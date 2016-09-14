@@ -12,6 +12,7 @@ import {
     viewBuilderChangeKeywords
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
+import FieldUtils from '../../../utils/fieldUtils';
 
 
 export default class ViewBuilder extends React.Component {
@@ -46,12 +47,9 @@ export default class ViewBuilder extends React.Component {
                 {id: null};
 
             const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
-            const selectOptions = [
-
-                ...fieldsForSelection.map((f) => {
-                    return {value: f.id, label: `${f.label} -- ${f.sourceName}`};
-                })
-            ];
+            const selectOptions = fieldsForSelection.map((f) => {
+                return {value: f.id, label: FieldUtils.makeFieldViewsCaption(f)};
+            });
             const {sortOrder, sortDirection, fieldId} = viewItem;
             const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
 

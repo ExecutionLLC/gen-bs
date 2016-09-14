@@ -1,37 +1,65 @@
 import _ from 'lodash';
 
 import * as SamplesUtils from './samplesUtils';
+import  {firstCharToUpperCase} from './stringUtils';
 
 export default class FieldUtils {
     static find(fieldId, fields) {
         return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
-    /**
-     * Make field structure usable for filters dialog purposes
-     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
-     * @param {string=} sourceName
-     * @returns {{id: string, label: string, type: string}}
-     */
-    static makeFieldSelectItemValue(f, sourceName) {
+    static isSourceField(field) {
+        return field.sourceName !== 'sample';
+    }
 
+    static makeFieldSourceCaption(field, sourceName) {
         var label;
 
-        if (f.sampleType) {
-            label = `(${SamplesUtils.typeLabels[f.sampleType]}) ${f.label}`;
+        if (field.sampleType) {
+            label = `(${SamplesUtils.typeLabels[field.sampleType]}) ${field.label}`;
         } else {
             if (sourceName) {
-                label = `${f.label} -- ${sourceName}`;
+                label = `${field.label} -- ${sourceName}`;
             } else {
-                label = `${f.label} -- ${f.sourceName}`;
+                label = `${field.label} -- ${field.sourceName}`;
             }
         }
 
+        return label;
+    }
+
+    static makeFieldSavedCaption(field, sampleType) {
+        return field.label + (field.sourceName && this.isSourceField(field) ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+    }
+
+    static makeFieldViewsCaption(field) {
+        return `${field.label} -- ${field.sourceName}`;
+    }
+
+    static makeFieldVariantsLabelTitle(field, sampleName, sampleType) {
+        const {sourceName, label} = field;
+        const isSource = sourceName && this.isSourceField(field);
         return {
-            id: f.id,
+            label: (!isSource && sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(label),
+            title: isSource ? sourceName : sampleName
+        };
+    }
+
+    /**
+     * Make field structure usable for filters dialog purposes
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
+     * @param {string=} sourceName
+     * @returns {{id: string, label: string, type: string}}
+     */
+    static makeFieldSelectItemValue(field, sourceName) {
+
+        var label = this.makeFieldSourceCaption(field, sourceName);
+
+        return {
+            id: field.id,
             label,
-            sampleType: f.sampleType,
-            type: f.valueType === 'float' ? 'double' : f.valueType
+            sampleType: field.sampleType,
+            type: field.valueType === 'float' ? 'double' : field.valueType
         };
     }
 
@@ -108,8 +136,9 @@ export default class FieldUtils {
         return sampleFields;
     }
 
-    static excludeVepFields(fields) {
-        return _.filter(fields, (field) => !field.name.startsWith('VEP_'));
+    static excludeVepFieldsButZygocityGenotype(fields) {
+        // TODO remove VEP exceptions when there fields will be renamed
+        return _.filter(fields, (field) => !field.name.startsWith('VEP_') || field.name === 'VEP_Zygosity' || field.name === 'VEP_Genotype');
     }
 
     static sortAndAddLabels(fields) {
@@ -128,9 +157,9 @@ export default class FieldUtils {
             });
     }
 
-    static makeViewAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
+    static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
         const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
-        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList);
+        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList).filter((field) => !field.isInvisible);
     }
 
     static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList) {
@@ -157,17 +186,13 @@ export default class FieldUtils {
             }));
         }
 
-        const samplesFields = samples.map((sample, index) => {
+        const samplesFields = samples.map((sample) => {
             const sampleType = samplesTypes[sample.id];
             const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
-            if (index) {
-                return addSampleTypeFields(sampleFields, sampleType);
-            } else {
-                return addSampleTypeFields(FieldUtils.excludeVepFields(sampleFields), sampleType);
-            }
+            return addSampleTypeFields(FieldUtils.excludeVepFieldsButZygocityGenotype(sampleFields), sampleType);
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
-        return _.filter(sortedLabelledFields, ['isEditable', false]);
+        return _.filter(sortedLabelledFields, (field) => !field.isEditable && !field.isInvisible);
     }
 }

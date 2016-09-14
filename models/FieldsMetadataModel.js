@@ -42,7 +42,8 @@ class FieldsMetadataModel extends ModelBase {
         async.waterfall([
             (callback) => this._fetchByIds(metadataIds, callback),
             (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback),
-            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachInvisible(fieldsMetadata, callback)
         ], (error, fields) => {
             callback(error, fields);
         });
@@ -110,7 +111,8 @@ class FieldsMetadataModel extends ModelBase {
         async.waterfall([
             (callback) => this._fetchSourcesMetadata(callback),
             (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback),
-            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachInvisible(fieldsMetadata, callback)
         ], callback);
     }
 
@@ -118,7 +120,8 @@ class FieldsMetadataModel extends ModelBase {
         async.waterfall([
             (callback) => this._fetchTotalMetadata(callback),
             (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback),
-            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachInvisible(fieldsMetadata, callback)
         ], callback);
     }
 
@@ -133,6 +136,31 @@ class FieldsMetadataModel extends ModelBase {
                         keywords: fieldIdsToKeywords[field.id] || []
                     }));
                 callback(null, fieldsWithKeywords);
+            }
+        ], callback);
+    }
+
+    _attachInvisible(fieldsMetadata, callback) {
+        async.waterfall([
+            (callback) => {
+                const fieldsWithInvisible = _.map(fieldsMetadata,
+                    (field) => {
+                        let isInvisible;
+                        // Hide fields that are already hidden
+                        // or fields from vep and sources with no labels
+                        if (field.isInvisible) {
+                            isInvisible = true;
+                        } else if (field.label && field.label !== field.name) {
+                            isInvisible = false;
+                        } else if (field.name.startsWith('VEP_')) {
+                            isInvisible = true;
+                        } else {
+                            isInvisible = field.sourceName !== 'sample';
+                        }
+                        return Object.assign({}, field, {isInvisible});
+                    }
+                );
+                callback(null, fieldsWithInvisible);
             }
         ], callback);
     }
