@@ -146,22 +146,16 @@ class FieldsMetadataModel extends ModelBase {
                 const fieldsWithInvisible = _.map(fieldsMetadata,
                     (field) => {
                         let isInvisible;
+                        // Hide fields that are already hidden
+                        // or fields from vep and sources with no labels
                         if (field.isInvisible) {
                             isInvisible = true;
+                        } else if (field.label && field.label !== field.name) {
+                            isInvisible = false;
+                        } else if (field.name.startsWith('VEP_')) {
+                            isInvisible = true;
                         } else {
-                            if (field.label && field.label !== field.name) {
-                                isInvisible = false;
-                            } else {
-                                if (field.name.startsWith('VEP_')) {
-                                    isInvisible = true;
-                                } else {
-                                    if (field.sourceName !== 'sample') {
-                                        isInvisible = true;
-                                    } else {
-                                        isInvisible = false;
-                                    }
-                                }
-                            }
+                            isInvisible = field.sourceName !== 'sample';
                         }
                         return Object.assign({}, field, {isInvisible});
                     }
