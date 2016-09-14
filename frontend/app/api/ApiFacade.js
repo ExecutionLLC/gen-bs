@@ -7,7 +7,7 @@ import CommentsClient from './CommentsClient';
 import DataClient from './DataClient';
 import FiltersClient from './FiltersClient';
 import ModelsClient from './ModelsClient';
-import QueryHistoryClient from './QueryHistoryClient';
+import AnalysesHistoryClient from './AnalysesHistoryClient';
 import SamplesClient from './SamplesClient';
 import SearchClient from './SearchClient';
 import SessionsClient from './SessionsClient';
@@ -22,7 +22,7 @@ class ApiFacade {
         this._commentsClient = new CommentsClient(urls);
         this._filtersClient = new FiltersClient(urls);
         this._modelsClient = new ModelsClient(urls);
-        this._queryHistoryClient = new QueryHistoryClient(urls);
+        this._queryHistoryClient = new AnalysesHistoryClient(urls);
         this._samplesClient = new SamplesClient(urls);
         this._searchClient = new SearchClient(urls);
         this._sessionsClient = new SessionsClient(urls);

@@ -3,7 +3,7 @@
 import RequestWrapper from './RequestWrapper';
 import UserEntityClientBase from './UserEntityClientBase';
 
-export default class QueryHistoryClient extends UserEntityClientBase {
+export default class AnalysesHistoryClient extends UserEntityClientBase {
     constructor(urls) {
         super(urls, urls.queryHistoryUrls());
     }

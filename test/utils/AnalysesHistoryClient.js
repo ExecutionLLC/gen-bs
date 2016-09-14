@@ -3,7 +3,7 @@
 const ClientBase = require('./ClientBase');
 const RequestWrapper = require('./RequestWrapper');
 
-class QueryHistoryClient extends ClientBase {
+class AnalysesHistoryClient extends ClientBase {
     constructor(urls) {
         super(urls);
     }
@@ -22,4 +22,4 @@ class QueryHistoryClient extends ClientBase {
     }
 }
 
-module.exports = QueryHistoryClient;
+module.exports = AnalysesHistoryClient;
