@@ -90,7 +90,10 @@ function reduceSamplesListSetHistorySamples(state, action) {
     if (samplesArrayWOHistory === hashedArray.array && !samplesToSet.length) {
         return state;
     }
-    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({...sample, type: entityType.HISTORY}));
+    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({
+        ...sample,
+        type: entityType.HISTORY
+    }));
     const samplesArrayWNewHistory = samplesToSetHistored.length ? [...samplesToSetHistored, ...samplesArrayWOHistory] : samplesArrayWOHistory;
     const samplesHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(samplesArrayWNewHistory);
     return {
@@ -99,9 +102,26 @@ function reduceSamplesListSetHistorySamples(state, action) {
     };
 }
 
+function reduceSetCurrentSampleId(state, action) {
+    return {
+        ...state,
+        currentSampleId: action.sampleId
+    };
+}
+
+function reduceSetCurrentSampleSearch(state, action) {
+    debugger;
+    return {
+        ...state,
+        search: action.search
+    };
+}
+
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
-    editedSamplesHash: ImmutableHash.makeFromObject({})
+    editedSamplesHash: ImmutableHash.makeFromObject({}),
+    search: '',
+    currentSampleId: null
 }, action) {
 
     switch (action.type) {
@@ -125,6 +145,12 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLES_LIST_SET_HISTORY_SAMPLES:
             return reduceSamplesListSetHistorySamples(state, action);
+
+        case ActionTypes.SET_CURRENT_SAMPLE_ID:
+            return reduceSetCurrentSampleId(state, action);
+
+        case ActionTypes.SET_CURRENT_SAMPLE_SEARCH:
+            return reduceSetCurrentSampleSearch(state, action);
 
         default:
             return state;

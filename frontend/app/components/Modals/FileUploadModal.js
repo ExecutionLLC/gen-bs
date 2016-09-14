@@ -3,31 +3,36 @@ import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
-import FileUploadFooter from './FileUpload/FileUploadFooter';
-import FileUpload from './FileUpload/FileUpload';
-import FileUploadSamples from './FileUpload/FileUploadSamples';
+import FileUploadBody from './FileUpload/FileUploadBody';
 
 class FileUploadModal extends Component {
     render() {
+        const {showModal} = this.props;
         return (
             <Modal
+                id='file-upload-modal'
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
-                show={this.props.showModal}
-                onHide={ () => this.props.closeModal('upload') }
+                show={showModal}
+                onHide={ () => this.onClose()}
             >
                 <FileUploadHeader />
-                <Modal.Body>
-                    <div className='modal-body-scroll'>
-                        <div className='modal-padding'>
-                            <FileUpload {...this.props} />
-                            <FileUploadSamples {...this.props} />
-                        </div>
-                    </div>
-                </Modal.Body>
-                <FileUploadFooter {...this.props} />
+                <FileUploadBody
+                    dispatch={this.props.dispatch}
+                    fileUpload={this.props.fileUpload}
+                    editableFieldsList={this.props.editableFieldsList}
+                    samplesList={this.props.samplesList}
+                    sampleSearch={this.props.sampleSearch}
+                    currentSampleId={this.props.currentSampleId}
+                    auth={this.props.auth}
+                    closeModal={ () => this.onClose() }
+                />
             </Modal>
         );
+    }
+
+    onClose() {
+        this.props.closeModal('upload');
     }
 }
 
@@ -39,7 +44,9 @@ function mapStateToProps(state) {
         ui,
         fileUpload,
         samplesList,
-        editableFieldsList: editableFields
+        editableFieldsList: editableFields,
+        sampleSearch: samplesList.search,
+        currentSampleId: samplesList.currentSampleId,
     };
 }
 

@@ -14,6 +14,9 @@ export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 
+export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
+export const SET_CURRENT_SAMPLE_SEARCH = 'SET_CURRENT_SAMPLE_SEARCH';
+
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
 const SERVER_ERROR = 'Internal server error. You can reload page and try again.';
@@ -25,6 +28,20 @@ const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). Y
 /*
  * Action Creators
  */
+
+export function setCurrentSampleId(sampleId){
+    return {
+        type:SET_CURRENT_SAMPLE_ID,
+        sampleId
+    }
+}
+
+export function setCurrentSampleSearch(search){
+    return {
+        type:SET_CURRENT_SAMPLE_SEARCH,
+        search
+    }
+}
 
 export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
     return {

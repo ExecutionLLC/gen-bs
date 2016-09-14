@@ -21,6 +21,7 @@ export default class FileUploadSamples extends Component {
         const filteredSamples = searchWord ?
             samplesArray.filter((sample) => sample.fileName.toLocaleLowerCase().indexOf(searchWord) >= 0) :
             samplesArray;
+        debugger;
         return (
             <div>
                 <div className='navbar navbar-search-full'>
