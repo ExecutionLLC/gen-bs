@@ -8,7 +8,7 @@ class AnalysesHistoryClient extends ClientBase {
         super(urls);
     }
 
-    getClientQueryHistory(sessionId, limit, offset, callback) {
+    getClientAnalysesHistory(sessionId, limit, offset, callback) {
         RequestWrapper.get(
             this.urls.queryHistory(),
             this._makeHeaders({sessionId}),
