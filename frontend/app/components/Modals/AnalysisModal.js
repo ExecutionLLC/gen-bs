@@ -44,13 +44,13 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, queryHistory, viewsList, filtersList, modelsList, samplesList, fields} = state;
+    const {auth, analysesHistory, viewsList, filtersList, modelsList, samplesList, fields} = state;
 
     
-    const historyList = queryHistory.history;
-    const initialHistoryList = queryHistory.initialHistory;
+    const historyList = analysesHistory.history;
+    const initialHistoryList = analysesHistory.initialHistory;
 
-    const newHistoryItem = queryHistory.newHistoryItem;
+    const newHistoryItem = analysesHistory.newHistoryItem;
 
     return {
         auth,
@@ -61,12 +61,12 @@ function mapStateToProps(state) {
         historyList,
         initialHistoryList,
         fields,
-        historyListSearch: queryHistory.search,
-        currentHistoryId: queryHistory.currentHistoryId,
-        isHistoryReceivedAll: queryHistory.isReceivedAll,
-        isHistoryRequesting: queryHistory.isRequesting,
+        historyListSearch: analysesHistory.search,
+        currentHistoryId: analysesHistory.currentHistoryId,
+        isHistoryReceivedAll: analysesHistory.isReceivedAll,
+        isHistoryRequesting: analysesHistory.isRequesting,
         newHistoryItem,
-        isLoadingHistoryData: queryHistory.isLoadingHistoryData
+        isLoadingHistoryData: analysesHistory.isLoadingHistoryData
     };
 }
 

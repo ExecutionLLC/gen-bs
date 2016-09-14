@@ -7,7 +7,7 @@ import {getUrlParameterByName} from '../utils/stringUtils';
 import {fetchUserdata} from './userData';
 import {initWSConnection} from './websocket';
 import {handleError} from './errorHandler';
-import {clearQueryHistory} from './queryHistory';
+import {clearAnalysesHistory} from './analysesHistory';
 
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient';
@@ -102,7 +102,7 @@ function updateLoginData(dispatch, isDemo) {
     dispatch(receiveSession(isDemo));
     dispatch(initWSConnection());
     if (isDemo) {
-        dispatch(clearQueryHistory());
+        dispatch(clearAnalysesHistory());
     }
     dispatch(fetchUserdata());
 }

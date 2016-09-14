@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React, {PropTypes, Component} from 'react';
 import classNames from 'classnames';
 
-import  {firstCharToUpperCase} from '../../utils/stringUtils';
 import config from '../../../config';
+import FieldUtils from '../../utils/fieldUtils';
 
 export default class FieldHeaderControls extends Component {
     constructor(props) {
@@ -48,19 +48,14 @@ export default class FieldHeaderControls extends Component {
             }
         );
 
-        const label = firstCharToUpperCase(
-            !fieldMetadata ? 'Unknown' : fieldMetadata.label
-        );
-        const sourceName = fieldMetadata.sourceName;
-        const labelPrefix = sourceName && sourceName !== 'sample' ? '' : sampleType ? `(${sampleType})` : null;
-        const title = sourceName && sourceName !== 'sample' ? sourceName : sampleName;
+        const {label, title} = FieldUtils.makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType);
 
         return (
             <td>
                 <div>
                     <div className='variants-table-header-label'>
                         <a type='button' className='btn-link-default' title={title}>
-                            {labelPrefix}{label}
+                            {label}
                         </a>
                         <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, disabled)}

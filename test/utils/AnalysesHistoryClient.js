@@ -3,14 +3,14 @@
 const ClientBase = require('./ClientBase');
 const RequestWrapper = require('./RequestWrapper');
 
-class QueryHistoryClient extends ClientBase {
+class AnalysesHistoryClient extends ClientBase {
     constructor(urls) {
         super(urls);
     }
 
-    getClientQueryHistory(sessionId, limit, offset, callback) {
+    getClientAnalysesHistory(sessionId, limit, offset, callback) {
         RequestWrapper.get(
-            this.urls.queryHistory(),
+            this.urls.analysesHistory(),
             this._makeHeaders({sessionId}),
             {
                 limit,
@@ -22,4 +22,4 @@ class QueryHistoryClient extends ClientBase {
     }
 }
 
-module.exports = QueryHistoryClient;
+module.exports = AnalysesHistoryClient;
