@@ -196,6 +196,6 @@ export default class FieldUtils {
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
-        return _.filter(sortedLabelledFields, ['isEditable', false]);
+        return _.filter(sortedLabelledFields, (field) => !field.isEditable);
     }
 }
