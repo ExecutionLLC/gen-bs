@@ -38,7 +38,7 @@ const GET_FILTER_SERVER_ERROR = 'Cannot get filter (server error). Please try ag
 const GET_MODEL_NETWORK_ERROR = 'Cannot get model (network error). Please try again.';
 const GET_MODEL_SERVER_ERROR = 'Cannot get model (server error). Please try again.';
 
-const queryHistoryClient = apiFacade.queryHistoryClient;
+const analysesHistoryClient = apiFacade.analysesHistoryClient;
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
@@ -151,7 +151,7 @@ export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, of
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
         dispatch(requestQueryHistory());
-        queryHistoryClient.getQueryHistory(language, search, limit, offset, (error, response) => {
+        analysesHistoryClient.getQueryHistory(language, search, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
@@ -170,7 +170,7 @@ export function updateQueryHistoryItem(historyItemId) {
         const historyItem = _.find(history, (historyItem) => {
             return historyItem.id === historyItemId;
         });
-        queryHistoryClient.update(historyItem, (error, response) => {
+        analysesHistoryClient.update(historyItem, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
@@ -182,7 +182,7 @@ export function updateQueryHistoryItem(historyItemId) {
 
 export function deleteServerQueryHistoryItem(historyItemId) {
     return (dispatch) => {
-        queryHistoryClient.remove(historyItemId, (error, response) => {
+        analysesHistoryClient.remove(historyItemId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

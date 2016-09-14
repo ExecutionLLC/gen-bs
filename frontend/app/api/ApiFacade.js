@@ -22,7 +22,7 @@ class ApiFacade {
         this._commentsClient = new CommentsClient(urls);
         this._filtersClient = new FiltersClient(urls);
         this._modelsClient = new ModelsClient(urls);
-        this._queryHistoryClient = new AnalysesHistoryClient(urls);
+        this._analysesHistoryClient = new AnalysesHistoryClient(urls);
         this._samplesClient = new SamplesClient(urls);
         this._searchClient = new SearchClient(urls);
         this._sessionsClient = new SessionsClient(urls);
@@ -46,8 +46,8 @@ class ApiFacade {
         return this._modelsClient;
     }
 
-    get queryHistoryClient() {
-        return this._queryHistoryClient;
+    get analysesHistoryClient() {
+        return this._analysesHistoryClient;
     }
 
     get samplesClient() {
