@@ -190,7 +190,7 @@ function reduceCreateNewHistoryItem(state, action) {
     };
 }
 
-export default function queryHistory(state = initialState, action) {
+export default function analysesHistory(state = initialState, action) {
     switch (action.type) {
         case ActionTypes.SET_CURRENT_ANALYSES_HISTORY_ID:
             return reduceSetCurrentAnalysesHistoryId(state, action);

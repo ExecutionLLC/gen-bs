@@ -116,7 +116,7 @@ export function fetchUserdata() {
                         dispatch(createNewHistoryItem(sample, filter, view));
                         dispatch(setCurrentAnalysesHistoryIdLoadData(null))
                             .then(() => {
-                                const historyItem = getState().queryHistory.newHistoryItem;
+                                const historyItem = getState().analysesHistory.newHistoryItem;
                                 dispatch(analyze({
                                     id: null,
                                     name: historyItem.name,

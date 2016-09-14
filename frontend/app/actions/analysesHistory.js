@@ -166,7 +166,7 @@ export function requestAppendAnalysesHistory(search = '', limit = DEFAULT_LIMIT,
 
 export function updateAnalysesHistoryItem(historyItemId) {
     return (dispatch, getState) => {
-        const {history} = getState().queryHistory;
+        const {history} = getState().analysesHistory;
         const historyItem = _.find(history, (historyItem) => {
             return historyItem.id === historyItemId;
         });
@@ -251,7 +251,7 @@ export function setCurrentAnalysesHistoryIdLoadData(id) {
             filtersList: {hashedArray: {hash: filtersHash}},
             modelsList: {hashedArray: {hash: modelsHash}},
             samplesList: {hashedArray: {hash: samplesHash}},
-            queryHistory: {newHistoryItem, history: historyList}
+            analysesHistory: {newHistoryItem, history: historyList}
         } = getState();
 
         const historyItem = id ? _.find(historyList, {id}) : newHistoryItem;
