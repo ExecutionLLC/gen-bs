@@ -43,7 +43,7 @@ const analysesHistoryClient = apiFacade.analysesHistoryClient;
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
 
-export function setCurrentQueryHistoryId(id) {
+export function setCurrentAnalysesHistoryId(id) {
     return {
         type: SET_CURRENT_ANALYSES_HISTORY_ID,
         id
@@ -59,27 +59,27 @@ export function createNewHistoryItem(sample, filter, view) {
     };
 }
 
-export function receiveQueryHistory(history) {
+export function receiveAnalysesHistory(history) {
     return {
         type: RECEIVE_ANALYSES_HISTORY,
         history
     };
 }
 
-export function receiveInitialQueryHistory(history) {
+export function receiveInitialAnalysesHistory(history) {
     return {
         type: RECEIVE_INITIAL_ANALYSES_HISTORY,
         history
     };
 }
 
-export function requestQueryHistory() {
+export function requestAnalysesHistory() {
     return {
         type: REQUEST_ANALYSES_HISTORY
     };
 }
 
-export function appendQueryHistory(search, requestFrom, items, isReceivedAll) {
+export function appendAnalysesHistory(search, requestFrom, items, isReceivedAll) {
     return {
         type: APPEND_ANALYSES_HISTORY,
         search,
@@ -89,27 +89,27 @@ export function appendQueryHistory(search, requestFrom, items, isReceivedAll) {
     };
 }
 
-export function clearQueryHistory() {
+export function clearAnalysesHistory() {
     return (dispatch) => {
-        dispatch(receiveQueryHistory([]));
+        dispatch(receiveAnalysesHistory([]));
     };
 }
 
-export function prepareQueryHistoryToSearch(search) {
+export function prepareAnalysesHistoryToSearch(search) {
     return {
         type: PREPARE_ANALYSES_HISTORY_TO_SEARCH,
         search
     };
 }
 
-export function duplicateQueryHistoryItem(historyItem) {
+export function duplicateAnalysesHistoryItem(historyItem) {
     return {
         type: DUPLICATE_ANALYSES_HISTORY_ITEM,
         historyItem
     };
 }
 
-export function editQueryHistoryItem(samplesList, modelsList, isDemo, changeItem) {
+export function editAnalysesHistoryItem(samplesList, modelsList, isDemo, changeItem) {
     return {
         type: EDIT_ANALYSES_HISTORY_ITEM,
         samplesList,
@@ -119,21 +119,21 @@ export function editQueryHistoryItem(samplesList, modelsList, isDemo, changeItem
     };
 }
 
-export function deleteQueryHistoryItem(historyItemId) {
+export function deleteAnalysesHistoryItem(historyItemId) {
     return {
         type: DELETE_ANALYSES_HISTORY_ITEM,
         historyItemId
     };
 }
 
-export function editExistentQueryHistoryItem(historyItem) {
+export function editExistentAnalysesHistoryItem(historyItem) {
     return {
         type: EDIT_EXISTENT_HISTORY_ITEM,
         historyItem
     };
 }
 
-export function cancelQueryHistoryEdit(historyItemId) {
+export function cancelAnalysesHistoryEdit(historyItemId) {
     return {
         type: CANCEL_ANALYSES_HISTORY_EDIT,
         historyItemId
@@ -147,10 +147,10 @@ export function setEditedHistoryItem(newHistoryItem) {
     };
 }
 
-export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+export function requestAppendAnalysesHistory(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
-        dispatch(requestQueryHistory());
+        dispatch(requestAnalysesHistory());
         analysesHistoryClient.getAnalysesHistory(language, search, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
@@ -158,13 +158,13 @@ export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, of
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
             } else {
                 const result = response.body.result;
-                dispatch(appendQueryHistory(search, offset, result, limit > result.length));
+                dispatch(appendAnalysesHistory(search, offset, result, limit > result.length));
             }
         });
     };
 }
 
-export function updateQueryHistoryItem(historyItemId) {
+export function updateAnalysesHistoryItem(historyItemId) {
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;
         const historyItem = _.find(history, (historyItem) => {
@@ -180,7 +180,7 @@ export function updateQueryHistoryItem(historyItemId) {
     };
 }
 
-export function deleteServerQueryHistoryItem(historyItemId) {
+export function deleteServerAnalysesHistoryItem(historyItemId) {
     return (dispatch) => {
         analysesHistoryClient.remove(historyItemId, (error, response) => {
             if (error) {
@@ -188,7 +188,7 @@ export function deleteServerQueryHistoryItem(historyItemId) {
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
             } else {
-                dispatch(deleteQueryHistoryItem(historyItemId));
+                dispatch(deleteAnalysesHistoryItem(historyItemId));
             }
         });
     };
@@ -242,7 +242,7 @@ function getSamples(samplesIds, samplesHash, callback) {
 // TODO REFACTOR make parallel loading of history data
 // Each promise gets existing or loads absent filter/view/model and then it inserts to the according list.
 // Samples inserts one-by-one by 'getSamples' function call
-export function setCurrentQueryHistoryIdLoadData(id) {
+export function setCurrentAnalysesHistoryIdLoadData(id) {
 
     return (dispatch, getState) => {
 
@@ -344,7 +344,7 @@ export function setCurrentQueryHistoryIdLoadData(id) {
             });
         }).then((samples) => {
             dispatch(samplesListSetHistorySamples(samples));
-            dispatch(setCurrentQueryHistoryId(id));
+            dispatch(setCurrentAnalysesHistoryId(id));
             dispatch(toggleLoadingHistoryData(false));
         });
     };

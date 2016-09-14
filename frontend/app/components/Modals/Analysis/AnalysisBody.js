@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
-import {setCurrentQueryHistoryIdLoadData} from '../../../actions/analysesHistory';
+import {setCurrentAnalysesHistoryIdLoadData} from '../../../actions/analysesHistory';
 
 
 export default class AnalysisBody extends React.Component {
@@ -68,6 +68,6 @@ export default class AnalysisBody extends React.Component {
 
     onSelectHistoryId(id) {
         const {dispatch} = this.props;
-        dispatch(setCurrentQueryHistoryIdLoadData(id));
+        dispatch(setCurrentAnalysesHistoryIdLoadData(id));
     }
 }

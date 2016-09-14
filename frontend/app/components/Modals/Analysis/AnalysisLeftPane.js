@@ -2,9 +2,9 @@ import React from 'react';
 import AnalysisHistorySearch from './AnalysisHistorySearch';
 import AnalysisHistoryList from './AnalysisHistoryList';
 import {
-    prepareQueryHistoryToSearch,
-    requestQueryHistory,
-    appendQueryHistory
+    prepareAnalysesHistoryToSearch,
+    requestAnalysesHistory,
+    appendAnalysesHistory
 } from '../../../actions/analysesHistory';
 
 
@@ -42,10 +42,10 @@ export default class AnalysisLeftPane extends React.Component {
 
     onSearchChange(str) {
         const {dispatch, initialHistoryList} = this.props;
-        dispatch(prepareQueryHistoryToSearch(str));
+        dispatch(prepareAnalysesHistoryToSearch(str));
         if (!str) {
-            dispatch(requestQueryHistory());
-            dispatch(appendQueryHistory('', 0, initialHistoryList, false));
+            dispatch(requestAnalysesHistory());
+            dispatch(appendAnalysesHistory('', 0, initialHistoryList, false));
         }
     }
 }
