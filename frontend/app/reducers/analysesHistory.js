@@ -192,29 +192,29 @@ function reduceCreateNewHistoryItem(state, action) {
 
 export default function queryHistory(state = initialState, action) {
     switch (action.type) {
-        case ActionTypes.SET_CURRENT_QUERY_HISTORY_ID:
+        case ActionTypes.SET_CURRENT_ANALYSES_HISTORY_ID:
             return reduceSetCurrentQueryHistoryId(state, action);
-        case ActionTypes.RECEIVE_QUERY_HISTORY:
+        case ActionTypes.RECEIVE_ANALYSES_HISTORY:
             return reduceReceiveQueryHistory(state, action);
-        case ActionTypes.RECEIVE_INITIAL_QUERY_HISTORY:
+        case ActionTypes.RECEIVE_INITIAL_ANALYSES_HISTORY:
             return reduceReceiveInitialQueryHistory(state, action);
-        case ActionTypes.REQUEST_QUERY_HISTORY:
+        case ActionTypes.REQUEST_ANALYSES_HISTORY:
             return reduceRequestQueryHistory(state, action);
-        case ActionTypes.SET_EDITED_QUERY_HISTORY:
+        case ActionTypes.SET_EDITED_ANALYSES_HISTORY:
             return reduceSetEditedQueryHistory(state, action);
-        case ActionTypes.APPEND_QUERY_HISTORY:
+        case ActionTypes.APPEND_ANALYSES_HISTORY:
             return reduceAppendQueryHistory(state, action);
-        case ActionTypes.PREPARE_QUERY_HISTORY_TO_SEARCH:
+        case ActionTypes.PREPARE_ANALYSES_HISTORY_TO_SEARCH:
             return reducePrepareQueryHistoryToSearch(state, action);
-        case ActionTypes.DUPLICATE_QUERY_HISTORY_ITEM:
+        case ActionTypes.DUPLICATE_ANALYSES_HISTORY_ITEM:
             return reduceDuplicateQueryHistoryItem(state, action);
-        case ActionTypes.EDIT_QUERY_HISTORY_ITEM:
+        case ActionTypes.EDIT_ANALYSES_HISTORY_ITEM:
             return reduceEditQueryHistoryItem(state, action);
-        case ActionTypes.DELETE_QUERY_HISTORY_ITEM:
+        case ActionTypes.DELETE_ANALYSES_HISTORY_ITEM:
             return reduceDeleteQueryHistoryItem(state, action);
         case ActionTypes.EDIT_EXISTENT_HISTORY_ITEM:
             return reduceEditExistentHistoryItem(state, action);
-        case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
+        case ActionTypes.CANCEL_ANALYSES_HISTORY_EDIT:
             return reduceCancelQueryHistoryEdit(state, action);
         case ActionTypes.TOGGLE_LOADING_HISTORY_DATA:
             return reduceToggleLoadingHistoryData(state, action);
