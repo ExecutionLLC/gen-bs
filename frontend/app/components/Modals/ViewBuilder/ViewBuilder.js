@@ -47,12 +47,9 @@ export default class ViewBuilder extends React.Component {
                 {id: null};
 
             const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
-            const selectOptions = [
-
-                ...fieldsForSelection.map((f) => {
-                    return {value: f.id, label: FieldUtils.makeFieldViewsCaption(f)};
-                })
-            ];
+            const selectOptions = fieldsForSelection.map((f) => {
+                return {value: f.id, label: FieldUtils.makeFieldViewsCaption(f)};
+            });
             const {sortOrder, sortDirection, fieldId} = viewItem;
             const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
 
