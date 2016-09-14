@@ -37,8 +37,8 @@ class App extends Component {
     }
 
     render() {
-        const {samplesList: {hashedArray: {array: samplesArray}}} = this.props;
-        const { ui } = this.props;
+        const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
+            ui, modalWindows, savedFiles, showErrorWindow, auth} = this.props;
 
         const mainDivClass = classNames({
             'main': true,
@@ -57,10 +57,10 @@ class App extends Component {
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain
-                        openAnalysisModal={() => this.props.dispatch(openModal('analysis'))}
+                        openAnalysisModal={() => dispatch(openModal('analysis'))}
                         openSamplesModal={() => {
-                            this.props.dispatch(samplesOnSave(null, null, null, null));
-                            this.props.dispatch(openModal('upload'));
+                            dispatch(samplesOnSave(null, null, null, null));
+                            dispatch(openModal('upload'));
                         }}
                     />
                      <div className={navbarQueryClass} id='subnav'>
@@ -72,33 +72,33 @@ class App extends Component {
                  </div>
                 }
                 <AnalysisModal
-                    showModal={this.props.modalWindows.analysis.showModal}
-                    closeModal={ () => { this.props.dispatch(closeModal('analysis')); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.analysis.showModal}
+                    closeModal={ () => { dispatch(closeModal('analysis')); } }
+                    dispatch={dispatch}
                 />
                 <ErrorModal
-                    showModal={this.props.showErrorWindow}
-                    closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
+                    showModal={showErrorWindow}
+                    closeModal={ () => { dispatch(lastErrorResolved()); } }
                 />
                 <AutoLogoutModal
-                    showModal={this.props.auth.showAutoLogoutDialog}
-                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()); } }
+                    showModal={auth.showAutoLogoutDialog}
+                    closeModal={ () => { dispatch(stopAutoLogoutTimer()); } }
                 />
                 <ViewsModal
-                    showModal={this.props.modalWindows.views.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.views.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    dispatch={dispatch}
                 />
                 <FiltersModal
-                    showModal={this.props.modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.filters.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    dispatch={dispatch}
                 />
                 <FileUploadModal
-                    showModal={this.props.modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    showModal={modalWindows.upload.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
                 />
-                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
+                <SavedFilesModal showModal={savedFiles.showSavedFilesModal} />
             </div>
         );
     }

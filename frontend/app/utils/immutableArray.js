@@ -4,7 +4,7 @@ export default class immutableArray {
      * @param {T[]} arr
      * @param {number} index
      * @param {T} item
-     * @returns {*}
+     * @returns {T[]}
      */
     static replace(arr, index, item) {
         if (index < 0 || index >= arr.length) {

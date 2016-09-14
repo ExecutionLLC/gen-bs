@@ -18,7 +18,7 @@ export default function websocket(state = {
     isVariantsLoading: false,
     progress: null
 }, action) {
-    switch (action.type) {
+    switch (action.type) { // TODO extract reducers
         case  ActionTypes.WS_DELETE_COMMENT: {
             const commentVariants = state.variants.slice();
             const deletedVariantIndex = _.findIndex(

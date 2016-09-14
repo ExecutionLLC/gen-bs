@@ -47,8 +47,9 @@ export default class VariantsTableRows extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.onRendered) {
-            this.props.onRendered();
+        const {onRendered} = this.props;
+        if (onRendered) {
+            onRendered();
         }
     }
 

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import SamplesUtils from './samplesUtils';
+import * as SamplesUtils from './samplesUtils';
 import  {firstCharToUpperCase} from './stringUtils';
 
 export default class FieldUtils {
@@ -136,7 +136,7 @@ export default class FieldUtils {
         return sampleFields;
     }
 
-    static ridOfVepFields(fields) {
+    static excludeVepFields(fields) {
         return _.filter(fields, (field) => !field.name.startsWith('VEP_'));
     }
 
@@ -191,7 +191,7 @@ export default class FieldUtils {
             if (index) {
                 return addSampleTypeFields(sampleFields, sampleType);
             } else {
-                return addSampleTypeFields(FieldUtils.ridOfVepFields(sampleFields), sampleType);
+                return addSampleTypeFields(FieldUtils.excludeVepFields(sampleFields), sampleType);
             }
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);

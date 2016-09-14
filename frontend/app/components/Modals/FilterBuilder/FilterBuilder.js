@@ -480,7 +480,7 @@ export default class FilterBuilder extends React.Component {
         const {
             filterBuilder,
             fields,
-            verb,
+            texts,
             dispatch
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
@@ -496,7 +496,7 @@ export default class FilterBuilder extends React.Component {
                         disabled={!entityTypeIsEditable(filter.type)}
                         dispatch={dispatch}
                     /> :
-                    <div>{`This ${verb.filter} has no rules to setup`}</div>
+                    <div>{`This ${texts.filter} has no rules to setup`}</div>
                 }
             </div>
         );

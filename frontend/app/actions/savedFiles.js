@@ -5,7 +5,7 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
-import SamplesUtils from '../utils/samplesUtils';
+import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
@@ -130,19 +130,26 @@ export function exportToFile(exportType) {
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && SamplesUtils.typeLabels[variantsAnalysisSamplesHash[listItem.sampleId].type];
+            const sample = variantsAnalysisSamplesHash[listItem.sampleId];
+            const sampleType = sample && SamplesUtils.typeLabels[sample.type];
             return FieldUtils.makeFieldSavedCaption(field, sampleType);
         })
         .concat(['Comment']);
 
         const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
-            .map(rowIndex => [...variants[rowIndex].fields, ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]])
+            .map(rowIndex => [
+                ...variants[rowIndex].fields,
+                ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]
+            ])
             .value();
 
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
-        const fileName = `${_.map(variantsSamples, (variantsSample) => variantsSample.fileName).join('-')}_chunk_${createdDate}.${exportType}`;
+        const fileName = `${
+            _.map(variantsSamples, (variantsSample) =>
+                variantsSample.fileName
+            ).join('-')}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
