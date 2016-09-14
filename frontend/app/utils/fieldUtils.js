@@ -18,12 +18,10 @@ export default class FieldUtils {
 
     /**
      * Make field structure usable for filters dialog purposes
-     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
      */
-    static makeFieldSelectItemValue(f, sourceName) {
-
     static makeFieldSourceCaption(field, sourceName) {
         var label;
 
