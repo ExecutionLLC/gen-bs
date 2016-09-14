@@ -42,12 +42,12 @@ class App extends Component {
 
         const mainDivClass = classNames({
             'main': true,
-            'subnav-closed': ui.queryNavbarClosed
+            'subnav-closed': true
         });
 
         const navbarQueryClass = classNames({
             'collapse-subnav': true,
-            'hidden': ui.queryNavbarClosed
+            'hidden': true
         });
 
         return (
