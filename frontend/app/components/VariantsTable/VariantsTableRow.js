@@ -101,13 +101,10 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     isHyperlink(field, value) {
-        if(field.isHyperlink && field.hyperlinkTemplate){
-            if (value && value !== '.'){
-                return true;
-            }
-            return false;
-        }
-        return false;
+        return field.isHyperlink
+            && field.hyperlinkTemplate
+            && value
+            && value !== '.';
     }
 
     shouldComponentUpdate(nextProps) {
