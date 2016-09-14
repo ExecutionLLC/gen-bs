@@ -158,7 +158,7 @@ export default class FieldUtils {
 
     static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
         const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
-        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList);
+        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList).filter((field) => !field.isInvisible);
     }
 
     static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList) {
