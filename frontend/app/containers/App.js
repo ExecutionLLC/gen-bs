@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout, WATCH_ALL } from 'redux-timeout';
-import classNames from 'classnames';
 
 import config from '../../config';
 
@@ -38,10 +37,10 @@ class App extends Component {
 
     render() {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
-            ui, modalWindows, savedFiles, showErrorWindow, auth} = this.props;
+            modalWindows, savedFiles, showErrorWindow, auth} = this.props;
 
         return (
-            <div className="main subnav-closed" id='main'>
+            <div className='main subnav-closed' id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'/>
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
@@ -53,7 +52,7 @@ class App extends Component {
                             dispatch(openModal('upload'));
                         }}
                     />
-                     <div className="collapse-subnav hidden" id='subnav'>
+                     <div className='collapse-subnav hidden' id='subnav'>
                      </div>
                      <VariantsTableReact {...this.props} />
                      <div id='fav-message' className='hidden'>
