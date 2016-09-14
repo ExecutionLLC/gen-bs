@@ -731,7 +731,7 @@ export default class AnalysisRightPane extends React.Component {
     onViewsClick() {
         const {historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
-        const allowedFields = FieldUtils.makeViewAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        const allowedFields = FieldUtils.makeViewFilterAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
         const action = this.actionEdit({viewId: null});
         this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
@@ -745,7 +745,7 @@ export default class AnalysisRightPane extends React.Component {
     onFiltersClick() {
         const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
-        const allowedFields = FieldUtils.makeViewAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         const filterFiltersStrategy = {name: 'filter'};
         dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
         const action = this.actionEdit({filterId: null});

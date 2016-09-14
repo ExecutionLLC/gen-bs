@@ -156,7 +156,7 @@ export default class FieldUtils {
             });
     }
 
-    static makeViewAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
+    static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
         const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
         return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList);
     }
