@@ -136,8 +136,9 @@ export default class FieldUtils {
         return sampleFields;
     }
 
-    static excludeVepFields(fields) {
-        return _.filter(fields, (field) => !field.name.startsWith('VEP_'));
+    static excludeVepFieldsButZygocityGenotype(fields) {
+        // TODO remove VEP exceptions when there fields will be renamed
+        return _.filter(fields, (field) => !field.name.startsWith('VEP_') || field.name === 'VEP_Zygosity' || field.name === 'VEP_Genotype');
     }
 
     static sortAndAddLabels(fields) {
@@ -185,14 +186,10 @@ export default class FieldUtils {
             }));
         }
 
-        const samplesFields = samples.map((sample, index) => {
+        const samplesFields = samples.map((sample) => {
             const sampleType = samplesTypes[sample.id];
             const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
-            if (index) {
-                return addSampleTypeFields(sampleFields, sampleType);
-            } else {
-                return addSampleTypeFields(FieldUtils.excludeVepFields(sampleFields), sampleType);
-            }
+            return addSampleTypeFields(FieldUtils.excludeVepFieldsButZygocityGenotype(sampleFields), sampleType);
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
