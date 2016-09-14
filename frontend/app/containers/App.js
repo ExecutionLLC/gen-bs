@@ -40,18 +40,8 @@ class App extends Component {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             ui, modalWindows, savedFiles, showErrorWindow, auth} = this.props;
 
-        const mainDivClass = classNames({
-            'main': true,
-            'subnav-closed': true
-        });
-
-        const navbarQueryClass = classNames({
-            'collapse-subnav': true,
-            'hidden': true
-        });
-
         return (
-            <div className={mainDivClass} id='main'>
+            <div className="main subnav-closed" id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'/>
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
@@ -63,7 +53,7 @@ class App extends Component {
                             dispatch(openModal('upload'));
                         }}
                     />
-                     <div className={navbarQueryClass} id='subnav'>
+                     <div className="collapse-subnav hidden" id='subnav'>
                      </div>
                      <VariantsTableReact {...this.props} />
                      <div id='fav-message' className='hidden'>
