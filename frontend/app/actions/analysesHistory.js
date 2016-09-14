@@ -151,7 +151,7 @@ export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, of
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
         dispatch(requestQueryHistory());
-        analysesHistoryClient.getQueryHistory(language, search, limit, offset, (error, response) => {
+        analysesHistoryClient.getAnalysesHistory(language, search, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

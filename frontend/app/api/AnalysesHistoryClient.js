@@ -8,7 +8,7 @@ export default class AnalysesHistoryClient extends UserEntityClientBase {
         super(urls, urls.analysesHistoryUrls());
     }
 
-    getQueryHistory(languageId, search, limit, offset, callback) {
+    getAnalysesHistory(languageId, search, limit, offset, callback) {
         RequestWrapper.get(this.urls.history(),
             this._makeHeaders({languageId}), {search, limit, offset}, null, callback);
     }
