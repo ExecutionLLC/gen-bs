@@ -6,6 +6,8 @@ import ComponentBase from '../shared/ComponentBase';
 
 import VariantsTableComment from './VariantsTableComment';
 
+import FieldUtils from '../../utils/fieldUtils.js';
+
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
@@ -72,21 +74,40 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     renderFieldValue(fieldId, sampleId, value, sortState) {
+        const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
         const resultFieldValue = value;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
-
         const sortedActiveClass = classNames({
             'active': columnSortParams
         });
 
+        const field = hash[fieldId];
+        const isValuedHyperlink = this.isHyperlink(field, resultFieldValue);
         return (
             <td className={sortedActiveClass}
                 key={fieldId + '-' + sampleId}>
                 <div>
-                    {resultFieldValue || ''}
+                    {isValuedHyperlink ?(this.renderHyperLink(field.hyperlinkTemplate, value)):(resultFieldValue || '')}
                 </div>
             </td>
         );
+    }
+    renderHyperLink(hyperlinkTemplate, value){
+        const replacementValue = encodeURIComponent(value);
+        const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+        return (
+            <a href={valueUrl}>{value}</a>
+        );
+    }
+
+    isHyperlink(field, value) {
+        if(field.isHyperlink && field.hyperlinkTemplate){
+            if (value && value !== '.'){
+                return true
+            }
+            return false
+        }
+        return false
     }
 
     shouldComponentUpdate(nextProps) {

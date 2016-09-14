@@ -7,6 +7,10 @@ export default class FieldUtils {
         return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
+    static getDefaultLinkIdentity(){
+        return '###DATA###'
+    }
+
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
