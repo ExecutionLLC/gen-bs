@@ -1,4 +1,4 @@
-import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
+import {renewHistoryItem, detachHistoryItem} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 //import {analyze} from '../app/actions/ui';

@@ -4,14 +4,14 @@ import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
-    duplicateQueryHistoryItem,
-    cancelQueryHistoryEdit,
-    editQueryHistoryItem,
-    editExistentQueryHistoryItem,
-    updateQueryHistoryItem,
+    duplicateAnalysesHistoryItem,
+    cancelAnalysesHistoryEdit,
+    editAnalysesHistoryItem,
+    editExistentAnalysesHistoryItem,
+    updateAnalysesHistoryItem,
     setEditedHistoryItem,
-    deleteServerQueryHistoryItem
-} from '../../../actions/queryHistory';
+    deleteServerAnalysesHistoryItem
+} from '../../../actions/analysesHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
 import {
@@ -664,7 +664,7 @@ export default class AnalysisRightPane extends React.Component {
     onDeleteAnalysisClick() {
         const {dispatch, historyItem: {id: historyItemId}} = this.props;
         if (historyItemId) {
-            dispatch(deleteServerQueryHistoryItem(historyItemId));
+            dispatch(deleteServerAnalysesHistoryItem(historyItemId));
         }
     }
 
@@ -674,8 +674,8 @@ export default class AnalysisRightPane extends React.Component {
             return;
         }
         if (historyItem.id) {
-            dispatch(editExistentQueryHistoryItem({...historyItem, name}));
-            dispatch(updateQueryHistoryItem(historyItem.id));
+            dispatch(editExistentAnalysesHistoryItem({...historyItem, name}));
+            dispatch(updateAnalysesHistoryItem(historyItem.id));
         } else {
             dispatch(this.actionEdit({name}));
         }
@@ -684,8 +684,8 @@ export default class AnalysisRightPane extends React.Component {
     onAnalysisDescriptionChange(description) {
         const {dispatch, historyItem} = this.props;
         if (historyItem.id) {
-            dispatch(editExistentQueryHistoryItem({...historyItem, description}));
-            dispatch(updateQueryHistoryItem(historyItem.id));
+            dispatch(editExistentAnalysesHistoryItem({...historyItem, description}));
+            dispatch(updateAnalysesHistoryItem(historyItem.id));
         } else {
             dispatch(this.actionEdit({description}));
         }
@@ -693,12 +693,12 @@ export default class AnalysisRightPane extends React.Component {
 
     onDuplicateButtonClick() {
         const {dispatch, historyItem} = this.props;
-        dispatch(duplicateQueryHistoryItem(historyItem));
+        dispatch(duplicateAnalysesHistoryItem(historyItem));
     }
 
     onCancelButtonClick() {
         const {dispatch} = this.props;
-        dispatch(cancelQueryHistoryEdit());
+        dispatch(cancelAnalysesHistoryEdit());
     }
 
     onAnalyzeButtonClick(isEditing) {
@@ -716,7 +716,7 @@ export default class AnalysisRightPane extends React.Component {
             if (isEditing && analysis) {
                 dispatch(setEditedHistoryItem(analysis));
             } else if (analysis) {
-                dispatch(editExistentQueryHistoryItem(analysis));
+                dispatch(editExistentAnalysesHistoryItem(analysis));
             }
         });
         dispatch(closeModal('analysis'));
@@ -796,7 +796,7 @@ export default class AnalysisRightPane extends React.Component {
 
     actionEdit(change) {
         const {samplesList, modelsList, auth: {isDemo}} = this.props;
-        return editQueryHistoryItem(
+        return editAnalysesHistoryItem(
             samplesList,
             modelsList,
             isDemo,

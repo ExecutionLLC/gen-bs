@@ -4,7 +4,7 @@ import Perf from 'react-addons-perf';
 
 const ENABLE_PERFORMANCE_CONTROLS = false;
 
-export default class CreateQueryNavbarButton extends Component {
+export default class SamplesAnalysisButtons extends Component {
 
     onStop() {
         Perf.stop();

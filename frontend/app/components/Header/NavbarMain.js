@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import CreateQueryNavbarButton from './NavbarMain/CreateQueryNavbarButton';
+import SamplesAnalysisButtons from './NavbarMain/SamplesAnalysisButtons';
 import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
@@ -39,7 +39,7 @@ class NavbarMain extends Component {
                         className='btn navbar-btn brand' data-toggle='modal' data-target='#info'><span
                         data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
 
-                    <CreateQueryNavbarButton
+                    <SamplesAnalysisButtons
                         openAnalysisModal={() => this.props.openAnalysisModal()}
                         openSamplesModal={() => this.props.openSamplesModal()}
                     />

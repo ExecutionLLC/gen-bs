@@ -8,10 +8,10 @@ import {
 } from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {
-    receiveInitialQueryHistory,
-    setCurrentQueryHistoryIdLoadData,
+    receiveInitialAnalysesHistory,
+    setCurrentAnalysesHistoryIdLoadData,
     createNewHistoryItem
-} from './queryHistory';
+} from './analysesHistory';
 import {receiveSamplesList} from './samplesList';
 import {
     filtersListReceive
@@ -87,10 +87,10 @@ export function fetchUserdata() {
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
                 dispatch(receiveSamplesList(samples));
-                dispatch(receiveInitialQueryHistory(analyses));
+                dispatch(receiveInitialAnalysesHistory(analyses));
                 if (analyses[0]) {
                     const historyItem = analyses[0];
-                    dispatch(setCurrentQueryHistoryIdLoadData(historyItem.id))
+                    dispatch(setCurrentAnalysesHistoryIdLoadData(historyItem.id))
                         .then(() => {
                             dispatch(analyze({
                                 id: historyItem.id,
@@ -114,9 +114,9 @@ export function fetchUserdata() {
                         dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                     } else {
                         dispatch(createNewHistoryItem(sample, filter, view));
-                        dispatch(setCurrentQueryHistoryIdLoadData(null))
+                        dispatch(setCurrentAnalysesHistoryIdLoadData(null))
                             .then(() => {
-                                const historyItem = getState().queryHistory.newHistoryItem;
+                                const historyItem = getState().analysesHistory.newHistoryItem;
                                 dispatch(analyze({
                                     id: null,
                                     name: historyItem.name,

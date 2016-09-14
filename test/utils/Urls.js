@@ -80,7 +80,7 @@ class Urls {
         return this._constructApiUrl('/data');
     }
 
-    queryHistory() {
+    analysesHistory() {
         return this._constructApiUrl('/history');
     }
 
