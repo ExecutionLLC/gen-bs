@@ -6,7 +6,6 @@ const ServiceBase = require('./ServiceBase');
 const LanguService = require('./LanguService');
 const KeywordsService = require('./KeywordsService');
 const UsersService = require('./UsersService');
-const RegistrationCodesService = require('./RegistrationCodesService');
 const ViewsService = require('./ViewsService');
 const FiltersService = require('./FiltersService');
 const CommentsService = require('./CommentsService');
@@ -41,7 +40,6 @@ class ServiceFacade {
         this.views = new ViewsService(this, models);
         this.filters = new FiltersService(this, models);
         this.users = new UsersService(this, models);
-        this.registrationCodes = new RegistrationCodesService(this, models);
         this.comments = new CommentsService(this, models);
         this.samples = new SamplesService(this, models);
         this.fieldsMetadata = new FieldsMetadataService(this, models);

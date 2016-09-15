@@ -97,18 +97,21 @@ class SessionsController extends ControllerBase {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, user, info) => {
+            }, (error, user/*, info*/) => {
                 if (error) {
                     return next(error);
                 }
-                const {firstName, lastName, userEmail} = user;
+                const {/*firstName, lastName, */userEmail} = user;
                 const registrationCodeId = request.query.state;
 
                 async.waterfall([
                     (callback) => {
                         if (registrationCodeId) {
                             // Activate registration code if any.
+/* TODO rewrite
                             this.services.registrationCodes.activate(registrationCodeId, firstName, lastName, userEmail, callback);
+*/
+                            callback(null);
                         } else {
                             callback(null);
                         }
