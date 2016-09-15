@@ -14,7 +14,6 @@
     "start-server": "cd frontend; npm run build;cd ../;node ./index.js",
     "client": "node test-client/index.js",
     "user:add": "node ./database/scripts/add-user.js",
-    "user:generate-codes": "node ./database/scripts/generate-registration-codes.js",
     "frontend": "cd frontend; npm start",
     "update": "cd scripts; bash amazon-update.sh",
     "build:webserver": "cd scripts/build; ./build.sh",
