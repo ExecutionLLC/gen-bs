@@ -14,6 +14,7 @@ try {
 }
 
 const ENV = Object.assign({}, defaultConfig, process.env);
+
 function makeDefault(value, defaultValue) {
     if (_.isUndefined(value)) {
         return defaultValue;
@@ -38,12 +39,13 @@ const SETTINGS = {
         databaseName: makeDefault(ENV.GEN_REG_DATABASE_NAME, 'genomixreg')
     },
     logger: {
+        app_name: 'regserver',
         console: {
             level: makeDefault(ENV.GEN_REG_CONSOLE_LOG_LEVEL, 'trace')
         },
         file: {
             level: makeDefault(ENV.GEN_REG_LOG_LEVEL, 'trace'),
-            path: makeDefault(ENV.GEN_REG_LOG_PATH, __dirname + '/../logs/genomix.log'),
+            path: makeDefault(ENV.GEN_REG_LOG_PATH, __dirname + '/../logs/regserver.log'),
             rotatingFilesCount: 7
         }
     }

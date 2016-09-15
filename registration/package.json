@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "GEN_WS_DISABLE_REQUEST_LIMITS=true mocha",
+    "user:generate-codes": "node ./database/scripts/generate-registration-codes.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +24,9 @@
     "passport": "0.3.2",
     "passport-google-oauth20": "1.0.0",
     "pg": "6.1.0"
+  },
+  "devDependencies": {
+    "fakeredis": "1.0.3",
+    "mocha": "2.4.5"
   }
 }
