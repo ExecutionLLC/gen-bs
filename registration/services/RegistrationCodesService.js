@@ -1,6 +1,5 @@
 'use strict';
 
-const async = require('async');
 const Promise = require('bluebird');
 
 class RegistrationCodesService {
