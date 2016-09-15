@@ -726,5 +726,33 @@
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
     "label": "PopMax allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_K1_RUN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "SNR repeats"
+  },
+  {
+    "field": {
+      "name": "INFO_K2_RUN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "DNR repeats"
+  },
+  {
+    "field": {
+      "name": "INFO_K3_RUN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "TNR repeats"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_CONSANGUINEOUS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Consanguineous homozygotes count"
   }
 ]
