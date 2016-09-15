@@ -11,7 +11,7 @@ const CollectionUtils = require('../utils/CollectionUtils');
 class ModelBase {
     /**
      * @param db
-     * @param {Logger} Logger
+     * @param {Logger} logger
      * @param baseTableName Name of the main (or the only) table of the corresponding model.
      * @param mappedColumns List of column names that will be allowed to extract from the table(s) (@see ModelBase._mapColumns() method).
      * */
