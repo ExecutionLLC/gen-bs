@@ -31,10 +31,10 @@ class RegistrationCodesService {
 
     createManyAsync(count, language, speciality, description, numberOfPaidSamples) {
         const {db, registrationCodes} = this;
-        return Promise.fromCallback((callback) => db.transactionally((trx, callback) => {
+
+        return db.transactionallyAsync((trx) =>
             registrationCodes.createManyAsync(count, language, speciality, description, numberOfPaidSamples, trx)
-                .asCallback(callback);
-        }, callback))
+        );
     }
 }
 

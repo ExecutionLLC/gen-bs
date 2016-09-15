@@ -84,6 +84,35 @@ class KnexWrapper {
             }
         ], callback);
     }
+
+    transactionallyAsync(queryAsync) {
+        const originalStack = new Error().stack;
+        return new Promise((resolve, reject) => {
+            async.waterfall([
+                (callback) => {
+                    // 1. Create transaction
+                    // 2. Open transaction
+                    this.beginTransaction(callback);
+                },
+                (trx, knex, callback) => {
+                    // 3. Execute query with the transaction
+                    queryAsync(knex)
+                        .then((data) => callback(null, trx, null, data))
+                        .catch((error) => callback(null, trx, error, null));
+                },
+                (trx, error, data, callback) => {
+                    // 4. Complete transaction
+                    trx.complete(error, originalStack, data, callback);
+                }
+            ], (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
 }
 
 module.exports = KnexWrapper;
