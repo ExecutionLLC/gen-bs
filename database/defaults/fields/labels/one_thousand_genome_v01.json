@@ -208,5 +208,12 @@
       "source_name": "one_thousand_genome_v01"
     },
     "label": "Multi-allelic"
+  },
+  {
+    "field": {
+      "name": "INFO_OLD_VARIANT",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Old variant location"
   }
 ]
