@@ -29,11 +29,6 @@ class RegistrationCodesService {
         }, callback));
     }
 
-    createMany(count, language, speciality, description, numberOfPaidSamples, callback) {
-        return this.createManyAsync(count, language, speciality, description, numberOfPaidSamples)
-            .asCallback(callback);
-    }
-
     createManyAsync(count, language, speciality, description, numberOfPaidSamples) {
         const {db, registrationCodes} = this;
         return Promise.fromCallback((callback) => db.transactionally((trx, callback) => {

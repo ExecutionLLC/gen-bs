@@ -26,18 +26,17 @@ const {
 } = args;
 
 if (count && speciality && description && defaultLanguage && numberPaidSamples) {
-    registrationCodes.createMany(count, defaultLanguage,
-        speciality, description, numberPaidSamples, (error, ids) => {
-            if (error) {
-                console.error(error);
-                process.exit(1);
-            } else {
-                console.log(`${count} registration codes are added with ids: ${JSON.stringify(ids)}`);
-                ids.map(id => {
-                    console.log(`${Config.baseUrl}/api/session/auth/google/login/${id}`);
-                });
-                process.exit(0);
-            }
+    registrationCodes.createManyAsync(count, defaultLanguage, speciality, description, numberPaidSamples)
+        .then((ids) => {
+            console.log(`${count} registration codes are added with ids: ${JSON.stringify(ids)}`);
+            ids.map(id => {
+                console.log(`${Config.baseUrl}/api/session/auth/google/login/${id}`);
+            });
+            process.exit(0);
+        })
+        .catch((error) => {
+            console.error(error);
+            process.exit(1);
         });
 } else {
     console.error('Usage: -- --count N --speciality "JobName" --description "Some string to mark codes in database"'
