@@ -17,16 +17,6 @@ class MockHost {
         this.registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel);
     }
 
-    _setControllersMocks(controllers, services) {
-        controllers.sessionsController = new MockSessionsController(controllers.sessionsController);
-    }
-
-    _setServicesMocks(services, models) {
-        services.sessions = new MockSessionsService(services, models);
-        // Initialization inside facade is already complete at this moment, so we need to call it by hand.
-        services.sessions.init();
-    }
-
     start(callback) {
         callback();
     }
