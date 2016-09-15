@@ -109,14 +109,14 @@
       "name": "INFO_AN_AMR",
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
-    "label": "American allele frequency adjusted"
+    "label": "American chromosomes count"
   },
   {
     "field": {
       "name": "INFO_AN_Adj",
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
-    "label": "Adjusted allele frequency"
+    "label": "Adjusted chromosomes count"
   },
   {
     "field": {
@@ -662,21 +662,42 @@
       "name": "INFO_AC_FEMALE",
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
-    "label": "Male allele count"
+    "label": "Female allele count"
   },
   {
     "field": {
       "name": "INFO_AN_FEMALE",
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
-    "label": "Male chromosomes count"
+    "label": "Female chromosomes count"
   },
   {
     "field": {
       "name": "INFO_AF_FEMALE",
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
-    "label": "Male allele frequency"
+    "label": "Female allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_Adj",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Adjusted allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African allele frequency adjusted"
   },
   {
     "field": {
