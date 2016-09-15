@@ -112,11 +112,11 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 }
             },
             (callback) => {
-                const replyResult = reply.result;
+                const replyResult = reply;
                 if (replyResult.error) {
                     callback(replyResult.error);
                 } else {
-                    callback(null, replyResult);
+                    callback(null, replyResult.result);
                 }
             },
             (sourcesMetadata, callback) => {
