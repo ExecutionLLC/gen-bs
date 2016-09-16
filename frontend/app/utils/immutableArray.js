@@ -4,7 +4,7 @@ export default class immutableArray {
      * @param {T[]} arr
      * @param {number} index
      * @param {T} item
-     * @returns {*}
+     * @returns {T[]}
      */
     static replace(arr, index, item) {
         if (index < 0 || index >= arr.length) {
@@ -43,6 +43,19 @@ export default class immutableArray {
         return [
             ...arr,
             data
+        ];
+    }
+
+    /**
+     * @template {T}
+     * @param {T[]} arr
+     * @param {T[]} arr2
+     * @returns {T[]}
+     */
+    static concat(arr, arr2) {
+        return [
+            ...arr,
+            ...arr2
         ];
     }
 }

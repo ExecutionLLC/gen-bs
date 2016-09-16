@@ -6,6 +6,7 @@ const async = require('async');
 const ServiceBase = require('./ServiceBase');
 const EventProxy = require('../utils/EventProxy');
 const CollectionUtils = require('../utils/CollectionUtils');
+const AppServerUtils = require('../utils/AppServerUtils');
 const RESULT_TYPES = require('./external/applicationServer/AppServerResultTypes');
 const {SEARCH_SERVICE_EVENTS} = require('../utils/Enums');
 
@@ -15,12 +16,12 @@ class SearchService extends ServiceBase {
         super(services, models);
 
         this._onSearchDataReceived = this._onSearchDataReceived.bind(this);
-        
+
         this.eventEmitter = new EventProxy(SEARCH_SERVICE_EVENTS.allValues);
     }
 
     init() {
-        this.searchKeyFieldName = this.services.applicationServerSearch.getSearchKeyFieldName();
+        this.searchKeyFieldName = AppServerUtils.getSearchKeyFieldName();
         this._subscribeToRPCEvents();
     }
 
@@ -36,43 +37,85 @@ class SearchService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    sendSearchRequest(user, session, languageId, sampleId, viewId, filterId, limit, offset, callback) {
-        const hasUndefOrNullParam = _.some([languageId, viewId, filterId, sampleId, limit, offset], (param) => {
-            return _.isUndefined(param) || _.isNull(param);
-        });
-
-        if (hasUndefOrNullParam) {
-            callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    languId: languageId || 'undefined',
-                    viewId: viewId || 'undefined',
-                    filterId: filterId || 'undefined',
-                    sampleId: sampleId || 'undefined',
-                    limit: _.isNumber(limit) ? limit : 'undefined',
-                    offset: _.isNumber(offset) ? offset : 'undefined'
-                }, null, 2)));
-        } else {
-            async.waterfall([
-                (callback) => this.services.queryHistory.add(user, languageId, sampleId, viewId, filterId,
-                    (error) => callback(error)),
-                (callback) => this._createAppServerSearchParams(user, languageId, sampleId,
-                    viewId, filterId, limit, offset, callback),
-                (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
-                    callback
-                ),
-                (appServerRequestParams, callback) => {
-                    this.services.applicationServer.requestOpenSearchSession(session,
-                        appServerRequestParams, callback);
-                }
-            ], callback);
+    sendSearchRequest(user, session, languageId, analysis, limit, offset, callback) {
+        const {id, name, description, type, samples, modelId, viewId, filterId} = analysis;
+        if (_.isEmpty(id)) {
+            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, name, description, type, samples, limit, offset], (param) => {
+                return  _.isUndefined(param) || _.isNull(param);
+            });
+            if (hasUndefOrNullParam) {
+                callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
+                        languId: languageId || 'undefined',
+                        viewId: viewId || 'undefined',
+                        filterId: filterId || 'undefined',
+                        samples: samples || 'undefined',
+                        name: name || 'undefined',
+                        description: description || 'undefined',
+                        type: type || 'undefined',
+                        limit: _.isNumber(limit) ? limit : 'undefined',
+                        offset: _.isNumber(offset) ? offset : 'undefined'
+                    }, null, 2)));
+            } else {
+                async.waterfall([
+                    (callback) => {
+                        this.services.analysis.add(
+                            user, languageId, name, description, type, viewId, filterId, modelId, samples, callback
+                        );
+                    },
+                    (analysis, callback) => {
+                        this._sendSearchRequest(
+                            user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
+                            (error, operationId) => callback(error, {
+                                operationId,
+                                analysis
+                            })
+                        );
+                    }
+                ], callback);
+            }
         }
+        else {
+            async.waterfall(
+                [
+                    (callback) => {
+                        this.services.analysis.find(user, id, callback);
+                    },
+                    (analysis, callback) =>{
+                        analysis.lastQueryDate = new Date();
+                        this.services.analysis.update(user, analysis, callback);
+                    },
+                    (analysis, callback) => {
+                        const {samples, modelId, viewId, filterId} = analysis;
+                        this._sendSearchRequest(
+                            user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
+                            (error, operationId) => callback(error ,  {operationId, analysis})
+                        );
+                    }
+                ],
+                callback
+            );
+        }
+    }
+
+    _sendSearchRequest(user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback) {
+        async.waterfall([
+            (callback) => this._createAppServerSearchParams(user, languageId, samples,
+                viewId, filterId, modelId, limit, offset, callback),
+            (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
+                callback
+            ),
+            (appServerRequestParams, callback) => {
+                this.services.applicationServer.requestOpenSearchSession(session,
+                    appServerRequestParams, callback);
+            }
+        ], callback);
     }
 
     searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         async.waterfall([
             (callback) => this.services.operations.find(session, operationId, callback),
-            (operation, callback) => this.services.samples.find(user, operation.getSampleId(), callback),
-            (sample, callback) => {
-                this._createAppServerSearchInResultsParams(session.id, operationId, sample, globalSearchValue,
+            (operation, callback) => {
+                this._createAppServerSearchInResultsParams(user, session.id, operationId, operation.getSampleIds(), operation.getViewId(), globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
@@ -97,44 +140,42 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const {session: {userId}, result: {fieldIdToValueArray}} = message;
+        const {session: {userId}, result: {tableData:{ header, data }}} = message;
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
-            (user, callback) => this._loadRowsComments(user.id, user.language, fieldIdToValueArray, callback),
+            (user, callback) => this._loadRowsComments(user.id, user.language, data.viewData, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
-                const rows = _.map(fieldIdToValueArray, fieldIdToValueHash => {
-                    const fieldValueObjects = _(fieldIdToValueHash)
-                        .keys()
-                        .filter(key => key != this.searchKeyFieldName)
-                        .map(fieldId => {
-                            return {
-                                fieldId,
-                                value: fieldIdToValueHash[fieldId]
-                            }
-                        })
-                        .value();
-                    const searchKey = fieldIdToValueHash[this.searchKeyFieldName];
-                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], comment => {
-                        return {
-                            id: comment.id,
-                            comment: comment.comment
-                        };
+                const rows = _.map(data, rowData => {
+                    const {viewData, mandatoryFields} = rowData;
+                    const fieldValueHash = CollectionUtils.createHash(viewData,
+                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId||'source'}`
+                    );
+                    const searchKeyObject = _.find(viewData, fieldWithId => {
+                        return fieldWithId.fieldId === this.searchKeyFieldName
                     });
+                    
+                    const fieldValueObjects = _.map(header, headerObject => {
+                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId||'source'}`];
+                        return fieldWithId ? fieldWithId.fieldValue: null
+                    });
+                    const searchKey = searchKeyObject.fieldValue;
+                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], ({id, comment}) => ({id, comment}));
 
                     return {
                         searchKey,
                         comments,
-                        fields: fieldValueObjects
+                        fields: fieldValueObjects,
+                        mandatoryFields
                     };
                 });
                 callback(null, rows);
             }
-        ], (error, convertedRows) => this._emitDataReceivedEvent(error, message, convertedRows));
+        ], (error, convertedRows) => this._emitDataReceivedEvent(error, message, convertedRows, header));
     }
 
-    _emitDataReceivedEvent(error, message, convertedRows) {
+    _emitDataReceivedEvent(error, message, convertedRows, header) {
         /**@type AppServerResult*/
         let clientMessage;
         if (error) {
@@ -145,8 +186,9 @@ class SearchService extends ServiceBase {
             });
         } else {
             clientMessage = Object.assign({}, message, {
-                result: Object.assign({}, message.result, {
-                    data: convertedRows
+                result: Object.assign({}, _.omit(message.result, ['tableData']), {
+                    data: convertedRows,
+                    header
                 })
             });
         }
@@ -163,7 +205,12 @@ class SearchService extends ServiceBase {
      * */
     _loadRowsComments(userId, languId, redisRows, callback) {
         // Extract search keys from all rows.
-        const searchKeys = _.map(redisRows, row => row[this.searchKeyFieldName]);
+        const searchKeys = _.map(redisRows, row => {
+            const searchField = _.find(row, field => {
+                return field.fieldId == this.searchKeyFieldName;
+            });
+            return searchField.fieldValue;
+        });
 
         async.waterfall([
             // Load comments for all search keys.
@@ -171,27 +218,35 @@ class SearchService extends ServiceBase {
 
             // Group comments by search key.
             (comments, callback) => {
-                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(comments, 
-                    (comment) => comment.searchKey);
+                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(
+                    comments, (comment) => comment.searchKey
+                );
                 callback(null, searchKeyToCommentHash);
             }
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(sessionId, operationId, sample, globalSearchValue,
+    _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, viewId, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
         async.parallel({
-            fieldSearchValues: (callback) => {
-                this._createAppServerFieldSearchValues(fieldSearchValues, callback);
-            },
-            sortValues: (callback) => {
-                this._createAppServerSortValues(sortValues, callback);
+            fieldsMetadata: (callback) => async.waterfall(
+                [
+                    (callback) => this.services.views.find(user, viewId, callback),
+                    (view, callback) => this.services.fieldsMetadata.findMany(
+                        _.map(view.viewListItems,item => item.fieldId),
+                        callback
+                    ),
+                ], callback
+            ),
+            samples: (callback) => {
+                this.services.samples.findMany(user, sampleIds, callback);
             }
-        }, (error, {fieldSearchValues, sortValues}) => {
+        }, (error, {fieldsMetadata, samples}) => {
             callback(error, {
                 sessionId,
                 operationId,
-                sample,
+                samples,
+                fieldsMetadata,
                 globalSearchValue,
                 fieldSearchValues,
                 sortValues,
@@ -201,47 +256,27 @@ class SearchService extends ServiceBase {
         });
     }
 
-    _createAppServerFieldSearchValues(fieldSearchValues, callback) {
-        async.map(fieldSearchValues, (fieldSearchValue, callback) => {
-            async.waterfall([
-                (callback) => {
-                    this.services.fieldsMetadata.find(fieldSearchValue.fieldId, callback);
-                },
-                (fieldMetadata, callback) => {
-                    callback(null, {
-                        fieldMetadata,
-                        value: fieldSearchValue.value
-                    });
-                }
-            ], callback);
-        }, callback);
-    }
-
-    _createAppServerSortValues(sortValues, callback) {
-        async.map(sortValues, (sortValue, callback) => {
-            async.waterfall([
-                callback => {
-                    this.services.fieldsMetadata.find(sortValue.fieldId, callback);
-                },
-                (fieldMetadata, callback) => {
-                    callback(null, {
-                        fieldMetadata,
-                        sortOrder: sortValue.order,
-                        sortDirection: sortValue.direction
-                    });
-                }
-            ], callback);
-        },
-        callback);
-    }
-
-    _createAppServerSearchParams(user, languId, sampleId, viewId, filterId, limit, offset, callback) {
+    _createAppServerSearchParams(user, languId, samples, viewId, filterId, modelId, limit, offset, callback) {
+        const sampleIds = _.map(samples, (sample) => sample.id);
         async.parallel({
             langu: (callback) => {
                 this.services.langu.find(languId, callback);
             },
-            sample: (callback) => {
-                this.services.samples.find(user, sampleId, callback);
+            samples: (callback) => {
+                async.waterfall([
+                    (callback) => {
+                        this.services.samples.findMany(user, sampleIds, callback);
+                    },
+                    (analysisSamples, callback) => {
+                        const resultSamples = _.map(samples, (sample) => {
+                            const resultSample = _.find(analysisSamples, {id: sample.id});
+                            return Object.assign({}, resultSample, {
+                                sampleType: sample.type
+                            });
+                        });
+                        callback(null, resultSamples);
+                    }
+                ], callback);
             },
             filter: (callback) => {
                 this.services.filters.find(user, filterId, callback);
@@ -250,7 +285,7 @@ class SearchService extends ServiceBase {
                 async.waterfall([
                     (callback) => {
                         // Load sample metadata
-                        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                        this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback);
                     },
                     (sampleMetadata, callback) => {
                         // Load sources metadata
@@ -270,18 +305,26 @@ class SearchService extends ServiceBase {
             },
             view: (callback) => {
                 this.services.views.find(user, viewId, callback);
+            },
+            model: (callback) => {
+                if (modelId === null) {
+                    callback(null, null)
+                } else {
+                    this.services.models.find(user, modelId, callback);
+                }
             }
-        }, (error, result) => {
+        }, (error, {langu, view, filter, model, samples, fieldsMetadata}) => {
             if (error) {
                 callback(error);
             } else {
                 const appServerSearchParams = {
-                    langu: result.langu,
+                    langu,
                     userId: user.id,
-                    view: result.view,
-                    filter: result.filter,
-                    sample: result.sample,
-                    fieldsMetadata: result.fieldsMetadata,
+                    view,
+                    filter,
+                    samples,
+                    fieldsMetadata,
+                    model,
                     limit,
                     offset
                 };
@@ -292,11 +335,16 @@ class SearchService extends ServiceBase {
 
     _validateAppServerSearchParams(appServerRequestParams, callback) {
         const userId = appServerRequestParams.userId;
-        const sample = appServerRequestParams.sample;
+        const model = appServerRequestParams.model;
         const filter = appServerRequestParams.filter;
         const view = appServerRequestParams.view;
-        async.each([sample, filter, view], (item, callback) => {
-            this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
+        const samples = appServerRequestParams.samples;
+        async.each([model, filter, view].concat(samples), (item, callback) => {
+            if (item !== null) {
+                this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
+            } else {
+                callback(null)
+            }
         }, (error) => {
             callback(error, appServerRequestParams);
         });

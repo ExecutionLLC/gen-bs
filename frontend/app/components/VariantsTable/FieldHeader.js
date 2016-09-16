@@ -1,8 +1,9 @@
+import _ from 'lodash';
 import React, {PropTypes, Component} from 'react';
 import classNames from 'classnames';
 
-import  {firstCharToUpperCase} from '../../utils/stringUtils';
 import config from '../../../config';
+import FieldUtils from '../../utils/fieldUtils';
 
 export default class FieldHeaderControls extends Component {
     constructor(props) {
@@ -15,8 +16,8 @@ export default class FieldHeaderControls extends Component {
     }
 
     render() {
-        const {fieldMetadata, sortState, areControlsEnabled, disabled} = this.props;
-        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldMetadata.id)
+        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleType, sampleId, sampleName} = this.props;
+        const columnSortParams = sortState ? _.find(sortState, {fieldId: fieldMetadata.id, sampleId})
             : null;
 
         const isFilterOpened = this.state.isFilterOpened;
@@ -47,16 +48,13 @@ export default class FieldHeaderControls extends Component {
             }
         );
 
-        const label = firstCharToUpperCase(
-            !fieldMetadata ? 'Unknown' : fieldMetadata.label
-        );
+        const {label, title} = FieldUtils.makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType);
 
         return (
-            <td data-label={fieldMetadata.id}
-                key={fieldMetadata.id}>
+            <td>
                 <div>
                     <div className='variants-table-header-label'>
-                        <a type='button' className='btn-link-default'>
+                        <a type='button' className='btn-link-default' title={title}>
                             {label}
                         </a>
                         <div className={buttonGroupClasses}>

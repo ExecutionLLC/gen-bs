@@ -2,14 +2,12 @@
 
 const _ = require('lodash');
 const CollectionUtils = require('./CollectionUtils');
+const AppServerUtils = require('./AppServerUtils');
 
 /**
  * Here is the WS to AS view conversion logic.
  * */
 class AppServerViewUtils {
-    static getGenotypeFieldsPrefix() {
-        return 'GT_';
-    }
 
     static createAppServerColumnName(fieldName, sourceName, genotypeName, shouldPrefixSources) {
         // Prefix source fields with the source name.
@@ -17,18 +15,30 @@ class AppServerViewUtils {
             return `${sourceName}_${fieldName}`;
         }
         // Postfix genotype fields with genotype name.
-        if (fieldName.startsWith(AppServerViewUtils.getGenotypeFieldsPrefix())) {
+        if (fieldName.startsWith(AppServerUtils.getGenotypeFieldsPrefix())) {
             return `${fieldName}_${genotypeName}`;
         }
         return fieldName;
     }
 
-    static createAppServerView(view, fieldIdToMetadata, sampleGenotypeName) {
-        const viewListItems = view.viewListItems;
+    static getDuplicatedSampleColumns(sampleItem, samples) {
+        return _(samples)
+            .filter(sample => _.some(sample.values, value => value.fieldId === sampleItem.fieldId))
+            .map(sample => {
+                return {
+                    columnName: AppServerUtils.createColumnName(sampleItem.fieldName, sample.genotypeName),
+                    sourceName: AppServerUtils.createSampleName(sample),
+                    filter: sampleItem.filter
+                };
+            })
+            .value();
+    }
 
-        // Mandatory fields should always be in the results (ex. for comments).
-        const mandatoryFields = _.filter(fieldIdToMetadata, field => field.isMandatory);
-        const missingMandatoryFieldsListItems = _(mandatoryFields)
+    static createAppServerView(view, fieldIdToMetadata, samples) {
+        const viewListItems = view.viewListItems;
+        const searchKeyFieldNames = AppServerUtils.getSearchKeyFieldsColumnNames();
+        const searchKeyFields = _.filter(fieldIdToMetadata, field => _.includes(searchKeyFieldNames, field.name));
+        const missingSearchFieldsListItems = _(searchKeyFields)
             .filter(mandatoryField => !_.some(viewListItems, listItem => listItem.fieldId === mandatoryField.id))
             .map(field => {
                 return {
@@ -37,9 +47,7 @@ class AppServerViewUtils {
                 };
             })
             .value();
-
-        const allListItems = view.viewListItems.concat(missingMandatoryFieldsListItems);
-
+        const allListItems = view.viewListItems.concat(missingSearchFieldsListItems);
         // Map list items' field ids to pair (field name, source name).
         const listItems = _(allListItems)
         // Ignore missing fields, to be able to apply views generated for a different sample, with unique fields.
@@ -48,48 +56,61 @@ class AppServerViewUtils {
                 const field = fieldIdToMetadata[listItem.fieldId];
                 const keyWordHash = CollectionUtils.createHashByKey(field.keywords, 'id');
                 return {
+                    fieldId: field.id,
                     fieldName: field.name,
                     sourceName: field.sourceName,
-                    order: listItem.order,
-                    sortOrder: listItem.sortOrder,
-                    sortDirection: listItem.sortDirection,
                     filter: _.map(listItem.keywords, keywordId => keyWordHash[keywordId].value)
                 };
             })
             .value();
-        // Group view items by source name.
-        const itemsBySource = _.groupBy(listItems, (listItem) => listItem.sourceName);
-
-        // 'sample' group contains all sample fields.
-        const appServerSampleColumns = _.map(itemsBySource['sample'],
-            ({fieldName, filter}) => ({
-                name: AppServerViewUtils.createAppServerColumnName(fieldName,
-                    'sample', sampleGenotypeName, false),
-                filter
-            }));
-
-        // Other groups except 'sample' are source names.
-        const sourceNames = _(itemsBySource)
-            .keys()
-            .filter(key => key !== 'sample')
+        const noneDuplicatedColumnNames = AppServerUtils.getNotDuplicatedColumnNames(fieldIdToMetadata);
+        const sampleDuplicatedItems = _(listItems)
+            .filter(listItem => {
+                return listItem.sourceName === 'sample' && !_.some(noneDuplicatedColumnNames, (columnName) => {
+                        return columnName === listItem.fieldName
+                    })
+            })
             .value();
+        const appServerSampleDuplicatedColumns = [].concat.apply(
+            [], _.map(sampleDuplicatedItems, sampleItem => AppServerViewUtils.getDuplicatedSampleColumns(sampleItem, samples))
+        );
 
-        // Make groups of columns separately for each source.
-        const appServerSources = _.map(sourceNames, sourceName => {
-            const sourceColumns = _.map(itemsBySource[sourceName], ({fieldName, filter}) => ({
-                name: AppServerViewUtils.createAppServerColumnName(fieldName, null, null, false),
-                filter
-            }));
-            return {
-                name: sourceName,
-                columns: sourceColumns
-            };
-        });
+        const sampleNoneDuplicatedItems = _(listItems)
+            .filter(listItem => {
+                return listItem.sourceName === 'sample' &&
+                    _.some(noneDuplicatedColumnNames, (columnName) => {
+                        return columnName === listItem.fieldName
+                    })
+            })
+            .value();
+        const appServerSampleNoneDuplicatedColumns = _.map(
+            sampleNoneDuplicatedItems, sampleItem => {
+                return {
+                    columnName: AppServerUtils.createColumnName(sampleItem.fieldName, samples[0].genotypeName),
+                    sourceName: AppServerUtils.createSampleName(samples[0]),
+                    filter: sampleItem.filter
+                }
+            });
 
-        return {
-            sampleColumns: appServerSampleColumns,
-            sources: appServerSources
-        };
+        const sourceItems = _(listItems)
+            .filter(listItem => listItem.sourceName !== 'sample')
+            .value();
+        const appServerSampleSourceColumns = _.map(
+            sourceItems, sourceItem => {
+                return {
+                    columnName: AppServerUtils.createColumnName(sourceItem.fieldName, null),
+                    sourceName: sourceItem.sourceName,
+                    filter: sourceItem.filter
+                }
+            });
+        return [].concat.apply(
+            [],
+            [
+                appServerSampleDuplicatedColumns,
+                appServerSampleNoneDuplicatedColumns,
+                appServerSampleSourceColumns
+            ]
+        );
     }
 }
 

@@ -105,12 +105,12 @@ export default class VariantsTableComment extends Component {
                             <div className='editable-buttons editable-buttons-bottom'>
                                 <button type='button'
                                         className='btn btn-uppercase btn-link editable-submit'
-                                        onClick={()=> this.onSaveClick(alt, pos,
+                                        onClick={() => this.onSaveClick(alt, pos,
                                             reference, chrom, searchKey, comment, comments)}
                                 >Save
                                 </button>
                                 <button type='button'
-                                        onClick={()=>this.refs.overlay.toggle()}
+                                        onClick={() => this.refs.overlay.toggle()}
                                         className='btn btn-uppercase btn-link editable-cancel'>
                                     Cancel
                                 </button>

@@ -3,28 +3,33 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
-import {receiveFields, receiveTotalFields} from './fields';
-import {receiveSavedFilesList} from './savedFiles';
-import {receiveQueryHistory} from './queryHistory';
-import {analyze} from './ui';
-import {changeSample, receiveSamplesList} from './samplesList';
 import {
-    filtersListReceive,
-    filtersListSelectFilter
+    receiveTotalFields
+} from './fields';
+import {receiveSavedFilesList} from './savedFiles';
+import {
+    receiveInitialAnalysesHistory,
+    setCurrentAnalysesHistoryIdLoadData,
+    createNewHistoryItem
+} from './analysesHistory';
+import {receiveSamplesList} from './samplesList';
+import {
+    filtersListReceive
 } from './filtersList';
 import {
-    viewsListReceive,
-    viewsListSelectView
+    viewsListReceive
 } from './viewsList';
+import {
+    modelsListReceive
+} from './modelsList';
 import {entityType} from '../utils/entityTypes';
+import {analyze} from './ui';
 
 /*
  * action types
  */
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA';
 export const REQUEST_USERDATA = 'REQUEST_USERDATA';
-
-export const CHANGE_HISTORY_DATA = 'CHANGE_HISTORY_DATA';
 
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
@@ -68,47 +73,64 @@ export function fetchUserdata() {
                     samples,
                     filters,
                     views,
+                    models,
                     totalFields,
                     savedFiles,
-                    queryHistory,
-                    lastSampleFields
+                    analyses
                 } = userData;
-
-                const sample = _.find(samples, {type: entityType.DEFAULT}) ||
-                               _.find(samples, {type: entityType.STANDARD});
-                const filter = _.find(filters, {type: entityType.DEFAULT}) ||
-                               _.find(filters, {type: entityType.STANDARD});
-                const view = _.find(views, {type: entityType.DEFAULT}) ||
-                             _.find(views, {type: entityType.STANDARD});
 
                 dispatch(receiveUserdata(userData));
                 dispatch(filtersListReceive(filters));
                 dispatch(viewsListReceive(views));
+                dispatch(modelsListReceive(models));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
-                dispatch(receiveFields(lastSampleFields));
                 dispatch(receiveSamplesList(samples));
-                dispatch(receiveQueryHistory(queryHistory));
-
-                if (!sample || !filter || !view) {
-                    dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                dispatch(receiveInitialAnalysesHistory(analyses));
+                if (analyses[0]) {
+                    const historyItem = analyses[0];
+                    dispatch(setCurrentAnalysesHistoryIdLoadData(historyItem.id))
+                        .then(() => {
+                            dispatch(analyze({
+                                id: historyItem.id,
+                                name: historyItem.name,
+                                description: historyItem.description,
+                                type: historyItem.type,
+                                samples: historyItem.samples,
+                                viewId: historyItem.viewId,
+                                filterId: historyItem.filterId,
+                                modelId: historyItem.modelId
+                            }));
+                        });
                 } else {
-                    dispatch(changeSample(sample.id));
-                    dispatch(filtersListSelectFilter(filter.id));
-                    dispatch(viewsListSelectView(view.id));
-                    dispatch(analyze(sample.id, view.id, filter.id));
+                    const sample = _.find(samples, {type: entityType.DEFAULT}) ||
+                                   _.find(samples, {type: entityType.STANDARD});
+                    const filter = _.find(filters, {type: entityType.DEFAULT}) ||
+                                   _.find(filters, {type: entityType.STANDARD});
+                    const view = _.find(views, {type: entityType.DEFAULT}) ||
+                                 _.find(views, {type: entityType.STANDARD});
+                    if (!sample || !filter || !view) {
+                        dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                    } else {
+                        dispatch(createNewHistoryItem(sample, filter, view));
+                        dispatch(setCurrentAnalysesHistoryIdLoadData(null))
+                            .then(() => {
+                                const historyItem = getState().analysesHistory.newHistoryItem;
+                                dispatch(analyze({
+                                    id: null,
+                                    name: historyItem.name,
+                                    description: historyItem.description,
+                                    type: historyItem.type,
+                                    samples: historyItem.samples,
+                                    viewId: historyItem.viewId,
+                                    filterId: historyItem.filterId,
+                                    modelId: historyItem.modelId
+                                }));
+                            });
+                    }
                 }
             }
         });
-    };
-}
-
-export function changeHistoryData(sampleId, filterId, viewId) {
-    return {
-        type: CHANGE_HISTORY_DATA,
-        sampleId,
-        filterId,
-        viewId
     };
 }

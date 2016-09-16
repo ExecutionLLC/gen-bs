@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as ActionTypes from '../actions/samplesList';
 import immutableArray from '../utils/immutableArray';
 import {ImmutableHash, ImmutableHashedArray} from '../utils/immutable';
+import {entityType} from '../utils/entityTypes';
 
 function reduceRequestSamples(state) {
     return state;
@@ -70,28 +71,37 @@ function reduceResetSampleInList(state, action) {
     };
 }
 
-function reduceChangeSample(state, action) {
-    const {sampleId} = action;
-
+function reduceSampleOnSave(state, action) {
     return {
         ...state,
-        selectedSampleId: sampleId
+        onSaveActionSelectedSamplesIds: action.selectedSamplesIds,
+        onSaveAction: action.onSaveAction,
+        onSaveActionPropertyIndex: action.onSaveActionPropertyIndex,
+        onSaveActionPropertyId: action.onSaveActionPropertyId
     };
 }
 
-function reduceChangeSamples(state, action) {
+function reduceSamplesListSetHistorySamples(state, action) {
     const {samples} = action;
+    const {hashedArray} = state;
+    const samplesArrayHistoryParted = _.partition(hashedArray.array, {type: entityType.HISTORY});
+    const samplesArrayWOHistory = samplesArrayHistoryParted[0].length ? samplesArrayHistoryParted[1] : hashedArray.array;
+    const samplesToSet = _.filter(samples, (sample) => !hashedArray.hash[sample.id] || hashedArray.hash[sample.id].type === entityType.HISTORY);
+    if (samplesArrayWOHistory === hashedArray.array && !samplesToSet.length) {
+        return state;
+    }
+    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({...sample, type: entityType.HISTORY}));
+    const samplesArrayWNewHistory = samplesToSetHistored.length ? [...samplesToSetHistored, ...samplesArrayWOHistory] : samplesArrayWOHistory;
+    const samplesHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(samplesArrayWNewHistory);
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(samples)
+        hashedArray: samplesHashedArrayWNewHistory
     };
 }
-
 
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
-    editedSamplesHash: ImmutableHash.makeFromObject({}),
-    selectedSampleId: null
+    editedSamplesHash: ImmutableHash.makeFromObject({})
 }, action) {
 
     switch (action.type) {
@@ -110,11 +120,11 @@ export default function samplesList(state = {
         case ActionTypes.RESET_SAMPLE_IN_LIST:
             return reduceResetSampleInList(state, action);
 
-        case ActionTypes.CHANGE_SAMPLE:
-            return reduceChangeSample(state, action);
+        case ActionTypes.SAMPLE_ON_SAVE:
+            return reduceSampleOnSave(state, action);
 
-        case ActionTypes.CHANGE_SAMPLES:
-            return reduceChangeSamples(state, action);
+        case ActionTypes.SAMPLES_LIST_SET_HISTORY_SAMPLES:
+            return reduceSamplesListSetHistorySamples(state, action);
 
         default:
             return state;

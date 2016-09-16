@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 
 import VariantsTableRow from './VariantsTableRow';
@@ -12,15 +13,14 @@ export default class VariantsTableRows extends Component {
         const {currentVariants} = this.props.ws;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
-        const {fields} = this.props;
-        const currentView = this.props.ws.variantsView;
+        const {fields, variantsHeader, variantsAnalysis} = this.props;
 
         return (
             <tbody className='table-variants-body'
                    id='variants_table_body'
                    ref='variantsTableBody'>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
-                currentView, fields, selectedRowIndices)}
+                !!variantsAnalysis, variantsHeader, fields, selectedRowIndices)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
             </tbody>
         );
@@ -29,8 +29,6 @@ export default class VariantsTableRows extends Component {
     componentDidMount() {
         const containerElement = document.getElementsByClassName('table-variants-container').item(0);
         const scrollElement = this.refs.variantsTableBody;
-        console.log('scrollElement', scrollElement);
-        console.log('containerElement', containerElement.clientHeight);
         scrollElement.style.height = `${containerElement.clientHeight - 100}px`;
 
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
@@ -49,13 +47,14 @@ export default class VariantsTableRows extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.onRendered) {
-            this.props.onRendered();
+        const {onRendered} = this.props;
+        if (onRendered) {
+            onRendered();
         }
     }
 
-    renderTableBody(rows, sortState, isFilteringOrSorting, currentView, fields, selectedRowIndices) {
-        if (isFilteringOrSorting || !currentView) {
+    renderTableBody(rows, sortState, isFilteringOrSorting, variantsAnalysisPresent, variantsHeader, fields, selectedRowIndices) {
+        if (isFilteringOrSorting || !variantsAnalysisPresent) {
             return (
                 <tr>
                     <td colSpan='100'>
@@ -67,7 +66,7 @@ export default class VariantsTableRows extends Component {
         } else {
             return _.map(rows,
                 (row, index) =>
-                    this.renderRow(row, index, sortState, currentView, fields, selectedRowIndices)
+                    this.renderRow(row, index, sortState, variantsHeader, fields, selectedRowIndices)
             );
         }
     }
@@ -97,14 +96,14 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderRow(row, rowIndex, sortState, currentView, fields, selectedRowIndices) {
+    renderRow(row, rowIndex, sortState, variantsHeader, fields, selectedRowIndices) {
         const isSelected = _.includes(selectedRowIndices, rowIndex);
         return (
             <VariantsTableRow key={rowIndex}
                               row={row}
                               rowIndex={rowIndex}
                               sortState={sortState}
-                              currentView={currentView}
+                              variantsHeader={variantsHeader}
                               isSelected={isSelected}
                               fields={fields}
                               auth={this.props.auth}
@@ -135,8 +134,5 @@ export default class VariantsTableRows extends Component {
     onTableRowSelected(rowIndex, isNowSelected) {
         const {dispatch} = this.props;
         dispatch(selectTableRow(rowIndex, isNowSelected));
-
-        const str = isNowSelected ? 'selected' : 'unselected';
-        console.log(`Row ${rowIndex} is ${str}`);
     }
 }

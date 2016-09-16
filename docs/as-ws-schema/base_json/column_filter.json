@@ -4,6 +4,10 @@
   "description": "Column filter. When sending column filter before the previous one is completed, the old results will be dropped.",
   "type": "object",
   "properties": {
+    "source_name": {
+      "type": "string",
+      "description": "name of the sample or source"
+    },
     "column_name": {
       "type": "string",
       "description": "name of the filtered column"

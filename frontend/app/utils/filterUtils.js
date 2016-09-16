@@ -7,117 +7,115 @@ export const filterUtils = {
 
         genomicsOperators: {
             equal: function (v) {
-                return {'$eq': v[0]};
+                return {operator: '$eq', value: v[0]};
             },
             not_equal: function (v) {
-                return {'$neq': v[0]};
+                return {operator: '$neq', value: v[0]};
             },
             in: function (v) {
-                return {'$in': v};
+                return {operator: '$in', value: v};
             },
             not_in: function (v) {
-                return {'$nin': v};
+                return {operator: '$nin', value: v};
             },
             less: function (v) {
-                return {'$lt': v[0]};
+                return {operator: '$lt', value: v[0]};
             },
             less_or_equal: function (v) {
-                return {'$lte': v[0]};
+                return {operator: '$lte', value: v[0]};
             },
             greater: function (v) {
-                return {'$gt': v[0]};
+                return {operator: '$gt', value: v[0]};
             },
             greater_or_equal: function (v) {
-                return {'$gte': v[0]};
+                return {operator: '$gte', value: v[0]};
             },
             between: function (v) {
-                return {'$between': v};
+                return {operator: '$between', value: v};
             },
             not_between: function (v) {
-                return {'$nbetween': v};
+                return {operator: '$nbetween', value: v};
             },
             begins_with: function (v) {
-                return {'$begin_with': v[0]};
+                return {operator: '$begin_with', value: v[0]};
             },
             not_begins_with: function (v) {
-                return {'$nbegin_with': v[0]};
+                return {operator: '$nbegin_with', value: v[0]};
             },
             contains: function (v) {
-                return {'$contains': v[0]};
+                return {operator: '$contains', value: v[0]};
             },
             not_contains: function (v) {
-                return {'$ncontains': v[0]};
+                return {operator: '$ncontains', value: v[0]};
             },
             ends_with: function (v) {
-                return {'$end_with': v[0]};
+                return {operator: '$end_with', value: v[0]};
             },
             not_ends_with: function (v) {
-                return {'$nend_with': v[0]};
+                return {operator: '$nend_with', value: v[0]};
             },
             is_null: function () {
-                return {'$eq': null};
+                return {operator: '$eq', value: null};
             },
             is_not_null: function () {
-                return {'$neq': null};
+                return {operator: '$neq', value: null};
             }
         },
 
         genomicsRuleOperators: {
             $eq: function (v) {
-                v = v.$eq;
                 return {
                     'val': v,
                     'op': v === null ? 'is_null' : 'equal'
                 };
             },
             $neq: function (v) {
-                v = v.$neq;
                 return {
                     'val': v,
                     'op': v === null ? 'is_not_null' : 'not_equal'
                 };
             },
             $in: function (v) {
-                return {'val': v.$in, 'op': 'in'};
+                return {'val': v, 'op': 'in'};
             },
             $nin: function (v) {
-                return {'val': v.$nin, 'op': 'not_in'};
+                return {'val': v, 'op': 'not_in'};
             },
             $lt: function (v) {
-                return {'val': v.$lt, 'op': 'less'};
+                return {'val': v, 'op': 'less'};
             },
             $lte: function (v) {
-                return {'val': v.$lte, 'op': 'less_or_equal'};
+                return {'val': v, 'op': 'less_or_equal'};
             },
             $gt: function (v) {
-                return {'val': v.$gt, 'op': 'greater'};
+                return {'val': v, 'op': 'greater'};
             },
             $gte: function (v) {
-                return {'val': v.$gte, 'op': 'greater_or_equal'};
+                return {'val': v, 'op': 'greater_or_equal'};
             },
             $begin_with: function (v) {
-                return {'val': v.$begin_with, 'op': 'begins_with'};
+                return {'val': v, 'op': 'begins_with'};
             },
             $nbegin_with: function (v) {
-                return {'val': v.$nbegin_with, 'op': 'not_begins_with'};
+                return {'val': v, 'op': 'not_begins_with'};
             },
             $contains: function (v) {
-                return {'val': v.$contains, 'op': 'contains'};
+                return {'val': v, 'op': 'contains'};
             },
             $ncontains: function (v) {
-                return {'val': v.$ncontains, 'op': 'not_contains'};
+                return {'val': v, 'op': 'not_contains'};
             },
             $between: function (v) {
-                return {'val': v.$between, 'op': 'between'};
+                return {'val': v, 'op': 'between'};
             },
             $nbetween: function (v) {
-                return {'val': v.$nbetween, 'op': 'not_between'};
+                return {'val': v, 'op': 'not_between'};
             },
             $end_with: function (v) {
-                return {'val': v.$end_with, 'op': 'ends_with'};
+                return {'val': v, 'op': 'ends_with'};
             },
             $nend_with: function (v) {
-                return {'val': v.$nend_with, 'op': 'not_ends_with'};
+                return {'val': v, 'op': 'not_ends_with'};
             }
         }
     },
@@ -207,7 +205,7 @@ export const filterUtils = {
     },
 
     /**
-     * @typedef {{field: string, operator: string, value: *}} genomicsParsedDataRule
+     * @typedef {{field: string, sampleType: string=, operator: string, value: *}} genomicsParsedDataRule
      * @typedef {{condition: string, rules: Array.<genomicsParsedDataGroup|genomicsParsedDataRule>}} genomicsParsedDataGroup
      * @typedef {genomicsParsedDataGroup} genomicsParsedData
      */
@@ -328,25 +326,28 @@ export const filterUtils = {
         },
         /**
          * @param {string} defaultFieldId
-         * @returns {{id: string, field: string, operator: string, value: *}}
+         * @param {string=} defaultSampleType
+         * @returns {{id: string, field: string, sampleType: string=, operator: string, value: *}}
          */
-        makeDefaultRule(defaultFieldId) {
+        makeDefaultRule(defaultFieldId, defaultSampleType) {
             return {
                 id: defaultFieldId,
                 field: defaultFieldId,
+                sampleType: defaultSampleType,
                 operator: 'is_null',
                 value: null
             };
         },
         /**
          * @param {string} defaultFieldId
+         * @param {string=} defaultSampleType
          * @returns {genomicsParsedDataGroup}
          */
-        makeDefaultGroup(defaultFieldId) {
+        makeDefaultGroup(defaultFieldId, defaultSampleType) {
             return {
                 condition: filterUtils.settings.default_condition,
                 rules: [
-                    this.makeDefaultRule(defaultFieldId)
+                    this.makeDefaultRule(defaultFieldId, defaultSampleType)
                 ]
             };
         },
@@ -355,11 +356,12 @@ export const filterUtils = {
          * @param {number[]} indexPath
          * @param {boolean} isGroup
          * @param {string} defaultFieldId
+         * @param {string=} defaultSampleType
          */
-        appendDefault(data, indexPath, isGroup, defaultFieldId) {
+        appendDefault(data, indexPath, isGroup, defaultFieldId, defaultSampleType) {
             const itemToAppend = isGroup ?
-                this.makeDefaultGroup(defaultFieldId) :
-                this.makeDefaultRule(defaultFieldId);
+                this.makeDefaultGroup(defaultFieldId, defaultSampleType) :
+                this.makeDefaultRule(defaultFieldId, defaultSampleType);
             return this.appendRuleOrGroup(data, indexPath, itemToAppend);
         },
         /**
@@ -391,6 +393,11 @@ export const filterUtils = {
      * @return {object}
      */
     getGenomics: function (data) {
+
+        if (!data) {
+            return null;
+        }
+
         var self = this;
 
         return (function parse(data) {
@@ -430,16 +437,19 @@ export const filterUtils = {
                         }
                     }
 
-                    var part = {};
-                    part[rule.field] = genomicsOp.call(self, values);
+                    var part = {
+                        ...genomicsOp.call(self, values),
+                        field: rule.field,
+                        sampleType: rule.sampleType
+                    };
                     parts.push(part);
                 }
             });
 
-            var res = {};
-            if (parts.length > 0) {
-                res['$' + data.condition.toLowerCase()] = parts;
-            }
+            var res = {
+                condition: '$' + data.condition.toLocaleLowerCase(),
+                rules: parts
+            };
             return res;
         }(data));
     },
@@ -448,10 +458,10 @@ export const filterUtils = {
      * Convert Genomics object to rules
      * @throws GenomicsParseError, UndefinedGenomicsConditionError, UndefinedGenomicsOperatorError
      * @param {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} data query object
-     * @return {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
+     * @return {?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}}
      */
     getRulesFromGenomics: function (data) {
-        if (data === undefined || data === null) {
+        if (data == null) {
             return null;
         }
 
@@ -462,33 +472,24 @@ export const filterUtils = {
         };
 
         return (function parse(data) {
-            var topKeys = Object.keys(data);
-
-            if (topKeys.length > 1) {
+            if (!data.condition || !data.rules) {
                 self.Utils.error('GenomicsParse', 'Invalid Genomics query format');
             }
-            if (!conditions[topKeys[0].toLowerCase()]) {
-                self.Utils.error('UndefinedGenomicsCondition', 'Unable to build Genomics query with condition "{0}"', topKeys[0]);
+            if (!conditions[data.condition.toLowerCase()]) {
+                self.Utils.error('UndefinedGenomicsCondition', 'Unable to build Genomics query with condition "{0}"', data.condition);
             }
 
-            var rules = data[topKeys[0]];
+            var rules = data.rules;
             var parts = [];
 
             rules.forEach(function (rule) {
-                var keys = Object.keys(rule);
-
-                if (conditions[keys[0].toLowerCase()]) {
+                if (rule.condition) {
                     parts.push(parse(rule));
-                }
-                else {
-                    var field = keys[0];
-                    var value = rule[field];
-
-                    var operator = self.determineGenomicsOperator(value);
-                    if (operator === undefined) {
-                        self.Utils.error('GenomicsParse', 'Invalid Genomics query format');
-                    }
-
+                } else {
+                    var field = rule.field;
+                    var sampleType = rule.sampleType;
+                    var value = rule.value;
+                    var operator = rule.operator;
                     var genomicsRule = self.settings.genomicsRuleOperators[operator];
                     if (genomicsRule === undefined) {
                         self.Utils.error('UndefinedGenomicsOperator', 'JSON Rule operation unknown for operator "{0}"', operator);
@@ -498,6 +499,7 @@ export const filterUtils = {
                     parts.push({
                         id: field,
                         field: field,
+                        sampleType: sampleType,
                         operator: opVal.op,
                         value: opVal.val
                     });
@@ -506,25 +508,11 @@ export const filterUtils = {
 
             var res = {};
             if (parts.length > 0) {
-                res.condition = conditions[topKeys[0].toLowerCase()];
+                res.condition = conditions[data.condition.toLowerCase()];
                 res.rules = parts;
             }
             return res;
         }(data));
-    },
-    /**
-     * Find which operator is used in a Genomics sub-object
-     * @param {Object|null|*} value
-     * @return {string|undefined}
-     */
-    determineGenomicsOperator: function (value) {
-        if (value !== null && typeof value === 'object') {
-            var subkeys = Object.keys(value);
-
-            if (subkeys.length === 1) {
-                return subkeys[0];
-            }
-        }
     }
 };
 
@@ -624,12 +612,12 @@ export const genomicsParsedRulesValidate = {
         }
     },
     /**
-     * Validate rule item (field, operator, value), return valid rule,
+     * Validate rule item (field, sampleType, operator, value), return valid rule,
      * rules group flag (groups are not validating here) or error message
      * Result value is type casted for field type
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {?{condition: *=, field: string=, operator: string=, value: *=}} rule
-     * @returns {{errorMessage: string=, isGroup: boolean=, validRule: {field: string, operator: string, value:*}=}}
+     * @param {?{condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}} rule
+     * @returns {{errorMessage: string=, isGroup: boolean=, validRule: {field: string, sampleType: string=, operator: string, value:*}=}}
      */
     validateRule(fields, rule) {
         if (!rule) {
@@ -669,6 +657,7 @@ export const genomicsParsedRulesValidate = {
         return {
             validRule: {
                 field: rule.field,
+                sampleType: rule.sampleType,
                 operator: rule.operator,
                 value: castedValue
             }
@@ -679,9 +668,9 @@ export const genomicsParsedRulesValidate = {
      * Return valid rules
      * Append validation report
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{condition: *=, field: string=, operator: string=, value: *=}[]} rules
+     * @param {{condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]} rules
      * @param {number[]} indexPath current rules group position, [] for root rules group, [1, 2] for 2nd group in 1st group in root
-     * @returns {{validRules: {field: string, operator: string, value:*}[], report: {indexPath: number[], message: string}[]}}
+     * @returns {{validRules: {field: string, sampleType: string=, operator: string, value:*}[], report: {indexPath: number[], message: string}[]}}
      */
     validateRules(fields, rules, indexPath) {
         var report = [];
@@ -694,7 +683,7 @@ export const genomicsParsedRulesValidate = {
             }
             const ruleIndexPath = indexPath.concat([i]);
             if (validateRuleResult.isGroup) {
-                const group = /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */rule;
+                const group = /** @type {{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} */rule;
                 const validSubGroupResult = this.validateGroup(fields, group, ruleIndexPath);
                 report = report.concat(validSubGroupResult.report);
                 if (!validSubGroupResult.validGroup) {
@@ -713,9 +702,9 @@ export const genomicsParsedRulesValidate = {
      * Return valid group or null
      * Append validation report
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} group
+     * @param {{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} group
      * @param {number[]} indexPath
-     * @returns {{validGroup: ?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
+     * @returns {{validGroup: ?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
      */
     validateGroup(fields, group, indexPath) {
         var reportGroup = [];
@@ -745,8 +734,8 @@ export const genomicsParsedRulesValidate = {
      * Validate parsed rules, return rules with valid items only (can be null) and validation report
      * Report is an array of object with message and index path (nested group indexes, [] is root) in source rules
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} rules
-     * @returns {{validRules: ?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
+     * @param {{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} rules
+     * @returns {{validRules: ?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
      */
     validateGemonicsParsedRules(fields, rules) {
         const validateGroupResult = this.validateGroup(fields, rules, []);

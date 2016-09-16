@@ -13,9 +13,10 @@ import samplesList from './samplesList';
 import websocket from './websocket';
 import fileUpload from './fileUpload';
 import errorHandler from './errorHandler';
-import queryHistory from './queryHistory';
+import analysesHistory from './analysesHistory';
 import filtersList from './filtersList';
 import viewsList from './viewsList';
+import modelsList from './modelsList';
 
 const genApp = combineReducers({
     auth,
@@ -30,10 +31,11 @@ const genApp = combineReducers({
     samplesList,
     filtersList,
     viewsList,
+    modelsList,
     websocket,
     fileUpload,
     errorHandler,
-    queryHistory
+    analysesHistory
 });
 
 export default genApp;

@@ -7,8 +7,9 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    viewBuilderStartEdit,
-    viewBuilderDeleteView
+    viewBuilderRestartEdit,
+    viewBuilderDeleteView,
+    fireOnSaveAction
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
@@ -135,24 +136,26 @@ export default class ExistentViewSelect extends React.Component {
 
     onSelectedViewChanged(viewId) {
         const {dispatch} = this.props;
-        dispatch(viewBuilderStartEdit(false, this.getViewForId(viewId)));
+        dispatch(viewBuilderRestartEdit(false, this.getViewForId(viewId)));
     }
 
     onDuplicateViewClick() {
-        const {dispatch} = this.props;
-        const editingView = this.props.viewBuilder.editingView;
-        dispatch(viewBuilderStartEdit(true, editingView));
+        const {dispatch, viewBuilder} = this.props;
+        const editingView = viewBuilder.editingView;
+        dispatch(viewBuilderRestartEdit(true, editingView));
     }
 
     onResetViewClick() {
         const {dispatch} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderStartEdit(false, this.getViewForId(editingViewId)));
+        dispatch(viewBuilderRestartEdit(false, this.getViewForId(editingViewId)));
     }
 
     onDeleteViewClick() {
         const {dispatch} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderDeleteView(editingViewId));
+        dispatch(viewBuilderDeleteView(editingViewId)).then((newView) => {
+            dispatch(fireOnSaveAction(newView));
+        });
     }
 }

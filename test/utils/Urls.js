@@ -80,7 +80,7 @@ class Urls {
         return this._constructApiUrl('/data');
     }
 
-    queryHistory() {
+    analysesHistory() {
         return this._constructApiUrl('/history');
     }
 
@@ -114,6 +114,10 @@ class Urls {
 
     filtersUrls() {
         return new CollectionUrls('/filters', this.host, this.port);
+    }
+
+    modelsUrls() {
+        return new CollectionUrls('/models', this.host, this.port);
     }
 
     samplesUrls() {

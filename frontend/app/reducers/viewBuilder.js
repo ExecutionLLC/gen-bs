@@ -23,7 +23,7 @@ function createViewItem(fieldId) {
 }
 
 function reduceVBuilderStartEdit(state, action) {
-    const {view, makeNew} = action;
+    const {view, makeNew, allowedFields} = action;
     const editingView = makeNew ?
         Object.assign({}, view, {
             type: entityType.USER,
@@ -35,7 +35,8 @@ function reduceVBuilderStartEdit(state, action) {
         editingView: editingView,
         originalView: editingView,
         editingViewIsNew: makeNew,
-        editingViewParentId: view.id
+        editingViewParentId: view.id,
+        allowedFields
     });
 }
 
@@ -48,7 +49,8 @@ function reduceVBuilderEndEdit(state) {
         editingView: null,
         originalView: null,
         editingViewIsNew: false,
-        editingViewParentId: ''
+        editingViewParentId: '',
+        allowedFields: null
     });
 }
 
@@ -57,10 +59,11 @@ export default function viewBuilder(state = {
     originalView: null,
     editingViewIsNew: false,
     editingViewParentId: '',
+    allowedFields: null,
     isFetching: false
 }, action) {
 
-    switch (action.type) {
+    switch (action.type) { // TODO extract reducers
         case ActionTypes.VBUILDER_START_EDIT:
             return reduceVBuilderStartEdit(state, action);
         case ActionTypes.VBUILDER_SAVE_EDIT:
@@ -166,6 +169,12 @@ export default function viewBuilder(state = {
                 })
             });
         }
+        case ActionTypes.VBUILDER_ON_SAVE:
+            return {
+                ...state,
+                onSaveAction: action.onSaveAction,
+                onSaveActionProperty: action.onSaveActionProperty
+            };
         default:
             return state;
     }

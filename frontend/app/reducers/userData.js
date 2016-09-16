@@ -3,12 +3,7 @@ import * as ActionTypes from '../actions/userData';
 export default function userData(state = {
     isFetching: false,
     isValid: false,
-    profileMetadata: {},
-    attachedHistoryData: {
-        sampleId: null,
-        filterId: null,
-        viewId: null
-    }
+    profileMetadata: {}
 }, action) {
 
     switch (action.type) {
@@ -28,17 +23,6 @@ export default function userData(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.CHANGE_HISTORY_DATA:
-            {
-                const {sampleId, filterId, viewId} = action;
-                return Object.assign({}, state, {
-                    attachedHistoryData: {
-                        sampleId: sampleId,
-                        filterId: filterId,
-                        viewId: viewId
-                    }
-                });
-            }
         default:
             return state;
     }

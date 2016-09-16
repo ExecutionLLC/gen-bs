@@ -24,6 +24,17 @@ const ENTITY_TYPES = createEnum({
     DEFAULT: 'default'
 });
 
+const MODEL_TYPES = createEnum({
+    FILTER: 'filter',
+    COMPLEX: 'complex'
+});
+
+const ANALYSIS_TYPES = createEnum({
+    ALL: 'all',
+    TUMOR: 'tumor',
+    FAMILY: 'family'
+});
+
 /**
  * Types which default elements can have.
  * */
@@ -42,5 +53,7 @@ module.exports = {
     OBJECT_STORAGE_TYPES,
     SEARCH_SERVICE_EVENTS,
     ENTITY_TYPES,
-    WS_INSTANCE_MESSAGE_TYPES
+    WS_INSTANCE_MESSAGE_TYPES,
+    MODEL_TYPES,
+    ANALYSIS_TYPES
 };

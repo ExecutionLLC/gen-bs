@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeSample} from '../../../actions/samplesList';
+import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 
@@ -17,7 +17,7 @@ export default class FileUploadSamplesRow extends Component {
     onSelectForAnalysisClick(e, sampleId) {
         e.preventDefault();
         const {dispatch, closeModal} = this.props;
-        dispatch(changeSample(sampleId));
+        dispatch(sampleSaveCurrent(sampleId));
         closeModal('upload');
     }
 
@@ -33,23 +33,25 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     makeFieldIdToValuesHash(sample) {
-        return _.reduce(sample.values, (result, value) => {
-            return {...result, [value.fieldId]: value.values};
-        }, {});
+        return _(sample.values)
+            .keyBy((value) => value.fieldId)
+            .mapValues((values) => values.values) // yes, values.values, we need all samples.values.values'es
+            .value();
     }
 
     render() {
         const {sampleId, samplesList: {hashedArray: {hash: samplesHash}, editedSamplesHash}} = this.props;
+        const {showValues} = this.state;
         const sample = samplesHash[sampleId];
         const fieldIdToValuesHash = this.makeFieldIdToValuesHash(sample);
-        const editedSample = this.state.showValues && editedSamplesHash[sampleId];
+        const editedSample = showValues && editedSamplesHash[sampleId];
         const editedFieldIdToValuesHash = editedSample && this.makeFieldIdToValuesHash(editedSample);
 
         return (
             <div className='panel'>
                 {this.renderHeader()}
                 {this.renderCurrentValues(fieldIdToValuesHash)}
-                {this.state.showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
+                {showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
         );
@@ -146,8 +148,9 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderReadOnlyField(field, fieldIdToValuesHash) {
-        if (fieldIdToValuesHash[field.id]) {
-            let fieldValue = fieldIdToValuesHash[field.id];
+        const fieldValues = fieldIdToValuesHash[field.id];
+        if (fieldValues) {
+            let fieldValue = fieldValues;
             // If field has available values, then the value is id of the actual option.
             // We then need to retrieve the actual value corresponding to the option.
             if (!_.isEmpty(field.availableValues)) {

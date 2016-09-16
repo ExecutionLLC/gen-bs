@@ -8,8 +8,9 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    filterBuilderStartEdit,
-    filterBuilderDeleteFilter
+    filterBuilderRestartEdit,
+    filterBuilderDeleteFilter,
+    fireOnSaveAction
 } from '../../../actions/filterBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
@@ -17,36 +18,37 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 export default class ExistentFilterSelect extends Component {
 
     render() {
-        const {auth, fields} = this.props;
-        const selectedFilter = this.props.filterBuilder.editingFilter.filter;
-        const filters = this.props.filtersList.hashedArray.array;
+        const {auth, texts, filterBuilder} = this.props;
+        const selectedFilter = filterBuilder.editingFilter.filter;
+        const filters = filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
+        const isFilterDuplicable = !!filterBuilder.editingFilter.parsedFilter;
 
         return (
             <div className='in'>
                 <div className='row grid-toolbar'>
-                    {this.renderTitle()}
+                    {this.renderTitle(texts)}
                 </div>
-                {this.renderWarning(isDemoSession, selectedFilter.type)}
+                {this.renderWarning(isDemoSession, selectedFilter.type, texts)}
                 <div className='row grid-toolbar row-head-selector'>
-                    {this.renderFiltersSelector(filters, fields)}
-                    {this.renderButtonGroup(isDemoSession, isFilterEditable)}
+                    {this.renderFiltersSelector(filters)}
+                    {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts)}
                 </div>
             </div>
         );
     }
 
-    renderTitle() {
+    renderTitle(texts) {
         return (
             <div className='col-sm-6'>
-                <label data-localize='filters.setup.selector.label'>Available Filters</label>
+                <label data-localize='filters.setup.selector.label'>Available {texts.Filters}</label>
             </div>
         );
     }
 
-    renderWarning(isDemoSession, selectedFilterType) {
-        const warningText = getReadonlyReasonForSessionAndType('filter', isDemoSession, selectedFilterType);
+    renderWarning(isDemoSession, selectedFilterType, texts) {
+        const warningText = getReadonlyReasonForSessionAndType(texts.filter, isDemoSession, selectedFilterType);
 
         if (!warningText) {
             return null;
@@ -60,7 +62,7 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderFiltersSelector(filters, fields) {
+    renderFiltersSelector(filters) {
         const selectItems = filters.map( filter => ({
             value: filter.id,
             label: getItemLabelByNameAndType(filter.name, filter.type)
@@ -71,27 +73,27 @@ export default class ExistentFilterSelect extends Component {
                 <Select
                     options={selectItems}
                     value={this.getSelectedFilter().id}
-                    onChange={(val) => this.onSelectChange(filters, val.value, fields)}
+                    onChange={(val) => this.onSelectChange(filters, val.value)}
                 />
             </div>
         );
     }
 
-    renderButtonGroup(isDemoSession, isFilterEditable) {
+    renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts) {
         return (
             <div className='col-sm-6'>
                 <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                      data-placement='bottom' data-container='body'>
-                    {this.renderDuplicateFilterButton(isDemoSession)}
-                    {isFilterEditable && this.renderResetFilterButton()}
-                    {isFilterEditable && this.renderDeleteFilterButton()}
+                    {isFilterDuplicable && this.renderDuplicateFilterButton(isDemoSession, texts)}
+                    {isFilterEditable && this.renderResetFilterButton(texts)}
+                    {isFilterEditable && this.renderDeleteFilterButton(texts)}
                 </div>
             </div>
         );
     }
 
-    renderDuplicateFilterButton(isDemoSession) {
-        const title = isDemoSession ? 'Login or register to work with filter' : 'Make a copy for editing';
+    renderDuplicateFilterButton(isDemoSession, texts) {
+        const title = isDemoSession ? `Login or register to work with ${texts.filter}` : 'Make a copy for editing';
         return (
             <button type='button'
                     className='btn btn-default in'
@@ -106,25 +108,25 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderResetFilterButton() {
+    renderResetFilterButton(texts) {
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onResetFilterClick()}
             >
-                <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset Filter</span>
+                <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset {texts.Filter}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
         );
     }
 
-    renderDeleteFilterButton() {
+    renderDeleteFilterButton(texts) {
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onDeleteFilterClick()}
             >
-                <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete Filter</span>
+                <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete {texts.Filter}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
         );
@@ -138,25 +140,26 @@ export default class ExistentFilterSelect extends Component {
         return _.find(filters, {id: filterId}) || null;
     }
 
-    onSelectChange(filters, filterId, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, this.getFilterForId(filters, filterId), fields));
+    onSelectChange(filters, filterId) {
+        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId)));
     }
 
     onDuplicateClick() {
         const filter = this.getSelectedFilter();
-        const fields = this.props.fields;
-        this.props.dispatch(filterBuilderStartEdit(true, filter, fields));
+        this.props.dispatch(filterBuilderRestartEdit(true, filter));
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        const fields = this.props.fields;
-        this.props.dispatch(filterBuilderStartEdit(false, filter, fields));
+        this.props.dispatch(filterBuilderRestartEdit(false, filter));
     }
 
     onDeleteFilterClick() {
+        const {dispatch} = this.props;
         const filterId = this.getSelectedFilter().id;
-        this.props.dispatch(filterBuilderDeleteFilter(filterId));
+        dispatch(filterBuilderDeleteFilter(filterId)).then((newFilter) => {
+            dispatch(fireOnSaveAction(newFilter));
+        });
     }
 
 }

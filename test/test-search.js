@@ -8,6 +8,7 @@ const CollectionUtils = require('../utils/CollectionUtils');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
+const ModelsClient = require('./utils/ModelsClient');
 const SamplesClient = require('./utils/SamplesClient');
 const SearchClient = require('./utils/SearchClient');
 const Config = require('../utils/Config');
@@ -18,6 +19,7 @@ const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
 const filtersClient = new FiltersClient(urls);
 const viewsClient = new ViewsClient(urls);
+const modelsClient = new ModelsClient(urls);
 const samplesClient = new SamplesClient(urls);
 const searchClient = new SearchClient(urls);
 
@@ -76,9 +78,9 @@ describe('Search', function () {
             wsState.messages.push(message);
             assert.equal(message.operationId, wsState.operationId);
             const endMessage = _.find(wsState.messages, (message) => message
-                && message.result
-                && message.result.data
-                && _.isArray(message.result.data));
+            && message.result
+            && message.result.data
+            && _.isArray(message.result.data));
             if (endMessage) {
                 const rows = endMessage.result.data;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
@@ -91,10 +93,10 @@ describe('Search', function () {
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {
                     _.each(row.fields, (rowField) => {
-                            const fieldId = rowField.fieldId;
-                            assert.ok(fieldId);
-                            assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
-                        });
+                        const fieldId = rowField.fieldId;
+                        assert.ok(fieldId);
+                        assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
+                    });
                     assert.ok(row.comments);
                     assert.ok(row.searchKey);
                 });
@@ -112,30 +114,47 @@ describe('Search', function () {
 
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
+                modelsClient.getAll(sessionId, (error, response) => {
+                    const models = ClientBase.readBodyWithCheck(error, response);
 
-                samplesClient.getAll(sessionId, (error, response) => {
-                    const samples = ClientBase.readBodyWithCheck(error, response);
-                    const sample = samples[0];
+                    samplesClient.getAll(sessionId, (error, response) => {
+                        const samples = ClientBase.readBodyWithCheck(error, response);
+                        const sample = samples[0];
 
-                    samplesClient.getFields(sessionId, sample.id, (error, response) => {
-                        const sampleFields = ClientBase.readBodyWithCheck(error, response);
+                        samplesClient.getFields(sessionId, sample.id, (error, response) => {
+                            const sampleFields = ClientBase.readBodyWithCheck(error, response);
 
-                        samplesClient.getSourcesFields(sessionId, (error, response) => {
-                            const sourcesFields = ClientBase.readBodyWithCheck(error, response);
+                            samplesClient.getSourcesFields(sessionId, (error, response) => {
+                                const sourcesFields = ClientBase.readBodyWithCheck(error, response);
 
-                            wsState.filter = filters[0];
-                            wsState.view = views[0];
-                            wsState.sample = sample;
-                            wsState.sourcesFields = sourcesFields;
-                            wsState.sampleFields = sampleFields;
+                                wsState.filter = filters[0];
+                                wsState.view = views[0];
+                                wsState.sample = sample;
+                                wsState.sourcesFields = sourcesFields;
+                                wsState.sampleFields = sampleFields;
+                                const analysis = {
+                                    id: null,
+                                    name: 'test name',
+                                    description: 'test_descr',
+                                    type: 'single',
+                                    samples: [
+                                        {
+                                            id: sample.id,
+                                            type: 'single'
+                                        }
+                                    ],
+                                    viewId: views[0].id,
+                                    filterId: filters[0].id,
+                                    modelId: models[0].id
+                                };
 
-                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id,
-                                wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset,
-                                (error, response) => {
-                                const body = ClientBase.readBodyWithCheck(error, response);
-                                const operationId = body.operationId;
-                                assert.ok(operationId);
-                                wsState.operationId = operationId;
+                                searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, analysis, wsState.limit, wsState.offset,
+                                    (error, response) => {
+                                        const body = ClientBase.readBodyWithCheck(error, response);
+                                        const operationId = body.operationId;
+                                        assert.ok(operationId);
+                                        wsState.operationId = operationId;
+                                    });
                             });
                         });
                     });

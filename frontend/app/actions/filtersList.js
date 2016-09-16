@@ -8,10 +8,10 @@ const filtersClient = apiFacade.filtersClient;
 export const FILTERS_LIST_START_SERVER_OPERATION = 'FILTERS_LIST_START_SERVER_OPERATION';
 export const FILTERS_LIST_END_SERVER_OPERATION = 'FILTERS_LIST_END_SERVER_OPERATION';
 export const FILTERS_LIST_RECEIVE = 'FILTERS_LIST_RECEIVE';
-export const FILTERS_LIST_SELECT_FILTER = 'FILTERS_LIST_SELECT_FILTER';
 export const FILTERS_LIST_ADD_FILTER = 'FILTERS_LIST_ADD_FILTER';
 export const FILTERS_LIST_DELETE_FILTER = 'FILTERS_LIST_DELETE_FILTER';
 export const FILTERS_LIST_EDIT_FILTER = 'FILTERS_LIST_EDIT_FILTER';
+export const FILTERS_LIST_SET_HISTORY_FILTER = 'FILTERS_LIST_SET_HISTORY_FILTER';
 
 
 const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
@@ -40,13 +40,6 @@ export function filtersListReceive(filters) {
     return {
         type: FILTERS_LIST_RECEIVE,
         filters
-    };
-}
-
-export function filtersListSelectFilter(filterId) {
-    return {
-        type: FILTERS_LIST_SELECT_FILTER,
-        filterId
     };
 }
 
@@ -86,9 +79,7 @@ export function filtersListServerCreateFilter(filter, languageId) {
                     reject();
                 } else {
                     const newFilter = response.body;
-                    const filterId = newFilter.id;
                     dispatch(filtersListAddFilter(newFilter));
-                    dispatch(filtersListSelectFilter(filterId));
                     resolve(newFilter);
                 }
             });
@@ -111,8 +102,7 @@ export function filtersListServerUpdateFilter(filter) {
                 } else {
                     const updatedFilter = response.body;
                     dispatch(filtersListEditFilter(filter.id, updatedFilter));
-                    dispatch(filtersListSelectFilter(updatedFilter.id));
-                    resolve();
+                    resolve(updatedFilter);
                 }
             });
         });
@@ -137,5 +127,12 @@ export function filtersListServerDeleteFilter(filterId) {
                 }
             });
         });
+    };
+}
+
+export function filtersListSetHistoryFilter(filter) {
+    return {
+        type: FILTERS_LIST_SET_HISTORY_FILTER,
+        filter
     };
 }

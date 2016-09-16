@@ -6,27 +6,28 @@ import ComponentBase from '../shared/ComponentBase';
 
 import VariantsTableComment from './VariantsTableComment';
 
+import FieldUtils from '../../utils/fieldUtils.js';
+
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
         const {
+            dispatch,
             row,
             auth,
             rowIndex,
-            currentView,
+            variantsHeader,
             sortState,
-            fields,
             isSelected
         } = this.props;
-        const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
+        const mandatoryFields = row.mandatoryFields;
         const comments = row.comments;
-        const viewFields = currentView.viewListItems;
 
-        const pos = this.getMainFieldValue('POS', rowFields, fields);
-        const alt = this.getMainFieldValue('ALT', rowFields, fields);
-        const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
-        const ref = this.getMainFieldValue('REF', rowFields, fields);
+        const pos = mandatoryFields['POS'];
+        const alt = mandatoryFields['ALT'];
+        const chrom = mandatoryFields['CHROM'];
+        const ref = mandatoryFields['REF'];
         const searchKey = row.searchKey;
 
         return (
@@ -56,11 +57,13 @@ export default class VariantsTableRow extends ComponentBase {
                                       reference={ref}
                                       chrom={chrom}
                                       searchKey={searchKey}
-                                      dispatch={this.props.dispatch}
+                                      dispatch={dispatch}
                                       auth={auth}
                                       comments={comments}
                 />
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
+                {_.map(rowFields, (value, index) =>
+                    this.renderFieldValue(variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
+                )}
             </tr>
         );
     }
@@ -70,29 +73,38 @@ export default class VariantsTableRow extends ComponentBase {
         onSelected(rowIndex, !isSelected);
     }
 
-    getMainFieldValue(colName, rowFields, fields) {
-        const mainField = _.find(fields.totalFieldsHashedArray.array, field => field.name === colName);
-        return _.find(rowFields, field => field.fieldId === mainField.id).value;
-    }
-
-
-    renderFieldValue(field, sortState, rowFields) {
-        const fieldId = field.fieldId;
-        const resultFieldValue = rowFields[fieldId];
-        let columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
-
-        let sortedActiveClass = classNames({
+    renderFieldValue(fieldId, sampleId, value, sortState) {
+        const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
+        const resultFieldValue = value;
+        const columnSortParams = _.find(sortState, {fieldId, sampleId});
+        const sortedActiveClass = classNames({
             'active': columnSortParams
         });
 
+        const field = hash[fieldId];
+        const isValuedHyperlink = this.isHyperlink(field, resultFieldValue);
         return (
             <td className={sortedActiveClass}
-                key={fieldId}>
+                key={fieldId + '-' + sampleId}>
                 <div>
-                    {resultFieldValue || ''}
+                    {isValuedHyperlink ?(this.renderHyperLink(field.hyperlinkTemplate, value)):(resultFieldValue || '')}
                 </div>
             </td>
         );
+    }
+    renderHyperLink(hyperlinkTemplate, value){
+        const replacementValue = encodeURIComponent(value);
+        const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+        return (
+            <a href={valueUrl}>{value}</a>
+        );
+    }
+
+    isHyperlink(field, value) {
+        return field.isHyperlink
+            && field.hyperlinkTemplate
+            && value
+            && value !== '.';
     }
 
     shouldComponentUpdate(nextProps) {
@@ -104,7 +116,6 @@ export default class VariantsTableRow extends ComponentBase {
 VariantsTableRow.propTypes = {
     row: React.PropTypes.object.isRequired,
     rowIndex: React.PropTypes.number.isRequired,
-    currentView: React.PropTypes.object.isRequired,
     sortState: React.PropTypes.array.isRequired,
     auth: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,

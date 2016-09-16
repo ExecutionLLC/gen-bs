@@ -3,7 +3,11 @@
   "title": "One column of the view.",
   "type": "object",
   "properties": {
-    "name": {
+    "source_name": {
+      "type": "string",
+      "description": "Name of sample or source"
+    },
+    "column_name": {
       "type": "string",
       "description": "Column name."
     },

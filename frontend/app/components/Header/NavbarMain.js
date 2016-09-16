@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import CreateQueryNavbarButton from './NavbarMain/CreateQueryNavbarButton';
+import SamplesAnalysisButtons from './NavbarMain/SamplesAnalysisButtons';
 import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
@@ -9,7 +9,6 @@ import Language from './NavbarMain/Language';
 import Buy from './NavbarMain/Buy';
 import Auth from './NavbarMain/Auth';
 
-import {toggleQueryNavbar} from '../../actions/ui';
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
 
 class NavbarMain extends Component {
@@ -21,7 +20,7 @@ class NavbarMain extends Component {
     render() {
         const {
             dispatch,
-            variantsTable: {selectedRowIndices,searchInResultsParams:{topSearch:{filter}}}
+            variantsTable: {selectedRowIndices,searchInResultsParams:{topSearch:{search}}}
         } = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
@@ -40,11 +39,14 @@ class NavbarMain extends Component {
                         className='btn navbar-btn brand' data-toggle='modal' data-target='#info'><span
                         data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
 
-                    <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()); } }/>
+                    <SamplesAnalysisButtons
+                        openAnalysisModal={() => this.props.openAnalysisModal()}
+                        openSamplesModal={() => this.props.openSamplesModal()}
+                    />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
-                        filter={filter}
+                        search={search}
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}

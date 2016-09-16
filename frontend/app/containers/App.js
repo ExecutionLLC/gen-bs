@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout, WATCH_ALL } from 'redux-timeout';
-import classNames from 'classnames';
 
 import config from '../../config';
 
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
-import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
-import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
+import AnalysisModal from '../components/Modals/AnalysisModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { closeQueryHistoryModal } from '../actions/queryHistory';
+import {samplesOnSave} from '../actions/samplesList';
 
 
 class App extends Component {
@@ -38,31 +36,23 @@ class App extends Component {
     }
 
     render() {
-        const {samplesList: {hashedArray: {array: samplesArray}}} = this.props;
-        const { ui } = this.props;
-
-        const mainDivClass = classNames({
-            'main': true,
-            'subnav-closed': ui.queryNavbarClosed
-        });
-
-        const navbarQueryClass = classNames({
-            'collapse-subnav': true,
-            'hidden': ui.queryNavbarClosed
-        });
+        const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
+            modalWindows, savedFiles, showErrorWindow, auth} = this.props;
 
         return (
-            <div className={mainDivClass} id='main'>
+            <div className='main subnav-closed' id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'/>
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
-                    <NavbarMain />
-                     <div className={navbarQueryClass} id='subnav'>
-                         <NavbarCreateQuery
-                          {...this.props}
-                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)); } }
-                         />
+                    <NavbarMain
+                        openAnalysisModal={() => dispatch(openModal('analysis'))}
+                        openSamplesModal={() => {
+                            dispatch(samplesOnSave(null, null, null, null));
+                            dispatch(openModal('upload'));
+                        }}
+                    />
+                     <div className='collapse-subnav hidden' id='subnav'>
                      </div>
                      <VariantsTableReact {...this.props} />
                      <div id='fav-message' className='hidden'>
@@ -70,33 +60,34 @@ class App extends Component {
                      </div>
                  </div>
                 }
+                <AnalysisModal
+                    showModal={modalWindows.analysis.showModal}
+                    closeModal={ () => { dispatch(closeModal('analysis')); } }
+                    dispatch={dispatch}
+                />
                 <ErrorModal
-                    showModal={this.props.showErrorWindow}
-                    closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
+                    showModal={showErrorWindow}
+                    closeModal={ () => { dispatch(lastErrorResolved()); } }
                 />
                 <AutoLogoutModal
-                    showModal={this.props.auth.showAutoLogoutDialog}
-                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()); } }
+                    showModal={auth.showAutoLogoutDialog}
+                    closeModal={ () => { dispatch(stopAutoLogoutTimer()); } }
                 />
                 <ViewsModal
-                    showModal={this.props.modalWindows.views.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.views.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    dispatch={dispatch}
                 />
                 <FiltersModal
-                    showModal={this.props.modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.filters.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    dispatch={dispatch}
                 />
                 <FileUploadModal
-                    showModal={this.props.modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    showModal={modalWindows.upload.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
                 />
-                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
-                <QueryHistoryModal
-                    showModal={this.props.showQueryHistoryModal}
-                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()); } }
-                />
+                <SavedFilesModal showModal={savedFiles.showSavedFilesModal} />
             </div>
         );
     }
@@ -112,8 +103,8 @@ function mapStateToProps(state) {
             samplesList,
             filtersList,
             viewsList,
-            errorHandler: { showErrorWindow },
-            queryHistory: { showQueryHistoryModal } } = state;
+            modelsList,
+            errorHandler: { showErrorWindow } } = state;
 
     return {
         auth,
@@ -125,8 +116,8 @@ function mapStateToProps(state) {
         samplesList,
         filtersList,
         viewsList,
-        showErrorWindow,
-        showQueryHistoryModal
+        modelsList,
+        showErrorWindow
     };
 }
 

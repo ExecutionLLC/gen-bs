@@ -2,18 +2,23 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/variantsTable';
 
+const DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET = {
+    limit: 100,
+    offset: 0
+};
+
+const DEFAULT_SEARCH_PARAMS = {
+    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET,
+    search: [],
+    sort: [],
+    topSearch: {
+        search: ''
+    }
+};
+
 const initialState = {
     operationId: null,
-    searchInResultsParams: {
-        search: [],
-        sort: [],
-        limit: 100,
-        offset: 0,
-        topSearch: {
-            filter: '',
-            excludedFields: []
-        }
-    },
+    searchInResultsParams: DEFAULT_SEARCH_PARAMS,
     scrollPos: 0,
     needUpdate: false,
     isNextDataLoading: false,
@@ -22,30 +27,11 @@ const initialState = {
 };
 
 export default function variantsTable(state = initialState, action) {
-    switch (action.type) {
+    switch (action.type) { // TODO extract reducers
 
         case ActionTypes.CLEAR_SEARCH_PARAMS: {
             return Object.assign({}, state, {
-                searchInResultsParams: {
-                    sort: [],
-                    search: [],
-                    limit: 100,
-                    offset: 0,
-                    topSearch: {
-                        filter: '',
-                        excludedFields: []
-                    }
-                }
-            });
-        }
-        case ActionTypes.SET_EXCLUDED_FIELDS: {
-            return Object.assign({}, state, {
-                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-                    topSearch: {
-                        filter: state.searchInResultsParams.topSearch.filter,
-                        excludedFields: action.excludedFields
-                    }
-                })
+                searchInResultsParams: DEFAULT_SEARCH_PARAMS
             });
         }
 
@@ -57,18 +43,16 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
-            const currentGlobalSearchString = state.searchInResultsParams.topSearch.filter;
+            const currentGlobalSearchString = state.searchInResultsParams.topSearch.search;
             if (currentGlobalSearchString === action.globalSearchString) {
                 return state;
             }
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     topSearch: {
-                        filter: action.globalSearchString,
-                        excludedFields: state.searchInResultsParams.topSearch.excludedFields
+                        search: action.globalSearchString
                     },
-                    limit: 100,
-                    offset: 0
+                    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
                 needUpdate: true
             });
@@ -76,7 +60,7 @@ export default function variantsTable(state = initialState, action) {
         case ActionTypes.SET_FIELD_FILTER: {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
-            const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId});
+            const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId, sampleId: action.sampleId});
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
@@ -89,18 +73,17 @@ export default function variantsTable(state = initialState, action) {
                     searchArray[fieldIndex].value = action.filterValue;
                 } else {
                     // it is new filter
-                    searchArray.push({fieldId: action.fieldId, value: action.filterValue});
+                    searchArray.push({fieldId: action.fieldId, sampleId: action.sampleId, value: action.filterValue});
                 }
             } else {
                 // filter value is empty, so we should remove filter
-                searchArray.splice(fieldIndex, 1);
+                searchArray.splice(fieldIndex, 1); // FIXME fails when fieldIndex < 1
             }
 
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     search: searchArray,
-                    limit: 100,
-                    offset: 0
+                    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
                 needUpdate: true
             });
@@ -115,14 +98,14 @@ export default function variantsTable(state = initialState, action) {
         case ActionTypes.CHANGE_VARIANTS_SORT: {
             // copy sort array
             var sortArray = [...state.searchInResultsParams.sort];
-            var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId});
+            var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId, sampleId: action.sampleId});
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {fieldId: action.fieldId, direction: action.sortDirection};
+                const newItem = {fieldId: action.fieldId, sampleId: action.sampleId, direction: action.sortDirection};
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
-                    fieldIndex = sortArray.length;
+                    fieldIndex = sortArray.length; // FIXME will be pushed?
                 } else {
                     // replace existent item, which has the same order
                     fieldIndex = action.sortOrder - 1;
@@ -158,8 +141,7 @@ export default function variantsTable(state = initialState, action) {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     sort: sortArray,
-                    limit: 100,
-                    offset: 0
+                    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
                 needUpdate: true
             });

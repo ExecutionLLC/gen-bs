@@ -79,7 +79,7 @@ export default class Urls {
     }
 
     history() {
-        return this._constructApiUrl('/history');
+        return this._constructApiUrl('/analysis');
     }
 
     startSearch() {
@@ -114,6 +114,10 @@ export default class Urls {
         return new CollectionUrls('/filters', this.httpScheme, this.host, this.port);
     }
 
+    modelsUrls() {
+        return new CollectionUrls('/models', this.httpScheme, this.host, this.port);
+    }
+
     samplesUrls() {
         return new UploadableEntityUrls('/samples', this.httpScheme, this.host, this.port);
     }
@@ -128,5 +132,9 @@ export default class Urls {
 
     _constructApiUrl(subUrl) {
         return _constructApiUrl(subUrl, this.httpScheme, this.host, this.port);
+    }
+
+    analysesHistoryUrls() {
+        return new CollectionUrls('/analysis', this.httpScheme, this.host, this.port);
     }
 }
