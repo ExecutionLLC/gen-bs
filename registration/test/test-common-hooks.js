@@ -14,23 +14,23 @@ global.regServer = regServer;
 
 before(function(done) {
     this.timeout(10000);
-    regServer.start((error) => {
-        if (error) {
-            throw new Error(error);
-        } else {
+    regServer.start()
+        .then(()=>{
             console.log('Mock server is started, waiting for ' + START_TIMEOUT + ' ms for it to complete loading...');
             setTimeout(done, START_TIMEOUT);
-        }
-    });
+        })
+        .catch((error) => {
+            throw new Error(error)
+        });
 });
 
 after((done) => {
-    regServer.stop((error) => {
-        if (error) {
-            throw new Error(error);
-        } else {
+    regServer.stop()
+        .then(() => {
             console.log('Mock server is stopped successfully.');
             done();
-        }
-    })
+        })
+        .catch((error) => {
+            throw new Error(error);
+        });
 });

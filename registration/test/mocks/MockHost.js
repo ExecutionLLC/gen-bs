@@ -1,5 +1,6 @@
 'use strict';
 
+const Promise = require('bluebird');
 const Config = require('../../Config');
 const Logger = require('../../utils/Logger');
 
@@ -19,12 +20,12 @@ class MockHost {
         this.registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
     }
 
-    start(callback) {
-        callback();
+    start() {
+        return Promise.resolve();
     }
 
-    stop(callback) {
-        callback()
+    stop() {
+        return Promise.resolve();
     }
 }
 
