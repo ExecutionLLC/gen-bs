@@ -187,7 +187,7 @@ class UserModel extends RemovableModelBase {
             .select('*')
             .from('user')
             .innerJoin('user_text', 'user_text.user_id', 'user.id')
-            .leftJoin('user_password', 'user.id', 'user_password.id')
+            .leftJoin('user_password', 'user.id', 'user_password.user_id')
             .whereRaw('1 = 1');
 
         if (userIdOrNull) {
