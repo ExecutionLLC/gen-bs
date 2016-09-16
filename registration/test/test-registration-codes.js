@@ -24,8 +24,9 @@ describe('Registration Codes', () => {
                     assert.equal(ids.length, 10);
                     return ids;
                 })
-                .then((ids) => Promise.all(ids.map((id) => registrationCodes.activateAsync(id, 'Test',
-                    'Test', generateEmail()))))
+                .then((ids) =>
+                    Promise.all(ids.map((id) => registrationCodes.activateAsync(id, 'Test', 'Test', generateEmail())))
+                )
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
                 .then(() => done());
         });
