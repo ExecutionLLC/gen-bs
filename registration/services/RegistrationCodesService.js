@@ -1,7 +1,5 @@
 'use strict';
 
-const Promise = require('bluebird');
-
 class RegistrationCodesService {
     constructor(db, registrationCodes, usersClient) {
         this.db = db;
