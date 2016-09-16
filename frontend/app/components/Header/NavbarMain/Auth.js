@@ -18,6 +18,7 @@ class Auth extends Component {
         };
     }
     render() {
+        // TODO: Close form on Esc
         const dropdownClasses = classNames({
             dropdown: true,
             open: this.state.isDropdownOpened
@@ -93,6 +94,11 @@ class Auth extends Component {
                                     <i className='md-i'>input</i>
                                 </span>
                             </a>
+                        </li>
+                        <li>
+                            <input type='text' key='login' />
+                            <input type='password' key='password' />
+                            <button type='button' />
                         </li>
                     </ul>
                 </div>
