@@ -48,6 +48,11 @@ const SETTINGS = {
             path: makeDefault(ENV.GEN_REG_LOG_PATH, __dirname + '/../logs/regserver.log'),
             rotatingFilesCount: 7
         }
+    },
+    usersClient: {
+        httpScheme: 'http',
+        host: 'localhost',
+        port: 80
     }
 };
 
