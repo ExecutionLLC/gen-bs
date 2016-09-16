@@ -8,11 +8,6 @@ class RegistrationCodesService {
         this.registrationCodes = registrationCodes;
     }
 
-    activate(registrationCodeId, firstName, lastName, userEmail, callback) {
-        return this.activateAsync(registrationCodeId, firstName, lastName, userEmail)
-            .asCallback(callback);
-    }
-
     activateAsync(registrationCodeId, firstName, lastName, userEmail) {
         const {db, registrationCodes} = this;
         return Promise.fromCallback((callback) => db.transactionally((trx, callback) => {
