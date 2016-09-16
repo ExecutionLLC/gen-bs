@@ -3,6 +3,7 @@
 const args = require('optimist').argv;
 
 const RegistrationCodesService = require('../../services/RegistrationCodesService');
+const UsersClient = require('../../api/UsersClient');
 const RegistrationCodesModel = require('../../models/RegistrationCodesModel');
 
 const Config = require('../../Config');
@@ -13,7 +14,8 @@ const KnexWrapper = require('../../utils/KnexWrapper');
 
 const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
-const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel);
+const usersClient = new UsersClient(Config);
+const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
 
 console.log(JSON.stringify(args));
 
