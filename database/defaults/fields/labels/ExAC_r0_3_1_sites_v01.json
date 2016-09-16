@@ -754,5 +754,12 @@
       "source_name": "ExAC_r0_3_1_sites_v01"
     },
     "label": "Consanguineous homozygotes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_Hom_CONSANGUINEOUS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Consanguineous homozygotes frequency"
   }
 ]
