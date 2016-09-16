@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import onClickOutside from 'react-onclickoutside';
+import classNames from 'classnames';
 
 import { logout } from '../../../actions/auth';
 import config from '../../../../config';
@@ -7,13 +9,38 @@ const AUTHORIZED_USER_TITLE = '';
 const DEMO_USER_TITLE = 'Register or login for access additional features';
 const GOOGLE_ACCOUNT_TITLE = 'Login using Google Account';
 
-export default class Auth extends Component {
-    _renderForAuthorizedUser() {
+class Auth extends Component {
+    constructor(...args) {
+        super(...args);
+
+        this.state = {
+            isDropdownOpened: false
+        };
+    }
+    render() {
+        const dropdownClasses = classNames({
+            dropdown: true,
+            open: this.state.isDropdownOpened
+        });
+        if (this.props.auth.isDemo) {
+            return this._renderForDemoUser(dropdownClasses);
+        }
+        return this._renderForAuthorizedUser(dropdownClasses);
+    }
+
+    handleClickOutside() {
+        this.setState({
+            isDropdownOpened: false
+        });
+    }
+
+    _renderForAuthorizedUser(dropdownClasses) {
         const {profileMetadata} = this.props.userData;
         return (
             <div>
-                <div className='dropdown'>
+                <div className={dropdownClasses}>
                     <a href='#'
+                       onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
                     >
                         <span title={AUTHORIZED_USER_TITLE}
@@ -39,11 +66,12 @@ export default class Auth extends Component {
         );
     }
 
-    _renderForDemoUser() {
+    _renderForDemoUser(dropdownClasses) {
         return (
             <div>
-                <div className='dropdown'>
+                <div className={dropdownClasses}>
                     <a href='#'
+                       onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
                     >
                         <span title={DEMO_USER_TITLE}
@@ -72,10 +100,11 @@ export default class Auth extends Component {
         );
     }
 
-    render() {
-        if (this.props.auth.isDemo) {
-            return this._renderForDemoUser();
-        }
-        return this._renderForAuthorizedUser();
+    onLoginDropdownClick() {
+        this.setState({
+            isDropdownOpened: !this.state.isDropdownOpened
+        });
     }
 }
+
+export default onClickOutside(Auth);
