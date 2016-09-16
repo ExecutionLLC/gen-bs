@@ -50,8 +50,8 @@ class AppServerSearchInResultUtils {
             const sample = _.find(samples, sample => sample.id === sampleId);
             const fieldMetadata = _.find(fieldsMetadata, fieldMetadata => fieldMetadata.id === fieldId);
             return {
-                columnName: AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName),
-                sourceName: AppServerUtils.createSampleName(sample),
+                columnName: sample ? AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName): fieldMetadata.name,
+                sourceName: sample ? AppServerUtils.createSampleName(sample) : fieldMetadata.sourceName,
                 isAscendingOrder: direction === 'asc'
             }
         })
