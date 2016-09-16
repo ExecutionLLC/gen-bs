@@ -11,14 +11,14 @@ class RegistrationCodesService {
 
     activateAsync(registrationCodeId, firstName, lastName, userEmail) {
         const {db, registrationCodes} = this;
-        return Promise.fromCallback((callback) => db.transactionally((trx, callback) => {
+
+        return db.transactionallyAsync((trx) =>
             registrationCodes.findInactiveAsync(registrationCodeId, trx)
                 .then(({speciality, language, numberOfPaidSamples}) =>
                     this.usersClient.addAsync('en', {firstName, lastName, userEmail, speciality, numberOfPaidSamples})
                 )
-                .then(() => registrationCodes.activateAsync(registrationCodeId, userEmail, trx, callback))
-                .asCallback(callback);
-        }, callback));
+                .then(() => registrationCodes.activateAsync(registrationCodeId, userEmail, trx))
+        );
     }
 
     createManyAsync(count, language, speciality, description, numberOfPaidSamples) {
