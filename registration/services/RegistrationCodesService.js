@@ -1,29 +1,29 @@
 'use strict';
 
 class RegistrationCodesService {
-    constructor(db, registrationCodes, usersClient) {
+    constructor(db, registrationCodesModel, usersClient) {
         this.db = db;
-        this.registrationCodes = registrationCodes;
+        this.registrationCodesModel = registrationCodesModel;
         this.usersClient = usersClient;
     }
 
     activateAsync(registrationCodeId, firstName, lastName, userEmail) {
-        const {db, registrationCodes} = this;
+        const {db, registrationCodesModel} = this;
 
         return db.transactionallyAsync((trx) =>
-            registrationCodes.findInactiveAsync(registrationCodeId, trx)
+            registrationCodesModel.findInactiveAsync(registrationCodeId, trx)
                 .then(({speciality, language, numberOfPaidSamples}) =>
                     this.usersClient.addAsync('en', {firstName, lastName, userEmail, speciality, numberOfPaidSamples})
                 )
-                .then(() => registrationCodes.activateAsync(registrationCodeId, userEmail, trx))
+                .then(() => registrationCodesModel.activateAsync(registrationCodeId, userEmail, trx))
         );
     }
 
     createManyAsync(count, language, speciality, description, numberOfPaidSamples) {
-        const {db, registrationCodes} = this;
+        const {db, registrationCodesModel} = this;
 
         return db.transactionallyAsync((trx) =>
-            registrationCodes.createManyAsync(count, language, speciality, description, numberOfPaidSamples, trx)
+            registrationCodesModel.createManyAsync(count, language, speciality, description, numberOfPaidSamples, trx)
         );
     }
 }
