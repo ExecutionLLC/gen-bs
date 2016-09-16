@@ -21,12 +21,19 @@ class SessionsController extends ControllerBase {
     }
 
     /**
-     * Opens new demo session.
+     * Opens new session.
      * */
     open(request, response) {
-        const {session} = request;
+        const {session, body} = request;
         async.waterfall([
-            (callback) => this.sessions.startDemo(session, callback),
+            (callback) => {
+                if (body && body.login) {
+                    const {login, password} = body;
+                    this.sessions.startForLoginPassword(session, login, password, callback);
+                } else {
+                    this.sessions.startDemo(session, callback)
+                }
+            },
             (session, callback) => callback(null, {
                     sessionId: session.id,
                     sessionType: session.type

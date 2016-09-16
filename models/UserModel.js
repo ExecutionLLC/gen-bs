@@ -2,12 +2,14 @@
 
 const _ = require('lodash');
 const async = require('async');
+const Promise = require('bluebird');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const RemovableModelBase = require('./RemovableModelBase');
 
 const mappedColumns = [
     'id',
+    'login',
     'name',
     'isDeleted',
     'lastName',
@@ -24,15 +26,17 @@ class UserModel extends RemovableModelBase {
 
     findIdByEmail(email, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findIdsByEmailInTransaction(email, trx, (error, userIds) => {
-                if (userIds.length > 1) {
-                    callback(new Error('Too many users'));
-                } else if (userIds.length) {
-                    callback(null, userIds[0]);
-                } else {
-                    callback(new Error('User is not found'));
-                }
-            });
+            this._findUserAsync(trx, null, email, null, null)
+                .then((user) => user.id)
+                .asCallback(callback);
+        }, callback);
+    }
+
+    findIdByLoginPassword(login, passwordHash, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findUserAsync(trx, null, login, passwordHash)
+                .then((user) => user.id)
+                .asCallback(callback);
         }, callback);
     }
 
@@ -120,9 +124,19 @@ class UserModel extends RemovableModelBase {
                         lastName: userToInsert.lastName,
                         speciality: userToInsert.speciality
                     };
-                    this._unsafeInsert('user_text', dataToInsert, trx, (error) => {
-                        callback(error, userId);
-                    });
+                    this._unsafeInsert('user_text', dataToInsert, trx, (error) => callback(error, userId));
+                },
+                (userId, callback) => {
+                    if (user.login) {
+                        const dataToInsert = {
+                            userId,
+                            login: user.login,
+                            passwordHash: user.passwordHash
+                        };
+                        this._unsafeInsert('user_password', dataToInsert, trx, (error) => callback(error, userId));
+                    } else {
+                        callback(null, userId);
+                    }
                 }
             ], callback);
         }, callback);
@@ -135,29 +149,6 @@ class UserModel extends RemovableModelBase {
             .asCallback((error) => {
                 callback(error, userId);
             });
-    }
-
-    /**
-     * Tries to find users by specified email.
-     * Returns empty array if no users found.
-     * @param email Email to search for.
-     * @param trx Knex transaction.
-     * @param callback (error, userIds || [])
-     * */
-    _findIdsByEmailInTransaction(email, trx, callback) {
-        async.waterfall([
-            (callback) => trx.select('id')
-                .from(this.baseTableName)
-                .where('email', email)
-                .asCallback(callback),
-            (results, callback) => {
-                if (results && results.length) {
-                    callback(null, _.map(results, obj => obj.id));
-                } else {
-                    callback(null, []);
-                }
-            }
-        ], callback);
     }
 
     _getNumberPaidSamplesInTransaction(userId, trx, callback) {
@@ -191,21 +182,61 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
+    _findUserAsync(trx, userIdOrNull, emailOrNull, loginOrNull, passwordHashOrNull) {
+        let query = trx
+            .select('*')
+            .from('user')
+            .innerJoin('user_text', 'user_text.user_id', 'user.id')
+            .leftJoin('user_password', 'user.id', 'user_password.id')
+            .whereRaw('1 = 1');
+
+        if (userIdOrNull) {
+            query = query.where('user.id', userIdOrNull);
+        }
+
+        if (emailOrNull) {
+            query = query
+                .where('user.email', emailOrNull);
+        }
+
+        if (loginOrNull) {
+            query = query.where('user_password.login', loginOrNull);
+        }
+
+        if (passwordHashOrNull) {
+            query = query.where('user_password.password_hash', passwordHashOrNull);
+        }
+
+        return query
+            .then((users) => {
+                if (!users || users.length !== 1) {
+                    return Promise.reject(new Error('User is not found'))
+                }
+                return users;
+            })
+            .then((users) => users[0])
+            .then((user) => ChangeCaseUtil.convertKeysToCamelCase(user))
+            .then((user) => {
+                user.language = user.defaultLanguId;
+                return this._mapColumns(user);
+            });
+    }
+
     /**
      * Checks that unique fields, ex. email, are unique across users collection.
      * */
     _checkFieldsUnique(user, trx, callback) {
-        async.waterfall([
-            (callback) => this._findIdsByEmailInTransaction(user.email, trx, (error, userIds) => {
-                if (error) {
-                    callback(error);
-                } else if (userIds.length) {
-                    callback(new Error('Duplicate e-mail.'));
-                } else {
-                    callback(null);
-                }
-            })
-        ], callback);
+        const {email, login} = user;
+        Promise.all([
+            this._findUserAsync(trx, email, null, null)
+                .then(() => Promise.reject(new Error('Duplicate e-mail.')))
+                .catch(() => Promise.resolve()),
+            this._findUserAsync(trx, null, login, null)
+                .then(() => Promise.reject(new Error('Duplicate login.')))
+                .catch(() => Promise.resolve())
+        ])
+            .then(() => callback(null))
+            .catch((error) => callback(error))
     }
 }
 
