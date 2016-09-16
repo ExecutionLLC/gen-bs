@@ -15,15 +15,8 @@ export default class Auth extends Component {
                 <div className='dropdown'>
                     <a href='#'
                        className='btn navbar-btn dropdown-toggle'
-                       data-toggle='dropdown'
-                       data-target='#sidebarRight'
                     >
-                        <span data-toggle='tooltip'
-                              data-localize='account.help'
-                              data-placement='left'
-                              title={AUTHORIZED_USER_TITLE}
-                              data-container='body'
-                              data-trigger='hover'
+                        <span title={AUTHORIZED_USER_TITLE}
                               className='hidden-xs'>
                             { profileMetadata.email }
                         </span>
@@ -37,7 +30,7 @@ export default class Auth extends Component {
                                href='#'
                                type='button'
                                id='logout'>
-                                <span data-localize='account.logout'>Logout</span>
+                                <span>Logout</span>
                             </a>
                         </li>
                     </ul>
@@ -52,15 +45,8 @@ export default class Auth extends Component {
                 <div className='dropdown'>
                     <a href='#'
                        className='btn navbar-btn dropdown-toggle'
-                       data-toggle='dropdown'
-                       data-target='#sidebarRight'
                     >
-                        <span data-toggle='tooltip'
-                              data-localize='account.help'
-                              data-placement='left'
-                              title={DEMO_USER_TITLE}
-                              data-container='body'
-                              data-trigger='hover'
+                        <span title={DEMO_USER_TITLE}
                               className='hidden-xs'>
                             Login
                         </span>
@@ -71,13 +57,7 @@ export default class Auth extends Component {
                     <ul className='dropdown-menu dropdown-menu-right'>
                         <li>
                             <a href={config.LOGIN_URL}>
-                                <span data-localize='account.login.title'
-                                      data-toggle='tooltip'
-                                      data-localize='account.help'
-                                      data-placement='left'
-                                      title={GOOGLE_ACCOUNT_TITLE}
-                                      data-container='body'
-                                      data-trigger='hover'
+                                <span title={GOOGLE_ACCOUNT_TITLE}
                                       className='hidden-xs'>
                                     Google Account
                                 </span>
