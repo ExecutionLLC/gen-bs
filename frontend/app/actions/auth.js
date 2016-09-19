@@ -182,7 +182,7 @@ function checkCookieSessionAndLogin(dispatch) {
 // create new demo session.
 //
 // It is legacy of previous developer :)
-export function login() {
+export function loginWithGoogle() {
     const errorFromParams = getUrlParameterByName('error');
 
     return dispatch => {
