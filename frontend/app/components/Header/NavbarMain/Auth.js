@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import classNames from 'classnames';
 
+import LoginForm from './LoginForm';
+
 import { logout } from '../../../actions/auth';
 import config from '../../../../config';
 
@@ -96,9 +98,7 @@ class Auth extends Component {
                             </a>
                         </li>
                         <li>
-                            <input type='text' key='login' />
-                            <input type='password' key='password' />
-                            <button type='button' />
+                            <LoginForm />
                         </li>
                     </ul>
                 </div>
