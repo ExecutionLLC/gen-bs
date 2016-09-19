@@ -1,11 +1,10 @@
 'use strict';
 
-const Promise = require('bluebird');
 const Uuid = require('node-uuid');
 const assert = require('assert');
 
 describe('Registration Codes', () => {
-    const {registrationCodes} = global.regServer;
+    const {registrationCodes, usersClient} = global.regServer;
 
     function generateEmail() {
         return `a${Uuid.v4()}@example.com`;
@@ -30,16 +29,17 @@ describe('Registration Codes', () => {
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
                 .then(() => done());
         });
-/* TODO restore functionality
-        it('activates successfully', (done) => {
+
+        it('activates successfully', () => {
             const testEmail = generateEmail();
-            generateCodeIdAsync()
+            return generateCodeIdAsync()
                 .then((id) => registrationCodes.activateAsync(id, 'Test', 'Test', testEmail))
-                .then(() => Promise.fromCallback((callback) => users.findIdByEmail(testEmail, callback)))
-                .catch((error) => assert.fail(`User who activated code is not found in the database: ${error}`))
-                .then(() => done());
+                .then(() => usersClient.findIdByEmailAsync(testEmail))
+                .catch((error) => {
+                    assert.fail(`User who activated code is not found in the database: ${error}`);
+                });
         });
-*/
+
     });
 
     describe('Negative tests', () => {
