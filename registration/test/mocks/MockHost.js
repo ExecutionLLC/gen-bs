@@ -10,7 +10,6 @@ const KnexWrapper = require('../../utils/KnexWrapper');
 
 const RegistrationCodesService = require('../../services/RegistrationCodesService');
 const RegistrationCodesModel = require('../../models/RegistrationCodesModel');
-const UsersClient = require('../../api/UsersClient');
 
 
 class MockUsersClient {
