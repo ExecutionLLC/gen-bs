@@ -32,7 +32,7 @@ if (count && speciality && description && defaultLanguage && numberPaidSamples) 
         .then((ids) => {
             console.log(`${count} registration codes are added with ids: ${JSON.stringify(ids)}`);
             ids.map(id => {
-                console.log(`${Config.baseUrl}/api/session/auth/google/login/${id}`);
+                console.log(`${Config.usersClient.httpScheme}://${Config.usersClient.host}:${Config.usersClient.port}/api/session/auth/google/login/${id}`);
             });
             process.exit(0);
         })
