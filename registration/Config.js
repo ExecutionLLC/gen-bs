@@ -50,9 +50,9 @@ const SETTINGS = {
         }
     },
     usersClient: {
-        httpScheme: 'http',
-        host: 'localhost',
-        port: 80
+        httpScheme: makeDefault(ENV.GEN_WS_SCHEME, 'http'),
+        host: makeDefault(ENV.GEN_WS_HOST, 'localhost'),
+        port: makeDefault(ENV.GEN_WS_PORT, 80)
     }
 };
 
