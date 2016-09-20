@@ -113,8 +113,8 @@ class SessionsController extends ControllerBase {
                     (callback) => {
                         if (registrationCodeId) {
                             // Activate registration code if any.
-                            this.regcodesClient.activateAsync(registrationCodeId)
-                                .then(callback);
+                            this.regcodesClient.activateAsync({id: registrationCodeId})
+                                .then(() => callback(null));
                         } else {
                             callback(null);
                         }
