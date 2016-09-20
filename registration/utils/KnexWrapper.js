@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const async = require('async');
+const Promise = require('bluebird');
 
 const Knex = require('knex');
 const KnexTransaction = require('./KnexTransaction');
@@ -65,31 +65,18 @@ class KnexWrapper {
 
     transactionallyAsync(queryAsync) {
         const originalStack = new Error().stack;
-        return new Promise((resolve, reject) => {
-            async.waterfall([
-                (callback) => {
-                    // 1. Create transaction
-                    // 2. Open transaction
-                    this.beginTransaction(callback);
-                },
-                (trx, knex, callback) => {
-                    // 3. Execute query with the transaction
-                    queryAsync(knex)
-                        .then((data) => callback(null, trx, null, data))
-                        .catch((error) => callback(null, trx, error, null));
-                },
-                (trx, error, data, callback) => {
-                    // 4. Complete transaction
-                    trx.complete(error, originalStack, data, callback);
-                }
-            ], (error, result) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
+        return Promise.resolve()
+            .then(() => Promise.fromCallback((callback) =>
+                this.beginTransaction((error, trx, knex) => callback(error, {trx, knex}))
+            ))
+            .then(({trx, knex}) =>
+                queryAsync(knex)
+                    .then((data) => ({trx, error: null, data}))
+                    .catch((error) => ({trx, error, data: null}))
+            )
+            .then(({trx, error, data}) => Promise.fromCallback((callback) =>
+                trx.complete(error, originalStack, data, callback)
+            ));
     }
 }
 
