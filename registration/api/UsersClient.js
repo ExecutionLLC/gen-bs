@@ -12,7 +12,7 @@ class UsersClient {
             Request
                 .post(this.urlAdd)
                 .send(user)
-                .then((res) => resolve(res.body))
+                .then(({body}) => resolve(body))
                 .catch((error) => reject(error));
         });
     }
