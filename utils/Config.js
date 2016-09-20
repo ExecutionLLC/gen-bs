@@ -133,9 +133,9 @@ const SETTINGS = {
     },
     defaultLanguId: 'en',
     regserver: {
-        SCHEME: makeDefault(ENV.GEN_RS_SCHEME, 'http'),
-        HOST: makeDefault(ENV.GEN_RS_HOST, 'localhost'),
-        PORT: makeDefault(ENV.GEN_RS_PORT, 3000)
+        SCHEME: makeDefault(ENV.GEN_WS_REG_SCHEME, 'http'),
+        HOST: makeDefault(ENV.GEN_WS_REG_HOST, 'localhost'),
+        PORT: makeDefault(ENV.GEN_WS_REG_PORT, 3000)
     }
 };
 
