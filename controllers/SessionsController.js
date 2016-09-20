@@ -8,6 +8,9 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const ControllerBase = require('./base/ControllerBase');
 
+const Config = require('../utils/Config');
+const RegcodesClient = require('../api/RegcodesClient');
+
 class SessionsController extends ControllerBase {
     constructor(services) {
         super(services);
@@ -18,6 +21,8 @@ class SessionsController extends ControllerBase {
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
+
+        this.regcodesClient = new RegcodesClient(Config);
     }
 
     /**
@@ -108,10 +113,8 @@ class SessionsController extends ControllerBase {
                     (callback) => {
                         if (registrationCodeId) {
                             // Activate registration code if any.
-/* TODO rewrite
-                            this.services.registrationCodes.activate(registrationCodeId, firstName, lastName, userEmail, callback);
-*/
-                            callback(null);
+                            this.regcodesClient.activateAsync(registrationCodeId)
+                                .then(callback);
                         } else {
                             callback(null);
                         }
