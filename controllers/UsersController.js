@@ -10,12 +10,6 @@ class UsersController extends ControllerBase {
         console.log('UsersController()');
     }
 
-    createRouter() {
-        const router = new Express();
-        router.post('/', this.add.bind(this));
-        return router;
-    }
-
     add(request, response) {
         async.waterfall([
             (callback) => this.getRequestBody(request, callback),
@@ -28,6 +22,12 @@ class UsersController extends ControllerBase {
         ], (error, insertedItem) => {
             this.sendErrorOrJson(response, error, insertedItem);
         });
+    }
+
+    createRouter() {
+        const router = new Express();
+        router.post('/', this.add.bind(this));
+        return router;
     }
 }
 
