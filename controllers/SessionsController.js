@@ -102,11 +102,11 @@ class SessionsController extends ControllerBase {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, user/*, info*/) => {
+            }, (error, user) => {
                 if (error) {
                     return next(error);
                 }
-                const {/*firstName, lastName, */userEmail} = user;
+                const {userEmail} = user;
                 const registrationCodeId = request.query.state;
 
                 async.waterfall([
