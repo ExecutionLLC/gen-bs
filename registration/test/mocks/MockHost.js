@@ -59,11 +59,11 @@ class MockHost {
         this.registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
     }
 
-    start() {
+    startAsync() {
         return Promise.resolve();
     }
 
-    stop() {
+    stopAsync() {
         return Promise.resolve();
     }
 }
