@@ -3,6 +3,16 @@
 const Uuid = require('node-uuid');
 const assert = require('assert');
 
+
+function mustThrowPromise(promise, message) {
+    return new Promise((resolve, reject) =>
+        promise
+            .then((result) => reject(`'${message}' must fail but has result '${result}'`))
+            .catch(() => resolve())
+    );
+}
+
+
 describe('Registration Codes', () => {
     const {registrationCodes, usersClient} = global.regServer;
 
@@ -16,7 +26,7 @@ describe('Registration Codes', () => {
     }
 
     describe('Positive tests', () => {
-        it('generates and activates new codes', (done) => {
+        it('generates and activates new codes', () =>
             registrationCodes.createManyAsync(10, 'en', 'speciality', 'description', 10)
                 .then((ids) => {
                     assert.ok(ids);
@@ -27,8 +37,7 @@ describe('Registration Codes', () => {
                     Promise.all(ids.map((id) => registrationCodes.activateAsync(id, 'Test', 'Test', generateEmail())))
                 )
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
-                .then(() => done());
-        });
+        );
 
         it('activates successfully', () => {
             const testEmail = generateEmail();
@@ -43,26 +52,28 @@ describe('Registration Codes', () => {
     });
 
     describe('Negative tests', () => {
-        it('activates only once', (done) => {
+        it('activates only once', () => {
             const testEmail = generateEmail();
             const otherEmail = generateEmail();
-            generateCodeIdAsync()
-                .then((id) => {
-                    return registrationCodes.activateAsync(id, 'Test', 'Test', testEmail)
-                        .catch(() => assert.fail('Code failed to activate'))
-                        .then(() => registrationCodes.activateAsync(id, 'Test', 'Test', otherEmail))
-                        .then(() => assert.fail('Activated the same code twice for different emails'))
-                        .catch(() => Promise.resolve())
-                        .then(() => registrationCodes.activateAsync(id, 'Test', 'Test', testEmail))
-                        .then(() => assert.fail('Activated the same code twice for the same email'))
-                        .catch(() => done());
-                });
+            return generateCodeIdAsync()
+                .then((id) =>
+                    registrationCodes.activateAsync(id, 'Test', 'Test', testEmail)
+                        .then(() => mustThrowPromise(
+                            registrationCodes.activateAsync(id, 'Test', 'Test', otherEmail),
+                            'Activated the same code twice for different emails'
+                        ))
+                        .then(() => mustThrowPromise(
+                            registrationCodes.activateAsync(id, 'Test', 'Test', testEmail),
+                            'Activated the same code twice for the same email'
+                        ))
+                );
         });
 
-        it('should work fine with unknown code', (done) => {
-            registrationCodes.activateAsync(Uuid.v4(), 'Test', 'Test', generateEmail())
-                .then(() => assert.fail('Activation successful for unknown code.'))
-                .catch(() => done());
-        });
+        it('should work fine with unknown code', () =>
+            mustThrowPromise(
+                registrationCodes.activateAsync(Uuid.v4(), 'Test', 'Test', generateEmail()),
+                'Activation successful for unknown code.'
+            )
+        );
     });
 });
