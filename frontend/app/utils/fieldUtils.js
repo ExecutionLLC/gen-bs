@@ -149,7 +149,6 @@ export default class FieldUtils {
 
     static excludeVepFieldsButZygocityGenotype(fields, sampleType) {
         // TODO remove VEP exceptions when there fields will be renamed
-        debugger;
         if ( isMainSample(sampleType)){
             return fields;
         }
@@ -193,7 +192,6 @@ export default class FieldUtils {
      * @returns {Array}
      */
     static makeModelAllowedFields(samples, samplesTypes, totalFieldsHash) {
-        debugger;
         function addSampleTypeFields(fields, sampleType) {
             return _.map(fields, (field) => ({
                 ...field,
