@@ -7,8 +7,8 @@ const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ModelBase = require('./ModelBase');
 
 class RegistrationCodesModel extends ModelBase {
-    constructor(models) {
-        super(models, 'registration_code', [
+    constructor(db, logger) {
+        super(db, logger, 'registration_code', [
             'id',
             'description',
             'isActivated',

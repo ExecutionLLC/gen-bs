@@ -8,6 +8,9 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const ControllerBase = require('./base/ControllerBase');
 
+const Config = require('../utils/Config');
+const RegcodesClient = require('../api/RegcodesClient');
+
 class SessionsController extends ControllerBase {
     constructor(services) {
         super(services);
@@ -18,6 +21,8 @@ class SessionsController extends ControllerBase {
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
+
+        this.regcodesClient = new RegcodesClient(Config);
     }
 
     /**
@@ -97,18 +102,19 @@ class SessionsController extends ControllerBase {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, user, info) => {
+            }, (error, user) => {
                 if (error) {
                     return next(error);
                 }
-                const {firstName, lastName, userEmail} = user;
+                const {userEmail} = user;
                 const registrationCodeId = request.query.state;
 
                 async.waterfall([
                     (callback) => {
                         if (registrationCodeId) {
                             // Activate registration code if any.
-                            this.services.registrationCodes.activate(registrationCodeId, firstName, lastName, userEmail, callback);
+                            this.regcodesClient.activateAsync({id: registrationCodeId})
+                                .then(() => callback(null));
                         } else {
                             callback(null);
                         }

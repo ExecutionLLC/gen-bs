@@ -1,0 +1,33 @@
+{
+  "name": "registration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "GEN_WS_DISABLE_REQUEST_LIMITS=true mocha",
+    "user:generate-codes": "node ./database/scripts/generate-registration-codes.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "3.4.6",
+    "body-parser": "1.15.2",
+    "connect-redis": "3.1.0",
+    "cors": "2.8.1",
+    "express": "4.14.0",
+    "express-rate-limit": "2.4.0",
+    "http-status": "0.2.3",
+    "knex": "0.9.0",
+    "lodash": "4.14.1",
+    "morgan": "1.7.0",
+    "passport": "0.3.2",
+    "passport-google-oauth20": "1.0.0",
+    "pg": "6.1.0",
+    "superagent": "2.2.0"
+  },
+  "devDependencies": {
+    "fakeredis": "1.0.3",
+    "mocha": "2.4.5"
+  }
+}
