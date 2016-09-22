@@ -43,13 +43,11 @@ export default class ViewBuilder extends React.Component {
 
             const currentField = _.find(fields.totalFieldsList, {id: viewItem.fieldId});
             const currentValue = currentField ? Object.assign({}, currentField, {
-                    label: `${currentField.label} -- ${currentField.sourceName}`
-                }
-            ) : {id: null};
+                label: `${currentField.label} -- ${currentField.sourceName}`
+            }) : {id: null};
 
             const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
             const selectOptions = [
-
                 ...fieldsForSelection.map((f) => {
                     return {value: f.id, label: `${f.label} -- ${f.sourceName}`};
                 })
@@ -64,7 +62,7 @@ export default class ViewBuilder extends React.Component {
 
             return (
 
-                <div className='row grid-toolbar' key={Math.round(Math.random()*100000000).toString()}>
+                <div className='row grid-toolbar' key={Math.round(Math.random() * 100000000).toString()}>
 
                     <div className='col-xs-12 col-sm-6 btn-group-select2'>
                         <div className='btn-group btn-group-left'>
@@ -92,12 +90,12 @@ export default class ViewBuilder extends React.Component {
                             <Select
                                 options={keywordsSelectOptions}
                                 multi={true}
-                                placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
+                                placeholder={(keywordsSelectOptions.length) ? 'Choose keywords' : 'No keywords defined for the field'}
                                 value={keywordsCurrentValue}
                                 onChange={ (val) => this.onChangeKeyword(index, val)}
                                 clearable={true}
                                 backspaceRemoves={true}
-                                disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
+                                disabled={isDisableEditing || !isFieldAvailable || !keywordsSelectOptions.length}
                             />
                         </div>
                         <div className='btn-group'>
@@ -106,7 +104,7 @@ export default class ViewBuilder extends React.Component {
                                     type='button'>
                                 <i className='md-i'>close</i></button>
                             <button className='btn-link-default' disabled={plusDisabled}
-                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
+                                    onClick={ () => dispatch(viewBuilderAddColumn(index + 1, nextDefaultField.id)) }
                                     type='button'>
                                 <i className='md-i'>add</i></button>
                         </div>
@@ -202,7 +200,7 @@ export default class ViewBuilder extends React.Component {
             <button className={sortButtonClass}
                     type='button'
                     disabled={isDisable}
-                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
+                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId)}>
                 <span className='badge badge-info'>{sortOrder}</span>
             </button>
         );

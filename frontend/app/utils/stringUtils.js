@@ -1,11 +1,5 @@
 import {entityType} from './entityTypes';
 
-export function firstCharToUpperCase(str) {
-    return (
-        str.charAt(0).toUpperCase() + str.slice(1)
-    );
-}
-
 // see http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 export function getUrlParameterByName(name, url) {
     if (!url) {

@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import classNames from 'classnames';
 
-import  {firstCharToUpperCase} from '../../utils/stringUtils';
 import config from '../../../config';
 
 export default class FieldHeaderControls extends Component {
@@ -47,9 +46,7 @@ export default class FieldHeaderControls extends Component {
             }
         );
 
-        const label = firstCharToUpperCase(
-            !fieldMetadata ? 'Unknown' : fieldMetadata.label
-        );
+        const label = !fieldMetadata ? 'Unknown' : fieldMetadata.label;
 
         return (
             <td data-label={fieldMetadata.id}
