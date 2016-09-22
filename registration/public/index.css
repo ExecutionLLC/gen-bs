@@ -1,0 +1,7 @@
+*[data-role=template] {
+    display: none;
+}
+
+body.no-regcode #regcoded-user {
+    background: gray;
+}

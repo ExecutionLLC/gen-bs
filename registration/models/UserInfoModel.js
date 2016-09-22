@@ -56,7 +56,7 @@ class UserInfoModel extends ModelBase {
         const userId = Uuid.v4();
         const itemToInsert = ChangeCaseUtil.convertKeysToSnakeCase({
             id: userId,
-            regcode: userInfo.regcode,
+            regcode: userInfo.regcode || null,
             email: userInfo.email,
             firstName: userInfo.firstName,
             lastName: userInfo.lastName,
@@ -64,7 +64,7 @@ class UserInfoModel extends ModelBase {
         });
         return trx(this.baseTableName)
             .insert(itemToInsert)
-            .then(() => userId)
+            .then(() => itemToInsert)
     }
 
     update(userId, userInfo, trx) {

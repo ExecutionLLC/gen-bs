@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <script src="index.js"></script>
+    <link type="text/css" rel="stylesheet" href="index.css">
+</head>
+<body>
+    <form>
+        <div>
+            Enter
+            <label>
+                <span>Regcode:</span>
+                <input type="text" id="regcode" name="regcode"/>
+            </label>
+            or
+            <label>
+                <span>Email:</span>
+                <input type="text" id="email" name="email"/>
+            </label>
+        </div>
+        <hr />
+        <div id="regcoded-user">
+            <div>
+                <label>
+                    <span>Login:</span>
+                    <input type="text" id="login" name="login"/>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>Password:</span>
+                    <input type="password" id="password" name="password" />
+                </label>
+            </div>
+            <button type="submit">Sign in</button>
+            <div id="userinfo">
+                <div data-role="template" data-id="userinfo-item">
+                    <label>
+                        <span data-id="userinfo-label">label</span><span>: </span><input type="text" data-id="userinfo-value" />
+                    </label>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </form>
+</body>
+</html>
