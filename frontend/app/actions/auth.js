@@ -129,30 +129,25 @@ function openDemoSession(dispatch) {
     });
 }
 
-// Create user session.
-export function openUserSession(dispatch, login, password) {
-    console.log('loginAsUser');
-    debugger;
-    sessionsClient.openUserSession(login, password, (error, response) => {
-        if (error) {
-            debugger;
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (response.status !== HttpStatus.OK) {
-            debugger;
-            dispatch(loginError(response.body));
-            dispatch(handleError(null, LOGIN_SERVER_ERROR));
-        } else {
-            debugger;
-            const sessionId = SessionsClient.getSessionFromResponse(response);
-            if (sessionId) {
-                updateLoginData(dispatch, false);
-            } else {
-                dispatch(loginError('Session id is empty'));
+export function openUserSession(login, password) {
+    return (dispatch) => {
+        sessionsClient.openUserSession(login, password, (error, response) => {
+            if (error) {
+                dispatch(loginError(error));
+                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, LOGIN_SERVER_ERROR));
+            } else {
+                const sessionId = SessionsClient.getSessionFromResponse(response);
+                if (sessionId) {
+                    updateLoginData(dispatch, false);
+                } else {
+                    dispatch(loginError('Session id is empty'));
+                    dispatch(handleError(null, LOGIN_SERVER_ERROR));
+                }
             }
-        }
-    });
+        });
+    };
 }
 
 /**@callback CheckSessionCallback
