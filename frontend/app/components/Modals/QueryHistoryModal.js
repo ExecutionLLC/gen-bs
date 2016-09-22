@@ -96,8 +96,8 @@ class QueryHistoryModal extends Component {
     renderHistoryTable() {
         return (
           <div className='modal-body'>
-              <div className='modal-body-scroll'>      
-                  <table className='table table-condensed table-vertical-top table-responsive-transform'>
+              <div className='modal-body-scroll modal-body-white'>      
+                  <table className='table table-condensed table-vertical-top table-responsive-transform table-export-labels'>
                       { this.renderHistoryTableHeader() }
                       { this.renderHistoryTableBody() }
                   </table>

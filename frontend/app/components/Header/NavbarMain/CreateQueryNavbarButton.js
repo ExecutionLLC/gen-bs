@@ -23,10 +23,10 @@ export default class CreateQeuryNavbarButton extends Component {
                 <div>
                     <a onClick={this.props.toggleQueryNavbar} type='button' href='#' className='btn navbar-btn'
                        id='btnToggle'>
-                        <span className='hidden-xxs' data-localize='query.help' data-toggle='tooltip'
+                        <span className='hidden-xs' data-localize='query.help' data-toggle='tooltip'
                               data-placement='right' title='Open navbar and create new analises query'
                               data-container='body' data-trigger='hover'>Analyze</span>
-                        <span className='visible-xxs'><i className='md-i'>settings</i></span>
+                        <span className='visible-xs'><i className='ag22 ag-flask'></i></span>
                     </a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
                     <div>

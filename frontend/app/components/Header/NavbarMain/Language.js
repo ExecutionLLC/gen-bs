@@ -11,7 +11,8 @@ export default class Language extends Component {
 
             <div data-localize='language.help' data-toggle='tooltip' data-placement='left'
                  title='Change interface language'
-                 data-container='body' data-trigger='hover'>
+                 data-container='body' data-trigger='hover'
+                 className='hidden-xs'>
                 <div className='dropdown language'>
 
                     <a href='#' className='btn navbar-btn dropdown-toggle' data-toggle='dropdown' role='button'><span

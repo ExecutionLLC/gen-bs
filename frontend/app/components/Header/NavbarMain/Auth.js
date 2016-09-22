@@ -16,7 +16,7 @@ export default class Auth extends Component {
                        className='btn navbar-btn dropdown-toggle' data-toggle='dropdown' data-target='#sidebarRight'>
                         <span data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={AUTHORIZED_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>{ profileMetadata.email }</span>
                         <span className='visible-xs'>
-                            <i className='md-i'>person</i>
+                            <span className='dropdown-menu-header'>Profile</span><i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
@@ -24,6 +24,13 @@ export default class Auth extends Component {
                             <a onClick={ () => { this.props.dispatch(logout()); } } href='#' type='button' id='logout'>
                                 <span data-localize='account.logout'>Logout</span>
                             </a>
+                        </li>
+                        <li className='visible-xs dropdown-header'>Language </li>
+                        <li className='visible-xs'><a href='#' type='button' id='en_lang'><span
+                            data-localize='language.lang_sm_En'>English</span></a>
+                        </li>
+                        <li className='visible-xs'><a href='#' type='button' id='ch_lang'><span
+                            data-localize='language.lang_sm_Ch'>中国</span></a>
                         </li>
                     </ul>
                 </div>

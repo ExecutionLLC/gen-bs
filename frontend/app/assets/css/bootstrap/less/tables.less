@@ -325,6 +325,9 @@ table {
     margin: 0;
     width: auto;
     min-width: 100%;
+    .table { 
+     margin-bottom: 0;
+   }
     tbody {
       display: block;
       max-width: 100%;
@@ -353,15 +356,14 @@ table {
               top: -32px;
               width: 32px!important;
               background: #fff;
-
+              
               button { 
                padding: 4px;
                border-radius: 0;
                i:before { 
-                 &:extend(.md-i);
+                .md-i();
                  content: "search";
                }
-               
              }
               .form-control { 
                 .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);  
@@ -467,12 +469,17 @@ table {
      }
     .table-variants-head,
     .table-variants-body { 
+   
       tr { 
-         td { 
-          font-size: ceil((@font-size-base * 0.92));
+      td { 
+          font-size: ceil((@font-size-base * 0.98));
           padding: 0;
           border:none;
           height: 35px;
+          @media (min-width: @screen-sm) { 
+             font-size: ceil((@font-size-base * 0.92));
+          }
+
            > div { 
                width: 120px;
                 overflow: hidden;
@@ -492,9 +499,7 @@ table {
                    }
                 }
            }
-          &.btntd {
-  
-            
+          &.btntd {            
              > div {
                 text-align: right; 
                width: 40px; 
@@ -518,28 +523,26 @@ table {
               max-width:  158px;
             }
             .comment-link { 
-              &:extend(.btn-link-default);
+              //&:extend(.btn-link-default);
             }
           
         }
+          &.tooltip-in-td {
+            > div {           
+            overflow: visible;
+              > span { 
+                display: inline-block;
+              }
+            }
+        }
       }
-      .table-variants-body { 
-    
-      tr {
+     
         &:hover { 
          cursor: pointer; 
         } 
-
+  
       
-                
-         td:first-child { 
-           text-align: right;
-           label { 
-             display: inline-block;
-           }
-         }
-      }
-    }
+    
      }
       
    }
@@ -589,7 +592,8 @@ table {
           position: absolute;
           right: 0;
           z-index: 1;
-    }
+      }
+
   }
 }
 .table-variants-message { 
@@ -670,7 +674,7 @@ table {
 .table {   
   &.table-responsive-transform { 
      margin-bottom: 0;
-         > thead,
+    > thead,
     > tbody,
     > tfoot { 
       > tr { 
@@ -692,7 +696,8 @@ table {
        }
      }
    }
-  @media (max-width:@grid-float-breakpoint-max) {
+
+  @media (max-width: @screen-sm-max) {
       &.table-responsive-transform { 
       thead { 
         display: none;
@@ -703,19 +708,14 @@ table {
         > tr { 
           display: block;
           position: relative;
-          padding: @padding-small-vertical @padding-base-horizontal;
-          border-top: solid 1px @table-border-color;
+          padding:  @padding-base-horizontal;
+          border-top: solid 1px darken(@default-max-light, 4%);
           td { 
             display: block; 
             width:100%;
             border-top:none;
           }
-          td:last-child:not(:first-child) { 
-            width: auto;
-            position: absolute;
-            top:@padding-small-vertical;
-            right: @padding-base-horizontal;
-          }
+          
         }
       } 
   
@@ -734,5 +734,46 @@ table {
         }
       }          
     }
-  }
+      &.table-export-labels { 
+        tbody { 
+          tr { 
+            
+            td {
+              font-size: 14px;
+               &:before {
+                 color: darken(@text-muted, 15%);
+      
+               }
+               &:last-child:not(:first-child) { 
+                margin: 0 -12px -8px;
+                padding-top: 8px;
+                width: auto;
+                }
+               &:first-child { 
+                  bottom: 16px;
+                  color: #bfc5ce;
+                  font-size: 13px;
+                  position: absolute;
+                  right: 16px;
+                  text-align: right;
+                  width: auto;
+
+              + td:before { 
+                content: 'Sample:';
+              }
+              + td + td:before { 
+                content: 'Filters:';
+              }
+              + td + td + td:before { 
+                content: 'Views:';
+              }
+
+               }
+            }
+          }
+        }
+      }
+    } 
+
+
 }

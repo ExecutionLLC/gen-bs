@@ -23,6 +23,10 @@
   font-style: normal;
 }
 
+//
+// Typography
+// --------------------------------------------------
+
 .md-i {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -160,7 +164,17 @@ mark,
 
 // Contextual colors
 .text-muted {
-  color: @text-muted;
+  color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: @text-muted;
+  }
+}
+.text-muted-light { 
+   color: darken(@text-muted-light, 15%);
+  @media (min-width: @screen-sm) {
+    color: @text-muted-light;
+  }
+ 
 }
 .text-primary {
   .text-emphasis-variant(@brand-primary);
@@ -169,20 +183,16 @@ mark,
   .text-emphasis-variant(@brand-success);
 }
 .text-info {
-  .text-emphasis-variant(@state-info-text);
+  .text-emphasis-variant(@brand-info);
 }
 .text-warning {
-  .text-emphasis-variant(@state-warning-text);
+  .text-emphasis-variant(@brand-warning);
 }
 .text-danger {
-  .text-emphasis-variant(@state-danger-text);
+  .text-emphasis-variant(@brand-danger);
 }
 .text-normal { 
   color: @text-color;
-}
-.text-order {
-  padding-right: 15px;
-  padding-left: 15px;
 }
 // Contextual backgrounds
 // For now we'll leave these alongside the text classes until v4 when we can
@@ -266,7 +276,10 @@ dd {
 }
 dt {
   font-weight: normal;
-   color: @text-muted;
+   color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: @text-muted;
+  }
 }
 dd {
   margin-left: 0; // Undo browser default
@@ -382,4 +395,6 @@ address {
   font-size: @font-size-h4;
   color: @gray-light;
 }
-
+.text-underline { 
+  text-decoration: underline;
+}

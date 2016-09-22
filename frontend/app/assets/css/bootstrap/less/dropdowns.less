@@ -20,7 +20,34 @@
 // The dropdown wrapper (div)
 .dropup,
 .dropdown {
-  position: relative;
+    position: relative;
+  .dropdown-menu-header { 
+    display: none; 
+  }
+  
+  @media (max-width: @screen-xxs-max){
+    &.open {
+    z-index: 2;
+    background: #fff;  
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  .dropdown-menu-header { 
+    display: inline;
+    float: left;
+    padding-left: 16px;
+
+  }
+    .md-replace-to-close { 
+      display: inline !important;
+    }
+  .md-replace-to-close:before { 
+      content: 'close'!important;
+   }
+  }
+ }
 }
 
 // Prevent the focus on the dropdown toggle when closing dropdowns
@@ -33,18 +60,17 @@
   position: absolute;
   top: 100%;
   left: 0;
+  right: auto;
+  bottom: auto;
+  float: left;
   z-index: @zindex-dropdown;
   display: none; // none by default, but block on "open" of the menu
-  float: left;
-  min-width: 160px;
   padding: 5px 0;
   margin: 0; // override default ul
   list-style: none;
   font-size: @font-size-base;
   text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
   background-color: @dropdown-bg;
-  .box-shadow(@dropdown-shadow);
-  border-radius: 1px;
   background-clip: padding-box;
 
   // Aligns the dropdown menu to right
@@ -63,7 +89,7 @@
   // Links within the dropdown menu
   > li > a {
     display: block;
-    padding: 8px 20px;
+    padding:10px 16px;  
     clear: both;
     font-weight: normal;
     line-height: @line-height-base;
@@ -71,9 +97,20 @@
     white-space: nowrap; // prevent links from randomly breaking onto new lines
  
   }
-  @media (min-width: @grid-float-breakpoint) { 
-    > li > a {
-      padding: 3px 20px; 
+
+  @media (max-width: @screen-xxs-max){ 
+    position: static;
+    float: none;
+  }
+  @media (min-width: @screen-xs){
+    min-width: 160px;
+   .box-shadow(@dropdown-shadow);
+  }
+  
+  @media (min-width: @screen-sm){ 
+        border-radius: 1px;
+      > li > a {
+      padding: 8px 16px; 
     }
   }
 }
@@ -157,7 +194,7 @@
 // Dropdown section headers
 .dropdown-header {
   display: block;
-  padding: 3px 20px;
+  padding: 8px 16px;
   font-size: @font-size-small;
   line-height: @line-height-base;
   color: @dropdown-header-color;

@@ -238,6 +238,10 @@
       margin-top:-1px;
     }
   }
+  .panel-body {
+    padding: @padding-large-vertical;
+
+  }
   .panel-heading { 
    border-bottom: 1px solid @panel-inner-border;
   }
@@ -252,23 +256,7 @@
     }
   }
   
-  .panel.edit-mode { 
-         background: @default-max-light;
-     
-         .panel-footer { 
-           background: transparent;
-           > .btn {
-             display: none;
-             
-           }
-           .btn-group { 
-               display: inline-block;
-           }
-         }
-         .panel-heading {
-          background: #fff; 
-         }
-       }
+
   .panel.active { 
          background: @component-active-bg;
          color: desaturate(darken(@component-active-bg, 60%), 10%);
@@ -277,12 +265,7 @@
          color: desaturate(darken(@component-active-bg, 60%), 10%);
        }
     }
-  .panel-collapse { 
-    .panel-body { 
-      background: @default-max-light;
-      padding: @padding-large-vertical;
-    }
-  }
+
   
 }
 
@@ -340,16 +323,7 @@
     }
 }
 .panel {
-  &.edit-mode {
-    dl.editable { 
-     dd {
-       display: none;
-       + dd { 
-         display: block;
-       }
-     }
-   }
-  }
+
   &.panel-file-upload { 
     margin-bottom: 16px;
   }
@@ -362,6 +336,12 @@
     padding-bottom: 80px;
   }
 }
-.samples-values.panel {
-  background-color: inherit;
+.edit-mode {
+   background: @default-max-light;
+}
+
+.panel-footer { 
+  .btn-link:first-child {
+    margin-left: -@padding-base-horizontal;
+  }
 }

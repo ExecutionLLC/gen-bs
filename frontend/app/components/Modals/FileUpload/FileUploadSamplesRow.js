@@ -84,7 +84,7 @@ export default class FileUploadSamplesRow extends Component {
     renderSelectButton(isDemoSession, sample) {
         if(entityTypeIsDemoDisabled(sample.type, isDemoSession)) {
             return (
-                <span data-localize='samples.settings.select.title'>
+                <span data-localize='samples.settings.select.title' className='text-muted'>
                     Please register to analyze this sample.
                 </span>
             );
@@ -132,7 +132,7 @@ export default class FileUploadSamplesRow extends Component {
 
         if (_.some(sample.values, option => option.values)) {
             return (
-                <div className='panel-body'>
+                <div className='panel-body view-mode'>
                     <div className='flex'>
                         {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                     </div>
@@ -154,8 +154,7 @@ export default class FileUploadSamplesRow extends Component {
                 fieldValue = option.value;
             }
             return (
-                <dl key={field.id}
-                    className='dl-horizontal'>
+                <dl key={field.id}>
                     <dt>{field.label}</dt>
                     <dd>{fieldValue}</dd>
                 </dl>

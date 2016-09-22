@@ -24,14 +24,14 @@ export default class ExistentFilterSelect extends Component {
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
 
         return (
-            <div className='in'>
-                <div className='row grid-toolbar'>
-                    {this.renderTitle()}
-                </div>
+            <div className='form-rows-dynamic in'>
+                {this.renderTitle()}
                 {this.renderWarning(isDemoSession, selectedFilter.type)}
-                <div className='row grid-toolbar row-head-selector'>
-                    {this.renderFiltersSelector(filters, fields)}
-                    {this.renderButtonGroup(isDemoSession, isFilterEditable)}
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
+                        {this.renderFiltersSelector(filters, fields)}
+                        {this.renderButtonGroup(isDemoSession, isFilterEditable)}
+                    </div>
                 </div>
             </div>
         );
@@ -39,9 +39,7 @@ export default class ExistentFilterSelect extends Component {
 
     renderTitle() {
         return (
-            <div className='col-sm-6'>
-                <label data-localize='filters.setup.selector.label'>Available Filters</label>
-            </div>
+          <h5 data-localize='filters.setup.selector.label'>Available Filters</h5>
         );
     }
 
@@ -67,7 +65,7 @@ export default class ExistentFilterSelect extends Component {
         }));
 
         return (
-            <div className='col-sm-6'>
+            <div className='btn-group btn-group-select2-max'>
                 <Select
                     options={selectItems}
                     value={this.getSelectedFilter().id}
@@ -79,13 +77,11 @@ export default class ExistentFilterSelect extends Component {
 
     renderButtonGroup(isDemoSession, isFilterEditable) {
         return (
-            <div className='col-sm-6'>
-                <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
-                     data-placement='bottom' data-container='body'>
-                    {this.renderDuplicateFilterButton(isDemoSession)}
-                    {isFilterEditable && this.renderResetFilterButton()}
-                    {isFilterEditable && this.renderDeleteFilterButton()}
-                </div>
+            <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
+                 data-placement='bottom' data-container='body'>
+                {this.renderDuplicateFilterButton(isDemoSession)}
+                {isFilterEditable && this.renderResetFilterButton()}
+                {isFilterEditable && this.renderDeleteFilterButton()}
             </div>
         );
     }

@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
-import {Panel} from 'react-bootstrap';
 import 'react-select/dist/react-select.css';
 
 import Select from '../../shared/Select';
@@ -37,12 +36,12 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     render() {
         const {sampleId, fieldIdToValuesHash} = this.props;
         return (
-            <Panel className='samples-values'>
+            <div className='panel-body edit-mode'>
                 <div className='flex'>
                     {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
                 </div>
-            </Panel>
+            </div>
         );
     }
 
@@ -90,7 +89,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         );
 
         return (
-            <dl key={field.id} className='dl-horizontal'>
+            <dl key={field.id}>
                 <dt>{field.label}</dt>
                 <dd>
                     <Select
@@ -105,7 +104,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
     renderTextField(sampleId, field, fieldValue) {
         return (
-            <dl key={field.id} className='dl-horizontal'>
+            <dl key={field.id}>
                 <dt>{field.label}</dt>
                 <dd>
                     <input

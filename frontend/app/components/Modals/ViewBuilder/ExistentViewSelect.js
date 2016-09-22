@@ -20,14 +20,14 @@ export default class ExistentViewSelect extends React.Component {
         const isEditableView = entityTypeIsEditable(selectedViewType);
 
         return (
-            <div className='collapse in'>
-                <div className='row grid-toolbar'>
-                    {this.renderTitle()}
-                </div>
+            <div className='form-rows-dynamic collapse in'>
+                {this.renderTitle()}
                 {this.renderWarning(isDemoSession, selectedViewType)}
-                <div className='row grid-toolbar row-head-selector'>
-                    {this.renderViewSelector(views)}
-                    {this.renderButtonGroup(isDemoSession, isEditableView)}
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
+                        {this.renderViewSelector(views)}
+                        {this.renderButtonGroup(isDemoSession, isEditableView)}
+                    </div>
                 </div>
             </div>
         );
@@ -35,9 +35,7 @@ export default class ExistentViewSelect extends React.Component {
 
     renderTitle() {
         return (
-            <div className='col-sm-6'>
-                <label data-localize='views.setup.selector.label'>Available Views</label>
-            </div>
+            <h5 data-localize='views.setup.selector.label'>Available Views</h5>
         );
     }
 
@@ -63,7 +61,7 @@ export default class ExistentViewSelect extends React.Component {
         }));
 
         return (
-            <div className='col-sm-6'>
+            <div className='btn-group btn-group-select2-max'>
                 <Select
                     options={selectorItems}
                     value={this.getEditingViewId()}
@@ -75,12 +73,10 @@ export default class ExistentViewSelect extends React.Component {
 
     renderButtonGroup(isDemoSession, isEditableView) {
         return (
-            <div className='col-sm-6'>
-                <div className='btn-group'>
-                    {this.renderDuplicateViewButton(isDemoSession)}
-                    {isEditableView && this.renderResetViewButton()}
-                    {isEditableView && this.renderDeleteViewButton()}
-                </div>
+            <div className='btn-group'>
+                {this.renderDuplicateViewButton(isDemoSession)}
+                {isEditableView && this.renderResetViewButton()}
+                {isEditableView && this.renderDeleteViewButton()}
             </div>
         );
     }

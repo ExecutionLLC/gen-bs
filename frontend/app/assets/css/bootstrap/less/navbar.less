@@ -848,7 +848,17 @@
  }
  
  }
- 
+.md-language:before { 
+  content: 'language';
+}
+
+.md-person:before {
+  content: 'person';
+}
+
+.md-cloud_download:before { 
+  content: 'cloud_download';
+} 
  //main color navbar
 .navbar-main {
   height: 0;
@@ -857,13 +867,8 @@
  .transition(all .25s linear);
   box-shadow: 0 0 10px rgba(107, 118, 137, 0.3);
 
- .dropdown-menu {
-   margin: 2px 0 0;
-  }      
+     
  .brand { 
-    width: 75px;
-    padding: 0 15px;
-    font-size: 22px;
     float: none;
     line-height: 42px;
     color: @navbar-inverse-color ;
@@ -888,20 +893,66 @@
  }
  .dropdown-toggle { 
      position: relative;
-     white-space: pre;
-   }
- .dropdown-menu {
-    
-       > li {
-       > a { 
-          padding:10px 12px;      
-        }
-       } 
-    }
+     //white-space: pre;
+  }
+
  .navbar-inner {
     position: relative;
     z-index: 3;
     display: table;
+     .btn, 
+     .dropdown-toggle  {
+       white-space: nowrap;
+       position: relative;
+       color: @navbar-inverse-color;
+       padding-left: 0;
+       padding-right: 0;
+       min-width:0;
+       text-align: center;
+       width: 100%;
+       display: block;
+       min-width: 0;
+      .md-i { 
+        font-size: 30px;
+        margin-bottom: -5px;
+      }
+
+      .badge { 
+        border-radius: 20px;
+        margin-right: -20px;
+        position: absolute;
+        right: 50%;
+        top: 4px;
+        z-index: 1;
+        
+       }
+      .badge-success { 
+        background: saturate(lighten(@brand-success, 8%), 28%);
+      }
+      .badge-warning { 
+        background: saturate(lighten(@brand-warning, 8%), 28%);
+      }
+      &:hover { 
+       color: lighten(@navbar-inverse-bg, 30%);
+      }
+      &.brand { 
+        width: auto;
+        padding: 0;
+        font-size: 22px;
+
+      }
+      &.btn-field-clean { 
+         position: absolute;
+         right: 16px;
+         top: 2px;
+         width: auto;
+         z-index: 1;
+         .md-i { 
+           opacity: 0.8; 
+         }
+         }
+
+     }
    > div { 
      display: table-cell;
      vertical-align: top;
@@ -910,79 +961,77 @@
      &.width100 { 
         width: 100%;
      }
-     > a, > div > a, .btn {
-       white-space: nowrap;
-       position: relative;
-       min-width: @navbar-height; 
-       color: @navbar-inverse-color;
-   
-       .badge { 
-      border-radius: 20px;
-      position: absolute;
-        right: 0;
-        top: 4px;
-      z-index: 1;
-       }
 
-       &:hover { 
-        opacity: .8;
-      }      
-     }
     &.navbar-search {
       padding-left: 0;
-    width: 100%;
- 
-
+      width: 1%;
    }
+    &.visible-xs { 
+       display: table-cell !important;
+    }
+    
   }
-    .dropdown { 
-     position: relative;
-     z-index: 4;
-   }
   }
 
  a:hover,
  a:focus { 
    text-decoration: none;
  }
- .nav { 
-   > li {
-      .dropdown-toggle {
-         position: relative;
-          .navbar-vertical-align(@line-height-computed);
-          max-height: 42px;
-         .badge { 
-           position: absolute;
-           right: 0;
-           top:2px;
-         }
-      }
-   }
- }
 
-@media (max-width: @screen-xss-max) {
+  @media (max-width: @screen-xxs-max) {
 
   .navbar-inner { 
-   > div { 
-      &.navbar-search { 
-        width: 1%;
+      .dropdown.open {
+        .dropdown-toggle {
+          text-align: right;
+          background: @navbar-inverse-bg;
+          color: #fff;
+          padding-bottom: 3px;
+          padding-right: 16px;
+          padding-top: 8px;       
+          .badge { 
+            display: none;
+          }
+          .md-i { 
+            display: inline-block;
+            position: relative;
+            top: -4px;
+          }
+         }
       }
-      &.visible-xxs { 
-       display: table-cell !important;
-     }
-     > a, > div > a, .btn, .dropdown-toggle {
-       padding-left: 0;
-       padding-right: 0;
-       min-width:0;
-       text-align: center;
-       width: 100%;
-       display: block;
-        &.brand { 
-          width: auto;
-          padding: 0 8px;
-          font-size: 18px;
+    } 
+  }
+
+  @media (min-width: @screen-xs){ 
+      .dropdown-menu {
+       margin: 2px 0 0;
+      }
+      
+  }
+  @media (min-width: @screen-sm){ 
+
+    .navbar-inner {
+      .btn, .dropdown-toggle {
+        padding-left: 12px;
+        padding-right: 12px;
+        &.brand {
+         width: 75px;
+         padding: 0 15px;
+         }
+         .badge {
+        margin-right: 0;
+        right: 0;
+       
+         }
+      }
+      > div { 
+        &.navbar-search {
+          width: 100%;
         }
-       }     
+      } 
+      .dropdown { 
+       position: relative;
+       z-index: 4;
       }
     } 
   }

@@ -58,8 +58,8 @@ class SavedFilesModal extends DialogBase {
             .take(10)
             .value();
         return (
-            <div className='modal-body-scroll'>
-                  <table className='table table-condensed table-vertical-top table-responsive-transform'>
+            <div className='modal-body-scroll modal-body-white'>
+                  <table className='table table-condensed table-vertical-top table-responsive-transform table-export-labels'>
                       <thead>
                       <tr>
                           <th>Date</th>

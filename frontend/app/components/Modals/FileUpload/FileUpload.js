@@ -64,7 +64,7 @@ export default class FileUpload extends Component {
                     // onDragEnter={(e) => this.onDragEnter(e)}
                     // onDragOver={(e) => this.onDragOver(e)}
                     // onDrop={(e) => this.onDrop(e)}
-                    className='btn-link-light-default btn-select-file'>
+                    className='btn-link-default btn-select-file'>
                 <input
                     onChange={ (e) => this.onUploadChanged(e.target.files)}
                     style={{display: 'none'}}
@@ -76,7 +76,7 @@ export default class FileUpload extends Component {
                 />
                 <i className='md-i'>cloud_upload</i>
                 <span>Click here to upload new samples</span>
-                <span>.vcf, .vcf.gz</span>
+                <span className='text-muted-light'>.vcf, .vcf.gz</span>
             </button>
         );
     }

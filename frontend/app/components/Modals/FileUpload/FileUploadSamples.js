@@ -31,7 +31,7 @@ export default class FileUploadSamples extends Component {
                         </div>
                     </div>
                 </div>
-                <div className='panel-group panel-group-scroll'>
+                <div className='panel-group'>
                     {filteredSamples.map(
                         sample => (
                             <FileUploadSamplesRow
