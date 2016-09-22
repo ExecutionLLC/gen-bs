@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import * as SamplesUtils from './samplesUtils';
-import  {firstCharToUpperCase} from './stringUtils';
 import {isMainSample} from './samplesUtils';
 
 export default class FieldUtils {
@@ -51,7 +50,7 @@ export default class FieldUtils {
         const {sourceName, label} = field;
         const isSource = sourceName && this.isSourceField(field);
         return {
-            label: (!isSource && sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(label),
+            label: `${(!isSource && sampleType ? `(${sampleType})` : '')}${label}`,
             title: isSource ? sourceName : sampleName
         };
     }
