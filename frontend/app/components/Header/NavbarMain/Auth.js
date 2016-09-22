@@ -98,7 +98,10 @@ class Auth extends Component {
                             </a>
                         </li>
                         <li>
-                            <LoginForm />
+                            <LoginForm
+                                dispatch={this.props.dispatch}
+                                closeLoginForm={() => this.handleClickOutside()}
+                            />
                         </li>
                     </ul>
                 </div>
