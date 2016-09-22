@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import * as SamplesUtils from './samplesUtils';
 import  {firstCharToUpperCase} from './stringUtils';
-import {isMainSample} from "./samplesUtils";
+import {isMainSample} from './samplesUtils';
 
 export default class FieldUtils {
     static find(fieldId, fields) {
