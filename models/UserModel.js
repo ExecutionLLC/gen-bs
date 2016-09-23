@@ -229,14 +229,31 @@ class UserModel extends RemovableModelBase {
         const {email, login} = user;
         Promise.all([
             this._findUserAsync(trx, email, null, null)
-                .then(() => Promise.reject(new Error('Duplicate e-mail.')))
-                .catch(() => Promise.resolve()),
+                .then(() => Promise.reject(new UserModelError('Duplicate e-mail.')))
+                .catch((error) => {
+                    if(error instanceof UserModelError){
+                        Promise.reject(new Error(error.message))
+                    }
+                    Promise.resolve()
+                }),
             this._findUserAsync(trx, null, login, null)
-                .then(() => Promise.reject(new Error('Duplicate login.')))
-                .catch(() => Promise.resolve())
+                .then(() => Promise.reject(new UserModelError('Duplicate login.')))
+                .catch((error) => {
+                    if(error instanceof UserModelError){
+                        Promise.reject(new Error(error.message))
+                    }
+                    Promise.resolve()
+                })
         ])
             .then(() => callback(null))
             .catch((error) => callback(error))
+    }
+}
+
+class UserModelError extends Error{
+
+    constructor(msg) {
+        super(msg)
     }
 }
 
