@@ -21,7 +21,7 @@ describe('User info', () => {
     }
 
     function generateRegcode() {
-        return Uuid.v4();
+        return '' + (10000000 + Math.floor(Math.random() * 89999999));
     }
 
     describe('Positive tests', () => {
