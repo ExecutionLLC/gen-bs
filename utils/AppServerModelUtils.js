@@ -3,25 +3,26 @@
 const _ = require('lodash');
 const AppServerUtils = require('./AppServerUtils');
 const CollectionUtils = require('./CollectionUtils');
+const {MODEL_TYPES} = require('./Enums.js');
 
 class AppServerModelUtils {
     static createAppServerModel(model, fieldIdToMetadata, samples) {
         if (_.isNull(model) || _.isNull(model.rules)) {
             return null;
         }
-        const samplesInfo = _.map(samples ,sample => {
+        const samplesInfo = _.map(samples, sample => {
             const sampleFields = _.map(sample.values, value => fieldIdToMetadata[value.fieldId]);
             const sampleFieldHash = CollectionUtils.createHash(sampleFields, fieldMetadata => fieldMetadata.id);
             return {
                 sampleFieldHash,
                 sample,
-                sampleType:sample.sampleType
+                sampleType: sample.sampleType
             }
         });
         const sampleInfoHash = CollectionUtils.createHash(samplesInfo, sampleInfo => sampleInfo.sampleType);
-        const rules = model.modelType == 'complex'? {name:model.name}: AppServerModelUtils._createServerRulesRecursively(model.rules, sampleInfoHash, samples);
+        const rules = model.modelType == MODEL_TYPES.COMPLEX ? {name: model.name} : AppServerModelUtils._createServerRulesRecursively(model.rules, sampleInfoHash, samples);
         return {
-            type:model.modelType,
+            type: model.modelType,
             rules
         };
     }
