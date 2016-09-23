@@ -49,7 +49,6 @@ class LoginForm extends Component {
         const {login, password} = this.state;
         const {closeLoginForm} = this.props;
 
-        debugger;
         closeLoginForm();
         this.props.dispatch(openUserSession(login, password));
     }
