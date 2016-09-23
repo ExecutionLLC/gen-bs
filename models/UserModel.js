@@ -6,6 +6,7 @@ const Promise = require('bluebird');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const RemovableModelBase = require('./RemovableModelBase');
+const UserModelError = require('../utils/errors/UserModelError');
 
 const mappedColumns = [
     'id',
@@ -232,7 +233,7 @@ class UserModel extends RemovableModelBase {
                 .then(() => Promise.reject(new UserModelError('Duplicate e-mail.')))
                 .catch((error) => {
                     if(error instanceof UserModelError){
-                        Promise.reject(new Error(error.message))
+                        Promise.reject(error)
                     }
                     Promise.resolve()
                 }),
@@ -240,20 +241,13 @@ class UserModel extends RemovableModelBase {
                 .then(() => Promise.reject(new UserModelError('Duplicate login.')))
                 .catch((error) => {
                     if(error instanceof UserModelError){
-                        Promise.reject(new Error(error.message))
+                        Promise.reject(error)
                     }
                     Promise.resolve()
                 })
         ])
             .then(() => callback(null))
             .catch((error) => callback(error))
-    }
-}
-
-class UserModelError extends Error{
-
-    constructor(msg) {
-        super(msg)
     }
 }
 
