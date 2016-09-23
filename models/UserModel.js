@@ -233,9 +233,9 @@ class UserModel extends RemovableModelBase {
                 .then(() => Promise.reject(new UserModelError('Duplicate e-mail.')))
                 .catch((error) => {
                     if(error instanceof UserModelError){
-                        Promise.reject(error)
+                        return Promise.reject(error)
                     }
-                    Promise.resolve()
+                    return Promise.resolve()
                 }),
             this._findUserAsync(trx, null, login, null)
                 .then(() => Promise.reject(new UserModelError('Duplicate login.')))
@@ -243,7 +243,7 @@ class UserModel extends RemovableModelBase {
                     if(error instanceof UserModelError){
                         Promise.reject(error)
                     }
-                    Promise.resolve()
+                    return Promise.resolve()
                 })
         ])
             .then(() => callback(null))
