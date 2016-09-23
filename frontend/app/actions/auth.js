@@ -98,35 +98,60 @@ function loginError(errorMessage) {
     };
 }
 
-function updateLoginData(dispatch, isDemo) {
-    dispatch(receiveSession(isDemo));
-    dispatch(initWSConnection());
-    if (isDemo) {
-        dispatch(clearAnalysesHistory());
-    }
-    dispatch(fetchUserdata());
+function updateLoginData(isDemo) {
+    return (dispatch) => {
+        dispatch(receiveSession(isDemo));
+        dispatch(initWSConnection());
+        if (isDemo) {
+            dispatch(clearAnalysesHistory());
+        }
+        dispatch(fetchUserdata());
+    };
 }
 
 // Create new demo session.
-function openDemoSession(dispatch) {
+function openDemoSession() {
     console.log('loginAsDemoUser');
-    sessionsClient.openDemoSession((error, response) => {
-        if (error) {
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (response.status !== HttpStatus.OK) {
-            dispatch(loginError(response.body));
-            dispatch(handleError(null, LOGIN_SERVER_ERROR));
-        } else {
-            const sessionId = SessionsClient.getSessionFromResponse(response);
-            if (sessionId) {
-                updateLoginData(dispatch, true);
-            } else {
-                dispatch(loginError('Session id is empty'));
+    return (dispatch) => {
+        sessionsClient.openDemoSession((error, response) => {
+            if (error) {
+                dispatch(loginError(error));
+                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(loginError(response.body));
                 dispatch(handleError(null, LOGIN_SERVER_ERROR));
+            } else {
+                const sessionId = SessionsClient.getSessionFromResponse(response);
+                if (sessionId) {
+                    dispatch(updateLoginData(true));
+                } else {
+                    dispatch(loginError('Session id is empty'));
+                    dispatch(handleError(null, LOGIN_SERVER_ERROR));
+                }
             }
-        }
-    });
+        });
+    };
+}
+
+export function openUserSession(login, password) {
+    return (dispatch) => {
+        sessionsClient.openUserSession(login, password, (error, response) => {
+            if (error) {
+                dispatch(loginError(error));
+                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, LOGIN_SERVER_ERROR));
+            } else {
+                const sessionId = SessionsClient.getSessionFromResponse(response);
+                if (sessionId) {
+                    dispatch(updateLoginData(false));
+                } else {
+                    dispatch(loginError('Session id is empty'));
+                    dispatch(handleError(null, LOGIN_SERVER_ERROR));
+                }
+            }
+        });
+    };
 }
 
 /**@callback CheckSessionCallback
@@ -155,22 +180,24 @@ function checkSession(callback) {
 
 // If session stored in cookie is valid, then restore it, otherwise create new
 // demo session.
-function checkCookieSessionAndLogin(dispatch) {
-    dispatch(requestSession());
+function checkCookieSessionAndLogin() {
+    return (dispatch) => {
+        dispatch(requestSession());
 
-    checkSession((error, isValidSession, isDemoSession) => {
-        if (error) {
-            // it is fatal network error
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (isValidSession) {
-            // restore old session
-            updateLoginData(dispatch, isDemoSession);
-        } else {
-            // old session is not valid, so we create new one
-            openDemoSession(dispatch);
-        }
-    });
+        checkSession((error, isValidSession, isDemoSession) => {
+            if (error) {
+                // it is fatal network error
+                dispatch(loginError(error));
+                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
+            } else if (isValidSession) {
+                // restore old session
+                dispatch(updateLoginData(isDemoSession));
+            } else {
+                // old session is not valid, so we create new one
+                dispatch(openDemoSession());
+            }
+        });
+    };
 }
 
 // Algorithm:
@@ -182,10 +209,10 @@ function checkCookieSessionAndLogin(dispatch) {
 // create new demo session.
 //
 // It is legacy of previous developer :)
-export function login() {
+export function loginWithGoogle() {
     const errorFromParams = getUrlParameterByName('error');
 
-    return dispatch => {
+    return (dispatch) => {
         if (errorFromParams) {
             // it is error from google authorization page (detected by URL parameters)
             console.log('google authorization failed', errorFromParams);
@@ -194,7 +221,7 @@ export function login() {
             history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
         }
         // try to restore old session
-        checkCookieSessionAndLogin(dispatch);
+        dispatch(checkCookieSessionAndLogin());
     };
 }
 
