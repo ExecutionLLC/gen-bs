@@ -29,9 +29,9 @@ describe('User info', () => {
             const userRegcode = generateRegcode();
             const userFirstName = userRegcode + '-first-name';
             return userInfo.create({regcode: userRegcode, firstName: userFirstName})
-                .then((userId) => {
-                    assert.ok(userId && typeof userId === 'string');
-                    return userId;
+                .then((user) => {
+                    assert.ok(user, `Not created user ${({regcode: userRegcode, firstName: userFirstName})}`);
+                    return user.id;
                 })
                 .then((userId) =>
                     userInfo.findByRegcodeOrEmailAsync(userRegcode, null)
@@ -46,9 +46,9 @@ describe('User info', () => {
             const userEmail = generateEmail();
             const userLastName = userEmail + '-last-name';
             return userInfo.create({email: userEmail, lastName: userLastName})
-                .then((userId) => {
-                    assert.ok(userId && typeof userId === 'string');
-                    return userId;
+                .then((user) => {
+                    assert.ok(user);
+                    return user.id;
                 })
                 .then((userId) =>
                     userInfo.findByRegcodeOrEmailAsync(null, userEmail)
@@ -64,8 +64,8 @@ describe('User info', () => {
             const userLastName = userEmail + '-last-name';
             const userNewLastName = userEmail + '-new-last-name';
             return userInfo.create({email: userEmail, lastName: userLastName})
-                .then((userId) =>
-                    userInfo.update(userId, {lastName: userNewLastName})
+                .then((user) =>
+                    userInfo.update(user.id, {lastName: userNewLastName})
                 )
                 .then(() =>
                     userInfo.findByRegcodeOrEmailAsync(null, userEmail)
