@@ -91,7 +91,7 @@ class RegistrationCodesModel extends ModelBase {
                 })));
     }
 
-    createAsync(startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
+    createRegcodeAsync(startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
         return this._findValidRegcodeAsync(startingRegcode ? '' + startingRegcode : this._generateRegcode(), trx)
             .then((regcode) => {
                 const itemId = Uuid.v4();
@@ -118,7 +118,7 @@ class RegistrationCodesModel extends ModelBase {
             items,
             () => {
                 return new Promise((resolve) => {
-                    this.createAsync(currentRegcode, language, speciality, description, numberOfPaidSamples, trx)
+                    this.createRegcodeAsync(currentRegcode, language, speciality, description, numberOfPaidSamples, trx)
                         .then((user) => {
                             currentRegcode = currentRegcode && this._generateNextRegcode(user.regcode);
                             resolve(user);
