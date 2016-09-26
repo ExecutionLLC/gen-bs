@@ -12,16 +12,12 @@ const KnexWrapper = require('./utils/KnexWrapper');
 const RegistrationCodesService = require('./services/RegistrationCodesService');
 const RegistrationCodesModel = require('./models/RegistrationCodesModel');
 const UsersClient = require('./api/UsersClient');
-const UserInfoModel = require('./models/UserInfoModel');
-const UserInfoService = require('./services/UserInfoService');
 
 const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
-const userInfoModel = new UserInfoModel(dbModel, logger);
 const usersClient = new UsersClient(Config);
 
 const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
-const userInfo = new UserInfoService(dbModel, userInfoModel);
 
 const app = new Express();
 app.disable('x-powered-by');
@@ -59,16 +55,7 @@ app.get(
         }
     }
 );
-/*
-app.post('/user', (request, response) => {
-    console.log('create user');
-    console.log(request.body);
-    const {regcode, email, user} = request.body;
-    userInfo.create(Object.assign({}, user, {regcode, email}))
-        .then((user) => response.send(user))
-        .catch((err) => response.status(400).send(err.message));
-});
-*/
+
 app.put('/user', (request, response) => {
     console.log('update user');
     console.log(request.body);
