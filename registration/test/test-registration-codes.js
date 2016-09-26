@@ -69,7 +69,6 @@ describe('Registration Codes', () => {
 
         it('should add regcode and find it', () => {
             const userRegcode = generateRegcode();
-            const userFirstName = userRegcode + '-first-name';
             return registrationCodes.createRegcodeAsync(userRegcode, 'en', 'speciality', 'description', 4)
                 .then((createdRegcode) => {
                     assert.ok(createdRegcode, 'Not created user');
