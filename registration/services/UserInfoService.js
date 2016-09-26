@@ -12,12 +12,6 @@ class UserInfoService {
         this.userInfoModel = userInfoModel;
     }
 
-    findByRegcodeIdAsync(regcodeId) {
-        const {db, userInfoModel} = this;
-        return db.transactionallyAsync((trx) =>
-            userInfoModel.findByRegcodeIdAsync(regcodeId, trx));
-    }
-
     findByRegcodeOrEmailAsync(regcode) {
         const {db, userInfoModel} = this;
         return db.transactionallyAsync((trx) =>

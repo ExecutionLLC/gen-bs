@@ -17,21 +17,6 @@ class UserInfoModel extends ModelBase {
         ]);
     }
 
-    findByRegcodeIdAsync(regcodeId, trx) {
-        return trx
-            .select()
-            .from(this.baseTableName)
-            .where('id', regcodeId)
-            .then((items) => items[0])
-            .then((item) => {
-                if (!item) {
-                    throw new Error(`User not found for regcodeId "${regcodeId}"`);
-                }
-                return item;
-            })
-            .then((item) => this._mapColumns(item));
-    }
-
     findByRegcodeOrEmailAsync(regcode, trx) {
         if (!regcode) {
             return Promise.reject('User not found for no regcode');
