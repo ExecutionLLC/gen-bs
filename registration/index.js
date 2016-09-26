@@ -50,7 +50,7 @@ app.get(
         const {regcode, email} = request.query;
         userInfo.findByRegcodeOrEmailAsync(regcode, email)
             .then((user) => response.send(user))
-            .catch((err) => response.send(null));
+            .catch((err) => response.status(404).send(err.message));
     }
 );
 
@@ -60,7 +60,7 @@ app.post('/user', (request, response) => {
     const {regcode, email, user} = request.body;
     userInfo.create(Object.assign({}, user, {regcode, email}))
         .then((user) => response.send(user))
-        .catch((err) => response.send(null));
+        .catch((err) => response.status(400).send(err.message));
 });
 
 app.put('/user', (request, response) => {
@@ -69,7 +69,7 @@ app.put('/user', (request, response) => {
     const user = request.body;
     userInfo.update(user.id, user)
         .then((userId) => response.send(user))
-        .catch((err) => response.send(null));
+        .catch((err) => response.status(400).send(err.message));
 });
 
 app.get('/register', (request, response) => {
