@@ -46,8 +46,8 @@ app.post('/register', (request, response) => {
 app.post('/get_user_for_regcode_email', (request, response) => {
     console.log('get_user_for_regcode_email');
     console.log(request.body);
-    const search = request.body;
-    userInfo.findByRegcodeOrEmailAsync(search.regcode, search.email)
+    const {regcode, email} = request.body;
+    userInfo.findByRegcodeOrEmailAsync(regcode, email)
         .then((user) => response.send(user))
         .catch((err) => response.send(null));
 });
