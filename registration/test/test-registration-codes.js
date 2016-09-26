@@ -91,6 +91,22 @@ describe('Registration Codes', () => {
                 )
         });
 
+        it('should update found user', () => {
+            const userRegcode = generateRegcode();
+            const userEmail = generateEmail();
+            const userLastName = userEmail + '-last-name';
+            return registrationCodes.createRegcodeAsync(userRegcode, 'en', 'speciality', 'description', 4)
+                .then((regcodeInfo) =>
+                    registrationCodes.update(regcodeInfo.id, {email: userEmail, lastName: userLastName})
+                )
+                .then((userId) =>
+                    registrationCodes.findRegcodeAsync(userRegcode)
+                )
+                .then((regcodeInfo) => {
+                    assert(regcodeInfo.lastName === userLastName);
+                    assert(regcodeInfo.email === userEmail);
+                })
+        });
     });
 
     describe('Negative tests', () => {
