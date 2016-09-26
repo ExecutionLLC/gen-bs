@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 // Load default config but prefer env variables
-const DEFAULT_CONFIG_PATH = path.resolve(`${__dirname}/../default-env.json`);
+const DEFAULT_CONFIG_PATH = path.resolve(`${__dirname}/default-env.json`);
 let defaultConfig = {};
 try {
     defaultConfig = require(DEFAULT_CONFIG_PATH);
@@ -55,5 +55,7 @@ const SETTINGS = {
         port: makeDefault(ENV.GEN_REG_WS_PORT, 80)
     }
 };
+
+console.log(`Configuration:\n${JSON.stringify(SETTINGS, null, 2)}`);
 
 module.exports = SETTINGS;
