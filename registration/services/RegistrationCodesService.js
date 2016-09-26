@@ -53,6 +53,12 @@ class RegistrationCodesService {
             registrationCodesModel.findRegcodeIdAsync(regcode, trx)
         );
     }
+
+    update(regcodeId, regcodeInfo) {
+        const {db, registrationCodesModel} = this;
+        return db.transactionallyAsync((trx) =>
+            registrationCodesModel.update(regcodeId, regcodeInfo, trx));
+    }
 }
 
 module.exports = RegistrationCodesService;

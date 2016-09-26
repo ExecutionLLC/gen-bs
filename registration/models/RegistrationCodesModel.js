@@ -145,6 +145,12 @@ class RegistrationCodesModel extends ModelBase {
             {concurrency: 1}
         );
     }
+
+    update(regcodeId, regcodeInfo, trx) {
+        return trx(this.baseTableName)
+            .where('id', regcodeId)
+            .update(ChangeCaseUtil.convertKeysToSnakeCase(regcodeInfo));
+    }
 }
 
 module.exports = RegistrationCodesModel;

@@ -59,7 +59,7 @@ app.get(
         }
     }
 );
-
+/*
 app.post('/user', (request, response) => {
     console.log('create user');
     console.log(request.body);
@@ -68,13 +68,13 @@ app.post('/user', (request, response) => {
         .then((user) => response.send(user))
         .catch((err) => response.status(400).send(err.message));
 });
-
+*/
 app.put('/user', (request, response) => {
     console.log('update user');
     console.log(request.body);
-    const user = request.body;
-    userInfo.update(user.id, user)
-        .then((userId) => response.send(user))
+    const regcodeInfo = request.body;
+    registrationCodes.update(regcodeInfo.id, regcodeInfo)
+        .then((userId) => response.send(regcodeInfo))
         .catch((err) => response.status(400).send(err.message));
 });
 
