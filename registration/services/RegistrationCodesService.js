@@ -39,6 +39,20 @@ class RegistrationCodesService {
             registrationCodesModel.createManyRegcodeAsync(count, startingRegcode, language, speciality, description, numberOfPaidSamples, trx)
         );
     }
+
+    findRegcodeAsync(regcode) {
+        const {db, registrationCodesModel} = this;
+        return db.transactionallyAsync((trx) =>
+            registrationCodesModel.findRegcodeAsync(regcode, trx)
+        );
+    }
+
+    findRegcodeIdAsync(regcode) {
+        const {db, registrationCodesModel} = this;
+        return db.transactionallyAsync((trx) =>
+            registrationCodesModel.findRegcodeIdAsync(regcode, trx)
+        );
+    }
 }
 
 module.exports = RegistrationCodesService;

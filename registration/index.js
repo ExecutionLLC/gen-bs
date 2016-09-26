@@ -49,11 +49,11 @@ app.get(
         console.log('/user', request.query);
         const {regcode, regcodeId} = request.query;
         if (regcodeId) {
-            userInfo.findByRegcodeIdAsync(regcodeId)
+            registrationCodes.findRegcodeIdAsync(regcodeId)
                 .then((user) => response.send(user))
                 .catch((err) => response.status(404).send(err.message));
         } else {
-            userInfo.findByRegcodeOrEmailAsync(regcode)
+            registrationCodes.findRegcodeAsync(regcode)
                 .then((user) => response.send(user))
                 .catch((err) => response.status(404).send(err.message));
         }

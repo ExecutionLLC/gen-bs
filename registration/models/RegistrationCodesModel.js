@@ -45,7 +45,7 @@ class RegistrationCodesModel extends ModelBase {
             });
     }
 
-    _findRegcodeAsync(regcode, trx) {
+    findRegcodeAsync(regcode, trx) {
         return trx.select()
             .from(this.baseTableName)
             .where('regcode', regcode)
@@ -53,6 +53,20 @@ class RegistrationCodesModel extends ModelBase {
             .then((item) => {
                 if (!item) {
                     throw new Error(`Regcode "${regcode}" not found`)
+                }
+                return item;
+            })
+            .then((item) => this._mapColumns(item));
+    }
+
+    findRegcodeIdAsync(regcodeId, trx) {
+        return trx.select()
+            .from(this.baseTableName)
+            .where('id', regcodeId)
+            .then((items) => items[0])
+            .then((item) => {
+                if (!item) {
+                    throw new Error(`Regcode id "${regcodeId}" not found`)
                 }
                 return item;
             })
@@ -74,7 +88,7 @@ class RegistrationCodesModel extends ModelBase {
 
     _findValidRegcodeAsync(regcode, trx) {
         return new Promise((resolve) => {
-            this._findRegcodeAsync(regcode, trx)
+            this.findRegcodeAsync(regcode, trx)
                 .then(() => this._findValidRegcodeAsync(this._generateNextRegcode(regcode), trx).then((regcode) => resolve(regcode)))
                 .catch((err) => resolve(regcode));
         });
