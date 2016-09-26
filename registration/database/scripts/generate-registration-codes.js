@@ -28,11 +28,11 @@ const {
 } = args;
 
 if (count && speciality && description && defaultLanguage && numberPaidSamples) {
-    registrationCodes.createManyAsync(count, defaultLanguage, speciality, description, numberPaidSamples)
-        .then((ids) => {
-            console.log(`${count} registration codes are added with ids: ${JSON.stringify(ids)}`);
-            ids.map(id => {
-                console.log(`${Config.usersClient.httpScheme}://${Config.usersClient.host}:${Config.usersClient.port}/api/session/auth/google/login/${id}`);
+    registrationCodes.createManyRegcodeAsync(count, null, defaultLanguage, speciality, description, numberPaidSamples)
+        .then((users) => {
+            console.log(`${count} registration codes are added with ids:`, users.map((user) => user.id));
+            users.map(user => {
+                console.log(`${user.regcode}: ${Config.usersClient.httpScheme}://${Config.usersClient.host}:${Config.usersClient.port}/api/session/auth/google/login/${user.id}`);
             });
             process.exit(0);
         })
