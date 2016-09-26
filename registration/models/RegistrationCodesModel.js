@@ -10,13 +10,16 @@ class RegistrationCodesModel extends ModelBase {
     constructor(db, logger) {
         super(db, logger, 'registration_code', [
             'id',
+            'regcode',
             'description',
             'isActivated',
             'activatedTimestamp',
             'language',
             'speciality',
             'numberOfPaidSamples',
-            'email'
+            'email',
+            'firstName',
+            'lastName'
         ]);
     }
 
