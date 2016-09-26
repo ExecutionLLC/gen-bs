@@ -118,5 +118,25 @@ describe('Registration Codes', () => {
                 'Activation successful for unknown code.'
             )
         );
+
+        it('should not find absent user', () =>
+            Promise.resolve()
+                .then(() => mustThrowPromise(
+                    registrationCodes.findRegcodeAsync(generateRegcode()),
+                    'find for absent regcode'
+                ))
+                .then(() => mustThrowPromise(
+                    registrationCodes.findRegcodeIdAsync(Uuid.v4()),
+                    'find for absent regcode id'
+                ))
+                .then(() => mustThrowPromise(
+                    registrationCodes.findRegcodeAsync(null),
+                    'find for null regcode'
+                ))
+                .then(() => mustThrowPromise(
+                    registrationCodes.findRegcodeIdAsync(null),
+                    'find for null regcode id'
+                ))
+        );
     });
 });

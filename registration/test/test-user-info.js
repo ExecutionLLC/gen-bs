@@ -64,7 +64,7 @@ describe('User info', () => {
         it('should not find absent user', () =>
             Promise.resolve()
                 .then(() => mustThrowPromise(
-                    userInfo.findByRegcodeOrEmailAsync(generateRegcode()),
+                    userInfo.findByRegcodeOrEmailAsync(generateRegcode()), // TODO remove test
                     'find for absent regcode'
                 ))
         );
@@ -80,7 +80,7 @@ describe('User info', () => {
                 .then(() => userInfo.create({email: generateEmail()}))
                 .then(() => userInfo.create({regcode: generateRegcode()}))
                 .then(() => mustThrowPromise(
-                    userInfo.findByRegcodeOrEmailAsync(null),
+                    userInfo.findByRegcodeOrEmailAsync(null), // TODO remove test
                     'find for null regcode'
                 ))
         );
