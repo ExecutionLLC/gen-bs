@@ -39,14 +39,6 @@ class RegistrationCodesService {
             registrationCodesModel.createManyRegcodeAsync(count, startingRegcode, language, speciality, description, numberOfPaidSamples, trx)
         );
     }
-
-    createManyAsync(count, language, speciality, description, numberOfPaidSamples) {
-        const {db, registrationCodesModel} = this;
-
-        return db.transactionallyAsync((trx) =>
-            registrationCodesModel.createManyAsync(count, language, speciality, description, numberOfPaidSamples, trx)
-        );
-    }
 }
 
 module.exports = RegistrationCodesService;

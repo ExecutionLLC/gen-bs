@@ -128,24 +128,6 @@ class RegistrationCodesModel extends ModelBase {
             {concurrency: 1}
         );
     }
-
-    createManyAsync(count, language, speciality, description, numberOfPaidSamples, trx) {
-        const items = new Array(count)
-            .fill(null)
-            .map(() => ChangeCaseUtil.convertKeysToSnakeCase({
-                id: Uuid.v4(),
-                speciality,
-                language,
-                description,
-                numberOfPaidSamples,
-                isActivated: false
-            }));
-        const itemIds = items.map(item => item.id);
-        const promises = items.map((item) => trx(this.baseTableName)
-                .insert(item));
-        return Promise.all(promises)
-            .then(() => itemIds);
-    }
 }
 
 module.exports = RegistrationCodesModel;
