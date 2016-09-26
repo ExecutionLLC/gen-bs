@@ -57,7 +57,13 @@ class MailChimpMailService extends ServiceBase {
                 "template_content":[],
                 "message": message
             },
-            (result) => callback(null, result),
+            (result) => {
+                const {reject_reason} = result[0];
+                if (reject_reason == null){
+                    callback(null, result[0])
+                }
+                callback(new Error(reject_reason), null)
+            },
             (error) => callback(error, null)
         );
     }
