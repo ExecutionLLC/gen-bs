@@ -146,7 +146,7 @@ var currentUser = {
     user: {}
 };
 
-var checkingUser = {
+const checkingUser = {
     requested: {
         regcode: '',
         email: ''
