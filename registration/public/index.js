@@ -35,8 +35,8 @@ function ajaxAsync(method, url, params, data) {
 }
 
 const API = {
-    getUserForRegcodeEmailAsync(regcode, email) {
-        return ajaxAsync('GET', 'http://localhost:3000/user', {regcode, email});
+    getUserForRegcodeEmailAsync(regcode) {
+        return ajaxAsync('GET', 'http://localhost:3000/user', {regcode, email: null});
     },
     getUserForRegcodeId(regcodeId) {
         return ajaxAsync('GET', 'http://localhost:3000/user', {regcodeId});
@@ -47,8 +47,8 @@ const API = {
     updateUser(user) {
         return ajaxAsync('PUT', 'http://localhost:3000/user', null, user)
     },
-    createUser(regcode, email, user) {
-        return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email, user})
+    createUser(regcode, user) {
+        return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email: null, user})
     }
 };
 
@@ -157,27 +157,24 @@ const FillData = {
 var loadedUserId = null;
 var currentUser = {
     regcode: '',
-    email: '',
     user: {}
 };
 
 const checkingUser = {
     requested: {
-        regcode: '',
-        email: ''
+        regcode: ''
     },
-    requestRegcodeEmailAsync(regcode, email) {
+    requestRegcodeAsync(regcode) {
         checkingUser.requested = {
-            regcode,
-            email
+            regcode
         };
-        return API.getUserForRegcodeEmailAsync(regcode, email)
+        return API.getUserForRegcodeEmailAsync(regcode, null)
             .then((user) => {
-                if (regcode !== checkingUser.requested.regcode || email !== checkingUser.requested.email) {
+                if (regcode !== checkingUser.requested.regcode) {
                     throw new Error('old request');
                 }
                 if (!user) {
-                    throw new Error('User for ' + regcode + '/' + email + ' not found');
+                    throw new Error('User for ' + regcode + ' not found');
                 }
                 console.log('Logged in as ', user);
                 return user;
@@ -191,13 +188,12 @@ function displayNoUserInfo() {
     FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
 }
 
-function checkRegcodeEmail(regcode, email) {
-    checkingUser.requestRegcodeEmailAsync(regcode, email)
+function checkRegcode(regcode) {
+    checkingUser.requestRegcodeAsync(regcode)
         .then((user) => {
             loadedUserId = user.id;
             currentUser.user = Object.assign({}, user);
             currentUser.regcode = checkingUser.requested.regcode;
-            currentUser.email = checkingUser.requested.email;
             FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
         })
         .catch(() => {
@@ -209,7 +205,7 @@ function onUserEdit(fieldId, str) {
     console.log(currentUser);
     currentUser.user[fieldId] = str;
     if (!loadedUserId) {
-        API.createUser(currentUser.regcode, currentUser.email, currentUser.user)
+        API.createUser(currentUser.regcode, currentUser.user)
             .then((createdUser) => {
                 loadedUserId = createdUser.id;
                 currentUser.user = Object.assign({}, {id: loadedUserId}, currentUser.user);
@@ -223,11 +219,7 @@ function onUserEdit(fieldId, str) {
 function onDocumentLoad() {
     const regcodeEl = document.getElementById('regcode');
     if (regcodeEl) {
-        DOMUtils.onInput(regcodeEl, (regcode) => {currentUser.regcode = regcode; checkRegcodeEmail(regcode, null);});
-    }
-    const emailEl = document.getElementById('email');
-    if (emailEl) {
-        DOMUtils.onInput(emailEl, (email) => {currentUser.email = email; checkRegcodeEmail(null, email);});
+        DOMUtils.onInput(regcodeEl, (regcode) => {currentUser.regcode = regcode; checkRegcode(regcode);});
     }
     const userInfoEl = document.getElementById('userinfo');
     const templateUserdataEl = MakeLayout.getTemplate(userInfoEl);
@@ -245,7 +237,6 @@ function onDocumentLoad() {
                 loadedUserId = user.id;
                 currentUser.user = Object.assign({}, user);
                 currentUser.regcode = checkingUser.requested.regcode;
-                currentUser.email = checkingUser.requested.email;
                 FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
                 if (regcodeEl) {
                     regcodeEl.value = user.regcode;
