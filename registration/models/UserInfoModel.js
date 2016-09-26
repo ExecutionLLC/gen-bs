@@ -18,35 +18,30 @@ class UserInfoModel extends ModelBase {
     }
 
     findByRegcodeOrEmailAsync(regcode, email, trx) {
+        if (!regcode && !email) {
+            return Promise.reject('User not found for no regcode and email');
+        }
+        let query = trx
+            .select()
+            .from(this.baseTableName);
         if (regcode) {
-            return trx.select()
-                .from(this.baseTableName)
-                .where('regcode', regcode)
-                .then((items) => items[0])
-                .then((item) => {
-                    if (!item) {
+            query = query.where('regcode', regcode);
+        } else {
+            query = query.where('email', email);
+        }
+        return query
+            .then((items) => items[0])
+            .then((item) => {
+                if (!item) {
+                    if (regcode) {
+                        throw new Error(`User not found for email ${email}`);
+                    } else {
                         throw new Error(`User not found for regcode ${regcode}`);
                     }
-                    return item;
-                })
-                .then((item) => this._mapColumns(item))
-        } else {
-            if (email) {
-                return trx.select()
-                    .from(this.baseTableName)
-                    .where('email', email)
-                    .then((items) => items[0])
-                    .then((item) => {
-                        if (!item) {
-                            throw new Error(`User not found for email ${email}`);
-                        }
-                        return item;
-                    })
-                    .then((item) => this._mapColumns(item))
-            } else {
-                return Promise.reject('User not found for no regcode and email');
-            }
-        }
+                }
+                return item;
+            })
+            .then((item) => this._mapColumns(item));
     }
 
     create(userInfo, trx) {
