@@ -38,6 +38,9 @@ const API = {
     getUserForRegcodeEmailAsync(regcode, email) {
         return ajaxAsync('GET', 'http://localhost:3000/user', {regcode, email});
     },
+    getUserForRegcodeId(regcodeId) {
+        return ajaxAsync('GET', 'http://localhost:3000/user', {regcodeId});
+    },
     getUserForId(userId) {
         return ajaxAsync('post', 'http://localhost:3000/register', null, userId)
     },
@@ -228,5 +231,26 @@ function onDocumentLoad() {
         MakeLayout.makeUserInfo(USER_INFO_SCHEME, userInfoEl, templateUserdataEl, onUserEdit);
         FillData.fillUserItem(USER_INFO_SCHEME, null);
     }
-
+    const regcodeId = window.location.hash.replace(/^#/, '');
+    if (regcodeId) {
+        if (regcodeEl) {
+            regcodeEl.disabled = true;
+        }
+        API.getUserForRegcodeId(regcodeId)
+            .then((user) => {
+                loadedUserId = user.id;
+                currentUser.user = Object.assign({}, user);
+                currentUser.regcode = checkingUser.requested.regcode;
+                currentUser.email = checkingUser.requested.email;
+                FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+                if (regcodeEl) {
+                    regcodeEl.value = user.regcode;
+                }
+            })
+            .catch(() => {
+                loadedUserId = null;
+                currentUser.user = {};
+                FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+            });
+    }
 }

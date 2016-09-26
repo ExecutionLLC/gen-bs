@@ -47,10 +47,16 @@ app.get(
     '/user',
     (request, response) => {
         console.log('/user', request.query);
-        const {regcode, email} = request.query;
-        userInfo.findByRegcodeOrEmailAsync(regcode, email)
-            .then((user) => response.send(user))
-            .catch((err) => response.status(404).send(err.message));
+        const {regcode, email, regcodeId} = request.query;
+        if (regcodeId) {
+            userInfo.findByRegcodeIdAsync(regcodeId)
+                .then((user) => response.send(user))
+                .catch((err) => response.status(404).send(err.message));
+        } else {
+            userInfo.findByRegcodeOrEmailAsync(regcode, email)
+                .then((user) => response.send(user))
+                .catch((err) => response.status(404).send(err.message));
+        }
     }
 );
 
