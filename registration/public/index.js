@@ -147,7 +147,7 @@ const FillData = {
         scheme.forEach(({id}) => {
             const inputEl = document.getElementById(MakeLayout.getValueElId(id));
             if (inputEl) {
-                FillData.fillDataItemEl(inputEl, data && data[id] || '');
+                FillData.fillDataItemEl(inputEl, data[id] || '');
             }
         });
     }
@@ -185,6 +185,12 @@ const checkingUser = {
     }
 };
 
+function displayNoUserInfo() {
+    loadedUserId = null;
+    currentUser.user = {};
+    FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+}
+
 function checkRegcodeEmail(regcode, email) {
     checkingUser.requestRegcodeEmailAsync(regcode, email)
         .then((user) => {
@@ -195,9 +201,7 @@ function checkRegcodeEmail(regcode, email) {
             FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
         })
         .catch(() => {
-            loadedUserId = null;
-            currentUser.user = {};
-            FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+            displayNoUserInfo();
         });
 }
 
@@ -229,7 +233,7 @@ function onDocumentLoad() {
     const templateUserdataEl = MakeLayout.getTemplate(userInfoEl);
     if (templateUserdataEl) {
         MakeLayout.makeUserInfo(USER_INFO_SCHEME, userInfoEl, templateUserdataEl, onUserEdit);
-        FillData.fillUserItem(USER_INFO_SCHEME, null);
+        displayNoUserInfo();
     }
     const regcodeId = window.location.hash.replace(/^#/, '');
     if (regcodeId) {
@@ -248,9 +252,7 @@ function onDocumentLoad() {
                 }
             })
             .catch(() => {
-                loadedUserId = null;
-                currentUser.user = {};
-                FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+                displayNoUserInfo();
             });
     }
 }
