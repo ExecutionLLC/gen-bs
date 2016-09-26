@@ -34,9 +34,9 @@ class UserInfoModel extends ModelBase {
             .then((item) => {
                 if (!item) {
                     if (regcode) {
-                        throw new Error(`User not found for email ${email}`);
+                        throw new Error(`User not found for regcode "${regcode}"`);
                     } else {
-                        throw new Error(`User not found for regcode ${regcode}`);
+                        throw new Error(`User not found for email "${email}"`);
                     }
                 }
                 return item;
