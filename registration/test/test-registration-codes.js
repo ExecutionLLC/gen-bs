@@ -21,20 +21,20 @@ describe('Registration Codes', () => {
     }
 
     function generateCodeIdAsync() {
-        return registrationCodes.createManyAsync(1, 'en', 'speciality', 'description', 10)
-            .then((ids) => ids[0])
+        return registrationCodes.createManyRegcodeAsync(1, null, 'en', 'speciality', 'description', 10)
+            .then((ids) => ids[0].id)
     }
 
     describe('Positive tests', () => {
         it('generates and activates new codes', () =>
-            registrationCodes.createManyAsync(10, 'en', 'speciality', 'description', 10)
-                .then((ids) => {
-                    assert.ok(ids);
-                    assert.equal(ids.length, 10);
-                    return ids;
+            registrationCodes.createManyRegcodeAsync(10, null, 'en', 'speciality', 'description', 10)
+                .then((regcodeUsers) => {
+                    assert.ok(regcodeUsers);
+                    assert.equal(regcodeUsers.length, 10);
+                    return regcodeUsers;
                 })
-                .then((ids) =>
-                    Promise.all(ids.map((id) => registrationCodes.activateAsync(id, 'Test', 'Test', generateEmail())))
+                .then((regcodeUsers) =>
+                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser.id, 'Test', 'Test', generateEmail())))
                 )
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
         );
