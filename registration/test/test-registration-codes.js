@@ -49,6 +49,20 @@ describe('Registration Codes', () => {
                 });
         });
 
+        it('must add user with regcode', () => {
+            const regcode = '' + (10000000 + Math.floor(Math.random() * 89999999));
+            const nextRegcode = '' + (+regcode + 1);
+            return registrationCodes.createAsync(regcode, 'en', 'speciality', 'description', 4)
+                .then((createdUser) => {
+                    assert.equal(createdUser.regcode, regcode);
+                })
+                .then(() =>
+                    registrationCodes.createAsync(regcode, 'en', 'speciality', 'description', 4)
+                )
+                .then((createdUser) => {
+                    assert.equal(createdUser.regcode, nextRegcode);
+                });
+        })
     });
 
     describe('Negative tests', () => {
