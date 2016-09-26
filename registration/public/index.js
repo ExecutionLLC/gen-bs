@@ -1,9 +1,21 @@
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
-function ajaxAsync(method, url, data) {
+function makeURIParams(params) {
+    var result = [];
+    var key;
+    for (key in params) {
+        if (!params.hasOwnProperty(key)) {
+            continue;
+        }
+        result.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key] || '')}`)
+    }
+    return result.join('&');
+}
+
+function ajaxAsync(method, url, params, data) {
     return new Promise((resolve, reject) => {
         const xmlhttp = new XMLHttpRequest();
-        xmlhttp.open(method, url);
+        xmlhttp.open(method, url + (params ? '?' + makeURIParams(params) : ''));
         xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState === xmlhttp.DONE) {
@@ -24,16 +36,16 @@ function ajaxAsync(method, url, data) {
 
 const API = {
     getUserForRegcodeEmailAsync(regcode, email) {
-        return ajaxAsync('POST', 'http://localhost:3000/get_user_for_regcode_email', {regcode, email})
+        return ajaxAsync('GET', 'http://localhost:3000/user', {regcode, email});
     },
     getUserForId(userId) {
-        return ajaxAsync('post', 'http://localhost:3000/register', userId)
+        return ajaxAsync('post', 'http://localhost:3000/register', null, userId)
     },
     updateUser(user) {
-        return ajaxAsync('post', 'http://localhost:3000/update_user', user)
+        return ajaxAsync('PUT', 'http://localhost:3000/user', null, user)
     },
     createUser(regcode, email, user) {
-        return ajaxAsync('post', 'http://localhost:3000/create_user', {regcode, email, user})
+        return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email, user})
     }
 };
 

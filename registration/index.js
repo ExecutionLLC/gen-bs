@@ -43,17 +43,19 @@ app.post('/register', (request, response) => {
         );
 });
 
-app.post('/get_user_for_regcode_email', (request, response) => {
-    console.log('get_user_for_regcode_email');
-    console.log(request.body);
-    const {regcode, email} = request.body;
-    userInfo.findByRegcodeOrEmailAsync(regcode, email)
-        .then((user) => response.send(user))
-        .catch((err) => response.send(null));
-});
+app.get(
+    '/user',
+    (request, response) => {
+        console.log('/user', request.query);
+        const {regcode, email} = request.query;
+        userInfo.findByRegcodeOrEmailAsync(regcode, email)
+            .then((user) => response.send(user))
+            .catch((err) => response.send(null));
+    }
+);
 
-app.post('/create_user', (request, response) => {
-    console.log('create_user');
+app.post('/user', (request, response) => {
+    console.log('create user');
     console.log(request.body);
     const {regcode, email, user} = request.body;
     userInfo.create(Object.assign({}, user, {regcode, email}))
@@ -61,8 +63,8 @@ app.post('/create_user', (request, response) => {
         .catch((err) => response.send(null));
 });
 
-app.post('/update_user', (request, response) => {
-    console.log('update_user');
+app.put('/user', (request, response) => {
+    console.log('update user');
     console.log(request.body);
     const user = request.body;
     userInfo.update(user.id, user)
