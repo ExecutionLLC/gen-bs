@@ -131,6 +131,16 @@ const SETTINGS = {
             rotatingFilesCount: 7
         }
     },
+    mailChimp: {
+        key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'ZZSunlwLdI-6KE2A6xRKWA'),
+        fromMail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'mailchimp@alapy.com'),
+        fromName: makeDefault(ENV.GEN_WS_MAIL_FROM_NAME, 'ALAPY'),
+        userRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
+        userRegisterCodeTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_CODE_TEMPLATE, 'TestGenomicsTemplate'),
+        userRegisterApproveTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_APPROVE_TEMPLATE, 'TestGenomicsTemplate'),
+        adminRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
+        adminRegisterApproveTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_APPROVE_TEMPLATE, 'TestGenomicsTemplate')
+    },
     defaultLanguId: 'en'
 };
 
