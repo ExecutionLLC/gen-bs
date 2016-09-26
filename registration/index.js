@@ -48,7 +48,7 @@ app.post('/get_user_for_regcode_email', (request, response) => {
     console.log(request.body);
     const search = request.body;
     userInfo.findByRegcodeOrEmailAsync(search.regcode, search.email)
-        .then((userId) => response.send(userId))
+        .then((user) => response.send(user))
         .catch((err) => response.send(null));
 });
 
@@ -57,7 +57,7 @@ app.post('/create_user', (request, response) => {
     console.log(request.body);
     const {regcode, email, user} = request.body;
     userInfo.create(Object.assign({}, user, {regcode, email}))
-        .then((userId) => response.send(userId))
+        .then((user) => response.send(user))
         .catch((err) => response.send(null));
 });
 
