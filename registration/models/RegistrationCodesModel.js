@@ -94,6 +94,9 @@ class RegistrationCodesModel extends ModelBase {
     createRegcodeAsync(startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
         return this._findValidRegcodeAsync(startingRegcode ? '' + startingRegcode : this._generateRegcode(), trx)
             .then((regcode) => {
+                if (!regcode) {
+                    throw new Error('createRegcodeAsync fails: no valid regcode found');
+                }
                 const itemId = Uuid.v4();
                 return ChangeCaseUtil.convertKeysToSnakeCase({
                     id: itemId,
