@@ -36,9 +36,9 @@ describe('User info', () => {
                 .then((userId) =>
                     userInfo.findByRegcodeOrEmailAsync(userRegcode, null)
                         .then((foundUser) => {
-                            assert(foundUser.id === userId);
-                            assert(foundUser.firstName === userFirstName);
-                            assert(foundUser.regcode === userRegcode);
+                            assert.equal(foundUser.id, userId, 'found created user id');
+                            assert.equal(foundUser.firstName, userFirstName, 'found created user name');
+                            assert.equal(foundUser.regcode, userRegcode, 'found created user regcode');
                         })
                 )
         });
