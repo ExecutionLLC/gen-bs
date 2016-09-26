@@ -18,10 +18,10 @@ class UserInfoService {
             userInfoModel.findByRegcodeIdAsync(regcodeId, trx));
     }
 
-    findByRegcodeOrEmailAsync(regcode, email) {
+    findByRegcodeOrEmailAsync(regcode) {
         const {db, userInfoModel} = this;
         return db.transactionallyAsync((trx) =>
-            userInfoModel.findByRegcodeOrEmailAsync(regcode, email, trx));
+            userInfoModel.findByRegcodeOrEmailAsync(regcode, trx));
     }
 
     create(userInfo) {

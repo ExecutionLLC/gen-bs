@@ -32,27 +32,18 @@ class UserInfoModel extends ModelBase {
             .then((item) => this._mapColumns(item));
     }
 
-    findByRegcodeOrEmailAsync(regcode, email, trx) {
-        if (!regcode && !email) {
-            return Promise.reject('User not found for no regcode and email');
+    findByRegcodeOrEmailAsync(regcode, trx) {
+        if (!regcode) {
+            return Promise.reject('User not found for no regcode');
         }
-        let query = trx
+        return trx
             .select()
-            .from(this.baseTableName);
-        if (regcode) {
-            query = query.where('regcode', regcode);
-        } else {
-            query = query.where('email', email);
-        }
-        return query
+            .from(this.baseTableName)
+            .where('regcode', regcode)
             .then((items) => items[0])
             .then((item) => {
                 if (!item) {
-                    if (regcode) {
-                        throw new Error(`User not found for regcode "${regcode}"`);
-                    } else {
-                        throw new Error(`User not found for email "${email}"`);
-                    }
+                    throw new Error(`User not found for regcode "${regcode}"`);
                 }
                 return item;
             })

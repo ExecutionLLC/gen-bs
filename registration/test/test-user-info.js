@@ -34,7 +34,7 @@ describe('User info', () => {
                     return user.id;
                 })
                 .then((userId) =>
-                    userInfo.findByRegcodeOrEmailAsync(userRegcode, null)
+                    userInfo.findByRegcodeOrEmailAsync(userRegcode)
                         .then((foundUser) => {
                             assert.equal(foundUser.id, userId, 'found created user id');
                             assert.equal(foundUser.firstName, userFirstName, 'found created user name');
@@ -42,33 +42,17 @@ describe('User info', () => {
                         })
                 )
         });
-        it('should add user and find it for email', () => {
-            const userEmail = generateEmail();
-            const userLastName = userEmail + '-last-name';
-            return userInfo.create({email: userEmail, lastName: userLastName})
-                .then((user) => {
-                    assert.ok(user);
-                    return user.id;
-                })
-                .then((userId) =>
-                    userInfo.findByRegcodeOrEmailAsync(null, userEmail)
-                        .then((foundUser) => {
-                            assert(foundUser.id === userId);
-                            assert(foundUser.lastName === userLastName);
-                            assert(foundUser.email === userEmail);
-                        })
-                )
-        });
         it('should update found user', () => {
+            const userRegcode = generateRegcode();
             const userEmail = generateEmail();
             const userLastName = userEmail + '-last-name';
             const userNewLastName = userEmail + '-new-last-name';
-            return userInfo.create({email: userEmail, lastName: userLastName})
+            return userInfo.create({regcode: userRegcode, email: userEmail, lastName: userLastName})
                 .then((user) =>
                     userInfo.update(user.id, {lastName: userNewLastName})
                 )
-                .then(() =>
-                    userInfo.findByRegcodeOrEmailAsync(null, userEmail)
+                .then((userId) =>
+                    userInfo.findByRegcodeOrEmailAsync(userRegcode)
                 )
                 .then((foundUser) => {
                     assert(foundUser.lastName === userNewLastName);
@@ -80,11 +64,7 @@ describe('User info', () => {
         it('should not find absent user', () =>
             Promise.resolve()
                 .then(() => mustThrowPromise(
-                    userInfo.findByRegcodeOrEmailAsync(null, generateEmail()),
-                    'find for absent email'
-                ))
-                .then(() => mustThrowPromise(
-                    userInfo.findByRegcodeOrEmailAsync(generateRegcode(), null),
+                    userInfo.findByRegcodeOrEmailAsync(generateRegcode()),
                     'find for absent regcode'
                 ))
         );
@@ -95,13 +75,13 @@ describe('User info', () => {
                     'add user with no email and regcode'
                 ))
         );
-        it('should not find user with no email or regcode', () =>
+        it('should not find user with no regcode', () =>
             Promise.resolve()
                 .then(() => userInfo.create({email: generateEmail()}))
                 .then(() => userInfo.create({regcode: generateRegcode()}))
                 .then(() => mustThrowPromise(
-                    userInfo.findByRegcodeOrEmailAsync(null, null),
-                    'find for null email and regcode'
+                    userInfo.findByRegcodeOrEmailAsync(null),
+                    'find for null regcode'
                 ))
         );
     });
