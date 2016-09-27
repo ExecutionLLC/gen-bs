@@ -17,7 +17,7 @@
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid transparent;
   white-space: nowrap;
-  .button-size(@padding-base-vertical; @padding-base-horizontal; @font-size-base; @line-height-base; @border-radius-small);
+  .button-size((@padding-base-vertical - 1); @padding-base-horizontal; @font-size-base; @line-height-base; @border-radius-small);
   .user-select(none);
 
   &,
@@ -122,56 +122,21 @@
 // -------------------------
 
 
-.btn-link-variant(@color)  {
-  color: @color;
-  font-weight: normal;
-  border-radius: 0;
-  text-decoration: none;
- 
-  vertical-align: middle;
-  border: none;
 
-
-  &,
-  &:active,
-  &.active,
-  &[disabled],
-  fieldset[disabled] & {
-    background-color: transparent;
-    .box-shadow(none);
-  }
-  &,
-  &:hover,
-  &:focus,
-  &:active {
-    border-color: transparent;
-  }
-  &:hover,
-  &:focus {
-   color: lighten(@color, 10%);
-    text-decoration:none ;
-    background-color: transparent;
-  }
-  &[disabled],
-  fieldset[disabled] & {
-    &:hover,
-    &:focus {
-     color: lighten(@color, 15%);
-      text-decoration: none;
-    }
-  }
-
-}
 
 .btn-link {
  .btn-link-variant(@brand-primary);
 }
 
 .btn-link-default { 
- .btn-link-variant(@gray-dark); 
+ .btn-link-variant(@gray-dark);
+    &.active {
+      color: @brand-primary;
+    }
 }
+
 .btn-link-light-default { 
- .btn-link-variant(@gray-light); 
+ .btn-link-variant(@gray-lighter); 
 }
 .btn-link-primary {
    .btn-link-variant(@brand-primary); 
@@ -182,6 +147,15 @@
 .btn-link-success {
  .btn-link-variant(@brand-success); 
 }
+.btn-link-inverse { 
+ .btn-link-variant(#fff); 
+ &:hover,
+ &:focus,
+ &:active { 
+   color: #fff;
+ }  
+}
+
 .btn-link-info {
  .btn-link-variant(@brand-info); 
 }
@@ -189,7 +163,13 @@
  .btn-link-variant(@text-muted); 
 }
 .btn-link small { 
+    color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
     color: @text-muted;
+  };
+  }
     text-decoration: underline;
  }
  
@@ -204,7 +184,13 @@ label.btn-link {
     max-width: 160px;
     padding-left: 5px;
     vertical-align: top;
-  font-weight: bold; color: @text-muted; font-size: @font-size-small;
+  font-weight: bold; color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: @text-muted;
+  };
+  } font-size: @font-size-small;
 }
 
 // Button Sizes
@@ -248,32 +234,6 @@ input[type="button"] {
     text-align: left;
   }
 }
-.btn-group-select2 { 
-  .btn-group { 
-    display: table-cell;
-    vertical-align: top;
-    padding-right: 5px;
-    width: 1%;
-    white-space: nowrap;
-    
-    .btn { 
-      float: none;
-      +.btn { 
-      margin-left: -0.4em;
-      }
-    }
-    +.btn-group { 
-      width: 100%;
-    
-    }
-    +.btn-group +.btn-group { 
-      width: 1%;
-     } 
-    &.btn-group-select100 { 
-      width: 100% !important;
-    }
-  }
-}
 .btn-sm-h-paddings { 
   padding-left: @padding-small-horizontal;
   padding-right: @padding-small-horizontal;
@@ -287,7 +247,13 @@ input[type="button"] {
     padding-left: 24px;
     position: relative;
     text-align: left;
+    color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
     color: @text-muted;
+  };
+  }
   }
   input { 
     position: absolute;
@@ -338,12 +304,13 @@ input[type="button"] {
    }
   }
 .btn.btn-sort {
-  .badge { 
+  .text-info { 
       background: transparent;
-       color: @brand-info;
+      color: @brand-info;
       position: absolute;
-      right: -6px;
-    top: -2px;
+      right: -2px;
+      top: -2px;
+      font-size: 11px;
     }
 }
 .btn-multi-label { 
@@ -391,11 +358,35 @@ input[type="button"] {
 .btn-width-fix { 
   min-width: 105px;
 }
+.btn-upload {
+    border-bottom: 1px solid #d4d7dd;
+    display: block;
+    text-align: center;
+    width: 100%;
+   &:hover { 
+      border-bottom: 1px solid #d4d7dd; 
+   }
+  h3 { 
+    span { 
+      text-decoration: underline;
+    }
+  }
+  i { 
+   font-size: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+}
 .btn-select-file {
     display: block;
     height: 100%;
     text-align: center;
     width: 100%;
+    &:focus,
+    &:active { 
+      outline: none;
+    }
   
   
   i, span, small  {
@@ -411,11 +402,6 @@ input[type="button"] {
   }
   i { 
     font-size: 32px;
-  }
-  span:last-child { 
-
-    color: @gray-lighter;
-    
   }
   @media(min-width:@screen-sm){
    i { 
@@ -470,9 +456,60 @@ input[type="button"] {
          .i-star:before { 
             color: @brand-warning;
             content: 'star';
-           
         }
        }
-      }
+     }
+  }
+}
+.btn-fix-width { 
+  float: none;
+  width: 100%;
+
+  @media(min-width:@screen-xs){ 
+    min-width: 148px;
+    width: auto;
+  }
+}
+.btn.btn-pushup {
+  box-shadow: 0px 0px 3px fade(@gray-dark, 40%); 
+}
+.btn.btn-right-in-form { 
+   display: none;
+    @media(min-width:@screen-sm){ 
+      display: block;
+      right: @padding-base-horizontal*1.5;
+      top: 24px;
+      position: absolute;
+     z-index: 2;
+    }
+}
+
+
+.btn { 
+  .ag24, .ag22 { 
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .ag24 { 
+        margin: -10px -4px;
+  }
+  .ag22 { 
+        margin: -10px 0;
+  }
+}
+
+.btn-close-xs { 
+display: block;
+    height: 40px;
+    left: 0;
+    padding: 8px 16px;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    top: 0;
+    width: 100%;
+  .md-i { 
+    float: right;
+    
   }
 }

@@ -9,14 +9,13 @@ export default class Language extends Component {
     render() {
         return (
 
-            <div data-localize='language.help' data-toggle='tooltip' data-placement='left'
+            <div className='hidden-xs' data-localize='language.help' data-toggle='tooltip' data-placement='left'
                  title='Change interface language'
                  data-container='body' data-trigger='hover'>
                 <div className='dropdown language'>
 
                     <a href='#' className='btn navbar-btn dropdown-toggle' data-toggle='dropdown' role='button'><span
-                        className='visible-xs' data-localize='language.lang_xs_En'>Eng</span><span className='hidden-xs'
-                                                                                                   data-localize='language.lang_sm_En'>English </span><span
+                         data-localize='language.lang_sm_En'>English </span><span
                         className='caret'></span></a>
                     <ul className='dropdown-menu'>
                         <li><a href='#' type='button' id='en_lang'><span

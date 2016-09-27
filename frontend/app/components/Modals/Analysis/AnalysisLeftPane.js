@@ -18,7 +18,7 @@ export default class AnalysisLeftPane extends React.Component {
         } = this.props;
 
         return (
-            <div>
+            <div className='split-left'>
                 <AnalysisHistorySearch
                     search={historyListSearch}
                     onSearch={(str) => this.onSearchChange(str)}
