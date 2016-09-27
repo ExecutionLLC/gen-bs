@@ -59,6 +59,19 @@ class RegistrationCodesService {
         return db.transactionallyAsync((trx) =>
             registrationCodesModel.update(regcodeId, regcodeInfo, trx));
     }
+
+    updateFirstDate(regcodeId, regcodeInfo) {
+        const {db, registrationCodesModel} = this;
+        return db.transactionallyAsync((trx) =>
+            registrationCodesModel.updateFirstDate(regcodeId, regcodeInfo, trx));
+    }
+
+    updateLastDate(regcodeId, regcodeInfo) {
+        const {db, registrationCodesModel} = this;
+        return db.transactionallyAsync((trx) =>
+            registrationCodesModel.updateLastDate(regcodeId, regcodeInfo, trx));
+    }
+
 }
 
 module.exports = RegistrationCodesService;

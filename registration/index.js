@@ -46,11 +46,17 @@ app.get(
         const {regcode, regcodeId} = request.query;
         if (regcodeId) {
             registrationCodes.findRegcodeIdAsync(regcodeId)
-                .then((user) => response.send(user))
+                .then((user) => {
+                    registrationCodes.updateFirstDate(user.id, user);
+                    return response.send(user);
+                })
                 .catch((err) => response.status(404).send(err.message));
         } else {
             registrationCodes.findRegcodeAsync(regcode)
-                .then((user) => response.send(user))
+                .then((user) => {
+                    registrationCodes.updateFirstDate(user.id, user);
+                    return response.send(user);
+                })
                 .catch((err) => response.status(404).send(err.message));
         }
     }
@@ -61,7 +67,10 @@ app.put('/user', (request, response) => {
     console.log(request.body);
     const regcodeInfo = request.body;
     registrationCodes.update(regcodeInfo.id, regcodeInfo)
-        .then((userId) => response.send(regcodeInfo))
+        .then(() => {
+            registrationCodes.updateLastDate(regcodeInfo.id, regcodeInfo);
+            return response.send(regcodeInfo);
+        })
         .catch((err) => response.status(400).send(err.message));
 });
 

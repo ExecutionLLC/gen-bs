@@ -155,6 +155,26 @@ class RegistrationCodesModel extends ModelBase {
             .where('id', regcodeId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(regcodeInfo));
     }
+
+    updateFirstDate(regcodeId, regcodeInfo, trx) {
+        if (regcodeInfo.firstDate) {
+            return Promise.resolve();
+        } else {
+            return Promise.resolve()
+                .then(() => {
+                    const updatedItem = Object.assign({}, regcodeInfo, {firstDate: new Date()});
+                    return this.update(regcodeId, updatedItem, trx);
+                });
+        }
+    }
+
+    updateLastDate(regcodeId, regcodeInfo, trx) {
+        return Promise.resolve()
+            .then(() => {
+                const updatedItem = Object.assign({}, regcodeInfo, {lastDate: new Date()});
+                return this.update(regcodeId, updatedItem, trx);
+            });
+    }
 }
 
 module.exports = RegistrationCodesModel;
