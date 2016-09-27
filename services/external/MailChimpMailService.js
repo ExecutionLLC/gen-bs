@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const mandrill = require('mandrill-api');
 const ServiceBase = require('../ServiceBase');
+const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
 class MailChimpMailService extends ServiceBase {
 
@@ -36,27 +37,25 @@ class MailChimpMailService extends ServiceBase {
     _sendMail(email, templateName, params, callback) {
         const {mailChimp:{key, fromMail, fromName}} = this.config;
 
-        const mandrill_client = new mandrill.Mandrill(key, true);
+        const mandrillClient = new mandrill.Mandrill(key, true);
         const message = {
-            from_email: fromMail,
-            from_name: fromName,
-            to: [
-                {
-                    email
-                }
-            ],
-            global_merge_vars: _.map(params, (value, key) => {
+            fromEmail: fromMail,
+            fromName: fromName,
+            to: [{
+                email
+            }],
+            globalMergeVars: _.map(params, (value, key) => {
                 return {
                     name: key,
                     content: value
                 }
             })
         };
-        mandrill_client.messages.sendTemplate({
-                "template_name": templateName,
-                "template_content":[],
-                "message": message
-            },
+        mandrillClient.messages.sendTemplate(ChangeCaseUtil.convertKeysToSnakeCase({
+                templateName,
+                templateContent:[],
+                message
+            }),
             (result) => {
                 const {reject_reason} = result[0];
                 if (reject_reason == null){

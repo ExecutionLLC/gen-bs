@@ -12,5 +12,6 @@
   "GEN_WS_OSS_REGION_NAME": "oss-cn-beijing",
   "GEN_WS_DATABASE_PASSWORD": "zxcasdqwe",
   "GEN_WS_GOOGLE_CLIENT_ID": "1051611087780-4eo3v6k4oboivgha2l8jbi9jd6b0bfe9.apps.googleusercontent.com",
-  "GEN_WS_GOOGLE_CLIENT_SECRET": "7U3OeIgx-wO86CAGT7xYOGIz"
+  "GEN_WS_GOOGLE_CLIENT_SECRET": "7U3OeIgx-wO86CAGT7xYOGIz",
+  "GEN_WS_MAIL_KEY": "ZZSunlwLdI-6KE2A6xRKWA"
 }
