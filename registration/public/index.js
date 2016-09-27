@@ -83,6 +83,9 @@ const DOMUtils = {
     },
     onInput(el, handler) {
         el.addEventListener('input', () => handler(el.value));
+    },
+    onClick(el, handler) {
+        el.addEventListener('click', () => handler());
     }
 };
 
@@ -216,6 +219,18 @@ function onUserEdit(fieldId, str) {
     }
 }
 
+function onSignupLoginPassword() {
+    if (loadedUserId) {
+        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
+    }
+}
+
+function onSignupGoogle() {
+    if (loadedUserId) {
+        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
+    }
+}
+
 function onDocumentLoad() {
     const regcodeEl = document.getElementById('regcode');
     if (regcodeEl) {
@@ -226,6 +241,14 @@ function onDocumentLoad() {
     if (templateUserdataEl) {
         MakeLayout.makeUserInfo(USER_INFO_SCHEME, userInfoEl, templateUserdataEl, onUserEdit);
         displayNoUserInfo();
+    }
+    const signupLoginPassword = document.getElementById('signup-login-password');
+    if (signupLoginPassword) {
+        DOMUtils.onClick(signupLoginPassword, onSignupLoginPassword);
+    }
+    const signupGoogle = document.getElementById('signup-google');
+    if (signupGoogle) {
+        DOMUtils.onClick(signupGoogle, onSignupGoogle);
     }
     const regcodeId = window.location.hash.replace(/^#/, '');
     if (regcodeId) {
