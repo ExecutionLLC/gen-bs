@@ -23,7 +23,11 @@ class RegistrationCodesModel extends ModelBase {
             'numberOfPaidSamples',
             'email',
             'firstName',
-            'lastName'
+            'lastName',
+            'telephone',
+            'company',
+            'firstDate',
+            'lastDate'
         ]);
     }
 
