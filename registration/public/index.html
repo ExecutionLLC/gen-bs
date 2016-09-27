@@ -7,44 +7,27 @@
     <link type="text/css" rel="stylesheet" href="index.css">
 </head>
 <body>
-    <form>
-        <div>
-            Enter
-            <label>
-                <span>Regcode:</span>
-                <input type="text" id="regcode" name="regcode"/>
-            </label>
+    <div>
+        Enter
+        <label>
+            <span>Regcode:</span>
+            <input type="text" id="regcode" name="regcode"/>
+        </label>
+    </div>
+    <hr />
+    <div id="regcoded-user">
+        <div id="userinfo">
+            <div data-role="template" data-id="userinfo-item">
+                <label>
+                    <span data-id="userinfo-label">label</span><span>: </span><input type="text" data-id="userinfo-value" />
+                </label>
+            </div>
         </div>
         <hr />
-        <div id="regcoded-user">
-            <div id="userinfo">
-                <div data-role="template" data-id="userinfo-item">
-                    <label>
-                        <span data-id="userinfo-label">label</span><span>: </span><input type="text" data-id="userinfo-value" />
-                    </label>
-                </div>
-            </div>
-            <hr />
-            <div>
-                <label>
-                    <span>Login:</span>
-                    <input type="text" id="login" name="login"/>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <span>Password:</span>
-                    <input type="password" id="password" name="password" />
-                </label>
-            </div>
-            <div>
-                <label>
-                    <span>Confirm password:</span>
-                    <input type="password" id="confirm_password" name="confirm_password" />
-                </label>
-            </div>
-            <button type="submit">Sign in</button>
+        <div>
+            <button id="signup-login-password">Sign Up via Login/Password</button>
+            <button id="signup-google">Sign Up via Google</button>
         </div>
-    </form>
+    </div>
 </body>
 </html>
