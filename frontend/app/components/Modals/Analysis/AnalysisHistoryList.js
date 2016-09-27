@@ -13,11 +13,6 @@ const REFS = {
 };
 
 export default class AnalysisHistoryList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.loadingTimer = null;
-    }
-
     render() {
         const {currentItemId, historyList, newHistoryItem, isHistoryReceivedAll} = this.props;
         return (
@@ -38,19 +33,15 @@ export default class AnalysisHistoryList extends React.Component {
         const loadingElement = this.refs[REFS.LOADING];
 
         if (!isHistoryReceivedAll && !isHistoryRequesting) {
-            if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
+            if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
                 dispatch(requestAppendAnalysesHistory(historyListSearch, PAGINATION.COUNT, historyList.length));
             }
         }
-        this.loadingTimer = setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
+        setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
     }
 
     componentDidMount() {
         this.checkAndLoadNext();
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.loadingTimer);
     }
 
     renderListItem(isActive,historyItem) {
