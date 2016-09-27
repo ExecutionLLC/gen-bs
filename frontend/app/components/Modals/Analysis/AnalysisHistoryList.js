@@ -33,7 +33,7 @@ export default class AnalysisHistoryList extends React.Component {
         const loadingElement = this.refs[REFS.LOADING];
 
         if (!isHistoryReceivedAll && !isHistoryRequesting) {
-            if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
+            if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
                 dispatch(requestAppendAnalysesHistory(historyListSearch, PAGINATION.COUNT, historyList.length));
             }
         }
