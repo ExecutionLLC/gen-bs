@@ -17,6 +17,14 @@
         </div>
         <hr />
         <div id="regcoded-user">
+            <div id="userinfo">
+                <div data-role="template" data-id="userinfo-item">
+                    <label>
+                        <span data-id="userinfo-label">label</span><span>: </span><input type="text" data-id="userinfo-value" />
+                    </label>
+                </div>
+            </div>
+            <hr />
             <div>
                 <label>
                     <span>Login:</span>
@@ -29,15 +37,13 @@
                     <input type="password" id="password" name="password" />
                 </label>
             </div>
-            <button type="submit">Sign in</button>
-            <div id="userinfo">
-                <div data-role="template" data-id="userinfo-item">
-                    <label>
-                        <span data-id="userinfo-label">label</span><span>: </span><input type="text" data-id="userinfo-value" />
-                    </label>
-                </div>
-                <hr />
+            <div>
+                <label>
+                    <span>Confirm password:</span>
+                    <input type="password" id="confirm_password" name="confirm_password" />
+                </label>
             </div>
+            <button type="submit">Sign in</button>
         </div>
     </form>
 </body>
