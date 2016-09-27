@@ -78,7 +78,7 @@ const DOMUtils = {
         }
     },
     setElementText(el, text) {
-        DOMUtils.removeAllChildren(el);
+        this.removeAllChildren(el);
         el.appendChild(document.createTextNode(text));
     },
     onInput(el, handler) {
