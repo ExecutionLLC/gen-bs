@@ -23,7 +23,7 @@ class VariantsTableReact extends Component {
 
     render() {
         const {auth, fields} = this.props;
-        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, error, variantsAnalysis, variantsSamples} = this.props.ws;
+        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.ws;
 
         return (
 
@@ -34,7 +34,7 @@ class VariantsTableReact extends Component {
 
                 { !isVariantsLoading && !isVariantsValid &&
                 <div className='col-xs-6 col-xs-offset-3' id='unexpected_variants_error'>
-                    <VariantsTableLoadError error={error}/>
+                    <VariantsTableLoadError error={variantsError}/>
                 </div>
                 }
                 { !isVariantsLoading && isVariantsValid &&
