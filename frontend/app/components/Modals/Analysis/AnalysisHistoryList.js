@@ -13,6 +13,11 @@ const REFS = {
 };
 
 export default class AnalysisHistoryList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.loadingTimer = null;
+    }
+
     render() {
         const {currentItemId, historyList, newHistoryItem, isHistoryReceivedAll} = this.props;
         return (
@@ -37,11 +42,15 @@ export default class AnalysisHistoryList extends React.Component {
                 dispatch(requestAppendAnalysesHistory(historyListSearch, PAGINATION.COUNT, historyList.length));
             }
         }
-        setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
+        this.loadingTimer = setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
     }
 
     componentDidMount() {
         this.checkAndLoadNext();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.loadingTimer);
     }
 
     renderListItem(isActive,historyItem) {
