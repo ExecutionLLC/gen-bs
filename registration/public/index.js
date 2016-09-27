@@ -234,6 +234,10 @@ function onDocumentLoad() {
         }
         API.getUserForRegcodeId(regcodeId)
             .then((user) => {
+                if (user.isActivated) {
+                    window.location.assign('http://localhost:80/');
+                    return;
+                }
                 loadedUserId = user.id;
                 currentUser.user = Object.assign({}, user);
                 currentUser.regcode = checkingUser.requested.regcode;
