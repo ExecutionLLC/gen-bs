@@ -75,11 +75,11 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderFooter() {
-        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}}} = this.props;
+        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}, onSaveAction}} = this.props;
         const sample = samplesHash[sampleId];
         return (
             <div className='panel-footer'>
-                {this.renderSelectButton(isDemoSession, sample)}
+                {onSaveAction && this.renderSelectButton(isDemoSession, sample)}
                 {this.renderEditButton(sample.type)}
             </div>
         );
