@@ -44,9 +44,6 @@ const API = {
     updateUser(user) {
         return ajaxAsync('PUT', 'http://localhost:3000/user', null, user);
     },
-    createUser(regcode, user) {
-        return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email: null, user});
-    },
     requestUser(user) {
         return ajaxAsync('POST', 'http://localhost:3000/user_request', null, user);
     }
