@@ -46,7 +46,10 @@ const API = {
     },
     requestUser(user) {
         return ajaxAsync('POST', 'http://localhost:3000/user_request', null, user);
-    }
+    },
+    registerUser(user) {
+        return ajaxAsync('POST', 'http://localhost:3000/register', null, user);
+    },
 };
 
 const USER_INFO_SCHEME = [
@@ -195,7 +198,9 @@ function onSignupGoogle() {
 }
 
 function onRegister() {
-    if (!loadedUserId) {
+    if (loadedUserId) {
+        API.registerUser(currentUser.user);
+    } else {
         API.requestUser(currentUser.user);
     }
 }

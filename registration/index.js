@@ -34,12 +34,12 @@ app.post('/register', (request, response) => {
     console.log('register');
     console.log(request.body.id);
     console.log(request.body);
-    registrationCodes.activateAsync()
+    registrationCodes.activateAsync(request.body.id, request.body.firstName, request.body.lastName, request.email)
         .then(() =>
-            response.send({success: true})
+            response.send({})
         )
         .catch((error) =>
-            response.send({success: false, error})
+            response.status(400).send(error.message)
         );
 });
 
