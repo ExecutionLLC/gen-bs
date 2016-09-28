@@ -53,21 +53,26 @@ function makeFilterRulesTemplate(filterRules, totalFieldsHash) {
     return processFilterRule(filterRules);
 }
 
-function getFilterAsTemplateAsync(userId, filterId) {
-    return Promise.all([
-        findFilterAsync(userId, filterId),
-        findTotalFieldsHashAsync()
-    ]).spread((filter, totalFieldsHash) => {
-        const newRules = makeFilterRulesTemplate(filter.rules, totalFieldsHash);
-        const filterTemplate = Object.assign({}, filter, {
+function getFilterAsTemplateAsync(filter) {
+    return findTotalFieldsHashAsync()
+        .then((totalFieldsHash) => {
+        const {name, description, type, rules} = filter;
+        const newRules = makeFilterRulesTemplate(rules, totalFieldsHash);
+        const filterTemplate = {
+            name,
+            description,
+            type,
+            is_copy_disabled: false,
             rules: newRules
-        });
+        };
         return Promise.resolve(filterTemplate);
     });
 }
 
 function listAllFiltersAsync(queryConditionFuncOrNull) {
-    let selector = models.db.knex.select().from('filter');
+    let selector = models.db.knex.select()
+        .from('filter')
+        .innerJoin('filter_text', 'filter_text.filter_id', 'filter.id');
     if (queryConditionFuncOrNull) {
         queryConditionFuncOrNull(selector);
     }
