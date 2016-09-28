@@ -42,10 +42,10 @@ const API = {
         return ajaxAsync('GET', 'http://localhost:3000/user', {regcodeId});
     },
     updateUser(user) {
-        return ajaxAsync('PUT', 'http://localhost:3000/user', null, user)
+        return ajaxAsync('PUT', 'http://localhost:3000/user', null, user);
     },
     createUser(regcode, user) {
-        return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email: null, user})
+        return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email: null, user});
     }
 };
 
