@@ -20,7 +20,8 @@ class UserRequestModel extends ModelBase {
             'telephone',
             'company',
             'loginType',
-            'password'
+            'password',
+            'gender'
         ]);
     }
 

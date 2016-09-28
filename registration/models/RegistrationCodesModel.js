@@ -27,7 +27,8 @@ class RegistrationCodesModel extends ModelBase {
             'telephone',
             'company',
             'firstDate',
-            'lastDate'
+            'lastDate',
+            'gender'
         ]);
     }
 
