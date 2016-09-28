@@ -73,7 +73,7 @@ const USER_INFO_SCHEME = [
     {
         id: 'telephone',
         elementId: 'phone-value'
-    },
+    }
 ];
 
 const DOMUtils = {
