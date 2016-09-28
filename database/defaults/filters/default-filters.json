@@ -1,6 +1,6 @@
 [
   {
-    "id": "629bcdd4-5cdd-41cd-8c25-ff63a083bc26",
+    "id": "15917571-077c-4d13-8dea-ffc252ca97da",
     "name": "Empty Filter",
     "description": "Empty filter",
     "type": "standard",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "id": "5ef2e3b5-af20-45a8-b499-90970f3b31ef",
+    "id": "9b56ca28-638e-4e85-8db0-7e2bd91d3734",
     "name": "Exome Filter",
     "description": "",
     "type": "default",
@@ -24,26 +24,26 @@
     "rules": {
       "$and": [
         {
-          "0c93efd9-c60b-4410-8511-c197d84bfc0f": {
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
             "$neq": null
           }
         },
         {
           "$or": [
             {
-              "6f7e6d9d-9d91-47dd-b50b-484c06be6426": {
+              "806776ec-ea68-4fe9-b72a-ba74729c0af5": {
                 "$begin_with": "NP_"
               }
             },
             {
               "$and": [
                 {
-                  "d3569598-9306-445e-9bad-9efac7bda3a8": {
+                  "7f171b90-c897-4ddd-8574-064bbad3cf41": {
                     "$contains": "splice"
                   }
                 },
                 {
-                  "5cd88d37-1b4a-4c86-a4c9-c745f4b0b78a": {
+                  "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
                     "$begin_with": "NM_"
                   }
                 }
@@ -55,7 +55,7 @@
     }
   },
   {
-    "id": "771f8bce-7ba3-4a40-bccd-dbc959a8bed3",
+    "id": "69e6f436-978a-491c-ac6c-8b40fd976e28",
     "name": "Retinoblastoma Filter",
     "description": "Empty filter",
     "type": "standard",
@@ -63,7 +63,7 @@
     "rules": {
       "$and": [
         {
-          "0c93efd9-c60b-4410-8511-c197d84bfc0f": {
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
             "$in": [
               "RB1"
             ]
@@ -72,7 +72,7 @@
         {
           "$and": [
             {
-              "5cd88d37-1b4a-4c86-a4c9-c745f4b0b78a": {
+              "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
                 "$nbegin_with": "X"
               }
             }
@@ -81,17 +81,17 @@
         {
           "$or": [
             {
-              "a3888bf0-e680-4acc-a502-49afa32c7c13": {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
                 "$contains": "high impact"
               }
             },
             {
-              "a3888bf0-e680-4acc-a502-49afa32c7c13": {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
                 "$contains": "changed protein"
               }
             },
             {
-              "d3569598-9306-445e-9bad-9efac7bda3a8": {
+              "7f171b90-c897-4ddd-8574-064bbad3cf41": {
                 "$contains": "inframe"
               }
             }
@@ -105,14 +105,14 @@
               }
             },
             {
-              "65a29016-b2eb-4066-94fb-034e9be4e297": {
+              "d28d76e7-76ce-4fc8-95a0-2add8a9cdda1": {
                 "$gte": 10
               }
             },
             {
               "$and": [
                 {
-                  "78ea1ac2-1698-45c6-9e59-3b0597e34189": {
+                  "ee14d092-4aea-45f4-8045-bbea0aa54bac": {
                     "$nbetween": [
                       0.01,
                       1
@@ -124,7 +124,7 @@
             {
               "$and": [
                 {
-                  "d28bb151-82f6-4a9d-bfd6-1466a3df6006": {
+                  "e18e6002-02fc-4702-89b8-9006e9a0a9c4": {
                     "$nbetween": [
                       0.01,
                       1
@@ -139,7 +139,7 @@
     }
   },
   {
-    "id": "aa7823d8-0f83-40c3-a180-417c02ba0495",
+    "id": "37bdbcc5-8ee3-423c-b426-a7f70da92956",
     "name": "Breast Cancer Filter",
     "description": "Empty filter",
     "type": "standard",
@@ -147,7 +147,7 @@
     "rules": {
       "$and": [
         {
-          "0c93efd9-c60b-4410-8511-c197d84bfc0f": {
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
             "$in": [
               "BRCA1",
               "BRCA2"
@@ -157,7 +157,7 @@
         {
           "$and": [
             {
-              "5cd88d37-1b4a-4c86-a4c9-c745f4b0b78a": {
+              "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
                 "$nbegin_with": "X"
               }
             }
@@ -166,17 +166,17 @@
         {
           "$or": [
             {
-              "a3888bf0-e680-4acc-a502-49afa32c7c13": {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
                 "$contains": "high impact"
               }
             },
             {
-              "a3888bf0-e680-4acc-a502-49afa32c7c13": {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
                 "$contains": "changed protein"
               }
             },
             {
-              "d3569598-9306-445e-9bad-9efac7bda3a8": {
+              "7f171b90-c897-4ddd-8574-064bbad3cf41": {
                 "$contains": "inframe"
               }
             }
@@ -190,14 +190,14 @@
               }
             },
             {
-              "65a29016-b2eb-4066-94fb-034e9be4e297": {
+              "d28d76e7-76ce-4fc8-95a0-2add8a9cdda1": {
                 "$gte": 10
               }
             },
             {
               "$and": [
                 {
-                  "78ea1ac2-1698-45c6-9e59-3b0597e34189": {
+                  "ee14d092-4aea-45f4-8045-bbea0aa54bac": {
                     "$nbetween": [
                       0.01,
                       1
@@ -209,7 +209,7 @@
             {
               "$and": [
                 {
-                  "d28bb151-82f6-4a9d-bfd6-1466a3df6006": {
+                  "e18e6002-02fc-4702-89b8-9006e9a0a9c4": {
                     "$nbetween": [
                       0.01,
                       1
@@ -224,7 +224,7 @@
     }
   },
   {
-    "id": "061af5b3-be31-4268-8047-d68cb8ec2757",
+    "id": "9a589090-c831-47b7-8b56-7c06d96750d8",
     "name": "Colon and Lung Cancer Filter",
     "description": "",
     "type": "standard",
@@ -232,7 +232,7 @@
     "rules": {
       "$and": [
         {
-          "0c93efd9-c60b-4410-8511-c197d84bfc0f": {
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
             "$in": [
               "KRAS",
               "EGFR",
@@ -262,7 +262,7 @@
         {
           "$and": [
             {
-              "5cd88d37-1b4a-4c86-a4c9-c745f4b0b78a": {
+              "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
                 "$nbegin_with": "X"
               }
             }
@@ -271,17 +271,17 @@
         {
           "$or": [
             {
-              "a3888bf0-e680-4acc-a502-49afa32c7c13": {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
                 "$contains": "high impact"
               }
             },
             {
-              "a3888bf0-e680-4acc-a502-49afa32c7c13": {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
                 "$contains": "changed protein"
               }
             },
             {
-              "d3569598-9306-445e-9bad-9efac7bda3a8": {
+              "7f171b90-c897-4ddd-8574-064bbad3cf41": {
                 "$contains": "inframe"
               }
             }
@@ -295,14 +295,14 @@
               }
             },
             {
-              "65a29016-b2eb-4066-94fb-034e9be4e297": {
+              "d28d76e7-76ce-4fc8-95a0-2add8a9cdda1": {
                 "$gte": 10
               }
             },
             {
               "$and": [
                 {
-                  "78ea1ac2-1698-45c6-9e59-3b0597e34189": {
+                  "ee14d092-4aea-45f4-8045-bbea0aa54bac": {
                     "$nbetween": [
                       0.01,
                       1
@@ -314,7 +314,7 @@
             {
               "$and": [
                 {
-                  "d28bb151-82f6-4a9d-bfd6-1466a3df6006": {
+                  "e18e6002-02fc-4702-89b8-9006e9a0a9c4": {
                     "$nbetween": [
                       0.01,
                       1

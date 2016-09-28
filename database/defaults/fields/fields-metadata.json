@@ -99,22 +99,22 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "cbb2b3e8-b138-4760-b1f2-70b969b887ff",
+        "id": "c24f90bb-9ab1-4dbd-9d05-01ac74563208",
         "langu_id": "en",
         "value": "Proband"
       },
       {
-        "id": "04affca6-22dc-41a5-9cc6-f499da602e41",
+        "id": "6102d489-954c-480a-94fa-6efe451b00e5",
         "langu_id": "en",
         "value": "Mother"
       },
       {
-        "id": "acff250d-c649-462c-83a9-d401f15b755d",
+        "id": "2d1f6eb5-7f6e-4547-a336-0a7ecfb00cc4",
         "langu_id": "en",
         "value": "Father"
       },
       {
-        "id": "33af4f79-d787-4118-b758-b59cb6661849",
+        "id": "b6aeb96a-ddc2-49dd-9fca-3c92927c98e5",
         "langu_id": "en",
         "value": "Sibling"
       }
@@ -132,17 +132,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "1acd4024-cd13-4efd-b4eb-cb16c6f476ef",
+        "id": "f0a1e16c-9386-4630-bf73-af3b04e4ef59",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "967d6357-9eaa-4e75-bccf-d5edc6d5a7eb",
+        "id": "872bd3e8-6c3e-495b-b6e9-1c48aa05854a",
         "langu_id": "en",
         "value": "Male"
       },
       {
-        "id": "cb3a316d-b0a6-4955-a4e2-b7a8fa512ba5",
+        "id": "79f00428-4049-4103-be1c-5d9d5b17b90d",
         "langu_id": "en",
         "value": "Female"
       }
@@ -160,17 +160,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "a8801816-7bf1-41b9-992f-6292ff1597b8",
+        "id": "5174770a-4ed4-468b-9bfe-edd9b6c525e4",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "3ed1fe63-d192-468e-9aa1-36b76e7057f7",
+        "id": "f6aaadac-256c-4dd1-bceb-7e6ff3eba70f",
         "langu_id": "en",
         "value": "Big ears (hpo1)"
       },
       {
-        "id": "fcacc403-1c6c-45c1-9125-6e00d2b50ea7",
+        "id": "dbe2254a-8f1f-4a88-ba8e-1ffe26a7ce0d",
         "langu_id": "en",
         "value": "Small ears (hpo2)"
       }
@@ -210,12 +210,12 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "53fc8693-b58f-40db-8dbb-e25f6ac54252",
+        "id": "aee30274-d542-4ff2-b9cf-a29726d6ade8",
         "langu_id": "en",
         "value": "hg19"
       },
       {
-        "id": "dd2e8ad2-42c5-43a3-80a9-d69526a60fea",
+        "id": "b3dccc47-77e2-4575-8e23-30b6f7b9f4e1",
         "langu_id": "en",
         "value": "hg38"
       }
@@ -233,909 +233,943 @@
     "dimension": 1
   },
   {
-    "id": "4a15ae96-fde5-48d9-ae0f-5119c242febf",
-    "name": "INFO_ExAC_AF_AMR_Adj",
-    "label": "INFO_ExAC_AF_AMR_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for American population in ExAC (AC_AMR/AN_AMR)",
-    "dimension": 1
-  },
-  {
-    "id": "77c38a31-4339-4beb-8cb2-8f911c00e39c",
-    "name": "VEP_Feature",
-    "label": "VEP_Feature",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "9781ead5-feca-453b-9e95-b08d039d0f29",
-    "name": "VEP_CELL_TYPE",
-    "label": "VEP_CELL_TYPE",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "51f7e563-c66a-4b14-a723-5634c67e7066",
-    "name": "INFO_ExAC_AF",
-    "label": "INFO_ExAC_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Raw allele frequency (population independent) of the variant based on ExAC exomes (AF)",
-    "dimension": 1
-  },
-  {
-    "id": "eeda2429-d4cf-4bba-8017-79318cecdff5",
-    "name": "VEP_DOMAINS",
-    "label": "VEP_DOMAINS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "adc3df92-2f28-4538-8bc1-821f4758ad5d",
-    "name": "VEP_CLIN_SIG",
-    "label": "VEP_CLIN_SIG",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "241f54b6-359c-404e-a264-1848e5b90a1c",
-    "name": "VEP_MOTIF_SCORE_CHANGE",
-    "label": "VEP_MOTIF_SCORE_CHANGE",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "f28a2a43-cbce-4bcc-9758-92c62ee4ce75",
-    "name": "INFO_ExAC_AF_NFE_Adj",
-    "label": "INFO_ExAC_AF_NFE_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for Non-Finnish European population in ExAC (AC_NFE/AN_NFE)",
-    "dimension": 1
-  },
-  {
-    "id": "4d1dd3f1-4a7f-46fc-859c-9c29178a8dfd",
-    "name": "INFO_ExAC_AF_Adj",
-    "label": "INFO_ExAC_AF_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency (population independent) of the variant based on ExAC (AC_Adj/AN_Adj)",
-    "dimension": 1
-  },
-  {
-    "id": "8b62a073-0f5b-46bf-ba21-2732d3baf9dd",
-    "name": "VEP_HGNC_ID",
-    "label": "VEP_HGNC_ID",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "5cd88d37-1b4a-4c86-a4c9-c745f4b0b78a",
-    "name": "VEP_HGVSc_transcript",
-    "label": "VEP_HGVSc_transcript",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "for use in HGVSc notation (left part before period glyph)",
-    "dimension": 0
-  },
-  {
-    "id": "ce32b07e-81df-44bb-99a3-5c298089bc4d",
-    "name": "VEP_ALLELE_NUM",
-    "label": "VEP_ALLELE_NUM",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "6510e12a-99a3-468b-8047-7cc12eb7ef78",
-    "name": "VEP_SWISSPROT",
-    "label": "VEP_SWISSPROT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "best match",
-    "dimension": 0
-  },
-  {
-    "id": "63565097-7feb-4746-bcf1-111d17b5cbe3",
-    "name": "VEP_AFR_MAF",
-    "label": "VEP_AFR_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "dae81bf1-d4f2-4e8a-a3e1-029a7e9ffd89",
-    "name": "VEP_NumberOfExons",
-    "label": "VEP_NumberOfExons",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "661bc62e-3948-418d-948d-079453430fc9",
-    "name": "VEP_TREMBL",
-    "label": "VEP_TREMBL",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "best match",
-    "dimension": 0
-  },
-  {
-    "id": "22d49c63-c689-4d23-ad82-18c491dcfa53",
-    "name": "VEP_Protein_position_0",
-    "label": "VEP_Protein_position_0",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Start position.",
-    "dimension": 1
-  },
-  {
-    "id": "11fadbe8-512e-49c0-9d3f-089e76fc51f6",
-    "name": "VEP_Protein_position_1",
-    "label": "VEP_Protein_position_1",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Stop position.",
-    "dimension": 1
-  },
-  {
-    "id": "174c74b9-2cc5-402b-8292-55b7170a01d5",
-    "name": "VEP_STRAND",
-    "label": "VEP_STRAND",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "c4ce9985-838a-438d-9ed9-9274715a8798",
-    "name": "VEP_CANONICAL",
-    "label": "VEP_CANONICAL",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "acc55b70-cc59-40e7-8be8-fd3d1aa07e49",
-    "name": "VEP_ExAC_FIN_MAF",
-    "label": "VEP_ExAC_FIN_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "b8378efd-367e-4940-8654-291240ab7d25",
-    "name": "VEP_ExonNumber",
-    "label": "VEP_ExonNumber",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "starting with 1",
-    "dimension": 0
-  },
-  {
-    "id": "4bf47b11-5dd8-4080-beef-ed5a5881fa8d",
-    "name": "VEP_EAS_MAF",
-    "label": "VEP_EAS_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "148bfb62-f1a7-4380-93df-d91329359399",
-    "name": "VEP_HGMD",
-    "label": "VEP_HGMD",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "6f7e6d9d-9d91-47dd-b50b-484c06be6426",
-    "name": "VEP_HGVSp_transcript",
-    "label": "VEP_HGVSp_transcript",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "for use in HGVSp notation (left part before period glyph)",
-    "dimension": 0
-  },
-  {
-    "id": "f01dfcfd-0552-46c6-b508-7d3aea9597d7",
-    "name": "VEP_ExAC_AFR_MAF",
-    "label": "VEP_ExAC_AFR_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "5cf4c1d3-13b1-4de1-8689-ee3577df5f53",
-    "name": "VEP_Zygosity",
-    "label": "VEP_Zygosity",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Heterozygous, Homozygous, Hemizygous, Unknown. Indels considered equal for zygosity",
-    "dimension": 0
-  },
-  {
-    "id": "3eafd1c8-90e2-4d77-8a01-c01918a0518c",
-    "name": "VEP_HGVS_OFFSET",
-    "label": "VEP_HGVS_OFFSET",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "HGVS was calculated after ambiguous repeat shift. Column shows shift size",
-    "dimension": 0
-  },
-  {
-    "id": "c423adfa-9105-4da0-b089-1966bd6c460a",
-    "name": "VEP_Feature_type",
-    "label": "VEP_Feature_type",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "transcript, regulatory, motif",
-    "dimension": 0
-  },
-  {
-    "id": "25de0206-61b6-4c95-bafa-c386a9f4d7c3",
-    "name": "VEP_ExAC_MAF",
-    "label": "VEP_ExAC_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "0ed8b2cc-b522-416f-9f55-62152e29c792",
-    "name": "VEP_PHENO",
-    "label": "VEP_PHENO",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "f38df932-c495-402b-9f59-9af44499af4a",
-    "name": "VEP_TSL",
-    "label": "VEP_TSL",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "731cd26b-d5a3-45c3-bbcb-6ce42b79e3df",
-    "name": "VEP_ExAC_EAS_MAF",
-    "label": "VEP_ExAC_EAS_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "a3888bf0-e680-4acc-a502-49afa32c7c13",
-    "name": "VEP_IMPACT",
-    "label": "VEP_IMPACT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "high impact, changed protein effectiveness , no change, no evidence or difficult to predict",
-    "dimension": 0
-  },
-  {
-    "id": "208b9d29-da21-4ead-ba74-49944b91bb71",
-    "name": "VEP_SAS_MAF",
-    "label": "VEP_SAS_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "6d79ba5f-b662-4d5f-9b73-55b7bbf992c4",
-    "name": "INFO_ExAC_AF_SAS_Adj",
-    "label": "INFO_ExAC_AF_SAS_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for South Asian population in ExAC (AC_SAS/AN_SAS)",
-    "dimension": 1
-  },
-  {
-    "id": "34de02a0-4e79-49e7-8fa3-310d54b93085",
-    "name": "VEP_Amino_acids",
-    "label": "VEP_Amino_acids",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "d37dd61a-9df5-43d8-8413-62b2366d529a",
-    "name": "VEP_GMAF",
-    "label": "VEP_GMAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "326c58b6-0f03-43dd-9c39-a4e3a44ca863",
-    "name": "VEP_CDS_position_1",
-    "label": "VEP_CDS_position_1",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Stop position.",
-    "dimension": 1
-  },
-  {
-    "id": "9c078a32-89d8-4887-9fed-cb2e67aacdd7",
-    "name": "VEP_CDS_position_0",
-    "label": "VEP_CDS_position_0",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Start position.",
-    "dimension": 1
-  },
-  {
-    "id": "505e66dc-e35c-4118-a0af-1ff76cc44317",
-    "name": "VEP_MOTIF_POS",
-    "label": "VEP_MOTIF_POS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "6bdfb741-c9df-43e4-9fb6-43275a7a64f4",
-    "name": "INFO_ExAC_AF_EAS_Adj",
-    "label": "INFO_ExAC_AF_EAS_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for East Asian population in ExAC (AC_EAS/AN_EAS)",
-    "dimension": 1
-  },
-  {
-    "id": "6e2a3e23-b0f1-4b67-b387-369bd1c5562b",
-    "name": "VEP_PUBMED",
-    "label": "VEP_PUBMED",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "4387b2ab-c968-4ff0-bd6a-d2054a5baa7a",
-    "name": "VEP_Codons",
-    "label": "VEP_Codons",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "2423a596-1f86-42c1-97b4-e14370ada792",
-    "name": "VEP_SOMATIC",
-    "label": "VEP_SOMATIC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "f8170e32-4c7b-4d3a-9203-1517cb97e347",
-    "name": "VEP_DISTANCE",
-    "label": "VEP_DISTANCE",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "02428c12-fbf9-44f9-a17b-00b60751a7eb",
-    "name": "INFO_ExAC_AF_AFR_Adj",
-    "label": "INFO_ExAC_AF_AFR_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for African/African American population in ExAC (AC_AFR/AN_AFR)",
-    "dimension": 1
-  },
-  {
-    "id": "0c93efd9-c60b-4410-8511-c197d84bfc0f",
-    "name": "VEP_SYMBOL",
-    "label": "VEP_SYMBOL",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Gene ID in database from \"Gene DB\" column",
-    "dimension": 0
-  },
-  {
-    "id": "88962fd8-4929-4aff-a76a-a1f385979dff",
-    "name": "VEP_MOTIF_NAME",
-    "label": "VEP_MOTIF_NAME",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "958522c4-fe72-4af8-80e0-d763de223292",
-    "name": "VEP_HGVSc_nucleotide_changes",
-    "label": "VEP_HGVSc_nucleotide_changes",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "in HGVSc transcript coordinates",
-    "dimension": 0
-  },
-  {
-    "id": "9c0dd77e-a3d6-40d1-add1-71bc85229149",
-    "name": "VEP_cDNA_position_0",
-    "label": "VEP_cDNA_position_0",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Start position.",
-    "dimension": 1
-  },
-  {
-    "id": "05ee8c46-7c78-466e-b99e-2df79257818e",
-    "name": "VEP_cDNA_position_1",
-    "label": "VEP_cDNA_position_1",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Stop position.",
-    "dimension": 1
-  },
-  {
-    "id": "0ed1a387-0334-4d1e-a875-3eb339f5f9a4",
+    "id": "acd5d6d6-6e50-43fc-8169-575f5dae5af5",
     "name": "VEP_AA_MAF",
-    "label": "VEP_AA_MAF",
+    "label": "Allele_AA_MAF",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "7226623d-70f4-45ae-b90f-656c4f332467",
-    "name": "VEP_Gene",
-    "label": "VEP_Gene",
+    "id": "fceaab54-f898-4bc4-9c05-ba99a313c5b8",
+    "name": "VEP_AFR_MAF",
+    "label": "Allele_AFR_MAF",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "ae1e6916-1223-42a1-80d8-a18e9cbf3ce1",
-    "name": "INFO_ExAC_AF_OTH_Adj",
-    "label": "INFO_ExAC_AF_OTH_Adj",
+    "id": "a46f78d4-bca4-4e4c-b7d7-9b78355fba78",
+    "name": "VEP_Allele",
+    "label": "Allele",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for Other population in ExAC (AC_OTH/AN_OTH)",
-    "dimension": 1
-  },
-  {
-    "id": "e6645eca-691d-437e-b3aa-4d804c60c1d7",
-    "name": "INFO_TYPE",
-    "label": "INFO_TYPE",
-    "source_name": "sample",
     "is_mandatory": false,
-    "is_editable": false,
     "value_type": "string",
-    "description": "The type of variant (snp or indel).",
-    "dimension": 1
-  },
-  {
-    "id": "e4a40cdd-6228-4415-8987-7efbd8a4afa9",
-    "name": "VEP_HIGH_INF_POS",
-    "label": "VEP_HIGH_INF_POS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "846bab0b-cb2c-4182-a133-bb39d1d4c3a0",
-    "name": "VEP_HGVSp_nucleotide_changes",
-    "label": "VEP_HGVSp_nucleotide_changes",
+    "id": "366bb4d0-6077-4165-9ea4-0e27cb54fabf",
+    "name": "VEP_ALLELE_NUM",
+    "label": "ALLELE_NUM",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
-    "value_type": "string",
-    "description": "in HGVSp transcript coordinates",
-    "dimension": 0
-  },
-  {
-    "id": "8a859c3e-5c67-45ff-b9da-1b1d6f4d3620",
-    "name": "VEP_VARIANT_CLASS",
-    "label": "VEP_VARIANT_CLASS",
-    "source_name": "sample",
     "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation",
-    "dimension": 0
-  },
-  {
-    "id": "ae6d700e-9727-40eb-a2aa-28178c914cd2",
-    "name": "VEP_GENE_PHENO",
-    "label": "VEP_GENE_PHENO",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
     "value_type": "integer",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "9fc23fed-393e-4fab-b145-01f27114a293",
-    "name": "VEP_SYMBOL_SOURCE",
-    "label": "VEP_SYMBOL_SOURCE",
+    "id": "0bd9849e-681a-492e-8dfc-bdff4553b68d",
+    "name": "VEP_Amino_acids",
+    "label": "Amino acid change",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
-    "value_type": "string",
-    "description": "database for \"Gene ID\" column",
-    "dimension": 0
-  },
-  {
-    "id": "35945026-b905-4393-ae0b-eb83694d21b7",
-    "name": "VEP_EUR_MAF",
-    "label": "VEP_EUR_MAF",
-    "source_name": "sample",
     "is_mandatory": false,
-    "is_editable": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "3df52dd7-d4d9-4d8a-915c-4617397a9e13",
-    "name": "VEP_ExAC_OTH_MAF",
-    "label": "VEP_ExAC_OTH_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "646f759b-cee1-4dcf-b469-5c0ed19f1e54",
+    "id": "dc8f4481-a2f9-48ec-805f-0e4479915676",
     "name": "VEP_AMR_MAF",
-    "label": "VEP_AMR_MAF",
+    "label": "Allele_AMR_MAF",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "96c40d05-84aa-42da-b7f6-1f8f8b3c9acd",
-    "name": "VEP_ExAC_AMR_MAF",
-    "label": "VEP_ExAC_AMR_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "a36198ac-ff42-47f4-bd88-9525bc503e67",
+    "id": "574fefc0-fc58-4800-9c9c-efada8a7c818",
     "name": "VEP_ASN_MAF",
-    "label": "VEP_ASN_MAF",
+    "label": "Allele_ASN_MAF",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "d3569598-9306-445e-9bad-9efac7bda3a8",
-    "name": "VEP_Consequence",
-    "label": "VEP_Consequence",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "2f1bd441-79f4-4ef9-babb-7fb8ed64f28d",
-    "name": "VEP_SIFT",
-    "label": "VEP_SIFT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is 0.05",
-    "dimension": 0
-  },
-  {
-    "id": "b0bd54c6-24b0-49f5-aad6-2c22993f1f80",
-    "name": "VEP_ExAC_SAS_MAF",
-    "label": "VEP_ExAC_SAS_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "e6e0960c-5853-47b4-b180-050988e44912",
-    "name": "VEP_Genotype",
-    "label": "VEP_Genotype",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Capital case is for alternative alleles and lowercase is for reference allele",
-    "dimension": 0
-  },
-  {
-    "id": "eb958f9c-2a89-47cf-994a-e90b39038f91",
-    "name": "VEP_ZYG",
-    "label": "VEP_ZYG",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "e6bd3b5c-53cb-4921-8c99-27a29d450d29",
-    "name": "VEP_ExAC_NFE_MAF",
-    "label": "VEP_ExAC_NFE_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "91f76314-4367-4c5d-b693-78c75d55c5dd",
-    "name": "VEP_Existing_variation",
-    "label": "VEP_Existing_variation",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "0969bf9a-f7d0-494d-a276-c381d2269c0b",
-    "name": "VEP_ExAC_Adj_MAF",
-    "label": "VEP_ExAC_Adj_MAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "7b7064cf-cd36-436f-974e-499060047c4f",
-    "name": "INFO_ExAC_AF_FIN_Adj",
-    "label": "INFO_ExAC_AF_FIN_Adj",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Adjusted allele frequency of the variant for Finnish population in ExAC (AC_FIN/AN_FIN)",
-    "dimension": 1
-  },
-  {
-    "id": "06e4319a-ec45-4292-88bc-21de6e2b6b18",
-    "name": "VEP_INTRON",
-    "label": "VEP_INTRON",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "85f7eeab-f58e-4012-a515-3da708a8a348",
-    "name": "VEP_CCDS",
-    "label": "VEP_CCDS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "",
-    "dimension": 0
-  },
-  {
-    "id": "11dddb91-2215-499b-a2af-8210ba946fa3",
+    "id": "a4b3fcd3-9b26-4bc3-9985-3144e9f306f1",
     "name": "VEP_BIOTYPE",
-    "label": "VEP_BIOTYPE",
+    "label": "Gene type",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "Gene type in Havana DB. Protein coding: IGC gene, IGD gene, IG gene, IGJ gene, IGLV gene, IGM gene, IGV gene, IGZ gene, nonsense mediated decay, nontranslating CDS, non stop decay, polymorphic pseudogene, TRC gene, TRD gene, TRJ gene. Pseudogene: disrupted domain, IGC pseudogene, IGJ pseudogene, IG pseudogene, IGV pseudogene, processed pseudogene, transcribed processed pseudogene, transcribed unitary pseudogene, transcribed unprocessed pseudogene, translated processed pseudogene, TRJ pseudogene, unprocessed pseudogene. Long noncoding: 3prime overlapping ncrna, ambiguous orf, antisense, antisense RNA, lincRNA, ncrna host, processed transcript, sense intronic, sense overlapping. Short noncoding: miRNA, miRNA_pseudogene, miscRNA, miscRNA pseudogene, Mt rRNA, Mt tRNA, rRNA, scRNA, snlRNA, snoRNA, snRNA, tRNA, tRNA_pseudogene",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "4062d661-ec5f-4846-ad48-84a6f1f76194",
-    "name": "VEP_EA_MAF",
-    "label": "VEP_EA_MAF",
+    "id": "c56dff04-f79e-4930-821e-e1d212e120af",
+    "name": "VEP_CANONICAL",
+    "label": "If canonical gene",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "1eb3e5f0-49a8-4c80-ba05-dd376df884de",
+    "name": "VEP_CCDS",
+    "label": "CCDS",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "ee0acf62-922c-4ccc-93bf-e3ecffa19f64",
-    "name": "VEP_PolyPhen",
-    "label": "VEP_PolyPhen",
+    "id": "2b052f04-ad98-43aa-89f5-7a13ccdf165d",
+    "name": "VEP_cDNA_position_0",
+    "label": "cDNA position start",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "Start position.",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "c09af4dd-68e5-4935-bc0d-15be6409c092",
+    "name": "VEP_cDNA_position_1",
+    "label": "cDNA position stop",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "Stop position.",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "1fa48d2e-902c-4272-acb9-524a75a05507",
+    "name": "VEP_CDS_position_0",
+    "label": "CDS position start",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "Start position.",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "be2d48a1-1e32-4898-8262-dd939592e65d",
+    "name": "VEP_CDS_position_1",
+    "label": "CDS position stop",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "Stop position.",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "1bc89629-b2a1-45c6-9239-1b61b4184756",
+    "name": "VEP_CELL_TYPE",
+    "label": "Cell type",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "9d861b26-1d3a-479b-b3d9-0e7c020e887b",
+    "name": "VEP_CLIN_SIG",
+    "label": "Clinicaly significant",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "6c36e35a-3ac0-4acc-ac11-8696a1c946f5",
+    "name": "VEP_Codons",
+    "label": "Codon change",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "7f171b90-c897-4ddd-8574-064bbad3cf41",
+    "name": "VEP_Consequence",
+    "label": "Consequence",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "5663f486-bfb9-4a4a-b786-f60a59ef419b",
+    "name": "VEP_DISTANCE",
+    "label": "Distance",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "577af8eb-d0d2-4c69-93c6-8b6eaba37b88",
+    "name": "VEP_DOMAINS",
+    "label": "Domains",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "6edb2686-ba95-411a-ad23-164f35dbc151",
+    "name": "VEP_EA_MAF",
+    "label": "Allele_EA_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "1c3461e8-b64b-4b4c-a8aa-3f3291245cb3",
+    "name": "VEP_EAS_MAF",
+    "label": "Allele_EAS_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "4ec595ef-0ada-4985-8c48-05112ba971aa",
+    "name": "VEP_EUR_MAF",
+    "label": "Allele_EUR_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "a0da92fa-71e2-45dc-b358-1ed52f3cc782",
+    "name": "VEP_ExAC_Adj_MAF",
+    "label": "Allele_ExAC_Adj_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "e61b0ca6-6301-4934-a32b-bfe4f3e289b3",
+    "name": "VEP_ExAC_AFR_MAF",
+    "label": "Allele_ExAC_AFR_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "62c1db84-b3b1-497a-bc59-0c85a2fc12f6",
+    "name": "VEP_ExAC_AMR_MAF",
+    "label": "Allele_ExAC_AMR_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "5954d86a-c83b-445f-8d51-ce58b74f4015",
+    "name": "VEP_ExAC_EAS_MAF",
+    "label": "Allele_ExAC_EAS_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "17d81a43-e752-4579-8d32-5e4ea2c9116b",
+    "name": "VEP_ExAC_FIN_MAF",
+    "label": "Allele_ExAC_FIN_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "7ea547fa-94f6-46a4-b2fb-c9f3017a85cf",
+    "name": "VEP_ExAC_MAF",
+    "label": "Allele_ExAC_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "caae8651-ccbb-493c-a9d6-a8c57be9a04f",
+    "name": "VEP_ExAC_NFE_MAF",
+    "label": "Allele_ExAC_NFE_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "ef4fbae5-1041-4152-9fc0-bf850aa5228c",
+    "name": "VEP_ExAC_OTH_MAF",
+    "label": "Allele_ExAC_OTH_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "0d01f5d1-4c5a-4250-8579-16dd6054ae50",
+    "name": "VEP_ExAC_SAS_MAF",
+    "label": "Allele_ExAC_SAS_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "12597250-ef22-4794-b404-5d1bd870bf9e",
+    "name": "VEP_Existing_variation",
+    "label": "Existing variation",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "3a2da9f0-69ae-4c5d-89fc-64af2eabe725",
+    "name": "VEP_ExonNumber",
+    "label": "Exon number",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "starting with 1",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "474fb82c-f029-486f-867e-7f7505041a42",
+    "name": "VEP_Feature",
+    "label": "Element ID",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "b40a65c0-31f2-49ab-a7b3-f477382921f4",
+    "name": "VEP_Feature_type",
+    "label": "Element type",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "transcript, regulatory, motif",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "8e2ab5f1-9889-4da3-bb7a-0505b1a665df",
+    "name": "VEP_Gene",
+    "label": "RefSeq gene ID",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "8d71aa15-56dc-4b7a-940b-b7869b7444ec",
+    "name": "VEP_GENE_PHENO",
+    "label": "Gene phenotype",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "76515578-8f6f-4919-a79b-0615fccc11a6",
+    "name": "VEP_Genotype",
+    "label": "Genotype",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "Capital case is for alternative alleles and lowercase is for reference allele",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "46e558ee-b611-429f-a4d6-b383ea748e93",
+    "name": "VEP_GMAF",
+    "label": "Allele_GMAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "ad7f5cfb-5dc2-4373-92e6-13aa0dab68f8",
+    "name": "VEP_HGMD",
+    "label": "HGMD",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "9182944c-25b7-453b-a259-619739947f11",
+    "name": "VEP_HGNC_ID",
+    "label": "HGNC ID",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "3e96ece7-d715-4d46-95ae-29aaff3acce2",
+    "name": "VEP_HGVSc_nucleotide_changes",
+    "label": "HGVSc transcript change",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "in HGVSc transcript coordinates",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4",
+    "name": "VEP_HGVSc_transcript",
+    "label": "HGVSc transcript",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "for use in HGVSc notation (left part before period glyph)",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "4fb3ed6b-acd9-41b0-a573-be75b1e2b043",
+    "name": "VEP_HGVS_OFFSET",
+    "label": "HGVS shift",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "HGVS was calculated after ambiguous repeat shift. Column shows shift size",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "b366b649-34a9-46bb-813c-79446ca9d384",
+    "name": "VEP_HGVSp_nucleotide_changes",
+    "label": "HGVSp protein change",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "in HGVSp transcript coordinates",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "806776ec-ea68-4fe9-b72a-ba74729c0af5",
+    "name": "VEP_HGVSp_transcript",
+    "label": "HGVSp protein",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "for use in HGVSp notation (left part before period glyph)",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "ae1c8d7f-6180-4f4c-8e0a-5f290f7b92c4",
+    "name": "VEP_HIGH_INF_POS",
+    "label": "TFBS important position",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "boolean",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "d77229fe-dd8b-4f3e-ba7c-5b9165320af7",
+    "name": "VEP_HIGH_INF_POS",
+    "label": "TFBS important position",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "boolean",
+    "description": "",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "1bfdd071-a4e3-4acb-80db-31fa6082b094",
+    "name": "VEP_IMPACT",
+    "label": "Variant impact",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "high impact, changed protein effectiveness , no change, no evidence or difficult to predict",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "f93d3069-1e31-48a5-92de-a6107e3bb78a",
+    "name": "VEP_INTRON",
+    "label": "Intron",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "133e2760-56a6-480f-b0c1-02e410043d9b",
+    "name": "VEP_IntronNumber",
+    "label": "Intron number",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "9f1f4fe9-6765-4426-9748-fab96622a8d0",
+    "name": "VEP_MOTIF_NAME",
+    "label": "TFBS",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "8762f431-d35b-4f1a-8d6a-ebe792c5f136",
+    "name": "VEP_MOTIF_POS",
+    "label": "TFBS  position",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "b794458a-d37d-476a-8e67-f0cee0afb1cf",
+    "name": "VEP_MOTIF_SCORE_CHANGE",
+    "label": "TFBS score change",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "2a6ad5eb-6ff4-4797-b47a-135198728ae6",
+    "name": "VEP_NumberOfExons",
+    "label": "Number of exons",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "d5fb8077-8dcd-4465-be0e-dcfc166aedc2",
+    "name": "VEP_NumberOfIntrons",
+    "label": "Number of introns",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "da50dcfc-8f6b-4ac6-85f0-fd0f7710dc9a",
+    "name": "VEP_PHENO",
+    "label": "Phenotype",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "ceb6326f-6ab2-420d-86f1-b63c303e9bf2",
+    "name": "VEP_PICK",
+    "label": "Longest transcript",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "boolean",
+    "description": "",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "ef407f6f-1299-49d7-90bb-7c9a65f65543",
+    "name": "VEP_PolyPhen",
+    "label": "PolyPhen-2",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
     "value_type": "float",
     "description": "PolyPhen-2 v2.2.2. Probability(variation is deleterious). Common threshold is 0.95",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "73069394-10d9-4dc4-9f50-9897cc82db98",
-    "name": "VEP_Allele",
-    "label": "VEP_Allele",
+    "id": "d4aa9820-6f3b-426f-9e9a-79b0ba54c1ac",
+    "name": "VEP_Protein_position_0",
+    "label": "Protein position start",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "Start position.",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "e09dd061-4349-4b68-a147-d5452c2dcafb",
+    "name": "VEP_Protein_position_1",
+    "label": "Protein position stop",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "integer",
+    "description": "Stop position.",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "53e2f8af-91ff-43ca-b5fa-06b4f1d6bacd",
+    "name": "VEP_PUBMED",
+    "label": "PubMed",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "5a9e1057-eb8d-427d-827a-dc21db2b1030",
+    "id": "7022e5eb-f05e-4af8-9bed-6bed1f7a6dd0",
+    "name": "VEP_SAS_MAF",
+    "label": "Allele_SAS_MAF",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "5370b4a8-f475-49bb-bfbe-5c09a1ab438a",
+    "name": "VEP_SIFT",
+    "label": "SIFT",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "float",
+    "description": "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is 0.05",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "fce64bab-2d95-488b-8311-1ca9dd3ace93",
+    "name": "VEP_SIFT",
+    "label": "SIFT",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is 0.05",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "834e0183-5847-44bc-ab61-5af4692489fd",
+    "name": "VEP_SOMATIC",
+    "label": "Somatic mutation",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "boolean",
+    "description": "",
+    "dimension": 1,
+    "available_values": []
+  },
+  {
+    "id": "e53432a0-29a9-404a-9414-a110a48cb9bb",
+    "name": "VEP_SOMATIC",
+    "label": "Somatic mutation",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "boolean",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "adae2e3b-146c-492e-b4f6-760b8052c1c0",
+    "name": "VEP_STRAND",
+    "label": "Element strand",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "74986f9f-2f93-43f7-8163-428d7548a0d6",
     "name": "VEP_SV",
-    "label": "VEP_SV",
+    "label": "Overlapping structural variant analysis",
     "source_name": "sample",
-    "is_mandatory": false,
     "is_editable": false,
+    "is_mandatory": false,
     "value_type": "string",
     "description": "",
-    "dimension": 0
+    "dimension": 0,
+    "available_values": []
   },
   {
-    "id": "c24518fa-9858-4f10-92d9-258802792cf7",
+    "id": "f048cc37-55ec-4881-88af-0dded507fd9b",
+    "name": "VEP_SWISSPROT",
+    "label": "Swiss-Prot",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "best match",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "a118952c-20fc-46b8-b142-61cc7869b989",
+    "name": "VEP_SYMBOL",
+    "label": "Gene ID",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "Gene ID in database from \"Gene DB\" column",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "1a8b79d4-c487-4b1a-bcd7-f73965982393",
+    "name": "VEP_SYMBOL_SOURCE",
+    "label": "Gene DB",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "database for \"Gene ID\" column",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "13566796-662e-49d7-932a-b18c4caf69bd",
+    "name": "VEP_TREMBL",
+    "label": "TReMBL",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "best match",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "04c93cb1-4275-44e7-887e-8f4025237424",
+    "name": "VEP_TSL",
+    "label": "Transcripts ",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "51f7078c-5f96-4f40-bdbd-900837f90793",
+    "name": "VEP_VARIANT_CLASS",
+    "label": "Variant Ontology",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "90d7eaac-ac28-4880-bd51-13e899667acd",
+    "name": "VEP_ZYG",
+    "label": "Zygosity-2",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "5c150ed8-fbb1-40b8-a451-13d780059f3c",
+    "name": "VEP_Zygosity",
+    "label": "Zygosity adjusted",
+    "source_name": "sample",
+    "is_editable": false,
+    "is_mandatory": false,
+    "value_type": "string",
+    "description": "Heterozygous, Homozygous, Hemizygous, Unknown. Indels considered equal for zygosity",
+    "dimension": 0,
+    "available_values": []
+  },
+  {
+    "id": "cb218925-987e-4e13-bc92-931f1a154819",
     "name": "INFO_NC",
     "label": "INFO_NC",
     "source_name": "sample",
@@ -1146,7 +1180,7 @@
     "dimension": 1
   },
   {
-    "id": "494c371a-d2aa-4b4a-bdf9-7101ff8da8ea",
+    "id": "e9aafb69-85df-45b9-85e9-28545a7b85a0",
     "name": "INFO_HOM",
     "label": "INFO_HOM",
     "source_name": "sample",
@@ -1157,7 +1191,7 @@
     "dimension": 1
   },
   {
-    "id": "a7734818-5d1e-471d-9275-929147a2e593",
+    "id": "cfcad47c-d7dd-4c00-bf61-ea6d5803049a",
     "name": "INFO_ADP",
     "label": "INFO_ADP",
     "source_name": "sample",
@@ -1168,7 +1202,7 @@
     "dimension": 1
   },
   {
-    "id": "7c87c767-202e-4fc1-a307-ce25b4057834",
+    "id": "7a52fbfd-0b7a-4252-addf-2b8db20cf8ad",
     "name": "INFO_HET",
     "label": "INFO_HET",
     "source_name": "sample",
@@ -1179,7 +1213,7 @@
     "dimension": 1
   },
   {
-    "id": "aa116415-c7a8-47f2-af94-fced993e0a2c",
+    "id": "58290c45-429e-46b6-9183-01cc72fcdbbc",
     "name": "INFO_WT",
     "label": "INFO_WT",
     "source_name": "sample",
@@ -1190,7 +1224,117 @@
     "dimension": 1
   },
   {
-    "id": "a49fc990-e3e1-49fa-8847-a90d8160ed66",
+    "id": "cd55dc2b-3e00-4041-8050-56c541375bb5",
+    "name": "INFO_ExAC_AF_AMR_Adj",
+    "label": "INFO_ExAC_AF_AMR_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for American population in ExAC (AC_AMR/AN_AMR)",
+    "dimension": 1
+  },
+  {
+    "id": "de96add4-b616-429d-9569-b2362620477e",
+    "name": "INFO_ExAC_AF",
+    "label": "INFO_ExAC_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Raw allele frequency (population independent) of the variant based on ExAC exomes (AF)",
+    "dimension": 1
+  },
+  {
+    "id": "52a69926-4ccf-42ae-9879-6182d3318a82",
+    "name": "INFO_ExAC_AF_NFE_Adj",
+    "label": "INFO_ExAC_AF_NFE_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for Non-Finnish European population in ExAC (AC_NFE/AN_NFE)",
+    "dimension": 1
+  },
+  {
+    "id": "1657e696-d8f2-4929-9efa-d541d88705e7",
+    "name": "INFO_ExAC_AF_Adj",
+    "label": "INFO_ExAC_AF_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency (population independent) of the variant based on ExAC (AC_Adj/AN_Adj)",
+    "dimension": 1
+  },
+  {
+    "id": "143cc078-a332-4b8c-9640-967225032e9e",
+    "name": "INFO_ExAC_AF_SAS_Adj",
+    "label": "INFO_ExAC_AF_SAS_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for South Asian population in ExAC (AC_SAS/AN_SAS)",
+    "dimension": 1
+  },
+  {
+    "id": "2fcc1188-c23d-474f-9539-e6c45c056ff7",
+    "name": "INFO_ExAC_AF_EAS_Adj",
+    "label": "INFO_ExAC_AF_EAS_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for East Asian population in ExAC (AC_EAS/AN_EAS)",
+    "dimension": 1
+  },
+  {
+    "id": "78febad7-1085-4312-93f7-15218b61c958",
+    "name": "INFO_ExAC_AF_AFR_Adj",
+    "label": "INFO_ExAC_AF_AFR_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for African/African American population in ExAC (AC_AFR/AN_AFR)",
+    "dimension": 1
+  },
+  {
+    "id": "97860df2-f045-4b2b-9432-8a6ab08fdc1b",
+    "name": "INFO_ExAC_AF_OTH_Adj",
+    "label": "INFO_ExAC_AF_OTH_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for Other population in ExAC (AC_OTH/AN_OTH)",
+    "dimension": 1
+  },
+  {
+    "id": "f4146fa1-e754-49cc-95d9-15fbf69ca909",
+    "name": "INFO_TYPE",
+    "label": "INFO_TYPE",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "The type of variant (snp or indel).",
+    "dimension": 1
+  },
+  {
+    "id": "cb8242e9-54d3-4f2f-92c4-980f96b061c0",
+    "name": "INFO_ExAC_AF_FIN_Adj",
+    "label": "INFO_ExAC_AF_FIN_Adj",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Adjusted allele frequency of the variant for Finnish population in ExAC (AC_FIN/AN_FIN)",
+    "dimension": 1
+  },
+  {
+    "id": "e920c479-cfab-458c-8b0c-8108c74f85ce",
     "name": "INFO_SGREFAA",
     "label": "INFO_SGREFAA",
     "source_name": "sample",
@@ -1201,7 +1345,7 @@
     "dimension": 1
   },
   {
-    "id": "78f7ca6e-d610-4aec-a08f-65f9dbcbe838",
+    "id": "d3176929-b0b1-4896-b41a-6ac745f71fa1",
     "name": "INFO_SGTI",
     "label": "INFO_SGTI",
     "source_name": "sample",
@@ -1212,7 +1356,7 @@
     "dimension": 0
   },
   {
-    "id": "196855a8-e24a-464d-9df3-21dafbbbefca",
+    "id": "16d08759-8138-4820-81fc-756d9092ac22",
     "name": "INFO_AF",
     "label": "INFO_AF",
     "source_name": "sample",
@@ -1223,7 +1367,7 @@
     "dimension": -1
   },
   {
-    "id": "2bd171a0-73ca-459b-8b0d-62b777438061",
+    "id": "58ca9453-c66a-4122-98c7-44d93241fa4d",
     "name": "INFO_SGACOV",
     "label": "INFO_SGACOV",
     "source_name": "sample",
@@ -1234,7 +1378,7 @@
     "dimension": -1
   },
   {
-    "id": "707ba0e8-8b33-429a-8021-b427cb29e9ad",
+    "id": "b3c91644-dc16-4a43-bb0b-359f3d21f2ca",
     "name": "INFO_SGGENEDIR",
     "label": "INFO_SGGENEDIR",
     "source_name": "sample",
@@ -1245,7 +1389,7 @@
     "dimension": 1
   },
   {
-    "id": "4a777d86-1ff5-41fb-8a0a-3e298f8b7a7c",
+    "id": "2928c3d8-5440-4f6a-a37f-a3fe7dc98106",
     "name": "INFO_SGANNOT",
     "label": "INFO_SGANNOT",
     "source_name": "sample",
@@ -1256,7 +1400,7 @@
     "dimension": 0
   },
   {
-    "id": "9bd014c5-7d7a-4597-9578-23e3928519ea",
+    "id": "bfa15911-7803-4f40-a59f-6287ea9c680a",
     "name": "INFO_SGCDSID",
     "label": "INFO_SGCDSID",
     "source_name": "sample",
@@ -1267,7 +1411,7 @@
     "dimension": 1
   },
   {
-    "id": "f02b8b11-d613-41c7-8f7c-25cc1fd262d5",
+    "id": "31a05024-d0ce-4e4b-a122-efc7b7409107",
     "name": "INFO_SGSEGDES",
     "label": "INFO_SGSEGDES",
     "source_name": "sample",
@@ -1278,7 +1422,7 @@
     "dimension": 1
   },
   {
-    "id": "8fd02210-9584-4ee8-88fa-37de707fda53",
+    "id": "44a1a63a-984e-4a65-b65c-d1c08c64dc2b",
     "name": "INFO_SGSEGPOS",
     "label": "INFO_SGSEGPOS",
     "source_name": "sample",
@@ -1289,7 +1433,7 @@
     "dimension": 1
   },
   {
-    "id": "36f49cc5-67ed-4c70-aeb9-11c19499050d",
+    "id": "30b3d5fc-3927-4ecd-b7ac-00c6e7397937",
     "name": "INFO_SGMRNAID",
     "label": "INFO_SGMRNAID",
     "source_name": "sample",
@@ -1300,7 +1444,7 @@
     "dimension": 1
   },
   {
-    "id": "b04bc236-7b96-44bb-8a9e-39ddba6b359f",
+    "id": "448805dd-419a-494c-b239-d16e44b09cf8",
     "name": "INFO_SGAMBGAINPEN",
     "label": "INFO_SGAMBGAINPEN",
     "source_name": "sample",
@@ -1311,7 +1455,7 @@
     "dimension": 1
   },
   {
-    "id": "65a29016-b2eb-4066-94fb-034e9be4e297",
+    "id": "d28d76e7-76ce-4fc8-95a0-2add8a9cdda1",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "sample",
@@ -1322,7 +1466,7 @@
     "dimension": 1
   },
   {
-    "id": "3d4a4b47-a8c4-4bc9-8cfc-4d8227977695",
+    "id": "31df6d31-954e-4edc-a54d-b52980040e40",
     "name": "INFO_SGPI",
     "label": "INFO_SGPI",
     "source_name": "sample",
@@ -1333,7 +1477,7 @@
     "dimension": 0
   },
   {
-    "id": "f1e4c74f-6b1c-4eb5-83b3-92ea54d45ae0",
+    "id": "3501d423-b69b-41e4-8a0b-45861442a8d0",
     "name": "INFO_SGGI",
     "label": "INFO_SGGI",
     "source_name": "sample",
@@ -1344,7 +1488,7 @@
     "dimension": 0
   },
   {
-    "id": "e996133f-1f19-4bfc-b596-71755cbbb831",
+    "id": "94cec4bf-1233-4fe2-bcf8-743eee69379a",
     "name": "INFO_SGAMBLOSSPEN",
     "label": "INFO_SGAMBLOSSPEN",
     "source_name": "sample",
@@ -1355,7 +1499,7 @@
     "dimension": 1
   },
   {
-    "id": "a561150d-a468-411a-9ba2-4588f5b77778",
+    "id": "ae20025d-1e23-4a3a-a5bf-6e78fce0d288",
     "name": "INFO_NS",
     "label": "INFO_NS",
     "source_name": "sample",
@@ -1366,7 +1510,7 @@
     "dimension": 1
   },
   {
-    "id": "77d2b242-e88e-4ced-b285-cf7c03ed039a",
+    "id": "9c2c3c5d-8ff6-4f8b-b10d-409824e60d2b",
     "name": "INFO_FC",
     "label": "INFO_FC",
     "source_name": "sample",
@@ -1377,7 +1521,7 @@
     "dimension": 0
   },
   {
-    "id": "351577f6-212c-4307-b82e-d53291c941cd",
+    "id": "f976435f-2780-4e06-a691-0b29109f98e8",
     "name": "INFO_SGAAC",
     "label": "INFO_SGAAC",
     "source_name": "sample",
@@ -1388,7 +1532,7 @@
     "dimension": -1
   },
   {
-    "id": "517f64ac-4996-4354-85d8-52a82c379c0b",
+    "id": "a7c2f7e4-ba2f-4028-85be-351defe66fdb",
     "name": "INFO_SGASCORE",
     "label": "INFO_SGASCORE",
     "source_name": "sample",
@@ -1399,7 +1543,7 @@
     "dimension": -1
   },
   {
-    "id": "ab67dba6-d6bc-4395-9704-69c8a3ac1ba0",
+    "id": "812ec775-8c68-4c3e-995c-b93a6620af5f",
     "name": "INFO_REVB",
     "label": "INFO_REVB",
     "source_name": "sample",
@@ -1410,7 +1554,7 @@
     "dimension": -1
   },
   {
-    "id": "81f887f7-ff7f-46ee-9bd6-f19a602d6e46",
+    "id": "1ef1cfb4-5fff-4f86-84ed-6ec162b9ca00",
     "name": "INFO_FRO",
     "label": "INFO_FRO",
     "source_name": "sample",
@@ -1421,7 +1565,7 @@
     "dimension": 1
   },
   {
-    "id": "d1f4b47c-e8d6-42bf-9ed4-d877fbd331c4",
+    "id": "be6c155c-6e6e-453a-80e6-756332800f80",
     "name": "INFO_AO",
     "label": "INFO_AO",
     "source_name": "sample",
@@ -1432,7 +1576,7 @@
     "dimension": -1
   },
   {
-    "id": "d3d02cf2-6643-44b2-b8a2-10c1436327de",
+    "id": "a1756189-43fe-47e8-ab47-0eb555b3bee3",
     "name": "INFO_SAR",
     "label": "INFO_SAR",
     "source_name": "sample",
@@ -1443,7 +1587,7 @@
     "dimension": -1
   },
   {
-    "id": "3d8ff40b-2a33-43a9-ba2d-ba4f322fe54d",
+    "id": "ae1c71a9-6eb5-4489-af85-9b44068dd20e",
     "name": "INFO_FSAF",
     "label": "INFO_FSAF",
     "source_name": "sample",
@@ -1454,7 +1598,7 @@
     "dimension": -1
   },
   {
-    "id": "3f6d73da-7f29-4e97-a664-fd0a70df25bc",
+    "id": "8af80c14-aaa4-4481-a1b2-db2ba663fe44",
     "name": "INFO_SAF",
     "label": "INFO_SAF",
     "source_name": "sample",
@@ -1465,7 +1609,7 @@
     "dimension": -1
   },
   {
-    "id": "9c5609d6-3f23-45df-8481-9e8fd5dc8c9d",
+    "id": "91d86745-07cf-4433-aeab-f510120d27cb",
     "name": "INFO_MLLD",
     "label": "INFO_MLLD",
     "source_name": "sample",
@@ -1476,7 +1620,7 @@
     "dimension": -1
   },
   {
-    "id": "e640058d-60db-4d6f-8cc1-69f44d70e242",
+    "id": "52f0d489-1f97-4e2b-8714-99ba49c25b12",
     "name": "INFO_FSAR",
     "label": "INFO_FSAR",
     "source_name": "sample",
@@ -1487,7 +1631,7 @@
     "dimension": -1
   },
   {
-    "id": "57d3280e-bd32-4263-bcca-eb0d248c29fd",
+    "id": "076581d4-7736-4a1e-a506-2cbd51b46403",
     "name": "INFO_PB",
     "label": "INFO_PB",
     "source_name": "sample",
@@ -1498,7 +1642,7 @@
     "dimension": -1
   },
   {
-    "id": "0ecc4b97-6b76-4e0d-bdf0-79b4efb37495",
+    "id": "6c079985-5218-4e16-a248-3cceb1791e46",
     "name": "INFO_HS",
     "label": "INFO_HS",
     "source_name": "sample",
@@ -1509,7 +1653,7 @@
     "dimension": 1
   },
   {
-    "id": "32eb87d1-c86d-4ff7-b601-9c66e6bd83c3",
+    "id": "fe7bd8f9-7d5c-45b8-a183-92f98b508db6",
     "name": "INFO_OID",
     "label": "INFO_OID",
     "source_name": "sample",
@@ -1520,7 +1664,7 @@
     "dimension": 0
   },
   {
-    "id": "e66c2b4b-bdca-4a56-bf86-ae9c6a72b53f",
+    "id": "9c3ac131-c568-4d3d-b000-e72fdd7e7968",
     "name": "INFO_REFB",
     "label": "INFO_REFB",
     "source_name": "sample",
@@ -1531,7 +1675,7 @@
     "dimension": -1
   },
   {
-    "id": "4eb027fc-6a91-4fad-b50f-1437b4566997",
+    "id": "dc779c79-da67-490a-a074-67d9eecebfb7",
     "name": "INFO_OREF",
     "label": "INFO_OREF",
     "source_name": "sample",
@@ -1542,7 +1686,7 @@
     "dimension": 0
   },
   {
-    "id": "986382fe-165b-46f2-932c-282e150a080b",
+    "id": "35f7e25c-73e9-45cf-8d2d-ab39260dfdf1",
     "name": "INFO_LEN",
     "label": "INFO_LEN",
     "source_name": "sample",
@@ -1553,7 +1697,7 @@
     "dimension": -1
   },
   {
-    "id": "6565c00b-94c4-4f0e-a443-cc0cb9afd477",
+    "id": "c6be3cae-eb19-4cd1-ad94-1d4738477a10",
     "name": "INFO_FWDB",
     "label": "INFO_FWDB",
     "source_name": "sample",
@@ -1564,7 +1708,7 @@
     "dimension": -1
   },
   {
-    "id": "7c64491f-1caa-4cca-95ff-10cdb3addb35",
+    "id": "389a3c7e-30ea-4150-8d72-8591847704a1",
     "name": "INFO_STB",
     "label": "INFO_STB",
     "source_name": "sample",
@@ -1575,7 +1719,7 @@
     "dimension": -1
   },
   {
-    "id": "f24b9cb6-edb5-4a3e-beb0-31e2bad25f43",
+    "id": "2f1145a7-1c2c-4b30-a53f-5ea5927c1527",
     "name": "INFO_SSSB",
     "label": "INFO_SSSB",
     "source_name": "sample",
@@ -1586,7 +1730,7 @@
     "dimension": -1
   },
   {
-    "id": "f93d8920-c6b3-495c-abbf-c3a73a7c5b93",
+    "id": "9ecbe37f-7bb6-4e3b-8186-b7c1bb7e2c59",
     "name": "INFO_RO",
     "label": "INFO_RO",
     "source_name": "sample",
@@ -1597,7 +1741,7 @@
     "dimension": 1
   },
   {
-    "id": "7ecfb694-8c20-4fdf-b634-d85083b54b8d",
+    "id": "9a6dc6aa-2167-4efd-9f18-07f64cd305a8",
     "name": "INFO_VARB",
     "label": "INFO_VARB",
     "source_name": "sample",
@@ -1608,7 +1752,7 @@
     "dimension": -1
   },
   {
-    "id": "676d3655-c24a-40aa-936a-ef08e26d4eab",
+    "id": "aa8d6657-fa8d-4bde-9cb0-320531f83692",
     "name": "INFO_PBP",
     "label": "INFO_PBP",
     "source_name": "sample",
@@ -1619,7 +1763,7 @@
     "dimension": -1
   },
   {
-    "id": "098a0586-8fdb-4ec6-b2a6-3dc7eba4ec98",
+    "id": "bd53f133-551d-4493-9bdc-b6daf310fd25",
     "name": "INFO_FSRF",
     "label": "INFO_FSRF",
     "source_name": "sample",
@@ -1630,7 +1774,7 @@
     "dimension": 1
   },
   {
-    "id": "aa2c3bf7-6584-4a23-960f-0cbf5495292b",
+    "id": "416fc956-e6e3-4cc8-b0bb-7cd820287583",
     "name": "INFO_RBI",
     "label": "INFO_RBI",
     "source_name": "sample",
@@ -1641,7 +1785,7 @@
     "dimension": -1
   },
   {
-    "id": "e5dd2547-5564-4927-b811-e71fb2d0b0ac",
+    "id": "2a707142-6443-452c-b7f3-00ec1ff41ae3",
     "name": "INFO_OPOS",
     "label": "INFO_OPOS",
     "source_name": "sample",
@@ -1652,7 +1796,7 @@
     "dimension": 0
   },
   {
-    "id": "6256c074-d792-484f-b872-1ee08dd558ef",
+    "id": "72f72a59-397f-4785-b5a4-ebb45ab1ac3a",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -1663,7 +1807,7 @@
     "dimension": -1
   },
   {
-    "id": "03c49760-2d24-4dc9-af95-1175e1c69ddc",
+    "id": "06909374-d66e-4d6d-8786-6907bee00bbb",
     "name": "INFO_FSRR",
     "label": "INFO_FSRR",
     "source_name": "sample",
@@ -1674,7 +1818,7 @@
     "dimension": 1
   },
   {
-    "id": "4925c772-9352-484a-af9b-00371400d5a5",
+    "id": "6a1b09f3-0653-45b4-bfe7-c7501069c25c",
     "name": "INFO_FDP",
     "label": "INFO_FDP",
     "source_name": "sample",
@@ -1685,7 +1829,7 @@
     "dimension": 1
   },
   {
-    "id": "1eaa92fc-047d-496a-9cfa-3733aaffe816",
+    "id": "20a26596-a62b-4fac-ace3-94db418ba9fa",
     "name": "INFO_HRUN",
     "label": "INFO_HRUN",
     "source_name": "sample",
@@ -1696,7 +1840,7 @@
     "dimension": -1
   },
   {
-    "id": "7efcc043-b23e-40f0-b849-43dbbf662a33",
+    "id": "d547ec46-7ded-4dcf-8615-45142ca2562b",
     "name": "INFO_SRF",
     "label": "INFO_SRF",
     "source_name": "sample",
@@ -1707,7 +1851,7 @@
     "dimension": 1
   },
   {
-    "id": "03fac9ff-2c1e-426f-b5b5-b607cddd99ef",
+    "id": "e4d7cde6-0d09-4ed6-86f1-15cf6eb45479",
     "name": "INFO_SRR",
     "label": "INFO_SRR",
     "source_name": "sample",
@@ -1718,7 +1862,7 @@
     "dimension": 1
   },
   {
-    "id": "077c10d6-4776-4218-9547-61768040a966",
+    "id": "9c1992a2-9189-4a07-9439-e06d9b5ffd70",
     "name": "INFO_FR",
     "label": "INFO_FR",
     "source_name": "sample",
@@ -1729,7 +1873,7 @@
     "dimension": 0
   },
   {
-    "id": "efb3c54c-51b8-4705-a518-730ea05a6994",
+    "id": "4315c68d-f36b-4e1e-bc09-3124e7f6e2ef",
     "name": "INFO_FAO",
     "label": "INFO_FAO",
     "source_name": "sample",
@@ -1740,7 +1884,7 @@
     "dimension": -1
   },
   {
-    "id": "89969708-175b-46dd-bb4a-3f2956325804",
+    "id": "942c8fd0-f1f4-4b84-9078-a9a5a774399d",
     "name": "INFO_QD",
     "label": "INFO_QD",
     "source_name": "sample",
@@ -1751,7 +1895,7 @@
     "dimension": 1
   },
   {
-    "id": "b8103f05-19eb-4984-a173-12ca02a7a866",
+    "id": "2a9675b8-ca54-4a88-97db-165f26bc7536",
     "name": "INFO_FXX",
     "label": "INFO_FXX",
     "source_name": "sample",
@@ -1762,7 +1906,7 @@
     "dimension": 1
   },
   {
-    "id": "185e55b1-b90c-401e-8c4e-d4dbace4e739",
+    "id": "d7e540f4-1e53-42f4-940d-b19e320d84b4",
     "name": "INFO_SSEN",
     "label": "INFO_SSEN",
     "source_name": "sample",
@@ -1773,7 +1917,7 @@
     "dimension": -1
   },
   {
-    "id": "2f53d878-baee-4f82-ae9a-06742cc7d997",
+    "id": "6e3050dc-73ba-46c2-a27c-52409c0a74f3",
     "name": "INFO_SSEP",
     "label": "INFO_SSEP",
     "source_name": "sample",
@@ -1784,7 +1928,7 @@
     "dimension": -1
   },
   {
-    "id": "af7fd197-ac5c-4b6c-b67c-812402849d24",
+    "id": "8e48deaa-9431-4e52-be3b-8215af17ef08",
     "name": "INFO_STBP",
     "label": "INFO_STBP",
     "source_name": "sample",
@@ -1795,7 +1939,7 @@
     "dimension": -1
   },
   {
-    "id": "35bd06df-31e8-4256-8420-6e75e7102e83",
+    "id": "ef323395-ec04-4013-bc21-fd7ddfc07f02",
     "name": "INFO_OMAPALT",
     "label": "INFO_OMAPALT",
     "source_name": "sample",
@@ -1806,7 +1950,7 @@
     "dimension": 0
   },
   {
-    "id": "039cc9d1-a12e-4824-8f2c-daba192826f4",
+    "id": "a356da70-8d61-493b-9555-bca35899a5bd",
     "name": "INFO_OALT",
     "label": "INFO_OALT",
     "source_name": "sample",
@@ -1817,7 +1961,7 @@
     "dimension": 0
   },
   {
-    "id": "743c07b8-6ca8-4a37-87a3-45190d85b83e",
+    "id": "49b90345-d8c8-44c5-a6f5-d6741900be84",
     "name": "INFO_SS",
     "label": "INFO_SS",
     "source_name": "sample",
@@ -1828,7 +1972,7 @@
     "dimension": 1
   },
   {
-    "id": "b319c13d-54e4-40e8-8150-30b8d214d5f4",
+    "id": "317f0ba8-8f08-4870-8865-addf2808b4ef",
     "name": "INFO_GPV",
     "label": "INFO_GPV",
     "source_name": "sample",
@@ -1839,7 +1983,7 @@
     "dimension": 1
   },
   {
-    "id": "b8b9b0f2-7cac-4282-b022-d277a02ca3f4",
+    "id": "9e8d1220-82f0-4698-9ad6-53cba6b91d0c",
     "name": "INFO_SSC",
     "label": "INFO_SSC",
     "source_name": "sample",
@@ -1850,7 +1994,7 @@
     "dimension": 1
   },
   {
-    "id": "7aa82827-abea-4d3f-a162-22b20e3f5aba",
+    "id": "97950254-a3e1-4fb8-b2e9-5b6f54320a22",
     "name": "INFO_SOMATIC",
     "label": "INFO_SOMATIC",
     "source_name": "sample",
@@ -1861,7 +2005,7 @@
     "dimension": 1
   },
   {
-    "id": "451148aa-dfa4-4fd6-ac73-9054d3d5fe93",
+    "id": "3dfe677a-a1b5-4a76-98ff-0485f6cdd171",
     "name": "INFO_SPV",
     "label": "INFO_SPV",
     "source_name": "sample",
@@ -1872,7 +2016,7 @@
     "dimension": 1
   },
   {
-    "id": "741941c1-8def-41aa-9b0d-4152bed9a82e",
+    "id": "61646595-4bec-4542-9b95-1ddf9747dd2d",
     "name": "INFO_EUR_AF",
     "label": "INFO_EUR_AF",
     "source_name": "sample",
@@ -1883,7 +2027,7 @@
     "dimension": -1
   },
   {
-    "id": "c082b3f8-4cce-4dcf-aaad-6da800fe985f",
+    "id": "3af0c06f-47fe-4dad-9eba-36864a57d300",
     "name": "INFO_MULTI_ALLELIC",
     "label": "INFO_MULTI_ALLELIC",
     "source_name": "sample",
@@ -1894,7 +2038,7 @@
     "dimension": 1
   },
   {
-    "id": "03369ff6-8436-4c0e-9b84-be5dfab07460",
+    "id": "7524fb4f-b828-484f-a6c1-0d5a8d9b3f5c",
     "name": "INFO_SAS_AF",
     "label": "INFO_SAS_AF",
     "source_name": "sample",
@@ -1905,7 +2049,7 @@
     "dimension": -1
   },
   {
-    "id": "8ba01320-d641-4463-a460-173735bd0f5f",
+    "id": "3eb9524e-b480-4f80-a5a2-99920891dc58",
     "name": "INFO_AN",
     "label": "INFO_AN",
     "source_name": "sample",
@@ -1916,7 +2060,7 @@
     "dimension": 1
   },
   {
-    "id": "4cce80f7-2912-4b30-806d-531796a052d7",
+    "id": "ba4ba534-1ac8-47f5-9488-55e927b62204",
     "name": "INFO_AC",
     "label": "INFO_AC",
     "source_name": "sample",
@@ -1927,7 +2071,7 @@
     "dimension": -1
   },
   {
-    "id": "c2c7ac56-8652-49cd-a1f4-0c35d9dfedb8",
+    "id": "edb33059-240c-448f-a2f1-008f6fc3e552",
     "name": "INFO_AA",
     "label": "INFO_AA",
     "source_name": "sample",
@@ -1938,7 +2082,7 @@
     "dimension": 1
   },
   {
-    "id": "70d2c76c-ca9c-4dbb-a979-a3a0fe9c21be",
+    "id": "cc7fee75-2c97-4cf8-9415-aab76bfb72d7",
     "name": "INFO_EAS_AF",
     "label": "INFO_EAS_AF",
     "source_name": "sample",
@@ -1949,7 +2093,7 @@
     "dimension": -1
   },
   {
-    "id": "3f036a24-c188-4fac-afc8-2e5c715692a0",
+    "id": "c63a8d5f-efb4-4145-b3f5-d9486f353e97",
     "name": "INFO_END",
     "label": "INFO_END",
     "source_name": "sample",
@@ -1960,7 +2104,7 @@
     "dimension": 1
   },
   {
-    "id": "b3f21719-3c7c-4ad3-b87c-f4b52dded4cb",
+    "id": "59a8e05b-94c5-4f31-8412-0fa328576334",
     "name": "INFO_SVTYPE",
     "label": "INFO_SVTYPE",
     "source_name": "sample",
@@ -1971,7 +2115,7 @@
     "dimension": 1
   },
   {
-    "id": "07ebf3f0-88b0-4574-bd45-1cc00ab2ca10",
+    "id": "5e59e2de-e298-4d30-82ff-489c0c135fcd",
     "name": "INFO_AMR_AF",
     "label": "INFO_AMR_AF",
     "source_name": "sample",
@@ -1982,7 +2126,7 @@
     "dimension": -1
   },
   {
-    "id": "8e148d2b-a90b-4888-a789-ffbc79374d6d",
+    "id": "f85f4472-7bf7-48d5-848a-9f06ed4e8ad9",
     "name": "INFO_EX_TARGET",
     "label": "INFO_EX_TARGET",
     "source_name": "sample",
@@ -1993,7 +2137,7 @@
     "dimension": 1
   },
   {
-    "id": "5ae53237-7f1b-4cfd-a4f8-78c42ccb7536",
+    "id": "b4a6e8f6-d111-4f62-9f27-b41b5099a9e7",
     "name": "INFO_AFR_AF",
     "label": "INFO_AFR_AF",
     "source_name": "sample",
@@ -2004,7 +2148,7 @@
     "dimension": -1
   },
   {
-    "id": "bf0f9317-66de-42f7-85e7-f3e7cdbf88c3",
+    "id": "c76380ad-2413-4e9e-b115-4b24a9181791",
     "name": "INFO_VT",
     "label": "INFO_VT",
     "source_name": "sample",
@@ -2015,7 +2159,7 @@
     "dimension": 0
   },
   {
-    "id": "3f426e0c-7a36-4e9a-8ee2-4c90e825c261",
+    "id": "8d2064fc-0ea5-4b89-9978-044755f7d827",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "ESP6500_v01",
@@ -2026,7 +2170,7 @@
     "dimension": 1
   },
   {
-    "id": "fca9d52f-5384-4686-aa4b-f93f0e39fdf0",
+    "id": "70570e8d-0f9b-432f-8b27-fb62e8717560",
     "name": "INFO_DBSNP",
     "label": "INFO_DBSNP",
     "source_name": "ESP6500_v01",
@@ -2037,7 +2181,7 @@
     "dimension": 0
   },
   {
-    "id": "b83162c7-d13f-4094-bca9-ec2a3e30f771",
+    "id": "3947fabd-4415-4342-8397-670de2952765",
     "name": "INFO_AA_AC",
     "label": "INFO_AA_AC",
     "source_name": "ESP6500_v01",
@@ -2048,7 +2192,7 @@
     "dimension": -4
   },
   {
-    "id": "9ceed6a5-0d02-4aa6-9577-ffe53dff087a",
+    "id": "20b8e5f2-f0a3-4bf9-9419-2abe0237da4a",
     "name": "INFO_AA_GTC",
     "label": "INFO_AA_GTC",
     "source_name": "ESP6500_v01",
@@ -2059,7 +2203,7 @@
     "dimension": 0
   },
   {
-    "id": "78ea1ac2-1698-45c6-9e59-3b0597e34189",
+    "id": "ee14d092-4aea-45f4-8045-bbea0aa54bac",
     "name": "INFO_MAF_2",
     "label": "INFO_MAF_2",
     "source_name": "ESP6500_v01",
@@ -2070,7 +2214,7 @@
     "dimension": 1
   },
   {
-    "id": "e00d85df-a397-47d2-aa22-5a72e30ef8d0",
+    "id": "a52ca621-b925-40f2-a0ef-cae3afd0e5df",
     "name": "INFO_FG",
     "label": "INFO_FG",
     "source_name": "ESP6500_v01",
@@ -2081,7 +2225,7 @@
     "dimension": 0
   },
   {
-    "id": "7b04f071-0ba5-41f2-827b-f230fd662bb6",
+    "id": "681965ad-c2f3-4d49-b517-7ea59f9c02df",
     "name": "INFO_MAF_0",
     "label": "INFO_MAF_0",
     "source_name": "ESP6500_v01",
@@ -2092,7 +2236,7 @@
     "dimension": 1
   },
   {
-    "id": "43a671e4-303c-4cda-aa45-638580498fdf",
+    "id": "8f94b7da-3724-4de9-b7ea-1507b3b65422",
     "name": "INFO_MAF_1",
     "label": "INFO_MAF_1",
     "source_name": "ESP6500_v01",
@@ -2103,7 +2247,7 @@
     "dimension": 1
   },
   {
-    "id": "691420dc-224d-4698-94e3-1a796447ccc9",
+    "id": "8cfc48fe-fa92-4dd8-844f-551aad96142c",
     "name": "INFO_GTC",
     "label": "INFO_GTC",
     "source_name": "ESP6500_v01",
@@ -2114,7 +2258,7 @@
     "dimension": 0
   },
   {
-    "id": "1d6b2da6-439b-4272-8d7e-961bd5f0d0cf",
+    "id": "05290219-90b0-461d-a55a-0309bb2fabba",
     "name": "INFO_EA_AGE",
     "label": "INFO_EA_AGE",
     "source_name": "ESP6500_v01",
@@ -2125,7 +2269,7 @@
     "dimension": 0
   },
   {
-    "id": "aa71ae2b-08c4-49bf-a760-cd52f9008825",
+    "id": "ef8f622e-baf9-486c-b157-a9f315062f19",
     "name": "INFO_EA_AC",
     "label": "INFO_EA_AC",
     "source_name": "ESP6500_v01",
@@ -2136,7 +2280,7 @@
     "dimension": -4
   },
   {
-    "id": "2b3901a4-e1ed-46a6-aa6b-53100e9ae866",
+    "id": "7e8f74bd-f380-49b0-99fa-157345837abd",
     "name": "INFO_AA_AGE",
     "label": "INFO_AA_AGE",
     "source_name": "ESP6500_v01",
@@ -2147,7 +2291,7 @@
     "dimension": 0
   },
   {
-    "id": "63ed9682-eb82-4edc-92da-bb96f522cee0",
+    "id": "65a2c168-36d5-4198-959d-688c4a25d524",
     "name": "INFO_GTS",
     "label": "INFO_GTS",
     "source_name": "ESP6500_v01",
@@ -2158,7 +2302,7 @@
     "dimension": 0
   },
   {
-    "id": "d045ec4b-e144-4290-96ac-76b73f3d70f4",
+    "id": "ec533436-cb95-4a20-958a-f802eac09480",
     "name": "INFO_GRCh38_POSITION",
     "label": "INFO_GRCh38_POSITION",
     "source_name": "ESP6500_v01",
@@ -2169,7 +2313,7 @@
     "dimension": 1
   },
   {
-    "id": "0ee70d19-b14f-41c4-a7c6-16bf6d675ee5",
+    "id": "16e81fb7-13ff-43ca-900a-f423e944ee90",
     "name": "INFO_ID",
     "label": "INFO_ID",
     "source_name": "ESP6500_v01",
@@ -2180,7 +2324,7 @@
     "dimension": 0
   },
   {
-    "id": "5ee1414d-344c-4a63-a3da-72671bb7d418",
+    "id": "23a11a8a-3bd6-4ad5-b651-992ca35d03ce",
     "name": "INFO_EXOME_CHIP",
     "label": "INFO_EXOME_CHIP",
     "source_name": "ESP6500_v01",
@@ -2191,7 +2335,7 @@
     "dimension": 0
   },
   {
-    "id": "ea10b04a-c0ba-4e3b-9833-1e2ebb5d1fd0",
+    "id": "5dc544bb-9e6b-4675-8ff1-084441be9a95",
     "name": "INFO_CG",
     "label": "INFO_CG",
     "source_name": "ESP6500_v01",
@@ -2202,7 +2346,7 @@
     "dimension": 1
   },
   {
-    "id": "caee0b0c-7a02-425f-b361-f5903a6358c1",
+    "id": "4272b950-f772-4517-8afa-d03b5007cbb1",
     "name": "INFO_HGVS_CDNA_VAR",
     "label": "INFO_HGVS_CDNA_VAR",
     "source_name": "ESP6500_v01",
@@ -2213,7 +2357,7 @@
     "dimension": 0
   },
   {
-    "id": "25887b01-22a3-44e9-9e6b-1051f43c02c8",
+    "id": "f22fa3fa-407b-4d40-bb6e-d0b7a8f2c979",
     "name": "INFO_GWAS_PUBMED",
     "label": "INFO_GWAS_PUBMED",
     "source_name": "ESP6500_v01",
@@ -2224,7 +2368,7 @@
     "dimension": 0
   },
   {
-    "id": "5f64f9dd-8637-4928-acca-6a43d249d753",
+    "id": "6e7a6235-3c5a-4619-8307-08590b39f98b",
     "name": "INFO_CA",
     "label": "INFO_CA",
     "source_name": "ESP6500_v01",
@@ -2235,7 +2379,7 @@
     "dimension": 0
   },
   {
-    "id": "8a23fd90-a08b-4524-865d-579d9129f274",
+    "id": "8352bb8d-3071-47a8-b92c-7a3a4b15eaaa",
     "name": "INFO_HGVS_PROTEIN_VAR",
     "label": "INFO_HGVS_PROTEIN_VAR",
     "source_name": "ESP6500_v01",
@@ -2246,7 +2390,7 @@
     "dimension": 0
   },
   {
-    "id": "08d96d29-3a49-4000-989b-044a9f21b811",
+    "id": "6e71c16e-baa5-42f1-83f1-4a291b3f95b8",
     "name": "INFO_AA",
     "label": "INFO_AA",
     "source_name": "ESP6500_v01",
@@ -2257,7 +2401,7 @@
     "dimension": 1
   },
   {
-    "id": "e2a20e7c-1d34-4304-a93e-45b73c886a97",
+    "id": "0835da81-4725-451e-af92-385a7adaae00",
     "name": "INFO_PH",
     "label": "INFO_PH",
     "source_name": "ESP6500_v01",
@@ -2268,7 +2412,7 @@
     "dimension": 0
   },
   {
-    "id": "cc180edc-1f02-4759-81d5-85c83f5b4516",
+    "id": "f9691cc1-6ec6-498b-b33e-132007783667",
     "name": "INFO_GS",
     "label": "INFO_GS",
     "source_name": "ESP6500_v01",
@@ -2279,7 +2423,7 @@
     "dimension": 0
   },
   {
-    "id": "c5c80585-5cfa-4e77-9a8d-5d7b180b3658",
+    "id": "288af203-adb0-4da9-870e-88489f5183bc",
     "name": "INFO_CP",
     "label": "INFO_CP",
     "source_name": "ESP6500_v01",
@@ -2290,7 +2434,7 @@
     "dimension": 1
   },
   {
-    "id": "eedae900-b523-4788-bfb9-4fa29b16ed18",
+    "id": "df02c6c0-af4f-4074-bc34-236737d481e9",
     "name": "INFO_CDS_SIZES",
     "label": "INFO_CDS_SIZES",
     "source_name": "ESP6500_v01",
@@ -2301,7 +2445,7 @@
     "dimension": 0
   },
   {
-    "id": "1f26d3b1-d434-45f3-ad37-a9d48973c736",
+    "id": "ff6c1423-bec8-4aa4-a841-d43f9a615c4c",
     "name": "INFO_GL",
     "label": "INFO_GL",
     "source_name": "ESP6500_v01",
@@ -2312,7 +2456,7 @@
     "dimension": 0
   },
   {
-    "id": "0502e6f9-bf56-482a-976c-df5dfba1c25a",
+    "id": "ebfee4e4-2aff-4da8-bf5d-57a32dba244a",
     "name": "INFO_EA_GTC",
     "label": "INFO_EA_GTC",
     "source_name": "ESP6500_v01",
@@ -2323,7 +2467,7 @@
     "dimension": 0
   },
   {
-    "id": "30611782-5f17-4fd0-b2e6-f3abbf93fd98",
+    "id": "1770ac78-d44f-42ff-8f1f-6510f868f06a",
     "name": "INFO_TAC",
     "label": "INFO_TAC",
     "source_name": "ESP6500_v01",
@@ -2334,7 +2478,7 @@
     "dimension": -4
   },
   {
-    "id": "cd974eef-f4ac-44d9-9aea-92ab5fa894b7",
+    "id": "901ae38e-8a93-49a7-aed6-b6815e6a3427",
     "name": "INFO_HetF_SAS",
     "label": "INFO_HetF_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2345,7 +2489,7 @@
     "dimension": -5
   },
   {
-    "id": "8394f842-21b7-492d-b293-0a82d7eb17c5",
+    "id": "5f0f2c15-4e3f-4b36-b176-4955e5e932a0",
     "name": "INFO_HetF_OTH",
     "label": "INFO_HetF_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2356,7 +2500,7 @@
     "dimension": -5
   },
   {
-    "id": "e899082c-0739-4768-8db4-2fc7198fbf0a",
+    "id": "90b3990a-96aa-48fc-a564-bd0527bf3fdb",
     "name": "INFO_AF_FIN",
     "label": "INFO_AF_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2367,7 +2511,7 @@
     "dimension": -1
   },
   {
-    "id": "4cb7b94f-40f9-45da-8ab5-ede3ccbafc62",
+    "id": "6d2da0a6-abba-4f82-9c5d-95d8ca9ff426",
     "name": "INFO_Het_SAS",
     "label": "INFO_Het_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2378,7 +2522,7 @@
     "dimension": -5
   },
   {
-    "id": "6ada34b8-353d-4a85-9595-c1b9e1b306d5",
+    "id": "2fb36440-d5c8-4cce-9871-55698d2b3b3f",
     "name": "INFO_AN_MALE",
     "label": "INFO_AN_MALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2389,7 +2533,7 @@
     "dimension": 1
   },
   {
-    "id": "5ba3f376-b8d5-468b-a66d-dc537bb67089",
+    "id": "e412cc0a-d90c-4bcd-82ba-9b0644cc15c7",
     "name": "INFO_HetF_EAS",
     "label": "INFO_HetF_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2400,7 +2544,7 @@
     "dimension": -5
   },
   {
-    "id": "f326fae2-fc26-4f44-9e5f-e06223fa79a7",
+    "id": "7e08d259-9ee1-42a7-8e5a-47be0f35d424",
     "name": "INFO_AC_OTH",
     "label": "INFO_AC_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2411,7 +2555,7 @@
     "dimension": -1
   },
   {
-    "id": "d2b5d639-433a-4386-bc2f-c408d4dea53f",
+    "id": "ff3faf8b-7ece-4876-80d6-9924790b07ce",
     "name": "INFO_AC_MALE",
     "label": "INFO_AC_MALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2422,7 +2566,7 @@
     "dimension": -1
   },
   {
-    "id": "f035c70f-153a-4604-89eb-a273d3feae71",
+    "id": "6928b44e-933a-4fc9-b281-b727f26a108e",
     "name": "INFO_ReadPosRankSum",
     "label": "INFO_ReadPosRankSum",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2433,7 +2577,7 @@
     "dimension": 1
   },
   {
-    "id": "001b5344-6aa9-4726-97b2-a26d297d9d05",
+    "id": "2fc06005-1e37-41b9-8399-faa2b5e7b63b",
     "name": "INFO_clinvar_measureset_id",
     "label": "INFO_clinvar_measureset_id",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2444,7 +2588,7 @@
     "dimension": -1
   },
   {
-    "id": "e51da1c6-d84e-4a8a-9641-3b17b424f717",
+    "id": "1114deca-ff6a-4af8-a5be-b561ab4be190",
     "name": "INFO_AF_POPMAX",
     "label": "INFO_AF_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2455,7 +2599,7 @@
     "dimension": -1
   },
   {
-    "id": "6f228b6a-c6e3-4e6f-8dfe-71eed6a74b97",
+    "id": "27ed9e17-6a5d-4815-b25f-346d662fb8e2",
     "name": "INFO_AC_SAS",
     "label": "INFO_AC_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2466,7 +2610,7 @@
     "dimension": -1
   },
   {
-    "id": "09ac2094-842c-42a2-87ee-a05c4538d705",
+    "id": "797f4c51-79fa-4e3a-a59f-cc2a8de4bf6d",
     "name": "INFO_AC_Hemi",
     "label": "INFO_AC_Hemi",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2477,7 +2621,7 @@
     "dimension": -1
   },
   {
-    "id": "001e580b-e8cb-4842-84e3-78649ee8c0c5",
+    "id": "f7a01fd6-35ac-4f83-9bc7-fdbe82a4ce7b",
     "name": "INFO_AC_AFR",
     "label": "INFO_AC_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2488,7 +2632,7 @@
     "dimension": -1
   },
   {
-    "id": "b5a140fd-9498-47e5-a9f4-e4b5dc070371",
+    "id": "f17d4c54-8ba2-48c8-be57-6859f236ed8f",
     "name": "INFO_AN",
     "label": "INFO_AN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2499,7 +2643,7 @@
     "dimension": 1
   },
   {
-    "id": "abce2c0a-03c4-4032-be75-3f1f637ee063",
+    "id": "7f8fb72b-d736-4be1-96bb-075002f02d45",
     "name": "INFO_AF",
     "label": "INFO_AF",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2510,7 +2654,7 @@
     "dimension": -1
   },
   {
-    "id": "cee117f0-664d-451c-b63e-981e6f53c205",
+    "id": "e0655edb-295d-4f62-a72d-ed6d330fea97",
     "name": "INFO_AC",
     "label": "INFO_AC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2521,7 +2665,7 @@
     "dimension": -1
   },
   {
-    "id": "f684f43e-a0c8-4a75-82ca-e040b945b10c",
+    "id": "79380ba8-dcb2-4ea7-bda2-9d74a2dc7302",
     "name": "INFO_NCC",
     "label": "INFO_NCC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2532,7 +2676,7 @@
     "dimension": 1
   },
   {
-    "id": "d28bb151-82f6-4a9d-bfd6-1466a3df6006",
+    "id": "e18e6002-02fc-4702-89b8-9006e9a0a9c4",
     "name": "INFO_AF_Adj",
     "label": "INFO_AF_Adj",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2543,7 +2687,7 @@
     "dimension": -1
   },
   {
-    "id": "6e874245-b59a-4657-be74-43633d0befe9",
+    "id": "ac6011ad-7573-4a32-a015-926e0d2f68a9",
     "name": "INFO_AF_AMR",
     "label": "INFO_AF_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2554,7 +2698,7 @@
     "dimension": -1
   },
   {
-    "id": "35603c17-a626-4144-b4b1-9048d7a39bf9",
+    "id": "782bac57-c410-45bb-be27-db8946460ba4",
     "name": "INFO_GQ_MEAN",
     "label": "INFO_GQ_MEAN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2565,7 +2709,7 @@
     "dimension": 1
   },
   {
-    "id": "4c34e61d-1075-49c0-9fb8-03df3d4da389",
+    "id": "0811706a-a637-4ed8-9806-8a738837239c",
     "name": "INFO_VQSLOD",
     "label": "INFO_VQSLOD",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2576,7 +2720,7 @@
     "dimension": 1
   },
   {
-    "id": "93cd8b43-820a-45ce-a150-739dade13073",
+    "id": "202b5d7a-433b-4113-9e53-fae3f0094d05",
     "name": "INFO_AC_Het",
     "label": "INFO_AC_Het",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2587,7 +2731,7 @@
     "dimension": -5
   },
   {
-    "id": "581f9c61-fe32-4383-baeb-d091eca8acf3",
+    "id": "80bb609d-12d7-405e-afe0-3d06f02182b1",
     "name": "INFO_Hom_AFR",
     "label": "INFO_Hom_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2598,7 +2742,7 @@
     "dimension": -1
   },
   {
-    "id": "08f000df-5332-4954-a7e9-ab9d31a6605a",
+    "id": "ebe315df-255b-49d5-bcc0-2d19b2e2da8b",
     "name": "INFO_AC_FIN",
     "label": "INFO_AC_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2609,7 +2753,7 @@
     "dimension": -1
   },
   {
-    "id": "1d823e49-06fd-4740-aa5b-f34d8914c61b",
+    "id": "e4008eae-1065-4303-9dd9-d4eb6e5b4584",
     "name": "INFO_clinvar_conflicted",
     "label": "INFO_clinvar_conflicted",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2620,7 +2764,7 @@
     "dimension": -1
   },
   {
-    "id": "332eb8a5-706e-4280-a3e3-247df9f86833",
+    "id": "c8f7a25b-2f98-46ca-9e54-452877e4d0e7",
     "name": "INFO_HWP",
     "label": "INFO_HWP",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2631,7 +2775,7 @@
     "dimension": 1
   },
   {
-    "id": "6aded71f-d708-4787-ad30-813b2059eb0f",
+    "id": "b4bc242e-8cab-4112-9194-65904cbaeed5",
     "name": "INFO_AN_FIN",
     "label": "INFO_AN_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2642,7 +2786,7 @@
     "dimension": 1
   },
   {
-    "id": "d5a4c8a6-aef9-4da1-8d8d-30e64bd649dc",
+    "id": "62a3331c-fc5d-4352-b3c6-74bae7e77fde",
     "name": "INFO_Hemi_NFE",
     "label": "INFO_Hemi_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2653,7 +2797,7 @@
     "dimension": -1
   },
   {
-    "id": "1e7406aa-b751-4cb8-be0a-b9d34c8db6be",
+    "id": "006163ad-60a4-4ee4-8f46-2d32af84752e",
     "name": "INFO_Het_NFE",
     "label": "INFO_Het_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2664,7 +2808,7 @@
     "dimension": -5
   },
   {
-    "id": "7938e425-53b9-42fe-bb4d-fcc59128b536",
+    "id": "0d766160-66d4-43e8-a2a2-37d891cac41a",
     "name": "INFO_KG_AF_GLOBAL",
     "label": "INFO_KG_AF_GLOBAL",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2675,7 +2819,7 @@
     "dimension": -1
   },
   {
-    "id": "e7d23003-4156-4555-9eb8-148d2d587694",
+    "id": "5b176dc2-5f0b-4932-ad13-3d718ae5ad7c",
     "name": "INFO_ESP_AC",
     "label": "INFO_ESP_AC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2686,7 +2830,7 @@
     "dimension": -1
   },
   {
-    "id": "c6ce6958-bca4-4839-a66b-88fd6bcf4406",
+    "id": "d4be8df7-11d9-4db5-b941-89e0b66d9178",
     "name": "INFO_KG_AF_POPMAX",
     "label": "INFO_KG_AF_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2697,7 +2841,7 @@
     "dimension": -1
   },
   {
-    "id": "7c679db3-7bd9-4b4c-94f7-666216102faa",
+    "id": "1aadfb12-1b8d-43fe-8935-fddd5170c67d",
     "name": "INFO_K3_RUN",
     "label": "INFO_K3_RUN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2708,7 +2852,7 @@
     "dimension": -1
   },
   {
-    "id": "d7bdcfbf-c393-40cb-9b6e-62bda9fe57f2",
+    "id": "b765f126-b050-4f9b-bf4e-bf6d0f9c8f1e",
     "name": "INFO_MQ",
     "label": "INFO_MQ",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2719,7 +2863,7 @@
     "dimension": 1
   },
   {
-    "id": "1ecb7327-4be0-4126-af5e-8700d1d0fb4c",
+    "id": "da12be92-06fd-49d1-90d4-728c7de3b645",
     "name": "INFO_AN_OTH",
     "label": "INFO_AN_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2730,7 +2874,7 @@
     "dimension": 1
   },
   {
-    "id": "f8240a6f-aadd-47da-8981-9b4c10809b5f",
+    "id": "73436199-f5e7-4431-a07b-1f99df4e0059",
     "name": "INFO_AF_EAS",
     "label": "INFO_AF_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2741,7 +2885,7 @@
     "dimension": -1
   },
   {
-    "id": "a8f880d7-a897-46d7-a11f-7fa92e9d3c3a",
+    "id": "16f1d222-4658-4141-bf95-7524be8c3142",
     "name": "INFO_AF_SAS",
     "label": "INFO_AF_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2752,7 +2896,7 @@
     "dimension": -1
   },
   {
-    "id": "c077eeb2-513b-4046-8208-8e3e9b6c3b9c",
+    "id": "d54f2cb8-4c12-4e0d-afb1-9c7dc1cd5102",
     "name": "INFO_HomF_OTH",
     "label": "INFO_HomF_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2763,7 +2907,7 @@
     "dimension": -1
   },
   {
-    "id": "95021955-bd22-4003-a9e2-6214b4587c83",
+    "id": "118606c4-2282-4e4b-a7f1-0fa180b7512e",
     "name": "INFO_Hemi_OTH",
     "label": "INFO_Hemi_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2774,7 +2918,7 @@
     "dimension": -1
   },
   {
-    "id": "51d7201f-9d24-43e7-b615-42f322c64a31",
+    "id": "24a688b5-254b-41a1-919c-bcaddfa56832",
     "name": "INFO_Hom_AMR",
     "label": "INFO_Hom_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2785,7 +2929,7 @@
     "dimension": -1
   },
   {
-    "id": "2c592655-343f-4be1-8726-0418a11e7a9d",
+    "id": "47bcf3ee-db10-46e3-b464-7312bd91df25",
     "name": "INFO_Het_AMR",
     "label": "INFO_Het_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2796,7 +2940,7 @@
     "dimension": -5
   },
   {
-    "id": "fbecb845-22f5-4d94-b861-4883bcf29c02",
+    "id": "f3ae8c47-dd75-4567-a882-1e4395505e9a",
     "name": "INFO_K2_RUN",
     "label": "INFO_K2_RUN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2807,7 +2951,7 @@
     "dimension": -1
   },
   {
-    "id": "d3e8aada-7aa8-482d-a570-c82d8a961b05",
+    "id": "3108391b-7ad7-4d52-91ba-9a8542d9a21c",
     "name": "INFO_Hom_CONSANGUINEOUS",
     "label": "INFO_Hom_CONSANGUINEOUS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2818,7 +2962,7 @@
     "dimension": -1
   },
   {
-    "id": "48a2677c-92db-44e8-9b51-6df66963de7b",
+    "id": "c47c693b-db0b-449c-8078-9ed0db7a7b03",
     "name": "INFO_Hom_SAS",
     "label": "INFO_Hom_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2829,7 +2973,7 @@
     "dimension": -1
   },
   {
-    "id": "b750672b-8166-4db9-a69d-a20134081ad0",
+    "id": "129819b5-bf99-4498-ab10-e8e7fac65a73",
     "name": "INFO_POPMAX",
     "label": "INFO_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2840,7 +2984,7 @@
     "dimension": -1
   },
   {
-    "id": "9158c149-276c-4f6f-8a9c-b0d7084600dc",
+    "id": "7c772fc6-e997-49df-9b70-9d78dded9c23",
     "name": "INFO_AF_Het",
     "label": "INFO_AF_Het",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2851,7 +2995,7 @@
     "dimension": -5
   },
   {
-    "id": "68884f22-c390-4816-b5bf-f4c7f6a59d4d",
+    "id": "cb83886c-e3c0-4602-86dd-27a4586fe762",
     "name": "INFO_Hemi_EAS",
     "label": "INFO_Hemi_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2862,7 +3006,7 @@
     "dimension": -1
   },
   {
-    "id": "1a2badec-e367-488b-8ed5-7bb9996f14d2",
+    "id": "e54ec7a5-fa66-4bef-a1b9-6cd51389c392",
     "name": "INFO_AN_FEMALE",
     "label": "INFO_AN_FEMALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2873,7 +3017,7 @@
     "dimension": 1
   },
   {
-    "id": "139193ce-3408-4f68-98a7-8729a51af9bd",
+    "id": "47dfd397-5da4-4fb9-94b5-502e25046c77",
     "name": "INFO_clinvar_pathogenic",
     "label": "INFO_clinvar_pathogenic",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2884,7 +3028,7 @@
     "dimension": -1
   },
   {
-    "id": "d9200f49-f8ed-45ec-8772-515677d79ae7",
+    "id": "d2e69293-f327-469b-806f-fe5c0e634834",
     "name": "INFO_HomF_EAS",
     "label": "INFO_HomF_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2895,7 +3039,7 @@
     "dimension": -1
   },
   {
-    "id": "45e1db57-0bc9-4dce-bc81-acc873a0bc9d",
+    "id": "ff22d60e-9009-47ab-a4b4-26ccc988874a",
     "name": "INFO_AN_EAS",
     "label": "INFO_AN_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2906,7 +3050,7 @@
     "dimension": 1
   },
   {
-    "id": "dd59f00d-2a68-49ad-b727-26ea240a5567",
+    "id": "76843673-b4e1-445f-84c5-625760b104b2",
     "name": "INFO_HomF_SAS",
     "label": "INFO_HomF_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2917,7 +3061,7 @@
     "dimension": -1
   },
   {
-    "id": "752b0430-98a4-43f5-86c5-44fb3dfd4862",
+    "id": "33560d49-a829-409e-995f-06fdcd81b9fd",
     "name": "INFO_AC_POPMAX",
     "label": "INFO_AC_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2928,7 +3072,7 @@
     "dimension": -1
   },
   {
-    "id": "36dae14a-20ac-43e9-9aa0-42269f61166f",
+    "id": "f517c3e2-d243-46ac-977d-4fedff336fa0",
     "name": "INFO_Hemi_FIN",
     "label": "INFO_Hemi_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2939,7 +3083,7 @@
     "dimension": -1
   },
   {
-    "id": "7da54497-431f-45c3-a78b-80654e6fea28",
+    "id": "9bf9e097-43ef-49e7-8a97-c4cea9b34c44",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2950,7 +3094,7 @@
     "dimension": 1
   },
   {
-    "id": "92e920d0-56c0-4e2c-bf9f-4ad57e3e245b",
+    "id": "c0b508a7-0ddf-4b63-ba1d-42cb9b5ccf46",
     "name": "INFO_Hom_EAS",
     "label": "INFO_Hom_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2961,7 +3105,7 @@
     "dimension": -1
   },
   {
-    "id": "3ec14828-6c0f-49c1-b7d3-00f0e3c9e23d",
+    "id": "955c8795-0b6b-4d39-bfe7-68f22f8c536b",
     "name": "INFO_DS",
     "label": "INFO_DS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2972,7 +3116,7 @@
     "dimension": 1
   },
   {
-    "id": "e75b2c34-6c6d-4731-9408-f45d8d864eac",
+    "id": "9cc9372a-2880-4737-aea7-35743d22033f",
     "name": "INFO_HomF_AFR",
     "label": "INFO_HomF_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2983,7 +3127,7 @@
     "dimension": -1
   },
   {
-    "id": "0c9a8855-fa5e-4b7b-8214-70cdaf41ad63",
+    "id": "b2fd98be-ee80-45dd-a5ed-39145defa0bf",
     "name": "INFO_AN_CONSANGUINEOUS",
     "label": "INFO_AN_CONSANGUINEOUS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2994,7 +3138,7 @@
     "dimension": 1
   },
   {
-    "id": "2610a2fe-95b4-4311-91aa-3fcce4d79d1d",
+    "id": "3c38d9a6-b641-44cd-8a9e-a3ba634203f1",
     "name": "INFO_AF_AFR",
     "label": "INFO_AF_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3005,7 +3149,7 @@
     "dimension": -1
   },
   {
-    "id": "bdaae2bb-6b5e-492e-a4ad-428acad58351",
+    "id": "ea47a04a-7fdf-4fbe-9d02-7bcedc3b0fce",
     "name": "INFO_HetF_AMR",
     "label": "INFO_HetF_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3016,7 +3160,7 @@
     "dimension": -5
   },
   {
-    "id": "794be3a6-63e0-47fd-81cb-a379da242b0d",
+    "id": "c79d10aa-9a31-4097-8b31-4743c9c2011f",
     "name": "INFO_AF_NFE",
     "label": "INFO_AF_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3027,7 +3171,7 @@
     "dimension": -1
   },
   {
-    "id": "43327712-46fa-4b04-af41-22e02beef7c0",
+    "id": "5fd119ed-4997-495c-a757-e76713a1cb3e",
     "name": "INFO_DB",
     "label": "INFO_DB",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3038,7 +3182,7 @@
     "dimension": 1
   },
   {
-    "id": "28882c10-b903-483a-8fd6-6376805b38d5",
+    "id": "35087695-ac33-4340-a033-e854afb2d676",
     "name": "INFO_Hom_NFE",
     "label": "INFO_Hom_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3049,7 +3193,7 @@
     "dimension": -1
   },
   {
-    "id": "fde49933-3ad3-4b0c-a52d-18cc494659fa",
+    "id": "69403dce-035f-416e-89ec-b53440766d4f",
     "name": "INFO_Het_EAS",
     "label": "INFO_Het_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3060,7 +3204,7 @@
     "dimension": -5
   },
   {
-    "id": "3e06f0b2-759f-4d7c-9e19-eed8f840fc72",
+    "id": "762e47ff-329e-4c78-a036-057222efb9a8",
     "name": "INFO_AC_Adj",
     "label": "INFO_AC_Adj",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3071,7 +3215,7 @@
     "dimension": -1
   },
   {
-    "id": "4cb68644-12de-4202-b0d3-36d31c66f611",
+    "id": "2d916c79-cad2-43dc-b0f8-4ebd9ca2e28d",
     "name": "INFO_DOUBLETON_DIST",
     "label": "INFO_DOUBLETON_DIST",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3082,7 +3226,7 @@
     "dimension": -1
   },
   {
-    "id": "40b67586-5a4b-494c-a29f-18c9fcf95a52",
+    "id": "655ae42f-17f4-4fe9-8cba-1c0b935a96ff",
     "name": "INFO_AN_Adj",
     "label": "INFO_AN_Adj",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3093,7 +3237,7 @@
     "dimension": 1
   },
   {
-    "id": "9d44ba1e-d246-414c-b148-cf765a3d3f93",
+    "id": "3a18fa64-23c4-4943-8f77-752a5b333b96",
     "name": "INFO_clinvar_mut",
     "label": "INFO_clinvar_mut",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3104,7 +3248,7 @@
     "dimension": -1
   },
   {
-    "id": "c0f7adf5-02f4-4d5b-9f9f-6eb297340072",
+    "id": "55640ff0-910c-4810-959d-5e7e375e86fd",
     "name": "INFO_culprit",
     "label": "INFO_culprit",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3115,7 +3259,7 @@
     "dimension": 1
   },
   {
-    "id": "fceb7f7c-9184-47e1-b865-79c552f26e34",
+    "id": "81b43ca2-1746-494c-a079-06eade2a9330",
     "name": "INFO_HomF_AMR",
     "label": "INFO_HomF_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3126,7 +3270,7 @@
     "dimension": -1
   },
   {
-    "id": "febb5e0c-4c55-4c49-a609-add3e31793df",
+    "id": "0db5c0c0-b5f4-4030-8e23-62ae8eaaff04",
     "name": "INFO_Het_OTH",
     "label": "INFO_Het_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3137,7 +3281,7 @@
     "dimension": -5
   },
   {
-    "id": "a4757195-9ad3-4016-bc39-c60125ddf6fb",
+    "id": "bedd37c7-dc9c-43bf-b52e-5fe1bba4b066",
     "name": "INFO_AF_MALE",
     "label": "INFO_AF_MALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3148,7 +3292,7 @@
     "dimension": -1
   },
   {
-    "id": "c17e0bca-1738-4acd-b060-2fc8f584ba8e",
+    "id": "8c4b086a-d5e1-4a16-862e-467fa1dffc9a",
     "name": "INFO_ESP_AF_POPMAX",
     "label": "INFO_ESP_AF_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3159,7 +3303,7 @@
     "dimension": -1
   },
   {
-    "id": "b2bcbed9-08d7-407a-943f-418cf977fb9c",
+    "id": "9aed9b6b-2f56-457e-a084-e8f3b4da4857",
     "name": "INFO_HaplotypeScore",
     "label": "INFO_HaplotypeScore",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3170,7 +3314,7 @@
     "dimension": 1
   },
   {
-    "id": "1f5d16e6-c0a6-483d-8138-13ce2043e187",
+    "id": "a2e98de8-8090-4ad7-987b-0c702d549966",
     "name": "INFO_ESP_AF_GLOBAL",
     "label": "INFO_ESP_AF_GLOBAL",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3181,7 +3325,7 @@
     "dimension": -1
   },
   {
-    "id": "8ae8cfbe-6d0d-4620-8c61-4c073c428f07",
+    "id": "6c2d08ea-33b9-48b7-ac54-a9ccc1ea2372",
     "name": "INFO_AC_NFE",
     "label": "INFO_AC_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3192,7 +3336,7 @@
     "dimension": -1
   },
   {
-    "id": "4b583f0a-4f59-4888-ad12-db12115e8fae",
+    "id": "eec1fba3-3c59-4ba2-bf90-9fd48d7bf338",
     "name": "INFO_AN_AFR",
     "label": "INFO_AN_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3203,7 +3347,7 @@
     "dimension": 1
   },
   {
-    "id": "c0c2a94f-ac26-4fa9-a105-2cd9cd82a74b",
+    "id": "8fbd46a5-511a-4bdf-829b-0fbc4e31a6d9",
     "name": "INFO_K1_RUN",
     "label": "INFO_K1_RUN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3214,7 +3358,7 @@
     "dimension": -1
   },
   {
-    "id": "68b96f84-202c-4641-9c00-a3f33a3185b1",
+    "id": "21f06b6d-9b4b-4ea7-8b1f-3de2f5df75cf",
     "name": "INFO_AF_Hom",
     "label": "INFO_AF_Hom",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3225,7 +3369,7 @@
     "dimension": -1
   },
   {
-    "id": "13499cc3-63f3-468e-bb68-ed92459ed701",
+    "id": "996a814f-770b-43cd-a853-edad6ac1748c",
     "name": "INFO_AC_CONSANGUINEOUS",
     "label": "INFO_AC_CONSANGUINEOUS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3236,7 +3380,7 @@
     "dimension": -1
   },
   {
-    "id": "38777cda-5afd-4b77-894f-f50e16407cb2",
+    "id": "796bfbf6-5aae-407c-a4dd-05a6157fa0fb",
     "name": "INFO_HomF_FIN",
     "label": "INFO_HomF_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3247,7 +3391,7 @@
     "dimension": -1
   },
   {
-    "id": "3147d6c8-2fa2-4c26-bf61-9e103a233dfd",
+    "id": "e0acc975-70d5-4815-bcf2-e2dd20b2620c",
     "name": "INFO_HomF_NFE",
     "label": "INFO_HomF_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3258,7 +3402,7 @@
     "dimension": -1
   },
   {
-    "id": "7c7d2037-abfa-4ae1-a621-a9efd3778654",
+    "id": "b304b6df-3748-43d5-95b3-4f014733b9ee",
     "name": "INFO_FS",
     "label": "INFO_FS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3269,7 +3413,7 @@
     "dimension": 1
   },
   {
-    "id": "9e522aaf-6849-42cc-8661-27c26746dcb7",
+    "id": "203d05e4-5819-43ab-b47b-fa5e36a22ac3",
     "name": "INFO_AN_NFE",
     "label": "INFO_AN_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3280,7 +3424,7 @@
     "dimension": 1
   },
   {
-    "id": "8442104a-2f07-4adc-9582-60aa71789c6a",
+    "id": "370be84d-918b-427c-ba82-13cc3f6df94a",
     "name": "INFO_AF_FEMALE",
     "label": "INFO_AF_FEMALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3291,7 +3435,7 @@
     "dimension": -1
   },
   {
-    "id": "79bd9a85-ee83-4165-8edf-f45b9876a42b",
+    "id": "1ffabf62-807c-42cf-bec9-2acd3a698e7b",
     "name": "INFO_MQ0",
     "label": "INFO_MQ0",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3302,7 +3446,7 @@
     "dimension": 1
   },
   {
-    "id": "f507cd04-8f1a-43a9-9d1e-e53a97018853",
+    "id": "ce416646-5187-4e2d-b631-3a4743d3a883",
     "name": "INFO_Hom_OTH",
     "label": "INFO_Hom_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3313,7 +3457,7 @@
     "dimension": -1
   },
   {
-    "id": "67adc829-d421-434a-8b42-eb68ff5ebcde",
+    "id": "734a65a3-71c1-42e1-bf82-04cfcdd0b0f5",
     "name": "INFO_AC_EAS",
     "label": "INFO_AC_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3324,7 +3468,7 @@
     "dimension": -1
   },
   {
-    "id": "6abaa185-b4b5-4218-b313-55e371be48ff",
+    "id": "628fc9f5-fd5d-4a09-9de1-d292183b0858",
     "name": "INFO_Het_FIN",
     "label": "INFO_Het_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3335,7 +3479,7 @@
     "dimension": -5
   },
   {
-    "id": "2fa059c4-03e1-42e5-a4ad-2e98db23047e",
+    "id": "75b6e7cd-b5ba-4516-80a4-3305ac3b31c7",
     "name": "INFO_AN_SAS",
     "label": "INFO_AN_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3346,7 +3490,7 @@
     "dimension": 1
   },
   {
-    "id": "ff14d1ce-a995-4fdd-840f-7e99489edac2",
+    "id": "1455cbc2-c38c-4357-8faa-e63c340355d6",
     "name": "INFO_GQ_STDDEV",
     "label": "INFO_GQ_STDDEV",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3357,7 +3501,7 @@
     "dimension": 1
   },
   {
-    "id": "ef108364-060d-4a82-9fe3-bdd1bb27fb0c",
+    "id": "916b0eca-6a2e-4cd3-87d2-d4740fc0f355",
     "name": "INFO_Hom_FIN",
     "label": "INFO_Hom_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3368,7 +3512,7 @@
     "dimension": -1
   },
   {
-    "id": "1d1af04f-eca7-4e60-95c3-0affc6686e3a",
+    "id": "2594f197-6bcd-42a9-9be9-1fd919864f4e",
     "name": "INFO_QD",
     "label": "INFO_QD",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3379,7 +3523,7 @@
     "dimension": 1
   },
   {
-    "id": "27f71608-3050-4045-90a9-4a5d861f05f3",
+    "id": "fc910195-cdfc-4daa-8f6a-020d2ef0c8e0",
     "name": "INFO_AN_AMR",
     "label": "INFO_AN_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3390,7 +3534,7 @@
     "dimension": 1
   },
   {
-    "id": "aca75793-2274-45e3-a0a4-bda15763e818",
+    "id": "6e8b0d78-dee4-41f2-b41c-e8c5ccefe328",
     "name": "INFO_KG_AC",
     "label": "INFO_KG_AC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3401,7 +3545,7 @@
     "dimension": -1
   },
   {
-    "id": "7b0f33a8-5b61-4907-bac2-b855ca73e880",
+    "id": "290f789b-5c95-409b-bf66-5b9c579a8b14",
     "name": "INFO_AN_POPMAX",
     "label": "INFO_AN_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3412,7 +3556,7 @@
     "dimension": -1
   },
   {
-    "id": "cc2b002b-fed5-4260-a248-49f693175bea",
+    "id": "62922637-9e91-4a8a-b6f4-f6cf34064c58",
     "name": "INFO_InbreedingCoeff",
     "label": "INFO_InbreedingCoeff",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3423,7 +3567,7 @@
     "dimension": 1
   },
   {
-    "id": "d4df6d21-9923-4604-9ba7-d90101a3b450",
+    "id": "91ae033d-a8ac-4c02-9d0d-0abfd9eec62f",
     "name": "INFO_Hemi_AFR",
     "label": "INFO_Hemi_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3434,7 +3578,7 @@
     "dimension": -1
   },
   {
-    "id": "dbf5f8af-1488-48b1-b877-36ac1f549e4c",
+    "id": "8e90f9db-362e-4808-8613-f1ae22713aba",
     "name": "INFO_HetF_FIN",
     "label": "INFO_HetF_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3445,7 +3589,7 @@
     "dimension": -5
   },
   {
-    "id": "2425e6db-93c5-483f-bfb5-44fdab9d6d54",
+    "id": "fc05f1a0-3a0b-4dc5-be15-48ecf49d4280",
     "name": "INFO_HetF_NFE",
     "label": "INFO_HetF_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3456,7 +3600,7 @@
     "dimension": -5
   },
   {
-    "id": "820c0d56-0777-40b5-9ebc-38261a0c49ef",
+    "id": "f00cf4c4-7713-48b2-9ba9-de629c680d9b",
     "name": "INFO_AF_Hemi",
     "label": "INFO_AF_Hemi",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3467,7 +3611,7 @@
     "dimension": -1
   },
   {
-    "id": "aec64490-f024-4730-8fcc-330fa15f1bb7",
+    "id": "b83115e8-c6e1-4d14-a85e-b1f9b1a7fd4c",
     "name": "INFO_Hemi_SAS",
     "label": "INFO_Hemi_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3478,7 +3622,7 @@
     "dimension": -1
   },
   {
-    "id": "fa1c073b-79ea-4378-9aad-01e7697a8122",
+    "id": "9dacf597-e614-4e6a-bfe4-0cf094b604b3",
     "name": "INFO_AC_Hom",
     "label": "INFO_AC_Hom",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3489,7 +3633,7 @@
     "dimension": -1
   },
   {
-    "id": "af3f556d-3abe-4444-9022-a9980f675fb3",
+    "id": "022b67a5-2803-4e81-9916-f1f58c24544c",
     "name": "INFO_Hemi_AMR",
     "label": "INFO_Hemi_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3500,7 +3644,7 @@
     "dimension": -1
   },
   {
-    "id": "35bcd583-01c7-4364-8d53-7eeb3ce1ac3d",
+    "id": "bbb41565-a463-43a0-b178-1565b0fb8393",
     "name": "INFO_AF_CONSANGUINEOUS",
     "label": "INFO_AF_CONSANGUINEOUS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3511,7 +3655,7 @@
     "dimension": -1
   },
   {
-    "id": "f0008ec6-2a9e-4e12-8ed5-70ce52a96bdb",
+    "id": "15c6b46a-bf82-4e36-9dde-bdcc6ec8250a",
     "name": "INFO_AC_FEMALE",
     "label": "INFO_AC_FEMALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3522,7 +3666,7 @@
     "dimension": -1
   },
   {
-    "id": "c55e0539-575d-4a6a-bac7-a53a5426266f",
+    "id": "93418204-2a0f-4d6d-a884-6ae56e46c1f1",
     "name": "INFO_CCC",
     "label": "INFO_CCC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3533,7 +3677,7 @@
     "dimension": 1
   },
   {
-    "id": "e9679d0b-6e3f-4ef6-8ed3-f06c50251612",
+    "id": "2666445a-bb74-4452-be5e-38ccf497ab75",
     "name": "INFO_AC_AMR",
     "label": "INFO_AC_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3544,7 +3688,7 @@
     "dimension": -1
   },
   {
-    "id": "f1307536-436b-4978-ba58-1da6c00ad7b7",
+    "id": "9446ff36-5b8a-4274-865a-f8f6d5529dde",
     "name": "INFO_AF_OTH",
     "label": "INFO_AF_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3555,7 +3699,7 @@
     "dimension": -1
   },
   {
-    "id": "e479fc15-cb68-4aea-b2ad-73698f758ebe",
+    "id": "43b7a83d-d0ef-4273-b159-ec7b6ef07d7d",
     "name": "INFO_Het_AFR",
     "label": "INFO_Het_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3566,7 +3710,7 @@
     "dimension": -5
   },
   {
-    "id": "85de5a79-baa2-46b5-a186-f07fbafee989",
+    "id": "63855f30-d167-4f53-a4a6-010e20473cb4",
     "name": "INFO_HetF_AFR",
     "label": "INFO_HetF_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3577,7 +3721,7 @@
     "dimension": -5
   },
   {
-    "id": "2567f410-5267-4ab0-8bdc-d92c03816281",
+    "id": "9c8a27b9-4451-4999-b03f-36ffb078743b",
     "name": "INFO_GENEINFO_1",
     "label": "INFO_GENEINFO_1",
     "source_name": "clinvar_20160705_v01",
@@ -3588,7 +3732,7 @@
     "dimension": 1
   },
   {
-    "id": "e35017d7-aa4a-4242-8cd2-4ac4952f90df",
+    "id": "5861d5a0-bfbe-4d56-8600-d225df1ff134",
     "name": "INFO_NSN",
     "label": "INFO_NSN",
     "source_name": "clinvar_20160705_v01",
@@ -3599,7 +3743,7 @@
     "dimension": 1
   },
   {
-    "id": "3329d020-711e-4619-a105-1d7159874bac",
+    "id": "4b781467-0e0e-46c9-be92-1be47c4eb180",
     "name": "INFO_NSM",
     "label": "INFO_NSM",
     "source_name": "clinvar_20160705_v01",
@@ -3610,7 +3754,7 @@
     "dimension": 1
   },
   {
-    "id": "f75a3504-9f49-4fe7-b94e-71aa88ed1d22",
+    "id": "e76559d3-704c-4ebc-b104-e3dc0e06de74",
     "name": "INFO_LSD",
     "label": "INFO_LSD",
     "source_name": "clinvar_20160705_v01",
@@ -3621,7 +3765,7 @@
     "dimension": 1
   },
   {
-    "id": "07a73e9f-ad98-4d64-85c5-2de6b8172ee4",
+    "id": "628f63d1-1ed7-42ef-91cb-bc63788d1ae7",
     "name": "INFO_ASP",
     "label": "INFO_ASP",
     "source_name": "clinvar_20160705_v01",
@@ -3632,7 +3776,7 @@
     "dimension": 1
   },
   {
-    "id": "32408dc5-8423-41ab-a87e-7820faa26049",
+    "id": "b8bb4a14-a245-4654-8b47-c3ae722d03f0",
     "name": "INFO_ASS",
     "label": "INFO_ASS",
     "source_name": "clinvar_20160705_v01",
@@ -3643,7 +3787,7 @@
     "dimension": 1
   },
   {
-    "id": "f3828943-f426-42c0-9dfc-044a7fa177ba",
+    "id": "b6aec77e-e81e-4224-b025-8567c5aa2702",
     "name": "INFO_NSF",
     "label": "INFO_NSF",
     "source_name": "clinvar_20160705_v01",
@@ -3654,7 +3798,7 @@
     "dimension": 1
   },
   {
-    "id": "db0419fd-eef5-4cca-b508-13582da1e379",
+    "id": "1971b3dc-4228-4632-b89c-c42fd9ea2220",
     "name": "INFO_KGPhase3",
     "label": "INFO_KGPhase3",
     "source_name": "clinvar_20160705_v01",
@@ -3665,7 +3809,7 @@
     "dimension": 1
   },
   {
-    "id": "91064f58-13a8-47ec-aa73-c7ccd29e0ea8",
+    "id": "81819efa-7b31-4a4c-a56d-7e479954b595",
     "name": "INFO_R5",
     "label": "INFO_R5",
     "source_name": "clinvar_20160705_v01",
@@ -3676,7 +3820,7 @@
     "dimension": 1
   },
   {
-    "id": "38f202fb-add3-4be3-8730-18eca8aedce5",
+    "id": "2e5da4d1-3824-4f21-b3d6-4200444dd381",
     "name": "INFO_R3",
     "label": "INFO_R3",
     "source_name": "clinvar_20160705_v01",
@@ -3687,7 +3831,7 @@
     "dimension": 1
   },
   {
-    "id": "9f12732b-1cbf-4e6a-b309-80b8307979bf",
+    "id": "09dd58c6-7808-4ba9-8df8-2b81ff9cdbe2",
     "name": "INFO_CDA",
     "label": "INFO_CDA",
     "source_name": "clinvar_20160705_v01",
@@ -3698,7 +3842,7 @@
     "dimension": 1
   },
   {
-    "id": "2330184c-9739-4937-8342-864c8201bc3e",
+    "id": "e38c9d69-dad7-48a1-b344-f3f8c6ef3e2f",
     "name": "INFO_G5A",
     "label": "INFO_G5A",
     "source_name": "clinvar_20160705_v01",
@@ -3709,7 +3853,7 @@
     "dimension": 1
   },
   {
-    "id": "51299854-f2a4-40e5-b0c3-4a74ba251b78",
+    "id": "d4cd46ce-9b6e-4a1d-83fb-13d62897875a",
     "name": "INFO_G5",
     "label": "INFO_G5",
     "source_name": "clinvar_20160705_v01",
@@ -3720,7 +3864,7 @@
     "dimension": 1
   },
   {
-    "id": "e7d63cda-0ec4-47c9-8cf2-63f8a20930e6",
+    "id": "e3b6b1f5-d542-45c3-9220-1688617cd2d7",
     "name": "INFO_CFL",
     "label": "INFO_CFL",
     "source_name": "clinvar_20160705_v01",
@@ -3731,7 +3875,7 @@
     "dimension": 1
   },
   {
-    "id": "7e472e4f-4622-4776-8da9-4320052b48b9",
+    "id": "94ea4338-8bfa-42c3-ba7e-d49fc98bd00a",
     "name": "INFO_COMMON",
     "label": "INFO_COMMON",
     "source_name": "clinvar_20160705_v01",
@@ -3742,7 +3886,7 @@
     "dimension": 1
   },
   {
-    "id": "6b7a115a-0c5b-49ac-8765-716a604e7306",
+    "id": "189797f1-1c26-463e-a0df-1a16fe88c69b",
     "name": "INFO_VLD",
     "label": "INFO_VLD",
     "source_name": "clinvar_20160705_v01",
@@ -3753,7 +3897,7 @@
     "dimension": 1
   },
   {
-    "id": "d057b167-93ca-4963-83a3-24fb6c76b1fd",
+    "id": "d830495d-03f5-4c74-984e-95c5c523e2ba",
     "name": "INFO_SSR",
     "label": "INFO_SSR",
     "source_name": "clinvar_20160705_v01",
@@ -3764,7 +3908,7 @@
     "dimension": 1
   },
   {
-    "id": "737ea878-08ab-4ebd-be2a-688dd4d3cb5a",
+    "id": "8cb980c6-fe75-41b3-a653-dc5dfe6117f8",
     "name": "INFO_CLNALLE",
     "label": "INFO_CLNALLE",
     "source_name": "clinvar_20160705_v01",
@@ -3775,7 +3919,7 @@
     "dimension": 0
   },
   {
-    "id": "2e17bba2-8cee-4d7b-9d55-29f50e7bb0d2",
+    "id": "c2e43453-7804-4c27-afc9-5e6223bf724f",
     "name": "INFO_CLNDSDBID",
     "label": "INFO_CLNDSDBID",
     "source_name": "clinvar_20160705_v01",
@@ -3786,7 +3930,7 @@
     "dimension": 0
   },
   {
-    "id": "5ae3edaf-a59d-4de5-adf7-3fca5987e90c",
+    "id": "0908320f-8f9f-4ef6-86fc-d5b494444009",
     "name": "INFO_CLNDBN",
     "label": "INFO_CLNDBN",
     "source_name": "clinvar_20160705_v01",
@@ -3797,7 +3941,7 @@
     "dimension": 0
   },
   {
-    "id": "cb1e8ae7-da68-450b-a907-c17965e23ae9",
+    "id": "a59ee69f-6f9d-427b-a570-e5f8fce21225",
     "name": "INFO_OM",
     "label": "INFO_OM",
     "source_name": "clinvar_20160705_v01",
@@ -3808,7 +3952,7 @@
     "dimension": 1
   },
   {
-    "id": "5d8a2ce8-6711-4b3a-8bc6-9de2d3fd335c",
+    "id": "fb7805d6-16cd-4dbf-b501-bf9b68785883",
     "name": "INFO_S3D",
     "label": "INFO_S3D",
     "source_name": "clinvar_20160705_v01",
@@ -3819,7 +3963,7 @@
     "dimension": 1
   },
   {
-    "id": "98f9d831-8d4d-4153-af62-5af600f6b953",
+    "id": "a8d315be-5121-4d2d-9635-1c447f1b8efe",
     "name": "INFO_CLNREVSTAT",
     "label": "INFO_CLNREVSTAT",
     "source_name": "clinvar_20160705_v01",
@@ -3830,7 +3974,7 @@
     "dimension": 1
   },
   {
-    "id": "2ec78780-cd17-481c-bb0f-c63b695f06f9",
+    "id": "889d2fd9-f4b1-421c-bb07-c69425a37575",
     "name": "INFO_U3",
     "label": "INFO_U3",
     "source_name": "clinvar_20160705_v01",
@@ -3841,7 +3985,7 @@
     "dimension": 1
   },
   {
-    "id": "61932a9e-b794-4d7f-9b77-d7dba69c0acf",
+    "id": "dcbbfd18-581d-4d0a-9f5e-7ab1e51111d0",
     "name": "INFO_PM",
     "label": "INFO_PM",
     "source_name": "clinvar_20160705_v01",
@@ -3852,7 +3996,7 @@
     "dimension": 1
   },
   {
-    "id": "4ee7babc-8cc8-4759-a26b-ced5870275ba",
+    "id": "d3d8668c-a7df-45fd-a401-80691a43738b",
     "name": "INFO_U5",
     "label": "INFO_U5",
     "source_name": "clinvar_20160705_v01",
@@ -3863,7 +4007,7 @@
     "dimension": 1
   },
   {
-    "id": "37383246-d369-4778-a10c-830f2f6cef2c",
+    "id": "11380fe2-a850-4979-88ce-c28a95f892bd",
     "name": "INFO_DSS",
     "label": "INFO_DSS",
     "source_name": "clinvar_20160705_v01",
@@ -3874,7 +4018,7 @@
     "dimension": 1
   },
   {
-    "id": "f7b9d5d5-1ae3-45c7-a439-ba79c3b38bae",
+    "id": "8d9fd728-6f94-4bdd-9a6b-eb5ea61ba977",
     "name": "INFO_SAO",
     "label": "INFO_SAO",
     "source_name": "clinvar_20160705_v01",
@@ -3885,7 +4029,7 @@
     "dimension": 1
   },
   {
-    "id": "6b424353-17fe-4b4f-a22e-6d30a0f146b0",
+    "id": "09b87f18-ebed-4f78-9cbb-1e1ba67cd11b",
     "name": "INFO_CLNORIGIN",
     "label": "INFO_CLNORIGIN",
     "source_name": "clinvar_20160705_v01",
@@ -3896,7 +4040,7 @@
     "dimension": 0
   },
   {
-    "id": "283adba4-4587-449f-bde6-a24b0de7f9df",
+    "id": "b8398d49-a883-41aa-a055-5af41e91de87",
     "name": "INFO_CLNACC",
     "label": "INFO_CLNACC",
     "source_name": "clinvar_20160705_v01",
@@ -3907,7 +4051,7 @@
     "dimension": 0
   },
   {
-    "id": "dfee6903-cf81-4fcc-b45a-e1116192ee35",
+    "id": "c835f80d-938a-4587-8882-f60147b93011",
     "name": "INFO_REF",
     "label": "INFO_REF",
     "source_name": "clinvar_20160705_v01",
@@ -3918,7 +4062,7 @@
     "dimension": 1
   },
   {
-    "id": "ed9ca90a-a3df-4011-9266-15d9a71b6d5b",
+    "id": "4c6d9716-9ef8-4151-ba59-f03ffb731638",
     "name": "INFO_CAF",
     "label": "INFO_CAF",
     "source_name": "clinvar_20160705_v01",
@@ -3929,7 +4073,7 @@
     "dimension": -2
   },
   {
-    "id": "1e72df1a-4315-40e9-bad6-0878105df4b4",
+    "id": "c7543c04-6591-4166-9812-3176206fd472",
     "name": "INFO_INT",
     "label": "INFO_INT",
     "source_name": "clinvar_20160705_v01",
@@ -3940,7 +4084,7 @@
     "dimension": 1
   },
   {
-    "id": "495d0e4f-7022-461b-bae5-bc2fddd12a6e",
+    "id": "cb974e6b-c82c-48c2-99a3-ebdb7aa6ea5d",
     "name": "INFO_CLNSRC",
     "label": "INFO_CLNSRC",
     "source_name": "clinvar_20160705_v01",
@@ -3951,7 +4095,7 @@
     "dimension": 0
   },
   {
-    "id": "d54c591e-9aee-4de3-a05e-3dab7c2d6495",
+    "id": "0067e1f4-7528-4aae-947a-ae991caeccd1",
     "name": "INFO_VC",
     "label": "INFO_VC",
     "source_name": "clinvar_20160705_v01",
@@ -3962,7 +4106,7 @@
     "dimension": 1
   },
   {
-    "id": "629ca4f0-75d1-4414-b4a2-d6712f18b018",
+    "id": "1d8756e0-ade5-44d8-af0f-9d5da621989a",
     "name": "INFO_GENEINFO_0",
     "label": "INFO_GENEINFO_0",
     "source_name": "clinvar_20160705_v01",
@@ -3973,7 +4117,7 @@
     "dimension": 1
   },
   {
-    "id": "e4674469-795f-4746-9e6e-2a368f6ecf14",
+    "id": "59450831-4914-4e1a-bb46-4ee7e79d6144",
     "name": "INFO_MUT",
     "label": "INFO_MUT",
     "source_name": "clinvar_20160705_v01",
@@ -3984,7 +4128,7 @@
     "dimension": 1
   },
   {
-    "id": "742bd9b0-f18f-40a6-8124-ca4a57c4659d",
+    "id": "34b7ad36-adf8-40cc-8655-6b10374682a8",
     "name": "INFO_TPA",
     "label": "INFO_TPA",
     "source_name": "clinvar_20160705_v01",
@@ -3995,7 +4139,7 @@
     "dimension": 1
   },
   {
-    "id": "c303ff37-6d3c-4093-8460-db08d06bb95a",
+    "id": "b17b148a-984c-43f5-840f-1f5223137581",
     "name": "INFO_HD",
     "label": "INFO_HD",
     "source_name": "clinvar_20160705_v01",
@@ -4006,7 +4150,7 @@
     "dimension": 1
   },
   {
-    "id": "d9c827bf-7bd2-4a8b-97ff-32025b180c4f",
+    "id": "addd54cd-ae88-402d-bc1b-76e37754a31a",
     "name": "INFO_SYN",
     "label": "INFO_SYN",
     "source_name": "clinvar_20160705_v01",
@@ -4017,7 +4161,7 @@
     "dimension": 1
   },
   {
-    "id": "04eb57bf-e485-49c9-b450-8fa8f2ffc277",
+    "id": "323a8142-736d-4ada-90b6-87f7df3ea8d3",
     "name": "INFO_CLNSIG",
     "label": "INFO_CLNSIG",
     "source_name": "clinvar_20160705_v01",
@@ -4028,7 +4172,7 @@
     "dimension": 0
   },
   {
-    "id": "0d2208fa-8398-48f4-af39-f3b07f72dcaa",
+    "id": "ef9f2499-1154-4ccc-b775-593dd713cc3c",
     "name": "INFO_RS",
     "label": "INFO_RS",
     "source_name": "clinvar_20160705_v01",
@@ -4039,7 +4183,7 @@
     "dimension": 1
   },
   {
-    "id": "db27efd3-5a38-4c85-830e-9b399edd0368",
+    "id": "c6805c82-71d0-4119-925e-5701d4beb77f",
     "name": "INFO_WTD",
     "label": "INFO_WTD",
     "source_name": "clinvar_20160705_v01",
@@ -4050,7 +4194,7 @@
     "dimension": 1
   },
   {
-    "id": "6dc5f030-c809-4ba5-84c4-1e753a3fa999",
+    "id": "acde4a06-7bac-4add-8214-1aad00ae60ce",
     "name": "INFO_CLNDSDB",
     "label": "INFO_CLNDSDB",
     "source_name": "clinvar_20160705_v01",
@@ -4061,7 +4205,7 @@
     "dimension": 0
   },
   {
-    "id": "545490a1-617e-4b22-bbcc-8133a109aebf",
+    "id": "47186979-ff7b-426f-833e-1d702f88ebf4",
     "name": "INFO_NSN",
     "label": "INFO_NSN",
     "source_name": "dbsnp_20160601_v01",
@@ -4072,7 +4216,7 @@
     "dimension": 1
   },
   {
-    "id": "04e27e07-773e-445e-99dd-4f459d4aa375",
+    "id": "d80f464a-9a04-454c-8144-298a868caa56",
     "name": "INFO_NSM",
     "label": "INFO_NSM",
     "source_name": "dbsnp_20160601_v01",
@@ -4083,7 +4227,7 @@
     "dimension": 1
   },
   {
-    "id": "f8d2a738-4ec0-46ba-805d-5517b6f8da64",
+    "id": "66ee3b41-1786-44ed-8d49-438c3fcd9ca7",
     "name": "INFO_LSD",
     "label": "INFO_LSD",
     "source_name": "dbsnp_20160601_v01",
@@ -4094,7 +4238,7 @@
     "dimension": 1
   },
   {
-    "id": "619261aa-54d9-4a9a-a056-1cadda666b11",
+    "id": "e1cf2dbf-cc9f-47c6-85f3-78c79baabd72",
     "name": "INFO_ASP",
     "label": "INFO_ASP",
     "source_name": "dbsnp_20160601_v01",
@@ -4105,7 +4249,7 @@
     "dimension": 1
   },
   {
-    "id": "323d1e51-b89a-45e5-9202-72b6f5132a7f",
+    "id": "e2165a3c-7833-47c8-ba46-8ec63591785a",
     "name": "INFO_ASS",
     "label": "INFO_ASS",
     "source_name": "dbsnp_20160601_v01",
@@ -4116,7 +4260,7 @@
     "dimension": 1
   },
   {
-    "id": "2dfdab6d-fe75-4030-8477-a75edb359412",
+    "id": "7443d97f-da19-4773-9502-fe9158b9c643",
     "name": "INFO_NSF",
     "label": "INFO_NSF",
     "source_name": "dbsnp_20160601_v01",
@@ -4127,7 +4271,7 @@
     "dimension": 1
   },
   {
-    "id": "2d439e1f-2729-47ec-8e7c-a747f0b52df7",
+    "id": "9c7e9a0c-21c1-4745-9496-35453a75162e",
     "name": "INFO_KGPhase3",
     "label": "INFO_KGPhase3",
     "source_name": "dbsnp_20160601_v01",
@@ -4138,7 +4282,7 @@
     "dimension": 1
   },
   {
-    "id": "ffeec724-f852-4f95-8c56-6c385e445fde",
+    "id": "9ebb688a-11c6-459c-ae44-da8256e0c945",
     "name": "INFO_SYN",
     "label": "INFO_SYN",
     "source_name": "dbsnp_20160601_v01",
@@ -4149,7 +4293,7 @@
     "dimension": 1
   },
   {
-    "id": "23a8dee2-19ef-40eb-94ba-3c4b90f56b15",
+    "id": "5195d175-bbdb-489f-9fd9-b367405a8d5e",
     "name": "INFO_R3",
     "label": "INFO_R3",
     "source_name": "dbsnp_20160601_v01",
@@ -4160,7 +4304,7 @@
     "dimension": 1
   },
   {
-    "id": "69104c83-2e19-4cbd-bce9-280e8cde0137",
+    "id": "232cbf5b-0b87-42c7-b42c-99c5b7fc79bd",
     "name": "INFO_CDA",
     "label": "INFO_CDA",
     "source_name": "dbsnp_20160601_v01",
@@ -4171,7 +4315,7 @@
     "dimension": 1
   },
   {
-    "id": "b5744e6f-19bf-438e-bde8-e702a8e80b8f",
+    "id": "2a32d57e-227a-4a9c-8610-c961a5d64f85",
     "name": "INFO_G5A",
     "label": "INFO_G5A",
     "source_name": "dbsnp_20160601_v01",
@@ -4182,7 +4326,7 @@
     "dimension": 1
   },
   {
-    "id": "98a896e9-99c9-4b77-8746-145df667e1f4",
+    "id": "f38a9470-6368-4f93-b55a-c06b3b177ab0",
     "name": "INFO_G5",
     "label": "INFO_G5",
     "source_name": "dbsnp_20160601_v01",
@@ -4193,7 +4337,7 @@
     "dimension": 1
   },
   {
-    "id": "948d99d1-6c73-4774-84d2-273b5161b0f7",
+    "id": "ce07b683-e1e4-482c-996d-076693579f14",
     "name": "INFO_CFL",
     "label": "INFO_CFL",
     "source_name": "dbsnp_20160601_v01",
@@ -4204,7 +4348,7 @@
     "dimension": 1
   },
   {
-    "id": "0de6f852-bb95-4815-beb7-999a3126b5a7",
+    "id": "b9572dcd-5b3c-4dc8-9790-6a6bed6679a3",
     "name": "INFO_COMMON",
     "label": "INFO_COMMON",
     "source_name": "dbsnp_20160601_v01",
@@ -4215,7 +4359,7 @@
     "dimension": 1
   },
   {
-    "id": "5bc19978-325b-43df-82ee-b624d6733ac2",
+    "id": "968f88f5-a14a-46c7-9859-7bf7709665f3",
     "name": "INFO_VLD",
     "label": "INFO_VLD",
     "source_name": "dbsnp_20160601_v01",
@@ -4226,7 +4370,7 @@
     "dimension": 1
   },
   {
-    "id": "4c043611-b720-45ab-8e2c-ad69f4d1f116",
+    "id": "0c4947f4-2d41-46cf-97cb-e71b1473ac77",
     "name": "INFO_SSR",
     "label": "INFO_SSR",
     "source_name": "dbsnp_20160601_v01",
@@ -4237,7 +4381,7 @@
     "dimension": 1
   },
   {
-    "id": "7d6b2ce5-8751-48c5-b7b6-25baf1a36c7c",
+    "id": "d98f80e6-9904-46fa-bb3a-56d70e7fcc0d",
     "name": "INFO_OM",
     "label": "INFO_OM",
     "source_name": "dbsnp_20160601_v01",
@@ -4248,7 +4392,7 @@
     "dimension": 1
   },
   {
-    "id": "990fe8e5-3d23-4464-8700-967fe2a7e338",
+    "id": "2a4dca7a-822c-40d0-bd49-16091fa50d0e",
     "name": "INFO_S3D",
     "label": "INFO_S3D",
     "source_name": "dbsnp_20160601_v01",
@@ -4259,7 +4403,7 @@
     "dimension": 1
   },
   {
-    "id": "ac696a49-d71b-445d-beb9-19de37bdec14",
+    "id": "32540284-f4b9-4d1e-b9a9-faba1568f76f",
     "name": "INFO_U3",
     "label": "INFO_U3",
     "source_name": "dbsnp_20160601_v01",
@@ -4270,7 +4414,7 @@
     "dimension": 1
   },
   {
-    "id": "53bbfa35-b15b-413e-b0a3-96d41bdc7416",
+    "id": "c8d684e4-beff-4c65-ba76-b43609355394",
     "name": "INFO_PM",
     "label": "INFO_PM",
     "source_name": "dbsnp_20160601_v01",
@@ -4281,7 +4425,7 @@
     "dimension": 1
   },
   {
-    "id": "0d50d174-50e6-4162-910e-190e6642451b",
+    "id": "fbd7b928-8f43-4518-a758-b58ac7fe7ebd",
     "name": "INFO_U5",
     "label": "INFO_U5",
     "source_name": "dbsnp_20160601_v01",
@@ -4292,7 +4436,7 @@
     "dimension": 1
   },
   {
-    "id": "7382c64e-ec5b-47ea-92f0-0ec5b76063d0",
+    "id": "6413d766-6501-4b3f-bd19-241cdae77a86",
     "name": "INFO_DSS",
     "label": "INFO_DSS",
     "source_name": "dbsnp_20160601_v01",
@@ -4303,7 +4447,7 @@
     "dimension": 1
   },
   {
-    "id": "88ea9f3f-71fb-4933-84d8-036689eaa5c4",
+    "id": "8642e01e-2f79-43db-b325-054a9b1e7a02",
     "name": "INFO_SAO",
     "label": "INFO_SAO",
     "source_name": "dbsnp_20160601_v01",
@@ -4314,7 +4458,7 @@
     "dimension": 1
   },
   {
-    "id": "660b3bb7-b877-4e08-8d96-0ebab0f22599",
+    "id": "843a8154-d62a-477d-a8f3-629f0cbbde1b",
     "name": "INFO_REF",
     "label": "INFO_REF",
     "source_name": "dbsnp_20160601_v01",
@@ -4325,7 +4469,7 @@
     "dimension": 1
   },
   {
-    "id": "53d9f236-dcb0-4d49-b423-9427f73f237c",
+    "id": "5c5b63a0-62cb-4c07-86ac-560dfc680b09",
     "name": "INFO_CAF",
     "label": "INFO_CAF",
     "source_name": "dbsnp_20160601_v01",
@@ -4336,7 +4480,7 @@
     "dimension": -2
   },
   {
-    "id": "7474a12b-5601-418b-9fed-771815d50f97",
+    "id": "84eba4b3-49da-443f-a862-d4def87cda26",
     "name": "INFO_INT",
     "label": "INFO_INT",
     "source_name": "dbsnp_20160601_v01",
@@ -4347,7 +4491,7 @@
     "dimension": 1
   },
   {
-    "id": "058ab927-b4fa-47de-a37d-5aac9881a32d",
+    "id": "ef6e5133-d800-46c4-918f-4f86bedfaacb",
     "name": "INFO_MUT",
     "label": "INFO_MUT",
     "source_name": "dbsnp_20160601_v01",
@@ -4358,7 +4502,7 @@
     "dimension": 1
   },
   {
-    "id": "1c1f8151-ee3e-4ec4-bf60-09abbefc4af3",
+    "id": "4cccafb2-b51a-4b6e-9b89-ce3ccb6fbc67",
     "name": "INFO_VC",
     "label": "INFO_VC",
     "source_name": "dbsnp_20160601_v01",
@@ -4369,7 +4513,7 @@
     "dimension": 1
   },
   {
-    "id": "5943ceb0-3b12-4c80-95ed-c94b62ca77d6",
+    "id": "efa075d2-d987-417a-bc5d-6917154f2612",
     "name": "INFO_GENEINFO_0",
     "label": "INFO_GENEINFO_0",
     "source_name": "dbsnp_20160601_v01",
@@ -4380,7 +4524,7 @@
     "dimension": 1
   },
   {
-    "id": "c68bcbd0-507a-4923-a00f-dc4acfb3eee0",
+    "id": "6c3ed8fb-2f66-4a24-a6f2-0ac3e332fd57",
     "name": "INFO_GENEINFO_1",
     "label": "INFO_GENEINFO_1",
     "source_name": "dbsnp_20160601_v01",
@@ -4391,7 +4535,7 @@
     "dimension": 1
   },
   {
-    "id": "8b8e03b2-b2d8-4907-8abf-9487e194da76",
+    "id": "6c13cf38-c545-4cfb-a92a-bf35e8a97791",
     "name": "INFO_TPA",
     "label": "INFO_TPA",
     "source_name": "dbsnp_20160601_v01",
@@ -4402,7 +4546,7 @@
     "dimension": 1
   },
   {
-    "id": "cf061d6d-8f0a-434e-ac84-bf03740cf19d",
+    "id": "11d8816c-e1a6-4ffd-93b6-575b30c16ba6",
     "name": "INFO_HD",
     "label": "INFO_HD",
     "source_name": "dbsnp_20160601_v01",
@@ -4413,7 +4557,7 @@
     "dimension": 1
   },
   {
-    "id": "4a7f1fea-ac51-4f2c-88ca-d70492b32c2d",
+    "id": "37c4d228-0ada-4231-a0df-4de3851add83",
     "name": "INFO_R5",
     "label": "INFO_R5",
     "source_name": "dbsnp_20160601_v01",
@@ -4424,7 +4568,7 @@
     "dimension": 1
   },
   {
-    "id": "e233dbb1-ba64-4403-b33f-48dfd3d94077",
+    "id": "90b94b6b-6ce9-4cc0-8713-e371d146f8f2",
     "name": "INFO_RS",
     "label": "INFO_RS",
     "source_name": "dbsnp_20160601_v01",
@@ -4435,7 +4579,7 @@
     "dimension": 1
   },
   {
-    "id": "fb9f98d0-7e86-4487-ab57-f2add5a4ea69",
+    "id": "9d5b1a8d-d96a-4ee3-8971-328fba6bf14d",
     "name": "INFO_WTD",
     "label": "INFO_WTD",
     "source_name": "dbsnp_20160601_v01",
@@ -4446,7 +4590,7 @@
     "dimension": 1
   },
   {
-    "id": "f980fe6b-d6ea-47b2-b1c5-b3ce89066a75",
+    "id": "314ad37c-1f26-4a15-8721-48a4741d85a3",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "one_thousand_genome_v01",
@@ -4457,7 +4601,7 @@
     "dimension": 1
   },
   {
-    "id": "2ebea6d6-b0e7-44b5-9611-7f4f1d3cbe40",
+    "id": "31685de7-66fe-4c04-b32b-c01e86143597",
     "name": "INFO_OLD_VARIANT",
     "label": "INFO_OLD_VARIANT",
     "source_name": "one_thousand_genome_v01",
@@ -4468,7 +4612,7 @@
     "dimension": 1
   },
   {
-    "id": "9d1bde82-374c-449b-902e-1da7e3f5691c",
+    "id": "925f4d60-9a35-43e4-902c-728a740f636c",
     "name": "INFO_IMPRECISE",
     "label": "INFO_IMPRECISE",
     "source_name": "one_thousand_genome_v01",
@@ -4479,7 +4623,7 @@
     "dimension": 1
   },
   {
-    "id": "f3ea6760-a523-47af-984f-ac933e15b8c4",
+    "id": "62cc9c2b-3b12-4d50-ba83-eff11382149a",
     "name": "INFO_MULTI_ALLELIC",
     "label": "INFO_MULTI_ALLELIC",
     "source_name": "one_thousand_genome_v01",
@@ -4490,7 +4634,7 @@
     "dimension": 1
   },
   {
-    "id": "751fba7b-7ee3-499f-b939-cde465760381",
+    "id": "8efb10b4-7c4c-470f-bba8-b62fbfa5f351",
     "name": "INFO_AMR_AF",
     "label": "INFO_AMR_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4501,7 +4645,7 @@
     "dimension": -1
   },
   {
-    "id": "9c95db29-f467-4298-b5ad-5af0bb1f7a8a",
+    "id": "40f1f5fc-c7d6-4846-8c82-75371885fb70",
     "name": "INFO_EUR_AF",
     "label": "INFO_EUR_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4512,7 +4656,7 @@
     "dimension": -1
   },
   {
-    "id": "a88d3abd-b83a-4e87-a5ea-1980a8208fb8",
+    "id": "c7a36a40-b839-4dbd-abc0-cff79a6a84ae",
     "name": "INFO_TSD",
     "label": "INFO_TSD",
     "source_name": "one_thousand_genome_v01",
@@ -4523,7 +4667,7 @@
     "dimension": 1
   },
   {
-    "id": "eddb22d4-a5bc-4554-9bc3-b874443b8a96",
+    "id": "604993dc-48b6-4346-b2e5-21a2c5688876",
     "name": "INFO_NS",
     "label": "INFO_NS",
     "source_name": "one_thousand_genome_v01",
@@ -4534,7 +4678,7 @@
     "dimension": 1
   },
   {
-    "id": "5f245285-bb9f-4417-8bbf-e3b5223ab30c",
+    "id": "e87f1e3d-d31b-4432-9135-08b9f530ec69",
     "name": "INFO_SAS_AF",
     "label": "INFO_SAS_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4545,7 +4689,7 @@
     "dimension": -1
   },
   {
-    "id": "e0a93664-f29b-43ab-ad70-1726f92cbfcc",
+    "id": "7a4c3169-e1c5-496e-a430-a8caf4a8193d",
     "name": "INFO_CIPOS",
     "label": "INFO_CIPOS",
     "source_name": "one_thousand_genome_v01",
@@ -4556,7 +4700,7 @@
     "dimension": 2
   },
   {
-    "id": "04765b7b-82e8-451d-8fe2-3ad6d5fcc999",
+    "id": "ad747801-ede3-4c4c-bc0b-f7a9251ed66a",
     "name": "INFO_EX_TARGET",
     "label": "INFO_EX_TARGET",
     "source_name": "one_thousand_genome_v01",
@@ -4567,7 +4711,7 @@
     "dimension": 1
   },
   {
-    "id": "a51a4085-d76b-490f-97fd-1716c81d5ee2",
+    "id": "46d9465c-f001-4e94-81e5-390d6477f29a",
     "name": "INFO_SVLEN",
     "label": "INFO_SVLEN",
     "source_name": "one_thousand_genome_v01",
@@ -4578,7 +4722,7 @@
     "dimension": 0
   },
   {
-    "id": "08cf27fb-a19e-4a8a-975a-230784b1d143",
+    "id": "d5bf37ac-32ba-40c0-b85c-b0fd35374c83",
     "name": "INFO_MC",
     "label": "INFO_MC",
     "source_name": "one_thousand_genome_v01",
@@ -4589,7 +4733,7 @@
     "dimension": 0
   },
   {
-    "id": "a66e1911-205e-4df7-8da7-6b06fe445158",
+    "id": "43658200-a94f-4a9f-8b78-7035b651be05",
     "name": "INFO_AA_1",
     "label": "INFO_AA_1",
     "source_name": "one_thousand_genome_v01",
@@ -4600,7 +4744,7 @@
     "dimension": 1
   },
   {
-    "id": "976d2bd4-0ffe-486e-b501-aaa2d300ba8f",
+    "id": "0824a382-3858-4a6f-8ec6-b43e838ba11d",
     "name": "INFO_EAS_AF",
     "label": "INFO_EAS_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4611,7 +4755,7 @@
     "dimension": -1
   },
   {
-    "id": "b92ed96d-e791-4f72-8be7-b79c3a892758",
+    "id": "852b2c82-7899-426a-9894-159717f85bd0",
     "name": "INFO_AN",
     "label": "INFO_AN",
     "source_name": "one_thousand_genome_v01",
@@ -4622,7 +4766,7 @@
     "dimension": 1
   },
   {
-    "id": "9c5bd2fd-d4e1-4286-bd27-81d9b97a1f04",
+    "id": "40eeaed7-ee3a-4e1e-a755-a38332e60467",
     "name": "INFO_END",
     "label": "INFO_END",
     "source_name": "one_thousand_genome_v01",
@@ -4633,7 +4777,7 @@
     "dimension": 1
   },
   {
-    "id": "d0247264-bdd4-42bb-8517-af7f74dc4d39",
+    "id": "af4ef748-d63c-4d90-a81d-43b054130fc1",
     "name": "INFO_AF",
     "label": "INFO_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4644,7 +4788,7 @@
     "dimension": -1
   },
   {
-    "id": "0082384a-256f-4412-8a2b-35f45a101e9c",
+    "id": "bb8b5d14-5b2e-413b-be9c-da5caefa53d8",
     "name": "INFO_AC",
     "label": "INFO_AC",
     "source_name": "one_thousand_genome_v01",
@@ -4655,7 +4799,7 @@
     "dimension": -1
   },
   {
-    "id": "169f39ed-0a0a-4f83-9474-4356d46c7a02",
+    "id": "46a692e5-49c0-4bce-8572-b524e6a412d6",
     "name": "INFO_CS",
     "label": "INFO_CS",
     "source_name": "one_thousand_genome_v01",
@@ -4666,7 +4810,7 @@
     "dimension": 1
   },
   {
-    "id": "470b0099-762e-425e-9758-6be3072d40f4",
+    "id": "654c667e-9610-4fec-a1ba-8b201c555c64",
     "name": "INFO_AFR_AF",
     "label": "INFO_AFR_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4677,7 +4821,7 @@
     "dimension": -1
   },
   {
-    "id": "b62c3646-27da-47aa-9ca1-44a295313624",
+    "id": "9c9360c3-1f5c-4673-96aa-6bccce7b4936",
     "name": "INFO_MEINFO",
     "label": "INFO_MEINFO",
     "source_name": "one_thousand_genome_v01",
@@ -4688,7 +4832,7 @@
     "dimension": 4
   },
   {
-    "id": "69b6e6ce-dff0-4922-a986-4eefdfb4a17b",
+    "id": "9957eb30-5705-4ad3-b9cd-d84525ce959e",
     "name": "INFO_CIEND",
     "label": "INFO_CIEND",
     "source_name": "one_thousand_genome_v01",
@@ -4699,7 +4843,7 @@
     "dimension": 2
   },
   {
-    "id": "39dd516b-8702-4858-8144-c5a5430733fb",
+    "id": "15390eff-7fa7-4007-afa3-aa451fa1b28a",
     "name": "INFO_AA_0",
     "label": "INFO_AA_0",
     "source_name": "one_thousand_genome_v01",
@@ -4710,7 +4854,7 @@
     "dimension": 1
   },
   {
-    "id": "e6709dfb-4f64-4c09-9c94-d01e98a2e042",
+    "id": "625524d2-bd47-4b8c-a198-edb475ba3e20",
     "name": "INFO_AA_3",
     "label": "INFO_AA_3",
     "source_name": "one_thousand_genome_v01",
@@ -4721,7 +4865,7 @@
     "dimension": 1
   },
   {
-    "id": "c1585ef0-34f1-482c-bd68-ee4631e3d53b",
+    "id": "8b5a16bc-4fe1-44a4-a1f7-ea1e6fad44c2",
     "name": "INFO_AA_2",
     "label": "INFO_AA_2",
     "source_name": "one_thousand_genome_v01",
@@ -4732,7 +4876,7 @@
     "dimension": 1
   },
   {
-    "id": "b641f36d-ec09-4a7c-9a41-01c9bb9d7fa0",
+    "id": "041c6035-18b3-48ed-abb2-13cd8ffb6974",
     "name": "INFO_SVTYPE",
     "label": "INFO_SVTYPE",
     "source_name": "one_thousand_genome_v01",
@@ -4743,7 +4887,7 @@
     "dimension": 1
   },
   {
-    "id": "534f2e3b-5c49-4acd-8e8c-84948962c298",
+    "id": "d77014b1-9b11-4a76-ace8-cf7e4d3294a1",
     "name": "INFO_VT",
     "label": "INFO_VT",
     "source_name": "one_thousand_genome_v01",
