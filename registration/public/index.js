@@ -46,6 +46,9 @@ const API = {
     },
     createUser(regcode, user) {
         return ajaxAsync('POST', 'http://localhost:3000/user', null, {regcode, email: null, user});
+    },
+    requestUser(user) {
+        return ajaxAsync('POST', 'http://localhost:3000/user_request', null, user);
     }
 };
 
@@ -191,6 +194,12 @@ function onSignupLoginPassword() {
 function onSignupGoogle() {
     if (loadedUserId) {
         API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
+    }
+}
+
+function onRegister() {
+    if (!loadedUserId) {
+        API.requestUser(currentUser.user);
     }
 }
 
