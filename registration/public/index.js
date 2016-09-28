@@ -100,7 +100,6 @@ const DOMUtils = {
 const MakeLayout = {
     attachHandlers(scheme, onChange) {
         scheme.forEach((scheme) => {
-            console.log('qqq', scheme);
             const inputEl = document.getElementById(scheme.elementId);
             if (inputEl) {
                 DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
