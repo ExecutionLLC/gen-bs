@@ -117,6 +117,20 @@ const MakeLayout = {
                 });
             }
         });
+    },
+    disableControls(scheme, disable) {
+        scheme.forEach((scheme) => {
+            const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
+            if (inputEl) {
+                inputEl.disabled = disable;
+            }
+            const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
+            if (radioEls && radioEls.length) {
+                radioEls.forEach((el) => {
+                    el.disabled = disable;
+                });
+            }
+        });
     }
 };
 
@@ -188,6 +202,13 @@ function onRegcodedUserReceived(user) {
     currentUser.user = Object.assign({}, user);
     currentUser.regcode = checkingUser.requested.regcode;
     FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+    switchPageState({
+        disableRegcode: true,
+        disableUserInfo: false,
+        showLoginType: true,
+        showPassword: false,
+        showRegister: false
+    });
 }
 
 function checkRegcode(regcode) {
@@ -212,31 +233,120 @@ function onUserEdit(fieldId, str) {
 
 function onSignupLoginPassword() {
     if (loadedUserId) {
-        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
+        switchPageState({
+            disableRegcode: true,
+            disableUserInfo: true,
+            showLoginType: false,
+            showPassword: false,
+            showRegister: false
+        });
+        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}))
+            .then(() => {
+                switchPageState({
+                    disableRegcode: true,
+                    disableUserInfo: true,
+                    showLoginType: false,
+                    showPassword: true,
+                    showRegister: true
+                });
+            });
+    } else {
+        switchPageState({
+            disableRegcode: true,
+            disableUserInfo: true,
+            showLoginType: false,
+            showPassword: true,
+            showRegister: true
+        });
     }
 }
 
 function onSignupGoogle() {
+    switchPageState({
+        disableRegcode: true,
+        disableUserInfo: true,
+        showLoginType: false,
+        showPassword: false,
+        showRegister: false
+    });
     if (loadedUserId) {
-        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
+        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}))
+            .then(() => {
+                switchPageState({
+                    disableRegcode: true,
+                    disableUserInfo: true,
+                    showLoginType: false,
+                    showPassword: true,
+                    showRegister: true
+                });
+            });
+    } else {
+        switchPageState({
+            disableRegcode: true,
+            disableUserInfo: true,
+            showLoginType: false,
+            showPassword: true,
+            showRegister: true
+        });
     }
 }
 
 function onRegister() {
+    const password = getPassword();
+    if (password == null) {
+        return
+    }
+    switchPageState({
+        disableRegcode: true,
+        disableUserInfo: true,
+        showLoginType: false,
+        showPassword: false,
+        showRegister: false
+    });
     if (loadedUserId) {
-        API.registerUser(currentUser.user);
+        API.registerUser(Object.assign({}, currentUser.user, {password}));
     } else {
-        API.requestUser(currentUser.user);
+        API.requestUser(Object.assign({}, currentUser.user, {password}));
     }
 }
 
 var getPassword = null; // will be defined later
 
-function onPassword(index, psw) {
+function onPassword(/*index, psw*/) {
     console.log('password:', getPassword());
 }
 
+function switchPageState(ops) {
+    if (ops.disableRegcode != null) {
+        const regcodeEl = document.getElementById('regcode');
+        if (regcodeEl) {
+            regcodeEl.disabled = ops.disableRegcode;
+        }
+    }
+    if (ops.disableUserInfo != null) {
+        MakeLayout.disableControls(USER_INFO_SCHEME, ops.disableUserInfo);
+    }
+    if (ops.showLoginType != null) {
+        document.body.classList.toggle('no-login-type', !ops.showLoginType)
+    }
+    if (ops.showPassword != null) {
+        document.body.classList.toggle('no-password', !ops.showPassword)
+    }
+    if (ops.showRegister != null) {
+        document.body.classList.toggle('no-register', !ops.showRegister)
+    }
+}
+
 function onDocumentLoad() {
+
+    switchPageState({
+        disableRegcode: true,
+        disableUserInfo: true,
+        showLoginType: false,
+        showPassword: false,
+        showRegister: false
+    });
+
     const regcodeEl = document.getElementById('regcode');
     if (regcodeEl) {
         DOMUtils.onInput(regcodeEl, checkRegcode);
@@ -281,18 +391,30 @@ function onDocumentLoad() {
 
     const regcodeId = window.location.hash.replace(/^#/, '');
     if (regcodeId) {
-        if (regcodeEl) {
-            regcodeEl.disabled = true;
-        }
         API.getUserForRegcodeId(regcodeId)
             .then((user) => {
                 if (regcodeEl) {
                     regcodeEl.value = user.regcode;
                 }
+                switchPageState({
+                    disableRegcode: true,
+                    disableUserInfo: false,
+                    showLoginType: true,
+                    showPassword: false,
+                    showRegister: false
+                });
                 onRegcodedUserReceived(user);
             })
             .catch(() => {
                 displayNoUserInfo();
             });
+    } else {
+        switchPageState({
+            disableRegcode: false,
+            disableUserInfo: false,
+            showLoginType: true,
+            showPassword: false,
+            showRegister: false
+        });
     }
 }

@@ -1,3 +1,11 @@
-body.no-regcode #regcoded-user {
-    background: gray;
+body.no-password #password {
+    display: none;
+}
+
+body.no-login-type #login-type {
+    display: none;
+}
+
+body.no-register #register-block {
+    display: none;
 }
