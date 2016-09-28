@@ -41,9 +41,6 @@ const API = {
     getUserForRegcodeId(regcodeId) {
         return ajaxAsync('GET', 'http://localhost:3000/user', {regcodeId});
     },
-    getUserForId(userId) {
-        return ajaxAsync('post', 'http://localhost:3000/register', null, userId)
-    },
     updateUser(user) {
         return ajaxAsync('PUT', 'http://localhost:3000/user', null, user)
     },
