@@ -78,6 +78,10 @@ const USER_INFO_SCHEME = [
     {
         id: 'telephone',
         elementId: 'phone-value'
+    },
+    {
+        id: 'gender',
+        radioName: 'reg-gender'
     }
 ];
 
@@ -102,9 +106,15 @@ const DOMUtils = {
 const MakeLayout = {
     attachHandlers(scheme, onChange) {
         scheme.forEach((scheme) => {
-            const inputEl = document.getElementById(scheme.elementId);
+            const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
+            }
+            const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
+            if (radioEls && radioEls.length) {
+                radioEls.forEach((el) => {
+                    DOMUtils.onClick(el, () => onChange(scheme.id, el.value))
+                });
             }
         });
     }
@@ -120,9 +130,15 @@ const FillData = {
     },
     fillUserItem(scheme, data) {
         scheme.forEach((scheme) => {
-            const inputEl = document.getElementById(scheme.elementId);
+            const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 FillData.fillDataItemEl(inputEl, data[scheme.id] || '');
+            }
+            const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
+            if (radioEls && radioEls.length) {
+                radioEls.forEach((el) => {
+                    el.checked = el.value === data[scheme.id];
+                });
             }
         });
     }
