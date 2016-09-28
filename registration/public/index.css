@@ -1,3 +1,10 @@
+.warning {
+    background: red;
+    font-weight: bold;
+    color: yellow;
+    display: none;
+}
+
 body.no-password #password {
     display: none;
 }
@@ -8,4 +15,12 @@ body.no-login-type #login-type {
 
 body.no-register #register-block {
     display: none;
+}
+
+body.warning-userdata #warning-userdata {
+    display: block;
+}
+
+body.warning-password #warning-password {
+    display: block;
 }

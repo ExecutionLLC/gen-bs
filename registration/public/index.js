@@ -225,6 +225,9 @@ function checkRegcode(regcode) {
 function onUserEdit(fieldId, str) {
     console.log('onUserEdit', fieldId, str);
     console.log(currentUser);
+    switchPageState({
+        warningUserdata: false
+    });
     currentUser.user[fieldId] = str;
     if (loadedUserId) {
         API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
@@ -232,6 +235,12 @@ function onUserEdit(fieldId, str) {
 }
 
 function onSignupLoginPassword() {
+    if (!validateUser()) {
+        switchPageState({
+            warningUserdata: true
+        });
+        return;
+    }
     if (loadedUserId) {
         switchPageState({
             disableRegcode: true,
@@ -262,6 +271,12 @@ function onSignupLoginPassword() {
 }
 
 function onSignupGoogle() {
+    if (!validateUser()) {
+        switchPageState({
+            warningUserdata: true
+        });
+        return;
+    }
     switchPageState({
         disableRegcode: true,
         disableUserInfo: true,
@@ -291,10 +306,18 @@ function onSignupGoogle() {
     }
 }
 
+function validateUser() {
+    const {email, firstName, lastName, company, telephone, gender, speciality} = currentUser.user;
+    if (!email || !firstName || !lastName|| !speciality || !gender || !company || !telephone) {
+        return false;
+    }
+    return true;
+}
+
 function onRegister() {
     const password = getPassword();
     if (password == null) {
-        return
+        return;
     }
     switchPageState({
         disableRegcode: true,
@@ -313,7 +336,9 @@ function onRegister() {
 var getPassword = null; // will be defined later
 
 function onPassword(/*index, psw*/) {
-    console.log('password:', getPassword());
+    switchPageState({
+        warningPassword: !getPassword()
+    });2
 }
 
 function switchPageState(ops) {
@@ -334,6 +359,12 @@ function switchPageState(ops) {
     }
     if (ops.showRegister != null) {
         document.body.classList.toggle('no-register', !ops.showRegister)
+    }
+    if (ops.warningUserdata != null) {
+        document.body.classList.toggle('warning-userdata', ops.warningUserdata)
+    }
+    if (ops.warningPassword != null) {
+        document.body.classList.toggle('warning-password', ops.warningPassword)
     }
 }
 
