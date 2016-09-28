@@ -1,3 +1,5 @@
+const WEBSERVER = 'localhost';
+
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
 function makeURIParams(params) {
@@ -36,19 +38,19 @@ function ajaxAsync(method, url, params, data) {
 
 const API = {
     getUserForRegcodeEmailAsync(regcode) {
-        return ajaxAsync('GET', 'http://localhost:3000/user', {regcode, email: null});
+        return ajaxAsync('GET', `http://${WEBSERVER}:3000/user`, {regcode, email: null});
     },
     getUserForRegcodeId(regcodeId) {
-        return ajaxAsync('GET', 'http://localhost:3000/user', {regcodeId});
+        return ajaxAsync('GET', `http://${WEBSERVER}:3000/user`, {regcodeId});
     },
     updateUser(user) {
-        return ajaxAsync('PUT', 'http://localhost:3000/user', null, user);
+        return ajaxAsync('PUT', `http://${WEBSERVER}:3000/user`, null, user);
     },
     requestUser(user) {
-        return ajaxAsync('POST', 'http://localhost:3000/user_request', null, user);
+        return ajaxAsync('POST', `http://${WEBSERVER}:3000/user_request`, null, user);
     },
     registerUser(user) {
-        return ajaxAsync('POST', 'http://localhost:3000/register', null, user);
+        return ajaxAsync('POST', `http://${WEBSERVER}:3000/register`, null, user);
     },
 };
 
@@ -261,7 +263,7 @@ function onDocumentLoad() {
         API.getUserForRegcodeId(regcodeId)
             .then((user) => {
                 if (user.isActivated) {
-                    window.location.assign('http://localhost:80/');
+                    window.location.assign(`http://${WEBSERVER}:80/`);
                     return;
                 }
                 loadedUserId = user.id;
