@@ -8,14 +8,11 @@ const ModelsFacade = require('../../../models/ModelsFacade');
 const Logger = require('../../../utils/Logger');
 const config = require('../../../utils/Config');
 const FsUtils = require('../../../utils/FileSystemUtils');
+const CollectionUtils = require('../../../utils/CollectionUtils');
 
 const logger = new Logger(config.logger);
 const models = new ModelsFacade(config, logger);
 const services = null;//new ServicesFacade(config, logger, models);
-
-function findFilterAsync(userId, filterId) {
-    return Promise.fromCallback(done => models.filters.find(userId, filterId, done));
-}
 
 function findTotalFieldsHashAsync() {
     return Promise.fromCallback(done => models.fields.findTotalMetadata(done))
@@ -79,6 +76,63 @@ function listAllFiltersAsync(queryConditionFuncOrNull) {
     return selector;
 }
 
+function listAllViewsAsync(queryConditionFuncOrNull) {
+    let selector = models.db.knex.select()
+        .from('view')
+        .innerJoin('view_text', 'view_text.view_id', 'view.id');
+    if (queryConditionFuncOrNull) {
+        queryConditionFuncOrNull(selector);
+    }
+    return selector
+        .then((views) => {
+            const viewIds = views.map(v => v.id);
+            return models.db.knex.select()
+                    .from('view_item')
+                    .whereIn('view_id', viewIds)
+                .then((viewItems) => CollectionUtils.createMultiValueHash(viewItems, (item) => item.view_id))
+                .then((viewIdToItemsHash) => ({
+                    viewIds,
+                    views,
+                    viewIdToItemsHash
+                }));
+            // TODO: Add keywords support here.
+        }).then(({views, viewIdToItemsHash}) => {
+            return views.map(view => Object.assign({}, view, {
+                view_list_items: viewIdToItemsHash[view.id]
+            }));
+        });
+}
+
+function getViewAsTemplateAsync(view) {
+    return findTotalFieldsHashAsync()
+        .then(totalFieldsHash => {
+            const {name, description, type} = view;
+            return {
+                name,
+                description,
+                type,
+                items: view.view_list_items.map(item => {
+                    const {field_id, order, sort_order, sort_direction} = item;
+                    const field = totalFieldsHash[field_id];
+                    if (!field) {
+                        throw new Error(`Field is not found for item ${item}`);
+                    }
+                    return {
+                        field: {
+                            name: field.name,
+                            source_name: field.sourceName,
+                            value_type: field.valueType
+                        },
+                        keywords: [],
+                        order,
+                        sort_order,
+                        sort_direction
+                    };
+                })
+            };
+        });
+}
+
 function printResult(result) {
     console.log(JSON.stringify(result, null, 2));
 }
@@ -92,6 +146,10 @@ module.exports = {
     services,
     writeStringToFileAsync,
     printResult,
+
+    listAllViewsAsync,
+    getViewAsTemplateAsync,
+
     listAllFiltersAsync,
     getFilterAsTemplateAsync
 };
