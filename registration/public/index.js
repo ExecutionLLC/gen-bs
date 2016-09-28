@@ -200,6 +200,12 @@ function onRegister() {
     }
 }
 
+var getPassword = null; // will be defined later
+
+function onPassword(index, psw) {
+    console.log('password:', getPassword());
+}
+
 function onDocumentLoad() {
     const regcodeEl = document.getElementById('regcode');
     if (regcodeEl) {
@@ -215,6 +221,34 @@ function onDocumentLoad() {
     if (signupGoogle) {
         DOMUtils.onClick(signupGoogle, onSignupGoogle);
     }
+    const registerButtonEl = document.getElementById('register');
+    if (registerButtonEl) {
+        DOMUtils.onClick(registerButtonEl, onRegister);
+    }
+    const passwordInputEls = ['password1-value', 'password2-value'].map((id, index) => {
+        const passwordInputEl = document.getElementById(id);
+        if (passwordInputEl) {
+            DOMUtils.onInput(passwordInputEl, (psw) => onPassword(index, psw));
+        }
+        return passwordInputEl;
+    });
+
+    getPassword = () => {
+        return passwordInputEls.reduce(
+            (psw, el, index) => {
+                if (!index) {
+                    return el.value;
+                }
+                if (el.value === psw) {
+                    return psw;
+                } else {
+                    return null;
+                }
+            },
+            null
+        );
+    };
+
     const regcodeId = window.location.hash.replace(/^#/, '');
     if (regcodeId) {
         if (regcodeEl) {
