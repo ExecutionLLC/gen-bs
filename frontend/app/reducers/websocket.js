@@ -15,6 +15,7 @@ export default function websocket(state = {
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
+    variantsError: null,
     isVariantsLoading: false,
     progress: null
 }, action) {
@@ -89,7 +90,8 @@ export default function websocket(state = {
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),
                 isVariantsLoading: false,
-                isVariantsValid: true
+                isVariantsValid: true,
+                variantsError: null
             });
         }
         case ActionTypes.WS_PROGRESS_MESSAGE:
@@ -100,7 +102,8 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 error: action.err,
                 isVariantsLoading: false,
-                isVariantsValid: false
+                isVariantsValid: false,
+                variantsError: action.err
             });
 
         case ActionTypes.WS_RECEIVE_ERROR:

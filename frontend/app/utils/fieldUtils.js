@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import * as SamplesUtils from './samplesUtils';
-import  {firstCharToUpperCase} from './stringUtils';
+import {isMainSample} from './samplesUtils';
 
 export default class FieldUtils {
     static find(fieldId, fields) {
@@ -50,7 +50,7 @@ export default class FieldUtils {
         const {sourceName, label} = field;
         const isSource = sourceName && this.isSourceField(field);
         return {
-            label: (!isSource && sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(label),
+            label: `${(!isSource && sampleType ? `(${sampleType})` : '')}${label}`,
             title: isSource ? sourceName : sampleName
         };
     }
@@ -146,8 +146,11 @@ export default class FieldUtils {
         return sampleFields;
     }
 
-    static excludeVepFieldsButZygocityGenotype(fields) {
+    static excludeVepFieldsButZygocityGenotype(fields, sampleType) {
         // TODO remove VEP exceptions when there fields will be renamed
+        if ( isMainSample(sampleType)){
+            return fields;
+        }
         return _.filter(fields, (field) => !field.name.startsWith('VEP_') || field.name === 'VEP_Zygosity' || field.name === 'VEP_Genotype');
     }
 
@@ -188,7 +191,6 @@ export default class FieldUtils {
      * @returns {Array}
      */
     static makeModelAllowedFields(samples, samplesTypes, totalFieldsHash) {
-
         function addSampleTypeFields(fields, sampleType) {
             return _.map(fields, (field) => ({
                 ...field,
@@ -199,7 +201,7 @@ export default class FieldUtils {
         const samplesFields = samples.map((sample) => {
             const sampleType = samplesTypes[sample.id];
             const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
-            return addSampleTypeFields(FieldUtils.excludeVepFieldsButZygocityGenotype(sampleFields), sampleType);
+            return addSampleTypeFields(FieldUtils.excludeVepFieldsButZygocityGenotype(sampleFields, sampleType), sampleType);
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);

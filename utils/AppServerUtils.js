@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const {ENTITY_TYPES} = require('./Enums');
-const NOT_DUPLICATED_COLUMNS = ['CHROM', 'POS'];
+const NOT_DUPLICATED_COLUMNS = ['CHROM', 'POS', 'ALT', 'REF'];
 const NOT_DUPLICATED_COLUMN_PREFIXES = ['VEP_'];
 
 class AppServerUtils {
