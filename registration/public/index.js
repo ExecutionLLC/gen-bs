@@ -183,6 +183,10 @@ function checkRegcode(regcode) {
     currentUser.regcode = regcode;
     checkingUser.requestRegcodeAsync(regcode)
         .then((user) => {
+            if (user.isActivated) {
+                window.location.assign(`http://${WEBSERVER}:80/`);
+                return;
+            }
             loadedUserId = user.id;
             currentUser.user = Object.assign({}, user);
             currentUser.regcode = checkingUser.requested.regcode;
