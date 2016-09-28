@@ -177,14 +177,7 @@ function onUserEdit(fieldId, str) {
     console.log('onUserEdit', fieldId, str);
     console.log(currentUser);
     currentUser.user[fieldId] = str;
-    if (!loadedUserId) {
-        API.createUser(currentUser.regcode, currentUser.user)
-            .then((createdUser) => {
-                loadedUserId = createdUser.id;
-                currentUser.user = Object.assign({}, {id: loadedUserId}, currentUser.user);
-                FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
-            });
-    } else {
+    if (loadedUserId) {
         API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
     }
 }
