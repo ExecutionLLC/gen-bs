@@ -147,6 +147,8 @@ module.exports = {
     writeStringToFileAsync,
     printResult,
 
+    findTotalFieldsHashAsync,
+
     listAllViewsAsync,
     getViewAsTemplateAsync,
 
