@@ -160,6 +160,7 @@ function displayNoUserInfo() {
 }
 
 function checkRegcode(regcode) {
+    currentUser.regcode = regcode;
     checkingUser.requestRegcodeAsync(regcode)
         .then((user) => {
             loadedUserId = user.id;
@@ -203,7 +204,7 @@ function onSignupGoogle() {
 function onDocumentLoad() {
     const regcodeEl = document.getElementById('regcode');
     if (regcodeEl) {
-        DOMUtils.onInput(regcodeEl, (regcode) => {currentUser.regcode = regcode; checkRegcode(regcode);});
+        DOMUtils.onInput(regcodeEl, checkRegcode);
     }
     MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
     displayNoUserInfo();
