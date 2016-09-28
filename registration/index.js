@@ -11,13 +11,17 @@ const logger = new Logger(Config.logger);
 const KnexWrapper = require('./utils/KnexWrapper');
 const RegistrationCodesService = require('./services/RegistrationCodesService');
 const RegistrationCodesModel = require('./models/RegistrationCodesModel');
+const UserRequestService = require('./services/UserRequestService');
+const UserRequestModel = require('./models/UserRequestModel');
 const UsersClient = require('./api/UsersClient');
 
 const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
+const userRequestModel = new UserRequestModel(dbModel, logger);
 const usersClient = new UsersClient(Config);
 
 const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
+const userRequests = new UserRequestService(dbModel, userRequestModel, usersClient);
 
 const app = new Express();
 app.disable('x-powered-by');
@@ -71,6 +75,17 @@ app.put('/user', (request, response) => {
             registrationCodes.updateLastDate(regcodeInfo.id, regcodeInfo);
             return response.send(regcodeInfo);
         })
+        .catch((err) => response.status(400).send(err.message));
+});
+
+app.post('/user_request', (request, response) => {
+    console.log('user request');
+    console.log(request.body);
+    const userInfo = request.body;
+    userRequests.createAsync(userInfo)
+        .then(() =>
+            response.send(userInfo)
+        )
         .catch((err) => response.status(400).send(err.message));
 });
 
