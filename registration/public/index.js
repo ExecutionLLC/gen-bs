@@ -179,22 +179,26 @@ function displayNoUserInfo() {
     FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
 }
 
+function onRegcodedUserReceived(user) {
+    if (user.isActivated) {
+        window.location.assign(`http://${WEBSERVER}:80/`);
+        return;
+    }
+    loadedUserId = user.id;
+    currentUser.user = Object.assign({}, user);
+    currentUser.regcode = checkingUser.requested.regcode;
+    FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
+}
+
 function checkRegcode(regcode) {
     currentUser.regcode = regcode;
     checkingUser.requestRegcodeAsync(regcode)
-        .then((user) => {
-            if (user.isActivated) {
-                window.location.assign(`http://${WEBSERVER}:80/`);
-                return;
-            }
-            loadedUserId = user.id;
-            currentUser.user = Object.assign({}, user);
-            currentUser.regcode = checkingUser.requested.regcode;
-            FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
-        })
-        .catch(() => {
-            displayNoUserInfo();
-        });
+        .then((user) =>
+            onRegcodedUserReceived(user)
+        )
+        .catch(() =>
+            displayNoUserInfo()
+        );
 }
 
 function onUserEdit(fieldId, str) {
@@ -282,17 +286,10 @@ function onDocumentLoad() {
         }
         API.getUserForRegcodeId(regcodeId)
             .then((user) => {
-                if (user.isActivated) {
-                    window.location.assign(`http://${WEBSERVER}:80/`);
-                    return;
-                }
-                loadedUserId = user.id;
-                currentUser.user = Object.assign({}, user);
-                currentUser.regcode = checkingUser.requested.regcode;
-                FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
                 if (regcodeEl) {
                     regcodeEl.value = user.regcode;
                 }
+                onRegcodedUserReceived(user);
             })
             .catch(() => {
                 displayNoUserInfo();
