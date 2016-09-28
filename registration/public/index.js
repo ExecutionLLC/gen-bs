@@ -52,20 +52,34 @@ const API = {
 const USER_INFO_SCHEME = [
     {
         id: 'email',
+        elementId: 'email-value',
         label: 'Email'
     },
     {
         id: 'firstName',
+        elementId: 'first-name-value',
         label: 'First name'
     },
     {
         id: 'lastName',
+        elementId: 'last-name-value',
         label: 'Last name'
     },
     {
         id: 'speciality',
+        elementId: 'speciality-value',
         label: 'Speciality'
-    }
+    },
+    {
+        id: 'company',
+        elementId: 'company-value',
+        label: '---'
+    },
+    {
+        id: 'telephone',
+        elementId: 'phone-value',
+        label: '---'
+    },
 ];
 
 const DOMUtils = {
@@ -87,46 +101,55 @@ const DOMUtils = {
 };
 
 const MakeLayout = {
-    makeTemplateIds(templateEl, idSuffix) {
-        const TEMPLATE_ID_ATTR = 'data-id';
-        if (templateEl.hasAttribute(TEMPLATE_ID_ATTR)) {
-            templateEl.id = templateEl.getAttribute(TEMPLATE_ID_ATTR) + '-' + idSuffix;
-            templateEl.removeAttribute(TEMPLATE_ID_ATTR);
-        }
-        let childEl = templateEl.firstElementChild;
-        while (childEl) {
-            MakeLayout.makeTemplateIds(childEl, idSuffix);
-            childEl = childEl.nextElementSibling;
-        }
-    },
-    getTemplate(containerEl) {
-        const templateEl = containerEl.querySelector('*[data-role=template]').cloneNode(true);
-        if (templateEl) {
-            templateEl.removeAttribute('data-role');
-        }
-        return templateEl;
-    },
-    getLabelElId(id) {
-        return `userinfo-label-${id}`;
-    },
+    // makeTemplateIds(templateEl, idSuffix) {
+    //     const TEMPLATE_ID_ATTR = 'data-id';
+    //     if (templateEl.hasAttribute(TEMPLATE_ID_ATTR)) {
+    //         templateEl.id = templateEl.getAttribute(TEMPLATE_ID_ATTR) + '-' + idSuffix;
+    //         templateEl.removeAttribute(TEMPLATE_ID_ATTR);
+    //     }
+    //     let childEl = templateEl.firstElementChild;
+    //     while (childEl) {
+    //         MakeLayout.makeTemplateIds(childEl, idSuffix);
+    //         childEl = childEl.nextElementSibling;
+    //     }
+    // },
+    // getTemplate(containerEl) {
+    //     const templateEl = containerEl.querySelector('*[data-role=template]').cloneNode(true);
+    //     if (templateEl) {
+    //         templateEl.removeAttribute('data-role');
+    //     }
+    //     return templateEl;
+    // },
+    // getLabelElId(id) {
+    //     return `userinfo-label-${id}`;
+    // },
     getValueElId(id) {
-        return `userinfo-value-${id}`;
+        return `${id}-value`;
     },
-    makeUserInfo(scheme, containerEl, templateEl, onChange) {
+    attachHandlers(scheme, onChange) {
         scheme.forEach((scheme) => {
-            const newEl = templateEl.cloneNode(true);
-            MakeLayout.makeTemplateIds(newEl, scheme.id);
-            containerEl.appendChild(newEl);
-            const labelEl = document.getElementById(MakeLayout.getLabelElId(scheme.id));
-            if (labelEl) {
-                DOMUtils.setElementText(labelEl, scheme.label);
-            }
-            const inputEl = document.getElementById(MakeLayout.getValueElId(scheme.id));
+            console.log('qqq', scheme);
+            const inputEl = document.getElementById(scheme.elementId);
             if (inputEl) {
                 DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
             }
         });
     }
+    // makeUserInfo(scheme, containerEl, templateEl, onChange) {
+    //     scheme.forEach((scheme) => {
+    //         const newEl = templateEl.cloneNode(true);
+    //         MakeLayout.makeTemplateIds(newEl, scheme.id);
+    //         containerEl.appendChild(newEl);
+    //         const labelEl = document.getElementById(MakeLayout.getLabelElId(scheme.id));
+    //         if (labelEl) {
+    //             DOMUtils.setElementText(labelEl, scheme.label);
+    //         }
+    //         const inputEl = document.getElementById(MakeLayout.getValueElId(scheme.id));
+    //         if (inputEl) {
+    //             DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
+    //         }
+    //     });
+    // }
 };
 
 const FillData = {
@@ -144,10 +167,10 @@ const FillData = {
         }
     },
     fillUserItem(scheme, data) {
-        scheme.forEach(({id}) => {
-            const inputEl = document.getElementById(MakeLayout.getValueElId(id));
+        scheme.forEach((scheme) => {
+            const inputEl = document.getElementById(scheme.elementId);
             if (inputEl) {
-                FillData.fillDataItemEl(inputEl, data[id] || '');
+                FillData.fillDataItemEl(inputEl, data[scheme.id] || '');
             }
         });
     }
@@ -202,6 +225,7 @@ function checkRegcode(regcode) {
 }
 
 function onUserEdit(fieldId, str) {
+    console.log('onUserEdit', fieldId, str);
     console.log(currentUser);
     currentUser.user[fieldId] = str;
     if (!loadedUserId) {
@@ -234,11 +258,12 @@ function onDocumentLoad() {
         DOMUtils.onInput(regcodeEl, (regcode) => {currentUser.regcode = regcode; checkRegcode(regcode);});
     }
     const userInfoEl = document.getElementById('userinfo');
-    const templateUserdataEl = MakeLayout.getTemplate(userInfoEl);
-    if (templateUserdataEl) {
-        MakeLayout.makeUserInfo(USER_INFO_SCHEME, userInfoEl, templateUserdataEl, onUserEdit);
+//    const templateUserdataEl = MakeLayout.getTemplate(userInfoEl);
+//    if (templateUserdataEl) {
+//        MakeLayout.makeUserInfo(USER_INFO_SCHEME, userInfoEl, templateUserdataEl, onUserEdit);
+        MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
         displayNoUserInfo();
-    }
+//    }
     const signupLoginPassword = document.getElementById('signup-login-password');
     if (signupLoginPassword) {
         DOMUtils.onClick(signupLoginPassword, onSignupLoginPassword);
