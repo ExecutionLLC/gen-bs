@@ -2,10 +2,13 @@
 
 const _ = require('lodash');
 
-const RESULT_TYPES = require('./AppServerResultTypes'); 
+const RESULT_TYPES = require('./AppServerResultTypes');
 const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
+const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
+const AppServerNotRespondedCode = -300000;
+const AppServerNotRespondedMessage = 'App server not responded';
 
 const proxyProviderFunc = _.once(function (...args) {
     return new RPCProxy(...args);
@@ -15,7 +18,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     constructor(services) {
         super(services);
 
-        _.bindAll(this, ['_rpcSend', '_rpcReply']);
+        _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
 
         this.logger = this.services.logger;
         const {host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
@@ -24,6 +27,40 @@ class ApplicationServerServiceBase extends ServiceBase {
          * */
         this.rpcProxy = proxyProviderFunc(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout,
             this.logger, this._rpcReply);
+        this.rpcProxy.onMessageReturned(this._rpcReturned)
+    }
+
+    _rpcReturned(rpcMessage) {
+        const {id, replyTo, method} = ChangeCaseUtil.convertKeysToCamelCase(rpcMessage);
+        const parts = (id || '').split('_');
+        if (!id || !parts || parts.length != 2) {
+            this.logger.error(`Message id is of an incorrect format, message will be ignored. Id: ${id}`);
+        } else {
+            const sessionId = parts[0];
+            const operationId = parts[1];
+            this.services.applicationServerReply.onRpcReplyReturned(sessionId, operationId,
+                {
+                    id,
+                    replyTo,
+                    method,
+                    error: {
+                        code: AppServerNotRespondedCode,
+                        message: AppServerNotRespondedMessage
+                    }
+                }, (error) => {
+                    if (error) {
+                        this.logger.error('Error processing RPC return: ' + ErrorUtils.createErrorMessage(error));
+                    }
+                });
+        }
+
+    }
+
+    processReturnedMessage(session, operation, messageObject){
+        this.logger.error(
+            `Message returned but no handler is registered to`
+            + ` message returns. Message: ${JSON.stringify(messageObject)}`
+        );
     }
 
     createAppServerSessionId(operation) {
@@ -67,7 +104,7 @@ class ApplicationServerServiceBase extends ServiceBase {
             });
         }
     }
-    
+
     /**
      * @typedef {Object}AppServerErrorResult
      * @property {number}code
@@ -79,17 +116,17 @@ class ApplicationServerServiceBase extends ServiceBase {
      * @property {string}status
      * @property {number}progress
      * */
-    
+
     /**
      * @typedef {AppServerProgressMessage}AppServerUploadResult
      * @property {string}sampleId
      * */
-    
+
     /**
      * @typedef {AppServerProgressMessage}AppServerSearchResult
      * @property {Array<Object>}data
      * */
-    
+
     /**
      * @typedef {Object}AppServerOperationResult
      * @property {string}[targetSessionId] If specified, it will be used to match client web socket.
@@ -150,13 +187,13 @@ class ApplicationServerServiceBase extends ServiceBase {
             targetUserId,
             eventName,
             shouldCompleteOperation,
-            resultType: error? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
+            resultType: error ? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
             error,
             result
         };
         callback(null, operationResult);
     }
-    
+
     _isAsErrorMessage(message) {
         return message.error;
     }

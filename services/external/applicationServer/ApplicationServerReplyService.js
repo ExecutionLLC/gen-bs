@@ -79,6 +79,32 @@ class ApplicationServerReplyService extends ServiceBase {
         });
     }
 
+    onRpcReplyReturned(sessionId, operationId, rpcMessage, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findById(sessionId, callback),
+            (session, callback) => this.services.operations.find(session, operationId,
+                (error, operation) => callback(error, session, operation)
+            ),
+            (session, operation, callback) => this._processOperationReturnedResult(session, operation, rpcMessage, callback),
+            (operationResult, callback) => {
+                // Store client message in the operation for active uploads.
+                const operation = operationResult.operation;
+                if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
+                    && !operationResult.shouldCompleteOperation) {
+                    operation.setLastAppServerMessage(operationResult);
+                }
+                callback(null, operationResult);
+            },
+            (operationResult, callback) => this._completeOperationIfNeeded(operationResult, callback),
+            (operationResult, callback) => this._emitEvent(operationResult.eventName,
+                operationResult, (error) => callback(error, operationResult)),
+            // We are working with the session by ourselves, so need to explicitly save it here.
+            (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
+        ], (error) => {
+            callback(error);
+        });
+    }
+
     _emitEvent(eventName, operationResult, callback) {
         this.eventEmitter.emit(eventName, operationResult);
         callback(null);
@@ -107,6 +133,36 @@ class ApplicationServerReplyService extends ServiceBase {
      */
     _processOperationResult(session, operation, rpcMessage, callback) {
         const method = operation.getMethod();
+
+        switch (method) {
+            case METHODS.openSearchSession:
+                this.services.applicationServerSearch.processSearchResult(session, operation, rpcMessage, callback);
+                break;
+
+            case METHODS.uploadSample:
+                this.services.applicationServerUpload.processUploadResult(session, operation, rpcMessage, callback);
+                break;
+
+            case METHODS.getSourcesList:
+                this.services.applicationServerSources.processGetSourcesListResult(session, operation, rpcMessage, callback);
+                break;
+
+            case METHODS.getSourceMetadata:
+                this.services.applicationServerSources.processGetSourceMetadataResult(session, operation, rpcMessage, callback);
+                break;
+
+            case METHODS.keepAlive:
+                this.services.applicationServerOperations.processKeepAliveResult(session, operation, rpcMessage, callback);
+                break;
+
+            default:
+                callback(new Error('Ignoring unexpected result came from the application server.'));
+                break;
+        }
+    }
+    
+    _processOperationReturnedResult(session, operation, rpcMessage, callback) {
+        const {method} = rpcMessage;
 
         switch (method) {
             case METHODS.openSearchSession:
