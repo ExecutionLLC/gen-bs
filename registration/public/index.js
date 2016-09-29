@@ -255,13 +255,15 @@ function debounce(fn, delay) {
 }
 
 const checkServerRegcode = debounce(() => {
-    checkingUser.requestRegcodeAsync(currentUser.regcode)
-        .then((user) =>
-            onRegcodedUserReceived(user)
-        )
-        .catch(() =>
-            displayNoUserInfo()
-        );
+    const regcode = currentUser.regcode;
+    checkingUser.requestRegcodeAsync(regcode)
+        .then((user) => {
+            switchPageState({validRegcode: true, disableUserInfo: false});
+            onRegcodedUserReceived(user);
+        })
+        .catch(() => {
+            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode});
+        });
 }, 200);
 
 function checkRegcode(regcode) {
@@ -428,11 +430,15 @@ function switchPageState(ops) {
         document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
         document.body.classList.toggle('register-fail', !!ops.register.fail);
     }
+    if (ops.validRegcode != null) {
+        document.body.classList.toggle('valid-regcode', ops.validRegcode)
+    }
 }
 
 function onDocumentLoad() {
 
     switchPageState({
+        validRegcode: true,
         disableRegcode: true,
         disableUserInfo: true,
         showLoginType: false,
