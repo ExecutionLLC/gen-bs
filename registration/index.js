@@ -48,6 +48,11 @@ app.post('/register', (request, response) => {
         );
 });
 
+function returnUser(user) {
+    const {id, firstName, lastName, company, email, gender, isActivated, regcode, speciality, telephone} = user;
+    return {id, firstName, lastName, company, email, gender, isActivated, regcode, speciality, telephone};
+}
+
 app.get(
     '/user',
     (request, response) => {
@@ -60,7 +65,7 @@ app.get(
         findAsync
             .then((user) => {
                 registrationCodes.updateFirstDate(user.id, user);
-                return response.header('Pragma', 'no-cache').header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').send(user);
+                return response.header('Pragma', 'no-cache').header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').send(returnUser(user));
             })
             .catch((err) => response.status(404).send(err.message));
     }
@@ -73,7 +78,7 @@ app.put('/user', (request, response) => {
     registrationCodes.update(regcodeInfo.id, regcodeInfo)
         .then(() => {
             registrationCodes.updateLastDate(regcodeInfo.id, regcodeInfo);
-            return response.send(regcodeInfo);
+            return response.send(returnUser(regcodeInfo));
         })
         .catch((err) => response.status(400).send(err.message));
 });
@@ -84,7 +89,7 @@ app.post('/user_request', (request, response) => {
     const userInfo = request.body;
     userRequests.createAsync(userInfo)
         .then(() =>
-            response.send(userInfo)
+            response.send(returnUser(userInfo))
         )
         .catch((err) => response.status(400).send(err.message));
 });
