@@ -91,7 +91,7 @@ class SessionService extends ServiceBase {
     startForEmail(session, email, callback) {
         async.waterfall([
             (callback) => this.services.users.findIdByEmail(email, callback),
-            (userId, callback) => this.ensureNoUserSessions(userId, callback),
+            (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
             (userId, callback) => this.services.operations.closeSearchOperationsIfAny(session,
                 (error) => callback(error, userId)
             ),
