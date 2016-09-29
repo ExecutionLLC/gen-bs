@@ -50,7 +50,7 @@ class UserRequestModel extends ModelBase {
                 .where('id', item.id)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase({
                     isActivated: true,
-                    email
+                    activatedTimestamp: new Date()
                 })));
     }
 
