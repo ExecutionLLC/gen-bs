@@ -61,7 +61,8 @@ const ELEMENT_ID = {
     signupLoginPasswordButton: 'reg-submit-log-pass',
     signupGoogleButton: 'reg-google',
     registerButton: 'reg-submit',
-    passwordInputs: ['reg-password', 'reg-re-password']
+    passwordInputs: ['reg-password', 'reg-re-password'],
+    registerFailMessage: 'register-fail-message'
 };
 
 const USER_INFO_SCHEME = [
@@ -271,34 +272,16 @@ function onSignupLoginPassword() {
         });
         return;
     }
+    switchPageState({
+        disableRegcode: true,
+        disableUserInfo: true,
+        showLoginType: false,
+        showPassword: true,
+        warningPassword: true,
+        showRegister: true
+    });
     if (loadedUserId) {
-        switchPageState({
-            disableRegcode: true,
-            disableUserInfo: true,
-            showLoginType: false,
-            showPassword: false,
-            showRegister: false
-        });
-        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}))
-            .then(() => {
-                switchPageState({
-                    disableRegcode: true,
-                    disableUserInfo: true,
-                    showLoginType: false,
-                    showPassword: true,
-                    warningPassword: true,
-                    showRegister: true
-                });
-            });
-    } else {
-        switchPageState({
-            disableRegcode: true,
-            disableUserInfo: true,
-            showLoginType: false,
-            showPassword: true,
-            warningPassword: true,
-            showRegister: true
-        });
+        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
     }
 }
 
@@ -327,14 +310,6 @@ function onSignupGoogle() {
                     showRegister: true
                 });
             });
-    } else {
-        switchPageState({
-            disableRegcode: true,
-            disableUserInfo: true,
-            showLoginType: false,
-            showPassword: true,
-            showRegister: true
-        });
     }
 }
 
@@ -356,13 +331,27 @@ function onRegister() {
         disableUserInfo: true,
         showLoginType: false,
         showPassword: false,
-        showRegister: false
+        showRegister: false,
+        loading: true
     });
-    if (loadedUserId) {
-        API.registerUser(Object.assign({}, currentUser.user, {password}));
-    } else {
+    const registerAsync = loadedUserId ?
+        API.registerUser(Object.assign({}, currentUser.user, {password})) :
         API.requestUser(Object.assign({}, currentUser.user, {password}));
-    }
+    registerAsync
+        .then(() => {
+            if (loadedUserId) {
+                window.location.assign(`http://${WEBSERVER}:${WEBSERVER_HTTP_PORT}/`);
+            } else {
+                switchPageState({loading: false, register: {mail: true}});
+            }
+        })
+        .catch((err) => {
+            const registerFailMessageEl = document.getElementById(ELEMENT_ID.registerFailMessage);
+            if (registerFailMessageEl) {
+                DOMUtils.setElementText(registerFailMessageEl, '' + err);
+            }
+            switchPageState({loading: false, register: {fail: true}});
+        });
 }
 
 var getPassword = null; // will be defined later
@@ -397,6 +386,13 @@ function switchPageState(ops) {
     }
     if (ops.warningPassword != null) {
         document.body.classList.toggle('warning-password', ops.warningPassword)
+    }
+    if (ops.loading != null) {
+        document.body.classList.toggle('loading', ops.loading)
+    }
+    if (ops.register != null) {
+        document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
+        document.body.classList.toggle('register-fail', !!ops.register.fail);
     }
 }
 
@@ -454,6 +450,7 @@ function onDocumentLoad() {
 
     const regcodeId = window.location.hash.replace(/^#/, '');
     if (regcodeId) {
+        switchPageState({loading: true});
         API.getUserForRegcodeId(regcodeId)
             .then((user) => {
                 if (regcodeEl) {
@@ -464,7 +461,8 @@ function onDocumentLoad() {
                     disableUserInfo: false,
                     showLoginType: true,
                     showPassword: false,
-                    showRegister: false
+                    showRegister: false,
+                    loading: false
                 });
                 onRegcodedUserReceived(user);
             })
