@@ -57,6 +57,17 @@ class SessionsController extends ControllerBase {
         });
     }
 
+    closeAllUserSessions(request, response) {
+        const {session: {userEmail}} = request;
+        if (userEmail) {
+            this.services.sessions.closeAllUserSessions(userEmail, (error) => {
+                this.sendErrorOrOk(response, error);
+            });
+        } else {
+            this.sendInternalError(response, 'Please try to login first.');
+        }
+    }
+
     _parseGoogleProfile(accessToken, refreshToken, profile, callback) {
         this.services.logger.debug('Google profile: ' + JSON.stringify(profile, null, 2));
         const userEmail = profile.emails[0].value;
@@ -83,14 +94,20 @@ class SessionsController extends ControllerBase {
         router.use(passport.initialize());
         // Registration code is optional.
         router.get('/auth/google/login/:registrationCodeId?', (request, response, next) => {
-            const {registrationCodeId} = request.params;
-            const authCallback = passport.authenticate('google', {
-                scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
-                returnURL: googleFullRedirectUrl,
-                realm: baseUrl,
-                state: registrationCodeId || ''
-            });
-            authCallback(request, response, next);
+            const {session, session: {userEmail}} = request;
+            if (!userEmail) {
+                const {registrationCodeId} = request.params;
+                const authCallback = passport.authenticate('google', {
+                    scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+                    returnURL: googleFullRedirectUrl,
+                    realm: baseUrl,
+                    state: registrationCodeId || ''
+                });
+                authCallback(request, response, next);
+            } else {
+                // User has already logged in.
+                this._startUserSession(session, userEmail, response);
+            }
         });
 
         router.get(googleRelativeRedirectUrl, (request, response, next) => {
@@ -113,15 +130,20 @@ class SessionsController extends ControllerBase {
                             callback(null);
                         }
                     },
-                    () => this.services.sessions.startForEmail(request.session, userEmail, (error) => {
-                        const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
-                        response.redirect(`/${queryPart}`);
-                    })
+                    () => this._startUserSession(request.session, userEmail, response)
                 ], (error) => next(error)); // We can be here only in case of an error.
 
             });
             authFunc(request, response, next);
         });
+    }
+
+    _startUserSession(session, email, response) {
+        session.userEmail = email;
+        this.services.sessions.startForEmail(session, email, (error) => {
+            const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
+            response.redirect(`/${queryPart}`);
+        })
     }
 
     createRouter(controllerRelativePath) {
@@ -145,9 +167,15 @@ class SessionsController extends ControllerBase {
             delayMs: 500
         });
 
+        const closeAllSessionsLimiter = this.createLimiter({
+            noDelayCount: 2,
+            delayMs: 500
+        });
+
         router.post('/', openSessionLimiter, this.open);
         router.put('/', checkSessionLimiter, this.check);
         router.delete('/', closeSessionLimiter, this.close);
+        router.delete('/all', closeAllSessionsLimiter, this.closeAllUserSessions);
 
         return router;
     }
