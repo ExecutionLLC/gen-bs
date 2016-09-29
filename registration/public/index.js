@@ -125,7 +125,7 @@ const MakeLayout = {
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                radioEls.forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach((el) => {
                     DOMUtils.onClick(el, () => onChange(scheme.id, el.value))
                 });
             }
@@ -139,7 +139,7 @@ const MakeLayout = {
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                radioEls.forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach((el) => {
                     el.disabled = disable;
                 });
             }
@@ -163,7 +163,7 @@ const FillData = {
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                radioEls.forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach((el) => {
                     el.checked = el.value === data[scheme.id];
                 });
             }
