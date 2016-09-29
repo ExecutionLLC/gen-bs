@@ -299,18 +299,24 @@ function onSignupGoogle() {
         showPassword: false,
         showRegister: false
     });
-    if (loadedUserId) {
-        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}))
-            .then(() => {
-                switchPageState({
-                    disableRegcode: true,
-                    disableUserInfo: true,
-                    showLoginType: false,
-                    showPassword: true,
-                    showRegister: true
-                });
-            });
-    }
+    const registerAsync = loadedUserId ?
+        API.registerUser(Object.assign({}, currentUser.user, {loginType: 'google'})) :
+        API.requestUser(Object.assign({}, currentUser.user, {loginType: 'google'}));
+    registerAsync
+        .then(() => {
+            if (loadedUserId) {
+                window.location.assign(`http://${WEBSERVER}:${WEBSERVER_HTTP_PORT}/`);
+            } else {
+                switchPageState({loading: false, register: {mail: true}});
+            }
+        })
+        .catch((err) => {
+            const registerFailMessageEl = document.getElementById(ELEMENT_ID.registerFailMessage);
+            if (registerFailMessageEl) {
+                DOMUtils.setElementText(registerFailMessageEl, '' + err);
+            }
+            switchPageState({loading: false, register: {fail: true}});
+        });
 }
 
 function validateUser() {
@@ -335,8 +341,8 @@ function onRegister() {
         loading: true
     });
     const registerAsync = loadedUserId ?
-        API.registerUser(Object.assign({}, currentUser.user, {password})) :
-        API.requestUser(Object.assign({}, currentUser.user, {password}));
+        API.registerUser(Object.assign({}, currentUser.user, {loginType: 'password', password})) :
+        API.requestUser(Object.assign({}, currentUser.user, {loginType: 'password', password}));
     registerAsync
         .then(() => {
             if (loadedUserId) {
