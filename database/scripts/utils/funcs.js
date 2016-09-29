@@ -12,7 +12,6 @@ const CollectionUtils = require('../../../utils/CollectionUtils');
 
 const logger = new Logger(config.logger);
 const models = new ModelsFacade(config, logger);
-const services = null;//new ServicesFacade(config, logger, models);
 
 function findTotalFieldsHashAsync() {
     return Promise.fromCallback(done => models.fields.findTotalMetadata(done))
@@ -143,7 +142,6 @@ function writeStringToFileAsync(filePath, contents) {
 
 module.exports = {
     models,
-    services,
     writeStringToFileAsync,
     printResult,
 
