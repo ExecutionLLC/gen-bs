@@ -237,7 +237,7 @@ function debounce(fn, delay) {
 }
 
 const checkServerRegcode = debounce(() => {
-    checkingUser.requestRegcodeAsync(regcode)
+    checkingUser.requestRegcodeAsync(currentUser.regcode)
         .then((user) =>
             onRegcodedUserReceived(user)
         )
