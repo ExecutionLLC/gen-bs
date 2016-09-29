@@ -1,7 +1,7 @@
 'use strict';
 
 
-const NUMBER_OF_PAID_SAMPLES = 0;
+const NUMBER_OF_PAID_SAMPLES = 10;
 
 class UserRequestService {
     constructor(db, userRequestModel, usersClient) {
