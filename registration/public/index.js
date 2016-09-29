@@ -286,6 +286,9 @@ function onUserEdit (fieldId, str) {
 }
 
 function onSignupLoginPassword() {
+    if (loadedUserId) {
+        updateServerData();
+    }
     if (!validateUser()) {
         switchPageState({
             warningUserdata: true
@@ -300,12 +303,12 @@ function onSignupLoginPassword() {
         warningPassword: false,
         showRegister: true
     });
-    if (loadedUserId) {
-        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
-    }
 }
 
 function onSignupGoogle() {
+    if (loadedUserId) {
+        updateServerData();
+    }
     if (!validateUser()) {
         switchPageState({
             warningUserdata: true
