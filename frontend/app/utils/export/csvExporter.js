@@ -41,7 +41,7 @@ export default class CsvExporter extends ExporterBase {
      * @private
      */
     _preprocessRowValue(value) {
-        const escapedValue = (value || '').replace(/"/g, '""');
+        const escapedValue = (value || '').replace(/"/g, '""').replace(/\n/g, ' ');
         return `"${escapedValue}"`;
     }
 }

@@ -49,7 +49,7 @@ export default class SqlExporter extends ExporterBase {
         }
 
         if (value.constructor === String) {
-            return `'${value.replace(/'/g, "''")}'`;
+            return `'${value.replace(/'/g, "''").replace(/\n/g, ' ')}'`;
         }
 
         return value;
