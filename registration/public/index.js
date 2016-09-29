@@ -346,7 +346,7 @@ var getPassword = null; // will be defined later
 function onPassword(/*index, psw*/) {
     switchPageState({
         warningPassword: !getPassword()
-    });2
+    });
 }
 
 function switchPageState(ops) {
