@@ -1,0 +1,50 @@
+<h2 id="registration-header">Registration</h2>
+<div id="regcode-container">
+    <label> Code
+        [text reg-company id:reg-code] </label>
+    <span class="wpcf7-not-valid-tip" id="wrong-regcode">Wrong regcode</span>
+</div>
+<div id="userinfo">
+    <label> Fist Name *
+        [text* reg-first-name id:reg-first-name]</label>
+    <label> Last Name *
+        [text* reg-last-name id:reg-last-name]</label>
+    <p> Gender *
+        [radio reg-gender id:reg-gender label_first default:1 "Male" "Female"]</p>
+    <label> Telephone *
+        [text* reg-user-name id:reg-telephone]</label>
+    <label> E-Mail *
+        [email* reg-e-mail id:reg-e-mail]</label>
+    <label> Company *
+        [text* reg-company id:reg-company]</label>
+    <label> Speciality *
+        [text* reg-speciality id:reg-speciality]</label>
+
+    <div class="warning" id="warning-userdata">Please correct errors above</div>
+</div>
+
+<div id="login-type">
+Choose login method:
+[submit id:reg-submit-log-pass "Login/Password"]  [submit id:reg-google "Google"]
+</div>
+
+<div id="password">
+    <label> Password *
+        <input type="password" id="reg-password" />
+    </label>
+    <label> Re-Enter Password*
+        <input type="password" id="reg-re-password" />
+    </label>
+    <span class="wpcf7-not-valid-tip" id="warning-password">Passwords different or empty</span>
+</div>
+
+<div id="register-block">
+[submit id:reg-submit "Register"]
+</div>
+
+<div id="register-ok-mail">
+We sent you mail
+</div>
+<div id="register-fail">
+Registration fails: <span id="register-fail-message"></span>
+</div>
