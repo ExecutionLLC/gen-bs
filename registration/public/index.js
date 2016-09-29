@@ -354,7 +354,10 @@ function validateUser() {
 
 function onRegister() {
     const password = getPassword();
-    if (password == null) {
+    if (!password) {
+        switchPageState({
+            warningPassword: true
+        });
         return;
     }
     switchPageState({
