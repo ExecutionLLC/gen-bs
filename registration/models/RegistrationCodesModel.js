@@ -18,6 +18,7 @@ class RegistrationCodesModel extends ModelBase {
             'description',
             'isActivated',
             'activatedTimestamp',
+            'createdTimestamp',
             'language',
             'speciality',
             'numberOfPaidSamples',
@@ -106,6 +107,7 @@ class RegistrationCodesModel extends ModelBase {
                 .where('id', item.id)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase({
                     isActivated: true,
+                    activatedTimestamp: new Date(),
                     email
                 })));
     }
