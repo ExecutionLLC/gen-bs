@@ -1,4 +1,6 @@
-const WEBSERVER = 'localhost';
+const WEBSERVER = '37.195.64.171';
+const WEBSERVER_API_PORT = '2030';
+const WEBSERVER_HTTP_PORT = '2080';
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
@@ -38,42 +40,42 @@ function ajaxAsync(method, url, params, data) {
 
 const API = {
     getUserForRegcodeEmailAsync(regcode) {
-        return ajaxAsync('GET', `http://${WEBSERVER}:3000/user`, {regcode, email: null});
+        return ajaxAsync('GET', `http://${WEBSERVER}:${WEBSERVER_API_PORT}/user`, {regcode, email: null});
     },
     getUserForRegcodeId(regcodeId) {
-        return ajaxAsync('GET', `http://${WEBSERVER}:3000/user`, {regcodeId});
+        return ajaxAsync('GET', `http://${WEBSERVER}:${WEBSERVER_API_PORT}/user`, {regcodeId});
     },
     updateUser(user) {
-        return ajaxAsync('PUT', `http://${WEBSERVER}:3000/user`, null, user);
+        return ajaxAsync('PUT', `http://${WEBSERVER}:${WEBSERVER_API_PORT}/user`, null, user);
     },
     requestUser(user) {
-        return ajaxAsync('POST', `http://${WEBSERVER}:3000/user_request`, null, user);
+        return ajaxAsync('POST', `http://${WEBSERVER}:${WEBSERVER_API_PORT}/user_request`, null, user);
     },
     registerUser(user) {
-        return ajaxAsync('POST', `http://${WEBSERVER}:3000/register`, null, user);
+        return ajaxAsync('POST', `http://${WEBSERVER}:${WEBSERVER_API_PORT}/register`, null, user);
     },
 };
 
 const ELEMENT_ID = {
-    regcodeInput: 'regcode',
-    signupLoginPasswordButton: 'signup-login-password',
-    signupGoogleButton: 'signup-google',
-    registerButton: 'register',
-    passwordInputs: ['password1-value', 'password2-value']
+    regcodeInput: 'reg-code',
+    signupLoginPasswordButton: 'reg-submit-log-pass',
+    signupGoogleButton: 'reg-google',
+    registerButton: 'reg-submit',
+    passwordInputs: ['reg-password', 'reg-re-password']
 };
 
 const USER_INFO_SCHEME = [
     {
         id: 'email',
-        elementId: 'email-value'
+        elementId: 'reg-e-mail'
     },
     {
         id: 'firstName',
-        elementId: 'first-name-value'
+        elementId: 'reg-first-name'
     },
     {
         id: 'lastName',
-        elementId: 'last-name-value'
+        elementId: 'reg-last-name'
     },
     {
         id: 'speciality',
@@ -81,11 +83,11 @@ const USER_INFO_SCHEME = [
     },
     {
         id: 'company',
-        elementId: 'company-value'
+        elementId: 'reg-company'
     },
     {
         id: 'telephone',
-        elementId: 'phone-value'
+        elementId: 'reg-telephone'
     },
     {
         id: 'gender',
@@ -203,7 +205,7 @@ function displayNoUserInfo() {
 
 function onRegcodedUserReceived(user) {
     if (user.isActivated) {
-        window.location.assign(`http://${WEBSERVER}:80/`);
+        window.location.assign(`http://${WEBSERVER}:${WEBSERVER_HTTP_PORT}/`);
         return;
     }
     loadedUserId = user.id;

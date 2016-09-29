@@ -29,6 +29,11 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use(Express.static('public'));
+app.use(cors({
+    origin: 'http://alapy.com',
+    credentials: true
+}));
+
 
 app.post('/register', (request, response) => {
     console.log('register');
