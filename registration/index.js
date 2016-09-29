@@ -53,21 +53,16 @@ app.get(
     (request, response) => {
         console.log('/user', request.query);
         const {regcode, regcodeId} = request.query;
-        if (regcodeId) {
-            registrationCodes.findRegcodeIdAsync(regcodeId)
-                .then((user) => {
-                    registrationCodes.updateFirstDate(user.id, user);
-                    return response.header('Pragma', 'no-cache').header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').send(user);
-                })
-                .catch((err) => response.status(404).send(err.message));
-        } else {
-            registrationCodes.findRegcodeAsync(regcode)
-                .then((user) => {
-                    registrationCodes.updateFirstDate(user.id, user);
-                    return response.header('Pragma', 'no-cache').header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').send(user);
-                })
-                .catch((err) => response.status(404).send(err.message));
-        }
+        const findAsync = regcodeId ?
+            registrationCodes.findRegcodeIdAsync(regcodeId) :
+            registrationCodes.findRegcodeAsync(regcode);
+
+        findAsync
+            .then((user) => {
+                registrationCodes.updateFirstDate(user.id, user);
+                return response.header('Pragma', 'no-cache').header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').send(user);
+            })
+            .catch((err) => response.status(404).send(err.message));
     }
 );
 
