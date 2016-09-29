@@ -269,6 +269,7 @@ function onSignupLoginPassword() {
                     disableUserInfo: true,
                     showLoginType: false,
                     showPassword: true,
+                    warningPassword: true,
                     showRegister: true
                 });
             });
@@ -278,6 +279,7 @@ function onSignupLoginPassword() {
             disableUserInfo: true,
             showLoginType: false,
             showPassword: true,
+            warningPassword: true,
             showRegister: true
         });
     }
