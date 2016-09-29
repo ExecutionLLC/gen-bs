@@ -224,8 +224,18 @@ function onRegcodedUserReceived(user) {
     });
 }
 
-function checkRegcode(regcode) {
-    currentUser.regcode = regcode;
+function debounce(fn, delay) {
+    var timer = null;
+    return function () {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            fn.apply(context, args);
+        }, delay);
+    };
+}
+
+const checkServerRegcode = debounce(() => {
     checkingUser.requestRegcodeAsync(regcode)
         .then((user) =>
             onRegcodedUserReceived(user)
@@ -233,9 +243,16 @@ function checkRegcode(regcode) {
         .catch(() =>
             displayNoUserInfo()
         );
+}, 200);
+
+function checkRegcode(regcode) {
+    currentUser.regcode = regcode;
+    checkServerRegcode()
 }
 
-function onUserEdit(fieldId, str) {
+const updateServerData = debounce(() => API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})), 200);
+
+function onUserEdit (fieldId, str) {
     console.log('onUserEdit', fieldId, str);
     console.log(currentUser);
     switchPageState({
@@ -243,7 +260,7 @@ function onUserEdit(fieldId, str) {
     });
     currentUser.user[fieldId] = str;
     if (loadedUserId) {
-        API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId}));
+        updateServerData();
     }
 }
 
