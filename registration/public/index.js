@@ -79,7 +79,7 @@ const USER_INFO_SCHEME = [
     },
     {
         id: 'speciality',
-        elementId: 'speciality-value'
+        elementId: 'reg-speciality'
     },
     {
         id: 'company',
