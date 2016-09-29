@@ -53,7 +53,7 @@ const API = {
     },
     registerUser(user) {
         return ajaxAsync('POST', `http://${WEBSERVER}:${WEBSERVER_API_PORT}/register`, null, user);
-    },
+    }
 };
 
 const ELEMENT_ID = {
@@ -404,22 +404,22 @@ function switchPageState(ops) {
         MakeLayout.disableControls(USER_INFO_SCHEME, ops.disableUserInfo);
     }
     if (ops.showLoginType != null) {
-        document.body.classList.toggle('no-login-type', !ops.showLoginType)
+        document.body.classList.toggle('no-login-type', !ops.showLoginType);
     }
     if (ops.showPassword != null) {
-        document.body.classList.toggle('no-password', !ops.showPassword)
+        document.body.classList.toggle('no-password', !ops.showPassword);
     }
     if (ops.showRegister != null) {
-        document.body.classList.toggle('no-register', !ops.showRegister)
+        document.body.classList.toggle('no-register', !ops.showRegister);
     }
     if (ops.warningUserdata != null) {
-        document.body.classList.toggle('warning-userdata', ops.warningUserdata)
+        document.body.classList.toggle('warning-userdata', ops.warningUserdata);
     }
     if (ops.warningPassword != null) {
-        document.body.classList.toggle('warning-password', ops.warningPassword)
+        document.body.classList.toggle('warning-password', ops.warningPassword);
     }
     if (ops.loading != null) {
-        document.body.classList.toggle('register-loading', ops.loading)
+        document.body.classList.toggle('register-loading', ops.loading);
     }
     if (ops.register != null) {
         document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
