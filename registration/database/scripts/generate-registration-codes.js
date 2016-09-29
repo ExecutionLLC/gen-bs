@@ -24,11 +24,12 @@ const {
     speciality,
     description,
     defaultLanguage,
-    numberPaidSamples
+    numberPaidSamples,
+    startRegcode
 } = args;
 
 if (count && speciality && description && defaultLanguage && numberPaidSamples) {
-    registrationCodes.createManyRegcodeAsync(count, null, defaultLanguage, speciality, description, numberPaidSamples)
+    registrationCodes.createManyRegcodeAsync(count, startRegcode, defaultLanguage, speciality, description, numberPaidSamples)
         .then((users) => {
             console.log(`${count} registration codes are added with ids:`, users.map((user) => user.id));
             users.map(user => {
