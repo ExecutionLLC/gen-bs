@@ -54,6 +54,14 @@ const API = {
     },
 };
 
+const ELEMENT_ID = {
+    regcodeInput: 'regcode',
+    signupLoginPasswordButton: 'signup-login-password',
+    signupGoogleButton: 'signup-google',
+    registerButton: 'register',
+    passwordInputs: ['password1-value', 'password2-value']
+};
+
 const USER_INFO_SCHEME = [
     {
         id: 'email',
@@ -343,7 +351,7 @@ function onPassword(/*index, psw*/) {
 
 function switchPageState(ops) {
     if (ops.disableRegcode != null) {
-        const regcodeEl = document.getElementById('regcode');
+        const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
         if (regcodeEl) {
             regcodeEl.disabled = ops.disableRegcode;
         }
@@ -378,25 +386,25 @@ function onDocumentLoad() {
         showRegister: false
     });
 
-    const regcodeEl = document.getElementById('regcode');
+    const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
     if (regcodeEl) {
         DOMUtils.onInput(regcodeEl, checkRegcode);
     }
     MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
     displayNoUserInfo();
-    const signupLoginPassword = document.getElementById('signup-login-password');
+    const signupLoginPassword = document.getElementById(ELEMENT_ID.signupLoginPasswordButton);
     if (signupLoginPassword) {
         DOMUtils.onClick(signupLoginPassword, onSignupLoginPassword);
     }
-    const signupGoogle = document.getElementById('signup-google');
+    const signupGoogle = document.getElementById(ELEMENT_ID.signupGoogleButton);
     if (signupGoogle) {
         DOMUtils.onClick(signupGoogle, onSignupGoogle);
     }
-    const registerButtonEl = document.getElementById('register');
+    const registerButtonEl = document.getElementById(ELEMENT_ID.registerButton);
     if (registerButtonEl) {
         DOMUtils.onClick(registerButtonEl, onRegister);
     }
-    const passwordInputEls = ['password1-value', 'password2-value'].map((id, index) => {
+    const passwordInputEls = ELEMENT_ID.passwordInputs.map((id, index) => {
         const passwordInputEl = document.getElementById(id);
         if (passwordInputEl) {
             DOMUtils.onInput(passwordInputEl, (psw) => onPassword(index, psw));
