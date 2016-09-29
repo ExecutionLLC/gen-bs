@@ -258,11 +258,11 @@ const checkServerRegcode = debounce(() => {
     const regcode = currentUser.regcode;
     checkingUser.requestRegcodeAsync(regcode)
         .then((user) => {
-            switchPageState({validRegcode: true, disableUserInfo: false});
+            switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true});
             onRegcodedUserReceived(user);
         })
         .catch(() => {
-            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode});
+            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode});
         });
 }, 200);
 
