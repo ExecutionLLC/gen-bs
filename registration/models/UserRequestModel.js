@@ -21,7 +21,8 @@ class UserRequestModel extends ModelBase {
             'company',
             'loginType',
             'password',
-            'gender'
+            'gender',
+            'createdTimestamp'
         ]);
     }
 
