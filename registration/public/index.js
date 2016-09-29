@@ -92,7 +92,8 @@ const USER_INFO_SCHEME = [
     },
     {
         id: 'gender',
-        radioName: 'reg-gender'
+        radioName: 'reg-gender',
+        containerId: 'reg-gender'
     }
 ];
 
@@ -145,6 +146,23 @@ const MakeLayout = {
                 });
             }
         });
+    },
+    toggleRequiredAlert(inputEl, showAlert) {
+        const nextEl = inputEl.nextElementSibling;
+        if (nextEl && nextEl.getAttribute('role') === 'alert') {
+            if (showAlert) {
+                return;
+            } else {
+                nextEl.parentNode.removeChild(nextEl);
+            }
+        }
+        if (showAlert) {
+            const el = document.createElement('span');
+            el.classList.add('wpcf7-not-valid-tip');
+            el.setAttribute('role', 'alert');
+            DOMUtils.setElementText(el, 'The field is required.');
+            inputEl.parentNode.insertBefore(el, inputEl.nextElementSibling);
+        }
     }
 };
 
@@ -320,11 +338,18 @@ function onSignupGoogle() {
 }
 
 function validateUser() {
-    const {email, firstName, lastName, company, telephone, gender, speciality} = currentUser.user;
-    if (!email || !firstName || !lastName|| !speciality || !gender || !company || !telephone) {
-        return false;
-    }
-    return true;
+
+    const hasAbsent = USER_INFO_SCHEME.reduce((hasAbsent, scheme) => {
+        const inputEl = scheme.containerId ?
+            document.getElementById(scheme.containerId) :
+            document.getElementById(scheme.elementId);
+        const isAbsent = !currentUser.user[scheme.id];
+        if (inputEl) {
+            MakeLayout.toggleRequiredAlert(inputEl, isAbsent);
+        }
+        return hasAbsent || isAbsent;
+    }, false);
+    return !hasAbsent;
 }
 
 function onRegister() {
