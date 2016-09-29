@@ -295,7 +295,7 @@ function onSignupLoginPassword() {
         disableUserInfo: true,
         showLoginType: false,
         showPassword: true,
-        warningPassword: true,
+        warningPassword: false,
         showRegister: true
     });
     if (loadedUserId) {
