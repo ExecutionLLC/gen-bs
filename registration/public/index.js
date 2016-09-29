@@ -388,7 +388,7 @@ function switchPageState(ops) {
         document.body.classList.toggle('warning-password', ops.warningPassword)
     }
     if (ops.loading != null) {
-        document.body.classList.toggle('loading', ops.loading)
+        document.body.classList.toggle('register-loading', ops.loading)
     }
     if (ops.register != null) {
         document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
