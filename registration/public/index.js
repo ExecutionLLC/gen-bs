@@ -109,6 +109,9 @@ const DOMUtils = {
         el.addEventListener('input', () => handler(el.value));
     },
     onClick(el, handler) {
+        if (el.getAttribute('type') === 'submit') {
+            el.setAttribute('type', 'button');
+        }
         el.addEventListener('click', () => handler());
     }
 };
