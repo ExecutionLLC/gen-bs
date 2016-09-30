@@ -37,18 +37,16 @@ describe('Registration Codes', () => {
                     return regcodeUsers;
                 })
                 .then((regcodeUsers) =>
-                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser.id, 'Test', 'Test', generateEmail())))
+                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser.id)))
                 )
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
         );
 
         it('activates successfully', () => {
-            const testEmail = generateEmail();
             return generateCodeIdAsync()
-                .then((id) => registrationCodes.activateAsync(id, 'Test', 'Test', testEmail))
-                .then(() => usersClient.findIdByEmailAsync(testEmail))
+                .then((id) => registrationCodes.activateAsync(id))
                 .catch((error) => {
-                    assert.fail(`User who activated code is not found in the database: ${error}`);
+                    assert.fail(`Activation failed: ${error}`);
                 });
         });
 
@@ -111,25 +109,19 @@ describe('Registration Codes', () => {
 
     describe('Negative tests', () => {
         it('activates only once', () => {
-            const testEmail = generateEmail();
-            const otherEmail = generateEmail();
             return generateCodeIdAsync()
                 .then((id) =>
-                    registrationCodes.activateAsync(id, 'Test', 'Test', testEmail)
+                    registrationCodes.activateAsync(id)
                         .then(() => mustThrowPromise(
-                            registrationCodes.activateAsync(id, 'Test', 'Test', otherEmail),
+                            registrationCodes.activateAsync(id),
                             'Activated the same code twice for different emails'
-                        ))
-                        .then(() => mustThrowPromise(
-                            registrationCodes.activateAsync(id, 'Test', 'Test', testEmail),
-                            'Activated the same code twice for the same email'
                         ))
                 );
         });
 
         it('should work fine with unknown code', () =>
             mustThrowPromise(
-                registrationCodes.activateAsync(Uuid.v4(), 'Test', 'Test', generateEmail()),
+                registrationCodes.activateAsync(Uuid.v4()),
                 'Activation successful for unknown code.'
             )
         );

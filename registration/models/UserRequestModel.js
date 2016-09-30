@@ -44,7 +44,7 @@ class UserRequestModel extends ModelBase {
             });
     }
 
-    activateAsync(id, email, trx) {
+    activateAsync(id, trx) {
         return this.findInactiveAsync(id, trx)
             .then((item) => trx(this.baseTableName)
                 .where('id', item.id)

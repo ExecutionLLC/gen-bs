@@ -10,15 +10,13 @@ class UserRequestService {
         this.usersClient = usersClient;
     }
 
-    activateAsync(registrationCodeId, firstName, lastName, userEmail) {
+    activateAsync(registrationCodeId) {
         const {db, userRequestModel, usersClient} = this;
 
         return db.transactionallyAsync((trx) =>
             userRequestModel.findInactiveAsync(registrationCodeId, trx)
-                .then(({speciality}) =>
-                    usersClient.addAsync({firstName, lastName, userEmail, speciality, numberOfPaidSamples: NUMBER_OF_PAID_SAMPLES})
-                )
-                .then(() => userRequestModel.activateAsync(registrationCodeId, userEmail, trx))
+                .then((user) => usersClient.addAsync(Object.assign({}, user, {numberOfPaidSamples: NUMBER_OF_PAID_SAMPLES})))
+                .then(() => userRequestModel.activateAsync(registrationCodeId, trx))
         );
     }
 

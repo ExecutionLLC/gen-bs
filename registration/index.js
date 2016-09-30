@@ -37,9 +37,8 @@ app.use(cors({
 
 app.post('/register', (request, response) => {
     console.log('register');
-    console.log(request.body.id);
     console.log(request.body);
-    registrationCodes.activateAsync(request.body.id, request.body.firstName, request.body.lastName, request.body.email)
+    registrationCodes.activateAsync(request.body.id)
         .then(() =>
             response.send({})
         )

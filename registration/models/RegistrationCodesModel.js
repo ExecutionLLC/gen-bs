@@ -101,14 +101,13 @@ class RegistrationCodesModel extends ModelBase {
     }
 
 
-    activateAsync(id, email, trx) {
+    activateAsync(id, trx) {
         return this.findInactiveAsync(id, trx)
             .then((item) => trx(this.baseTableName)
                 .where('id', item.id)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase({
                     isActivated: true,
-                    activatedTimestamp: new Date(),
-                    email
+                    activatedTimestamp: new Date()
                 })));
     }
 
