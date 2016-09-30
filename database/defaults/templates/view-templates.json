@@ -1,13 +1,13 @@
 [
   {
-    "name": "Default Test View",
+    "name": "Snapshot View",
     "description": "This is default view with two columns and no keywords",
     "type": "default",
     "items": [
       {
         "field": {
-          "source_name": "sample",
           "name": "CHROM",
+          "source_name": "sample",
           "value_type": "integer"
         },
         "keywords": [],
@@ -17,125 +17,318 @@
       },
       {
         "field": {
-          "source_name": "sample",
           "name": "POS",
+          "source_name": "sample",
           "value_type": "integer"
         },
         "keywords": [],
         "order": 2,
         "sort_order": 2,
-        "sort_direction": "desc"
+        "sort_direction": "asc"
       },
       {
         "field": {
+          "name": "VEP_Genotype",
           "source_name": "sample",
-          "name": "ALT",
           "value_type": "string"
         },
-        "keywords": [
-          "ALT A",
-          "ALT C"
-        ],
-        "order": 5
+        "keywords": [],
+        "order": 5,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_Zygosity",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_SYMBOL",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSc_transcript",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSc_nucleotide_changes",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSp_transcript",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSp_nucleotide_changes",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_Consequence",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_ExonNumber",
+          "source_name": "sample",
+          "value_type": "integer"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_NumberOfExons",
+          "source_name": "sample",
+          "value_type": "integer"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
       }
     ]
   },
   {
-    "name": "Test Default View",
+    "name": "Standard View",
     "description": "This is default view with two columns and no keywords",
     "type": "standard",
     "items": [
       {
         "field": {
+          "name": "VEP_Genotype",
           "source_name": "sample",
-          "name": "CHROM",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_Zygosity",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_SYMBOL",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSc_transcript",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSc_nucleotide_changes",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSp_transcript",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_HGVSp_nucleotide_changes",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_Consequence",
+          "source_name": "sample",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_ExonNumber",
+          "source_name": "sample",
           "value_type": "integer"
         },
         "keywords": [],
-        "order": 1,
-        "sort_order": 1,
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_NumberOfExons",
+          "source_name": "sample",
+          "value_type": "integer"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "INFO_CLNACC",
+          "source_name": "clinvar_20160705_v01",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "INFO_CLNREVSTAT",
+          "source_name": "clinvar_20160705_v01",
+          "value_type": "string"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "INFO_MAF_2",
+          "source_name": "ESP6500_v01",
+          "value_type": "float"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "INFO_AF_Adj",
+          "source_name": "ExAC_r0_3_1_sites_v01",
+          "value_type": "float"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
+      },
+      {
+        "field": {
+          "name": "VEP_SIFT",
+          "source_name": "sample",
+          "value_type": "float"
+        },
+        "keywords": [],
+        "order": null,
+        "sort_order": 2,
         "sort_direction": "asc"
       },
       {
         "field": {
+          "name": "VEP_PolyPhen",
           "source_name": "sample",
-          "name": "POS",
-          "value_type": "integer"
+          "value_type": "float"
         },
         "keywords": [],
-        "order": 2,
-        "sort_order": 2,
-        "sort_direction": "desc"
-      },
-      {
-        "field": {
-          "source_name": "sample",
-          "name": "FILTER",
-          "value_type": "string"
-        },
-        "keywords": [],
-        "order": 6
-      },
-      {
-        "field": {
-          "source_name": "sample",
-          "name": "ALT",
-          "value_type": "string"
-        },
-        "keywords": [
-          "ALT A",
-          "ALT C"
-        ],
-        "order": 5
-      }
-    ]
-  },
-  {
-    "name": "Another Default View",
-    "description": "This is default view with two columns and no keywords",
-    "type": "advanced",
-    "items": [
-      {
-        "field": {
-          "source_name": "sample",
-          "name": "CHROM",
-          "value_type": "integer"
-        },
-        "keywords": [],
-        "order": 1,
+        "order": null,
         "sort_order": 1,
-        "sort_direction": "asc"
-      },
-      {
-        "field": {
-          "source_name": "sample",
-          "name": "POS",
-          "value_type": "integer"
-        },
-        "keywords": [],
-        "order": 2,
-        "sort_order": 2,
         "sort_direction": "desc"
       },
       {
         "field": {
-          "source_name": "sample",
-          "name": "FILTER",
+          "name": "INFO_RS",
+          "source_name": "dbsnp_20160601_v01",
           "value_type": "string"
         },
         "keywords": [],
-        "order": 3
-      },
-      {
-        "field": {
-          "source_name": "sample",
-          "name": "ALT",
-          "value_type": "string"
-        },
-        "keywords": [
-          "ALT C"
-        ],
-        "order": 4
+        "order": null,
+        "sort_order": null,
+        "sort_direction": null
       }
     ]
   }
