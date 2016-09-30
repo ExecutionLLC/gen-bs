@@ -19,7 +19,7 @@ class RegistrationCodesService {
         return db.transactionallyAsync((trx) =>
             registrationCodesModel.findInactiveAsync(registrationCodeId, trx)
                 .then(({speciality, language, numberOfPaidSamples}) =>
-                    usersClient.addAsync('en', {firstName, lastName, userEmail, speciality, numberOfPaidSamples})
+                    usersClient.addAsync('en', {firstName, lastName, email: userEmail, speciality, numberPaidSamples: numberOfPaidSamples})
                 )
                 .then(() => registrationCodesModel.activateAsync(registrationCodeId, userEmail, trx))
         );

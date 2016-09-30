@@ -41,9 +41,9 @@ class UserService extends ServiceBase {
      * @param email User email.
      * @param callback (error, userId)
      * */
-    add(defaultLanguId, name, lastName, email, speciality, numberPaidSamples, callback) {
+    add(defaultLanguId, firstName, lastName, email, speciality, numberPaidSamples, callback) { // TODO users.add
         const user = {
-            name,
+            firstName,
             lastName,
             email,
             speciality,

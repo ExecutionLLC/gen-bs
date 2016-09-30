@@ -39,7 +39,7 @@ app.post('/register', (request, response) => {
     console.log('register');
     console.log(request.body.id);
     console.log(request.body);
-    registrationCodes.activateAsync(request.body.id, request.body.firstName, request.body.lastName, request.email)
+    registrationCodes.activateAsync(request.body.id, request.body.firstName, request.body.lastName, request.body.email)
         .then(() =>
             response.send({})
         )

@@ -10,14 +10,16 @@ const UserModelError = require('../utils/errors/UserModelError');
 
 const mappedColumns = [
     'id',
-    'login',
-    'name',
-    'isDeleted',
+    'firstName',
     'lastName',
+    'defaultLanguId',
+    'isDeleted',
     'email',
-    'language',
-    'numberPaidSamples',
-    'speciality'
+    'gender',
+    'phone',
+    'loginType',
+    'password',
+    'numberPaidSamples'
 ];
 
 class UserModel extends RemovableModelBase {
@@ -46,7 +48,7 @@ class UserModel extends RemovableModelBase {
         userToUpdate.id = userId;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._checkFieldsUnique(userToUpdate, trx, callback),
+                //(callback) => this._checkFieldsUnique(userToUpdate, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: userToUpdate.numberPaidSamples,
@@ -103,44 +105,40 @@ class UserModel extends RemovableModelBase {
     }
 
     _add(user, languId, shouldGenerateId, callback) {
-        const userToInsert = _.cloneDeep(user);
-        userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => this._checkFieldsUnique(userToInsert, trx, callback),
-                (callback) => {
-                    const dataToInsert = {
-                        id: userToInsert.id,
-                        numberPaidSamples: userToInsert.numberPaidSamples,
-                        email: userToInsert.email,
-                        defaultLanguId: languId
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (userId, callback) => {
+        this._addAsync(user, languId, shouldGenerateId)
+            .asCallback(callback);
+    }
+
+    _addAsync(user, languId, shouldGenerateId) {
+        const idToInsert = shouldGenerateId ? this._generateId() : user.id;
+
+        // TODO: add (callback) => this._checkFieldsUnique(userToInsert, trx, callback),
+
+        return this.db.transactionallyAsync((trx) => {
+            const dataToInsert = {
+                id: idToInsert,
+                numberPaidSamples: user.numberPaidSamples,
+                email: user.email,
+                defaultLanguId: languId,
+                isDeleted: false,
+                gender: user.gender,
+                phone: user.phone,
+                loginType: user.loginType,
+                password: user.password
+            };
+            return this._insertAsync(dataToInsert, trx)
+                .then((userId) => {
                     const dataToInsert = {
                         userId: userId,
                         languId: languId,
-                        name: userToInsert.name,
-                        lastName: userToInsert.lastName,
-                        speciality: userToInsert.speciality
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        speciality: user.speciality,
+                        company: user.company
                     };
-                    this._unsafeInsert('user_text', dataToInsert, trx, (error) => callback(error, userId));
-                },
-                (userId, callback) => {
-                    if (user.login) {
-                        const dataToInsert = {
-                            userId,
-                            login: user.login,
-                            passwordHash: user.passwordHash
-                        };
-                        this._unsafeInsert('user_password', dataToInsert, trx, (error) => callback(error, userId));
-                    } else {
-                        callback(null, userId);
-                    }
-                }
-            ], callback);
-        }, callback);
+                    return this._unsafeInsertAsync('user_text', dataToInsert, trx).then(() => userId);
+                });
+        });
     }
 
     _updateUserText(userId, dataToUpdate, trx, callback) {
