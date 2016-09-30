@@ -227,7 +227,7 @@ class UserModel extends RemovableModelBase {
     _checkFieldsUnique(user, trx, callback) {
         const {email, login} = user;
         Promise.all([
-            this._findUserAsync(trx, email, null, null)
+            this._findUserAsync(trx, null, email, null, null)
                 .then(() => Promise.reject(new UserModelError('Duplicate e-mail.')))
                 .catch((error) => {
                     if(error instanceof UserModelError){
@@ -235,7 +235,7 @@ class UserModel extends RemovableModelBase {
                     }
                     return Promise.resolve();
                 }),
-            this._findUserAsync(trx, null, login, null)
+            this._findUserAsync(trx, null, null, login, null)
                 .then(() => Promise.reject(new UserModelError('Duplicate login.')))
                 .catch((error) => {
                     if(error instanceof UserModelError){
