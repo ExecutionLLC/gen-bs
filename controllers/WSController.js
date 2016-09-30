@@ -1,9 +1,11 @@
 'use strict';
 
+const Promise = require('bluebird');
 const _ = require('lodash');
 
 const ControllerBase = require('./base/ControllerBase');
 const WebSocketServerProxy = require('../utils/WebSocketServerProxy');
+const InvalidSessionError = require('../utils/errors/InvalidSessionError');
 
 /**
  * This controller handles client web socket connections,
@@ -31,9 +33,13 @@ class WSController extends ControllerBase {
     }
 
     verifyWebSocketClient(info, callback) {
-        const sessionParser = this.services.sessions.getSessionParserMiddleware();
-        // Apply middleware manually to parse session and check the session is initialized.
-        sessionParser(info.req, {}, () => callback(info.req.session && info.req.session.userId));
+        this._parseSessionAsync(info.req)
+            .then((session) => this._checkSessionIsValidAsync(session))
+            .then(() => callback(true))
+            .catch((error) => {
+                this.logger.warn(`Denying client web-socket connection with error: ${error}`);
+                callback(false);
+            });
     }
 
     /**
@@ -49,6 +55,30 @@ class WSController extends ControllerBase {
         } else {
             this.logger.warn(`No web-sockets found for session:user ${targetSessionId}:${targetUserId}`);
         }
+    }
+
+    _parseSessionAsync(request) {
+        // Apply middleware manually to parse session
+        const sessionParser = this.services.sessions.getSessionParserMiddleware();
+        return Promise.fromCallback((done) => sessionParser(request, {}, () => done(null, request.session)))
+    }
+
+    _checkSessionIsValidAsync(session) {
+        return Promise.resolve(
+        ).then(() => {
+            // Check session is initialized.
+            if (session && session.userId) {
+                return Promise.resolve();
+            }
+            return Promise.reject(new InvalidSessionError())
+        }).then(() => {
+            // Check that there are no other sockets opened for the same user.
+            const otherSockets = _.filter(this.clients, {sessionId: session.id});
+            if (!otherSockets.length) {
+                return Promise.resolve();
+            }
+            return Promise.reject(new InvalidSessionError('There are other web-sockets opened for the same session'));
+        });
     }
 
     /**
