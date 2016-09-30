@@ -26,41 +26,19 @@ class ApplicationServerServiceBase extends ServiceBase {
          * @type {RPCProxy}
          * */
         this.rpcProxy = proxyProviderFunc(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout,
-            this.logger, this._rpcReply);
-        this.rpcProxy.onMessageReturned(this._rpcReturned)
+            this.logger, this._rpcReply, this._rpcReturned);
     }
 
     _rpcReturned(rpcMessage) {
         const {id, replyTo, method} = ChangeCaseUtil.convertKeysToCamelCase(rpcMessage);
-        const parts = (id || '').split('_');
-        if (!id || !parts || parts.length != 2) {
-            this.logger.error(`Message id is of an incorrect format, message will be ignored. Id: ${id}`);
-        } else {
-            const sessionId = parts[0];
-            const operationId = parts[1];
-            this.services.applicationServerReply.onRpcReplyReturned(sessionId, operationId,
-                {
-                    id,
-                    replyTo,
-                    method,
-                    error: {
-                        code: AppServerNotRespondedCode,
-                        message: AppServerNotRespondedMessage
-                    }
-                }, (error) => {
-                    if (error) {
-                        this.logger.error('Error processing RPC return: ' + ErrorUtils.createErrorMessage(error));
-                    }
-                });
-        }
-
-    }
-
-    processReturnedMessage(session, operation, messageObject){
-        this.logger.error(
-            `Message returned but no handler is registered to`
-            + ` message returns. Message: ${JSON.stringify(messageObject)}`
-        );
+        this._rpcReply({
+            id,
+            method,
+            error: {
+                code: AppServerNotRespondedCode,
+                message: AppServerNotRespondedMessage
+            }
+        });
     }
 
     createAppServerSessionId(operation) {
