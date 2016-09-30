@@ -34,7 +34,7 @@ class UserService extends ServiceBase {
     /**
      * Adds a new user with specified params.
      * @param defaultLanguId User's default language.
-     * @param name First name.
+     * @param firstName First name.
      * @param lastName Last name.
      * @param speciality User's job position name.
      * @param numberPaidSamples Number of times user is allowed to analyze a new sample.
