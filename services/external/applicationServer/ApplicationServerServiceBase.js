@@ -7,8 +7,7 @@ const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
-const AppServerNotRespondedCode = -300000;
-const AppServerNotRespondedMessage = 'App server not responded';
+const AppServerNotRespondedError = require('../../../utils/errors/AppServerNotRespondedError');
 
 const proxyProviderFunc = _.once(function (...args) {
     return new RPCProxy(...args);
@@ -34,10 +33,7 @@ class ApplicationServerServiceBase extends ServiceBase {
         this._rpcReply({
             id,
             method,
-            error: {
-                code: AppServerNotRespondedCode,
-                message: AppServerNotRespondedMessage
-            }
+            error: new AppServerNotRespondedError()
         });
     }
 
