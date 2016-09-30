@@ -30,7 +30,7 @@ function ajaxAsync(method, url, params, data) {
                         reject('Not a JSON answer');
                     }
                 } else {
-                    reject(xmlhttp.statusText);
+                    reject(xmlhttp.response || xmlhttp.statusText);
                 }
             }
         };

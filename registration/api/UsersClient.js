@@ -13,7 +13,7 @@ class UsersClient {
                 .post(this.urlAdd)
                 .send(user)
                 .then(({body}) => resolve(body))
-                .catch((error) => reject(error));
+                .catch((error) => reject(error.response.body));
         });
     }
 }

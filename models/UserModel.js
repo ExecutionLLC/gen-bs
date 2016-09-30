@@ -114,33 +114,34 @@ class UserModel extends RemovableModelBase {
 
     _addAsync(user, languId, shouldGenerateId) {
         const idToInsert = shouldGenerateId ? this._generateId() : user.id;
-
-        // TODO: add (callback) => this._checkFieldsUnique(userToInsert, trx, callback),
-
         return this.db.transactionallyAsync((trx) => {
-            const dataToInsert = {
-                id: idToInsert,
-                numberPaidSamples: user.numberPaidSamples,
-                email: user.email,
-                defaultLanguId: languId,
-                isDeleted: false,
-                gender: user.gender,
-                phone: user.phone,
-                loginType: user.loginType,
-                password: user.password
-            };
-            return this._insertAsync(dataToInsert, trx)
-                .then((userId) => {
+            return Promise.resolve()
+                .then(() => this._checkEmailUniqueAsync(user, trx))
+                .then(() => {
                     const dataToInsert = {
-                        userId: userId,
-                        languId: languId,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        speciality: user.speciality,
-                        company: user.company
+                        id: idToInsert,
+                        numberPaidSamples: user.numberPaidSamples,
+                        email: user.email,
+                        defaultLanguId: languId,
+                        isDeleted: false,
+                        gender: user.gender,
+                        phone: user.phone,
+                        loginType: user.loginType,
+                        password: user.password
                     };
-                    return this._unsafeInsertAsync('user_text', dataToInsert, trx).then(() => userId);
-                });
+                    return this._insertAsync(dataToInsert, trx)
+                        .then((userId) => {
+                            const dataToInsert = {
+                                userId: userId,
+                                languId: languId,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                speciality: user.speciality,
+                                company: user.company
+                            };
+                            return this._unsafeInsertAsync('user_text', dataToInsert, trx).then(() => userId);
+                        });
+                })
         });
     }
 
@@ -235,6 +236,15 @@ class UserModel extends RemovableModelBase {
         ])
             .then(() => callback(null))
             .catch((error) => callback(error))
+    }
+
+    _checkEmailUniqueAsync(user, trx) {
+        const {email} = user;
+        return new Promise((resolve, reject) => {
+            this._findUserAsync(trx, null, email, null)
+                .catch((error) => resolve())
+                .then(() => reject(new Error('Duplicate e-mail.')))
+        });
     }
 }
 
