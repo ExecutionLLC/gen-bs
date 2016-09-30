@@ -71,13 +71,6 @@ class WSController extends ControllerBase {
                 return Promise.resolve();
             }
             return Promise.reject(new InvalidSessionError())
-        }).then(() => {
-            // Check that there are no other sockets opened for the same user.
-            const otherSockets = _.filter(this.clients, {sessionId: session.id});
-            if (!otherSockets.length) {
-                return Promise.resolve();
-            }
-            return Promise.reject(new InvalidSessionError('There are other web-sockets opened for the same session'));
         });
     }
 
@@ -112,6 +105,16 @@ class WSController extends ControllerBase {
 
     _onClientConnected(ws) {
         const {id:sessionId, userId} = ws.upgradeReq.session;
+        const existingClients = this._findClients(sessionId, null);
+        if (existingClients.length) {
+            // Do not allow multiple sockets to be opened for the same session.
+            this._sendClientMessage(ws, {
+                operationType: 'OpenSocket',
+                resultType: 'error',
+                error: 'Too many sockets for the session.'
+            });
+            ws.close();
+        }
         this.logger.info(`WS client connected, sessionId: ${sessionId}, userId: ${userId}`);
         this.clients.push({
             ws,
