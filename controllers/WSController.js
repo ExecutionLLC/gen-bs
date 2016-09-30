@@ -32,7 +32,7 @@ class WSController extends ControllerBase {
 
     verifyWebSocketClient(info, callback) {
         const sessionParser = this.services.sessions.getSessionParserMiddleware();
-        // Allow connection only in case session is properly initialized.
+        // Apply middleware manually to parse session and check the session is initialized.
         sessionParser(info.req, {}, () => callback(info.req.session && info.req.session.userId));
     }
 
