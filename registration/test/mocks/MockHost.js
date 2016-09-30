@@ -18,7 +18,7 @@ class MockUsersClient {
         this.users = {};
     }
 
-    addAsync(languId, user) {
+    addAsync(user) {
         return new Promise((resolve) => {
             const userId = Uuid.v4();
             const newUser = {
@@ -27,7 +27,7 @@ class MockUsersClient {
                 isDeleted: false,
                 lastName: user.lastName,
                 email: user.userEmail,
-                language: languId,
+                language: 'en',
                 numberPaidSamples: user.numberOfPaidSamples,
                 speciality: user.speciality
             };

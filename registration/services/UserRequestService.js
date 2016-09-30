@@ -16,7 +16,7 @@ class UserRequestService {
         return db.transactionallyAsync((trx) =>
             userRequestModel.findInactiveAsync(registrationCodeId, trx)
                 .then(({speciality}) =>
-                    usersClient.addAsync('en', {firstName, lastName, userEmail, speciality, numberOfPaidSamples: NUMBER_OF_PAID_SAMPLES})
+                    usersClient.addAsync({firstName, lastName, userEmail, speciality, numberOfPaidSamples: NUMBER_OF_PAID_SAMPLES})
                 )
                 .then(() => userRequestModel.activateAsync(registrationCodeId, userEmail, trx))
         );

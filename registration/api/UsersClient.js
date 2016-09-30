@@ -7,7 +7,7 @@ class UsersClient {
         this.urlAdd = `${config.usersClient.httpScheme}://${config.usersClient.host}:${config.usersClient.port}/api${'/users'}`;
     }
 
-    addAsync(languId, user) {
+    addAsync(user) {
         return new Promise((resolve, reject) => {
             Request
                 .post(this.urlAdd)
