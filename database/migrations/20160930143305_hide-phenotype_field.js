@@ -1,8 +1,11 @@
+const _ = require('lodash');
+const editableFields = require('../defaults/templates/metadata/editable-metadata.json');
 
 function hidePhenotypeField(knex, Promise) {
     console.log('=> Hide phenotype field');
+    const phenotypeField = _.find(editableFields, {name:'PHENOTYPE'});
     return knex('field_metadata')
-        .where('name', 'PHENOTYPE')
+        .where('id', phenotypeField.id)
         .update({
             is_invisible: true
         });
