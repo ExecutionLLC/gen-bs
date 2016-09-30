@@ -27,7 +27,7 @@ export default class TxtExporter extends ExporterBase {
      */
     buildRow(columnsArray, rowValues) {
         return _.map(columnsArray, (column, columnIndex) => {
-            const rowValue = (rowValues[columnIndex]||'').replace(/\n/g, ' ');
+            const rowValue = (rowValues[columnIndex] + '').replace(/\n/g, ' ');
             const valueLength = this.longestValueLengthByColumn[columnIndex];
             return this._addSpaces(rowValue, valueLength);
         }).join(this.valuesSeparator);
