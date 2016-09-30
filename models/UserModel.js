@@ -185,25 +185,24 @@ class UserModel extends RemovableModelBase {
         let query = trx
             .select('*')
             .from('user')
-            .innerJoin('user_text', 'user_text.user_id', 'user.id')
-            .leftJoin('user_password', 'user.id', 'user_password.user_id')
+            .leftJoin('user_text', 'user_text.user_id', 'user.id')
             .whereRaw('1 = 1');
 
         if (userIdOrNull) {
-            query = query.where('user.id', userIdOrNull);
+            query = query.andWhere('user.id', userIdOrNull);
         }
 
         if (emailOrNull) {
             query = query
-                .where('user.email', emailOrNull);
+                .andWhere('user.email', emailOrNull);
         }
 
         if (loginOrNull) {
-            query = query.where('user_password.login', loginOrNull);
+            query = query.andWhere('user_password.login', loginOrNull);
         }
 
         if (passwordHashOrNull) {
-            query = query.where('user_password.password_hash', passwordHashOrNull);
+            query = query.andWhere('user_password.password_hash', passwordHashOrNull);
         }
 
         return query
