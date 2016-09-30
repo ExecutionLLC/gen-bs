@@ -305,26 +305,16 @@ function onSignupLoginPassword() {
     });
 }
 
-function onSignupGoogle() {
-    if (loadedUserId) {
-        updateServerData();
-    }
-    if (!validateUser()) {
-        switchPageState({
-            warningUserdata: true
-        });
-        return;
-    }
+function addUser(loginInfo) {
     switchPageState({
-        disableRegcode: true,
-        disableUserInfo: true,
         showLoginType: false,
         showPassword: false,
-        showRegister: false
+        showRegister: false,
+        loading: true
     });
     const registerAsync = loadedUserId ?
-        API.registerUser(Object.assign({}, currentUser.user, {loginType: 'google'})) :
-        API.requestUser(Object.assign({}, currentUser.user, {loginType: 'google'}));
+        API.registerUser(Object.assign({}, currentUser.user, loginInfo)) :
+        API.requestUser(Object.assign({}, currentUser.user, loginInfo));
     registerAsync
         .then(() => {
             if (loadedUserId) {
@@ -338,8 +328,28 @@ function onSignupGoogle() {
             if (registerFailMessageEl) {
                 DOMUtils.setElementText(registerFailMessageEl, '' + err);
             }
-            switchPageState({loading: false, register: {fail: true}});
+            switchPageState({
+                disableUserInfo: false,
+                showLoginType: true,
+                showPassword: false,
+                showRegister: false,
+                loading: false,
+                register: {fail: true}
+            });
         });
+}
+
+function onSignupGoogle() {
+    if (loadedUserId) {
+        updateServerData();
+    }
+    if (!validateUser()) {
+        switchPageState({
+            warningUserdata: true
+        });
+        return;
+    }
+    addUser({loginType: 'google'});
 }
 
 function validateUser() {
@@ -365,32 +375,7 @@ function onRegister() {
         });
         return;
     }
-    switchPageState({
-        disableRegcode: true,
-        disableUserInfo: true,
-        showLoginType: false,
-        showPassword: false,
-        showRegister: false,
-        loading: true
-    });
-    const registerAsync = loadedUserId ?
-        API.registerUser(Object.assign({}, currentUser.user, {loginType: 'password', password})) :
-        API.requestUser(Object.assign({}, currentUser.user, {loginType: 'password', password}));
-    registerAsync
-        .then(() => {
-            if (loadedUserId) {
-                window.location.assign(`http://${WEBSERVER}:${WEBSERVER_HTTP_PORT}/`);
-            } else {
-                switchPageState({loading: false, register: {mail: true}});
-            }
-        })
-        .catch((err) => {
-            const registerFailMessageEl = document.getElementById(ELEMENT_ID.registerFailMessage);
-            if (registerFailMessageEl) {
-                DOMUtils.setElementText(registerFailMessageEl, '' + err);
-            }
-            switchPageState({loading: false, register: {fail: true}});
-        });
+    addUser({loginType: 'password', password});
 }
 
 var getPassword = null; // will be defined later
