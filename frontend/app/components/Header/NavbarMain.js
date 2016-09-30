@@ -5,8 +5,6 @@ import SamplesAnalysisButtons from './NavbarMain/SamplesAnalysisButtons';
 import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
-import Language from './NavbarMain/Language';
-import Buy from './NavbarMain/Buy';
 import Auth from './NavbarMain/Auth';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
@@ -52,8 +50,6 @@ class NavbarMain extends Component {
                                     selectedRowIndices={selectedRowIndices}
                     />
                     <SavedFiles dispatch={this.props.dispatch}/>
-                    <Language />
-                    <Buy />
                     <Auth {...this.props} />
                 </div>
             </nav>
