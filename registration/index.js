@@ -101,7 +101,7 @@ app.post('/user_request', (request, response) => {
     userRequests.createAsync(userInfo)
         .then((insertedUser) => {
             mailService.sendRegisterMail(userInfo.email, userInfo, () => {
-                mailService.sendAdminRegisterMail(Object.assign({}, userInfo, {approveUrl: `http://37.195.64.171:2030/approve/?id=${insertedUser.id}`}), () => {
+                mailService.sendAdminRegisterMail(Object.assign({}, userInfo, {approveUrl: `${Config.scheme}://${Config.host}:${Config.port}/approve/?id=${insertedUser.id}`}), () => {
                     return response.send(userInfo);
                 });
             });
@@ -131,6 +131,6 @@ app.get('/approve', (request, response) => {
 });
 
 
-app.listen(3000, () => {
+app.listen(Config.port, () => {
     console.log('Server is started!');
 });

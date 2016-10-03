@@ -27,6 +27,8 @@ function makeDefault(value, defaultValue) {
 }
 
 const SETTINGS = {
+    scheme: makeDefault(ENV.GEN_REG_SCHEME, 'http'),
+    host: makeDefault(ENV.GEN_REG_HOST, 'localhost'),
     port: makeDefault(ENV.GEN_REG_PORT, 3000),
     enableCORS: makeDefault(ENV.GEN_REG_CORS_ENABLE, true),
     disableRequestLimits: makeDefault(ENV.GEN_REG_DISABLE_REQUEST_LIMITS, false),
