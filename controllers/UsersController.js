@@ -4,8 +4,6 @@ const Express = require('express');
 const async = require('async');
 const ControllerBase = require('./base/ControllerBase');
 
-const ADD_USER_KEY = 'b5b7a458-693c-4a8d-845b-7b9a1295a15b';
-
 class UsersController extends ControllerBase {
     constructor(services) {
         super(services);
@@ -18,7 +16,7 @@ class UsersController extends ControllerBase {
             (item, callback) => {
                 const languId = request.languId;
                 const {user, key} = item;
-                if (key === ADD_USER_KEY) {
+                if (key === this.config.regserver.ADD_USER_KEY) {
                     this.services.users.add(languId, user, callback);
                 } else {
                     callback('Invalid add user key');

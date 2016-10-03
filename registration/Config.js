@@ -52,7 +52,8 @@ const SETTINGS = {
     usersClient: {
         httpScheme: makeDefault(ENV.GEN_REG_WS_SCHEME, 'http'),
         host: makeDefault(ENV.GEN_REG_WS_HOST, 'localhost'),
-        port: makeDefault(ENV.GEN_REG_WS_PORT, 80)
+        port: makeDefault(ENV.GEN_REG_WS_PORT, 80),
+        ADD_USER_KEY: makeDefault(ENV.GEN_REG_WS_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
     },
     mailChimp: {
         key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),

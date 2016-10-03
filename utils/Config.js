@@ -135,7 +135,8 @@ const SETTINGS = {
     regserver: {
         SCHEME: makeDefault(ENV.GEN_WS_REG_SCHEME, 'http'),
         HOST: makeDefault(ENV.GEN_WS_REG_HOST, 'localhost'),
-        PORT: makeDefault(ENV.GEN_WS_REG_PORT, 3000)
+        PORT: makeDefault(ENV.GEN_WS_REG_PORT, 3000),
+        ADD_USER_KEY: makeDefault(ENV.GEN_WS_REG_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
     }
 };
 
