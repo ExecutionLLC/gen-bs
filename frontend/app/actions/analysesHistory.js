@@ -224,7 +224,7 @@ function getSamples(samplesIds, samplesHash, callback) {
 // TODO REFACTOR make parallel loading of history data
 // Each promise gets existing or loads absent filter/view/model and then it inserts to the according list.
 // Samples inserts one-by-one by 'getSamples' function call
-export function setCurrentAnalysesHistoryIdLoadData(id) {
+export function setCurrentAnalysesHistoryIdLoadDataAsync(id) {
 
     return (dispatch, getState) => {
 

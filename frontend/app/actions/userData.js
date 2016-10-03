@@ -8,7 +8,7 @@ import {
 import {receiveSavedFilesList} from './savedFiles';
 import {
     receiveInitialAnalysesHistory,
-    setCurrentAnalysesHistoryIdLoadData,
+    setCurrentAnalysesHistoryIdLoadDataAsync,
     createNewHistoryItem
 } from './analysesHistory';
 import {receiveSamplesList} from './samplesList';
@@ -86,7 +86,7 @@ export function fetchUserDataAsync() {
             dispatch(receiveInitialAnalysesHistory(analyses));
             if (analyses[0]) {
                 const historyItem = analyses[0];
-                dispatch(setCurrentAnalysesHistoryIdLoadData(historyItem.id))
+                dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(historyItem.id))
                     .then(() => {
                         dispatch(analyze({
                             id: historyItem.id,
@@ -110,7 +110,7 @@ export function fetchUserDataAsync() {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
                     dispatch(createNewHistoryItem(sample, filter, view));
-                    dispatch(setCurrentAnalysesHistoryIdLoadData(null))
+                    dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(null))
                         .then(() => {
                             const historyItem = getState().analysesHistory.newHistoryItem;
                             dispatch(analyze({
