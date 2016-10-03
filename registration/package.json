@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "GEN_WS_DISABLE_REQUEST_LIMITS=true mocha",
+    "db:create": "node ./database/scripts/create-database.js",
+    "db:reset": "npm run db:create; npm run db:migrate;",
     "db:migrate": "node ./database/scripts/migrate.js",
     "user:generate-codes": "node ./database/scripts/generate-registration-codes.js"
   },
