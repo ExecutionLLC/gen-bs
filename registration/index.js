@@ -3,6 +3,7 @@ const cors = require('cors');
 const compression = require('compression');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 
 const Config = require('./Config');
 const Logger = require('./utils/Logger');
@@ -32,6 +33,9 @@ app.use(Express.static('public'));
 app.use(cors({
     origin: 'http://alapy.com',
     credentials: true
+}));
+app.use(helmet({
+    noCache: true
 }));
 
 
@@ -64,7 +68,7 @@ app.get(
         findAsync
             .then((user) => {
                 registrationCodes.updateFirstDate(user.id, user);
-                return response.header('Pragma', 'no-cache').header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').send(returnUser(user));
+                return response.send(returnUser(user));
             })
             .catch((err) => response.status(404).send(err.message));
     }
