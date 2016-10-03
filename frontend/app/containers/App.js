@@ -14,6 +14,7 @@ import FileUploadModal from '../components/Modals/FileUploadModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 import AnalysisModal from '../components/Modals/AnalysisModal';
+import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessionsModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
@@ -88,6 +89,7 @@ class App extends Component {
                     closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
                 />
                 <SavedFilesModal showModal={savedFiles.showSavedFilesModal} />
+                <CloseAllUserSessionsModal showModal={auth.showCloseAllUserSessionsDialog} />
             </div>
         );
     }

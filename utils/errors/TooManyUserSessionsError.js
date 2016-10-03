@@ -2,7 +2,7 @@
 
 class TooManyUserSessionsError extends Error {
     constructor() {
-        super('Too many user sessions.');
+        super('TooManyUserSessions');
     }
 }
 
