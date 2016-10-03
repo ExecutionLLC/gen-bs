@@ -15,9 +15,7 @@ class UsersController extends ControllerBase {
             (callback) => this.getRequestBody(request, callback),
             (item, callback) => {
                 const languId = request.languId;
-                const user = request.user;
-                console.log(item);
-                this.services.users.add(languId, item.firstName, item.lastName, item.email, item.speciality, item.numberPaidSamples, callback);
+                this.services.users.add(languId, item, callback);
             }
         ], (error, insertedItem) => {
             this.sendErrorOrJson(response, error, insertedItem);
