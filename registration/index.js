@@ -49,7 +49,7 @@ app.post('/register', (request, response) => {
     registrationCodes.activateAsync(user)
         .then(() => {
             mailService.sendRegisterCodeMail(user.email, {'UserName': `${user.firstName} ${user.lastName}`}, () => {});
-            response.send({})
+            return response.send({})
         })
         .catch((error) =>
             response.status(400).send(error.message)
