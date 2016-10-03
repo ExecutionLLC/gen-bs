@@ -47,11 +47,8 @@ app.post('/register', (request, response) => {
     const user = request.body;
     console.log(user);
     registrationCodes.activateAsync(user)
-        .then(() => {
-            mailService.sendRegisterCodeMail(user.email, {'UserName': `${user.firstName} ${user.lastName}`}, () => {
-                return response.send({})
-            });
-        })
+        .then(() => mailService.sendRegisterCodeMailAsync(user.email, {'UserName': `${user.firstName} ${user.lastName}`}))
+        .then(() => response.send({}))
         .catch((error) =>
             response.status(400).send(error.message)
         );
@@ -99,13 +96,11 @@ app.post('/user_request', (request, response) => {
     const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password};
     console.log(userInfo);
     userRequests.createAsync(userInfo)
-        .then((insertedUser) => {
-            mailService.sendRegisterMail(userInfo.email, userInfo, () => {
-                mailService.sendAdminRegisterMail(Object.assign({}, userInfo, {approveUrl: `${Config.scheme}://${Config.host}:${Config.port}/approve/?id=${insertedUser.id}`}), () => {
-                    return response.send(userInfo);
-                });
-            });
-        })
+        .then((insertedUser) =>
+            mailService.sendRegisterMailAsync(userInfo.email, userInfo)
+                .then(() => mailService.sendAdminRegisterMailAsync(
+                    Object.assign({}, userInfo, {approveUrl: `${Config.scheme}://${Config.host}:${Config.port}/approve/?id=${insertedUser.id}`}))))
+        .then(() => response.send(userInfo))
         .catch((err) => response.status(400).send(err.message));
 });
 
@@ -118,13 +113,9 @@ app.get('/approve', (request, response) => {
     const {id} = request.query;
     console.log(id);
     userRequests.activateAsync(id)
-        .then((user) => {
-            mailService.sendRegisterApproveMail(user.email, user, () => {
-                mailService.sendAdminRegisterApproveMail(user, () => {
-                    return response.send({})
-                });
-            });
-        })
+        .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)
+            .then(() => mailService.sendAdminRegisterApproveMailAsync(user)))
+        .then(() => response.send({}))
         .catch((error) =>
             response.status(400).send(error.message)
         );
