@@ -1,8 +1,8 @@
 import {closeModal} from './modalWindows';
 import {
-    filtersListServerCreateFilter,
-    filtersListServerUpdateFilter,
-    filtersListServerDeleteFilter
+    filtersListServerCreateFilterAsync,
+    filtersListServerUpdateFilterAsync,
+    filtersListServerDeleteFilterAsync
 } from './filtersList';
 import {
     modelsListServerCreateModel,
@@ -21,9 +21,9 @@ export const filterBuilderStrategyActions = {
         getList(state) {
             return state.filtersList;
         },
-        serverCreate: filtersListServerCreateFilter,
-        serverUpdate: filtersListServerUpdateFilter,
-        serverDelete: filtersListServerDeleteFilter
+        serverCreate: filtersListServerCreateFilterAsync,
+        serverUpdate: filtersListServerUpdateFilterAsync,
+        serverDelete: filtersListServerDeleteFilterAsync
     },
     'model': {
         getList(state) {

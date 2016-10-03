@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import {
-    fetchVariants,
+    fetchVariantsAsync,
     clearSearchParams,
     setViewVariantsSort
 } from './variantsTable';
@@ -64,7 +64,7 @@ export function analyze(searchParams) {
         dispatch(clearSearchParams());
         dispatch(requestAnalyze());
         return new Promise((resolve, reject) => {
-            dispatch(fetchVariants(searchParamsWithLimitsOffset)).then((result) => {
+            dispatch(fetchVariantsAsync(searchParamsWithLimitsOffset)).then((result) => {
                 const searchView = viewIdToViewHash[searchParams.viewId];
                 const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
                 const searchFilter = filterIdToFilterHash[searchParams.filterId];

@@ -7,7 +7,7 @@ import {addTimeout, removeTimeout} from 'redux-timeout';
 import config from '../../config';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
-import {fetchUserdata} from './userData';
+import {fetchUserDataAsync} from './userData';
 import {initWSConnectionAsync} from './websocket';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {clearAnalysesHistory} from './analysesHistory';
@@ -111,12 +111,13 @@ function loginError(errorMessage) {
 function restoreOldSessionAsync(isDemoSession) {
     return (dispatch) => {
         dispatch(receiveSession(isDemoSession));
-        dispatch(initWSConnectionAsync());
-        if (isDemoSession) {
-            dispatch(clearAnalysesHistory());
-        }
-        dispatch(fetchUserdata());
-        return Promise.resolve();
+        return dispatch(initWSConnectionAsync())
+            .then(() => {
+                if (isDemoSession) {
+                    dispatch(clearAnalysesHistory());
+                }
+                return dispatch(fetchUserDataAsync());
+            });
     };
 }
 
@@ -127,9 +128,9 @@ function openDemoSessionAsync() {
         (resolve) => sessionsClient.openDemoSession(
             (error, response) => resolve({error, response})
         ))
-    ).then(({error, response}) => handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response)
+    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
     ).then((response) => SessionsClient.getSessionFromResponse(response)
-    ).then((sessionId) => sessionId ? restoreOldSessionAsync(true) : dispatch([
+    ).then((sessionId) => sessionId ? dispatch(restoreOldSessionAsync(true)) : dispatch([
         loginError('Session id is empty'),
         handleError(null, LOGIN_ERROR_MESSAGE)
     ]));
