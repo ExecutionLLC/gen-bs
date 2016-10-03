@@ -13,13 +13,12 @@ class RegistrationCodesService {
         this.usersClient = usersClient;
     }
 
-    activateAsync(registrationCodeId) {
+    activateAsync(user) {
         const {db, registrationCodesModel, usersClient} = this;
 
         return db.transactionallyAsync((trx) =>
-            registrationCodesModel.findInactiveAsync(registrationCodeId, trx)
-                .then((user) => usersClient.addAsync(user))
-                .then(() => registrationCodesModel.activateAsync(registrationCodeId, trx))
+            registrationCodesModel.activateAsync(user, trx)
+                .then(() => usersClient.addAsync(user))
         );
     }
 
