@@ -48,8 +48,9 @@ app.post('/register', (request, response) => {
     console.log(user);
     registrationCodes.activateAsync(user)
         .then(() => {
-            mailService.sendRegisterCodeMail(user.email, {'UserName': `${user.firstName} ${user.lastName}`}, () => {});
-            return response.send({})
+            mailService.sendRegisterCodeMail(user.email, {'UserName': `${user.firstName} ${user.lastName}`}, () => {
+                return response.send({})
+            });
         })
         .catch((error) =>
             response.status(400).send(error.message)
@@ -99,9 +100,11 @@ app.post('/user_request', (request, response) => {
     console.log(userInfo);
     userRequests.createAsync(userInfo)
         .then((insertedUser) => {
-            mailService.sendRegisterMail(userInfo.email, userInfo, () => {});
-            mailService.sendAdminRegisterMail(Object.assign({}, userInfo, {approveUrl: `http://37.195.64.171:2030/approve/?id=${insertedUser.id}`}), () => {});
-            return response.send(userInfo);
+            mailService.sendRegisterMail(userInfo.email, userInfo, () => {
+                mailService.sendAdminRegisterMail(Object.assign({}, userInfo, {approveUrl: `http://37.195.64.171:2030/approve/?id=${insertedUser.id}`}), () => {
+                    return response.send(userInfo);
+                });
+            });
         })
         .catch((err) => response.status(400).send(err.message));
 });
@@ -116,9 +119,11 @@ app.get('/approve', (request, response) => {
     console.log(id);
     userRequests.activateAsync(id)
         .then((user) => {
-            mailService.sendRegisterApproveMail(user.email, user, () => {});
-            mailService.sendAdminRegisterApproveMail(user, () => {});
-            return response.send({})
+            mailService.sendRegisterApproveMail(user.email, user, () => {
+                mailService.sendAdminRegisterApproveMail(user, () => {
+                    return response.send({})
+                });
+            });
         })
         .catch((error) =>
             response.status(400).send(error.message)
