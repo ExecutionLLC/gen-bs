@@ -7,6 +7,8 @@ const ControllerBase = require('./base/ControllerBase');
 const WebSocketServerProxy = require('../utils/WebSocketServerProxy');
 const InvalidSessionError = require('../utils/errors/InvalidSessionError');
 
+const OPEN_SOCKET_OPERATION_TYPE = 'OpenSocket';
+
 /**
  * This controller handles client web socket connections,
  * associates them with sessions and sends application server
@@ -109,18 +111,23 @@ class WSController extends ControllerBase {
         if (existingClients.length) {
             // Do not allow multiple sockets to be opened for the same session.
             this._sendClientMessage(ws, {
-                operationType: 'OpenSocket',
+                operationType: OPEN_SOCKET_OPERATION_TYPE,
                 resultType: 'error',
                 error: 'Too many sockets for the session.'
             });
             ws.close();
+        } else {
+            this.logger.info(`WS client connected, sessionId: ${sessionId}, userId: ${userId}`);
+            this.clients.push({
+                ws,
+                sessionId,
+                userId
+            });
+            this._sendClientMessage(ws, {
+                operationType: OPEN_SOCKET_OPERATION_TYPE,
+                resultType: 'success'
+            });
         }
-        this.logger.info(`WS client connected, sessionId: ${sessionId}, userId: ${userId}`);
-        this.clients.push({
-            ws,
-            sessionId,
-            userId
-        });
     }
 
     _onClientDisconnected(clientWs) {

@@ -202,7 +202,12 @@ export function login() {
         ).then((sessionType) => {
             if (sessionType !== SESSION_TYPE.INVALID) {
                 // restore old session
-                return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO));
+                return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO))
+                    .catch((error) => {
+                        // TODO: Check error type here.
+                        dispatch(handleError(null, error.message));
+                        return Promise.reject(error);
+                    });
             } else {
                 // old session is invalid, so we create new one
                 return dispatch(openDemoSessionAsync());
