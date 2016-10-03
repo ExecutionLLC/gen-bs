@@ -1,3 +1,6 @@
+/* global reduxStore: false */
+
+import Promise from 'bluebird';
 import HttpStatus from 'http-status';
 import {addTimeout, removeTimeout} from 'redux-timeout';
 
@@ -5,8 +8,8 @@ import config from '../../config';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
 import {fetchUserdata} from './userData';
-import {initWSConnection} from './websocket';
-import {handleError} from './errorHandler';
+import {initWSConnectionAsync} from './websocket';
+import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {clearAnalysesHistory} from './analysesHistory';
 
 import apiFacade from '../api/ApiFacade';
@@ -24,12 +27,17 @@ export const UPDATE_AUTOLOGOUT_TIMER = 'UPDATE_AUTOLOGOUT_TIMER';
 
 const sessionsClient = apiFacade.sessionsClient;
 
+export const SESSION_TYPE = {
+    INVALID: 'INVALID',
+    DEMO: 'DEMO',
+    USER: 'USER'
+};
+
 /*
  * login errors
  */
 
-const LOGIN_NETWORK_ERROR = 'Authorization failed (network error). You can reload page and try again.';
-const LOGIN_SERVER_ERROR = 'Authorization failed (internal server error). You can reload page and try again.';
+const LOGIN_ERROR_MESSAGE = 'Authorization failed. You can reload page and try again.';
 const LOGIN_GOOGLE_ERROR = 'Google authorization failed.';
 
 /*
@@ -61,14 +69,16 @@ export class KeepAliveTask {
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
             // update session on the web server
-            checkSession((error) => {
-                if (error) {
-                    console.log('got unexpected error in keep alive task', error);
-                }
-            });
-
-            // reschedule task
-            this._scheduleTask();
+            reduxStore.dispatch(getCookieSessionTypeAsync())
+                .then((sessionType) => {
+                    if (sessionType === SESSION_TYPE.INVALID) {
+                        // TODO: Handle this situation.
+                        console.error('Cookie session is invalid.');
+                    }
+                })
+                .catch((error) => console.error('got unexpected error in keep alive task', error))
+                // reschedule task
+                .then(() => this._scheduleTask());
         }, this.period);
     }
 }
@@ -98,35 +108,31 @@ function loginError(errorMessage) {
     };
 }
 
-function updateLoginData(dispatch, isDemo) {
-    dispatch(receiveSession(isDemo));
-    dispatch(initWSConnection());
-    if (isDemo) {
-        dispatch(clearAnalysesHistory());
-    }
-    dispatch(fetchUserdata());
+function restoreOldSessionAsync(isDemoSession) {
+    return (dispatch) => {
+        dispatch(receiveSession(isDemoSession));
+        dispatch(initWSConnectionAsync());
+        if (isDemoSession) {
+            dispatch(clearAnalysesHistory());
+        }
+        dispatch(fetchUserdata());
+        return Promise.resolve();
+    };
 }
 
 // Create new demo session.
-function openDemoSession(dispatch) {
-    console.log('loginAsDemoUser');
-    sessionsClient.openDemoSession((error, response) => {
-        if (error) {
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (response.status !== HttpStatus.OK) {
-            dispatch(loginError(response.body));
-            dispatch(handleError(null, LOGIN_SERVER_ERROR));
-        } else {
-            const sessionId = SessionsClient.getSessionFromResponse(response);
-            if (sessionId) {
-                updateLoginData(dispatch, true);
-            } else {
-                dispatch(loginError('Session id is empty'));
-                dispatch(handleError(null, LOGIN_SERVER_ERROR));
-            }
-        }
-    });
+function openDemoSessionAsync() {
+    return (dispatch) => Promise.resolve(
+    ).then(() => new Promise(
+        (resolve) => sessionsClient.openDemoSession(
+            (error, response) => resolve({error, response})
+        ))
+    ).then(({error, response}) => handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response)
+    ).then((response) => SessionsClient.getSessionFromResponse(response)
+    ).then((sessionId) => sessionId ? restoreOldSessionAsync(true) : dispatch([
+        loginError('Session id is empty'),
+        handleError(null, LOGIN_ERROR_MESSAGE)
+    ]));
 }
 
 /**@callback CheckSessionCallback
@@ -137,40 +143,41 @@ function openDemoSession(dispatch) {
 
 /**
  *  Checks current session state.
- * @param {CheckSessionCallback}callback
  */
-function checkSession(callback) {
-    console.log('checkSession');
-    sessionsClient.checkSession((error, response) => {
-        if (!error) {
+function getCookieSessionTypeAsync() {
+    return () => {
+        return Promise.fromCallback(
+            (done) => sessionsClient.checkSession(done)
+        ).then((response) => {
             const {status, body} = response;
-            const isValidSession = status === HttpStatus.OK;
-            const isDemoSession = isValidSession ? body.sessionType === 'DEMO' : false;
-            callback(null, isValidSession, isDemoSession);
-        } else {
-            callback(error);
-        }
-    });
+
+            if (status !== HttpStatus.OK) {
+                return SESSION_TYPE.INVALID;
+            }
+            switch (body.sessionType) {
+                case SESSION_TYPE.USER:
+                case SESSION_TYPE.DEMO:
+                    return body.sessionType;
+                default:
+                    return Promise.reject(new Error('Unknown session type'));
+            }
+        }).catch(() => Promise.resolve(SESSION_TYPE.INVALID));
+    };
 }
 
-// If session stored in cookie is valid, then restore it, otherwise create new
-// demo session.
-function checkCookieSessionAndLogin(dispatch) {
-    dispatch(requestSession());
-
-    checkSession((error, isValidSession, isDemoSession) => {
-        if (error) {
-            // it is fatal network error
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (isValidSession) {
-            // restore old session
-            updateLoginData(dispatch, isDemoSession);
-        } else {
-            // old session is not valid, so we create new one
-            openDemoSession(dispatch);
-        }
-    });
+function displayErrorFromParamsAsync() {
+    return (dispatch) => Promise.resolve()
+        .then(() => {
+            const errorFromParams = getUrlParameterByName('error');
+            if (errorFromParams) {
+                // it is error from google authorization page (detected by URL parameters)
+                console.log('google authorization failed', errorFromParams);
+                dispatch(loginError(errorFromParams));
+                dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
+                history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
+            }
+            return Promise.resolve();
+        });
 }
 
 // Algorithm:
@@ -183,19 +190,24 @@ function checkCookieSessionAndLogin(dispatch) {
 //
 // It is legacy of previous developer :)
 export function login() {
-    const errorFromParams = getUrlParameterByName('error');
-
-    return dispatch => {
-        if (errorFromParams) {
-            // it is error from google authorization page (detected by URL parameters)
-            console.log('google authorization failed', errorFromParams);
-            dispatch(loginError(errorFromParams));
-            dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
-            history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
-        }
+    return dispatch => Promise.resolve(
+        // Display auth error from params if any
+    ).then(() => dispatch(displayErrorFromParamsAsync())
+    ).then(() => {
         // try to restore old session
-        checkCookieSessionAndLogin(dispatch);
-    };
+        dispatch(requestSession());
+        return dispatch(
+            getCookieSessionTypeAsync()
+        ).then((sessionType) => {
+            if (sessionType !== SESSION_TYPE.INVALID) {
+                // restore old session
+                return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO));
+            } else {
+                // old session is invalid, so we create new one
+                return dispatch(openDemoSessionAsync());
+            }
+        });
+    });
 }
 
 export function logout() {
