@@ -42,6 +42,7 @@ app.use(helmet({
 app.post('/register', (request, response) => {
     console.log('register');
     const user = request.body;
+    console.log(user);
     registrationCodes.activateAsync(user)
         .then(() =>
             response.send({})
@@ -51,7 +52,7 @@ app.post('/register', (request, response) => {
         );
 });
 
-function returnUser(user) {
+function filterUser(user) {
     const {id, firstName, lastName, company, email, gender, isActivated, regcode, speciality, telephone} = user;
     return {id, firstName, lastName, company, email, gender, isActivated, regcode, speciality, telephone};
 }
@@ -61,6 +62,7 @@ app.get(
     (request, response) => {
         console.log('/user', request.query);
         const {regcode, regcodeId} = request.query;
+        console.log(regcode, regcodeId);
         const findAsync = regcodeId ?
             registrationCodes.findRegcodeIdAsync(regcodeId) :
             registrationCodes.findRegcodeAsync(regcode);
@@ -68,7 +70,7 @@ app.get(
         findAsync
             .then((user) => {
                 registrationCodes.updateFirstDate(user.id, user);
-                return response.send(returnUser(user));
+                return response.send(filterUser(user));
             })
             .catch((err) => response.status(404).send(err.message));
     }
@@ -76,23 +78,23 @@ app.get(
 
 app.put('/user', (request, response) => {
     console.log('update user');
-    console.log(request.body);
     const regcodeInfo = request.body;
+    console.log(regcodeInfo);
     registrationCodes.update(regcodeInfo.id, regcodeInfo)
         .then(() => {
             registrationCodes.updateLastDate(regcodeInfo.id, regcodeInfo);
-            return response.send(returnUser(regcodeInfo));
+            return response.send(filterUser(regcodeInfo));
         })
         .catch((err) => response.status(400).send(err.message));
 });
 
 app.post('/user_request', (request, response) => {
     console.log('user request');
-    console.log(request.body);
-    const userInfo = request.body;
+    const userInfo = filterUser(request.body);
+    console.log(userInfo);
     userRequests.createAsync(userInfo)
         .then(() =>
-            response.send(returnUser(userInfo))
+            response.send(filterUser(userInfo))
         )
         .catch((err) => response.status(400).send(err.message));
 });

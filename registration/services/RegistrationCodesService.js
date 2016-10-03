@@ -18,7 +18,7 @@ class RegistrationCodesService {
 
         return db.transactionallyAsync((trx) =>
             registrationCodesModel.activateAsync(user.id, trx)
-                .then(() => usersClient.addAsync(user))
+                .then((userPay) => usersClient.addAsync(Object.assign({}, user, {numberOfPaidSamples: userPay.numberOfPaidSamples})))
         );
     }
 

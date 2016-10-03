@@ -108,7 +108,10 @@ class RegistrationCodesModel extends ModelBase {
                 .update(ChangeCaseUtil.convertKeysToSnakeCase({
                     isActivated: true,
                     activatedTimestamp: new Date()
-                })));
+                })))
+            .then(() =>
+                this.findRegcodeIdAsync(id, trx)
+            );
     }
 
     createRegcodeAsync(startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
