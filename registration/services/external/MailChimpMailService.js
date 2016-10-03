@@ -59,8 +59,9 @@ class MailChimpMailService {
                 const {reject_reason} = result[0];
                 if (reject_reason == null){
                     callback(null, result[0])
+                } else {
+                    callback(new Error(reject_reason), null)
                 }
-                callback(new Error(reject_reason), null)
             },
             (error) => callback(error, null)
         );
