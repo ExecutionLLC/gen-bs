@@ -23,14 +23,14 @@ class MailChimpMailService {
         this._sendMail(email, userRegisterApproveTemplate, params, callback)
     }
 
-    sendAdminRegisterMail(email, params, callback){
-        const {mailChimp:{adminRegisterTemplate}} = this.config;
-        this._sendMail(email, adminRegisterTemplate, params, callback)
+    sendAdminRegisterMail(params, callback){
+        const {mailChimp:{adminRegisterTemplate, adminEmail}} = this.config;
+        this._sendMail(adminEmail, adminRegisterTemplate, params, callback)
     }
 
-    sendAdminRegisterApproveMail(email, params, callback){
-        const {mailChimp:{adminRegisterApproveTemplate}} = this.config;
-        this._sendMail(email, adminRegisterApproveTemplate, params, callback)
+    sendAdminRegisterApproveMail(params, callback){
+        const {mailChimp:{adminRegisterApproveTemplate, adminEmail}} = this.config;
+        this._sendMail(adminEmail, adminRegisterApproveTemplate, params, callback)
     }
 
     _sendMail(email, templateName, params, callback) {

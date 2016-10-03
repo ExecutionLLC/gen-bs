@@ -15,8 +15,15 @@ class UserRequestService {
 
         return db.transactionallyAsync((trx) =>
             userRequestModel.findInactiveAsync(registrationCodeId, trx)
-                .then((user) => usersClient.addAsync(Object.assign({}, user, {numberOfPaidSamples: NUMBER_OF_PAID_SAMPLES})))
-                .then(() => userRequestModel.activateAsync(registrationCodeId, trx))
+                .then((user) => {
+                    const userWithPaidSamples = Object.assign({}, user, {numberOfPaidSamples: NUMBER_OF_PAID_SAMPLES});
+                    return usersClient.addAsync(userWithPaidSamples)
+                        .then(() => userWithPaidSamples);
+                })
+                .then((userWithPaidSamples) =>
+                    userRequestModel.activateAsync(registrationCodeId, trx)
+                        .then(() => userWithPaidSamples)
+                )
         );
     }
 

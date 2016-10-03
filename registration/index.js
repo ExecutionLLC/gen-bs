@@ -100,6 +100,7 @@ app.post('/user_request', (request, response) => {
     userRequests.createAsync(userInfo)
         .then(() => {
             mailService.sendRegisterMail(userInfo.email, userInfo, () => {});
+            mailService.sendAdminRegisterMail(userInfo, () => {});
             return response.send(userInfo);
         })
         .catch((err) => response.status(400).send(err.message));
