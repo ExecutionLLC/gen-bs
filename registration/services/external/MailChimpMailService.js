@@ -1,12 +1,11 @@
 const _ = require('lodash');
 const mandrill = require('mandrill-api');
-const ServiceBase = require('../ServiceBase');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
-class MailChimpMailService extends ServiceBase {
+class MailChimpMailService {
 
-    constructor(services) {
-        super(services)
+    constructor(config) {
+        this.config = config;
     }
 
     sendRegisterMail(email, params, callback){

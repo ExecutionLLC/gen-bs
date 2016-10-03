@@ -53,6 +53,16 @@ const SETTINGS = {
         httpScheme: makeDefault(ENV.GEN_REG_WS_SCHEME, 'http'),
         host: makeDefault(ENV.GEN_REG_WS_HOST, 'localhost'),
         port: makeDefault(ENV.GEN_REG_WS_PORT, 80)
+    },
+    mailChimp: {
+        key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),
+        fromMail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'mailchimp@alapy.com'),
+        fromName: makeDefault(ENV.GEN_WS_MAIL_FROM_NAME, 'ALAPY'),
+        userRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
+        userRegisterCodeTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_CODE_TEMPLATE, 'TestGenomicsTemplate'),
+        userRegisterApproveTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_APPROVE_TEMPLATE, 'TestGenomicsTemplate'),
+        adminRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
+        adminRegisterApproveTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_APPROVE_TEMPLATE, 'TestGenomicsTemplate')
     }
 };
 
