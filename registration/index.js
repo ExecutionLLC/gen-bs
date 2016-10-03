@@ -94,12 +94,14 @@ app.put('/user', (request, response) => {
 
 app.post('/user_request', (request, response) => {
     console.log('user request');
-    const userInfo = filterUser(request.body);
+    const {id, firstName, lastName, company, email, gender, speciality, telephone} = request.body;
+    const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone};
     console.log(userInfo);
     userRequests.createAsync(userInfo)
-        .then(() =>
-            response.send(filterUser(userInfo))
-        )
+        .then(() => {
+            mailService.sendRegisterMail(userInfo.email, userInfo, () => {});
+            return response.send(userInfo);
+        })
         .catch((err) => response.status(400).send(err.message));
 });
 
