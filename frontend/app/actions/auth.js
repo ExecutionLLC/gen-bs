@@ -129,9 +129,9 @@ function openDemoSessionAsync() {
         (resolve) => sessionsClient.openDemoSession(
             (error, response) => resolve({error, response})
         ))
-    ).then(({error, response}) => handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response)
+    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
     ).then((response) => SessionsClient.getSessionFromResponse(response)
-    ).then((sessionId) => sessionId ? restoreOldSessionAsync(true) : dispatch([
+    ).then((sessionId) => sessionId ? dispatch(restoreOldSessionAsync(true)) : dispatch([
         loginError('Session id is empty'),
         handleError(null, LOGIN_ERROR_MESSAGE)
     ]));
