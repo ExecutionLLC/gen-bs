@@ -94,13 +94,13 @@ app.put('/user', (request, response) => {
 
 app.post('/user_request', (request, response) => {
     console.log('user request');
-    const {id, firstName, lastName, company, email, gender, speciality, telephone} = request.body;
-    const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone};
+    const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
+    const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password};
     console.log(userInfo);
     userRequests.createAsync(userInfo)
-        .then(() => {
+        .then((insertedUser) => {
             mailService.sendRegisterMail(userInfo.email, userInfo, () => {});
-            mailService.sendAdminRegisterMail(userInfo, () => {});
+            mailService.sendAdminRegisterMail(Object.assign({}, userInfo, {approveUrl: `http://37.195.64.171:2030/approve/?id=${insertedUser.id}`}), () => {});
             return response.send(userInfo);
         })
         .catch((err) => response.status(400).send(err.message));
@@ -109,6 +109,22 @@ app.post('/user_request', (request, response) => {
 app.get('/register', (request, response) => {
     response.send('Got hello!');
 });
+
+app.get('/approve', (request, response) => {
+    console.log('approve');
+    const {id} = request.query;
+    console.log(id);
+    userRequests.activateAsync(id)
+        .then((user) => {
+            mailService.sendRegisterApproveMail(user.email, user, () => {});
+            mailService.sendAdminRegisterApproveMail(user, () => {});
+            return response.send({})
+        })
+        .catch((error) =>
+            response.status(400).send(error.message)
+        );
+});
+
 
 app.listen(3000, () => {
     console.log('Server is started!');

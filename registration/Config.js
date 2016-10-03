@@ -63,7 +63,7 @@ const SETTINGS = {
         userRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
         userRegisterCodeTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_CODE_TEMPLATE, 'V-objem: Successful user register'),
         userRegisterApproveTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_APPROVE_TEMPLATE, 'TestGenomicsTemplate'),
-        adminRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
+        adminRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_TEMPLATE, 'TestGenomicsAdminApproveTemplate'),
         adminRegisterApproveTemplate: makeDefault(ENV.GEN_WS_MAIL_ADMIN_REGISTER_APPROVE_TEMPLATE, 'TestGenomicsTemplate')
     }
 };

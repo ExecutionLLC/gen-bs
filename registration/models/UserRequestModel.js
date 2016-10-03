@@ -55,11 +55,12 @@ class UserRequestModel extends ModelBase {
     }
 
     createAsync(userInfo, trx) {
+        const userToInsert = Object.assign({}, userInfo, {id: Uuid.v4(), isActivated: false});
         return trx(this.baseTableName)
             .insert(
-                ChangeCaseUtil.convertKeysToSnakeCase(
-                    Object.assign({}, userInfo, {id: Uuid.v4(), isActivated: false}))
-                );
+                ChangeCaseUtil.convertKeysToSnakeCase(userToInsert)
+            )
+            .then(() => userToInsert);
     }
 }
 
