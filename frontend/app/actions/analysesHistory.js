@@ -255,7 +255,8 @@ export function setCurrentAnalysesHistoryIdLoadData(id) {
                 return new Promise((resolve) => apiFacade.viewsClient.get(
                     viewId,
                     (error, response) => resolve({error, response})
-                )).then(({error, response}) => handleApiResponseErrorAsync(GET_VIEW_ERROR_MESSAGE, error, response)
+                )).then(
+                    ({error, response}) => dispatch(handleApiResponseErrorAsync(GET_VIEW_ERROR_MESSAGE, error, response))
                 ).then((response) => response.body);
             }
         }).then((view) => {

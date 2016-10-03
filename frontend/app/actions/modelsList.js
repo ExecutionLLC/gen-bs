@@ -98,7 +98,7 @@ export function modelsListServerDeleteModel(modelId) {
         ).then(({error, response}) => {
             dispatch(modelsListEndServerOperation());
             return dispatch(handleApiResponseErrorAsync(DELETE_MODEL_ERROR_MESSAGE, error, response));
-        }).then((response) => dispatch(modelsListDeleteModel(modelId)));
+        }).then(() => dispatch(modelsListDeleteModel(modelId)));
     };
 }
 
