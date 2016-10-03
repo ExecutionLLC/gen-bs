@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import HttpStatus from 'http-status';
 
-import {handleError} from './errorHandler';
+import {handleApiResponseErrorAsync} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
 import {immutableSetPathProperty} from '../utils/immutable';
 
@@ -15,11 +14,10 @@ export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 
 const samplesClient = apiFacade.samplesClient;
-const NETWORK_ERROR = 'Network error. You can reload page and try again.';
-const SERVER_ERROR = 'Internal server error. You can reload page and try again.';
-
-const FETCH_SAMPLES_NETWORK_ERROR = 'Cannot update samples data (network error). You can reload page and try again.';
-const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). You can reload page and try again.';
+const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
+    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
+const FETCH_SAMPLES_ERROR_MESSAGE = 'We are really sorry, but there is an error while getting the list of samples' +
+    ' from our server. Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 
 /*
@@ -51,21 +49,15 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
     };
 }
 
-export function fetchSamples() {
+export function fetchSamplesAsync() {
 
     return (dispatch) => {
         dispatch(requestSamples());
-
-        samplesClient.getAll((error, response) => {
-            if (error) {
-                dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
-            } else {
-                const samples = response.body;
-                dispatch(receiveSamplesList(samples));
-            }
-        });
+        return new Promise((resolve) => samplesClient.getAll((error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response))
+        ).then((response) => response.body
+        ).then((samples) => dispatch(receiveSamplesList(samples)));
     };
 }
 
@@ -91,27 +83,16 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
     };
 }
 
-export function requestUpdateSampleFields(sampleId) {
+export function requestUpdateSampleFieldsAsync(sampleId) {
     return (dispatch, getState) => {
         const {samplesList: {editedSamplesHash}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
-        return new Promise((resolve, reject) => {
-            samplesClient.update(sampleToUpdate, (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, NETWORK_ERROR));
-                    reject();
-                } else {
-                    if (response.status !== HttpStatus.OK) {
-                        dispatch(handleError(null, SERVER_ERROR));
-                        reject();
-                    } else {
-                        const updatedSample = response.body;
-                        dispatch(receiveUpdatedSample(sampleId, updatedSample));
-                        resolve(updatedSample);
-                    }
-                }
-            });
-        });
+        return new Promise((resolve) => samplesClient.update(
+            sampleToUpdate,
+            (error, response) => resolve({error, response})
+        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
+        ).then((response) => response.body
+        ).then((updatedSample) => dispatch(receiveUpdatedSample(sampleId, updatedSample)));
     };
 }
 
