@@ -5,13 +5,15 @@ export const LAST_ERROR_RESOLVED = 'LAST_ERROR_RESOLVED';
 
 export class NetworkError extends Error {
     constructor(message) {
-        super(message || 'Network error');
+        super(message || 'Please kindly check your network connection. If it is okay, please be sure we are already' +
+            ' working on your issue. Sorry for the inconvenience.');
     }
 }
 
 export class WebServerError extends Error {
     constructor(message) {
-        super(message || 'WebServer error');
+        super(message || 'Our server has taken liberties to respond with error.' +
+            ' Sorry for the inconvenience, we are working on fixing it.');
     }
 }
 
@@ -38,9 +40,8 @@ export function handleApiResponseErrorAsync(errorMessage, apiCallError, response
             } else if (response.status !== HttpStatus.OK) {
                 error = new WebServerError(response.body);
             }
-
             if (error) {
-                dispatch(handleError(null, `${errorMessage} Reason: ${error.message}`));
+                dispatch(handleError(null, errorMessage));
                 reject(error);
             } else {
                 resolve(response);
