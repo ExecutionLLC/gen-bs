@@ -111,12 +111,14 @@ function loginError(errorMessage) {
 function restoreOldSessionAsync(isDemoSession) {
     return (dispatch) => {
         dispatch(receiveSession(isDemoSession));
-        dispatch(initWSConnectionAsync());
-        if (isDemoSession) {
-            dispatch(clearAnalysesHistory());
-        }
-        dispatch(fetchUserdata());
-        return Promise.resolve();
+        return dispatch(initWSConnectionAsync())
+            .then(() => {
+                if (isDemoSession) {
+                    dispatch(clearAnalysesHistory());
+                }
+                dispatch(fetchUserdata());
+                return Promise.resolve();
+            });
     };
 }
 
