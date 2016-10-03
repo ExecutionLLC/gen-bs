@@ -15,6 +15,7 @@ const RegistrationCodesModel = require('./models/RegistrationCodesModel');
 const UserRequestService = require('./services/UserRequestService');
 const UserRequestModel = require('./models/UserRequestModel');
 const UsersClient = require('./api/UsersClient');
+const MailChimpMailService = require('./services/external/MailChimpMailService');
 
 const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
@@ -23,6 +24,8 @@ const usersClient = new UsersClient(Config);
 
 const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
 const userRequests = new UserRequestService(dbModel, userRequestModel, usersClient);
+
+const mailService = new MailChimpMailService(Config);
 
 const app = new Express();
 app.disable('x-powered-by');
@@ -44,9 +47,10 @@ app.post('/register', (request, response) => {
     const user = request.body;
     console.log(user);
     registrationCodes.activateAsync(user)
-        .then(() =>
+        .then(() => {
+            mailService.sendRegisterCodeMail(user.email, {'UserName': `${user.firstName} ${user.lastName}`}, () => {});
             response.send({})
-        )
+        })
         .catch((error) =>
             response.status(400).send(error.message)
         );
