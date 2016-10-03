@@ -15,7 +15,7 @@ class UsersClient {
                 .post(this.urlAdd)
                 .send({
                     key: ADD_USER_KEY,
-                    languId,
+                    languId: 'en',
                     user: {
                         firstName: user.firstName,
                         lastName: user.lastName,

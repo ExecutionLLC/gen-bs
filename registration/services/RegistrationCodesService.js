@@ -17,7 +17,7 @@ class RegistrationCodesService {
         const {db, registrationCodesModel, usersClient} = this;
 
         return db.transactionallyAsync((trx) =>
-            registrationCodesModel.activateAsync(user, trx)
+            registrationCodesModel.activateAsync(user.id, trx)
                 .then(() => usersClient.addAsync(user))
         );
     }
