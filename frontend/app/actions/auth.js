@@ -7,7 +7,7 @@ import {addTimeout, removeTimeout} from 'redux-timeout';
 import config from '../../config';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
-import {fetchUserdata} from './userData';
+import {fetchUserDataAsync} from './userData';
 import {initWSConnectionAsync} from './websocket';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {clearAnalysesHistory} from './analysesHistory';
@@ -116,8 +116,7 @@ function restoreOldSessionAsync(isDemoSession) {
                 if (isDemoSession) {
                     dispatch(clearAnalysesHistory());
                 }
-                dispatch(fetchUserdata());
-                return Promise.resolve();
+                return dispatch(fetchUserDataAsync());
             });
     };
 }

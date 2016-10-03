@@ -1,8 +1,7 @@
-import HttpStatus from 'http-status';
 import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler';
+import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {
     receiveTotalFields
 } from './fields';
@@ -31,9 +30,7 @@ import {analyze} from './ui';
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA';
 export const REQUEST_USERDATA = 'REQUEST_USERDATA';
 
-const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
-const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
-
+const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot load user data. You can reload page and try again.';
 const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' +
                                         'You can try to set sample, filter, view by hand or try to reload page.';
 
@@ -43,13 +40,13 @@ const dataClient = apiFacade.dataClient;
  * action creators
  */
 
-function requestUserdata() {
+function requestUserData() {
     return {
         type: REQUEST_USERDATA
     };
 }
 
-function receiveUserdata(json) {
+function receiveUserData(json) {
     return {
         type: RECEIVE_USERDATA,
         userData: json,
@@ -57,43 +54,67 @@ function receiveUserdata(json) {
     };
 }
 
-export function fetchUserdata() {
-
+export function fetchUserDataAsync() {
     return (dispatch, getState) => {
-        dispatch(requestUserdata());
+        dispatch(requestUserData());
         const {ui: {languageId}} = getState();
-        dataClient.getUserData(languageId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
+        return new Promise((resolve) => dataClient.getUserData(
+            languageId,
+            (error, response) => resolve({error, response})
+        )).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_USER_DATA_NETWORK_ERROR, error, response))
+        ).then((response) => {
+            const userData = response.body;
+            const {
+                samples,
+                filters,
+                views,
+                models,
+                totalFields,
+                savedFiles,
+                analyses
+            } = userData;
+
+            dispatch(receiveUserData(userData));
+            dispatch(filtersListReceive(filters));
+            dispatch(viewsListReceive(views));
+            dispatch(modelsListReceive(models));
+
+            dispatch(receiveSavedFilesList(savedFiles));
+            dispatch(receiveTotalFields(totalFields));
+            dispatch(receiveSamplesList(samples));
+            dispatch(receiveInitialAnalysesHistory(analyses));
+            if (analyses[0]) {
+                const historyItem = analyses[0];
+                dispatch(setCurrentAnalysesHistoryIdLoadData(historyItem.id))
+                    .then(() => {
+                        dispatch(analyze({
+                            id: historyItem.id,
+                            name: historyItem.name,
+                            description: historyItem.description,
+                            type: historyItem.type,
+                            samples: historyItem.samples,
+                            viewId: historyItem.viewId,
+                            filterId: historyItem.filterId,
+                            modelId: historyItem.modelId
+                        }));
+                    });
             } else {
-                const userData = response.body;
-                const {
-                    samples,
-                    filters,
-                    views,
-                    models,
-                    totalFields,
-                    savedFiles,
-                    analyses
-                } = userData;
-
-                dispatch(receiveUserdata(userData));
-                dispatch(filtersListReceive(filters));
-                dispatch(viewsListReceive(views));
-                dispatch(modelsListReceive(models));
-
-                dispatch(receiveSavedFilesList(savedFiles));
-                dispatch(receiveTotalFields(totalFields));
-                dispatch(receiveSamplesList(samples));
-                dispatch(receiveInitialAnalysesHistory(analyses));
-                if (analyses[0]) {
-                    const historyItem = analyses[0];
-                    dispatch(setCurrentAnalysesHistoryIdLoadData(historyItem.id))
+                const sample = _.find(samples, {type: entityType.DEFAULT}) ||
+                    _.find(samples, {type: entityType.STANDARD});
+                const filter = _.find(filters, {type: entityType.DEFAULT}) ||
+                    _.find(filters, {type: entityType.STANDARD});
+                const view = _.find(views, {type: entityType.DEFAULT}) ||
+                    _.find(views, {type: entityType.STANDARD});
+                if (!sample || !filter || !view) {
+                    dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                } else {
+                    dispatch(createNewHistoryItem(sample, filter, view));
+                    dispatch(setCurrentAnalysesHistoryIdLoadData(null))
                         .then(() => {
+                            const historyItem = getState().analysesHistory.newHistoryItem;
                             dispatch(analyze({
-                                id: historyItem.id,
+                                id: null,
                                 name: historyItem.name,
                                 description: historyItem.description,
                                 type: historyItem.type,
@@ -103,32 +124,6 @@ export function fetchUserdata() {
                                 modelId: historyItem.modelId
                             }));
                         });
-                } else {
-                    const sample = _.find(samples, {type: entityType.DEFAULT}) ||
-                                   _.find(samples, {type: entityType.STANDARD});
-                    const filter = _.find(filters, {type: entityType.DEFAULT}) ||
-                                   _.find(filters, {type: entityType.STANDARD});
-                    const view = _.find(views, {type: entityType.DEFAULT}) ||
-                                 _.find(views, {type: entityType.STANDARD});
-                    if (!sample || !filter || !view) {
-                        dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
-                    } else {
-                        dispatch(createNewHistoryItem(sample, filter, view));
-                        dispatch(setCurrentAnalysesHistoryIdLoadData(null))
-                            .then(() => {
-                                const historyItem = getState().analysesHistory.newHistoryItem;
-                                dispatch(analyze({
-                                    id: null,
-                                    name: historyItem.name,
-                                    description: historyItem.description,
-                                    type: historyItem.type,
-                                    samples: historyItem.samples,
-                                    viewId: historyItem.viewId,
-                                    filterId: historyItem.filterId,
-                                    modelId: historyItem.modelId
-                                }));
-                            });
-                    }
                 }
             }
         });
