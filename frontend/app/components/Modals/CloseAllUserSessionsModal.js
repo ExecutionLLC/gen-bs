@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import DialogBase from './DialogBase';
-import {login, closeAllUserSessionsAsync, showCloseAllUserSessionsDialog} from '../../actions/auth';
+import config from '../../../config';
+import {closeAllUserSessionsAsync, showCloseAllUserSessionsDialog} from '../../actions/auth';
 
 class CloseAllUserSessionsModal extends DialogBase {
     renderTitleContents() {
@@ -36,10 +37,10 @@ class CloseAllUserSessionsModal extends DialogBase {
     _closeAllSessions() {
         const {dispatch} = this.props;
         dispatch(closeAllUserSessionsAsync())
-            .then(() => dispatch([
-                showCloseAllUserSessionsDialog(false),
-                login()
-            ]));
+            .then(() => {
+                dispatch(showCloseAllUserSessionsDialog(false));
+                window.location = config.LOGIN_URL;
+            });
     }
 }
 
