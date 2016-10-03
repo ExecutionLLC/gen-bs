@@ -2,7 +2,7 @@ import HttpStatus from 'http-status';
 import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler';
+import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {viewsListSetHistoryView} from './viewsList';
 import {filtersListSetHistoryFilter} from './filtersList';
 import {modelsListSetHistoryModel} from './modelsList';
@@ -23,20 +23,14 @@ export const CANCEL_ANALYSES_HISTORY_EDIT = 'CANCEL_ANALYSES_HISTORY_EDIT';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
-const HISTORY_NETWORK_ERROR = 'Cannot update "analyses history" (network error).';
-const HISTORY_SERVER_ERROR = 'Cannot update "analyses history" (server error).';
+const HISTORY_ERROR_MESSAGE = 'Cannot update analyses history. Please try again.';
 
 const GET_SAMPLE_NETWORK_ERROR = 'Cannot get sample (network error). Please try again.';
 const GET_SAMPLE_SERVER_ERROR = 'Cannot get sample (server error). Please try again.';
 
-const GET_VIEW_NETWORK_ERROR = 'Cannot get view (network error). Please try again.';
-const GET_VIEW_SERVER_ERROR = 'Cannot get view (server error). Please try again.';
-
-const GET_FILTER_NETWORK_ERROR = 'Cannot get filter (network error). Please try again.';
-const GET_FILTER_SERVER_ERROR = 'Cannot get filter (server error). Please try again.';
-
-const GET_MODEL_NETWORK_ERROR = 'Cannot get model (network error). Please try again.';
-const GET_MODEL_SERVER_ERROR = 'Cannot get model (server error). Please try again.';
+const GET_VIEW_ERROR_MESSAGE = 'Cannot get view. Please try again.';
+const GET_FILTER_ERROR_MESSAGE = 'Cannot get filter. Please try again.';
+const GET_MODEL_ERROR_MESSAGE = 'Cannot get model. Please try again.';
 
 const analysesHistoryClient = apiFacade.analysesHistoryClient;
 
@@ -147,50 +141,38 @@ export function setEditedHistoryItem(newHistoryItem) {
     };
 }
 
-export function requestAppendAnalysesHistory(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+export function requestAppendAnalysesHistoryAsync(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
         dispatch(requestAnalysesHistory());
-        analysesHistoryClient.getAnalysesHistory(language, search, limit, offset, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, HISTORY_SERVER_ERROR));
-            } else {
-                const result = response.body.result;
-                dispatch(appendAnalysesHistory(search, offset, result, limit > result.length));
-            }
+        return new Promise((resolve) => analysesHistoryClient.getAnalysesHistory(language, search, limit, offset,
+            (error, response) => resolve({error, response})
+        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
+        ).then((response) => {
+            const result = response.body.result;
+            dispatch(appendAnalysesHistory(search, offset, result, limit > result.length));
         });
     };
 }
 
-export function updateAnalysesHistoryItem(historyItemId) {
+export function updateAnalysesHistoryItemAsync(historyItemId) {
     return (dispatch, getState) => {
         const {history} = getState().analysesHistory;
         const historyItem = _.find(history, (historyItem) => {
             return historyItem.id === historyItemId;
         });
-        analysesHistoryClient.update(historyItem, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, HISTORY_SERVER_ERROR));
-            }
-        });
+        return new Promise(
+            (resolve) => analysesHistoryClient.update(historyItem, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response)));
     };
 }
 
-export function deleteServerAnalysesHistoryItem(historyItemId) {
+export function deleteServerAnalysesHistoryItemAsync(historyItemId) {
     return (dispatch) => {
-        analysesHistoryClient.remove(historyItemId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, HISTORY_SERVER_ERROR));
-            } else {
-                dispatch(deleteAnalysesHistoryItem(historyItemId));
-            }
-        });
+        return new Promise(
+            (resolve) => analysesHistoryClient.remove(historyItemId, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
+        ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId)));
     };
 }
 
@@ -270,19 +252,11 @@ export function setCurrentAnalysesHistoryIdLoadData(id) {
             if (existentView) {
                 return existentView;
             } else {
-                return new Promise((resolve, reject) => {
-                    apiFacade.viewsClient.get(viewId, (error, response) => {
-                        if (error) {
-                            dispatch(handleError(null, GET_VIEW_NETWORK_ERROR));
-                            reject();
-                        } else if (response.status !== HttpStatus.OK) {
-                            dispatch(handleError(null, GET_VIEW_SERVER_ERROR));
-                            reject();
-                        } else {
-                            resolve(response.body);
-                        }
-                    });
-                });
+                return new Promise((resolve) => apiFacade.viewsClient.get(
+                    viewId,
+                    (error, response) => resolve({error, response})
+                )).then(({error, response}) => handleApiResponseErrorAsync(GET_VIEW_ERROR_MESSAGE, error, response)
+                ).then((response) => response.body);
             }
         }).then((view) => {
             // TODO it is unclear that ...SetHistoryView can receive non-history item,
@@ -293,19 +267,11 @@ export function setCurrentAnalysesHistoryIdLoadData(id) {
             if (existentFilter) {
                 return existentFilter;
             } else {
-                return new Promise((resolve, reject) => {
-                    apiFacade.filtersClient.get(filterId, (error, response) => {
-                        if (error) {
-                            dispatch(handleError(null, GET_FILTER_NETWORK_ERROR));
-                            reject();
-                        } else if (response.status !== HttpStatus.OK) {
-                            dispatch(handleError(null, GET_FILTER_SERVER_ERROR));
-                            reject();
-                        } else {
-                            resolve(response.body);
-                        }
-                    });
-                });
+                return new Promise((resolve) => apiFacade.filtersClient.get(
+                    filterId,
+                    (error, response) => resolve({error, response})
+                )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(GET_FILTER_ERROR_MESSAGE, error, response))
+                ).then((response) => response.body);
             }
         }).then((filter) => {
             dispatch(filtersListSetHistoryFilter(filter));
@@ -316,19 +282,11 @@ export function setCurrentAnalysesHistoryIdLoadData(id) {
             if (existentModel) {
                 return existentModel;
             } else {
-                return new Promise((resolve, reject) => {
-                    apiFacade.modelsClient.get(modelId, (error, response) => {
-                        if (error) {
-                            dispatch(handleError(null, GET_MODEL_NETWORK_ERROR));
-                            reject();
-                        } else if (response.status !== HttpStatus.OK) {
-                            dispatch(handleError(null, GET_MODEL_SERVER_ERROR));
-                            reject();
-                        } else {
-                            resolve(response.body);
-                        }
-                    });
-                });
+                return new Promise((resolve) => apiFacade.modelsClient.get(
+                    modelId,
+                    (error, response) => resolve({error, response}))
+                ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(GET_MODEL_ERROR_MESSAGE, error, response))
+                ).then((response) => response.body);
             }
         }).then((model) => {
             dispatch(modelsListSetHistoryModel(model));
@@ -336,16 +294,16 @@ export function setCurrentAnalysesHistoryIdLoadData(id) {
                 getSamples(samplesIds, samplesHash, (error, samples) => {
                     if (error) {
                         dispatch(handleError(null, error));
-                        reject();
+                        reject(error);
                     } else {
                         resolve(samples);
                     }
                 });
             });
-        }).then((samples) => {
-            dispatch(samplesListSetHistorySamples(samples));
-            dispatch(setCurrentAnalysesHistoryId(id));
-            dispatch(toggleLoadingHistoryData(false));
-        });
+        }).then((samples) => dispatch([
+            samplesListSetHistorySamples(samples),
+            setCurrentAnalysesHistoryId(id),
+            toggleLoadingHistoryData(false)
+        ]));
     };
 }

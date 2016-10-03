@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {requestAppendAnalysesHistory} from '../../../actions/analysesHistory';
+import {requestAppendAnalysesHistoryAsync} from '../../../actions/analysesHistory';
 
 
 const PAGINATION = {
@@ -39,7 +39,7 @@ export default class AnalysisHistoryList extends React.Component {
 
         if (!isHistoryReceivedAll && !isHistoryRequesting) {
             if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
-                dispatch(requestAppendAnalysesHistory(historyListSearch, PAGINATION.COUNT, historyList.length));
+                dispatch(requestAppendAnalysesHistoryAsync(historyListSearch, PAGINATION.COUNT, historyList.length));
             }
         }
         this.loadingTimer = setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
