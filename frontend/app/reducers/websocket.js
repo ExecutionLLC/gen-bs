@@ -75,7 +75,7 @@ export default function websocket(state = {
                 variants: null,
                 currentVariants: null
             });
-        case ActionTypes.WS_CREATE_CONNECTION:
+        case ActionTypes.WS_STORE_CONNECTION:
             return Object.assign({}, state, {
                 wsConn: action.wsConn,
                 error: null
