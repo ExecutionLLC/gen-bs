@@ -99,22 +99,22 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "c24f90bb-9ab1-4dbd-9d05-01ac74563208",
+        "id": "8e59ace6-c4b5-4117-b8f6-3f4d61d84566",
         "langu_id": "en",
         "value": "Proband"
       },
       {
-        "id": "6102d489-954c-480a-94fa-6efe451b00e5",
+        "id": "ef339aa8-e7b7-4f99-8713-a1406e182e86",
         "langu_id": "en",
         "value": "Mother"
       },
       {
-        "id": "2d1f6eb5-7f6e-4547-a336-0a7ecfb00cc4",
+        "id": "58af2a6b-5e4c-427e-8139-ffb741be30c4",
         "langu_id": "en",
         "value": "Father"
       },
       {
-        "id": "b6aeb96a-ddc2-49dd-9fca-3c92927c98e5",
+        "id": "d0981e8d-35f2-4333-9faf-3921f0118e6b",
         "langu_id": "en",
         "value": "Sibling"
       }
@@ -132,17 +132,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "f0a1e16c-9386-4630-bf73-af3b04e4ef59",
+        "id": "b7aa798a-cd57-43be-b2c3-ebe075a0fee3",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "872bd3e8-6c3e-495b-b6e9-1c48aa05854a",
+        "id": "bda7c397-6bae-4739-8904-5c00b5adf1a1",
         "langu_id": "en",
         "value": "Male"
       },
       {
-        "id": "79f00428-4049-4103-be1c-5d9d5b17b90d",
+        "id": "f9256706-eeca-4078-9e3f-386412f9b14e",
         "langu_id": "en",
         "value": "Female"
       }
@@ -160,17 +160,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "5174770a-4ed4-468b-9bfe-edd9b6c525e4",
+        "id": "80348497-cc13-4682-97b2-f88cdd63bda3",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "f6aaadac-256c-4dd1-bceb-7e6ff3eba70f",
+        "id": "63e4b70e-1f61-4fa6-a08d-33ec92dec236",
         "langu_id": "en",
         "value": "Big ears (hpo1)"
       },
       {
-        "id": "dbe2254a-8f1f-4a88-ba8e-1ffe26a7ce0d",
+        "id": "561c486d-007b-4c9f-bb1b-e7f865597567",
         "langu_id": "en",
         "value": "Small ears (hpo2)"
       }
@@ -210,12 +210,12 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "aee30274-d542-4ff2-b9cf-a29726d6ade8",
+        "id": "e93fc66a-262c-4c0c-ae89-b393eb3582b0",
         "langu_id": "en",
         "value": "hg19"
       },
       {
-        "id": "b3dccc47-77e2-4575-8e23-30b6f7b9f4e1",
+        "id": "e7f339fb-6053-4281-97b2-a6527f2706f9",
         "langu_id": "en",
         "value": "hg38"
       }
@@ -1169,62 +1169,7 @@
     "available_values": []
   },
   {
-    "id": "cb218925-987e-4e13-bc92-931f1a154819",
-    "name": "INFO_NC",
-    "label": "INFO_NC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of samples not called",
-    "dimension": 1
-  },
-  {
-    "id": "e9aafb69-85df-45b9-85e9-28545a7b85a0",
-    "name": "INFO_HOM",
-    "label": "INFO_HOM",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of samples called homozygous-variant",
-    "dimension": 1
-  },
-  {
-    "id": "cfcad47c-d7dd-4c00-bf61-ea6d5803049a",
-    "name": "INFO_ADP",
-    "label": "INFO_ADP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Average per-sample depth of bases with Phred score >= 0",
-    "dimension": 1
-  },
-  {
-    "id": "7a52fbfd-0b7a-4252-addf-2b8db20cf8ad",
-    "name": "INFO_HET",
-    "label": "INFO_HET",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of samples called heterozygous-variant",
-    "dimension": 1
-  },
-  {
-    "id": "58290c45-429e-46b6-9183-01cc72fcdbbc",
-    "name": "INFO_WT",
-    "label": "INFO_WT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of samples called reference (wild-type)",
-    "dimension": 1
-  },
-  {
-    "id": "cd55dc2b-3e00-4041-8050-56c541375bb5",
+    "id": "1aa787bc-e70c-49bf-af96-3892c2613e09",
     "name": "INFO_ExAC_AF_AMR_Adj",
     "label": "INFO_ExAC_AF_AMR_Adj",
     "source_name": "sample",
@@ -1235,7 +1180,7 @@
     "dimension": 1
   },
   {
-    "id": "de96add4-b616-429d-9569-b2362620477e",
+    "id": "35ea0e54-abe9-48e1-ba38-6a0b2e9affe7",
     "name": "INFO_ExAC_AF",
     "label": "INFO_ExAC_AF",
     "source_name": "sample",
@@ -1246,7 +1191,7 @@
     "dimension": 1
   },
   {
-    "id": "52a69926-4ccf-42ae-9879-6182d3318a82",
+    "id": "27838a2e-2ba6-42e3-b1db-0c6256eed03b",
     "name": "INFO_ExAC_AF_NFE_Adj",
     "label": "INFO_ExAC_AF_NFE_Adj",
     "source_name": "sample",
@@ -1257,7 +1202,7 @@
     "dimension": 1
   },
   {
-    "id": "1657e696-d8f2-4929-9efa-d541d88705e7",
+    "id": "68dfed73-7a85-4cbc-b335-0744dccab056",
     "name": "INFO_ExAC_AF_Adj",
     "label": "INFO_ExAC_AF_Adj",
     "source_name": "sample",
@@ -1268,7 +1213,7 @@
     "dimension": 1
   },
   {
-    "id": "143cc078-a332-4b8c-9640-967225032e9e",
+    "id": "6b2a0dee-c5ce-4d38-9e1b-78bd8b522349",
     "name": "INFO_ExAC_AF_SAS_Adj",
     "label": "INFO_ExAC_AF_SAS_Adj",
     "source_name": "sample",
@@ -1279,7 +1224,7 @@
     "dimension": 1
   },
   {
-    "id": "2fcc1188-c23d-474f-9539-e6c45c056ff7",
+    "id": "106eb101-5568-4a6f-a2ed-85ceb551d8ac",
     "name": "INFO_ExAC_AF_EAS_Adj",
     "label": "INFO_ExAC_AF_EAS_Adj",
     "source_name": "sample",
@@ -1290,7 +1235,7 @@
     "dimension": 1
   },
   {
-    "id": "78febad7-1085-4312-93f7-15218b61c958",
+    "id": "5dd4e62b-6f11-497e-8339-47aebb524b2a",
     "name": "INFO_ExAC_AF_AFR_Adj",
     "label": "INFO_ExAC_AF_AFR_Adj",
     "source_name": "sample",
@@ -1301,7 +1246,7 @@
     "dimension": 1
   },
   {
-    "id": "97860df2-f045-4b2b-9432-8a6ab08fdc1b",
+    "id": "7ded1fe2-faa7-4fb8-aed1-0cdb68ea8b10",
     "name": "INFO_ExAC_AF_OTH_Adj",
     "label": "INFO_ExAC_AF_OTH_Adj",
     "source_name": "sample",
@@ -1312,7 +1257,7 @@
     "dimension": 1
   },
   {
-    "id": "f4146fa1-e754-49cc-95d9-15fbf69ca909",
+    "id": "acbc3ca9-a8f9-44fe-bdf8-90d6b0b6022b",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -1323,7 +1268,7 @@
     "dimension": 1
   },
   {
-    "id": "cb8242e9-54d3-4f2f-92c4-980f96b061c0",
+    "id": "c189d390-bc3c-4fde-b605-2c7b2d3b3f99",
     "name": "INFO_ExAC_AF_FIN_Adj",
     "label": "INFO_ExAC_AF_FIN_Adj",
     "source_name": "sample",
@@ -1334,7 +1279,62 @@
     "dimension": 1
   },
   {
-    "id": "e920c479-cfab-458c-8b0c-8108c74f85ce",
+    "id": "13acb86e-aed6-44b8-9699-7fe20f9ab6fe",
+    "name": "INFO_NC",
+    "label": "INFO_NC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of samples not called",
+    "dimension": 1
+  },
+  {
+    "id": "0419f402-1777-4ab5-868a-c3f6c8818c32",
+    "name": "INFO_HOM",
+    "label": "INFO_HOM",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of samples called homozygous-variant",
+    "dimension": 1
+  },
+  {
+    "id": "16884d9c-d39b-4654-9e8f-e5d727e8d3b7",
+    "name": "INFO_ADP",
+    "label": "INFO_ADP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Average per-sample depth of bases with Phred score >= 0",
+    "dimension": 1
+  },
+  {
+    "id": "e19ec567-3518-45a7-85a6-b5148025693d",
+    "name": "INFO_HET",
+    "label": "INFO_HET",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of samples called heterozygous-variant",
+    "dimension": 1
+  },
+  {
+    "id": "104a510e-04b9-4654-8a1e-8eb61b055bb2",
+    "name": "INFO_WT",
+    "label": "INFO_WT",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of samples called reference (wild-type)",
+    "dimension": 1
+  },
+  {
+    "id": "d9240ec6-071c-4b4b-b04b-70b551bd328e",
     "name": "INFO_SGREFAA",
     "label": "INFO_SGREFAA",
     "source_name": "sample",
@@ -1345,7 +1345,7 @@
     "dimension": 1
   },
   {
-    "id": "d3176929-b0b1-4896-b41a-6ac745f71fa1",
+    "id": "53b7c374-16e8-4e92-819b-5e01bda5d2c9",
     "name": "INFO_SGTI",
     "label": "INFO_SGTI",
     "source_name": "sample",
@@ -1356,7 +1356,7 @@
     "dimension": 0
   },
   {
-    "id": "16d08759-8138-4820-81fc-756d9092ac22",
+    "id": "584060be-194f-4c92-aaf1-b270b6443f61",
     "name": "INFO_AF",
     "label": "INFO_AF",
     "source_name": "sample",
@@ -1367,7 +1367,7 @@
     "dimension": -1
   },
   {
-    "id": "58ca9453-c66a-4122-98c7-44d93241fa4d",
+    "id": "ec4adbb8-b44a-46f2-830c-b41bca7e0a9a",
     "name": "INFO_SGACOV",
     "label": "INFO_SGACOV",
     "source_name": "sample",
@@ -1378,7 +1378,7 @@
     "dimension": -1
   },
   {
-    "id": "b3c91644-dc16-4a43-bb0b-359f3d21f2ca",
+    "id": "f3ca88d4-2f17-4fba-95c2-e72971579eb2",
     "name": "INFO_SGGENEDIR",
     "label": "INFO_SGGENEDIR",
     "source_name": "sample",
@@ -1389,7 +1389,7 @@
     "dimension": 1
   },
   {
-    "id": "2928c3d8-5440-4f6a-a37f-a3fe7dc98106",
+    "id": "26c6ca17-ef65-4026-8453-5b2f61a30cf6",
     "name": "INFO_SGANNOT",
     "label": "INFO_SGANNOT",
     "source_name": "sample",
@@ -1400,7 +1400,7 @@
     "dimension": 0
   },
   {
-    "id": "bfa15911-7803-4f40-a59f-6287ea9c680a",
+    "id": "1ac83bb0-f369-4c24-8819-b4bc7d169d84",
     "name": "INFO_SGCDSID",
     "label": "INFO_SGCDSID",
     "source_name": "sample",
@@ -1411,7 +1411,7 @@
     "dimension": 1
   },
   {
-    "id": "31a05024-d0ce-4e4b-a122-efc7b7409107",
+    "id": "62d2b9ad-e096-41a0-9028-84baf1018745",
     "name": "INFO_SGSEGDES",
     "label": "INFO_SGSEGDES",
     "source_name": "sample",
@@ -1422,7 +1422,7 @@
     "dimension": 1
   },
   {
-    "id": "44a1a63a-984e-4a65-b65c-d1c08c64dc2b",
+    "id": "3989d0cd-f07e-4d8a-a2e5-6d5e76dfa0c5",
     "name": "INFO_SGSEGPOS",
     "label": "INFO_SGSEGPOS",
     "source_name": "sample",
@@ -1433,7 +1433,7 @@
     "dimension": 1
   },
   {
-    "id": "30b3d5fc-3927-4ecd-b7ac-00c6e7397937",
+    "id": "f16e1e67-c1b0-4141-a6bc-d23d4bad1a2a",
     "name": "INFO_SGMRNAID",
     "label": "INFO_SGMRNAID",
     "source_name": "sample",
@@ -1444,7 +1444,7 @@
     "dimension": 1
   },
   {
-    "id": "448805dd-419a-494c-b239-d16e44b09cf8",
+    "id": "64cccadc-5746-4548-b139-3e8deeed0300",
     "name": "INFO_SGAMBGAINPEN",
     "label": "INFO_SGAMBGAINPEN",
     "source_name": "sample",
@@ -1455,7 +1455,7 @@
     "dimension": 1
   },
   {
-    "id": "d28d76e7-76ce-4fc8-95a0-2add8a9cdda1",
+    "id": "7fec0a66-e4eb-4153-959f-227898076e2c",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "sample",
@@ -1466,7 +1466,7 @@
     "dimension": 1
   },
   {
-    "id": "31df6d31-954e-4edc-a54d-b52980040e40",
+    "id": "ff0ffd4d-f44e-4f6b-a798-05a1013d07b5",
     "name": "INFO_SGPI",
     "label": "INFO_SGPI",
     "source_name": "sample",
@@ -1477,7 +1477,7 @@
     "dimension": 0
   },
   {
-    "id": "3501d423-b69b-41e4-8a0b-45861442a8d0",
+    "id": "70041a54-1869-4c84-8ded-a20269175dae",
     "name": "INFO_SGGI",
     "label": "INFO_SGGI",
     "source_name": "sample",
@@ -1488,7 +1488,7 @@
     "dimension": 0
   },
   {
-    "id": "94cec4bf-1233-4fe2-bcf8-743eee69379a",
+    "id": "05b2e949-4682-461b-88ad-6dccb1d5fe11",
     "name": "INFO_SGAMBLOSSPEN",
     "label": "INFO_SGAMBLOSSPEN",
     "source_name": "sample",
@@ -1499,7 +1499,7 @@
     "dimension": 1
   },
   {
-    "id": "ae20025d-1e23-4a3a-a5bf-6e78fce0d288",
+    "id": "d8d94cd4-3a94-4613-9642-11b41619fa17",
     "name": "INFO_NS",
     "label": "INFO_NS",
     "source_name": "sample",
@@ -1510,7 +1510,7 @@
     "dimension": 1
   },
   {
-    "id": "9c2c3c5d-8ff6-4f8b-b10d-409824e60d2b",
+    "id": "2afdb1ec-e2e4-4aed-afae-b2ca1ef04623",
     "name": "INFO_FC",
     "label": "INFO_FC",
     "source_name": "sample",
@@ -1521,7 +1521,7 @@
     "dimension": 0
   },
   {
-    "id": "f976435f-2780-4e06-a691-0b29109f98e8",
+    "id": "91d0ba32-5bd0-446d-9d73-8c85e3dee88f",
     "name": "INFO_SGAAC",
     "label": "INFO_SGAAC",
     "source_name": "sample",
@@ -1532,7 +1532,7 @@
     "dimension": -1
   },
   {
-    "id": "a7c2f7e4-ba2f-4028-85be-351defe66fdb",
+    "id": "ae42ee19-b136-4494-91e2-823b49bb81e5",
     "name": "INFO_SGASCORE",
     "label": "INFO_SGASCORE",
     "source_name": "sample",
@@ -1543,7 +1543,7 @@
     "dimension": -1
   },
   {
-    "id": "812ec775-8c68-4c3e-995c-b93a6620af5f",
+    "id": "85c994b6-cf87-49d7-a263-2e2b11df7249",
     "name": "INFO_REVB",
     "label": "INFO_REVB",
     "source_name": "sample",
@@ -1554,7 +1554,7 @@
     "dimension": -1
   },
   {
-    "id": "1ef1cfb4-5fff-4f86-84ed-6ec162b9ca00",
+    "id": "a4168878-25e9-43be-b434-41a5f6207f3a",
     "name": "INFO_FRO",
     "label": "INFO_FRO",
     "source_name": "sample",
@@ -1565,7 +1565,7 @@
     "dimension": 1
   },
   {
-    "id": "be6c155c-6e6e-453a-80e6-756332800f80",
+    "id": "bbc3c6a5-8d95-4777-ae4e-1c5bd53264db",
     "name": "INFO_AO",
     "label": "INFO_AO",
     "source_name": "sample",
@@ -1576,7 +1576,7 @@
     "dimension": -1
   },
   {
-    "id": "a1756189-43fe-47e8-ab47-0eb555b3bee3",
+    "id": "5ecb0275-cb1c-4316-b480-a3eb10d644ec",
     "name": "INFO_SAR",
     "label": "INFO_SAR",
     "source_name": "sample",
@@ -1587,7 +1587,7 @@
     "dimension": -1
   },
   {
-    "id": "ae1c71a9-6eb5-4489-af85-9b44068dd20e",
+    "id": "727ae12f-5cee-437e-9d8f-36f2493e2fd8",
     "name": "INFO_FSAF",
     "label": "INFO_FSAF",
     "source_name": "sample",
@@ -1598,7 +1598,7 @@
     "dimension": -1
   },
   {
-    "id": "8af80c14-aaa4-4481-a1b2-db2ba663fe44",
+    "id": "7bf3aabf-3809-46a3-9be4-77db6ea7e2fe",
     "name": "INFO_SAF",
     "label": "INFO_SAF",
     "source_name": "sample",
@@ -1609,7 +1609,7 @@
     "dimension": -1
   },
   {
-    "id": "91d86745-07cf-4433-aeab-f510120d27cb",
+    "id": "a3a10f3c-0877-4a98-bc4a-62c8dbd9fa7e",
     "name": "INFO_MLLD",
     "label": "INFO_MLLD",
     "source_name": "sample",
@@ -1620,7 +1620,7 @@
     "dimension": -1
   },
   {
-    "id": "52f0d489-1f97-4e2b-8714-99ba49c25b12",
+    "id": "86de9896-fb60-4478-a4e6-b4a3bcab9306",
     "name": "INFO_FSAR",
     "label": "INFO_FSAR",
     "source_name": "sample",
@@ -1631,7 +1631,7 @@
     "dimension": -1
   },
   {
-    "id": "076581d4-7736-4a1e-a506-2cbd51b46403",
+    "id": "fad59aa5-5931-4b8d-92c2-fcc2909b5274",
     "name": "INFO_PB",
     "label": "INFO_PB",
     "source_name": "sample",
@@ -1642,7 +1642,7 @@
     "dimension": -1
   },
   {
-    "id": "6c079985-5218-4e16-a248-3cceb1791e46",
+    "id": "3b52b3fd-f913-472d-873b-c0028b890173",
     "name": "INFO_HS",
     "label": "INFO_HS",
     "source_name": "sample",
@@ -1653,7 +1653,7 @@
     "dimension": 1
   },
   {
-    "id": "fe7bd8f9-7d5c-45b8-a183-92f98b508db6",
+    "id": "6c8462a9-20b0-47cc-890c-ff3635140d61",
     "name": "INFO_OID",
     "label": "INFO_OID",
     "source_name": "sample",
@@ -1664,7 +1664,7 @@
     "dimension": 0
   },
   {
-    "id": "9c3ac131-c568-4d3d-b000-e72fdd7e7968",
+    "id": "656e5d6f-8337-46fa-91ed-58d78bad3276",
     "name": "INFO_REFB",
     "label": "INFO_REFB",
     "source_name": "sample",
@@ -1675,7 +1675,7 @@
     "dimension": -1
   },
   {
-    "id": "dc779c79-da67-490a-a074-67d9eecebfb7",
+    "id": "7ed924c6-705a-4f2a-975d-e1c02c207712",
     "name": "INFO_OREF",
     "label": "INFO_OREF",
     "source_name": "sample",
@@ -1686,7 +1686,7 @@
     "dimension": 0
   },
   {
-    "id": "35f7e25c-73e9-45cf-8d2d-ab39260dfdf1",
+    "id": "a19670a4-4266-46ad-9125-0cab06c9e00c",
     "name": "INFO_LEN",
     "label": "INFO_LEN",
     "source_name": "sample",
@@ -1697,7 +1697,7 @@
     "dimension": -1
   },
   {
-    "id": "c6be3cae-eb19-4cd1-ad94-1d4738477a10",
+    "id": "8732706e-cd05-4278-9998-e38dba00c07c",
     "name": "INFO_FWDB",
     "label": "INFO_FWDB",
     "source_name": "sample",
@@ -1708,7 +1708,7 @@
     "dimension": -1
   },
   {
-    "id": "389a3c7e-30ea-4150-8d72-8591847704a1",
+    "id": "b9dec7db-22b8-4dd4-ad15-aac3dc24ef53",
     "name": "INFO_STB",
     "label": "INFO_STB",
     "source_name": "sample",
@@ -1719,7 +1719,7 @@
     "dimension": -1
   },
   {
-    "id": "2f1145a7-1c2c-4b30-a53f-5ea5927c1527",
+    "id": "aa3ab14d-8be3-4cef-828b-21a2c5f075cc",
     "name": "INFO_SSSB",
     "label": "INFO_SSSB",
     "source_name": "sample",
@@ -1730,7 +1730,7 @@
     "dimension": -1
   },
   {
-    "id": "9ecbe37f-7bb6-4e3b-8186-b7c1bb7e2c59",
+    "id": "6889b338-dab9-4286-bcec-1295a11f138a",
     "name": "INFO_RO",
     "label": "INFO_RO",
     "source_name": "sample",
@@ -1741,7 +1741,7 @@
     "dimension": 1
   },
   {
-    "id": "9a6dc6aa-2167-4efd-9f18-07f64cd305a8",
+    "id": "86c8f8e7-4cf3-4b90-8ed7-32e0e59f8db0",
     "name": "INFO_VARB",
     "label": "INFO_VARB",
     "source_name": "sample",
@@ -1752,7 +1752,7 @@
     "dimension": -1
   },
   {
-    "id": "aa8d6657-fa8d-4bde-9cb0-320531f83692",
+    "id": "408e2562-bacd-4e0a-9efd-f6116ac3c15e",
     "name": "INFO_PBP",
     "label": "INFO_PBP",
     "source_name": "sample",
@@ -1763,7 +1763,7 @@
     "dimension": -1
   },
   {
-    "id": "bd53f133-551d-4493-9bdc-b6daf310fd25",
+    "id": "6a8be7b8-9702-4964-b2a7-a70f0fcedc55",
     "name": "INFO_FSRF",
     "label": "INFO_FSRF",
     "source_name": "sample",
@@ -1774,7 +1774,7 @@
     "dimension": 1
   },
   {
-    "id": "416fc956-e6e3-4cc8-b0bb-7cd820287583",
+    "id": "9c5c27c0-a102-4c05-a3b9-e7fe445fdc9f",
     "name": "INFO_RBI",
     "label": "INFO_RBI",
     "source_name": "sample",
@@ -1785,7 +1785,7 @@
     "dimension": -1
   },
   {
-    "id": "2a707142-6443-452c-b7f3-00ec1ff41ae3",
+    "id": "a7d9708c-c90d-4395-98de-acc850047b10",
     "name": "INFO_OPOS",
     "label": "INFO_OPOS",
     "source_name": "sample",
@@ -1796,7 +1796,7 @@
     "dimension": 0
   },
   {
-    "id": "72f72a59-397f-4785-b5a4-ebb45ab1ac3a",
+    "id": "f60e1aed-8c1f-4c82-b154-b33a23bef46f",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -1807,7 +1807,7 @@
     "dimension": -1
   },
   {
-    "id": "06909374-d66e-4d6d-8786-6907bee00bbb",
+    "id": "443d6923-a4b8-4906-ba17-9f0ee0a6d9a2",
     "name": "INFO_FSRR",
     "label": "INFO_FSRR",
     "source_name": "sample",
@@ -1818,7 +1818,7 @@
     "dimension": 1
   },
   {
-    "id": "6a1b09f3-0653-45b4-bfe7-c7501069c25c",
+    "id": "f3f28212-cb2f-4e0c-8944-e45e4359a859",
     "name": "INFO_FDP",
     "label": "INFO_FDP",
     "source_name": "sample",
@@ -1829,7 +1829,7 @@
     "dimension": 1
   },
   {
-    "id": "20a26596-a62b-4fac-ace3-94db418ba9fa",
+    "id": "f40e0065-935d-4184-8135-b888943ef24e",
     "name": "INFO_HRUN",
     "label": "INFO_HRUN",
     "source_name": "sample",
@@ -1840,7 +1840,7 @@
     "dimension": -1
   },
   {
-    "id": "d547ec46-7ded-4dcf-8615-45142ca2562b",
+    "id": "e848a212-c82e-417a-bcd9-d495199e2b24",
     "name": "INFO_SRF",
     "label": "INFO_SRF",
     "source_name": "sample",
@@ -1851,7 +1851,7 @@
     "dimension": 1
   },
   {
-    "id": "e4d7cde6-0d09-4ed6-86f1-15cf6eb45479",
+    "id": "3dfcce9a-fd61-46b7-8910-cedea97204b3",
     "name": "INFO_SRR",
     "label": "INFO_SRR",
     "source_name": "sample",
@@ -1862,7 +1862,7 @@
     "dimension": 1
   },
   {
-    "id": "9c1992a2-9189-4a07-9439-e06d9b5ffd70",
+    "id": "78e28125-8b56-44f8-9afb-fd80d15c0dfe",
     "name": "INFO_FR",
     "label": "INFO_FR",
     "source_name": "sample",
@@ -1873,7 +1873,7 @@
     "dimension": 0
   },
   {
-    "id": "4315c68d-f36b-4e1e-bc09-3124e7f6e2ef",
+    "id": "ccfaf944-4812-43ab-9d22-adb96861bb47",
     "name": "INFO_FAO",
     "label": "INFO_FAO",
     "source_name": "sample",
@@ -1884,7 +1884,7 @@
     "dimension": -1
   },
   {
-    "id": "942c8fd0-f1f4-4b84-9078-a9a5a774399d",
+    "id": "27b70537-eac0-40a4-9c3b-f055da5a9825",
     "name": "INFO_QD",
     "label": "INFO_QD",
     "source_name": "sample",
@@ -1895,7 +1895,7 @@
     "dimension": 1
   },
   {
-    "id": "2a9675b8-ca54-4a88-97db-165f26bc7536",
+    "id": "db2075c2-a489-40b7-a54e-930206e2a8e3",
     "name": "INFO_FXX",
     "label": "INFO_FXX",
     "source_name": "sample",
@@ -1906,7 +1906,7 @@
     "dimension": 1
   },
   {
-    "id": "d7e540f4-1e53-42f4-940d-b19e320d84b4",
+    "id": "65ea4515-d794-453a-90ac-fdb8b9e0b32d",
     "name": "INFO_SSEN",
     "label": "INFO_SSEN",
     "source_name": "sample",
@@ -1917,7 +1917,7 @@
     "dimension": -1
   },
   {
-    "id": "6e3050dc-73ba-46c2-a27c-52409c0a74f3",
+    "id": "f1360d4d-3e04-4d7f-befa-65f41dcb3fdd",
     "name": "INFO_SSEP",
     "label": "INFO_SSEP",
     "source_name": "sample",
@@ -1928,7 +1928,7 @@
     "dimension": -1
   },
   {
-    "id": "8e48deaa-9431-4e52-be3b-8215af17ef08",
+    "id": "34d70e4f-ea80-4deb-8fe1-78c1385cc948",
     "name": "INFO_STBP",
     "label": "INFO_STBP",
     "source_name": "sample",
@@ -1939,7 +1939,7 @@
     "dimension": -1
   },
   {
-    "id": "ef323395-ec04-4013-bc21-fd7ddfc07f02",
+    "id": "e7beb504-8b40-4ed1-89f7-dc6bd75f5e1d",
     "name": "INFO_OMAPALT",
     "label": "INFO_OMAPALT",
     "source_name": "sample",
@@ -1950,7 +1950,7 @@
     "dimension": 0
   },
   {
-    "id": "a356da70-8d61-493b-9555-bca35899a5bd",
+    "id": "dcbc1c8c-33d8-41df-8624-43ba4044a096",
     "name": "INFO_OALT",
     "label": "INFO_OALT",
     "source_name": "sample",
@@ -1961,7 +1961,7 @@
     "dimension": 0
   },
   {
-    "id": "49b90345-d8c8-44c5-a6f5-d6741900be84",
+    "id": "7b82ad8e-33b4-4b99-98fd-a35bb1851243",
     "name": "INFO_SS",
     "label": "INFO_SS",
     "source_name": "sample",
@@ -1972,7 +1972,7 @@
     "dimension": 1
   },
   {
-    "id": "317f0ba8-8f08-4870-8865-addf2808b4ef",
+    "id": "b33ec9a9-f8f7-4ab2-b77e-4120e10f50fc",
     "name": "INFO_GPV",
     "label": "INFO_GPV",
     "source_name": "sample",
@@ -1983,7 +1983,7 @@
     "dimension": 1
   },
   {
-    "id": "9e8d1220-82f0-4698-9ad6-53cba6b91d0c",
+    "id": "f97e09c4-b112-445b-b8f0-e5ba82a81761",
     "name": "INFO_SSC",
     "label": "INFO_SSC",
     "source_name": "sample",
@@ -1994,7 +1994,7 @@
     "dimension": 1
   },
   {
-    "id": "97950254-a3e1-4fb8-b2e9-5b6f54320a22",
+    "id": "e2a5d987-cbc9-4027-ac53-8f07e6fa2136",
     "name": "INFO_SOMATIC",
     "label": "INFO_SOMATIC",
     "source_name": "sample",
@@ -2005,7 +2005,7 @@
     "dimension": 1
   },
   {
-    "id": "3dfe677a-a1b5-4a76-98ff-0485f6cdd171",
+    "id": "ea9f5fc7-c4a1-4125-8741-809c1181923f",
     "name": "INFO_SPV",
     "label": "INFO_SPV",
     "source_name": "sample",
@@ -2016,7 +2016,7 @@
     "dimension": 1
   },
   {
-    "id": "61646595-4bec-4542-9b95-1ddf9747dd2d",
+    "id": "9eda2c00-972b-44d2-a9ad-318b69b48a07",
     "name": "INFO_EUR_AF",
     "label": "INFO_EUR_AF",
     "source_name": "sample",
@@ -2027,7 +2027,7 @@
     "dimension": -1
   },
   {
-    "id": "3af0c06f-47fe-4dad-9eba-36864a57d300",
+    "id": "b23a6c18-1185-4c09-acb9-1e08b3e8129d",
     "name": "INFO_MULTI_ALLELIC",
     "label": "INFO_MULTI_ALLELIC",
     "source_name": "sample",
@@ -2038,7 +2038,7 @@
     "dimension": 1
   },
   {
-    "id": "7524fb4f-b828-484f-a6c1-0d5a8d9b3f5c",
+    "id": "e1d914e7-c5ec-42f3-aa70-e71b70b9655d",
     "name": "INFO_SAS_AF",
     "label": "INFO_SAS_AF",
     "source_name": "sample",
@@ -2049,7 +2049,7 @@
     "dimension": -1
   },
   {
-    "id": "3eb9524e-b480-4f80-a5a2-99920891dc58",
+    "id": "a2d86b8e-0bb9-4478-b272-d535f14bac7a",
     "name": "INFO_AN",
     "label": "INFO_AN",
     "source_name": "sample",
@@ -2060,7 +2060,7 @@
     "dimension": 1
   },
   {
-    "id": "ba4ba534-1ac8-47f5-9488-55e927b62204",
+    "id": "befdf3d0-4321-435b-b489-b5c8191daac3",
     "name": "INFO_AC",
     "label": "INFO_AC",
     "source_name": "sample",
@@ -2071,7 +2071,7 @@
     "dimension": -1
   },
   {
-    "id": "edb33059-240c-448f-a2f1-008f6fc3e552",
+    "id": "f7e88c28-2878-4049-b191-87dacc9ec9e2",
     "name": "INFO_AA",
     "label": "INFO_AA",
     "source_name": "sample",
@@ -2082,7 +2082,7 @@
     "dimension": 1
   },
   {
-    "id": "cc7fee75-2c97-4cf8-9415-aab76bfb72d7",
+    "id": "dfd56441-dd37-4588-9961-7b5adc66c7fd",
     "name": "INFO_EAS_AF",
     "label": "INFO_EAS_AF",
     "source_name": "sample",
@@ -2093,7 +2093,7 @@
     "dimension": -1
   },
   {
-    "id": "c63a8d5f-efb4-4145-b3f5-d9486f353e97",
+    "id": "fc635e14-c698-464f-94e7-6ed01d992971",
     "name": "INFO_END",
     "label": "INFO_END",
     "source_name": "sample",
@@ -2104,7 +2104,7 @@
     "dimension": 1
   },
   {
-    "id": "59a8e05b-94c5-4f31-8412-0fa328576334",
+    "id": "6102e4e8-0f2a-4c77-aa43-d89fc35ec6a7",
     "name": "INFO_SVTYPE",
     "label": "INFO_SVTYPE",
     "source_name": "sample",
@@ -2115,7 +2115,7 @@
     "dimension": 1
   },
   {
-    "id": "5e59e2de-e298-4d30-82ff-489c0c135fcd",
+    "id": "ef5dc786-8dfc-4096-b139-90d763d99de6",
     "name": "INFO_AMR_AF",
     "label": "INFO_AMR_AF",
     "source_name": "sample",
@@ -2126,7 +2126,7 @@
     "dimension": -1
   },
   {
-    "id": "f85f4472-7bf7-48d5-848a-9f06ed4e8ad9",
+    "id": "15ffaa5d-d792-44fb-b302-7333381347ca",
     "name": "INFO_EX_TARGET",
     "label": "INFO_EX_TARGET",
     "source_name": "sample",
@@ -2137,7 +2137,7 @@
     "dimension": 1
   },
   {
-    "id": "b4a6e8f6-d111-4f62-9f27-b41b5099a9e7",
+    "id": "8074eaba-b716-4dd4-ad14-eaa2a1e2ff5c",
     "name": "INFO_AFR_AF",
     "label": "INFO_AFR_AF",
     "source_name": "sample",
@@ -2148,7 +2148,7 @@
     "dimension": -1
   },
   {
-    "id": "c76380ad-2413-4e9e-b115-4b24a9181791",
+    "id": "0f30549a-a09b-4243-bb04-689dd24fc9e3",
     "name": "INFO_VT",
     "label": "INFO_VT",
     "source_name": "sample",
@@ -2159,7 +2159,7 @@
     "dimension": 0
   },
   {
-    "id": "8d2064fc-0ea5-4b89-9978-044755f7d827",
+    "id": "4c4c76c7-e6f6-421e-8631-18a7b9459543",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "ESP6500_v01",
@@ -2170,7 +2170,7 @@
     "dimension": 1
   },
   {
-    "id": "70570e8d-0f9b-432f-8b27-fb62e8717560",
+    "id": "4cba6226-5e48-4cb6-87f8-db07d87ef7ac",
     "name": "INFO_DBSNP",
     "label": "INFO_DBSNP",
     "source_name": "ESP6500_v01",
@@ -2181,106 +2181,7 @@
     "dimension": 0
   },
   {
-    "id": "3947fabd-4415-4342-8397-670de2952765",
-    "name": "INFO_AA_AC",
-    "label": "INFO_AA_AC",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "African American Allele Count",
-    "dimension": -4
-  },
-  {
-    "id": "20b8e5f2-f0a3-4bf9-9419-2abe0237da4a",
-    "name": "INFO_AA_GTC",
-    "label": "INFO_AA_GTC",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "African American Genotype Counts in the order of listed GTS",
-    "dimension": 0
-  },
-  {
-    "id": "ee14d092-4aea-45f4-8045-bbea0aa54bac",
-    "name": "INFO_MAF_2",
-    "label": "INFO_MAF_2",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": 1
-  },
-  {
-    "id": "a52ca621-b925-40f2-a0ef-cae3afd0e5df",
-    "name": "INFO_FG",
-    "label": "INFO_FG",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "functionGVS",
-    "dimension": 0
-  },
-  {
-    "id": "681965ad-c2f3-4d49-b517-7ea59f9c02df",
-    "name": "INFO_MAF_0",
-    "label": "INFO_MAF_0",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": 1
-  },
-  {
-    "id": "8f94b7da-3724-4de9-b7ea-1507b3b65422",
-    "name": "INFO_MAF_1",
-    "label": "INFO_MAF_1",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": 1
-  },
-  {
-    "id": "8cfc48fe-fa92-4dd8-844f-551aad96142c",
-    "name": "INFO_GTC",
-    "label": "INFO_GTC",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Total Genotype Counts in the order of listed GTS",
-    "dimension": 0
-  },
-  {
-    "id": "05290219-90b0-461d-a55a-0309bb2fabba",
-    "name": "INFO_EA_AGE",
-    "label": "INFO_EA_AGE",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Esitmated Variant Age in kilo years for the European American Population",
-    "dimension": 0
-  },
-  {
-    "id": "ef8f622e-baf9-486c-b157-a9f315062f19",
-    "name": "INFO_EA_AC",
-    "label": "INFO_EA_AC",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "European American Allele Count",
-    "dimension": -4
-  },
-  {
-    "id": "7e8f74bd-f380-49b0-99fa-157345837abd",
+    "id": "44c37695-1a4b-4e11-92be-b0a8621030e7",
     "name": "INFO_AA_AGE",
     "label": "INFO_AA_AGE",
     "source_name": "ESP6500_v01",
@@ -2291,7 +2192,95 @@
     "dimension": 0
   },
   {
-    "id": "65a2c168-36d5-4198-959d-688c4a25d524",
+    "id": "b08129e2-2e8d-436a-bd80-fb29ae49a9d1",
+    "name": "INFO_AA_GTC",
+    "label": "INFO_AA_GTC",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "African American Genotype Counts in the order of listed GTS",
+    "dimension": 0
+  },
+  {
+    "id": "c83ab0a2-df31-4bfc-9442-ef1a53683fa1",
+    "name": "INFO_MAF_0",
+    "label": "INFO_MAF_0",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": 1
+  },
+  {
+    "id": "e018051e-fb51-4946-8644-bf2a62a1841d",
+    "name": "INFO_MAF_1",
+    "label": "INFO_MAF_1",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": 1
+  },
+  {
+    "id": "e490059a-1762-4046-bcab-8ef9b27237cf",
+    "name": "INFO_GTC",
+    "label": "INFO_GTC",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Total Genotype Counts in the order of listed GTS",
+    "dimension": 0
+  },
+  {
+    "id": "fd28fca8-7e51-4718-be17-23154fa3d2c7",
+    "name": "INFO_EA_AGE",
+    "label": "INFO_EA_AGE",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Esitmated Variant Age in kilo years for the European American Population",
+    "dimension": 0
+  },
+  {
+    "id": "7e4f8290-79cb-47e7-8567-2226498301d9",
+    "name": "INFO_MAF_2",
+    "label": "INFO_MAF_2",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": 1
+  },
+  {
+    "id": "be4db668-e691-4edc-92a9-24b1f7919ee4",
+    "name": "INFO_EA_AC",
+    "label": "INFO_EA_AC",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "European American Allele Count",
+    "dimension": -4
+  },
+  {
+    "id": "f897d7e6-9977-4a7d-84e0-b2c0ed1b70bb",
+    "name": "INFO_AA_AC",
+    "label": "INFO_AA_AC",
+    "source_name": "ESP6500_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "African American Allele Count",
+    "dimension": -4
+  },
+  {
+    "id": "e2728ac7-8f0e-4276-8098-030913d369f4",
     "name": "INFO_GTS",
     "label": "INFO_GTS",
     "source_name": "ESP6500_v01",
@@ -2302,7 +2291,7 @@
     "dimension": 0
   },
   {
-    "id": "ec533436-cb95-4a20-958a-f802eac09480",
+    "id": "f29db9d3-ca0f-44db-a069-b4021f14a996",
     "name": "INFO_GRCh38_POSITION",
     "label": "INFO_GRCh38_POSITION",
     "source_name": "ESP6500_v01",
@@ -2313,7 +2302,7 @@
     "dimension": 1
   },
   {
-    "id": "16e81fb7-13ff-43ca-900a-f423e944ee90",
+    "id": "96f9f2c5-e7eb-464d-b171-8d61b61d5945",
     "name": "INFO_ID",
     "label": "INFO_ID",
     "source_name": "ESP6500_v01",
@@ -2324,73 +2313,7 @@
     "dimension": 0
   },
   {
-    "id": "23a11a8a-3bd6-4ad5-b651-992ca35d03ce",
-    "name": "INFO_EXOME_CHIP",
-    "label": "INFO_EXOME_CHIP",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Whether a SNP is on the Illumina HumanExome Chip",
-    "dimension": 0
-  },
-  {
-    "id": "5dc544bb-9e6b-4675-8ff1-084441be9a95",
-    "name": "INFO_CG",
-    "label": "INFO_CG",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "consScoreGERP",
-    "dimension": 1
-  },
-  {
-    "id": "4272b950-f772-4517-8afa-d03b5007cbb1",
-    "name": "INFO_HGVS_CDNA_VAR",
-    "label": "INFO_HGVS_CDNA_VAR",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "HGVS Coding DNA Variant",
-    "dimension": 0
-  },
-  {
-    "id": "f22fa3fa-407b-4d40-bb6e-d0b7a8f2c979",
-    "name": "INFO_GWAS_PUBMED",
-    "label": "INFO_GWAS_PUBMED",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "PubMed records for GWAS hits",
-    "dimension": 0
-  },
-  {
-    "id": "6e7a6235-3c5a-4619-8307-08590b39f98b",
-    "name": "INFO_CA",
-    "label": "INFO_CA",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "clinicalAssociation",
-    "dimension": 0
-  },
-  {
-    "id": "8352bb8d-3071-47a8-b92c-7a3a4b15eaaa",
-    "name": "INFO_HGVS_PROTEIN_VAR",
-    "label": "INFO_HGVS_PROTEIN_VAR",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "HGVS Protein Variant",
-    "dimension": 0
-  },
-  {
-    "id": "6e71c16e-baa5-42f1-83f1-4a291b3f95b8",
+    "id": "aebb3742-e84f-4db2-98b5-ac4ed9cd074f",
     "name": "INFO_AA",
     "label": "INFO_AA",
     "source_name": "ESP6500_v01",
@@ -2401,62 +2324,7 @@
     "dimension": 1
   },
   {
-    "id": "0835da81-4725-451e-af92-385a7adaae00",
-    "name": "INFO_PH",
-    "label": "INFO_PH",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "polyPhen2 result including prediction class and score",
-    "dimension": 0
-  },
-  {
-    "id": "f9691cc1-6ec6-498b-b33e-132007783667",
-    "name": "INFO_GS",
-    "label": "INFO_GS",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "granthamScore",
-    "dimension": 0
-  },
-  {
-    "id": "288af203-adb0-4da9-870e-88489f5183bc",
-    "name": "INFO_CP",
-    "label": "INFO_CP",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "scorePhastCons",
-    "dimension": 1
-  },
-  {
-    "id": "df02c6c0-af4f-4074-bc34-236737d481e9",
-    "name": "INFO_CDS_SIZES",
-    "label": "INFO_CDS_SIZES",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Coding DNA Sizes",
-    "dimension": 0
-  },
-  {
-    "id": "ff6c1423-bec8-4aa4-a841-d43f9a615c4c",
-    "name": "INFO_GL",
-    "label": "INFO_GL",
-    "source_name": "ESP6500_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "geneList",
-    "dimension": 0
-  },
-  {
-    "id": "ebfee4e4-2aff-4da8-bf5d-57a32dba244a",
+    "id": "f6c4ca3e-9c05-4e00-88a9-e81c82da705d",
     "name": "INFO_EA_GTC",
     "label": "INFO_EA_GTC",
     "source_name": "ESP6500_v01",
@@ -2467,7 +2335,7 @@
     "dimension": 0
   },
   {
-    "id": "1770ac78-d44f-42ff-8f1f-6510f868f06a",
+    "id": "a840713d-945a-4812-abb3-b950131c0dd4",
     "name": "INFO_TAC",
     "label": "INFO_TAC",
     "source_name": "ESP6500_v01",
@@ -2478,29 +2346,7 @@
     "dimension": -4
   },
   {
-    "id": "901ae38e-8a93-49a7-aed6-b6815e6a3427",
-    "name": "INFO_HetF_SAS",
-    "label": "INFO_HetF_SAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "for chromosomes 1-22",
-    "dimension": -5
-  },
-  {
-    "id": "5f0f2c15-4e3f-4b36-b176-4955e5e932a0",
-    "name": "INFO_HetF_OTH",
-    "label": "INFO_HetF_OTH",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "for chromosomes 1-22",
-    "dimension": -5
-  },
-  {
-    "id": "90b3990a-96aa-48fc-a564-bd0527bf3fdb",
+    "id": "2836fa04-aa18-4aa6-b75b-387d65bd9a7b",
     "name": "INFO_AF_FIN",
     "label": "INFO_AF_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2511,7 +2357,29 @@
     "dimension": -1
   },
   {
-    "id": "6d2da0a6-abba-4f82-9c5d-95d8ca9ff426",
+    "id": "9ada245a-9330-4114-bb74-45d84c2d23f2",
+    "name": "INFO_HetF_OTH",
+    "label": "INFO_HetF_OTH",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "for chromosomes 1-22",
+    "dimension": -5
+  },
+  {
+    "id": "7c2738fa-564b-4a8c-95fb-75ee5f010aae",
+    "name": "INFO_HetF_SAS",
+    "label": "INFO_HetF_SAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "for chromosomes 1-22",
+    "dimension": -5
+  },
+  {
+    "id": "b1a5d53d-34cd-4212-a1b6-f3e6e4ed2f38",
     "name": "INFO_Het_SAS",
     "label": "INFO_Het_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2522,7 +2390,7 @@
     "dimension": -5
   },
   {
-    "id": "2fb36440-d5c8-4cce-9871-55698d2b3b3f",
+    "id": "e510ba19-bdfc-438a-b246-c5597f9763d1",
     "name": "INFO_AN_MALE",
     "label": "INFO_AN_MALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2533,7 +2401,7 @@
     "dimension": 1
   },
   {
-    "id": "e412cc0a-d90c-4bcd-82ba-9b0644cc15c7",
+    "id": "496106be-fb49-45fc-9b7c-ee22661815aa",
     "name": "INFO_HetF_EAS",
     "label": "INFO_HetF_EAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2544,7 +2412,7 @@
     "dimension": -5
   },
   {
-    "id": "7e08d259-9ee1-42a7-8e5a-47be0f35d424",
+    "id": "2beee650-13ba-4151-a4e9-0cd287b7017d",
     "name": "INFO_AC_OTH",
     "label": "INFO_AC_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2555,7 +2423,7 @@
     "dimension": -1
   },
   {
-    "id": "ff3faf8b-7ece-4876-80d6-9924790b07ce",
+    "id": "552648a5-a767-4365-ac54-ab5bb7b42adb",
     "name": "INFO_AC_MALE",
     "label": "INFO_AC_MALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2566,7 +2434,7 @@
     "dimension": -1
   },
   {
-    "id": "6928b44e-933a-4fc9-b281-b727f26a108e",
+    "id": "cda93c1d-371c-4140-860e-09341062c4e2",
     "name": "INFO_ReadPosRankSum",
     "label": "INFO_ReadPosRankSum",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2577,18 +2445,7 @@
     "dimension": 1
   },
   {
-    "id": "2fc06005-1e37-41b9-8399-faa2b5e7b63b",
-    "name": "INFO_clinvar_measureset_id",
-    "label": "INFO_clinvar_measureset_id",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Clinvar Measureset ID",
-    "dimension": -1
-  },
-  {
-    "id": "1114deca-ff6a-4af8-a5be-b561ab4be190",
+    "id": "c6d86748-93d9-4444-9495-f7d8ea94e551",
     "name": "INFO_AF_POPMAX",
     "label": "INFO_AF_POPMAX",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2599,7 +2456,7 @@
     "dimension": -1
   },
   {
-    "id": "27ed9e17-6a5d-4815-b25f-346d662fb8e2",
+    "id": "a4f1d661-226a-41af-915b-a39b397a5dbf",
     "name": "INFO_AC_SAS",
     "label": "INFO_AC_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2610,7 +2467,7 @@
     "dimension": -1
   },
   {
-    "id": "797f4c51-79fa-4e3a-a59f-cc2a8de4bf6d",
+    "id": "6450239d-d0eb-4bfa-9fe3-ed6219f48508",
     "name": "INFO_AC_Hemi",
     "label": "INFO_AC_Hemi",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2621,7 +2478,7 @@
     "dimension": -1
   },
   {
-    "id": "f7a01fd6-35ac-4f83-9bc7-fdbe82a4ce7b",
+    "id": "cff47984-6f30-469a-8da1-2afea165b75f",
     "name": "INFO_AC_AFR",
     "label": "INFO_AC_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2632,7 +2489,7 @@
     "dimension": -1
   },
   {
-    "id": "f17d4c54-8ba2-48c8-be57-6859f236ed8f",
+    "id": "202add72-5758-4cae-92bf-76744892b02b",
     "name": "INFO_AN",
     "label": "INFO_AN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2643,7 +2500,7 @@
     "dimension": 1
   },
   {
-    "id": "7f8fb72b-d736-4be1-96bb-075002f02d45",
+    "id": "1750b8e5-59d8-46d1-a0aa-d3f2d722568b",
     "name": "INFO_AF",
     "label": "INFO_AF",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2654,7 +2511,7 @@
     "dimension": -1
   },
   {
-    "id": "e0655edb-295d-4f62-a72d-ed6d330fea97",
+    "id": "09e6b10d-f241-4276-a971-693f948d8a4f",
     "name": "INFO_AC",
     "label": "INFO_AC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2665,7 +2522,7 @@
     "dimension": -1
   },
   {
-    "id": "79380ba8-dcb2-4ea7-bda2-9d74a2dc7302",
+    "id": "9b3a3d24-1d19-4a6a-93a5-e1ea6d888dc4",
     "name": "INFO_NCC",
     "label": "INFO_NCC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2676,7 +2533,7 @@
     "dimension": 1
   },
   {
-    "id": "e18e6002-02fc-4702-89b8-9006e9a0a9c4",
+    "id": "3756ca7b-3889-435a-9daa-3c91d89a4744",
     "name": "INFO_AF_Adj",
     "label": "INFO_AF_Adj",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2687,7 +2544,7 @@
     "dimension": -1
   },
   {
-    "id": "ac6011ad-7573-4a32-a015-926e0d2f68a9",
+    "id": "441e269a-934f-4876-b63e-3238225e4af1",
     "name": "INFO_AF_AMR",
     "label": "INFO_AF_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2698,7 +2555,7 @@
     "dimension": -1
   },
   {
-    "id": "782bac57-c410-45bb-be27-db8946460ba4",
+    "id": "6b4fa949-ac50-4488-bff6-2b6d1b831e52",
     "name": "INFO_GQ_MEAN",
     "label": "INFO_GQ_MEAN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2709,7 +2566,7 @@
     "dimension": 1
   },
   {
-    "id": "0811706a-a637-4ed8-9806-8a738837239c",
+    "id": "fa7efa27-a495-455c-9141-f3bf957ff253",
     "name": "INFO_VQSLOD",
     "label": "INFO_VQSLOD",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2720,7 +2577,7 @@
     "dimension": 1
   },
   {
-    "id": "202b5d7a-433b-4113-9e53-fae3f0094d05",
+    "id": "a23d6943-aa82-4ef6-9782-3e3d7309c279",
     "name": "INFO_AC_Het",
     "label": "INFO_AC_Het",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2731,7 +2588,7 @@
     "dimension": -5
   },
   {
-    "id": "80bb609d-12d7-405e-afe0-3d06f02182b1",
+    "id": "68adc93a-7b56-40e0-8e1a-8335c0d8b8bb",
     "name": "INFO_Hom_AFR",
     "label": "INFO_Hom_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2742,7 +2599,7 @@
     "dimension": -1
   },
   {
-    "id": "ebe315df-255b-49d5-bcc0-2d19b2e2da8b",
+    "id": "83d1ad6c-dbaa-4341-9a44-37b132200ada",
     "name": "INFO_AC_FIN",
     "label": "INFO_AC_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2753,7 +2610,7 @@
     "dimension": -1
   },
   {
-    "id": "e4008eae-1065-4303-9dd9-d4eb6e5b4584",
+    "id": "385295d6-eb4e-45b5-8c2d-c0e6ddc1823d",
     "name": "INFO_clinvar_conflicted",
     "label": "INFO_clinvar_conflicted",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2764,7 +2621,7 @@
     "dimension": -1
   },
   {
-    "id": "c8f7a25b-2f98-46ca-9e54-452877e4d0e7",
+    "id": "4406c180-ba26-4338-a5fd-8f23c86efb14",
     "name": "INFO_HWP",
     "label": "INFO_HWP",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2775,7 +2632,7 @@
     "dimension": 1
   },
   {
-    "id": "b4bc242e-8cab-4112-9194-65904cbaeed5",
+    "id": "f597ec67-6f9b-460b-b24c-411b8c13955e",
     "name": "INFO_AN_FIN",
     "label": "INFO_AN_FIN",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2786,7 +2643,7 @@
     "dimension": 1
   },
   {
-    "id": "62a3331c-fc5d-4352-b3c6-74bae7e77fde",
+    "id": "b65edd95-d88b-4fe5-8f69-13f6dcf84fab",
     "name": "INFO_Hemi_NFE",
     "label": "INFO_Hemi_NFE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -2797,810 +2654,7 @@
     "dimension": -1
   },
   {
-    "id": "006163ad-60a4-4ee4-8f46-2d32af84752e",
-    "name": "INFO_Het_NFE",
-    "label": "INFO_Het_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Non-Finnish European Heterozygous Counts",
-    "dimension": -5
-  },
-  {
-    "id": "0d766160-66d4-43e8-a2a2-37d891cac41a",
-    "name": "INFO_KG_AF_GLOBAL",
-    "label": "INFO_KG_AF_GLOBAL",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Overall allele frequency in 1000 Genomes",
-    "dimension": -1
-  },
-  {
-    "id": "5b176dc2-5f0b-4932-ad13-3d718ae5ad7c",
-    "name": "INFO_ESP_AC",
-    "label": "INFO_ESP_AC",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Allele Count in ESP",
-    "dimension": -1
-  },
-  {
-    "id": "d4be8df7-11d9-4db5-b941-89e0b66d9178",
-    "name": "INFO_KG_AF_POPMAX",
-    "label": "INFO_KG_AF_POPMAX",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Max allele frequency across populations in 1000 Genomes",
-    "dimension": -1
-  },
-  {
-    "id": "1aadfb12-1b8d-43fe-8935-fddd5170c67d",
-    "name": "INFO_K3_RUN",
-    "label": "INFO_K3_RUN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Number of ensuing tri-nucleotide repeats.",
-    "dimension": -1
-  },
-  {
-    "id": "b765f126-b050-4f9b-bf4e-bf6d0f9c8f1e",
-    "name": "INFO_MQ",
-    "label": "INFO_MQ",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "RMS Mapping Quality",
-    "dimension": 1
-  },
-  {
-    "id": "da12be92-06fd-49d1-90d4-728c7de3b645",
-    "name": "INFO_AN_OTH",
-    "label": "INFO_AN_OTH",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Other Chromosome Count",
-    "dimension": 1
-  },
-  {
-    "id": "73436199-f5e7-4431-a07b-1f99df4e0059",
-    "name": "INFO_AF_EAS",
-    "label": "INFO_AF_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "East Asian allele frequency adjusted",
-    "dimension": -1
-  },
-  {
-    "id": "16f1d222-4658-4141-bf95-7524be8c3142",
-    "name": "INFO_AF_SAS",
-    "label": "INFO_AF_SAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "d54f2cb8-4c12-4e0d-afb1-9c7dc1cd5102",
-    "name": "INFO_HomF_OTH",
-    "label": "INFO_HomF_OTH",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "118606c4-2282-4e4b-a7f1-0fa180b7512e",
-    "name": "INFO_Hemi_OTH",
-    "label": "INFO_Hemi_OTH",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Other Hemizygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "24a688b5-254b-41a1-919c-bcaddfa56832",
-    "name": "INFO_Hom_AMR",
-    "label": "INFO_Hom_AMR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "American Homozygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "47bcf3ee-db10-46e3-b464-7312bd91df25",
-    "name": "INFO_Het_AMR",
-    "label": "INFO_Het_AMR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "American Heterozygous Counts",
-    "dimension": -5
-  },
-  {
-    "id": "f3ae8c47-dd75-4567-a882-1e4395505e9a",
-    "name": "INFO_K2_RUN",
-    "label": "INFO_K2_RUN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Number of ensuing di-nucleotide repeats.",
-    "dimension": -1
-  },
-  {
-    "id": "3108391b-7ad7-4d52-91ba-9a8542d9a21c",
-    "name": "INFO_Hom_CONSANGUINEOUS",
-    "label": "INFO_Hom_CONSANGUINEOUS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Homozygote count among individuals with F > 0.05",
-    "dimension": -1
-  },
-  {
-    "id": "c47c693b-db0b-449c-8078-9ed0db7a7b03",
-    "name": "INFO_Hom_SAS",
-    "label": "INFO_Hom_SAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "South Asian Homozygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "129819b5-bf99-4498-ab10-e8e7fac65a73",
-    "name": "INFO_POPMAX",
-    "label": "INFO_POPMAX",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Population with max AF",
-    "dimension": -1
-  },
-  {
-    "id": "7c772fc6-e997-49df-9b70-9d78dded9c23",
-    "name": "INFO_AF_Het",
-    "label": "INFO_AF_Het",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -5
-  },
-  {
-    "id": "cb83886c-e3c0-4602-86dd-27a4586fe762",
-    "name": "INFO_Hemi_EAS",
-    "label": "INFO_Hemi_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "East Asian Hemizygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "e54ec7a5-fa66-4bef-a1b9-6cd51389c392",
-    "name": "INFO_AN_FEMALE",
-    "label": "INFO_AN_FEMALE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Allele number among females",
-    "dimension": 1
-  },
-  {
-    "id": "47dfd397-5da4-4fb9-94b5-502e25046c77",
-    "name": "INFO_clinvar_pathogenic",
-    "label": "INFO_clinvar_pathogenic",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Clinvar Pathogenic Status",
-    "dimension": -1
-  },
-  {
-    "id": "d2e69293-f327-469b-806f-fe5c0e634834",
-    "name": "INFO_HomF_EAS",
-    "label": "INFO_HomF_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "ff22d60e-9009-47ab-a4b4-26ccc988874a",
-    "name": "INFO_AN_EAS",
-    "label": "INFO_AN_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "East Asian Chromosome Count",
-    "dimension": 1
-  },
-  {
-    "id": "76843673-b4e1-445f-84c5-625760b104b2",
-    "name": "INFO_HomF_SAS",
-    "label": "INFO_HomF_SAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "33560d49-a829-409e-995f-06fdcd81b9fd",
-    "name": "INFO_AC_POPMAX",
-    "label": "INFO_AC_POPMAX",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "AC in the population with the max AF",
-    "dimension": -1
-  },
-  {
-    "id": "f517c3e2-d243-46ac-977d-4fedff336fa0",
-    "name": "INFO_Hemi_FIN",
-    "label": "INFO_Hemi_FIN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Finnish Hemizygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "9bf9e097-43ef-49e7-8a97-c4cea9b34c44",
-    "name": "INFO_DP",
-    "label": "INFO_DP",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Approximate read depth; some reads may have been filtered",
-    "dimension": 1
-  },
-  {
-    "id": "c0b508a7-0ddf-4b63-ba1d-42cb9b5ccf46",
-    "name": "INFO_Hom_EAS",
-    "label": "INFO_Hom_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "East Asian Homozygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "955c8795-0b6b-4d39-bfe7-68f22f8c536b",
-    "name": "INFO_DS",
-    "label": "INFO_DS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Were any of the samples downsampled?",
-    "dimension": 1
-  },
-  {
-    "id": "9cc9372a-2880-4737-aea7-35743d22033f",
-    "name": "INFO_HomF_AFR",
-    "label": "INFO_HomF_AFR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "African and African American heterozygous frequency adjusted",
-    "dimension": -1
-  },
-  {
-    "id": "b2fd98be-ee80-45dd-a5ed-39145defa0bf",
-    "name": "INFO_AN_CONSANGUINEOUS",
-    "label": "INFO_AN_CONSANGUINEOUS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Allele count among individuals with inbreeding coefficient F > 0.05",
-    "dimension": 1
-  },
-  {
-    "id": "3c38d9a6-b641-44cd-8a9e-a3ba634203f1",
-    "name": "INFO_AF_AFR",
-    "label": "INFO_AF_AFR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "African and African American allele frequency adjusted",
-    "dimension": -1
-  },
-  {
-    "id": "ea47a04a-7fdf-4fbe-9d02-7bcedc3b0fce",
-    "name": "INFO_HetF_AMR",
-    "label": "INFO_HetF_AMR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "for chromosomes 1-22",
-    "dimension": -5
-  },
-  {
-    "id": "c79d10aa-9a31-4097-8b31-4743c9c2011f",
-    "name": "INFO_AF_NFE",
-    "label": "INFO_AF_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "non Finnish",
-    "dimension": -1
-  },
-  {
-    "id": "5fd119ed-4997-495c-a757-e76713a1cb3e",
-    "name": "INFO_DB",
-    "label": "INFO_DB",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "dbSNP Membership",
-    "dimension": 1
-  },
-  {
-    "id": "35087695-ac33-4340-a033-e854afb2d676",
-    "name": "INFO_Hom_NFE",
-    "label": "INFO_Hom_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "excluding Finnish",
-    "dimension": -1
-  },
-  {
-    "id": "69403dce-035f-416e-89ec-b53440766d4f",
-    "name": "INFO_Het_EAS",
-    "label": "INFO_Het_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "East Asian Heterozygous Counts",
-    "dimension": -5
-  },
-  {
-    "id": "762e47ff-329e-4c78-a036-057222efb9a8",
-    "name": "INFO_AC_Adj",
-    "label": "INFO_AC_Adj",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Adjusted Allele Counts",
-    "dimension": -1
-  },
-  {
-    "id": "2d916c79-cad2-43dc-b0f8-4ebd9ca2e28d",
-    "name": "INFO_DOUBLETON_DIST",
-    "label": "INFO_DOUBLETON_DIST",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Euclidean distance of carriers of doubletons",
-    "dimension": -1
-  },
-  {
-    "id": "655ae42f-17f4-4fe9-8cba-1c0b935a96ff",
-    "name": "INFO_AN_Adj",
-    "label": "INFO_AN_Adj",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Adjusted Chromosome Count",
-    "dimension": 1
-  },
-  {
-    "id": "3a18fa64-23c4-4943-8f77-752a5b333b96",
-    "name": "INFO_clinvar_mut",
-    "label": "INFO_clinvar_mut",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Clinvar MUT Flag (is disease allele REF?)",
-    "dimension": -1
-  },
-  {
-    "id": "55640ff0-910c-4810-959d-5e7e375e86fd",
-    "name": "INFO_culprit",
-    "label": "INFO_culprit",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "The annotation which was the worst performing in the Gaussian mixture model, likely the reason why the variant was filtered out",
-    "dimension": 1
-  },
-  {
-    "id": "81b43ca2-1746-494c-a079-06eade2a9330",
-    "name": "INFO_HomF_AMR",
-    "label": "INFO_HomF_AMR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "0db5c0c0-b5f4-4030-8e23-62ae8eaaff04",
-    "name": "INFO_Het_OTH",
-    "label": "INFO_Het_OTH",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Other Heterozygous Counts",
-    "dimension": -5
-  },
-  {
-    "id": "bedd37c7-dc9c-43bf-b52e-5fe1bba4b066",
-    "name": "INFO_AF_MALE",
-    "label": "INFO_AF_MALE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "8c4b086a-d5e1-4a16-862e-467fa1dffc9a",
-    "name": "INFO_ESP_AF_POPMAX",
-    "label": "INFO_ESP_AF_POPMAX",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Max allele frequency across populations in ESP",
-    "dimension": -1
-  },
-  {
-    "id": "9aed9b6b-2f56-457e-a084-e8f3b4da4857",
-    "name": "INFO_HaplotypeScore",
-    "label": "INFO_HaplotypeScore",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Consistency score of the site with at most two segregating haplotypes",
-    "dimension": 1
-  },
-  {
-    "id": "a2e98de8-8090-4ad7-987b-0c702d549966",
-    "name": "INFO_ESP_AF_GLOBAL",
-    "label": "INFO_ESP_AF_GLOBAL",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Overall allele frequency in ESP",
-    "dimension": -1
-  },
-  {
-    "id": "6c2d08ea-33b9-48b7-ac54-a9ccc1ea2372",
-    "name": "INFO_AC_NFE",
-    "label": "INFO_AC_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "excluding Finnish",
-    "dimension": -1
-  },
-  {
-    "id": "eec1fba3-3c59-4ba2-bf90-9fd48d7bf338",
-    "name": "INFO_AN_AFR",
-    "label": "INFO_AN_AFR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "African and African American chromosomes count",
-    "dimension": 1
-  },
-  {
-    "id": "8fbd46a5-511a-4bdf-829b-0fbc4e31a6d9",
-    "name": "INFO_K1_RUN",
-    "label": "INFO_K1_RUN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Number of ensuing single nucleotide repeats.",
-    "dimension": -1
-  },
-  {
-    "id": "21f06b6d-9b4b-4ea7-8b1f-3de2f5df75cf",
-    "name": "INFO_AF_Hom",
-    "label": "INFO_AF_Hom",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "996a814f-770b-43cd-a853-edad6ac1748c",
-    "name": "INFO_AC_CONSANGUINEOUS",
-    "label": "INFO_AC_CONSANGUINEOUS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Allele count among individuals with inbreeding coefficient F > 0.05",
-    "dimension": -1
-  },
-  {
-    "id": "796bfbf6-5aae-407c-a4dd-05a6157fa0fb",
-    "name": "INFO_HomF_FIN",
-    "label": "INFO_HomF_FIN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "e0acc975-70d5-4815-bcf2-e2dd20b2620c",
-    "name": "INFO_HomF_NFE",
-    "label": "INFO_HomF_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "non Finnish",
-    "dimension": -1
-  },
-  {
-    "id": "b304b6df-3748-43d5-95b3-4f014733b9ee",
-    "name": "INFO_FS",
-    "label": "INFO_FS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Phred-scaled p-value using Fisher's exact test to detect strand bias",
-    "dimension": 1
-  },
-  {
-    "id": "203d05e4-5819-43ab-b47b-fa5e36a22ac3",
-    "name": "INFO_AN_NFE",
-    "label": "INFO_AN_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "excluding Finnish",
-    "dimension": 1
-  },
-  {
-    "id": "370be84d-918b-427c-ba82-13cc3f6df94a",
-    "name": "INFO_AF_FEMALE",
-    "label": "INFO_AF_FEMALE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "",
-    "dimension": -1
-  },
-  {
-    "id": "1ffabf62-807c-42cf-bec9-2acd3a698e7b",
-    "name": "INFO_MQ0",
-    "label": "INFO_MQ0",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total Mapping Quality Zero Reads",
-    "dimension": 1
-  },
-  {
-    "id": "ce416646-5187-4e2d-b631-3a4743d3a883",
-    "name": "INFO_Hom_OTH",
-    "label": "INFO_Hom_OTH",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Other Homozygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "734a65a3-71c1-42e1-bf82-04cfcdd0b0f5",
-    "name": "INFO_AC_EAS",
-    "label": "INFO_AC_EAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "East Asian Allele Counts",
-    "dimension": -1
-  },
-  {
-    "id": "628fc9f5-fd5d-4a09-9de1-d292183b0858",
-    "name": "INFO_Het_FIN",
-    "label": "INFO_Het_FIN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Finnish Heterozygous Counts",
-    "dimension": -5
-  },
-  {
-    "id": "75b6e7cd-b5ba-4516-80a4-3305ac3b31c7",
-    "name": "INFO_AN_SAS",
-    "label": "INFO_AN_SAS",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "South Asian Chromosome Count",
-    "dimension": 1
-  },
-  {
-    "id": "1455cbc2-c38c-4357-8faa-e63c340355d6",
-    "name": "INFO_GQ_STDDEV",
-    "label": "INFO_GQ_STDDEV",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Standard deviation of all GQ values",
-    "dimension": 1
-  },
-  {
-    "id": "916b0eca-6a2e-4cd3-87d2-d4740fc0f355",
-    "name": "INFO_Hom_FIN",
-    "label": "INFO_Hom_FIN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Finnish Homozygous Counts",
-    "dimension": -1
-  },
-  {
-    "id": "2594f197-6bcd-42a9-9be9-1fd919864f4e",
-    "name": "INFO_QD",
-    "label": "INFO_QD",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Variant Confidence/Quality by Depth",
-    "dimension": 1
-  },
-  {
-    "id": "fc910195-cdfc-4daa-8f6a-020d2ef0c8e0",
-    "name": "INFO_AN_AMR",
-    "label": "INFO_AN_AMR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "American chromosomes count",
-    "dimension": 1
-  },
-  {
-    "id": "6e8b0d78-dee4-41f2-b41c-e8c5ccefe328",
-    "name": "INFO_KG_AC",
-    "label": "INFO_KG_AC",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Allele Count in 1000 Genomes",
-    "dimension": -1
-  },
-  {
-    "id": "290f789b-5c95-409b-bf66-5b9c579a8b14",
-    "name": "INFO_AN_POPMAX",
-    "label": "INFO_AN_POPMAX",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "AN in the population with the max AF",
-    "dimension": -1
-  },
-  {
-    "id": "62922637-9e91-4a8a-b6f4-f6cf34064c58",
-    "name": "INFO_InbreedingCoeff",
-    "label": "INFO_InbreedingCoeff",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "estimated from the genotype likelihoods per-sample when compared against the Hardy-Weinberg expectation",
-    "dimension": 1
-  },
-  {
-    "id": "91ae033d-a8ac-4c02-9d0d-0abfd9eec62f",
-    "name": "INFO_Hemi_AFR",
-    "label": "INFO_Hemi_AFR",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "African and African American hemizygous individuals adjusted",
-    "dimension": -1
-  },
-  {
-    "id": "8e90f9db-362e-4808-8613-f1ae22713aba",
-    "name": "INFO_HetF_FIN",
-    "label": "INFO_HetF_FIN",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "for chromosomes 1-22",
-    "dimension": -5
-  },
-  {
-    "id": "fc05f1a0-3a0b-4dc5-be15-48ecf49d4280",
-    "name": "INFO_HetF_NFE",
-    "label": "INFO_HetF_NFE",
-    "source_name": "ExAC_r0_3_1_sites_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "for chromosomes 1-22 (non Finnish)",
-    "dimension": -5
-  },
-  {
-    "id": "f00cf4c4-7713-48b2-9ba9-de629c680d9b",
+    "id": "9c74ab67-84c3-4561-a53b-7dbeb8070aca",
     "name": "INFO_AF_Hemi",
     "label": "INFO_AF_Hemi",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3611,7 +2665,766 @@
     "dimension": -1
   },
   {
-    "id": "b83115e8-c6e1-4d14-a85e-b1f9b1a7fd4c",
+    "id": "9921f1f1-30ce-4269-9b8b-3bf3281702c1",
+    "name": "INFO_Het_NFE",
+    "label": "INFO_Het_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Non-Finnish European Heterozygous Counts",
+    "dimension": -5
+  },
+  {
+    "id": "e7828080-08f1-43fe-b3c2-bc97bd78befb",
+    "name": "INFO_KG_AF_GLOBAL",
+    "label": "INFO_KG_AF_GLOBAL",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Overall allele frequency in 1000 Genomes",
+    "dimension": -1
+  },
+  {
+    "id": "750c136c-b57f-4144-8006-09e4af9be6d4",
+    "name": "INFO_ESP_AC",
+    "label": "INFO_ESP_AC",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Allele Count in ESP",
+    "dimension": -1
+  },
+  {
+    "id": "3f69c880-34bb-4074-a1f1-d7d012ea59c9",
+    "name": "INFO_KG_AF_POPMAX",
+    "label": "INFO_KG_AF_POPMAX",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Max allele frequency across populations in 1000 Genomes",
+    "dimension": -1
+  },
+  {
+    "id": "09209282-1311-40cc-9b1d-052b7062b309",
+    "name": "INFO_AN_OTH",
+    "label": "INFO_AN_OTH",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Other Chromosome Count",
+    "dimension": 1
+  },
+  {
+    "id": "9c6b2e77-d789-4b6c-8a1a-519acfe128c6",
+    "name": "INFO_AF_EAS",
+    "label": "INFO_AF_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "East Asian allele frequency adjusted",
+    "dimension": -1
+  },
+  {
+    "id": "a0b28988-85b2-4edc-9eef-adc6f9328b8d",
+    "name": "INFO_AF_SAS",
+    "label": "INFO_AF_SAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "87b4ed0b-dab3-4b1e-8dc0-9003e272f628",
+    "name": "INFO_HomF_OTH",
+    "label": "INFO_HomF_OTH",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "de250f4a-128b-48d6-bd21-5f75987d907c",
+    "name": "INFO_Hemi_OTH",
+    "label": "INFO_Hemi_OTH",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Other Hemizygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "a16528b3-b64e-454e-b947-9a7b6104901f",
+    "name": "INFO_Hom_AMR",
+    "label": "INFO_Hom_AMR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "American Homozygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "978950bd-55b3-4409-965c-5725ef9a2cea",
+    "name": "INFO_Het_AMR",
+    "label": "INFO_Het_AMR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "American Heterozygous Counts",
+    "dimension": -5
+  },
+  {
+    "id": "d552d261-a2e3-4b47-9890-ab8b9853685f",
+    "name": "INFO_AN_NFE",
+    "label": "INFO_AN_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "excluding Finnish",
+    "dimension": 1
+  },
+  {
+    "id": "9e5c4123-2f73-48f8-9450-362e2c6bcddd",
+    "name": "INFO_Hom_CONSANGUINEOUS",
+    "label": "INFO_Hom_CONSANGUINEOUS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Homozygote count among individuals with F > 0.05",
+    "dimension": -1
+  },
+  {
+    "id": "c8604d81-24c9-4ff9-9304-ee12140b9f46",
+    "name": "INFO_Hom_SAS",
+    "label": "INFO_Hom_SAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "South Asian Homozygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "fdce1f22-4841-4ef2-be6a-1506bf585f7b",
+    "name": "INFO_POPMAX",
+    "label": "INFO_POPMAX",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Population with max AF",
+    "dimension": -1
+  },
+  {
+    "id": "47d3036f-67d1-463c-a642-cd65b9a8d9cb",
+    "name": "INFO_AF_Het",
+    "label": "INFO_AF_Het",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -5
+  },
+  {
+    "id": "5a557f94-4e38-4446-8344-d1b0279fcdc1",
+    "name": "INFO_Hemi_EAS",
+    "label": "INFO_Hemi_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "East Asian Hemizygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "25b508c3-9857-49e4-b695-4becb5fd593a",
+    "name": "INFO_AN_FEMALE",
+    "label": "INFO_AN_FEMALE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Allele number among females",
+    "dimension": 1
+  },
+  {
+    "id": "e37474b9-38f2-4411-822c-10a19e2931b7",
+    "name": "INFO_clinvar_pathogenic",
+    "label": "INFO_clinvar_pathogenic",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Clinvar Pathogenic Status",
+    "dimension": -1
+  },
+  {
+    "id": "d431a31a-dd58-4174-b480-8ffcff46ad15",
+    "name": "INFO_HomF_EAS",
+    "label": "INFO_HomF_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "b8e346ac-d11e-4953-a6a1-0700ac184fd2",
+    "name": "INFO_AN_EAS",
+    "label": "INFO_AN_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "East Asian Chromosome Count",
+    "dimension": 1
+  },
+  {
+    "id": "4f7d51a9-a819-443c-9496-17a567c48d5d",
+    "name": "INFO_HomF_SAS",
+    "label": "INFO_HomF_SAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "4d6e8e5b-6c65-4f68-a3e8-f210a05d4808",
+    "name": "INFO_AC_POPMAX",
+    "label": "INFO_AC_POPMAX",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "AC in the population with the max AF",
+    "dimension": -1
+  },
+  {
+    "id": "bfc88361-2ff5-4bcc-bcf4-c80915c3140e",
+    "name": "INFO_DP",
+    "label": "INFO_DP",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Approximate read depth; some reads may have been filtered",
+    "dimension": 1
+  },
+  {
+    "id": "c62acb9a-1140-41b7-973c-685ded343b32",
+    "name": "INFO_Hom_EAS",
+    "label": "INFO_Hom_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "East Asian Homozygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "5c1e42c5-672e-477d-8cad-f95aad3d2824",
+    "name": "INFO_DS",
+    "label": "INFO_DS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Were any of the samples downsampled?",
+    "dimension": 1
+  },
+  {
+    "id": "cc7f69fa-b417-459e-ba43-86ae35ae7d8c",
+    "name": "INFO_HomF_AFR",
+    "label": "INFO_HomF_AFR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "African and African American heterozygous frequency adjusted",
+    "dimension": -1
+  },
+  {
+    "id": "ff0f6abd-a549-41aa-99d1-25b9a2ae3945",
+    "name": "INFO_AF_AFR",
+    "label": "INFO_AF_AFR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "African and African American allele frequency adjusted",
+    "dimension": -1
+  },
+  {
+    "id": "6cc369cd-8d54-473c-bd66-c3649a1a9540",
+    "name": "INFO_HetF_AMR",
+    "label": "INFO_HetF_AMR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "for chromosomes 1-22",
+    "dimension": -5
+  },
+  {
+    "id": "b3fd2556-987f-4117-ae3c-f5f371ef93e4",
+    "name": "INFO_AF_NFE",
+    "label": "INFO_AF_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "non Finnish",
+    "dimension": -1
+  },
+  {
+    "id": "7377c87e-844f-469d-875c-f34a2a724a96",
+    "name": "INFO_DB",
+    "label": "INFO_DB",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "dbSNP Membership",
+    "dimension": 1
+  },
+  {
+    "id": "c1cbcfdc-cddc-43a9-91ca-ed8f7d3ced63",
+    "name": "INFO_Hom_NFE",
+    "label": "INFO_Hom_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "excluding Finnish",
+    "dimension": -1
+  },
+  {
+    "id": "fc11c62d-3db2-4339-8980-16603cb6eb45",
+    "name": "INFO_Het_EAS",
+    "label": "INFO_Het_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "East Asian Heterozygous Counts",
+    "dimension": -5
+  },
+  {
+    "id": "adf46d6a-6991-4465-a972-124d3e98b5a4",
+    "name": "INFO_K3_RUN",
+    "label": "INFO_K3_RUN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Number of ensuing tri-nucleotide repeats.",
+    "dimension": -1
+  },
+  {
+    "id": "66fa1c0e-ffa9-44d8-88ad-03dfc22db392",
+    "name": "INFO_AC_Adj",
+    "label": "INFO_AC_Adj",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Adjusted Allele Counts",
+    "dimension": -1
+  },
+  {
+    "id": "0da3261b-79b7-4ced-9bc6-f558e04a72ae",
+    "name": "INFO_AN_Adj",
+    "label": "INFO_AN_Adj",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Adjusted Chromosome Count",
+    "dimension": 1
+  },
+  {
+    "id": "b7a0bf4b-243b-4250-b129-d9b80f180aed",
+    "name": "INFO_clinvar_mut",
+    "label": "INFO_clinvar_mut",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Clinvar MUT Flag (is disease allele REF?)",
+    "dimension": -1
+  },
+  {
+    "id": "fb8542ba-1c03-4708-b26c-a85b006cc588",
+    "name": "INFO_AN_CONSANGUINEOUS",
+    "label": "INFO_AN_CONSANGUINEOUS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Allele count among individuals with inbreeding coefficient F > 0.05",
+    "dimension": 1
+  },
+  {
+    "id": "4f2c494f-75cd-4735-ace4-83f55cf88a41",
+    "name": "INFO_Het_OTH",
+    "label": "INFO_Het_OTH",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Other Heterozygous Counts",
+    "dimension": -5
+  },
+  {
+    "id": "4ba65605-1425-4abb-a6c7-281cc9711531",
+    "name": "INFO_AF_MALE",
+    "label": "INFO_AF_MALE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "95a25bf2-a4db-46e7-975a-23b89fb00ada",
+    "name": "INFO_ESP_AF_POPMAX",
+    "label": "INFO_ESP_AF_POPMAX",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Max allele frequency across populations in ESP",
+    "dimension": -1
+  },
+  {
+    "id": "b77c1d9a-a17b-48ac-89a6-32a74633c11c",
+    "name": "INFO_HaplotypeScore",
+    "label": "INFO_HaplotypeScore",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Consistency score of the site with at most two segregating haplotypes",
+    "dimension": 1
+  },
+  {
+    "id": "1d512473-b6ec-464b-acc5-3c48c6430948",
+    "name": "INFO_ESP_AF_GLOBAL",
+    "label": "INFO_ESP_AF_GLOBAL",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Overall allele frequency in ESP",
+    "dimension": -1
+  },
+  {
+    "id": "eb4791f2-3ad4-4397-984c-9b14cd771f53",
+    "name": "INFO_AC_NFE",
+    "label": "INFO_AC_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "excluding Finnish",
+    "dimension": -1
+  },
+  {
+    "id": "2148b277-c583-453d-9561-e8328c873dd4",
+    "name": "INFO_AN_AFR",
+    "label": "INFO_AN_AFR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "African and African American chromosomes count",
+    "dimension": 1
+  },
+  {
+    "id": "c6bfc85c-a7f4-4e5d-926f-6b31141d249f",
+    "name": "INFO_K1_RUN",
+    "label": "INFO_K1_RUN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Number of ensuing single nucleotide repeats.",
+    "dimension": -1
+  },
+  {
+    "id": "263cd3a0-d85b-4c7f-9c2b-c21356b77ff0",
+    "name": "INFO_AF_Hom",
+    "label": "INFO_AF_Hom",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "c72e14b7-fb36-4933-a530-bbde73aca454",
+    "name": "INFO_AC_CONSANGUINEOUS",
+    "label": "INFO_AC_CONSANGUINEOUS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Allele count among individuals with inbreeding coefficient F > 0.05",
+    "dimension": -1
+  },
+  {
+    "id": "c9c3b04d-ff13-4d4e-ab41-5250d328e5f1",
+    "name": "INFO_HomF_FIN",
+    "label": "INFO_HomF_FIN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "aa032cac-bf5d-4bcb-8796-00366372df2a",
+    "name": "INFO_HomF_NFE",
+    "label": "INFO_HomF_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "non Finnish",
+    "dimension": -1
+  },
+  {
+    "id": "ae15bee6-48ff-4396-b98a-722ab7b1afb0",
+    "name": "INFO_FS",
+    "label": "INFO_FS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Phred-scaled p-value using Fisher's exact test to detect strand bias",
+    "dimension": 1
+  },
+  {
+    "id": "85ece2c9-c798-492b-8edc-7f54ccbd951d",
+    "name": "INFO_K2_RUN",
+    "label": "INFO_K2_RUN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Number of ensuing di-nucleotide repeats.",
+    "dimension": -1
+  },
+  {
+    "id": "593c0e32-1080-42f8-acb8-ea25dd82960c",
+    "name": "INFO_AF_FEMALE",
+    "label": "INFO_AF_FEMALE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "3f6a6af1-0b72-47cb-b61a-d97ddfe0156c",
+    "name": "INFO_Hemi_FIN",
+    "label": "INFO_Hemi_FIN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Finnish Hemizygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "1898e2f8-6386-40dc-a9d0-e9f1d60ba1ea",
+    "name": "INFO_Hom_OTH",
+    "label": "INFO_Hom_OTH",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Other Homozygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "719bafc9-08e9-4c70-b33d-3c35adaf3eec",
+    "name": "INFO_clinvar_measureset_id",
+    "label": "INFO_clinvar_measureset_id",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Clinvar Measureset ID",
+    "dimension": -1
+  },
+  {
+    "id": "c0178e36-8fed-443b-8049-dceaf53914fd",
+    "name": "INFO_Het_FIN",
+    "label": "INFO_Het_FIN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Finnish Heterozygous Counts",
+    "dimension": -5
+  },
+  {
+    "id": "a508a075-c6f7-4b73-bf18-372edfad5649",
+    "name": "INFO_AN_SAS",
+    "label": "INFO_AN_SAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "South Asian Chromosome Count",
+    "dimension": 1
+  },
+  {
+    "id": "42077213-435b-49dd-9c66-d31281db1f7c",
+    "name": "INFO_GQ_STDDEV",
+    "label": "INFO_GQ_STDDEV",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Standard deviation of all GQ values",
+    "dimension": 1
+  },
+  {
+    "id": "446dcac8-4dad-4d35-aab2-f87af06a5164",
+    "name": "INFO_Hom_FIN",
+    "label": "INFO_Hom_FIN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Finnish Homozygous Counts",
+    "dimension": -1
+  },
+  {
+    "id": "672a07e0-95ba-4174-b76e-b46c4ef056ae",
+    "name": "INFO_QD",
+    "label": "INFO_QD",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Variant Confidence/Quality by Depth",
+    "dimension": 1
+  },
+  {
+    "id": "e28a4c3c-ff5a-415b-ba6b-c71335974655",
+    "name": "INFO_AN_AMR",
+    "label": "INFO_AN_AMR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "American chromosomes count",
+    "dimension": 1
+  },
+  {
+    "id": "aed6442a-8594-40eb-bae5-0474bb69b913",
+    "name": "INFO_KG_AC",
+    "label": "INFO_KG_AC",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Allele Count in 1000 Genomes",
+    "dimension": -1
+  },
+  {
+    "id": "c5fac3cb-bec4-4173-9b43-df83e1b10750",
+    "name": "INFO_AN_POPMAX",
+    "label": "INFO_AN_POPMAX",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "AN in the population with the max AF",
+    "dimension": -1
+  },
+  {
+    "id": "2f8e4b7b-965b-4e8a-84ee-442a40e60d83",
+    "name": "INFO_InbreedingCoeff",
+    "label": "INFO_InbreedingCoeff",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "estimated from the genotype likelihoods per-sample when compared against the Hardy-Weinberg expectation",
+    "dimension": 1
+  },
+  {
+    "id": "02d63b13-ab3b-4a89-97ec-4e27ef6a376a",
+    "name": "INFO_Hemi_AFR",
+    "label": "INFO_Hemi_AFR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "African and African American hemizygous individuals adjusted",
+    "dimension": -1
+  },
+  {
+    "id": "ee3c2031-dbe0-456e-bdce-219d190e0643",
+    "name": "INFO_HetF_FIN",
+    "label": "INFO_HetF_FIN",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "for chromosomes 1-22",
+    "dimension": -5
+  },
+  {
+    "id": "0add161c-f530-4705-9d60-e85f6390c42d",
+    "name": "INFO_HetF_NFE",
+    "label": "INFO_HetF_NFE",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "for chromosomes 1-22 (non Finnish)",
+    "dimension": -5
+  },
+  {
+    "id": "7285bd22-9a90-4a5f-b33f-81ce734b6b5a",
+    "name": "INFO_AC_EAS",
+    "label": "INFO_AC_EAS",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "East Asian Allele Counts",
+    "dimension": -1
+  },
+  {
+    "id": "e017a672-13fa-487c-a62b-84848ccddb36",
     "name": "INFO_Hemi_SAS",
     "label": "INFO_Hemi_SAS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3622,7 +3435,7 @@
     "dimension": -1
   },
   {
-    "id": "9dacf597-e614-4e6a-bfe4-0cf094b604b3",
+    "id": "47144894-ed30-4493-a5cb-75dcf6546f77",
     "name": "INFO_AC_Hom",
     "label": "INFO_AC_Hom",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3633,7 +3446,7 @@
     "dimension": -1
   },
   {
-    "id": "022b67a5-2803-4e81-9916-f1f58c24544c",
+    "id": "ad99eb1b-d306-4f1e-983a-f79300d7a2a9",
     "name": "INFO_Hemi_AMR",
     "label": "INFO_Hemi_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3644,7 +3457,7 @@
     "dimension": -1
   },
   {
-    "id": "bbb41565-a463-43a0-b178-1565b0fb8393",
+    "id": "3349ee96-bb43-48a2-9d1a-92bf9a1b994e",
     "name": "INFO_AF_CONSANGUINEOUS",
     "label": "INFO_AF_CONSANGUINEOUS",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3655,7 +3468,7 @@
     "dimension": -1
   },
   {
-    "id": "15c6b46a-bf82-4e36-9dde-bdcc6ec8250a",
+    "id": "7b9dd6b9-80db-470e-9541-89871e6e590f",
     "name": "INFO_AC_FEMALE",
     "label": "INFO_AC_FEMALE",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3666,7 +3479,18 @@
     "dimension": -1
   },
   {
-    "id": "93418204-2a0f-4d6d-a884-6ae56e46c1f1",
+    "id": "0b99f4b5-024d-425f-90e2-dfd20c37709f",
+    "name": "INFO_HomF_AMR",
+    "label": "INFO_HomF_AMR",
+    "source_name": "ExAC_r0_3_1_sites_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "",
+    "dimension": -1
+  },
+  {
+    "id": "263ada4f-1529-44c3-a6d3-667abb9792d6",
     "name": "INFO_CCC",
     "label": "INFO_CCC",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3677,7 +3501,7 @@
     "dimension": 1
   },
   {
-    "id": "2666445a-bb74-4452-be5e-38ccf497ab75",
+    "id": "53664e02-edc3-48b5-9d47-6e604a40dbc8",
     "name": "INFO_AC_AMR",
     "label": "INFO_AC_AMR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3688,7 +3512,7 @@
     "dimension": -1
   },
   {
-    "id": "9446ff36-5b8a-4274-865a-f8f6d5529dde",
+    "id": "42a135d6-67a4-49ae-8145-88b94dc93019",
     "name": "INFO_AF_OTH",
     "label": "INFO_AF_OTH",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3699,7 +3523,7 @@
     "dimension": -1
   },
   {
-    "id": "43b7a83d-d0ef-4273-b159-ec7b6ef07d7d",
+    "id": "b28f81db-59ff-489e-be60-c79072e3776f",
     "name": "INFO_Het_AFR",
     "label": "INFO_Het_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3710,7 +3534,7 @@
     "dimension": -5
   },
   {
-    "id": "63855f30-d167-4f53-a4a6-010e20473cb4",
+    "id": "3399caed-576d-4e1d-b7c5-eed97656a7fe",
     "name": "INFO_HetF_AFR",
     "label": "INFO_HetF_AFR",
     "source_name": "ExAC_r0_3_1_sites_v01",
@@ -3721,40 +3545,7 @@
     "dimension": -5
   },
   {
-    "id": "9c8a27b9-4451-4999-b03f-36ffb078743b",
-    "name": "INFO_GENEINFO_1",
-    "label": "INFO_GENEINFO_1",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "NCBI Gene ID.",
-    "dimension": 1
-  },
-  {
-    "id": "5861d5a0-bfbe-4d56-8600-d225df1ff134",
-    "name": "INFO_NSN",
-    "label": "INFO_NSN",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has non-synonymous nonsense A coding region variation where one allele in the set changes to STOP codon (TER). FxnClass = 41",
-    "dimension": 1
-  },
-  {
-    "id": "4b781467-0e0e-46c9-be92-1be47c4eb180",
-    "name": "INFO_NSM",
-    "label": "INFO_NSM",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has non-synonymous missense A coding region variation where one allele in the set changes protein peptide. FxnClass = 42",
-    "dimension": 1
-  },
-  {
-    "id": "e76559d3-704c-4ebc-b104-e3dc0e06de74",
+    "id": "3bc0b0c0-f86a-4ae4-95e6-c2944468dade",
     "name": "INFO_LSD",
     "label": "INFO_LSD",
     "source_name": "clinvar_20160705_v01",
@@ -3765,7 +3556,7 @@
     "dimension": 1
   },
   {
-    "id": "628f63d1-1ed7-42ef-91cb-bc63788d1ae7",
+    "id": "85cf35b6-c853-4c3b-9755-505ef69c8ef4",
     "name": "INFO_ASP",
     "label": "INFO_ASP",
     "source_name": "clinvar_20160705_v01",
@@ -3776,381 +3567,7 @@
     "dimension": 1
   },
   {
-    "id": "b8bb4a14-a245-4654-8b47-c3ae722d03f0",
-    "name": "INFO_ASS",
-    "label": "INFO_ASS",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "splice site",
-    "dimension": 1
-  },
-  {
-    "id": "b6aec77e-e81e-4224-b025-8567c5aa2702",
-    "name": "INFO_NSF",
-    "label": "INFO_NSF",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has non-synonymous frameshift A coding region variation where one allele in the set changes all downstream amino acids. FxnClass = 44",
-    "dimension": 1
-  },
-  {
-    "id": "1971b3dc-4228-4632-b89c-c42fd9ea2220",
-    "name": "INFO_KGPhase3",
-    "label": "INFO_KGPhase3",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "variant found in 1000 genomes project phase 3 data",
-    "dimension": 1
-  },
-  {
-    "id": "81819efa-7b31-4a4c-a56d-7e479954b595",
-    "name": "INFO_R5",
-    "label": "INFO_R5",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 5' gene region FxnCode = 15",
-    "dimension": 1
-  },
-  {
-    "id": "2e5da4d1-3824-4f21-b3d6-4200444dd381",
-    "name": "INFO_R3",
-    "label": "INFO_R3",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 3' gene region FxnCode = 13",
-    "dimension": 1
-  },
-  {
-    "id": "09dd58c6-7808-4ba9-8df8-2b81ff9cdbe2",
-    "name": "INFO_CDA",
-    "label": "INFO_CDA",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "variant studied in clinical assay",
-    "dimension": 1
-  },
-  {
-    "id": "e38c9d69-dad7-48a1-b344-f3f8c6ef3e2f",
-    "name": "INFO_G5A",
-    "label": "INFO_G5A",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "MAF>5% in all 26 populations in 1000 genomes project",
-    "dimension": 1
-  },
-  {
-    "id": "d4cd46ce-9b6e-4a1d-83fb-13d62897875a",
-    "name": "INFO_G5",
-    "label": "INFO_G5",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "MAF>5% in 1+ out of 26 populations in 1000 genomes project",
-    "dimension": 1
-  },
-  {
-    "id": "e3b6b1f5-d542-45c3-9220-1688617cd2d7",
-    "name": "INFO_CFL",
-    "label": "INFO_CFL",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies.",
-    "dimension": 1
-  },
-  {
-    "id": "94ea4338-8bfa-42c3-ba7e-d49fc98bd00a",
-    "name": "INFO_COMMON",
-    "label": "INFO_COMMON",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population",
-    "dimension": 1
-  },
-  {
-    "id": "189797f1-1c26-463e-a0df-1a16fe88c69b",
-    "name": "INFO_VLD",
-    "label": "INFO_VLD",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data.",
-    "dimension": 1
-  },
-  {
-    "id": "d830495d-03f5-4c74-984e-95c5c523e2ba",
-    "name": "INFO_SSR",
-    "label": "INFO_SSR",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "There are reasons to suspect the variant to be false positive: true, false",
-    "dimension": 1
-  },
-  {
-    "id": "8cb980c6-fe75-41b3-a653-dc5dfe6117f8",
-    "name": "INFO_CLNALLE",
-    "label": "INFO_CLNALLE",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Variant alleles from REF or ALT columns.  0 is REF, 1 is the first ALT allele, etc.  This is used to match alleles with other corresponding clinical (CLN) INFO tags.  A value of -1 indicates that no allele was found to match a corresponding HGVS allele name.",
-    "dimension": 0
-  },
-  {
-    "id": "c2e43453-7804-4c27-afc9-5e6223bf724f",
-    "name": "INFO_CLNDSDBID",
-    "label": "INFO_CLNDSDBID",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Variant disease database ID",
-    "dimension": 0
-  },
-  {
-    "id": "0908320f-8f9f-4ef6-86fc-d5b494444009",
-    "name": "INFO_CLNDBN",
-    "label": "INFO_CLNDBN",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Variant disease name",
-    "dimension": 0
-  },
-  {
-    "id": "a59ee69f-6f9d-427b-a570-e5f8fce21225",
-    "name": "INFO_OM",
-    "label": "INFO_OM",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has OMIM/OMIA",
-    "dimension": 1
-  },
-  {
-    "id": "fb7805d6-16cd-4dbf-b501-bf9b68785883",
-    "name": "INFO_S3D",
-    "label": "INFO_S3D",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has 3D structure - SNP3D table",
-    "dimension": 1
-  },
-  {
-    "id": "a8d315be-5121-4d2d-9635-1c447f1b8efe",
-    "name": "INFO_CLNREVSTAT",
-    "label": "INFO_CLNREVSTAT",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "no_assertion - No assertion provided, no_criteria - No assertion criteria provided, single - Criteria provided single submitter, mult - Criteria provided multiple submitters no conflicts, conf - Criteria provided conflicting interpretations, exp - Reviewed by expert panel, guideline - Practice guideline",
-    "dimension": 1
-  },
-  {
-    "id": "889d2fd9-f4b1-421c-bb07-c69425a37575",
-    "name": "INFO_U3",
-    "label": "INFO_U3",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 3' UTR Location is in an untranslated region (UTR). FxnCode = 53",
-    "dimension": 1
-  },
-  {
-    "id": "dcbbfd18-581d-4d0a-9f5e-7ab1e51111d0",
-    "name": "INFO_PM",
-    "label": "INFO_PM",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Variant is Precious(Clinical,Pubmed Cited)",
-    "dimension": 1
-  },
-  {
-    "id": "d3d8668c-a7df-45fd-a401-80691a43738b",
-    "name": "INFO_U5",
-    "label": "INFO_U5",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 5' UTR Location is in an untranslated region (UTR). FxnCode = 55",
-    "dimension": 1
-  },
-  {
-    "id": "11380fe2-a850-4979-88ce-c28a95f892bd",
-    "name": "INFO_DSS",
-    "label": "INFO_DSS",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "splice site",
-    "dimension": 1
-  },
-  {
-    "id": "8d9fd728-6f94-4bdd-9a6b-eb5ea61ba977",
-    "name": "INFO_SAO",
-    "label": "INFO_SAO",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Variant allele origin.",
-    "dimension": 1
-  },
-  {
-    "id": "09b87f18-ebed-4f78-9cbb-1e1ba67cd11b",
-    "name": "INFO_CLNORIGIN",
-    "label": "INFO_CLNORIGIN",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "unknown, germline, somatic, inherited, parental, maternal, de-novo, biparental, uniparental, not-tested, tested-inconclusive, other",
-    "dimension": 0
-  },
-  {
-    "id": "b8398d49-a883-41aa-a055-5af41e91de87",
-    "name": "INFO_CLNACC",
-    "label": "INFO_CLNACC",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Variant Accession and Versions",
-    "dimension": 0
-  },
-  {
-    "id": "c835f80d-938a-4587-8882-f60147b93011",
-    "name": "INFO_REF",
-    "label": "INFO_REF",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "coding region variation where one allele in the set is identical to the reference sequence",
-    "dimension": 1
-  },
-  {
-    "id": "4c6d9716-9ef8-4151-ba59-f03ffb731638",
-    "name": "INFO_CAF",
-    "label": "INFO_CAF",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency based on 1000 genomes project",
-    "dimension": -2
-  },
-  {
-    "id": "c7543c04-6591-4166-9812-3176206fd472",
-    "name": "INFO_INT",
-    "label": "INFO_INT",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In Intron FxnCode = 6",
-    "dimension": 1
-  },
-  {
-    "id": "cb974e6b-c82c-48c2-99a3-ebdb7aa6ea5d",
-    "name": "INFO_CLNSRC",
-    "label": "INFO_CLNSRC",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Variant Clinical Chanels",
-    "dimension": 0
-  },
-  {
-    "id": "0067e1f4-7528-4aae-947a-ae991caeccd1",
-    "name": "INFO_VC",
-    "label": "INFO_VC",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation",
-    "dimension": 1
-  },
-  {
-    "id": "1d8756e0-ade5-44d8-af0f-9d5da621989a",
-    "name": "INFO_GENEINFO_0",
-    "label": "INFO_GENEINFO_0",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Gene name.",
-    "dimension": 1
-  },
-  {
-    "id": "59450831-4914-4e1a-bb46-4ee7e79d6144",
-    "name": "INFO_MUT",
-    "label": "INFO_MUT",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources",
-    "dimension": 1
-  },
-  {
-    "id": "34b7ad36-adf8-40cc-8655-6b10374682a8",
-    "name": "INFO_TPA",
-    "label": "INFO_TPA",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)",
-    "dimension": 1
-  },
-  {
-    "id": "b17b148a-984c-43f5-840f-1f5223137581",
-    "name": "INFO_HD",
-    "label": "INFO_HD",
-    "source_name": "clinvar_20160705_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "with density >50k",
-    "dimension": 1
-  },
-  {
-    "id": "addd54cd-ae88-402d-bc1b-76e37754a31a",
+    "id": "4fa7c1bb-8f8e-4a19-93b4-c608624f4007",
     "name": "INFO_SYN",
     "label": "INFO_SYN",
     "source_name": "clinvar_20160705_v01",
@@ -4161,7 +3578,194 @@
     "dimension": 1
   },
   {
-    "id": "323a8142-736d-4ada-90b6-87f7df3ea8d3",
+    "id": "2b34c2e3-42c7-41ab-8dca-7715edce28c5",
+    "name": "INFO_CDA",
+    "label": "INFO_CDA",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "variant studied in clinical assay",
+    "dimension": 1
+  },
+  {
+    "id": "225feac6-e753-4371-a661-100fa26cc0a6",
+    "name": "INFO_CLNSRC",
+    "label": "INFO_CLNSRC",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Variant Clinical Chanels",
+    "dimension": 0
+  },
+  {
+    "id": "df366d96-8e64-4c4a-b647-0a05a492520b",
+    "name": "INFO_CFL",
+    "label": "INFO_CFL",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies.",
+    "dimension": 1
+  },
+  {
+    "id": "88859381-e051-4a3f-8984-89543632cca2",
+    "name": "INFO_COMMON",
+    "label": "INFO_COMMON",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population",
+    "dimension": 1
+  },
+  {
+    "id": "9321821f-4436-4d19-90ef-fe654e08103b",
+    "name": "INFO_VLD",
+    "label": "INFO_VLD",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data.",
+    "dimension": 1
+  },
+  {
+    "id": "49f0795d-a1e9-4ec4-9024-5608459c51ed",
+    "name": "INFO_SSR",
+    "label": "INFO_SSR",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "There are reasons to suspect the variant to be false positive: true, false",
+    "dimension": 1
+  },
+  {
+    "id": "085e7043-5a62-4518-9f97-16a66e91ac62",
+    "name": "INFO_CLNDSDBID",
+    "label": "INFO_CLNDSDBID",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Variant disease database ID",
+    "dimension": 0
+  },
+  {
+    "id": "fdd25a4b-5098-40c4-a277-1602db4fc736",
+    "name": "INFO_CLNDBN",
+    "label": "INFO_CLNDBN",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Variant disease name",
+    "dimension": 0
+  },
+  {
+    "id": "e095c21e-f002-45b8-ba9d-23227672ccaa",
+    "name": "INFO_REF",
+    "label": "INFO_REF",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "coding region variation where one allele in the set is identical to the reference sequence",
+    "dimension": 1
+  },
+  {
+    "id": "1f15c345-179a-4247-8160-6951e564e5e1",
+    "name": "INFO_CLNACC",
+    "label": "INFO_CLNACC",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Variant Accession and Versions",
+    "dimension": 0
+  },
+  {
+    "id": "e06a5208-3f80-4c82-894a-97eb9f5826f7",
+    "name": "INFO_PM",
+    "label": "INFO_PM",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Variant is Precious(Clinical,Pubmed Cited)",
+    "dimension": 1
+  },
+  {
+    "id": "c4e66e90-d6b5-4ac7-b191-26cd580664bd",
+    "name": "INFO_SAO",
+    "label": "INFO_SAO",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Variant allele origin.",
+    "dimension": 1
+  },
+  {
+    "id": "321df7cf-3bbd-4624-a6aa-fcf370c9a472",
+    "name": "INFO_CLNORIGIN",
+    "label": "INFO_CLNORIGIN",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "unknown, germline, somatic, inherited, parental, maternal, de-novo, biparental, uniparental, not-tested, tested-inconclusive, other",
+    "dimension": 0
+  },
+  {
+    "id": "08d06787-a387-4e87-a09e-d553ba7cf994",
+    "name": "INFO_CLNREVSTAT",
+    "label": "INFO_CLNREVSTAT",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "no_assertion - No assertion provided, no_criteria - No assertion criteria provided, single - Criteria provided single submitter, mult - Criteria provided multiple submitters no conflicts, conf - Criteria provided conflicting interpretations, exp - Reviewed by expert panel, guideline - Practice guideline",
+    "dimension": 1
+  },
+  {
+    "id": "7e2090ed-427c-4353-afb7-8f97430997ca",
+    "name": "INFO_MUT",
+    "label": "INFO_MUT",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources",
+    "dimension": 1
+  },
+  {
+    "id": "150e97fa-9edc-47ca-95aa-973ee49f5465",
+    "name": "INFO_VC",
+    "label": "INFO_VC",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation",
+    "dimension": 1
+  },
+  {
+    "id": "9b0f8fea-7d83-4a19-924c-1ee37867bb1e",
+    "name": "INFO_TPA",
+    "label": "INFO_TPA",
+    "source_name": "clinvar_20160705_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)",
+    "dimension": 1
+  },
+  {
+    "id": "ffa882da-fe5d-44b3-8530-64850ded198d",
     "name": "INFO_CLNSIG",
     "label": "INFO_CLNSIG",
     "source_name": "clinvar_20160705_v01",
@@ -4172,7 +3776,7 @@
     "dimension": 0
   },
   {
-    "id": "ef9f2499-1154-4ccc-b775-593dd713cc3c",
+    "id": "70168969-c8b8-43e6-8407-70929b9582a1",
     "name": "INFO_RS",
     "label": "INFO_RS",
     "source_name": "clinvar_20160705_v01",
@@ -4183,7 +3787,7 @@
     "dimension": 1
   },
   {
-    "id": "c6805c82-71d0-4119-925e-5701d4beb77f",
+    "id": "5cee6dbb-6b5e-4e04-9ad7-0140fd69b5be",
     "name": "INFO_WTD",
     "label": "INFO_WTD",
     "source_name": "clinvar_20160705_v01",
@@ -4194,7 +3798,7 @@
     "dimension": 1
   },
   {
-    "id": "acde4a06-7bac-4add-8214-1aad00ae60ce",
+    "id": "fb2e1e52-80a6-4bf8-bb1d-e5b85663faf2",
     "name": "INFO_CLNDSDB",
     "label": "INFO_CLNDSDB",
     "source_name": "clinvar_20160705_v01",
@@ -4205,260 +3809,7 @@
     "dimension": 0
   },
   {
-    "id": "47186979-ff7b-426f-833e-1d702f88ebf4",
-    "name": "INFO_NSN",
-    "label": "INFO_NSN",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has non-synonymous nonsense A coding region variation where one allele in the set changes to STOP codon (TER). FxnClass = 41",
-    "dimension": 1
-  },
-  {
-    "id": "d80f464a-9a04-454c-8144-298a868caa56",
-    "name": "INFO_NSM",
-    "label": "INFO_NSM",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has non-synonymous missense A coding region variation where one allele in the set changes protein peptide. FxnClass = 42",
-    "dimension": 1
-  },
-  {
-    "id": "66ee3b41-1786-44ed-8d49-438c3fcd9ca7",
-    "name": "INFO_LSD",
-    "label": "INFO_LSD",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Submitted from a locus-specific database",
-    "dimension": 1
-  },
-  {
-    "id": "e1cf2dbf-cc9f-47c6-85f3-78c79baabd72",
-    "name": "INFO_ASP",
-    "label": "INFO_ASP",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Is Assembly specific. This is set if the variant only maps to one assembly",
-    "dimension": 1
-  },
-  {
-    "id": "e2165a3c-7833-47c8-ba46-8ec63591785a",
-    "name": "INFO_ASS",
-    "label": "INFO_ASS",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In acceptor splice site FxnCode = 73",
-    "dimension": 1
-  },
-  {
-    "id": "7443d97f-da19-4773-9502-fe9158b9c643",
-    "name": "INFO_NSF",
-    "label": "INFO_NSF",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has non-synonymous frameshift A coding region variation where one allele in the set changes all downstream amino acids. FxnClass = 44",
-    "dimension": 1
-  },
-  {
-    "id": "9c7e9a0c-21c1-4745-9496-35453a75162e",
-    "name": "INFO_KGPhase3",
-    "label": "INFO_KGPhase3",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "1000 Genome phase 3",
-    "dimension": 1
-  },
-  {
-    "id": "9ebb688a-11c6-459c-ae44-da8256e0c945",
-    "name": "INFO_SYN",
-    "label": "INFO_SYN",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has synonymous A coding region variation where one allele in the set does not change the encoded amino acid. FxnCode = 3",
-    "dimension": 1
-  },
-  {
-    "id": "5195d175-bbdb-489f-9fd9-b367405a8d5e",
-    "name": "INFO_R3",
-    "label": "INFO_R3",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 3' gene region FxnCode = 13",
-    "dimension": 1
-  },
-  {
-    "id": "232cbf5b-0b87-42c7-b42c-99c5b7fc79bd",
-    "name": "INFO_CDA",
-    "label": "INFO_CDA",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Variation is interrogated in a clinical diagnostic assay",
-    "dimension": 1
-  },
-  {
-    "id": "2a32d57e-227a-4a9c-8610-c961a5d64f85",
-    "name": "INFO_G5A",
-    "label": "INFO_G5A",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": ">5% minor allele frequency in each and all populations",
-    "dimension": 1
-  },
-  {
-    "id": "f38a9470-6368-4f93-b55a-c06b3b177ab0",
-    "name": "INFO_G5",
-    "label": "INFO_G5",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": ">5% minor allele frequency in 1+ populations",
-    "dimension": 1
-  },
-  {
-    "id": "ce07b683-e1e4-482c-996d-076693579f14",
-    "name": "INFO_CFL",
-    "label": "INFO_CFL",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies.",
-    "dimension": 1
-  },
-  {
-    "id": "b9572dcd-5b3c-4dc8-9790-6a6bed6679a3",
-    "name": "INFO_COMMON",
-    "label": "INFO_COMMON",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population",
-    "dimension": 1
-  },
-  {
-    "id": "968f88f5-a14a-46c7-9859-7bf7709665f3",
-    "name": "INFO_VLD",
-    "label": "INFO_VLD",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data.",
-    "dimension": 1
-  },
-  {
-    "id": "0c4947f4-2d41-46cf-97cb-e71b1473ac77",
-    "name": "INFO_SSR",
-    "label": "INFO_SSR",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "There are reasons to suspect the variant to be false positive: true, false",
-    "dimension": 1
-  },
-  {
-    "id": "d98f80e6-9904-46fa-bb3a-56d70e7fcc0d",
-    "name": "INFO_OM",
-    "label": "INFO_OM",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has OMIM/OMIA",
-    "dimension": 1
-  },
-  {
-    "id": "2a4dca7a-822c-40d0-bd49-16091fa50d0e",
-    "name": "INFO_S3D",
-    "label": "INFO_S3D",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Has 3D structure - SNP3D table",
-    "dimension": 1
-  },
-  {
-    "id": "32540284-f4b9-4d1e-b9a9-faba1568f76f",
-    "name": "INFO_U3",
-    "label": "INFO_U3",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 3' UTR Location is in an untranslated region (UTR). FxnCode = 53",
-    "dimension": 1
-  },
-  {
-    "id": "c8d684e4-beff-4c65-ba76-b43609355394",
-    "name": "INFO_PM",
-    "label": "INFO_PM",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Variant is Precious(Clinical,Pubmed Cited)",
-    "dimension": 1
-  },
-  {
-    "id": "fbd7b928-8f43-4518-a758-b58ac7fe7ebd",
-    "name": "INFO_U5",
-    "label": "INFO_U5",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In 5' UTR Location is in an untranslated region (UTR). FxnCode = 55",
-    "dimension": 1
-  },
-  {
-    "id": "6413d766-6501-4b3f-bd19-241cdae77a86",
-    "name": "INFO_DSS",
-    "label": "INFO_DSS",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In donor splice-site FxnCode = 75",
-    "dimension": 1
-  },
-  {
-    "id": "8642e01e-2f79-43db-b325-054a9b1e7a02",
-    "name": "INFO_SAO",
-    "label": "INFO_SAO",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Variant allele origin.",
-    "dimension": 1
-  },
-  {
-    "id": "843a8154-d62a-477d-a8f3-629f0cbbde1b",
+    "id": "7d943028-1041-446d-9509-d3c428ba94a7",
     "name": "INFO_REF",
     "label": "INFO_REF",
     "source_name": "dbsnp_20160601_v01",
@@ -4469,29 +3820,18 @@
     "dimension": 1
   },
   {
-    "id": "5c5b63a0-62cb-4c07-86ac-560dfc680b09",
-    "name": "INFO_CAF",
-    "label": "INFO_CAF",
+    "id": "7fba33a6-a88d-4108-b660-b98e82974da9",
+    "name": "INFO_SSR",
+    "label": "INFO_SSR",
     "source_name": "dbsnp_20160601_v01",
     "is_mandatory": false,
     "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency based on 1000 genomes project",
-    "dimension": -2
-  },
-  {
-    "id": "84eba4b3-49da-443f-a862-d4def87cda26",
-    "name": "INFO_INT",
-    "label": "INFO_INT",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "In Intron FxnCode = 6",
+    "value_type": "string",
+    "description": "There are reasons to suspect the variant to be false positive: true, false",
     "dimension": 1
   },
   {
-    "id": "ef6e5133-d800-46c4-918f-4f86bedfaacb",
+    "id": "e51bea57-4ec9-4b28-86dd-3cd5265a2f8d",
     "name": "INFO_MUT",
     "label": "INFO_MUT",
     "source_name": "dbsnp_20160601_v01",
@@ -4502,7 +3842,18 @@
     "dimension": 1
   },
   {
-    "id": "4cccafb2-b51a-4b6e-9b89-ce3ccb6fbc67",
+    "id": "f467daa3-1edc-4126-8621-efdedbf04f97",
+    "name": "INFO_LSD",
+    "label": "INFO_LSD",
+    "source_name": "dbsnp_20160601_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Submitted from a locus-specific database",
+    "dimension": 1
+  },
+  {
+    "id": "469ce78a-8cdc-40ce-8643-57da8dd31de8",
     "name": "INFO_VC",
     "label": "INFO_VC",
     "source_name": "dbsnp_20160601_v01",
@@ -4513,29 +3864,18 @@
     "dimension": 1
   },
   {
-    "id": "efa075d2-d987-417a-bc5d-6917154f2612",
-    "name": "INFO_GENEINFO_0",
-    "label": "INFO_GENEINFO_0",
+    "id": "769783d1-ea74-4e34-97fc-cb90e4f5fc66",
+    "name": "INFO_COMMON",
+    "label": "INFO_COMMON",
     "source_name": "dbsnp_20160601_v01",
     "is_mandatory": false,
     "is_editable": false,
     "value_type": "string",
-    "description": "Gene name.",
+    "description": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population",
     "dimension": 1
   },
   {
-    "id": "6c3ed8fb-2f66-4a24-a6f2-0ac3e332fd57",
-    "name": "INFO_GENEINFO_1",
-    "label": "INFO_GENEINFO_1",
-    "source_name": "dbsnp_20160601_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "NCBI Gene ID.",
-    "dimension": 1
-  },
-  {
-    "id": "6c13cf38-c545-4cfb-a92a-bf35e8a97791",
+    "id": "e24ff7fd-0fcc-4ca8-9e79-2d35d267a7b9",
     "name": "INFO_TPA",
     "label": "INFO_TPA",
     "source_name": "dbsnp_20160601_v01",
@@ -4546,29 +3886,40 @@
     "dimension": 1
   },
   {
-    "id": "11d8816c-e1a6-4ffd-93b6-575b30c16ba6",
-    "name": "INFO_HD",
-    "label": "INFO_HD",
+    "id": "d7eb3b12-6b87-4f69-aa4f-a0c89b0a80c5",
+    "name": "INFO_VLD",
+    "label": "INFO_VLD",
     "source_name": "dbsnp_20160601_v01",
     "is_mandatory": false,
     "is_editable": false,
     "value_type": "boolean",
-    "description": "Marker is on high density genotyping kit (50K density or greater).  The variant may have phenotype associations present in dbGaP.",
+    "description": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data.",
     "dimension": 1
   },
   {
-    "id": "37c4d228-0ada-4231-a0df-4de3851add83",
-    "name": "INFO_R5",
-    "label": "INFO_R5",
+    "id": "7ab3c9a3-8abb-46ad-a217-1cbd2c5c53fa",
+    "name": "INFO_PM",
+    "label": "INFO_PM",
     "source_name": "dbsnp_20160601_v01",
     "is_mandatory": false,
     "is_editable": false,
     "value_type": "boolean",
-    "description": "In 5' gene region FxnCode = 15",
+    "description": "Variant is Precious(Clinical,Pubmed Cited)",
     "dimension": 1
   },
   {
-    "id": "90b94b6b-6ce9-4cc0-8713-e371d146f8f2",
+    "id": "4ba511c3-c0d0-4251-8750-e9258b70ac52",
+    "name": "INFO_SYN",
+    "label": "INFO_SYN",
+    "source_name": "dbsnp_20160601_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Has synonymous A coding region variation where one allele in the set does not change the encoded amino acid. FxnCode = 3",
+    "dimension": 1
+  },
+  {
+    "id": "09040451-443d-4de8-be45-cf488adf4dce",
     "name": "INFO_RS",
     "label": "INFO_RS",
     "source_name": "dbsnp_20160601_v01",
@@ -4579,7 +3930,7 @@
     "dimension": 1
   },
   {
-    "id": "9d5b1a8d-d96a-4ee3-8971-328fba6bf14d",
+    "id": "2d6c62a8-037b-47d3-a976-d48c6ae80554",
     "name": "INFO_WTD",
     "label": "INFO_WTD",
     "source_name": "dbsnp_20160601_v01",
@@ -4590,7 +3941,51 @@
     "dimension": 1
   },
   {
-    "id": "314ad37c-1f26-4a15-8721-48a4741d85a3",
+    "id": "29732e09-189a-4ea4-b800-b58dfc694859",
+    "name": "INFO_ASP",
+    "label": "INFO_ASP",
+    "source_name": "dbsnp_20160601_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Is Assembly specific. This is set if the variant only maps to one assembly",
+    "dimension": 1
+  },
+  {
+    "id": "f60c3da3-c6b7-430f-bd23-38ace110944a",
+    "name": "INFO_CDA",
+    "label": "INFO_CDA",
+    "source_name": "dbsnp_20160601_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Variation is interrogated in a clinical diagnostic assay",
+    "dimension": 1
+  },
+  {
+    "id": "e5259205-9895-47c3-80c5-ba51734ea1bd",
+    "name": "INFO_SAO",
+    "label": "INFO_SAO",
+    "source_name": "dbsnp_20160601_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Variant allele origin.",
+    "dimension": 1
+  },
+  {
+    "id": "b1e97d2d-b103-4842-878a-9170d12482bc",
+    "name": "INFO_CFL",
+    "label": "INFO_CFL",
+    "source_name": "dbsnp_20160601_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies.",
+    "dimension": 1
+  },
+  {
+    "id": "cb742dd9-e25a-4336-b7e9-8505ecba8762",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "one_thousand_genome_v01",
@@ -4601,18 +3996,7 @@
     "dimension": 1
   },
   {
-    "id": "31685de7-66fe-4c04-b32b-c01e86143597",
-    "name": "INFO_OLD_VARIANT",
-    "label": "INFO_OLD_VARIANT",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "old variant location. Format chrom:position:REF_allele/ALT_allele",
-    "dimension": 1
-  },
-  {
-    "id": "925f4d60-9a35-43e4-902c-728a740f636c",
+    "id": "8e9f0b27-3081-4724-a57c-7f0143177c63",
     "name": "INFO_IMPRECISE",
     "label": "INFO_IMPRECISE",
     "source_name": "one_thousand_genome_v01",
@@ -4623,7 +4007,7 @@
     "dimension": 1
   },
   {
-    "id": "62cc9c2b-3b12-4d50-ba83-eff11382149a",
+    "id": "acfe1a6d-5f9f-4be1-9fa9-949e046e1ac2",
     "name": "INFO_MULTI_ALLELIC",
     "label": "INFO_MULTI_ALLELIC",
     "source_name": "one_thousand_genome_v01",
@@ -4634,7 +4018,7 @@
     "dimension": 1
   },
   {
-    "id": "8efb10b4-7c4c-470f-bba8-b62fbfa5f351",
+    "id": "14e2358c-f13f-402c-b9a8-7d4e8b3898b1",
     "name": "INFO_AMR_AF",
     "label": "INFO_AMR_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4645,7 +4029,7 @@
     "dimension": -1
   },
   {
-    "id": "40f1f5fc-c7d6-4846-8c82-75371885fb70",
+    "id": "db213272-2fb0-4d40-a5e3-da045648f83d",
     "name": "INFO_EUR_AF",
     "label": "INFO_EUR_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4656,7 +4040,7 @@
     "dimension": -1
   },
   {
-    "id": "c7a36a40-b839-4dbd-abc0-cff79a6a84ae",
+    "id": "a8897027-e2db-4913-9845-447cc676c825",
     "name": "INFO_TSD",
     "label": "INFO_TSD",
     "source_name": "one_thousand_genome_v01",
@@ -4667,7 +4051,7 @@
     "dimension": 1
   },
   {
-    "id": "604993dc-48b6-4346-b2e5-21a2c5688876",
+    "id": "7c1ba7bb-4b7d-4656-ae6c-9a296ee43ed3",
     "name": "INFO_NS",
     "label": "INFO_NS",
     "source_name": "one_thousand_genome_v01",
@@ -4678,7 +4062,7 @@
     "dimension": 1
   },
   {
-    "id": "e87f1e3d-d31b-4432-9135-08b9f530ec69",
+    "id": "d4181246-60ee-434c-a3da-440b150b99ae",
     "name": "INFO_SAS_AF",
     "label": "INFO_SAS_AF",
     "source_name": "one_thousand_genome_v01",
@@ -4689,7 +4073,7 @@
     "dimension": -1
   },
   {
-    "id": "7a4c3169-e1c5-496e-a430-a8caf4a8193d",
+    "id": "a5f0201a-7f4d-4786-9fd4-34b78096e02c",
     "name": "INFO_CIPOS",
     "label": "INFO_CIPOS",
     "source_name": "one_thousand_genome_v01",
@@ -4700,7 +4084,7 @@
     "dimension": 2
   },
   {
-    "id": "ad747801-ede3-4c4c-bc0b-f7a9251ed66a",
+    "id": "e95850f6-83f5-420f-92af-43e1b5242301",
     "name": "INFO_EX_TARGET",
     "label": "INFO_EX_TARGET",
     "source_name": "one_thousand_genome_v01",
@@ -4711,7 +4095,7 @@
     "dimension": 1
   },
   {
-    "id": "46d9465c-f001-4e94-81e5-390d6477f29a",
+    "id": "b85f66a4-e312-490c-b77e-901dd88eefeb",
     "name": "INFO_SVLEN",
     "label": "INFO_SVLEN",
     "source_name": "one_thousand_genome_v01",
@@ -4722,7 +4106,7 @@
     "dimension": 0
   },
   {
-    "id": "d5bf37ac-32ba-40c0-b85c-b0fd35374c83",
+    "id": "08ec8be2-0dd0-49bb-beeb-dca2e93856c1",
     "name": "INFO_MC",
     "label": "INFO_MC",
     "source_name": "one_thousand_genome_v01",
@@ -4733,106 +4117,7 @@
     "dimension": 0
   },
   {
-    "id": "43658200-a94f-4a9f-8b78-7035b651be05",
-    "name": "INFO_AA_1",
-    "label": "INFO_AA_1",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Ancestral reference as in vcf format. For InDels only",
-    "dimension": 1
-  },
-  {
-    "id": "0824a382-3858-4a6f-8ec6-b43e838ba11d",
-    "name": "INFO_EAS_AF",
-    "label": "INFO_EAS_AF",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the EAS populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "852b2c82-7899-426a-9894-159717f85bd0",
-    "name": "INFO_AN",
-    "label": "INFO_AN",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total number of alleles in called genotypes",
-    "dimension": 1
-  },
-  {
-    "id": "40eeaed7-ee3a-4e1e-a755-a38332e60467",
-    "name": "INFO_END",
-    "label": "INFO_END",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "End position",
-    "dimension": 1
-  },
-  {
-    "id": "af4ef748-d63c-4d90-a81d-43b054130fc1",
-    "name": "INFO_AF",
-    "label": "INFO_AF",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Estimated allele frequency in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "bb8b5d14-5b2e-413b-be9c-da5caefa53d8",
-    "name": "INFO_AC",
-    "label": "INFO_AC",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total number of alternate alleles in called genotypes",
-    "dimension": -1
-  },
-  {
-    "id": "46a692e5-49c0-4bce-8572-b524e6a412d6",
-    "name": "INFO_CS",
-    "label": "INFO_CS",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Source call set.",
-    "dimension": 1
-  },
-  {
-    "id": "654c667e-9610-4fec-a1ba-8b201c555c64",
-    "name": "INFO_AFR_AF",
-    "label": "INFO_AFR_AF",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the AFR populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "9c9360c3-1f5c-4673-96aa-6bccce7b4936",
-    "name": "INFO_MEINFO",
-    "label": "INFO_MEINFO",
-    "source_name": "one_thousand_genome_v01",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Mobile element info of the form NAME,START,END<POLARITY; If there is only 5' OR 3' support for this call, will be NULL NULL for START and END",
-    "dimension": 4
-  },
-  {
-    "id": "9957eb30-5705-4ad3-b9cd-d84525ce959e",
+    "id": "a28fc357-5366-48ed-a57d-e1fe63c563da",
     "name": "INFO_CIEND",
     "label": "INFO_CIEND",
     "source_name": "one_thousand_genome_v01",
@@ -4843,7 +4128,106 @@
     "dimension": 2
   },
   {
-    "id": "15390eff-7fa7-4007-afa3-aa451fa1b28a",
+    "id": "9793b7d5-a43d-4f72-b068-191110e5b025",
+    "name": "INFO_EAS_AF",
+    "label": "INFO_EAS_AF",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the EAS populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "936c8aa2-0250-4891-80f9-c16d71b19fe1",
+    "name": "INFO_AN",
+    "label": "INFO_AN",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Total number of alleles in called genotypes",
+    "dimension": 1
+  },
+  {
+    "id": "56b9e92a-da77-44f1-afb3-86d360dd216b",
+    "name": "INFO_END",
+    "label": "INFO_END",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "End position",
+    "dimension": 1
+  },
+  {
+    "id": "0694aff4-354b-4fa1-9b54-6fb8bb05e6d6",
+    "name": "INFO_AF",
+    "label": "INFO_AF",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Estimated allele frequency in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "adaed118-1825-47d4-89db-917ac04c37ee",
+    "name": "INFO_AC",
+    "label": "INFO_AC",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Total number of alternate alleles in called genotypes",
+    "dimension": -1
+  },
+  {
+    "id": "14aa66b4-920e-4b1e-b399-76253f2897d6",
+    "name": "INFO_CS",
+    "label": "INFO_CS",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Source call set.",
+    "dimension": 1
+  },
+  {
+    "id": "18848b08-ffba-4df8-88ee-3aaaf74f2b9a",
+    "name": "INFO_AFR_AF",
+    "label": "INFO_AFR_AF",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the AFR populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "330844c8-3c4d-4c9d-9ae0-43777ebfaaaf",
+    "name": "INFO_VT",
+    "label": "INFO_VT",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "SNP, INDEL, SV",
+    "dimension": 0
+  },
+  {
+    "id": "a5f644cd-c6de-4cc7-8a59-c68a24cf3d55",
+    "name": "INFO_AA_1",
+    "label": "INFO_AA_1",
+    "source_name": "one_thousand_genome_v01",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Ancestral reference as in vcf format. For InDels only",
+    "dimension": 1
+  },
+  {
+    "id": "32d97bea-5206-48ec-a22b-5af510920100",
     "name": "INFO_AA_0",
     "label": "INFO_AA_0",
     "source_name": "one_thousand_genome_v01",
@@ -4854,7 +4238,7 @@
     "dimension": 1
   },
   {
-    "id": "625524d2-bd47-4b8c-a198-edb475ba3e20",
+    "id": "8de5234c-7d18-404c-aa77-04071ab492ab",
     "name": "INFO_AA_3",
     "label": "INFO_AA_3",
     "source_name": "one_thousand_genome_v01",
@@ -4865,7 +4249,7 @@
     "dimension": 1
   },
   {
-    "id": "8b5a16bc-4fe1-44a4-a1f7-ea1e6fad44c2",
+    "id": "4dbb3535-6766-40d0-8890-2083749e3be4",
     "name": "INFO_AA_2",
     "label": "INFO_AA_2",
     "source_name": "one_thousand_genome_v01",
@@ -4876,7 +4260,7 @@
     "dimension": 1
   },
   {
-    "id": "041c6035-18b3-48ed-abb2-13cd8ffb6974",
+    "id": "47f66bd7-7900-42b6-b7f8-e04efa3056cf",
     "name": "INFO_SVTYPE",
     "label": "INFO_SVTYPE",
     "source_name": "one_thousand_genome_v01",
@@ -4887,14 +4271,14 @@
     "dimension": 1
   },
   {
-    "id": "d77014b1-9b11-4a76-ace8-cf7e4d3294a1",
-    "name": "INFO_VT",
-    "label": "INFO_VT",
+    "id": "3a94520f-ee23-4acb-aa5d-bb22fb0bab24",
+    "name": "INFO_MEINFO",
+    "label": "INFO_MEINFO",
     "source_name": "one_thousand_genome_v01",
     "is_mandatory": false,
     "is_editable": false,
     "value_type": "string",
-    "description": "SNP, INDEL, SV",
-    "dimension": 0
+    "description": "Mobile element info of the form NAME,START,END<POLARITY; If there is only 5' OR 3' support for this call, will be NULL NULL for START and END",
+    "dimension": 4
   }
 ]
