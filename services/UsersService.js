@@ -43,7 +43,7 @@ class UserService extends ServiceBase {
 
     findIdByLoginPassword(login, password, callback) {
         const passwordHash = PasswordUtils.hash(password || '');
-        this.models.users.findIdByLoginPassword(login, passwordHash, callback);
+        this.models.users.findIdByEmailPassword(login, passwordHash, callback);
     }
 
     /**
