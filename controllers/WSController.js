@@ -136,7 +136,9 @@ class WSController extends ControllerBase {
     }
 
     _onClientMessage(clientWs, message) {
-        this.logger.info(`Unexpected message in web-socket: ${message}`);
+        if (message !== 'ping') {
+            this.logger.debug(`Unexpected message in web-socket: ${message}`);
+        }
     }
 
     /**

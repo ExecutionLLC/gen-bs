@@ -8,7 +8,7 @@ import config from '../../config';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
 import {fetchUserDataAsync} from './userData';
-import {initWSConnectionAsync} from './websocket';
+import {initWSConnectionAsync, send} from './websocket';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {clearAnalysesHistory} from './analysesHistory';
 
@@ -72,8 +72,10 @@ export class KeepAliveTask {
 
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
+            console.log('Keep-alive tick.');
             // update session on the web server
-            reduxStore.dispatch(getCookieSessionTypeAsync())
+            const {dispatch} = reduxStore;
+            dispatch(getCookieSessionTypeAsync())
                 .then((sessionType) => {
                     if (sessionType === SESSION_TYPE.INVALID) {
                         // TODO: Handle this situation.
@@ -81,6 +83,7 @@ export class KeepAliveTask {
                     }
                 })
                 .catch((error) => console.error('got unexpected error in keep alive task', error))
+                .then(() => dispatch(send('ping')))
                 // reschedule task
                 .then(() => this._scheduleTask());
         }, this.period);

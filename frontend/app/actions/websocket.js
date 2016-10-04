@@ -28,6 +28,7 @@ export class TooManyWebSocketsError extends Error {
     }
 }
 
+let webSocketConnection = null;
 
 /*
  * other consts
@@ -193,13 +194,12 @@ function reconnectWS() {
 }
 
 export function subscribeToWsAsync() {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         return new Promise((resolve, reject) => {
-            const conn = getState().websocket.wsConn;
-            conn.onopen = () => {
-                console.log('Socket connection is opened');
+            webSocketConnection.onopen = () => {
+                console.log('Socket connection is open');
             };
-            conn.onmessage = ({data}) => {
+            webSocketConnection.onmessage = ({data}) => {
                 const messageObject = JSON.parse(data);
                 const {operationType, resultType} = messageObject;
                 if (operationType === WS_OPERATION_TYPES.OPEN) {
@@ -212,10 +212,10 @@ export function subscribeToWsAsync() {
                     dispatch(receiveMessage(messageObject));
                 }
             };
-            conn.onerror = event => {
+            webSocketConnection.onerror = event => {
                 dispatch(receiveError(event.data));
             };
-            conn.onclose = event => {
+            webSocketConnection.onclose = event => {
                 dispatch(receiveClose(event.data));
                 if (!event.wasClean) {
                     dispatch(reconnectWS());
@@ -228,19 +228,18 @@ export function subscribeToWsAsync() {
 export function initWSConnectionAsync() {
     return (dispatch) => {
         // path just for redirecting to webserver (see nginx rule 'location ~ ^/api/(?<section>.*)'), did not used in webserver
-        const conn = new WebSocket(`${config.URLS.WS}/api/ws`);
+        webSocketConnection = new WebSocket(`${config.URLS.WS}/api/ws`);
         return Promise.resolve(
         ).then(() => {
-            dispatch(storeWsConnection(conn));
+            dispatch(storeWsConnection(null));
             return dispatch(subscribeToWsAsync());
         });
     };
 }
 
 export function send(msg) {
-    return (dispatch, getState) => {
-        const conn = getState().websocket.wsConn;
-        conn.send(msg);
+    return (dispatch) => {
+        webSocketConnection.send(msg);
         return dispatch(sended(msg));
     };
 }
