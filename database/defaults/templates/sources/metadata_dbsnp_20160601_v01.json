@@ -1,0 +1,278 @@
+{
+  "reference": "GRCh37",
+  "fields": [
+    {
+      "name": "INFO_NSN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has non-synonymous nonsense A coding region variation where one allele in the set changes to STOP codon (TER). FxnClass = 41"
+    },
+    {
+      "name": "INFO_NSM",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has non-synonymous missense A coding region variation where one allele in the set changes protein peptide. FxnClass = 42"
+    },
+    {
+      "name": "INFO_LSD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Submitted from a locus-specific database"
+    },
+    {
+      "name": "INFO_ASP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Assembly specific. This is set if the variant only maps to one assembly"
+    },
+    {
+      "name": "INFO_ASS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In acceptor splice site FxnCode = 73"
+    },
+    {
+      "name": "INFO_NSF",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has non-synonymous frameshift A coding region variation where one allele in the set changes all downstream amino acids. FxnClass = 44"
+    },
+    {
+      "name": "INFO_KGPhase3",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "1000 Genome phase 3"
+    },
+    {
+      "name": "INFO_SYN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has synonymous A coding region variation where one allele in the set does not change the encoded amino acid. FxnCode = 3"
+    },
+    {
+      "name": "INFO_R3",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In 3' gene region FxnCode = 13"
+    },
+    {
+      "name": "INFO_CDA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Variation is interrogated in a clinical diagnostic assay"
+    },
+    {
+      "name": "INFO_G5A",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ">5% minor allele frequency in each and all populations"
+    },
+    {
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "INFO_G5",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ">5% minor allele frequency in 1+ populations"
+    },
+    {
+      "name": "INFO_CFL",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies."
+    },
+    {
+      "name": "INFO_COMMON",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population"
+    },
+    {
+      "name": "POS",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_VLD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data."
+    },
+    {
+      "name": "CHROM",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "INFO_SSR",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "There are reasons to suspect the variant to be false positive: true, false"
+    },
+    {
+      "name": "INFO_OM",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has OMIM/OMIA"
+    },
+    {
+      "name": "INFO_S3D",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has 3D structure - SNP3D table"
+    },
+    {
+      "name": "INFO_U3",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In 3' UTR Location is in an untranslated region (UTR). FxnCode = 53"
+    },
+    {
+      "name": "INFO_PM",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Variant is Precious(Clinical,Pubmed Cited)"
+    },
+    {
+      "name": "INFO_U5",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In 5' UTR Location is in an untranslated region (UTR). FxnCode = 55"
+    },
+    {
+      "name": "INFO_DSS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In donor splice-site FxnCode = 75"
+    },
+    {
+      "name": "INFO_SAO",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Variant allele origin."
+    },
+    {
+      "name": "INFO_REF",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has reference A coding region variation where one allele in the set is identical to the reference sequence. FxnCode = 8"
+    },
+    {
+      "name": "INFO_CAF",
+      "isMandatory": false,
+      "num": -2,
+      "type": "float",
+      "desc": "Allele frequency based on 1000 genomes project"
+    },
+    {
+      "name": "INFO_INT",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In Intron FxnCode = 6"
+    },
+    {
+      "name": "INFO_MUT",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources"
+    },
+    {
+      "name": "INFO_VC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    {
+      "name": "INFO_GENEINFO_0",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Gene name."
+    },
+    {
+      "name": "INFO_GENEINFO_1",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "NCBI Gene ID."
+    },
+    {
+      "name": "INFO_TPA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)"
+    },
+    {
+      "name": "INFO_HD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Marker is on high density genotyping kit (50K density or greater).  The variant may have phenotype associations present in dbGaP."
+    },
+    {
+      "name": "INFO_R5",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "In 5' gene region FxnCode = 15"
+    },
+    {
+      "name": "INFO_RS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "dbSNP ID (i.e. rs number)"
+    },
+    {
+      "name": "INFO_WTD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Withdrawn by submitter If one member ss is withdrawn by submitter, then this bit is set.  If all member ss' are withdrawn, then the rs is deleted to SNPHistory"
+    },
+    {
+      "name": "ALT",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    }
+  ]
+}

@@ -27,3 +27,9 @@ webServerHost.start((error) => {
         process.exit(1);
     }
 });
+
+module.exports = {
+    models,
+    services,
+    controllers
+};

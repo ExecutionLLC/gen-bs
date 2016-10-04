@@ -44,14 +44,10 @@ export default class SqlExporter extends ExporterBase {
      * @private
      */
     _prepareValue(value) {
-        if (value === null || value === undefined) {
+        if (value == null) {
             return 'NULL';
         }
 
-        if (value.constructor === String) {
-            return `'${value.replace(/'/g, "''")}'`;
-        }
-
-        return value;
+        return `'${(value + '').replace(/'/g, "''").replace(/\n/g, ' ')}'`;
     }
 }

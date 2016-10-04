@@ -20,6 +20,7 @@ class DefaultsBuilderBase {
         this.modelsDir = this.defaultsDir + '/models'; // Output directory for default models.
         this.requiredFieldsFile = this.defaultsDir + '/templates/metadata/required-metadata.json'; // Metadata of the mandatory VCF fields.
         this.editableFieldsFile = this.defaultsDir + '/templates/metadata/editable-metadata.json'; // Metadata of the editable fields, which are used in the UI and WS only.
+        this.vepFieldsFile = this.defaultsDir + '/templates/metadata/vep-metadata.json'; // Metadata of VEP fields.
     }
 
     _removeJsonFilesFromDirectory(directory, callback) {

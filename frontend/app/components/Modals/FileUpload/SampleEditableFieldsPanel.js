@@ -7,7 +7,7 @@ import Select from '../../shared/Select';
 import ComponentBase from '../../shared/ComponentBase';
 import {
     updateSampleValue, resetSampleInList,
-    requestUpdateSampleFields,
+    requestUpdateSampleFieldsAsync,
     sampleSaveCurrentIfSelected
 } from '../../../actions/samplesList';
 
@@ -25,7 +25,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sampleId))
+        dispatch(requestUpdateSampleFieldsAsync(sampleId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
             });
@@ -40,10 +40,11 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
     render() {
         const {sampleId, fieldIdToValuesHash, fields} = this.props;
+        const visibleEditableFields = _.filter(fields, field => !field.isInvisible);
         return (
             <Panel className='samples-values'>
                 <div className='flex'>
-                    {fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
+                    {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
                 </div>
             </Panel>

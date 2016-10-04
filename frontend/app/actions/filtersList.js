@@ -1,7 +1,5 @@
-import HttpStatus from 'http-status';
-
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler';
+import {handleApiResponseErrorAsync} from './errorHandler';
 
 const filtersClient = apiFacade.filtersClient;
 
@@ -13,15 +11,9 @@ export const FILTERS_LIST_DELETE_FILTER = 'FILTERS_LIST_DELETE_FILTER';
 export const FILTERS_LIST_EDIT_FILTER = 'FILTERS_LIST_EDIT_FILTER';
 export const FILTERS_LIST_SET_HISTORY_FILTER = 'FILTERS_LIST_SET_HISTORY_FILTER';
 
-
-const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
-const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
-
-const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
-const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
-
-const DELETE_FILTER_NETWORK_ERROR = 'Cannot delete filter (network error). Please try again.';
-const DELETE_FILTER_SERVER_ERROR = 'Cannot delete filter (server error). Please try again.';
+const CREATE_FILTER_ERROR_MESSAGE = 'Cannot create new filter. Please try again.';
+const UPDATE_FILTER_ERROR_MESSAGE = 'Cannot update filter. Please try again.';
+const DELETE_FILTER_ERROR_MESSAGE = 'Cannot delete filter. Please try again.';
 
 
 export function filtersListStartServerOperation() {
@@ -65,68 +57,47 @@ export function filtersListEditFilter(filterId, filter) {
     };
 }
 
-export function filtersListServerCreateFilter(filter, languageId) {
+export function filtersListServerCreateFilterAsync(filter, languageId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
-        return new Promise( (resolve, reject) => {
-            filtersClient.add(languageId, filter, (error, response) => {
-                dispatch(filtersListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
-                    reject();
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
-                    reject();
-                } else {
-                    const newFilter = response.body;
-                    dispatch(filtersListAddFilter(newFilter));
-                    resolve(newFilter);
-                }
-            });
+        return new Promise((resolve) => filtersClient.add(
+            languageId,
+            filter,
+            (error, response) => resolve({error, response}))
+        ).then(({error, response}) => {
+            dispatch(filtersListEndServerOperation());
+            return dispatch(handleApiResponseErrorAsync(CREATE_FILTER_ERROR_MESSAGE, error, response));
+        }).then((response) => response.body
+        ).then((newFilter) => {
+            dispatch(filtersListAddFilter(newFilter));
+            return newFilter;
         });
     };
 }
 
-export function filtersListServerUpdateFilter(filter) {
+export function filtersListServerUpdateFilterAsync(filter) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
-        return new Promise( (resolve, reject) => {
-            filtersClient.update(filter, (error, response) => {
-                dispatch(filtersListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
-                    reject();
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
-                    reject();
-                } else {
-                    const updatedFilter = response.body;
-                    dispatch(filtersListEditFilter(filter.id, updatedFilter));
-                    resolve(updatedFilter);
-                }
-            });
+        return new Promise((resolve) => filtersClient.update(filter, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => {
+            dispatch(filtersListEndServerOperation());
+            return dispatch(handleApiResponseErrorAsync(UPDATE_FILTER_ERROR_MESSAGE, error, response));
+        }).then((response) => response.body
+        ).then((updatedFilter) => {
+            dispatch(filtersListEditFilter(updatedFilter.id, updatedFilter));
+            return updatedFilter;
         });
     };
 }
 
-export function filtersListServerDeleteFilter(filterId) {
+export function filtersListServerDeleteFilterAsync(filterId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
-        return new Promise( (resolve, reject) => {
-            filtersClient.remove(filterId, (error, response) => {
-                dispatch(filtersListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
-                    reject();
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
-                    reject();
-                } else {
-                    dispatch(filtersListDeleteFilter(filterId));
-                    resolve();
-                }
-            });
-        });
+        return new Promise((resolve) => filtersClient.remove(filterId, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => {
+            dispatch(filtersListEndServerOperation());
+            return dispatch(handleApiResponseErrorAsync(DELETE_FILTER_ERROR_MESSAGE, error, response));
+        }).then(() => dispatch(filtersListDeleteFilter(filterId)));
     };
 }
 
