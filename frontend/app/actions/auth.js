@@ -116,6 +116,7 @@ function loginError(errorMessage) {
     };
 }
 
+
 function restoreOldSessionAsync(isDemoSession) {
     return (dispatch) => {
         dispatch(receiveSession(isDemoSession));
@@ -129,7 +130,6 @@ function restoreOldSessionAsync(isDemoSession) {
     };
 }
 
-// Create new demo session.
 function openDemoSessionAsync() {
     return (dispatch) => Promise.resolve(
     ).then(() => new Promise(
@@ -144,12 +144,27 @@ function openDemoSessionAsync() {
     ]));
 }
 
+export function openUserSession(login, password) {
+    return (dispatch) => Promise.resolve(
+
+    ).then(() => new Promise(
+        (resolve) => sessionsClient.openUserSession(
+            login, password, (error, response) => resolve({error, response})
+        ))
+    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
+    ).then((response) => SessionsClient.getSessionFromResponse(response)
+    ).then((sessionId) => sessionId ? dispatch(restoreOldSessionAsync(false)) : dispatch([
+        loginError('Session id is empty'),
+        handleError(null, LOGIN_ERROR_MESSAGE)
+    ]));
+}
+
+
 /**@callback CheckSessionCallback
  * @param {(Error|null)}error
  * @param {boolean}[isValidSession]
  * @param {boolean}[isDemoSession]
  */
-
 /**
  *  Checks current session state.
  */
@@ -177,6 +192,7 @@ function getCookieSessionTypeAsync() {
     };
 }
 
+
 function displayErrorFromParamsAsync() {
     return (dispatch) => Promise.resolve()
         .then(() => {
@@ -196,16 +212,8 @@ function displayErrorFromParamsAsync() {
         });
 }
 
-// Algorithm:
-// 1. If we stay on the URL returned by google and sessionId is valid, then
-// we should login as real user (not demo).
-// 2. If we got error from google, then we should try to restore old session or
-// create new demo session and send notification about error.
-// 3. In all other situations we should silently try to restore old session or
-// create new demo session.
-//
-// It is legacy of previous developer :)
-export function login() {
+
+export function loginWithGoogle() {
     return dispatch => Promise.resolve(
         // Display auth error from params if any
     ).then(() => dispatch(displayErrorFromParamsAsync())
@@ -230,6 +238,7 @@ export function login() {
         });
     });
 }
+
 
 export function logout() {
     sessionsClient.closeSession((error, response) => {

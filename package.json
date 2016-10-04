@@ -14,7 +14,6 @@
     "start": "node index.js",
     "start-server": "cd frontend; npm run build;cd ../;node ./index.js",
     "user:add": "node ./database/scripts/add-user.js",
-    "user:generate-codes": "node ./database/scripts/generate-registration-codes.js",
     "frontend": "cd frontend; npm start",
     "update": "cd scripts; bash amazon-update.sh",
     "build:webserver": "cd scripts/build; ./build.sh",
@@ -67,6 +66,7 @@
     "querystring": "0.2.0",
     "redis": "2.4.2",
     "request": "2.67.0",
+    "superagent": "2.2.0",
     "uglify-js": "github:mishoo/UglifyJS2#6eaeb19",
     "webpack": "1.13.1",
     "ws": "1.0.1"

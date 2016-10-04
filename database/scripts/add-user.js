@@ -12,10 +12,32 @@ const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 
-if (args.name && args.lastName && args.speciality
-    && args.email && args.defaultLanguage && args.numberPaidSamples) {
-    services.users.add(args.defaultLanguage, args.name, args.lastName,
-        args.email, args.speciality, args.numberPaidSamples, (error, user) => {
+if (
+    args.firstName &&
+    args.lastName &&
+    args.speciality &&
+    args.email &&
+    args.defaultLanguage &&
+    args.numberPaidSamples &&
+    args.gender &&
+    args.phone &&
+    args.loginType &&
+    args.company) {
+    services.users.add(
+        args.defaultLanguage,
+        {
+            firstName: args.firstName,
+            lastName: args.lastName,
+            email: args.email,
+            speciality: args.speciality,
+            numberPaidSamples: args.numberPaidSamples,
+            gender: args.gender,
+            phone: args.phone,
+            loginType: args.loginType,
+            password: args.password,
+            company: args.company
+        },
+        (error, user) => {
             if (error) {
                 console.error(error);
                 process.exit(1);
@@ -25,8 +47,9 @@ if (args.name && args.lastName && args.speciality
             }
         });
 } else {
-    console.error('Usage: -- --name "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
-        + '--defaultLanguage "en" --numberPaidSamples N --email "email@gmail.com"');
+    console.error('Usage: -- --firstName "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
+        + '--defaultLanguage "en" --numberPaidSamples N --email "email@gmail.com" --gender "Male|Female" '
+        + '--phone "phoneNumber" --company "companyName --loginType "password|google" --password "password"');
     console.error('Note the "--" before all params, it is required.');
     process.exit(1);
 }
