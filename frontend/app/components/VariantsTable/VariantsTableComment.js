@@ -2,7 +2,7 @@ import React, {Component}  from 'react';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
-import {createComment, updateComment, removeComment} from '../../actions/variantsTable';
+import {createCommentAsync, updateCommentAsync, removeCommentAsync} from '../../actions/variantsTable';
 import config from '../../../config';
 
 
@@ -65,12 +65,12 @@ export default class VariantsTableComment extends Component {
     onSaveClick(alt, pos, reference, chrom, searchKey, comment, comments) {
         if (_.isEmpty(comments)) {
             if (comment) {
-                this.props.dispatch(createComment(alt, pos, reference, chrom, searchKey, comment));
+                this.props.dispatch(createCommentAsync(alt, pos, reference, chrom, searchKey, comment));
             }
         } else if (comment) {
-            this.props.dispatch(updateComment(comments[0].id, alt, pos, reference, chrom, searchKey, comment));
+            this.props.dispatch(updateCommentAsync(comments[0].id, alt, pos, reference, chrom, searchKey, comment));
         } else {
-            this.props.dispatch(removeComment(comments[0].id, searchKey));
+            this.props.dispatch(removeCommentAsync(comments[0].id, searchKey));
         }
 
         this.refs.overlay.toggle();

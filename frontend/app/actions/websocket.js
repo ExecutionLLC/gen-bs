@@ -5,7 +5,7 @@ import config from '../../config';
 /*
  * action types
  */
-export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
+export const WS_STORE_CONNECTION = 'WS_STORE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
@@ -72,9 +72,9 @@ export function clearVariants() {
     };
 }
 
-export function createWsConnection(wsConn) {
+export function storeWsConnection(wsConn) {
     return {
-        type: WS_CREATE_CONNECTION,
+        type: WS_STORE_CONNECTION,
         wsConn
     };
 }
@@ -180,7 +180,7 @@ function sended(msg) {
 function reconnectWS() {
     return (dispatch) => {
         setTimeout(
-            () => dispatch(initWSConnection()),
+            () => dispatch(initWSConnectionAsync()),
             config.WEBSOCKET_RECONNECT_TIME_MS
         );
     };
@@ -203,20 +203,20 @@ export function subscribeToWs() {
     };
 }
 
-export function initWSConnection() {
+export function initWSConnectionAsync() {
     return (dispatch) => {
         // path just for redirecting to webserver (see nginx rule 'location ~ ^/api/(?<section>.*)'), did not used in webserver
-        var conn = new WebSocket(`${config.URLS.WS}/api/ws`);
-        dispatch([
-            createWsConnection(conn),
+        const conn = new WebSocket(`${config.URLS.WS}/api/ws`);
+        return Promise.resolve(
+        ).then(() => dispatch([
+            storeWsConnection(conn),
             subscribeToWs()
-        ]);
+        ]));
     };
 }
 
 export function send(msg) {
     return (dispatch, getState) => {
-
         const conn = getState().websocket.wsConn;
         conn.send(msg);
         return dispatch(sended(msg));

@@ -1,6 +1,6 @@
 import config from '../../config';
 import {closeModal} from './modalWindows';
-import {fetchSamples} from './samplesList';
+import {fetchSamplesAsync} from './samplesList';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 
@@ -179,7 +179,7 @@ export function changeFileUploadProgress(progressValue, progressStatus, id) {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
             dispatch(closeModal('upload'));
-            dispatch(fetchSamples());
+            dispatch(fetchSamplesAsync());
         }
     };
 }
