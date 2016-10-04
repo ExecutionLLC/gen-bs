@@ -5,7 +5,7 @@ import config from '../../config';
 /*
  * action types
  */
-export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
+export const WS_STORE_CONNECTION = 'WS_STORE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
@@ -82,7 +82,7 @@ export function clearVariants() {
 
 export function storeWsConnection(wsConn) {
     return {
-        type: WS_CREATE_CONNECTION,
+        type: WS_STORE_CONNECTION,
         wsConn
     };
 }
