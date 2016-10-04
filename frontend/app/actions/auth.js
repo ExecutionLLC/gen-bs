@@ -35,6 +35,7 @@ export const SESSION_TYPE = {
 };
 
 const TOO_MANY_USER_SESSIONS_ERROR = 'TooManyUserSessions';
+const PING_MESSAGE_CONTENTS = 'ping';
 
 /*
  * login errors
@@ -83,7 +84,7 @@ export class KeepAliveTask {
                     }
                 })
                 .catch((error) => console.error('got unexpected error in keep alive task', error))
-                .then(() => dispatch(send('ping')))
+                .then(() => dispatch(send(PING_MESSAGE_CONTENTS)))
                 // reschedule task
                 .then(() => this._scheduleTask());
         }, this.period);

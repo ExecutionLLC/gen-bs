@@ -192,7 +192,7 @@ class SessionService extends ServiceBase {
                 this.findById(sessionId, (error, session) => callback(error, Object.assign({}, session, {sessionId})));
             }, callback),
             (sessions, callback) => {
-                const userSessions = _.filter(sessions, session => session.userId === userId);
+                const userSessions = _.filter(sessions, {userId});
                 callback(null, userSessions)
             }
         ], callback);

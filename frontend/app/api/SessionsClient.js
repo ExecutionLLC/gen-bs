@@ -23,7 +23,7 @@ export default class SessionsClient extends ClientBase {
     }
 
     closeAllUserSessions(callback) {
-        RequestWrapper.del(this.urls.session() + '/all', null, null, callback);
+        RequestWrapper.del(`${this.urls.session()}/all`, null, null, callback);
     }
 
     /**

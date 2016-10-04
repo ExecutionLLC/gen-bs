@@ -8,6 +8,7 @@ const WebSocketServerProxy = require('../utils/WebSocketServerProxy');
 const InvalidSessionError = require('../utils/errors/InvalidSessionError');
 
 const OPEN_SOCKET_OPERATION_TYPE = 'OpenSocket';
+const PING_MESSAGE_CONTENTS = 'ping';
 
 /**
  * This controller handles client web socket connections,
@@ -136,7 +137,7 @@ class WSController extends ControllerBase {
     }
 
     _onClientMessage(clientWs, message) {
-        if (message !== 'ping') {
+        if (message !== PING_MESSAGE_CONTENTS) {
             this.logger.debug(`Unexpected message in web-socket: ${message}`);
         }
     }
