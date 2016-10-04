@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 
 import DialogBase from './DialogBase';
@@ -44,4 +44,4 @@ class CloseAllUserSessionsModal extends DialogBase {
     }
 }
 
-export default connect((state) => ({}))(CloseAllUserSessionsModal);
+export default connect(() => ({}))(CloseAllUserSessionsModal);
