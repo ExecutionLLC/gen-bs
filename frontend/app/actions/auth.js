@@ -162,7 +162,10 @@ function getCookieSessionTypeAsync() {
                 default:
                     return Promise.reject(new Error('Unknown session type'));
             }
-        }).catch(() => Promise.resolve(SESSION_TYPE.INVALID));
+        }).catch((error) => {
+            console.error(`Error when determining session type: ${error}, consider session invalid.`);
+            Promise.resolve(SESSION_TYPE.INVALID);
+        });
     };
 }
 
