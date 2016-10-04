@@ -148,7 +148,7 @@ class FiltersModal extends Component {
      */
     getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters, texts) {
         const filterNameExists = isFilterEditable && _(filters)
-                .filter(filter => filter.type !== entityType.HISTORY)
+                .filter(filter => filter.type !== entityType.HISTORY && filter.analysisType === editingFilter.analysisType)
                 .some(filter => filter.name.trim() === editingFilterName
                     && filter.id != editingFilter.id
                 );
