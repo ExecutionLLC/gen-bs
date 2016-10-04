@@ -7,7 +7,41 @@ import {entityType} from '../../../utils/entityTypes';
 export default class FileUploadSamples extends Component {
     constructor(...args) {
         super(...args);
-        this.state = {searchWord: ''};
+        this.state = {
+            searchWord: '',
+            samplesSearchHash: this.extractSamplesSearchValues(this.props)
+        };
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (this.props.samplesList !== newProps.samplesList) {
+            debugger;
+            this.state.samplesSearchHash = this.extractSamplesSearchValues(newProps);
+        }
+    }
+
+    extractSamplesSearchValues(props) {
+        const {samplesList, editableFieldsList} = props;
+        const {hashedArray: {array: samplesArray}} = samplesList;
+        const sampleSearchArray = _.map(samplesArray, sample => {
+            const sampleFieldsHash = _.keyBy(sample.values, 'fieldId');
+            const sampleSearchValues = _.map(editableFieldsList, editableField => {
+                const sampleEditableField = sampleFieldsHash[editableField.fieldId];
+                const searchValue = !_.isNull(sampleEditableField.values)
+                    ? !_.isEmpty(editableField.availableValues)
+                        ? _.find(editableField.availableValues, {'id': sampleEditableField.values}).value
+                        : sampleEditableField.values
+                    : '';
+
+                return searchValue;
+            });
+            sampleSearchValues.push(sample.fileName);
+            return {
+                sampleId:sample.id,
+                searchValues: sampleSearchValues
+            };
+        });
+        return _.keyBy(sampleSearchArray, 'sampleId');
     }
 
     render() {
@@ -20,21 +54,10 @@ export default class FileUploadSamples extends Component {
             return null;
         }
         const sampleSearchArray = _.map(samplesArray, sample => {
-            const sampleFieldsHash = _.keyBy(sample.values, 'fieldId');
-            const sampleSearchValues = _.map(editableFieldsList, editableField => {
-                const sampleEditableField = sampleFieldsHash[editableField.fieldId];
-                const searchValue = !_.isNull(sampleEditableField.values)
-                        ? !_.isEmpty(editableField.availableValues)
-                            ? _.find(editableField.availableValues, {'id': sampleEditableField.values}).value
-                            : sampleEditableField.values
-                        : '';
-
-                return searchValue;
-            });
-            sampleSearchValues.push(sample.fileName);
+            const searchValues = this.state.samplesSearchHash[sample.id].searchValues;
             return {
                 ...sample,
-                searchValues: sampleSearchValues
+                searchValues
             };
         });
         const filteredSamples = searchWord ?
