@@ -1,5 +1,4 @@
 {
-  "reference": "hs37d5",
   "fields": [
     {
       "name": "INFO_DP",
@@ -7,13 +6,6 @@
       "num": 1,
       "type": "integer",
       "desc": "Total read depth; only low coverage data were counted towards the DP, exome data were not used"
-    },
-    {
-      "name": "INFO_OLD_VARIANT",
-      "isMandatory": false,
-      "num": 1,
-      "type": "string",
-      "desc": "old variant location. Format chrom:position:REF_allele/ALT_allele"
     },
     {
       "name": "INFO_IMPRECISE",
@@ -107,11 +99,11 @@
       "desc": "Merged calls."
     },
     {
-      "name": "INFO_AA_1",
+      "name": "INFO_CIEND",
       "isMandatory": false,
-      "num": 1,
-      "type": "string",
-      "desc": "Ancestral reference as in vcf format. For InDels only"
+      "num": 2,
+      "type": "integer",
+      "desc": "Confidence interval near the end of imprecise variant"
     },
     {
       "name": "CHROM",
@@ -163,13 +155,6 @@
       "desc": "Source call set."
     },
     {
-      "name": "ID",
-      "isMandatory": true,
-      "num": 0,
-      "type": "string",
-      "desc": "Semi-colon separated list of unique identifiers where available."
-    },
-    {
       "name": "INFO_AFR_AF",
       "isMandatory": false,
       "num": -1,
@@ -177,18 +162,18 @@
       "desc": "Allele frequency in the AFR populations calculated from AC and AN, in the range (0,1)"
     },
     {
-      "name": "INFO_MEINFO",
+      "name": "INFO_VT",
       "isMandatory": false,
-      "num": 4,
+      "num": 0,
       "type": "string",
-      "desc": "Mobile element info of the form NAME,START,END<POLARITY; If there is only 5' OR 3' support for this call, will be NULL NULL for START and END"
+      "desc": "SNP, INDEL, SV"
     },
     {
-      "name": "INFO_CIEND",
+      "name": "INFO_AA_1",
       "isMandatory": false,
-      "num": 2,
-      "type": "integer",
-      "desc": "Confidence interval near the end of imprecise variant"
+      "num": 1,
+      "type": "string",
+      "desc": "Ancestral reference as in vcf format. For InDels only"
     },
     {
       "name": "INFO_AA_0",
@@ -226,11 +211,12 @@
       "desc": "Type of structural variant"
     },
     {
-      "name": "INFO_VT",
+      "name": "INFO_MEINFO",
       "isMandatory": false,
-      "num": 0,
+      "num": 4,
       "type": "string",
-      "desc": "SNP, INDEL, SV"
+      "desc": "Mobile element info of the form NAME,START,END<POLARITY; If there is only 5' OR 3' support for this call, will be NULL NULL for START and END"
     }
-  ]
+  ],
+  "reference": "hs37d5"
 }

@@ -1,27 +1,5 @@
 {
-  "reference": "GRCh37",
   "fields": [
-    {
-      "name": "INFO_GENEINFO_1",
-      "isMandatory": false,
-      "num": 1,
-      "type": "string",
-      "desc": "NCBI Gene ID."
-    },
-    {
-      "name": "INFO_NSN",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "Has non-synonymous nonsense A coding region variation where one allele in the set changes to STOP codon (TER). FxnClass = 41"
-    },
-    {
-      "name": "INFO_NSM",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "Has non-synonymous missense A coding region variation where one allele in the set changes protein peptide. FxnClass = 42"
-    },
     {
       "name": "INFO_LSD",
       "isMandatory": false,
@@ -37,39 +15,11 @@
       "desc": "Is Assembly specific. This is set if the variant only maps to one assembly"
     },
     {
-      "name": "INFO_ASS",
+      "name": "INFO_SYN",
       "isMandatory": false,
       "num": 1,
       "type": "boolean",
-      "desc": "splice site"
-    },
-    {
-      "name": "INFO_NSF",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "Has non-synonymous frameshift A coding region variation where one allele in the set changes all downstream amino acids. FxnClass = 44"
-    },
-    {
-      "name": "INFO_KGPhase3",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "variant found in 1000 genomes project phase 3 data"
-    },
-    {
-      "name": "INFO_R5",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "In 5' gene region FxnCode = 15"
-    },
-    {
-      "name": "INFO_R3",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "In 3' gene region FxnCode = 13"
+      "desc": "coding region variation where one allele in the set does not change the encoded amino acid"
     },
     {
       "name": "INFO_CDA",
@@ -79,13 +29,6 @@
       "desc": "variant studied in clinical assay"
     },
     {
-      "name": "INFO_G5A",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "MAF>5% in all 26 populations in 1000 genomes project"
-    },
-    {
       "name": "REF",
       "isMandatory": true,
       "num": 0,
@@ -93,11 +36,11 @@
       "desc": "The value in the POS field refers to the position of the first base in the String."
     },
     {
-      "name": "INFO_G5",
+      "name": "INFO_CLNSRC",
       "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "MAF>5% in 1+ out of 26 populations in 1000 genomes project"
+      "num": 0,
+      "type": "string",
+      "desc": "Variant Clinical Chanels"
     },
     {
       "name": "INFO_CFL",
@@ -142,13 +85,6 @@
       "desc": "There are reasons to suspect the variant to be false positive: true, false"
     },
     {
-      "name": "INFO_CLNALLE",
-      "isMandatory": false,
-      "num": 0,
-      "type": "integer",
-      "desc": "Variant alleles from REF or ALT columns.  0 is REF, 1 is the first ALT allele, etc.  This is used to match alleles with other corresponding clinical (CLN) INFO tags.  A value of -1 indicates that no allele was found to match a corresponding HGVS allele name."
-    },
-    {
       "name": "INFO_CLNDSDBID",
       "isMandatory": false,
       "num": 0,
@@ -163,32 +99,18 @@
       "desc": "Variant disease name"
     },
     {
-      "name": "INFO_OM",
+      "name": "INFO_REF",
       "isMandatory": false,
       "num": 1,
       "type": "boolean",
-      "desc": "Has OMIM/OMIA"
+      "desc": "coding region variation where one allele in the set is identical to the reference sequence"
     },
     {
-      "name": "INFO_S3D",
+      "name": "INFO_CLNACC",
       "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "Has 3D structure - SNP3D table"
-    },
-    {
-      "name": "INFO_CLNREVSTAT",
-      "isMandatory": false,
-      "num": 1,
+      "num": 0,
       "type": "string",
-      "desc": "no_assertion - No assertion provided, no_criteria - No assertion criteria provided, single - Criteria provided single submitter, mult - Criteria provided multiple submitters no conflicts, conf - Criteria provided conflicting interpretations, exp - Reviewed by expert panel, guideline - Practice guideline"
-    },
-    {
-      "name": "INFO_U3",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "In 3' UTR Location is in an untranslated region (UTR). FxnCode = 53"
+      "desc": "Variant Accession and Versions"
     },
     {
       "name": "INFO_PM",
@@ -196,20 +118,6 @@
       "num": 1,
       "type": "boolean",
       "desc": "Variant is Precious(Clinical,Pubmed Cited)"
-    },
-    {
-      "name": "INFO_U5",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "In 5' UTR Location is in an untranslated region (UTR). FxnCode = 55"
-    },
-    {
-      "name": "INFO_DSS",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "splice site"
     },
     {
       "name": "INFO_SAO",
@@ -226,53 +134,11 @@
       "desc": "unknown, germline, somatic, inherited, parental, maternal, de-novo, biparental, uniparental, not-tested, tested-inconclusive, other"
     },
     {
-      "name": "INFO_CLNACC",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "Variant Accession and Versions"
-    },
-    {
-      "name": "INFO_REF",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "coding region variation where one allele in the set is identical to the reference sequence"
-    },
-    {
-      "name": "INFO_CAF",
-      "isMandatory": false,
-      "num": -2,
-      "type": "float",
-      "desc": "Allele frequency based on 1000 genomes project"
-    },
-    {
-      "name": "INFO_INT",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "In Intron FxnCode = 6"
-    },
-    {
-      "name": "INFO_CLNSRC",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "Variant Clinical Chanels"
-    },
-    {
-      "name": "INFO_VC",
+      "name": "INFO_CLNREVSTAT",
       "isMandatory": false,
       "num": 1,
       "type": "string",
-      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
-    },
-    {
-      "name": "INFO_GENEINFO_0",
-      "isMandatory": false,
-      "num": 1,
-      "type": "string",
-      "desc": "Gene name."
+      "desc": "no_assertion - No assertion provided, no_criteria - No assertion criteria provided, single - Criteria provided single submitter, mult - Criteria provided multiple submitters no conflicts, conf - Criteria provided conflicting interpretations, exp - Reviewed by expert panel, guideline - Practice guideline"
     },
     {
       "name": "INFO_MUT",
@@ -282,25 +148,18 @@
       "desc": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources"
     },
     {
+      "name": "INFO_VC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    {
       "name": "INFO_TPA",
       "isMandatory": false,
       "num": 1,
       "type": "boolean",
       "desc": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)"
-    },
-    {
-      "name": "INFO_HD",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "with density >50k"
-    },
-    {
-      "name": "INFO_SYN",
-      "isMandatory": false,
-      "num": 1,
-      "type": "boolean",
-      "desc": "coding region variation where one allele in the set does not change the encoded amino acid"
     },
     {
       "name": "INFO_CLNSIG",
@@ -337,5 +196,6 @@
       "type": "string",
       "desc": "Variant disease database name"
     }
-  ]
+  ],
+  "reference": "GRCh37"
 }

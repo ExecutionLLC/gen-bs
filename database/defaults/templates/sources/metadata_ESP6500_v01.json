@@ -1,5 +1,4 @@
 {
-  "reference": null,
   "fields": [
     {
       "name": "INFO_DP",
@@ -16,11 +15,11 @@
       "desc": "dbSNP version which established the rs_id"
     },
     {
-      "name": "INFO_AA_AC",
+      "name": "INFO_AA_AGE",
       "isMandatory": false,
-      "num": -4,
-      "type": "integer",
-      "desc": "African American Allele Count"
+      "num": 0,
+      "type": "string",
+      "desc": "Esitmated Variant Age in kilo years for the African American Population"
     },
     {
       "name": "INFO_AA_GTC",
@@ -30,18 +29,11 @@
       "desc": "African American Genotype Counts in the order of listed GTS"
     },
     {
-      "name": "INFO_MAF_2",
-      "isMandatory": false,
-      "num": 1,
-      "type": "float",
-      "desc": ""
-    },
-    {
-      "name": "INFO_FG",
-      "isMandatory": false,
+      "name": "REF",
+      "isMandatory": true,
       "num": 0,
       "type": "string",
-      "desc": "functionGVS"
+      "desc": "The value in the POS field refers to the position of the first base in the String."
     },
     {
       "name": "INFO_MAF_0",
@@ -72,11 +64,11 @@
       "desc": "Esitmated Variant Age in kilo years for the European American Population"
     },
     {
-      "name": "REF",
-      "isMandatory": true,
-      "num": 0,
-      "type": "string",
-      "desc": "The value in the POS field refers to the position of the first base in the String."
+      "name": "INFO_MAF_2",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": ""
     },
     {
       "name": "INFO_EA_AC",
@@ -93,11 +85,11 @@
       "desc": "The reference position."
     },
     {
-      "name": "INFO_AA_AGE",
+      "name": "INFO_AA_AC",
       "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "Esitmated Variant Age in kilo years for the African American Population"
+      "num": -4,
+      "type": "integer",
+      "desc": "African American Allele Count"
     },
     {
       "name": "INFO_GTS",
@@ -121,13 +113,6 @@
       "desc": "indels mapping predicted with SeattleSeqAnnotation137 on dbSNP v137"
     },
     {
-      "name": "INFO_EXOME_CHIP",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "Whether a SNP is on the Illumina HumanExome Chip"
-    },
-    {
       "name": "CHROM",
       "isMandatory": true,
       "num": 1,
@@ -135,88 +120,11 @@
       "desc": "Chromosome identifier."
     },
     {
-      "name": "INFO_CG",
-      "isMandatory": false,
-      "num": 1,
-      "type": "float",
-      "desc": "consScoreGERP"
-    },
-    {
-      "name": "INFO_HGVS_CDNA_VAR",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "HGVS Coding DNA Variant"
-    },
-    {
-      "name": "INFO_GWAS_PUBMED",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "PubMed records for GWAS hits"
-    },
-    {
-      "name": "INFO_CA",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "clinicalAssociation"
-    },
-    {
-      "name": "INFO_HGVS_PROTEIN_VAR",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "HGVS Protein Variant"
-    },
-    {
       "name": "INFO_AA",
       "isMandatory": false,
       "num": 1,
       "type": "string",
       "desc": "chimpAllele"
-    },
-    {
-      "name": "QUAL",
-      "isMandatory": true,
-      "num": 1,
-      "type": "float",
-      "desc": "Quality."
-    },
-    {
-      "name": "INFO_PH",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "polyPhen2 result including prediction class and score"
-    },
-    {
-      "name": "INFO_GS",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "granthamScore"
-    },
-    {
-      "name": "INFO_CP",
-      "isMandatory": false,
-      "num": 1,
-      "type": "float",
-      "desc": "scorePhastCons"
-    },
-    {
-      "name": "INFO_CDS_SIZES",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "Coding DNA Sizes"
-    },
-    {
-      "name": "INFO_GL",
-      "isMandatory": false,
-      "num": 0,
-      "type": "string",
-      "desc": "geneList"
     },
     {
       "name": "INFO_EA_GTC",
@@ -246,5 +154,6 @@
       "type": "string",
       "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
     }
-  ]
+  ],
+  "reference": null
 }
