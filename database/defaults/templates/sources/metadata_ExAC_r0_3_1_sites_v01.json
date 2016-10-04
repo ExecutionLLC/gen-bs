@@ -1,12 +1,11 @@
 {
-  "reference": "Homo_sapiens_assembly19",
   "fields": [
     {
-      "name": "INFO_HetF_SAS",
+      "name": "INFO_AF_FIN",
       "isMandatory": false,
-      "num": -5,
+      "num": -1,
       "type": "float",
-      "desc": "for chromosomes 1-22"
+      "desc": "Finnish allele frequency adjusted"
     },
     {
       "name": "INFO_HetF_OTH",
@@ -16,11 +15,11 @@
       "desc": "for chromosomes 1-22"
     },
     {
-      "name": "INFO_AF_FIN",
+      "name": "INFO_HetF_SAS",
       "isMandatory": false,
-      "num": -1,
+      "num": -5,
       "type": "float",
-      "desc": "Finnish allele frequency adjusted"
+      "desc": "for chromosomes 1-22"
     },
     {
       "name": "INFO_Het_SAS",
@@ -63,13 +62,6 @@
       "num": 1,
       "type": "float",
       "desc": "Z-score from Wilcoxon rank sum test of Alt vs. Ref read position bias"
-    },
-    {
-      "name": "INFO_clinvar_measureset_id",
-      "isMandatory": false,
-      "num": -1,
-      "type": "string",
-      "desc": "Clinvar Measureset ID"
     },
     {
       "name": "INFO_AF_POPMAX",
@@ -205,6 +197,13 @@
       "desc": "Non-Finnish European Hemizygous Counts"
     },
     {
+      "name": "INFO_AF_Hemi",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
       "name": "INFO_Het_NFE",
       "isMandatory": false,
       "num": -5,
@@ -233,18 +232,11 @@
       "desc": "Max allele frequency across populations in 1000 Genomes"
     },
     {
-      "name": "INFO_K3_RUN",
-      "isMandatory": false,
-      "num": -1,
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
       "type": "string",
-      "desc": "Number of ensuing tri-nucleotide repeats."
-    },
-    {
-      "name": "INFO_MQ",
-      "isMandatory": false,
-      "num": 1,
-      "type": "float",
-      "desc": "RMS Mapping Quality"
+      "desc": "The value in the POS field refers to the position of the first base in the String."
     },
     {
       "name": "INFO_AN_OTH",
@@ -296,11 +288,11 @@
       "desc": "American Heterozygous Counts"
     },
     {
-      "name": "INFO_K2_RUN",
+      "name": "INFO_AN_NFE",
       "isMandatory": false,
-      "num": -1,
-      "type": "string",
-      "desc": "Number of ensuing di-nucleotide repeats."
+      "num": 1,
+      "type": "integer",
+      "desc": "excluding Finnish"
     },
     {
       "name": "INFO_Hom_CONSANGUINEOUS",
@@ -387,13 +379,6 @@
       "desc": "AC in the population with the max AF"
     },
     {
-      "name": "INFO_Hemi_FIN",
-      "isMandatory": false,
-      "num": -1,
-      "type": "integer",
-      "desc": "Finnish Hemizygous Counts"
-    },
-    {
       "name": "INFO_DP",
       "isMandatory": false,
       "num": 1,
@@ -420,13 +405,6 @@
       "num": -1,
       "type": "float",
       "desc": "African and African American heterozygous frequency adjusted"
-    },
-    {
-      "name": "INFO_AN_CONSANGUINEOUS",
-      "isMandatory": false,
-      "num": 1,
-      "type": "string",
-      "desc": "Allele count among individuals with inbreeding coefficient F > 0.05"
     },
     {
       "name": "INFO_AF_AFR",
@@ -471,11 +449,11 @@
       "desc": "East Asian Heterozygous Counts"
     },
     {
-      "name": "REF",
-      "isMandatory": true,
-      "num": 0,
+      "name": "INFO_K3_RUN",
+      "isMandatory": false,
+      "num": -1,
       "type": "string",
-      "desc": "The value in the POS field refers to the position of the first base in the String."
+      "desc": "Number of ensuing tri-nucleotide repeats."
     },
     {
       "name": "INFO_AC_Adj",
@@ -483,13 +461,6 @@
       "num": -1,
       "type": "integer",
       "desc": "Adjusted Allele Counts"
-    },
-    {
-      "name": "INFO_DOUBLETON_DIST",
-      "isMandatory": false,
-      "num": -1,
-      "type": "string",
-      "desc": "Euclidean distance of carriers of doubletons"
     },
     {
       "name": "INFO_AN_Adj",
@@ -506,18 +477,18 @@
       "desc": "Clinvar MUT Flag (is disease allele REF?)"
     },
     {
-      "name": "INFO_culprit",
+      "name": "INFO_AN_CONSANGUINEOUS",
       "isMandatory": false,
       "num": 1,
       "type": "string",
-      "desc": "The annotation which was the worst performing in the Gaussian mixture model, likely the reason why the variant was filtered out"
+      "desc": "Allele count among individuals with inbreeding coefficient F > 0.05"
     },
     {
-      "name": "INFO_HomF_AMR",
-      "isMandatory": false,
-      "num": -1,
-      "type": "float",
-      "desc": ""
+      "name": "ID",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Semi-colon separated list of unique identifiers where available."
     },
     {
       "name": "INFO_Het_OTH",
@@ -576,13 +547,6 @@
       "desc": "African and African American chromosomes count"
     },
     {
-      "name": "QUAL",
-      "isMandatory": true,
-      "num": 1,
-      "type": "float",
-      "desc": "Quality."
-    },
-    {
       "name": "INFO_K1_RUN",
       "isMandatory": false,
       "num": -1,
@@ -625,11 +589,11 @@
       "desc": "Phred-scaled p-value using Fisher's exact test to detect strand bias"
     },
     {
-      "name": "INFO_AN_NFE",
+      "name": "INFO_K2_RUN",
       "isMandatory": false,
-      "num": 1,
-      "type": "integer",
-      "desc": "excluding Finnish"
+      "num": -1,
+      "type": "string",
+      "desc": "Number of ensuing di-nucleotide repeats."
     },
     {
       "name": "ALT",
@@ -646,11 +610,11 @@
       "desc": ""
     },
     {
-      "name": "INFO_MQ0",
+      "name": "INFO_Hemi_FIN",
       "isMandatory": false,
-      "num": 1,
+      "num": -1,
       "type": "integer",
-      "desc": "Total Mapping Quality Zero Reads"
+      "desc": "Finnish Hemizygous Counts"
     },
     {
       "name": "INFO_Hom_OTH",
@@ -660,11 +624,11 @@
       "desc": "Other Homozygous Counts"
     },
     {
-      "name": "INFO_AC_EAS",
+      "name": "INFO_clinvar_measureset_id",
       "isMandatory": false,
       "num": -1,
-      "type": "integer",
-      "desc": "East Asian Allele Counts"
+      "type": "string",
+      "desc": "Clinvar Measureset ID"
     },
     {
       "name": "INFO_Het_FIN",
@@ -758,11 +722,11 @@
       "desc": "for chromosomes 1-22 (non Finnish)"
     },
     {
-      "name": "INFO_AF_Hemi",
+      "name": "INFO_AC_EAS",
       "isMandatory": false,
       "num": -1,
-      "type": "float",
-      "desc": ""
+      "type": "integer",
+      "desc": "East Asian Allele Counts"
     },
     {
       "name": "INFO_Hemi_SAS",
@@ -800,11 +764,11 @@
       "desc": "Allele count among females"
     },
     {
-      "name": "ID",
-      "isMandatory": true,
-      "num": 0,
-      "type": "string",
-      "desc": "Semi-colon separated list of unique identifiers where available."
+      "name": "INFO_HomF_AMR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
     },
     {
       "name": "INFO_CCC",
@@ -841,5 +805,6 @@
       "type": "float",
       "desc": "African and African American heterozygous frequency adjusted for chromosomes 1-22"
     }
-  ]
+  ],
+  "reference": "Homo_sapiens_assembly19"
 }
