@@ -101,7 +101,7 @@ class ModelsService extends UserEntityServiceBase {
         }
         const modelName = model.name.trim();
         const modelExists = _.some(
-            models, f => f.name.trim() == modelName
+            models, f => f.name.trim() == modelName && model.analysisType == f.analysisType
         );
         if (modelExists) {
             callback(new Error('Model with this name already exists.'));
