@@ -201,7 +201,7 @@ class UserModel extends RemovableModelBase {
         }
 
         if (passwordOrNull) {
-            query = query.andWhere('user_password.password', passwordOrNull);
+            query = query.andWhere('user.password', passwordOrNull);
         }
 
         return query
