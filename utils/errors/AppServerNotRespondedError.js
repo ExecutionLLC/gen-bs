@@ -1,14 +1,12 @@
 'use strict';
 
-const AppServerNotRespondedCode = -300000;
-const AppServerNotRespondedMessage = 'App server not responded';
+const APP_SERVER_NOT_RESPONDED_CODE = -300000;
+const APP_SERVER_NOT_RESPONDED_MESSAGE = 'App server not responded';
 
 class AppServerNotRespondedError extends Error {
-
     constructor() {
-        super();
-        this.code = AppServerNotRespondedCode;
-        this.message = AppServerNotRespondedMessage;
+        super(APP_SERVER_NOT_RESPONDED_MESSAGE);
+        this.code = APP_SERVER_NOT_RESPONDED_CODE;
     }
 }
 

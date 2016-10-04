@@ -84,7 +84,7 @@ export function filtersListServerUpdateFilterAsync(filter) {
             return dispatch(handleApiResponseErrorAsync(UPDATE_FILTER_ERROR_MESSAGE, error, response));
         }).then((response) => response.body
         ).then((updatedFilter) => {
-            dispatch(filtersListEditFilter(updatedFilter.id, updatedFilter));
+            dispatch(filtersListEditFilter(filter.id, updatedFilter));
             return updatedFilter;
         });
     };

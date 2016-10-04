@@ -22,6 +22,13 @@ export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
 export const WS_DELETE_COMMENT = 'WS_DELETE_COMMENT';
 export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
+export class TooManyWebSocketsError extends Error {
+    constructor(message) {
+        super(message || 'It seems you have another tab opened. Please close it and reload this page to continue.');
+    }
+}
+
+let webSocketConnection = null;
 
 /*
  * other consts
@@ -33,7 +40,8 @@ const WS_PROGRESS_STATUSES = {
 
 const WS_OPERATION_TYPES = {
     UPLOAD: 'UploadOperation',
-    SEARCH: 'SearchOperation'
+    SEARCH: 'SearchOperation',
+    OPEN: 'OpenSocket'
 };
 
 const WS_RESULT_TYPES = {
@@ -149,16 +157,15 @@ function receiveErrorMessage(wsData) {
 
 function receiveMessage(msg) {
     return (dispatch) => {
-        const wsData = JSON.parse(msg);
-        const {operationType, resultType} = wsData;
+        const {operationType, resultType} = msg;
         if (resultType == WS_RESULT_TYPES.ERROR) {
-            dispatch(receiveErrorMessage(wsData));
+            dispatch(receiveErrorMessage(msg));
         } else if (operationType == WS_OPERATION_TYPES.SEARCH) {
-            dispatch(receiveSearchMessage(wsData));
+            dispatch(receiveSearchMessage(msg));
         } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
-            dispatch(receiveUploadMessage(wsData));
+            dispatch(receiveUploadMessage(msg));
         } else {
-            dispatch(otherMessage(wsData));
+            dispatch(otherMessage(msg));
         }
     };
 }
@@ -186,39 +193,53 @@ function reconnectWS() {
     };
 }
 
-export function subscribeToWs() {
-    return (dispatch, getState) => {
-        const conn = getState().websocket.wsConn;
-        conn.onopen = () => {
-            console.log('Socket connection is ready');
-        };
-        conn.onmessage = event => dispatch(receiveMessage(event.data));
-        conn.onerror = event => dispatch(receiveError(event.data));
-        conn.onclose = event => {
-            dispatch(receiveClose(event.data));
-            if (!event.wasClean) {
-                dispatch(reconnectWS());
-            }
-        };
+export function subscribeToWsAsync() {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            webSocketConnection.onopen = () => {
+                console.log('Socket connection is open');
+            };
+            webSocketConnection.onmessage = ({data}) => {
+                const messageObject = JSON.parse(data);
+                const {operationType, resultType} = messageObject;
+                if (operationType === WS_OPERATION_TYPES.OPEN) {
+                    if (resultType === WS_RESULT_TYPES.SUCCESS) {
+                        resolve();
+                    } else {
+                        reject(new TooManyWebSocketsError());
+                    }
+                } else {
+                    dispatch(receiveMessage(messageObject));
+                }
+            };
+            webSocketConnection.onerror = event => {
+                dispatch(receiveError(event.data));
+            };
+            webSocketConnection.onclose = event => {
+                dispatch(receiveClose(event.data));
+                if (!event.wasClean) {
+                    dispatch(reconnectWS());
+                }
+            };
+        });
     };
 }
 
 export function initWSConnectionAsync() {
     return (dispatch) => {
         // path just for redirecting to webserver (see nginx rule 'location ~ ^/api/(?<section>.*)'), did not used in webserver
-        const conn = new WebSocket(`${config.URLS.WS}/api/ws`);
+        webSocketConnection = new WebSocket(`${config.URLS.WS}/api/ws`);
         return Promise.resolve(
-        ).then(() => dispatch([
-            storeWsConnection(conn),
-            subscribeToWs()
-        ]));
+        ).then(() => {
+            dispatch(storeWsConnection(null));
+            return dispatch(subscribeToWsAsync());
+        });
     };
 }
 
 export function send(msg) {
-    return (dispatch, getState) => {
-        const conn = getState().websocket.wsConn;
-        conn.send(msg);
+    return (dispatch) => {
+        webSocketConnection.send(msg);
         return dispatch(sended(msg));
     };
 }

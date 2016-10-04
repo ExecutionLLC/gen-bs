@@ -8,7 +8,7 @@ import config from '../../config';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
 import {fetchUserDataAsync} from './userData';
-import {initWSConnectionAsync} from './websocket';
+import {initWSConnectionAsync, send} from './websocket';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {clearAnalysesHistory} from './analysesHistory';
 
@@ -20,6 +20,7 @@ import SessionsClient from '../api/SessionsClient';
  */
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
+export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
@@ -33,12 +34,16 @@ export const SESSION_TYPE = {
     USER: 'USER'
 };
 
+const TOO_MANY_USER_SESSIONS_ERROR = 'TooManyUserSessions';
+const PING_MESSAGE_CONTENTS = 'ping';
+
 /*
  * login errors
  */
 
 const LOGIN_ERROR_MESSAGE = 'Authorization failed. You can reload page and try again.';
 const LOGIN_GOOGLE_ERROR = 'Google authorization failed.';
+const CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE = 'Error while closing all user sessions.';
 
 /*
  * Start keep alive task, which update session on the WS.
@@ -68,8 +73,10 @@ export class KeepAliveTask {
 
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
+            console.log('Keep-alive tick.');
             // update session on the web server
-            reduxStore.dispatch(getCookieSessionTypeAsync())
+            const {dispatch} = reduxStore;
+            dispatch(getCookieSessionTypeAsync())
                 .then((sessionType) => {
                     if (sessionType === SESSION_TYPE.INVALID) {
                         // TODO: Handle this situation.
@@ -77,6 +84,7 @@ export class KeepAliveTask {
                     }
                 })
                 .catch((error) => console.error('got unexpected error in keep alive task', error))
+                .then(() => dispatch(send(PING_MESSAGE_CONTENTS)))
                 // reschedule task
                 .then(() => this._scheduleTask());
         }, this.period);
@@ -162,7 +170,10 @@ function getCookieSessionTypeAsync() {
                 default:
                     return Promise.reject(new Error('Unknown session type'));
             }
-        }).catch(() => Promise.resolve(SESSION_TYPE.INVALID));
+        }).catch((error) => {
+            console.error(`Error when determining session type: ${error}, consider session invalid.`);
+            Promise.resolve(SESSION_TYPE.INVALID);
+        });
     };
 }
 
@@ -171,11 +182,15 @@ function displayErrorFromParamsAsync() {
         .then(() => {
             const errorFromParams = getUrlParameterByName('error');
             if (errorFromParams) {
-                // it is error from google authorization page (detected by URL parameters)
-                console.log('google authorization failed', errorFromParams);
-                dispatch(loginError(errorFromParams));
-                dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
+                console.log('authorization failed', errorFromParams);
                 history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
+                if (errorFromParams.toLowerCase() === TOO_MANY_USER_SESSIONS_ERROR.toLowerCase()) {
+                    dispatch(showCloseAllUserSessionsDialog(true));
+                    return Promise.reject(new Error(TOO_MANY_USER_SESSIONS_ERROR));
+                } else {
+                    dispatch(loginError(errorFromParams));
+                    dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
+                }
             }
             return Promise.resolve();
         });
@@ -202,7 +217,12 @@ export function login() {
         ).then((sessionType) => {
             if (sessionType !== SESSION_TYPE.INVALID) {
                 // restore old session
-                return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO));
+                return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO))
+                    .catch((error) => {
+                        // TODO: Check error type here.
+                        dispatch(handleError(null, error.message));
+                        return Promise.reject(error);
+                    });
             } else {
                 // old session is invalid, so we create new one
                 return dispatch(openDemoSessionAsync());
@@ -223,6 +243,23 @@ export function logout() {
         }
         location.replace(location.origin);
     });
+}
+
+export function showCloseAllUserSessionsDialog(shouldShow) {
+    return {
+        type: SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG,
+        shouldShow
+    };
+}
+
+export function closeAllUserSessionsAsync() {
+    return (dispatch) => {
+        return new Promise(
+            (resolve) => sessionsClient.closeAllUserSessions((error, response) => resolve({error, response}))
+        ).then(({error, response}) => dispatch(
+            handleApiResponseErrorAsync(CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE, error, response)
+        ));
+    };
 }
 
 export function startAutoLogoutTimer() {
