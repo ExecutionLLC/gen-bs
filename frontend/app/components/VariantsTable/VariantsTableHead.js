@@ -60,7 +60,7 @@ export default class VariantsTableHead extends Component {
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
                     this.renderFieldHeader(
-                        fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist,
+                        fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
                         samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
                 )}
             </tr>
@@ -68,9 +68,12 @@ export default class VariantsTableHead extends Component {
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist,isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
-        const fieldMetadata = totalFieldsHash[fieldId];
+        const fieldMetadata = {
+            ...totalFieldsHash[fieldId],
+            isUnique
+        };
         const areControlsEnabled = !!isExist;
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
             dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));

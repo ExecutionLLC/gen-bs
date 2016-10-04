@@ -230,7 +230,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             if (viewField.sourceName !== 'sample') {
                 resultHeader.push({
                     fieldId: viewField.id,
-                    exist: true
+                    exist: true,
+                    unique: true
                 });
             } else {
                 if (_.some(notDuplicatedColumnNames, notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)) {
@@ -238,7 +239,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     resultHeader.push({
                         fieldId: viewField.id,
                         sampleId: samples[0].id,
-                        exist
+                        exist,
+                        unique: true
                     });
                 } else {
                     _.forEach(samples, sample => {
@@ -246,7 +248,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                         resultHeader.push({
                             fieldId: viewField.id,
                             sampleId: sample.id,
-                            exist
+                            exist,
+                            unique: false
                         });
                     })
                 }
