@@ -110,6 +110,7 @@ class SavedFilesModal extends DialogBase {
 }
 
 SavedFilesModal.propTypes = {
+    savedFiles: React.PropTypes.array.isRequired,
     showModal: React.PropTypes.bool.isRequired
 };
 

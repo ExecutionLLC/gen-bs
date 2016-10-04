@@ -5,7 +5,8 @@ export default function auth(state = {
     isDemo: false,
     showAutoLogoutDialog: false,
     secondsToAutoLogout: null,
-    errorMessage: null
+    errorMessage: null,
+    showCloseAllUserSessionsDialog: false
 }, action) {
 
     switch (action.type) {
@@ -34,6 +35,11 @@ export default function auth(state = {
         case ActionTypes.LOGIN_ERROR:
             return Object.assign({}, state, {
                 errorMessage: action.errorMessage
+            });
+
+        case ActionTypes.SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG:
+            return Object.assign({}, state, {
+                showCloseAllUserSessionsDialog: action.shouldShow
             });
 
         default:

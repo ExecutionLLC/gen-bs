@@ -2,6 +2,7 @@
 
 const QueryString = require('querystring');
 const async = require('async');
+const _ = require('lodash');
 const Express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -12,9 +13,7 @@ class SessionsController extends ControllerBase {
     constructor(services) {
         super(services);
 
-        this.open = this.open.bind(this);
-        this.check = this.check.bind(this);
-        this.close = this.close.bind(this);
+        _.bindAll(this, [this.open.name, this.check.name, this.close.name, this.closeAllUserSessions.name])
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
