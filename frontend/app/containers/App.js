@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTimeout, WATCH_ALL } from 'redux-timeout';
+import { addTimeout } from 'redux-timeout';
 
 import config from '../../config';
 
@@ -20,6 +20,7 @@ import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from 
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
+import UserActions from '../actions/userActions';
 
 
 class App extends Component {
@@ -30,7 +31,7 @@ class App extends Component {
 
         const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT*1000;
         const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
-        dispatch(addTimeout(autoLogoutTimeout, WATCH_ALL, autoLogoutFn));
+        dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
 
         const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
         keepAliveTask.start();
