@@ -109,27 +109,6 @@ function loginError(errorMessage) {
 }
 
 
-function updateLoginData_prefix(dispatch, isDemo) {
-    dispatch(receiveSession(isDemo));
-    dispatch(initWSConnection());
-    if (isDemo) {
-        dispatch(clearAnalysesHistory());
-    }
-    dispatch(fetchUserdata());
-}
-// MERGE: fix, deleted in master
-function updateLoginData(isDemo) {
-    return (dispatch) => {
-        dispatch(receiveSession(isDemo));
-        dispatch(initWSConnection());
-        if (isDemo) {
-            dispatch(clearAnalysesHistory());
-        }
-        dispatch(fetchUserdata());
-    };
-}
-
-// MERGE: new in master
 function restoreOldSessionAsync(isDemoSession) {
     return (dispatch) => {
         dispatch(receiveSession(isDemoSession));
@@ -143,54 +122,7 @@ function restoreOldSessionAsync(isDemoSession) {
     };
 }
 
-
-
-// Create new demo session.
-function openDemoSession_prefix(dispatch) {
-    console.log('loginAsDemoUser');
-    sessionsClient.openDemoSession((error, response) => {
-        if (error) {
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (response.status !== HttpStatus.OK) {
-            dispatch(loginError(response.body));
-            dispatch(handleError(null, LOGIN_SERVER_ERROR));
-        } else {
-            const sessionId = SessionsClient.getSessionFromResponse(response);
-            if (sessionId) {
-                updateLoginData(dispatch, true);
-            } else {
-                dispatch(loginError('Session id is empty'));
-                dispatch(handleError(null, LOGIN_SERVER_ERROR));
-            }
-        }
-    });
-}
-// MERGE: fix, fixed in master too
-function openDemoSession() {
-    console.log('loginAsDemoUser');
-    return (dispatch) => {
-        sessionsClient.openDemoSession((error, response) => {
-            if (error) {
-                dispatch(loginError(error));
-                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(loginError(response.body));
-                dispatch(handleError(null, LOGIN_SERVER_ERROR));
-            } else {
-                const sessionId = SessionsClient.getSessionFromResponse(response);
-                if (sessionId) {
-                    dispatch(updateLoginData(true));
-                } else {
-                    dispatch(loginError('Session id is empty'));
-                    dispatch(handleError(null, LOGIN_SERVER_ERROR));
-                }
-            }
-        });
-    };
-}
-// MERGE: master fix
-function openDemoSessionAsync_master() {
+function openDemoSessionAsync() {
     return (dispatch) => Promise.resolve(
     ).then(() => new Promise(
         (resolve) => sessionsClient.openDemoSession(
@@ -204,26 +136,19 @@ function openDemoSessionAsync_master() {
     ]));
 }
 
-// MERGE new
 export function openUserSession(login, password) {
-    return (dispatch) => {
-        sessionsClient.openUserSession(login, password, (error, response) => {
-            if (error) {
-                dispatch(loginError(error));
-                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, LOGIN_SERVER_ERROR));
-            } else {
-                const sessionId = SessionsClient.getSessionFromResponse(response);
-                if (sessionId) {
-                    dispatch(updateLoginData(false));
-                } else {
-                    dispatch(loginError('Session id is empty'));
-                    dispatch(handleError(null, LOGIN_SERVER_ERROR));
-                }
-            }
-        });
-    };
+    return (dispatch) => Promise.resolve(
+
+    ).then(() => new Promise(
+        (resolve) => sessionsClient.openUserSession(
+            login, password, (error, response) => resolve({error, response})
+        ))
+    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
+    ).then((response) => SessionsClient.getSessionFromResponse(response)
+    ).then((sessionId) => sessionId ? dispatch(restoreOldSessionAsync(false)) : dispatch([
+        loginError('Session id is empty'),
+        handleError(null, LOGIN_ERROR_MESSAGE)
+    ]));
 }
 
 
@@ -232,25 +157,6 @@ export function openUserSession(login, password) {
  * @param {boolean}[isValidSession]
  * @param {boolean}[isDemoSession]
  */
-// MERGE: untouched, deleted in master
-/**
- *  Checks current session state.
- * @param {CheckSessionCallback}callback
- */
-function checkSession(callback) {
-    console.log('checkSession');
-    sessionsClient.checkSession((error, response) => {
-        if (!error) {
-            const {status, body} = response;
-            const isValidSession = status === HttpStatus.OK;
-            const isDemoSession = isValidSession ? body.sessionType === 'DEMO' : false;
-            callback(null, isValidSession, isDemoSession);
-        } else {
-            callback(error);
-        }
-    });
-}
-// MERGE: new in master, ssem like renamed and rewrited checkSession
 /**
  *  Checks current session state.
  */
@@ -275,50 +181,7 @@ function getCookieSessionTypeAsync() {
     };
 }
 
-// MERGE fixed, deleted in master
-// If session stored in cookie is valid, then restore it, otherwise create new
-// demo session.
-function checkCookieSessionAndLogin_prefix(dispatch) {
-    dispatch(requestSession());
 
-    checkSession((error, isValidSession, isDemoSession) => {
-        if (error) {
-            // it is fatal network error
-            dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-        } else if (isValidSession) {
-            // restore old session
-            updateLoginData(dispatch, isDemoSession);
-        } else {
-            // old session is not valid, so we create new one
-            openDemoSession(dispatch);
-        }
-    });
-}
-// MERGE fix
-// If session stored in cookie is valid, then restore it, otherwise create new
-// demo session.
-function checkCookieSessionAndLogin() {
-    return (dispatch) => {
-        dispatch(requestSession());
-
-        checkSession((error, isValidSession, isDemoSession) => {
-            if (error) {
-                // it is fatal network error
-                dispatch(loginError(error));
-                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-            } else if (isValidSession) {
-                // restore old session
-                dispatch(updateLoginData(isDemoSession));
-            } else {
-                // old session is not valid, so we create new one
-                dispatch(openDemoSession());
-            }
-        });
-    };
-}
-
-// MERGE: new in master
 function displayErrorFromParamsAsync() {
     return (dispatch) => Promise.resolve()
         .then(() => {
@@ -335,49 +198,7 @@ function displayErrorFromParamsAsync() {
 }
 
 
-// Algorithm:
-// 1. If we stay on the URL returned by google and sessionId is valid, then
-// we should login as real user (not demo).
-// 2. If we got error from google, then we should try to restore old session or
-// create new demo session and send notification about error.
-// 3. In all other situations we should silently try to restore old session or
-// create new demo session.
-//
-// It is legacy of previous developer :)
-// MERGE: renamed and fixed, also fixed in master
-export function login_prefix() {
-    const errorFromParams = getUrlParameterByName('error');
-
-    return dispatch => {
-        if (errorFromParams) {
-            // it is error from google authorization page (detected by URL parameters)
-            console.log('google authorization failed', errorFromParams);
-            dispatch(loginError(errorFromParams));
-            dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
-            history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
-        }
-        // try to restore old session
-        checkCookieSessionAndLogin(dispatch);
-    };
-}
-// MERGE: renamed, fixed
 export function loginWithGoogle() {
-    const errorFromParams = getUrlParameterByName('error');
-
-    return (dispatch) => {
-        if (errorFromParams) {
-            // it is error from google authorization page (detected by URL parameters)
-            console.log('google authorization failed', errorFromParams);
-            dispatch(loginError(errorFromParams));
-            dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
-            history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
-        }
-        // try to restore old session
-        dispatch(checkCookieSessionAndLogin());
-    };
-}
-// MERGE fix in master
-export function login_master() {
     return dispatch => Promise.resolve(
         // Display auth error from params if any
     ).then(() => dispatch(displayErrorFromParamsAsync())
