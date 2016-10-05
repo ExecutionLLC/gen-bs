@@ -4,6 +4,7 @@ import * as ActionTypes from '../actions/filterBuilder';
 import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
 import FieldUtils from '../utils/fieldUtils';
 import {entityType} from '../utils/entityTypes';
+import {ImmutableHashedArray} from '../utils/immutable';
 
 
 /**
@@ -97,9 +98,14 @@ function reduceFBuilderStartEdit(state, action) {
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)), // need for type convert from 'valueType' to 'type'
         allowedFields
     );
+    const newFiltersList = {
+        hashedArray: ImmutableHashedArray.makeFromArray(filtersList.hashedArray.array.filter((model) => model.analysisType === filtersStrategy.analysisType))
+    };
+
+    debugger;
     return Object.assign({}, state, {
         filtersStrategy,
-        filtersList,
+        filtersList:newFiltersList,
         editingFilter: editingFilter,
         originalFilter: editingFilter,
         allowedFields
