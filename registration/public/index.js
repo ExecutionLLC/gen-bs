@@ -1,6 +1,5 @@
-const REGSERVER = '37.195.64.171';
-const REGSERVER_API_PORT = '2030';
-const REGSERVER_HTTP_PORT = '2080';
+const REGSERVER_API_BASE_URL = 'http://37.195.64.171:2080/register';
+const GENOMICS_URL = 'http://alpha.genomics-exe.com/';
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
@@ -40,19 +39,19 @@ function ajaxAsync(method, url, params, data) {
 
 const API = {
     getUserForRegcodeEmailAsync(regcode) {
-        return ajaxAsync('GET', `http://${REGSERVER}:${REGSERVER_API_PORT}/user`, {regcode, email: null});
+        return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcode, email: null});
     },
     getUserForRegcodeId(regcodeId) {
-        return ajaxAsync('GET', `http://${REGSERVER}:${REGSERVER_API_PORT}/user`, {regcodeId});
+        return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcodeId});
     },
     updateUser(user) {
-        return ajaxAsync('PUT', `http://${REGSERVER}:${REGSERVER_API_PORT}/user`, null, user);
+        return ajaxAsync('PUT', `${REGSERVER_API_BASE_URL}/user`, null, user);
     },
     requestUser(user) {
-        return ajaxAsync('POST', `http://${REGSERVER}:${REGSERVER_API_PORT}/user_request`, null, user);
+        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/user_request`, null, user);
     },
     registerUser(user) {
-        return ajaxAsync('POST', `http://${REGSERVER}:${REGSERVER_API_PORT}/register`, null, user);
+        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/register`, null, user);
     }
 };
 
@@ -227,7 +226,7 @@ function displayNoUserInfo() {
 
 function onRegcodedUserReceived(user) {
     if (user.isActivated) {
-        window.location.assign(`http://${REGSERVER}:${REGSERVER_HTTP_PORT}/`);
+        window.location.assign(GENOMICS_URL);
         return;
     }
     loadedUserId = user.id;
@@ -318,7 +317,7 @@ function addUser(loginInfo) {
     registerAsync
         .then(() => {
             if (loadedUserId) {
-                window.location.assign(`http://${REGSERVER}:${REGSERVER_HTTP_PORT}/`);
+                window.location.assign(GENOMICS_URL);
             } else {
                 switchPageState({loading: false, register: {mail: true}});
             }

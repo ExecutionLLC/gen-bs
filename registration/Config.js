@@ -26,10 +26,11 @@ function makeDefault(value, defaultValue) {
     return value;
 }
 
+const port = makeDefault(ENV.GEN_REG_PORT, 3000);
+
 const SETTINGS = {
-    scheme: makeDefault(ENV.GEN_REG_SCHEME, 'http'),
-    host: makeDefault(ENV.GEN_REG_HOST, 'localhost'),
-    port: makeDefault(ENV.GEN_REG_PORT, 3000),
+    port: port,
+    baseUrl: makeDefault(ENV.GEN_REG_BASE_URL, `http://localhost:${port}/register`),
     enableCORS: makeDefault(ENV.GEN_REG_CORS_ENABLE, true),
     disableRequestLimits: makeDefault(ENV.GEN_REG_DISABLE_REQUEST_LIMITS, false),
     database: {
