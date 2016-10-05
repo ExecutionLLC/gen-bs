@@ -58,6 +58,10 @@ const SETTINGS = {
         port: makeDefault(ENV.GEN_REG_WS_PORT, 80),
         ADD_USER_KEY: makeDefault(ENV.GEN_REG_WS_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
     },
+    registrationFrontend: {
+        site: makeDefault(ENV.GEN_REG_FRONTEND_SITE, 'http://alapy.com'),
+        regcodeIdPath: makeDefault(ENV.GEN_REG_FRONTEND_REGCODE_ID_PATH, '/test-register/')
+    },
     mailChimp: {
         key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),
         adminEmail: makeDefault(ENV.GEN_WS_MAIL_ADMIN_MAIL, 'zzdmitry@yandex.ru'/*'admin@alapy.com'*/),
