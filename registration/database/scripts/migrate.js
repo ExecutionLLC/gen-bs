@@ -7,13 +7,14 @@ const knexfile = require('./../knexfile');
 
 const env = process.env.NODE_ENV || 'development';
 const {connection: connectionSettings, client} = knexfile[env];
-const {host, database, user, password} = connectionSettings;
+const {host, port, database, user, password} = connectionSettings;
 
 function createConfigForDatabaseName(databaseName) {
     return {
         client,
         connection: {
             host,
+            port,
             user,
             password,
             database: databaseName
