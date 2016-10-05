@@ -44,7 +44,7 @@ export default class FileUploadSamples extends Component {
                 return getSearchValue(editableField, sampleEditableField)
                     .toLocaleLowerCase();
             });
-            sampleSearchValues.push(sample.fileName);
+            sampleSearchValues.push(sample.fileName.toLocaleLowerCase());
             return {
                 sampleId: sample.id,
                 searchValues: sampleSearchValues
@@ -54,7 +54,7 @@ export default class FileUploadSamples extends Component {
     }
 
     getFilteredSamplesArray(samplesArray) {
-        const searchWord = this.state.searchWord.toLowerCase();
+        const searchWord = this.state.searchWord.toLocaleLowerCase();
         if (!searchWord) {
             return samplesArray;
         }
