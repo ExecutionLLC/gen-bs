@@ -50,7 +50,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className='panel'>
                 {this.renderHeader()}
-                {this.renderCurrentValues(fieldIdToValuesHash)}
+                {!showValues && this.renderCurrentValues(fieldIdToValuesHash)}
                 {showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
