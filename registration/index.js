@@ -99,7 +99,7 @@ app.post('/user_request', (request, response) => {
         .then((insertedUser) =>
             mailService.sendRegisterMailAsync(userInfo.email, userInfo)
                 .then(() => mailService.sendAdminRegisterMailAsync(
-                    Object.assign({}, userInfo, {approveUrl: `${Config.scheme}://${Config.host}:${Config.port}/approve/?id=${insertedUser.id}`}))))
+                    Object.assign({}, userInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${insertedUser.id}`}))))
         .then(() => response.send(userInfo))
         .catch((err) => response.status(400).send(err.message));
 });
