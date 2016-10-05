@@ -1,7 +1,6 @@
 'use strict';
 
 const Request = require('superagent');
-const PasswordUtils = require('../utils/PasswordUtils');
 
 const ADD_USER_KEY = 'b5b7a458-693c-4a8d-845b-7b9a1295a15b';
 
@@ -27,7 +26,7 @@ class UsersClient {
                         gender: user.gender,
                         phone: user.telephone,
                         loginType: user.loginType,
-                        password: PasswordUtils.hash(user.password),
+                        password: user.password,
                         company: user.company
                     }
                 })
