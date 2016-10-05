@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 import _ from 'lodash';
 
 import config from '../../../config';
@@ -74,7 +74,7 @@ class FiltersModal extends Component {
             strategyValidationMessage;
 
         const confirmButtonParams = {
-            caption: isFilterEditable ? 'Save and Select': 'Select',
+            caption: isFilterEditable ? 'Save and Select' : 'Select',
             title: title,
             disabled: !!title || !!titleValidationMessage
         };
@@ -148,7 +148,9 @@ class FiltersModal extends Component {
      */
     getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters, texts) {
         const filterNameExists = isFilterEditable && _(filters)
-                .filter(filter => filter.type !== entityType.HISTORY && filter.analysisType === editingFilter.analysisType)
+                .filter(filter => filter.type !== entityType.HISTORY
+                // Next line is done to work with models. Filters have no analysis type.
+                && filter.analysisType === editingFilter.analysisType)
                 .some(filter => filter.name.trim() === editingFilterName
                     && filter.id != editingFilter.id
                 );
@@ -170,7 +172,7 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, fields } = state;
+    const {filterBuilder, ui, auth, fields} = state;
 
     return {
         fields,
