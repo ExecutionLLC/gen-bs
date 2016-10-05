@@ -15,7 +15,6 @@ export default class FileUploadSamples extends Component {
 
     componentWillReceiveProps(newProps) {
         if (this.props.samplesList !== newProps.samplesList) {
-            debugger;
             this.state.samplesSearchHash = this.extractSamplesSearchValues(newProps);
         }
     }
