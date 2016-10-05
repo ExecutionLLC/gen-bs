@@ -167,9 +167,9 @@ export function filterBuilderDeleteFilter(filterId) {
                 .then(() => {
                     const {filterBuilder} = getState();
                     const editingFilterId = filterBuilder.editingFilter.filter.id;
-                    const {filtersHashedArray} = filterBuilder.filtersList;
-                    const newFilterId = (filterId == editingFilterId) ? filtersHashedArray.array[0].id : editingFilterId;
-                    const newFilter = filtersHashedArray.hash[newFilterId];
+                    const {hashedArray} = filterBuilder.filtersList;
+                    const newFilterId = (filterId == editingFilterId) ? hashedArray.array[0].id : editingFilterId;
+                    const newFilter = hashedArray.hash[newFilterId];
                     dispatch(filterBuilderRestartEdit(false, newFilter));
                     resolve(newFilter);
                 });
