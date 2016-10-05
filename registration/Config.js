@@ -59,7 +59,7 @@ const SETTINGS = {
     },
     mailChimp: {
         key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),
-        adminEmail: makeDefault(ENV.GEN_WS_MAIL_ADMIN_MAIL, 'admin@alapy.com'),
+        adminEmail: makeDefault(ENV.GEN_WS_MAIL_ADMIN_MAIL, 'zzdmitry@yandex.ru'/*'admin@alapy.com'*/),
         fromMail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'mailchimp@alapy.com'),
         fromName: makeDefault(ENV.GEN_WS_MAIL_FROM_NAME, 'ALAPY'),
         userRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
