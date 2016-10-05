@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use(Express.static('public'));
 app.use(cors({
-    origin: 'http://alapy.com',
+    origin: Config.registrationFrontend.site,
     credentials: true
 }));
 app.use(helmet({
