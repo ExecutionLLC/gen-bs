@@ -16,6 +16,7 @@ const UserRequestService = require('./services/UserRequestService');
 const UserRequestModel = require('./models/UserRequestModel');
 const UsersClient = require('./api/UsersClient');
 const MailChimpMailService = require('./services/external/MailChimpMailService');
+const PasswordUtils = require('./utils/PasswordUtils');
 
 const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
@@ -44,7 +45,8 @@ app.use(helmet({
 
 app.post('/register', (request, response) => {
     console.log('register');
-    const user = request.body;
+    const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
+    const user = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
     console.log(user);
     registrationCodes.activateAsync(user)
         .then(() => mailService.sendRegisterCodeMailAsync(user.email, {'UserName': `${user.firstName} ${user.lastName}`}))
@@ -80,7 +82,8 @@ app.get(
 
 app.put('/user', (request, response) => {
     console.log('update user');
-    const regcodeInfo = request.body;
+    const {id, firstName, lastName, company, email, gender, speciality, telephone} = request.body;
+    const regcodeInfo = {id, firstName, lastName, company, email, gender, speciality, telephone};
     console.log(regcodeInfo);
     registrationCodes.update(regcodeInfo.id, regcodeInfo)
         .then(() => {
@@ -93,7 +96,7 @@ app.put('/user', (request, response) => {
 app.post('/user_request', (request, response) => {
     console.log('user request');
     const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
-    const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password};
+    const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
     console.log(userInfo);
     userRequests.createAsync(userInfo)
         .then((insertedUser) =>
