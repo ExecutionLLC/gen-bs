@@ -33,7 +33,7 @@ if (count && speciality && description && defaultLanguage && numberPaidSamples) 
         .then((users) => {
             console.log(`${count} registration codes are added with ids:`, users.map((user) => user.id));
             users.map(user => {
-                console.log(`${user.regcode}: ${Config.usersClient.httpScheme}://${Config.usersClient.host}:${Config.usersClient.port}/api/session/auth/google/login/${user.id}`);
+                console.log(`${user.regcode}: http://alapy.com/test-register/#${user.id}`);
             });
             process.exit(0);
         })
