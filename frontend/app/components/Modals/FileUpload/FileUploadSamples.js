@@ -14,64 +14,72 @@ export default class FileUploadSamples extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (this.props.samplesList !== newProps.samplesList) {
-            this.state.samplesSearchHash = this.extractSamplesSearchValues(newProps);
+        if (this.props.samplesList === newProps.samplesList) {
+            return;
         }
+        this.setState({
+            samplesSearchHash: this.extractSamplesSearchValues(newProps)
+        });
     }
 
     extractSamplesSearchValues(props) {
         const {samplesList, editableFieldsList} = props;
         const {hashedArray: {array: samplesArray}} = samplesList;
+
+        // Calculates search value for the specified editable field.
+        function getSearchValue(editableField, sampleEditableFieldValue) {
+            if (_.isNull(sampleEditableFieldValue.values)) {
+                return '';
+            }
+            if (_.isEmpty(editableField.availableValues)) {
+                return sampleEditableFieldValue.values;
+            }
+            return _.find(editableField.availableValues, {'id': sampleEditableFieldValue.values}).value;
+        }
+
         const sampleSearchArray = _.map(samplesArray, sample => {
             const sampleFieldsHash = _.keyBy(sample.values, 'fieldId');
             const sampleSearchValues = _.map(editableFieldsList, editableField => {
                 const sampleEditableField = sampleFieldsHash[editableField.fieldId];
-                const searchValue = !_.isNull(sampleEditableField.values)
-                    ? !_.isEmpty(editableField.availableValues)
-                        ? _.find(editableField.availableValues, {'id': sampleEditableField.values}).value
-                        : sampleEditableField.values
-                    : '';
-
-                return searchValue;
+                return getSearchValue(editableField, sampleEditableField)
+                    .toLocaleLowerCase();
             });
             sampleSearchValues.push(sample.fileName);
             return {
-                sampleId:sample.id,
+                sampleId: sample.id,
                 searchValues: sampleSearchValues
             };
         });
         return _.keyBy(sampleSearchArray, 'sampleId');
     }
 
+    getFilteredSamplesArray(samplesArray) {
+        const searchWord = this.state.searchWord.toLowerCase();
+        if (!searchWord) {
+            return samplesArray;
+        }
+        return _.filter(samplesArray, sample => {
+            const searchValues = this.state.samplesSearchHash[sample.id].searchValues;
+            return _.some(searchValues, searchValue => searchValue.indexOf(searchWord) >= 0);
+        });
+    }
+
     render() {
         const {dispatch, closeModal, samplesList, editableFieldsList} = this.props;
         const {hashedArray: {array: samplesArray}} = samplesList;
-        const searchWord = this.state.searchWord.toLowerCase();
 
         if (!editableFieldsList || !editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
         }
-        const sampleSearchArray = _.map(samplesArray, sample => {
-            const searchValues = this.state.samplesSearchHash[sample.id].searchValues;
-            return {
-                ...sample,
-                searchValues
-            };
-        });
-        const filteredSamples = searchWord ?
-            _.filter(sampleSearchArray, sample => {
-                return _.some(sample.searchValues, searchValue => {
-                    return searchValue.toLocaleLowerCase().indexOf(searchWord) >= 0;
-                });
-            }) : samplesArray;
+        const filteredSamples = this.getFilteredSamplesArray(samplesArray);
         return (
             <div>
                 <div className='navbar navbar-search-full'>
                     <div className='navbar-search'>
                         <div className='navbar-search-field'>
                             <input type='text' placeholder='Search available samples'
-                                   onChange={e => this.setState({ searchWord: e.target.value })}
+                                   onChange={e => this.setState({searchWord: e.target.value})}
                                    className='form-control material-input'/>
                         </div>
                     </div>
