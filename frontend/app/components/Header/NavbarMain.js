@@ -34,8 +34,11 @@ class NavbarMain extends Component {
 
                     <div data-localize='brand.help' data-toggle='tooltip' data-placement='left'
                          title='Click for about and help info' data-container='body' data-trigger='hover'><a
-                        className='btn navbar-btn brand' data-toggle='modal' data-target='#info'><span
-                        data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
+                        className='btn navbar-btn brand' data-toggle='modal' data-target='#info'>
+                        <span
+                        data-localize='brand.title'>AGx</span>
+                        </a>
+                    </div>
 
                     <SamplesAnalysisButtons
                         openAnalysisModal={() => this.props.openAnalysisModal()}

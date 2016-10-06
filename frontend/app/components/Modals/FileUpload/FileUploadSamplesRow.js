@@ -63,13 +63,11 @@ export default class FileUploadSamplesRow extends Component {
         const {fileName, genotypeName} = sample;
         const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
         return (
-            <div>
-                <div className='panel-heading'>
-                    <h3 className='panel-title'>
-                        {getItemLabelByNameAndType(sampleName, sample.type)}
-                        <span>{sample.description}</span>
-                    </h3>
-                </div>
+            <div className='panel-heading'>
+                <h3 className='panel-title'>
+                    {getItemLabelByNameAndType(sampleName, sample.type)}
+                    <span>{sample.description}</span>
+                </h3>
             </div>
         );
     }
@@ -136,7 +134,7 @@ export default class FileUploadSamplesRow extends Component {
 
         if (_.some(sample.values, option => option.values)) {
             return (
-                <div className='panel-body'>
+                <div className='panel-body view-mode'>
                     <div className='flex'>
                         {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                     </div>
@@ -159,8 +157,7 @@ export default class FileUploadSamplesRow extends Component {
                 fieldValue = option.value;
             }
             return (
-                <dl key={field.id}
-                    className='dl-horizontal'>
+                <dl key={field.id}>
                     <dt>{field.label}</dt>
                     <dd>{fieldValue}</dd>
                 </dl>

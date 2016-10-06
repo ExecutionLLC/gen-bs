@@ -43,31 +43,57 @@
   background-color: @progress-bar-bg;
   .transition(width .6s ease);
   position: relative;
-      > span { 
-    background-color: @progress-bar-bg;
-    color: @progress-bar-color;
-    border-radius: @border-radius-small;
-    padding: 6px;
-    position: absolute;
-    right: -16px;
-    top: -28px;
-    &:before {
-    border-color: transparent;  
-    border-top-color: @progress-bar-bg;
-    border-style: solid;
-    border-width: 8px;
-    content: "";
-    display: block;
-    height: 0;
-    margin-right: 8px;
-    margin-top: 14px;
-    position: absolute;
-    right: 0;
-    width: 0;
+      > span:last-child {
+        background-color: @progress-bar-bg; 
+        color: @progress-bar-color;
+        border-radius: @border-radius-small;
+        padding: 5px 2px 5px 3px;
+        position: absolute;
+        right: -13px;
+        top: 9px;
+          &:before {
+          border-color: transparent;  
+          border-bottom-color: @progress-bar-bg;
+          border-style: solid;
+          border-width: 5px;
+          content: "";
+          display: block;
+          height: 0;
+           margin-right: 8px;
+          margin-top: -14px;
+          position: absolute;
+          right: 0;
+          width: 0;
      }
-
   }
+  &.progress-bar-success {
 
+       > span:last-child {
+         background-color:@progress-bar-success-bg; 
+         &:before { 
+          border-bottom-color: @progress-bar-success-bg;
+        }
+      }
+  }
+  &.progress-bar-warning {
+         > span:last-child {
+           background-color:@progress-bar-warning-bg; 
+
+           &:before { 
+          border-bottom-color: @progress-bar-warning-bg;
+         } 
+      }
+  }
+  &.progress-bar-danger {
+      > span:last-child {
+          background-color:@progress-bar-danger-bg; 
+
+        &:before { 
+         border-bottom-color: @progress-bar-danger-bg;
+        } 
+      }
+  }
+  
 }
 
 // Striped bars
@@ -108,4 +134,7 @@
 
 .progress-bar-danger {
   .progress-bar-variant(@progress-bar-danger-bg);
+}
+.progress-bar-default {
+  .progress-bar-variant(@progress-bar-default-bg);
 }

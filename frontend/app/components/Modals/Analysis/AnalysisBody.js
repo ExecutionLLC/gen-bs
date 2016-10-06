@@ -20,42 +20,34 @@ export default class AnalysisBody extends React.Component {
         return (
             <Modal.Body>
                 <div className='split-layout'>
-                    <div className='split-left'>
-                        <div className='split-wrap'>
-                            <AnalysisLeftPane
-                                dispatch={dispatch}
-                                historyList={this.props.historyList}
-                                initialHistoryList={this.props.initialHistoryList}
-                                historyListSearch={this.props.historyListSearch}
-                                newHistoryItem={newHistoryItem}
-                                isHistoryReceivedAll={this.props.isHistoryReceivedAll}
-                                isHistoryRequesting={this.props.isHistoryRequesting}
-                                currentItemId={currentHistoryId}
-                                onSelectHistory={(id) => this.onSelectHistoryId(id)}
-                                viewsList={this.props.viewsList}
-                                filtersList={this.props.filtersList}
-                                samplesList={this.props.samplesList}
-                                modelsList={this.props.modelsList}
-                            />
-                        </div>
-                    </div>
-                    <div className='split-right tab-content'>
-                        <div className='split-wrap tab-pane active'>
-                            {!isLoadingHistoryData && <AnalysisRightPane
-                                dispatch={dispatch}
-                                disabled={!!currentHistoryId}
-                                auth={this.props.auth}
-                                historyItem={selectedHistoryItem}
-                                currentItemId={currentHistoryId}
-                                viewsList={this.props.viewsList}
-                                filtersList={this.props.filtersList}
-                                samplesList={this.props.samplesList}
-                                modelsList={this.props.modelsList}
-                                fields={this.props.fields}
-                                isOnlyItem={!this.props.historyList.length}
-                            />}
-                        </div>
-                    </div>
+                    <AnalysisLeftPane
+                        dispatch={dispatch}
+                        historyList={this.props.historyList}
+                        initialHistoryList={this.props.initialHistoryList}
+                        historyListSearch={this.props.historyListSearch}
+                        newHistoryItem={newHistoryItem}
+                        isHistoryReceivedAll={this.props.isHistoryReceivedAll}
+                        isHistoryRequesting={this.props.isHistoryRequesting}
+                        currentItemId={currentHistoryId}
+                        onSelectHistory={(id) => this.onSelectHistoryId(id)}
+                        viewsList={this.props.viewsList}
+                        filtersList={this.props.filtersList}
+                        samplesList={this.props.samplesList}
+                        modelsList={this.props.modelsList}
+                    />
+                    {!isLoadingHistoryData && <AnalysisRightPane
+                        dispatch={dispatch}
+                        disabled={!!currentHistoryId}
+                        auth={this.props.auth}
+                        historyItem={selectedHistoryItem}
+                        currentItemId={currentHistoryId}
+                        viewsList={this.props.viewsList}
+                        filtersList={this.props.filtersList}
+                        samplesList={this.props.samplesList}
+                        modelsList={this.props.modelsList}
+                        fields={this.props.fields}
+                        isOnlyItem={!this.props.historyList.length}
+                    />}
                 </div>
             </Modal.Body>
         );
