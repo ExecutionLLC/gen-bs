@@ -152,12 +152,7 @@ export function openUserSession(login, password) {
             login, password, (error, response) => resolve({error, response})
         ))
     ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
-    ).then((response) => location.replace(location.origin)
-    ).then((response) => SessionsClient.getSessionFromResponse(response)
-    ).then((sessionId) => sessionId ? dispatch(restoreOldSessionAsync(false)) : dispatch([
-        loginError('Session id is empty'),
-        handleError(null, LOGIN_ERROR_MESSAGE)
-    ]));
+    ).then((response) => location.replace(location.origin));
 }
 
 
