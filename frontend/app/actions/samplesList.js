@@ -97,20 +97,20 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
             // If editing selected sample, don't forget to set it as current.
             if (selectedSampleId === sampleId) {
-                dispatch(sampleSaveCurrent(updatedSample));
+                dispatch(sampleSaveCurrent(updatedSample.id));
             }
             return updatedSample.id;
         });
     };
 }
 
-export function sampleSaveCurrent(sample) {
+export function sampleSaveCurrent(sampleId) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionPropertyId} = getState().samplesList;
         if (!onSaveAction) {
             return;
         }
-        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sample.id));
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sampleId));
     };
 }
 
