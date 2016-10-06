@@ -1,8 +1,7 @@
 import _ from 'lodash';
-import HttpStatus from 'http-status';
 
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler';
+import {handleApiResponseErrorAsync} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
 import {requestTableScrollPositionReset} from './ui';
 
@@ -27,23 +26,12 @@ export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 
 export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
 
-const ANALYZE_SAMPLE_NETWORK_ERROR = 'Cannot analyze data (network error). Please try again.';
-const ANALYZE_SAMPLE_SERVER_ERROR = 'Cannot analyze data (server error). Please try again.';
-
-const NEXT_DATA_NETWORK_ERROR = 'Cannot get next part of data (network error). Please try again.';
-const NEXT_DATA_SERVER_ERROR = 'Cannot get next part of data (server error). Please try again.';
-
-const SEARCH_IN_RESULTS_NETWORK_ERROR = 'Cannot analyze results (network error). Please try again.';
-const SEARCH_IN_RESULTS_SERVER_ERROR = 'Cannot analyze results (server error). Please try again.';
-
-const ADD_COMMENT_NETWORK_ERROR = 'Cannot add commentary (network error). Please try again.';
-const ADD_COMMENT_SERVER_ERROR = 'Cannot add commentary (server error). Please try again.';
-
-const UPDATE_COMMENT_NETWORK_ERROR = 'Cannot update commentary (network error). Please try again.';
-const UPDATE_COMMENT_SERVER_ERROR = 'Cannot update commentary (server error). Please try again.';
-
-const DELETE_COMMENT_NETWORK_ERROR = 'Cannot delete commentary (network error). Please try again.';
-const DELETE_COMMENT_SERVER_ERROR = 'Cannot delete commentary (server error). Please try again.';
+const ANALYZE_SAMPLE_ERROR_MESSAGE = 'Cannot analyze data. Please try again.';
+const NEXT_DATA_ERROR_MESSAGE = 'Cannot get next part of data. Please try again.';
+const SEARCH_IN_RESULTS_ERROR_MESSAGE = 'Cannot analyze results. Please try again.';
+const ADD_COMMENT_ERROR_MESSAGE = 'Cannot add commentary. Please try again.';
+const UPDATE_COMMENT_ERROR_MESSAGE = 'Cannot update commentary. Please try again.';
+const DELETE_COMMENT_ERROR_MESSAGE = 'Cannot delete commentary. Please try again.';
 
 const commentsClient = apiFacade.commentsClient;
 const searchClient = apiFacade.searchClient;
@@ -64,7 +52,7 @@ export function getNextPartOfData() {
         dispatch(changeVariantsLimit());
 
         setTimeout(() => {
-            dispatch(searchInResultsNextData());
+            dispatch(searchInResultsNextDataAsync());
         }, 100);
     };
 }
@@ -89,7 +77,7 @@ export function sortVariants(fieldId, sampleId, sortDirection, ctrlKeyPressed) {
         dispatch(changeVariantsSort(fieldId, sampleId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
-            dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
+            dispatch(searchInResultsAsync({isNextDataLoading: false, isFilteringOrSorting: true}));
         }
     };
 }
@@ -169,10 +157,8 @@ function receiveAnalysisOperationId(operationId) {
 }
 
 
-export function createComment(alt, pos, reference, chrom, searchKey, comment) {
-
+export function createCommentAsync(alt, pos, reference, chrom, searchKey, comment) {
     return (dispatch, getState) => {
-
         const commentObject = {
             alt,
             pos,
@@ -181,23 +167,19 @@ export function createComment(alt, pos, reference, chrom, searchKey, comment) {
             searchKey,
             comment
         };
-
         const {ui: {languageId}} = getState();
-        commentsClient.add(languageId, commentObject,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, ADD_COMMENT_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, ADD_COMMENT_SERVER_ERROR));
-                } else {
-                    dispatch(addComment(response.body));
-                }
-            }
-        );
+        return new Promise((resolve) => commentsClient.add(
+            languageId,
+            commentObject,
+            (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(ADD_COMMENT_ERROR_MESSAGE, error, response))
+        ).then((response) => response.body
+        ).then((comment) => dispatch(addComment(comment)));
     };
 }
 
-export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
+export function updateCommentAsync(id, alt, pos, ref, chrom, searchKey, comment) {
 
     return (dispatch) => {
 
@@ -205,44 +187,34 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
             id,
             alt,
             pos,
-            'reference': ref,
+            reference: ref,
             chrom,
             searchKey,
             comment
         };
-
-        commentsClient.update(commentObject,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, UPDATE_COMMENT_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_COMMENT_SERVER_ERROR));
-                } else {
-                    dispatch(changeComment(response.body));
-                }
-            }
-        );
+        return new Promise(
+            (resolve) => commentsClient.update(commentObject, (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_COMMENT_ERROR_MESSAGE, error, response))
+        ).then(
+            (response) => response.body
+        ).then((comment) => dispatch(changeComment(comment)));
     };
 }
 
-export function removeComment(id, searchKey) {
-
+export function removeCommentAsync(id, searchKey) {
     return (dispatch) => {
-        commentsClient.remove(id,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, DELETE_COMMENT_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, DELETE_COMMENT_SERVER_ERROR));
-                } else {
-                    dispatch(deleteComment(response.body, searchKey));
-                }
-            }
-        );
+        return new Promise(
+            (resolve) => commentsClient.remove(id, (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_COMMENT_ERROR_MESSAGE, error, response))
+        ).then(
+            (response) => response.body
+        ).then((comment) => dispatch(deleteComment(comment, searchKey)));
     };
 }
 
-export function fetchVariants(searchParams) {
+export function fetchVariantsAsync(searchParams) {
     return (dispatch, getState) => {
         console.log('fetchVariants: ', searchParams);
 
@@ -256,25 +228,14 @@ export function fetchVariants(searchParams) {
             searchClient.sendSearchAgainRequest.bind(searchClient, languageId, analyze.id) :
             searchClient.sendSearchRequest.bind(searchClient, languageId, analyze);
 
-        return new Promise((resolve, reject) => {
-            sendAPI(
-                limit,
-                offset,
-                (error, response) => {
-                    if (error) {
-                        dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
-                        reject();
-                    } else if (response.status !== HttpStatus.OK) {
-                        dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
-                        reject();
-                    } else {
-                        const result = response.body;
-                        const {operationId} = result;
-                        dispatch(receiveAnalysisOperationId(operationId));
-                        resolve(result);
-                    }
-                }
-            );
+        return new Promise(
+            (resolve) => sendAPI(limit, offset, (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(ANALYZE_SAMPLE_ERROR_MESSAGE, error, response))
+        ).then(({body}) => {
+            const {operationId} = body;
+            dispatch(receiveAnalysisOperationId(operationId));
+            return body;
         });
     };
 }
@@ -298,37 +259,30 @@ export function searchInResultsSortFilter() {
     return (dispatch, getState) => {
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
-            dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
+            dispatch(searchInResultsAsync({isNextDataLoading: false, isFilteringOrSorting: true}));
         }
     };
 }
 
-export function searchInResultsNextData() {
+export function searchInResultsNextDataAsync() {
     return (dispatch, getState) => {
         dispatch(requestSearchedResults({isNextDataLoading: true, isFilteringOrSorting: false}));
 
         const state = getState();
         const operationId = state.variantsTable.operationId;
         const {offset, limit} = state.variantsTable.searchInResultsParams;
-
-        searchClient.sendGetNextPartOfData(
+        return new Promise((resolve) => searchClient.sendGetNextPartOfData(
             operationId,
             offset,
             limit,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, NEXT_DATA_NETWORK_ERROR));
-                    dispatch(receiveSearchedResults());
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, NEXT_DATA_SERVER_ERROR));
-                    dispatch(receiveSearchedResults());
-                }
-            }
-        );
+            (error, response) => resolve({error, response})))
+            .then(
+                ({error, response}) => dispatch(handleApiResponseErrorAsync(NEXT_DATA_ERROR_MESSAGE, error, response))
+            ).then(() => dispatch(receiveSearchedResults()));
     };
 }
 
-export function searchInResults(flags) {
+export function searchInResultsAsync(flags) {
     return (dispatch, getState) => {
         dispatch(requestTableScrollPositionReset());
         dispatch(requestSearchedResults(flags));
@@ -338,23 +292,18 @@ export function searchInResults(flags) {
         const operationId = state.variantsTable.operationId;
         const {search, sort, topSearch, limit, offset} = state.variantsTable.searchInResultsParams;
 
-        searchClient.sendSearchInResultsRequest(
-            operationId,
-            topSearch,
-            limit,
-            offset,
-            search,
-            sort,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, SEARCH_IN_RESULTS_NETWORK_ERROR));
-                    dispatch(receiveSearchedResults());
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, SEARCH_IN_RESULTS_SERVER_ERROR));
-                    dispatch(receiveSearchedResults());
-                }
-            }
-        );
+        return new Promise(
+            (resolve) => searchClient.sendSearchInResultsRequest(
+                operationId,
+                topSearch,
+                limit,
+                offset,
+                search,
+                sort,
+                (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(SEARCH_IN_RESULTS_ERROR_MESSAGE, error, response))
+        ).then(() => dispatch(receiveSearchedResults()));
     };
 }
 

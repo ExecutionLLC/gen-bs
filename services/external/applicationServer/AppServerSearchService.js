@@ -230,7 +230,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             if (viewField.sourceName !== 'sample') {
                 resultHeader.push({
                     fieldId: viewField.id,
-                    exist: true
+                    exist: true,
+                    unique: true
                 });
             } else {
                 if (_.some(notDuplicatedColumnNames, notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)) {
@@ -238,7 +239,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     resultHeader.push({
                         fieldId: viewField.id,
                         sampleId: samples[0].id,
-                        exist
+                        exist,
+                        unique: true
                     });
                 } else {
                     _.forEach(samples, sample => {
@@ -246,7 +248,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                         resultHeader.push({
                             fieldId: viewField.id,
                             sampleId: sample.id,
-                            exist
+                            exist,
+                            unique: false
                         });
                     })
                 }
@@ -330,20 +333,22 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 const missingFieldsSet = new Set();
                 const searchKeyFieldName = AppServerUtils.getSearchKeyFieldName();
                 const fieldsWithIdArray = _.map(asData, (rowObject) => {
-                    const mappedRowObject = _.map(rowObject, rowField => {
+                    const mappedRowObject = _.flatMap(rowObject, rowField => {
                         if (rowField.fieldName !== searchKeyFieldName) {
-                            const currentSampleFieldHash = _.find(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId == rowField.fieldSource);
-                            const fieldMetadata = currentSampleFieldHash.sampleFieldHash[rowField.fieldName];
-                            if (fieldMetadata) {
-                                return {
-                                    fieldId: fieldMetadata.id,
-                                    fieldValue: this._mapFieldValue(rowField.fieldValue),
-                                    sampleId: currentSampleFieldHash.sampleId == 'source' ? null : currentSampleFieldHash.sampleId
-                                };
-                            } else {
-                                missingFieldsSet.add(rowField.fieldName);
-                                return null;
-                            }
+                            const currentSampleFieldHashes = _.filter(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId == rowField.fieldSource);
+                            return _.map(currentSampleFieldHashes, currentSampleFieldHash => {
+                                const fieldMetadata = currentSampleFieldHash.sampleFieldHash[rowField.fieldName];
+                                if (fieldMetadata) {
+                                    return {
+                                        fieldId: fieldMetadata.id,
+                                        fieldValue: this._mapFieldValue(rowField.fieldValue),
+                                        sampleId: currentSampleFieldHash.sampleId == 'source' ? null : currentSampleFieldHash.sampleId
+                                    };
+                                } else {
+                                    missingFieldsSet.add(rowField.fieldName);
+                                    return null;
+                                }
+                            });
                         } else {
                             return {
                                 fieldId: rowField.fieldName,

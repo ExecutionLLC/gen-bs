@@ -16,9 +16,20 @@ const services = new ServicesFacade(Config, logger, models);
 const controllers = new ControllersFacade(logger, services);
 
 const webServerHost = new WebServerHost(controllers, services, models);
+
+process.on('uncaughtException',(error) => {
+    logger.error(error);
+    process.exit(1);
+});
 webServerHost.start((error) => {
     if (error) {
         logger.error(error);
         process.exit(1);
     }
 });
+
+module.exports = {
+    models,
+    services,
+    controllers
+};

@@ -3,7 +3,7 @@ import Moment from 'moment';
 import { connect } from 'react-redux';
 
 import DialogBase from './DialogBase';
-import {closeSavedFilesDialog, downloadSavedFile} from '../../actions/savedFiles';
+import {closeSavedFilesDialog, downloadSavedFileAsync} from '../../actions/savedFiles';
 
 class SavedFilesModal extends DialogBase {
     constructor(props) {
@@ -100,7 +100,7 @@ class SavedFilesModal extends DialogBase {
     
     onDownloadClick(savedFile) {
         const {dispatch} = this.props;
-        dispatch(downloadSavedFile(savedFile));
+        dispatch(downloadSavedFileAsync(savedFile));
     }
 
     onCloseModal() {
@@ -110,6 +110,7 @@ class SavedFilesModal extends DialogBase {
 }
 
 SavedFilesModal.propTypes = {
+    savedFiles: React.PropTypes.array.isRequired,
     showModal: React.PropTypes.bool.isRequired
 };
 

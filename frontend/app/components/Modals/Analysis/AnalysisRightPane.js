@@ -8,9 +8,9 @@ import {
     cancelAnalysesHistoryEdit,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
-    updateAnalysesHistoryItem,
+    updateAnalysesHistoryItemAsync,
     setEditedHistoryItem,
-    deleteServerAnalysesHistoryItem
+    deleteServerAnalysesHistoryItemAsync
 } from '../../../actions/analysesHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
@@ -646,7 +646,7 @@ export default class AnalysisRightPane extends React.Component {
     onDeleteAnalysisClick() {
         const {dispatch, historyItem: {id: historyItemId}} = this.props;
         if (historyItemId) {
-            dispatch(deleteServerAnalysesHistoryItem(historyItemId));
+            dispatch(deleteServerAnalysesHistoryItemAsync(historyItemId));
         }
     }
 
@@ -657,7 +657,7 @@ export default class AnalysisRightPane extends React.Component {
         }
         if (historyItem.id) {
             dispatch(editExistentAnalysesHistoryItem({...historyItem, name}));
-            dispatch(updateAnalysesHistoryItem(historyItem.id));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
         } else {
             dispatch(this.actionEdit({name}));
         }
@@ -667,7 +667,7 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem} = this.props;
         if (historyItem.id) {
             dispatch(editExistentAnalysesHistoryItem({...historyItem, description}));
-            dispatch(updateAnalysesHistoryItem(historyItem.id));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
         } else {
             dispatch(this.actionEdit({description}));
         }

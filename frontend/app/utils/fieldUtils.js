@@ -47,10 +47,10 @@ export default class FieldUtils {
     }
 
     static makeFieldVariantsLabelTitle(field, sampleName, sampleType) {
-        const {sourceName, label} = field;
+        const {sourceName, label, isUnique} = field;
         const isSource = sourceName && this.isSourceField(field);
         return {
-            label: `${(!isSource && sampleType ? `(${sampleType})` : '')}${label}`,
+            label: `${(!isSource && sampleType && !isUnique ? `(${sampleType})` : '')}${label}`,
             title: isSource ? sourceName : sampleName
         };
     }

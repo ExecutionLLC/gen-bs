@@ -1,8 +1,8 @@
 import {closeModal} from './modalWindows';
 import {
-    filtersListServerCreateFilter,
-    filtersListServerUpdateFilter,
-    filtersListServerDeleteFilter
+    filtersListServerCreateFilterAsync,
+    filtersListServerUpdateFilterAsync,
+    filtersListServerDeleteFilterAsync
 } from './filtersList';
 import {
     modelsListServerCreateModel,
@@ -21,9 +21,9 @@ export const filterBuilderStrategyActions = {
         getList(state) {
             return state.filtersList;
         },
-        serverCreate: filtersListServerCreateFilter,
-        serverUpdate: filtersListServerUpdateFilter,
-        serverDelete: filtersListServerDeleteFilter
+        serverCreate: filtersListServerCreateFilterAsync,
+        serverUpdate: filtersListServerUpdateFilterAsync,
+        serverDelete: filtersListServerDeleteFilterAsync
     },
     'model': {
         getList(state) {
@@ -167,9 +167,9 @@ export function filterBuilderDeleteFilter(filterId) {
                 .then(() => {
                     const {filterBuilder} = getState();
                     const editingFilterId = filterBuilder.editingFilter.filter.id;
-                    const {filtersHashedArray} = filterBuilder.filtersList;
-                    const newFilterId = (filterId == editingFilterId) ? filtersHashedArray.array[0].id : editingFilterId;
-                    const newFilter = filtersHashedArray.hash[newFilterId];
+                    const {hashedArray} = filterBuilder.filtersList;
+                    const newFilterId = (filterId == editingFilterId) ? hashedArray.array[0].id : editingFilterId;
+                    const newFilter = hashedArray.hash[newFilterId];
                     dispatch(filterBuilderRestartEdit(false, newFilter));
                     resolve(newFilter);
                 });
