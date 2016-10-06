@@ -5,11 +5,10 @@ const Promise = require('bluebird');
 
 const FsUtils = require('../../utils/FileSystemUtils');
 const Config = require('../../utils/Config');
-const {ENTITY_TYPES} = require('../../utils/Enums');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 const fieldsTableNames = {
-    Metadata:'field_metadata',
-    Text:'field_text'
+    Metadata: 'field_metadata',
+    Text: 'field_text'
 };
 const sampleTableNames = {
     Metadata: 'vcf_file_sample',
@@ -17,6 +16,19 @@ const sampleTableNames = {
     Versions: 'genotype_version',
     Values: 'vcf_file_sample_value'
 };
+
+function createEnum(keyValueObject) {
+    return Object.assign({}, keyValueObject, {
+        allValues: _.map(keyValueObject)
+    });
+}
+
+const ENTITY_TYPES = createEnum({
+    STANDARD: 'standard',
+    ADVANCED: 'advanced',
+    USER: 'user',
+    DEFAULT: 'default'
+});
 
 const sampleDir = '20161005115436_default-samples-update';
 const defaultSampleName = "Patient's VCF File";
@@ -33,7 +45,7 @@ function deleteOldDefaultSamples(knex) {
 function makeDefaultSample(knex, sampleName) {
     console.log('==> Make defualt sample...');
     return knex(sampleTableNames.Metadata)
-        .where('file_name',sampleName)
+        .where('file_name', sampleName)
         .update({
             type: ENTITY_TYPES.DEFAULT
         });
@@ -112,9 +124,9 @@ function addMissingFields(knex, fields) {
             });
     })
         .then((fieldsWithIds) => Promise.mapSeries(fieldsWithIds, fieldWithId => {
-                if(!fieldWithId.id){
+                if (!fieldWithId.id) {
                     return addField(knex, fieldWithId)
-                }else {
+                } else {
                     return fieldWithId
                 }
             })
@@ -130,7 +142,7 @@ function findIdOfTheSameAsOrNullInTransaction(knex, fieldMetadata) {
         .then((results) => (results && results.length) ? results[0].id : null);
 }
 
-function addField( knex, field) {
+function addField(knex, field) {
     console.log('==> Add Field :', field.name);
     const {
         name, sourceName, valueType, isMandatory, isEditable, isInvisible,
@@ -150,17 +162,13 @@ function addField( knex, field) {
             isHyperlink: isHyperlink || false,
             hyperlinkTemplate: hyperlinkTemplate || null,
         }))
-        .then(
-            () => {
-                return knex(fieldsTableNames.Text)
-                    .insert(ChangeCaseUtil.convertKeysToSnakeCase({
-                        fieldId: id,
-                        label,
-                        description,
-                        languId: Config.defaultLanguId
-                    }))
-            })
-        .then(() => findIdOfTheSameAsOrNullInTransaction(knex,field));
+        .then(() => knex(fieldsTableNames.Text
+        ).insert(ChangeCaseUtil.convertKeysToSnakeCase({
+            fieldId: id,
+            label,
+            description,
+            languId: Config.defaultLanguId
+        }))).then(() => findIdOfTheSameAsOrNullInTransaction(knex, field));
 }
 
 function findEditableFields(knex) {
@@ -170,7 +178,7 @@ function findEditableFields(knex) {
 }
 
 function addSampleInTransaction(knex, sampleWithValues, genotypes) {
-    return addSample(knex,sampleWithValues)
+    return addSample(knex, sampleWithValues)
         .then((sampleId) => {
             return setAnalyzed(knex, sampleId, true)
                 .then(() => {
@@ -178,12 +186,11 @@ function addSampleInTransaction(knex, sampleWithValues, genotypes) {
                 })
                 .then((genotypeIds) => {
                     return Promise.all(
-                        genotypeIds.map( (genotypeId) => addGenotypeVersion(knex,genotypeId))
-                    )
-                        .mapSeries((genotypeVersionId) => {
-                            return addGenotypeValues(knex,genotypeVersionId,sampleWithValues.values)
-                        })
-                })
+                        genotypeIds.map((genotypeId) => addGenotypeVersion(knex, genotypeId))
+                    ).mapSeries((genotypeVersionId) => {
+                        return addGenotypeValues(knex, genotypeVersionId, sampleWithValues.values)
+                    });
+                });
         })
 }
 
@@ -203,7 +210,7 @@ function addSample(knex, sample) {
 
 function setAnalyzed(knex, sampleId, value) {
     return knex(sampleTableNames.Metadata)
-        .where('id',sampleId)
+        .where('id', sampleId)
         .update(ChangeCaseUtil.convertKeysToSnakeCase({
             isAnalyzed: value,
             analyzedTimestamp: value ? new Date() : null
@@ -236,7 +243,7 @@ function addGenotypeVersion(knex, genotypeId) {
 }
 
 function addGenotypeValues(knex, versionId, values) {
-    return Promise.map(values, ({fieldId, values}) =>{
+    return Promise.map(values, ({fieldId, values}) => {
         return knex(sampleTableNames.Values)
             .insert(ChangeCaseUtil.convertKeysToSnakeCase({
                 genotypeVersionId: versionId,
