@@ -39,6 +39,7 @@ function dropDefaultFilterTextNameColumn(knex, Promise) {
 }
 
 exports.up = function (knex, Promise) {
+    console.log('Moving filter names to filter_text');
     return addColumnToFilterText(knex, Promise)
         .then(() => moveFilterNamesIntoNewColumn(knex, Promise))
         .then(() => dropDefaultFilterTextNameColumn(knex, Promise))
