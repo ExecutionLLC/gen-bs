@@ -11,7 +11,7 @@ export default class NewFilterInputs extends Component {
         const {validationMessage, texts} = this.props;
 
         return (
-            <div className='collapse in'>
+            <div className='form-rows-dynamic collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='filters.setup.selector.description'>
@@ -19,7 +19,7 @@ export default class NewFilterInputs extends Component {
                         </span>
                 </div>
                 }
-                <div className='row grid-toolbar row-noborder row-new-item'>
+                <div className='form-group row-new-item'>
                     <div className='col-sm-6'>
                         <label data-localize='filters.setup.new.name.title'>New {texts.Filter}</label>
                         <input
@@ -32,25 +32,24 @@ export default class NewFilterInputs extends Component {
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
-                    <div className='col-sm-6'>
+                    <div className='col-sm-6 input-group'>
                         <label data-localize='general.description'>Description</label>
-                        <div className='input-group'>
-                            <input
-                                type='text'
-                                className='form-control'
-                                data-localize='filters.setup.new.description'
-                                placeholder={`Set ${texts.filter} description (optional)`}
-                                value={editingFilter.description}
-                                maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
-                                onChange={(e) => this.onDescriptionChange(e.target.value)}
-                            />
-                            <div className='input-group-btn  btn-group-close'>
-                                <button type='button' className='btn-link-default'
-                                        onClick={() => this.onCancelClick()}>
-                                    <i className='md-i'>close</i>
-                                </button>
-                            </div>
+                        <input
+                            type='text'
+                            className='form-control'
+                            data-localize='filters.setup.new.description'
+                            placeholder={`Set ${texts.filter} description (optional)`}
+                            value={editingFilter.description}
+                            maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
+                            onChange={(e) => this.onDescriptionChange(e.target.value)}
+                        />
+                        <div className='input-group-btn  btn-group-close'>
+                            <button type='button' className='btn-link-default'
+                                    onClick={() => this.onCancelClick()}>
+                                <i className='md-i'>close</i>
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
             </div>

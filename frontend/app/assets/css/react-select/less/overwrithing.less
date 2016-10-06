@@ -1,3 +1,7 @@
+.Select-control {
+  border-radius: 3px;
+  box-shadow: @btn-default-shadow;
+}
 .Select-option.is-disabled{
   color: @gray-lighter;
 }
@@ -11,3 +15,37 @@
   }
 }
 
+.btn-group-select2-max {
+    
+
+  div.Select { 
+    width: 100%!important;
+  }
+  @media (max-width: @screen-xs-max){
+    .Select--multi {
+      .Select-control { 
+        display: block;
+        white-space: normal;
+        height: auto;
+      }
+      .Select-arrow-zone,
+      .Select-clear-zone { 
+        float: right;
+      }
+      .Select-value { 
+        position: relative;
+        padding-left: 17px;
+        line-height: 1.2;  
+      }
+       .Select-value-icon {
+        position: absolute;
+        border-bottom: 1px solid rgba(66,165,245,.24);
+        left: 0;
+          }
+    }
+
+  }
+}
+.select2-search__field { 
+  outline: none;
+}

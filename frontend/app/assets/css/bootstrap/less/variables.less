@@ -360,7 +360,7 @@
 @screen-lg-desktop:          @screen-lg-min;
 
 // So media queries don't overlap when required, provide a maximum
-@screen-xss-max:             (@screen-xs-min - 1);
+@screen-xxs-max:             (@screen-xs-min - 1);
 @screen-xs-max:              (@screen-sm-min - 1);
 @screen-sm-max:              (@screen-md-min - 1);
 @screen-md-max:              (@screen-lg-min - 1);
@@ -416,6 +416,9 @@
 @navbar-default-color:             @gray-dark;
 @navbar-default-bg:                @default-max-light;
 @navbar-default-border:            darken(@navbar-default-bg, 10%);
+
+@navbar-sm-height:                  32px;
+
 
 // Navbar links
 @navbar-default-link-color:                @gray;
@@ -607,7 +610,9 @@
 //##
 
 //** Default label background color
-@label-default-bg:            @gray-lighter;
+@label-default-bg:            darken(@default-max-light, 5%);
+@label-dark-default-bg:       @gray;
+
 @label-default-light-bg:      darken(@default-max-light, 5%);
 //** Primary label background color
 @label-primary-bg:            @brand-primary;
@@ -642,7 +647,7 @@
 
 //** Modal title line-height
 @modal-title-line-height:     @line-height-base;
-@modal-footer-padding:   8px;
+@modal-footer-padding: 8px 16px;
 @modal-footer-height: 54px;
 
 //** Background color of modal content area
@@ -675,6 +680,11 @@
 @alert-icon-font-family:     "Material Icons";  
 @alert-border-radius:         @border-radius-base;
 @alert-link-font-weight:      bold;
+
+@alert-primary-bg:               transparent;
+@alert-primary-text:             @state-primary-text;
+@alert-primary-border:           @brand-primary;
+@alert-primary-state-icon:       "schedule"; 
 
 @alert-success-bg:            transparent;
 @alert-success-text:          @state-success-text;
@@ -728,6 +738,7 @@
 //** Info progress bar color
 @progress-bar-info-bg:        @brand-info;
 @progress-bar-height:        6px;
+@progress-bar-default-bg:  @gray-lighter;
 
 //== List group
 //
@@ -770,7 +781,7 @@
 @panel-bg:                    #fff;
 @panel-body-padding:          @padding-base-horizontal;
 @panel-heading-padding:       @padding-base-horizontal ;
-@panel-footer-padding:        @padding-base-vertical 0;
+@panel-footer-padding:        @padding-base-vertical @padding-base-horizontal;
 @panel-border-radius:         @border-radius-small;
 @panel-shadow:        @shadow-paper-1;
 @panel-hover-shadow:  @shadow-paper-3;
@@ -915,6 +926,8 @@
 @component-offset-horizontal: 180px;
 //** Text muted color
 @text-muted:                  @gray-light;
+@text-muted-light:            @gray-lighter;
+
 //** Abbreviations and acronyms border color
 @abbr-border-color:           @gray-light;
 //** Headings small color
@@ -935,7 +948,7 @@
 @hr-border:                   @gray-lighter;
 
 @dl-flex-horizontal-breakpoint: @component-offset-horizontal;
-@dl-flex-horizontal-offset: 50%;
+@dl-flex-horizontal-offset: 35%;
 
 //layout 
 @sidebar-closed-width: 0;
