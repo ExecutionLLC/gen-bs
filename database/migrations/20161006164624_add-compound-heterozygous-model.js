@@ -47,6 +47,7 @@ function addModel(knex, model) {
 }
 
 exports.up = function (knex, Promise) {
+    console.log('=> Add Compound Heterozygous model...');
     return addCompoundHeterozygousModel(knex, Promise)
         .then(() => console.log('=> Complete.'));
 };
