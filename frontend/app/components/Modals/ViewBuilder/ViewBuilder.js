@@ -61,17 +61,10 @@ export default class ViewBuilder extends React.Component {
 
             return (
 
-                <div className='row grid-toolbar' key={Math.round(Math.random()*100000000).toString()}>
+                <div className='form-group' key={Math.round(Math.random()*100000000).toString()}>
 
                     <div className='col-xs-12 col-sm-6 btn-group-select2'>
-                        <div className='btn-group btn-group-left'>
-                            <button className='btn btn-link btnDrag' disabled='' type='button'>
-                                <span className='icon-bar'/>
-                                <span className='icon-bar'/>
-                                <span className='icon-bar'/>
-                            </button>
-                        </div>
-                        <div className='btn-group'>
+                        <div className='btn-group btn-group-select2-max'>
                             <Select
                                 options={selectOptions}
                                 value={currentValue}
@@ -85,7 +78,7 @@ export default class ViewBuilder extends React.Component {
                         </div>
                     </div>
                     <div className='col-xs-12 col-sm-6 btn-group-select2'>
-                        <div className='btn-group btn-group-select100'>
+                        <div className='btn-group btn-group-select2-max'>
                             <Select
                                 options={keywordsSelectOptions}
                                 multi={true}
@@ -114,9 +107,9 @@ export default class ViewBuilder extends React.Component {
 
         return (
 
-            <div className='collapse in'>
+            <div className='form-rows-dynamic'>
                 <h5 data-localize='views.setup.settings.title'>Table Columns</h5>
-                <div className='row grid-toolbar hidden-xs'>
+                <div className='form-group hidden-xs'>
 
                     <div className='col-sm-6'>
                         <small className='text-muted text-order' data-localize='views.setup.settings.columns_order'>
@@ -175,13 +168,13 @@ export default class ViewBuilder extends React.Component {
             return classNames(
                 'btn',
                 'btn-sort',
-                'btn-default'
+                'btn-link-default'
             );
         }
         else {
             return classNames(
                 'btn',
-                'btn-default',
+                'btn-link-default',
                 'btn-sort',
                 sortDirection,
                 {
@@ -197,7 +190,7 @@ export default class ViewBuilder extends React.Component {
                     type='button'
                     disabled={isDisable}
                     onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
-                <span className='badge badge-info'>{sortOrder}</span>
+                <span className='text-info'>{sortOrder}</span>
             </button>
         );
     }

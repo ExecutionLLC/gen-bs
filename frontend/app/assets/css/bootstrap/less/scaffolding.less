@@ -26,10 +26,14 @@ html {
 
 body {
   font-family: @font-family-base;
-  font-size: @font-size-base;
+  font-size: 15px;
   line-height: @line-height-base;
-  color: @text-color;
+  color: darken(@text-color, 15%);;
   background-color: @default-max-light;
+  @media (min-width: @screen-sm) {
+    font-size: @font-size-base;
+    color: @text-color;
+  }
 }
 
 // Reset fonts for relevant elements

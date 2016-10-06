@@ -51,7 +51,7 @@ class Auth extends Component {
                             { profileMetadata.email }
                         </span>
                         <span className='visible-xs'>
-                            <i className='md-i'>person</i>
+                            <span className='dropdown-menu-header'>Profile</span><i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
@@ -63,7 +63,13 @@ class Auth extends Component {
                                 <span>Logout</span>
                             </a>
                         </li>
-                    </ul>
+                        <li className='visible-xs dropdown-header'>Language </li>
+                        <li className='visible-xs'><a href='#' type='button' id='en_lang'><span
+                            data-localize='language.lang_sm_En'>English</span></a>
+                        </li>
+                        <li className='visible-xs'><a href='#' type='button' id='ch_lang'><span
+                            data-localize='language.lang_sm_Ch'>中国</span></a>
+                        </li>                    </ul>
                 </div>
             </div>
         );
