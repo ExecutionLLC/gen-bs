@@ -10,6 +10,7 @@ function createHyperlinkColumns(knex, Promise) {
 }
 
 exports.up = function(knex, Promise) {
+    console.log('Adding hyperlinks support');
     return createHyperlinkColumns(knex, Promise)
         .then(() => console.log('=> Complete.'));
 };

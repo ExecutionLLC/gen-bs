@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import classNames from 'classnames';
 import React from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
@@ -32,10 +33,10 @@ import {ImmutableHashedArray} from '../../../utils/immutable';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, isOnlyItem, auth: {isDemo}} = this.props;
+        const {historyItem, disabled, isOnlyItem, auth: {isDemo}, isBringToFront} = this.props;
 
         return (
-            <div className='split-right'>
+            <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
                 <div className='split-scroll form-horizontal'>
                     <div className='form-padding'>
