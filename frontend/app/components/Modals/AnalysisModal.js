@@ -6,6 +6,11 @@ import AnalysisBody from './Analysis/AnalysisBody';
 
 
 class AnalysisModal extends React.Component {
+    constructor(state) {
+        super(state);
+        this.state = {isAnalysisBringToFront: false};
+    }
+
     render() {
         const {showModal} = this.props;
 
@@ -17,7 +22,10 @@ class AnalysisModal extends React.Component {
                 show={showModal}
                 onHide={() => this.onClose()}
             >
-                <AnalysisHeader />
+                <AnalysisHeader
+                    showAnalysisHide={this.state.isAnalysisBringToFront}
+                    onAnalysisHide={() => this.onAnalysisHide()}
+                />
                 <AnalysisBody
                     dispatch={this.props.dispatch}
                     auth={this.props.auth}
@@ -33,6 +41,8 @@ class AnalysisModal extends React.Component {
                     samplesList={this.props.samplesList}
                     modelsList={this.props.modelsList}
                     fields={this.props.fields}
+                    isAnalysisBringToFront={this.state.isAnalysisBringToFront}
+                    onAnalysisShow={() => this.onAnalysisShow()}
                 />
             </Modal>
         );
@@ -40,6 +50,14 @@ class AnalysisModal extends React.Component {
 
     onClose() {
         this.props.closeModal();
+    }
+
+    onAnalysisShow() {
+        this.setState({isAnalysisBringToFront: true});
+    }
+
+    onAnalysisHide() {
+        this.setState({isAnalysisBringToFront: false});
     }
 }
 
