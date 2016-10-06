@@ -81,7 +81,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const viewId = view.id;
         const appServerSampleIds = _.map(samples, sample => {
             return {
-                name: this._getAppServerSampleId(sample),
+                sample: this._getAppServerSampleId(sample),
                 type: sample.sampleType,
                 genotype: sample.genotypeName
             }
