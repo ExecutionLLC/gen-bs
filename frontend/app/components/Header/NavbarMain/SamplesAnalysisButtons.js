@@ -30,7 +30,7 @@ export default class SamplesAnalysisButtons extends Component {
                         data-toggle='modal'
                         onClick={() => this.props.openAnalysisModal()}
                     ><span className='hidden-xs' data-localize='query.title'>Analysis</span>
-                    <span className='visible-xs'><i className='ag22 ag-flask'></i></span>{/*<span class='badge badge-inverse'>2</span>*/}
+                    <span className='visible-xs'><i className='ag22 ag-flask'></i></span>
                     </a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
                     <div>
