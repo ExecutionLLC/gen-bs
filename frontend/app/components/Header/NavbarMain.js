@@ -31,14 +31,9 @@ class NavbarMain extends Component {
 
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
-
-                    <div data-localize='brand.help' data-toggle='tooltip' data-placement='left'
-                         title='Click for about and help info' data-container='body' data-trigger='hover'><span
-                        className='navbar-text brand' data-toggle='modal' data-target='#info'>
-                        <span
-                        data-localize='brand.title'>AGx</span>
-                        </span>
-                    </div>
+                     <div>
+                        <span className='navbar-text'>AGx</span>
+                     </div>
 
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
