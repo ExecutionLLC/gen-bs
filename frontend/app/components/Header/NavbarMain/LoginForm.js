@@ -14,14 +14,14 @@ class LoginForm extends Component {
         const {login, password} = this.state;
         const isDisable = login && password ? false : true;
         return (
-            <div className='login-form'>
-                <input className='form-control'
+            <div className='form-inline'>
+                <input className='form-control material-input'
                        value={login}
                        type='text'
                        key='login'
                        placeholder='Login'
                        onChange={(e) => this.onLoginChanged(e)}/>
-                <input className='form-control'
+                <input className='form-control material-input'
                        value={password}
                        type='password'
                        key='password'

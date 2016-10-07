@@ -43,10 +43,6 @@ class Auth extends Component {
             <div>
                 <div className={dropdownClasses}>
                     <a href='#'
-<<<<<<< HEAD
-                       className='btn navbar-btn dropdown-toggle' data-toggle="dropdown">
-                        <span data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={AUTHORIZED_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>{ profileMetadata.email }</span>
-=======
                        onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
                     >
@@ -54,13 +50,12 @@ class Auth extends Component {
                               className='hidden-xs'>
                             { profileMetadata.email }
                         </span>
->>>>>>> 52fab125419a7814ee68710fa8e70c8f3ebaa5a3
                         <span className='visible-xs'>
                             <span className='dropdown-menu-header'>{ profileMetadata.email }</span><i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                        <li>
+                        <li className='form-inline'>
                             <a onClick={ () => { this.props.dispatch(logout()); } }
                                href='#'
                                type='button'
@@ -93,6 +88,7 @@ class Auth extends Component {
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
+                       <li class="dropdown-header">Enter in</li>
                         <li>
                             <a href={config.LOGIN_URL}>
                                 <span title={GOOGLE_ACCOUNT_TITLE}
@@ -104,6 +100,7 @@ class Auth extends Component {
                                 </span>
                             </a>
                         </li>
+                        <li class="dropdown-header">OR login</li>
                         <li>
                             <LoginForm
                                 dispatch={this.props.dispatch}
