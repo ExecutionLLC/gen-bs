@@ -51,11 +51,11 @@ class Auth extends Component {
                             { profileMetadata.email }
                         </span>
                         <span className='visible-xs'>
-                            <span className='dropdown-menu-header'>Profile</span><i className='md-i md-person md-replace-to-close'></i>
+                            <span className='dropdown-menu-header'>{ profileMetadata.email }</span><i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                        <li>
+                        <li className='form-inline'>
                             <a onClick={ () => { this.props.dispatch(logout()); } }
                                href='#'
                                type='button'
@@ -63,13 +63,8 @@ class Auth extends Component {
                                 <span>Logout</span>
                             </a>
                         </li>
-                        <li className='visible-xs dropdown-header'>Language </li>
-                        <li className='visible-xs'><a href='#' type='button' id='en_lang'><span
-                            data-localize='language.lang_sm_En'>English</span></a>
-                        </li>
-                        <li className='visible-xs'><a href='#' type='button' id='ch_lang'><span
-                            data-localize='language.lang_sm_Ch'>中国</span></a>
-                        </li>                    </ul>
+                                
+                      </ul>
                 </div>
             </div>
         );
@@ -78,6 +73,7 @@ class Auth extends Component {
     _renderForDemoUser(dropdownClasses) {
         return (
             <div>
+
                 <div className={dropdownClasses}>
                     <a href='#'
                        onClick={() => this.onLoginDropdownClick()}
@@ -92,6 +88,7 @@ class Auth extends Component {
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
+                       <li class="dropdown-header">Enter in</li>
                         <li>
                             <a href={config.LOGIN_URL}>
                                 <span title={GOOGLE_ACCOUNT_TITLE}
@@ -103,6 +100,7 @@ class Auth extends Component {
                                 </span>
                             </a>
                         </li>
+                        <li class="dropdown-header">OR login</li>
                         <li>
                             <LoginForm
                                 dispatch={this.props.dispatch}

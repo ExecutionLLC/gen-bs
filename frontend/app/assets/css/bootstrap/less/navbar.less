@@ -363,12 +363,7 @@
 
 .navbar-text {
   .navbar-vertical-align(@line-height-computed);
-
-  @media (min-width: @grid-float-breakpoint) {
     float: left;
-    margin-left: @navbar-padding-horizontal;
-    margin-right: @navbar-padding-horizontal;
-  }
 }
 
 
@@ -929,7 +924,7 @@
     float: none;
     line-height: 42px;
     color: @navbar-inverse-color ;
-  
+    
     sup {
      font-size: 15px;
     font-weight: bold;
@@ -952,11 +947,49 @@
      position: relative;
      //white-space: pre;
   }
-
+ .dropdown-menu { 
+   a,
+   .btn.btn-link { 
+     color: @link-color;
+   }
+   .btn-danger { 
+     color: #fff;
+    &:hover {
+       background-color: lighten(@btn-danger-bg, 5%);
+    }
+    &:focus {
+      background-color: @btn-danger-bg;
+    }
+    &:active { 
+      background-color:darken(@btn-danger-bg, 5%)
+    }
+   }
+   .btn-primary { 
+    color: #fff;
+  }
+   .form-inline { 
+     padding: @padding-base-vertical  @padding-base-horizontal;
+     
+     .login-button {
+       margin-top:  @padding-large-vertical;
+     }
+     .form-control:first-child { 
+       margin-top: -@padding-large-vertical;
+     }
+   }
+   li.form-inline{
+       padding-bottom: @padding-large-vertical; 
+   }
+ } 
  .navbar-inner {
     position: relative;
     z-index: 3;
     display: table;
+      .brand { 
+        width: auto;
+        padding: 0;
+        font-size: 22px;
+      }
      .btn, 
      .dropdown-toggle  {
        white-space: nowrap;
@@ -992,12 +1025,7 @@
       &:hover { 
        color: lighten(@navbar-inverse-bg, 30%);
       }
-      &.brand { 
-        width: auto;
-        padding: 0;
-        font-size: 22px;
 
-      }
       &.btn-field-clean { 
          position: absolute;
          right: 16px;
@@ -1010,7 +1038,7 @@
          }
 
      }
-   > div { 
+    > div { 
      display: table-cell;
      vertical-align: top;
      width: 1%;
@@ -1068,13 +1096,14 @@
   @media (min-width: @screen-sm){ 
 
     .navbar-inner {
+      .brand {
+         width: 75px;
+         padding: 0 15px;
+      }
       .btn, .dropdown-toggle {
         padding-left: 12px;
         padding-right: 12px;
-        &.brand {
-         width: 75px;
-         padding: 0 15px;
-         }
+        
          .badge {
         margin-right: 0;
         right: 0;
