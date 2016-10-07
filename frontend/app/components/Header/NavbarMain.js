@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import SamplesAnalysisButtons from './NavbarMain/SamplesAnalysisButtons';
+import {SamplesButton, AnalysisButton} from './NavbarMain/SamplesAnalysisButtons';
 import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
@@ -40,9 +40,11 @@ class NavbarMain extends Component {
                         </span>
                     </div>
 
-                    <SamplesAnalysisButtons
-                        openAnalysisModal={() => this.props.openAnalysisModal()}
+                    <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
+                    />
+                    <AnalysisButton
+                        openAnalysisModal={() => this.props.openAnalysisModal()}
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
@@ -53,7 +55,6 @@ class NavbarMain extends Component {
                                     selectedRowIndices={selectedRowIndices}
                     />
                     <SavedFiles dispatch={this.props.dispatch}/>
-                
                     <Auth {...this.props} />
                 </div>
             </nav>

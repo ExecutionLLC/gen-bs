@@ -1,7 +1,7 @@
 [
   {
-    "name": "Default Test Filter",
-    "description": "Default Test filter description",
+    "name": "Empty Filter",
+    "description": "Empty filter",
     "type": "standard",
     "is_copy_disabled": false,
     "rules": {
@@ -9,54 +9,68 @@
         {
           "field": {
             "source_name": "sample",
-            "name": "ALT",
-            "value_type": "string"
+            "name": "CHROM",
+            "value_type": "integer"
           },
           "condition": {
-            "$neq": "A"
+            "$neq": null
           }
         }
       ]
     }
   },
   {
-    "name": "Test Filter",
-    "description": "Test filter description",
-    "type": "standard",
+    "name": "Exome Filter",
+    "description": "",
+    "type": "default",
     "is_copy_disabled": false,
     "rules": {
-      "$or": [
+      "$and": [
         {
           "field": {
             "source_name": "sample",
-            "name": "ALT",
+            "name": "VEP_SYMBOL",
             "value_type": "string"
           },
           "condition": {
-            "$neq": "A"
+            "$neq": null
           }
         },
         {
-          "field": {
-            "source_name": "sample",
-            "name": "FILTER",
-            "value_type": "string"
-          },
-          "condition": {
-	    "$eq": "PASS"
-	  }
-        },
-        {
-          "$and": [
+          "$or": [
             {
               "field": {
                 "source_name": "sample",
-                "name": "ALT",
+                "name": "VEP_HGVSp_transcript",
                 "value_type": "string"
               },
               "condition": {
-                "$neq": "ABC"
+                "$begin_with": "NP_"
               }
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "sample",
+                    "name": "VEP_Consequence",
+                    "value_type": "string"
+                  },
+                  "condition": {
+                    "$contains": "splice"
+                  }
+                },
+                {
+                  "field": {
+                    "source_name": "sample",
+                    "name": "VEP_HGVSc_transcript",
+                    "value_type": "string"
+                  },
+                  "condition": {
+                    "$begin_with": "NM_"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -64,31 +78,407 @@
     }
   },
   {
-    "name": "Another Test Filter",
-    "description": "Test filter description v2",
-    "type": "advanced",
+    "name": "Retinoblastoma Filter",
+    "description": "Empty filter",
+    "type": "standard",
     "is_copy_disabled": false,
     "rules": {
-      "$or": [
+      "$and": [
         {
           "field": {
             "source_name": "sample",
-            "name": "ALT",
+            "name": "VEP_SYMBOL",
             "value_type": "string"
           },
           "condition": {
-            "$neq": "A"
+            "$in": [
+              "RB1"
+            ]
           }
         },
         {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_HGVSc_transcript",
+                "value_type": "string"
+              },
+              "condition": {
+                "$nbegin_with": "X"
+              }
+            }
+          ]
+        },
+        {
+          "$or": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_IMPACT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "high impact"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_IMPACT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "changed protein"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_Consequence",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "inframe"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "FILTER",
+                "value_type": "string"
+              },
+              "condition": {
+                "$eq": "PASS"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "INFO_DP",
+                "value_type": "integer"
+              },
+              "condition": {
+                "$gte": 10
+              }
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "ESP6500_v01",
+                    "name": "INFO_MAF_2",
+                    "value_type": "float"
+                  },
+                  "condition": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "ExAC_r0_3_1_sites_v01",
+                    "name": "INFO_AF_Adj",
+                    "value_type": "float"
+                  },
+                  "condition": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Breast Cancer Filter",
+    "description": "Empty filter",
+    "type": "standard",
+    "is_copy_disabled": false,
+    "rules": {
+      "$and": [
+        {
           "field": {
             "source_name": "sample",
-            "name": "FILTER",
+            "name": "VEP_SYMBOL",
             "value_type": "string"
           },
           "condition": {
-	    "$eq": "PASS"
-	  }
+            "$in": [
+              "BRCA1",
+              "BRCA2"
+            ]
+          }
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_HGVSc_transcript",
+                "value_type": "string"
+              },
+              "condition": {
+                "$nbegin_with": "X"
+              }
+            }
+          ]
+        },
+        {
+          "$or": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_IMPACT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "high impact"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_IMPACT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "changed protein"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_Consequence",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "inframe"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "FILTER",
+                "value_type": "string"
+              },
+              "condition": {
+                "$eq": "PASS"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "INFO_DP",
+                "value_type": "integer"
+              },
+              "condition": {
+                "$gte": 10
+              }
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "ESP6500_v01",
+                    "name": "INFO_MAF_2",
+                    "value_type": "float"
+                  },
+                  "condition": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "ExAC_r0_3_1_sites_v01",
+                    "name": "INFO_AF_Adj",
+                    "value_type": "float"
+                  },
+                  "condition": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Colon and Lung Cancer Filter",
+    "description": "",
+    "type": "standard",
+    "is_copy_disabled": false,
+    "rules": {
+      "$and": [
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "VEP_SYMBOL",
+            "value_type": "string"
+          },
+          "condition": {
+            "$in": [
+              "KRAS",
+              "EGFR",
+              "BRAF",
+              "PIK3CA",
+              "AKT1",
+              "ERBB2",
+              "PTEN",
+              "NRAS",
+              "STK11",
+              "MAP2K1",
+              "ALK",
+              "DDR2",
+              "CTNNB1",
+              "MET",
+              "TP53",
+              "SMAD4",
+              "FBX7",
+              "FGFR3",
+              "NOTCH1",
+              "ERBB4",
+              "FGFR1",
+              "FGFR2"
+            ]
+          }
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_HGVSc_transcript",
+                "value_type": "string"
+              },
+              "condition": {
+                "$nbegin_with": "X"
+              }
+            }
+          ]
+        },
+        {
+          "$or": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_IMPACT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "high impact"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_IMPACT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "changed protein"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "VEP_Consequence",
+                "value_type": "string"
+              },
+              "condition": {
+                "$contains": "inframe"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "FILTER",
+                "value_type": "string"
+              },
+              "condition": {
+                "$eq": "PASS"
+              }
+            },
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "INFO_DP",
+                "value_type": "integer"
+              },
+              "condition": {
+                "$gte": 10
+              }
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "ESP6500_v01",
+                    "name": "INFO_MAF_2",
+                    "value_type": "float"
+                  },
+                  "condition": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$and": [
+                {
+                  "field": {
+                    "source_name": "ExAC_r0_3_1_sites_v01",
+                    "name": "INFO_AF_Adj",
+                    "value_type": "float"
+                  },
+                  "condition": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }

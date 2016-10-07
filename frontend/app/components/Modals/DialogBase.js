@@ -30,9 +30,6 @@ export default class DialogBase extends ComponentBase {
             <button
                 onClick={ () => this.onCloseModal() }
                 type='button'
-                className='btn btn-default'
-                data-dismiss='modal'
-                localize-data='action.extendSession'
             >
                 <span>Ok</span>
             </button>
@@ -86,6 +83,5 @@ export default class DialogBase extends ComponentBase {
 }
 
 DialogBase.propTypes = {
-    savedFiles: React.PropTypes.array.isRequired,
     showModal: React.PropTypes.bool.isRequired
 };

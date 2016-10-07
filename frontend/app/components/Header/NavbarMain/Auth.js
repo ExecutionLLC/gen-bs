@@ -1,28 +1,71 @@
 import React, { Component } from 'react';
+import onClickOutside from 'react-onclickoutside';
+import classNames from 'classnames';
+
+import LoginForm from './LoginForm';
 
 import { logout } from '../../../actions/auth';
 import config from '../../../../config';
 
 const AUTHORIZED_USER_TITLE = '';
 const DEMO_USER_TITLE = 'Register or login for access additional features';
+const GOOGLE_ACCOUNT_TITLE = 'Login using Google Account';
 
-export default class Auth extends Component {
-    _renderForAuthorizedUser() {
+class Auth extends Component {
+    constructor(...args) {
+        super(...args);
+
+        this.state = {
+            isDropdownOpened: false
+        };
+    }
+    render() {
+        // TODO: Close form on Esc
+        const dropdownClasses = classNames({
+            dropdown: true,
+            open: this.state.isDropdownOpened
+        });
+        if (this.props.auth.isDemo) {
+            return this._renderForDemoUser(dropdownClasses);
+        }
+        return this._renderForAuthorizedUser(dropdownClasses);
+    }
+
+    handleClickOutside() {
+        this.setState({
+            isDropdownOpened: false
+        });
+    }
+
+    _renderForAuthorizedUser(dropdownClasses) {
         const {profileMetadata} = this.props.userData;
         return (
             <div>
-                <div className='dropdown'>
+                <div className={dropdownClasses}>
                     <a href='#'
+<<<<<<< HEAD
                        className='btn navbar-btn dropdown-toggle' data-toggle="dropdown">
                         <span data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={AUTHORIZED_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>{ profileMetadata.email }</span>
+=======
+                       onClick={() => this.onLoginDropdownClick()}
+                       className='btn navbar-btn dropdown-toggle'
+                    >
+                        <span title={AUTHORIZED_USER_TITLE}
+                              className='hidden-xs'>
+                            { profileMetadata.email }
+                        </span>
+>>>>>>> 52fab125419a7814ee68710fa8e70c8f3ebaa5a3
                         <span className='visible-xs'>
                             <span className='dropdown-menu-header'>{ profileMetadata.email }</span><i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
                         <li>
-                            <a onClick={ () => { this.props.dispatch(logout()); } } href='#' type='button' id='logout'>
-                                <span data-localize='account.logout'>Logout</span>
+                            <a onClick={ () => { this.props.dispatch(logout()); } }
+                               href='#'
+                               type='button'
+                               id='logout'>
+                                <span>Logout</span>
                             </a>
                         </li>
                                 
@@ -32,23 +75,52 @@ export default class Auth extends Component {
         );
     }
 
-    _renderForDemoUser() {
+    _renderForDemoUser(dropdownClasses) {
         return (
             <div>
-                <a href={config.LOGIN_URL} className='btn navbar-btn dropdown-toggle' data-toggle="dropdown">
-                    <span data-localize='account.login.title'  data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={DEMO_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>
-                        Login
-                    </span>
-                    <span className='visible-xs'><i className='md-i'>input</i></span>
-                </a>
+
+                <div className={dropdownClasses}>
+                    <a href='#'
+                       onClick={() => this.onLoginDropdownClick()}
+                       className='btn navbar-btn dropdown-toggle'
+                    >
+                        <span title={DEMO_USER_TITLE}
+                              className='hidden-xs'>
+                            Login
+                        </span>
+                        <span className='visible-xs'>
+                            <i className='md-i'>person</i>
+                        </span>
+                    </a>
+                    <ul className='dropdown-menu dropdown-menu-right'>
+                        <li>
+                            <a href={config.LOGIN_URL}>
+                                <span title={GOOGLE_ACCOUNT_TITLE}
+                                      className='hidden-xs'>
+                                    Google Account
+                                </span>
+                                <span className='visible-xs'>
+                                    <i className='md-i'>input</i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <LoginForm
+                                dispatch={this.props.dispatch}
+                                closeLoginForm={() => this.handleClickOutside()}
+                            />
+                        </li>
+                    </ul>
+                </div>
             </div>
         );
     }
 
-    render() {
-        if (this.props.auth.isDemo) {
-            return this._renderForDemoUser();
-        }
-        return this._renderForAuthorizedUser();
+    onLoginDropdownClick() {
+        this.setState({
+            isDropdownOpened: !this.state.isDropdownOpened
+        });
     }
 }
+
+export default onClickOutside(Auth);

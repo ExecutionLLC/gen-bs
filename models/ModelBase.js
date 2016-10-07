@@ -131,12 +131,22 @@ class ModelBase {
         this._unsafeInsert(this.baseTableName, dataToInsert, trx, callback);
     }
 
+    _insertAsync(dataToInsert, trx) {
+        return this._unsafeInsertAsync(this.baseTableName, dataToInsert, trx);
+    }
+
     _unsafeInsert(tableName, dataToInsert, trx, callback) {
         trx(tableName)
             .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
             .asCallback((error) => {
                 callback(error, dataToInsert.id);
             });
+    }
+
+    _unsafeInsertAsync(tableName, dataToInsert, trx) {
+        return trx(tableName)
+            .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
+            .then(() => dataToInsert.id);
     }
 
     _unsafeUpdate(itemId, dataToUpdate, trx, callback) {

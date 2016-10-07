@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
-import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
+import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilterAsync, filtersListServerDeleteFilterAsync} from '../app/actions/filtersList';
 import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
@@ -48,17 +48,17 @@ runListedObjectTests({
     makeActions: {
         remove(filterId, sessionId) {
             return (dispatch) => {
-                dispatch(filtersListServerDeleteFilter(filterId, sessionId));
+                dispatch(filtersListServerDeleteFilterAsync(filterId, sessionId));
             };
         },
         update(newFilter, sessionId) {
             return (dispatch) => {
-                dispatch(filtersListServerUpdateFilter(newFilter, sessionId));
+                dispatch(filtersListServerUpdateFilterAsync(newFilter, sessionId));
             };
         },
         create(newFilter, sessionId, languageId) {
             return (dispatch) => {
-                return dispatch(filtersListServerCreateFilter(newFilter, sessionId, languageId));
+                return dispatch(filtersListServerCreateFilterAsync(newFilter, sessionId, languageId));
             }
         }
     },

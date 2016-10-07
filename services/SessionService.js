@@ -7,12 +7,15 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 
 const ServiceBase = require('./ServiceBase');
+const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
 const SESSION_TYPES = {
     USER: 'USER',
     DEMO: 'DEMO',
     SYSTEM: 'SYSTEM'
 };
+
+const SESSION_KEY_PREFIX = 'genomics:';
 
 class SessionService extends ServiceBase {
     constructor(services, models) {
@@ -31,6 +34,7 @@ class SessionService extends ServiceBase {
             ttl: sessionTimeoutSec,
             pass: password,
             db: databaseNumber,
+            prefix: SESSION_KEY_PREFIX,
             serializer: {
                 stringify: (session) => this._stringifySession(session),
                 parse: (sessionString) => this._parseSession(sessionString)
@@ -77,6 +81,13 @@ class SessionService extends ServiceBase {
             && session.userId;
     }
 
+    startForLoginPassword(session, login, password, callback) {
+        async.waterfall([
+            (callback) => this.services.users.findIdByLoginPassword(login, password, callback),
+            (userId, callback) => this._initUserSession(session, userId, callback)
+        ], callback);
+    }
+
     /**
      * Initializes session for a user with the specified email.
      *
@@ -87,16 +98,18 @@ class SessionService extends ServiceBase {
     startForEmail(session, email, callback) {
         async.waterfall([
             (callback) => this.services.users.findIdByEmail(email, callback),
-            (userId, callback) => this.services.operations.closeSearchOperationsIfAny(session,
-                (error) => callback(error, userId)
-            ),
-            (userId, callback) => {
-                Object.assign(session, {
-                    userId,
-                    type: SESSION_TYPES.USER
-                });
-                callback(null, session);
-            }
+            (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
+            (userId, callback) => this._initUserSession(session, userId, callback)
+        ], callback);
+    }
+
+    closeAllUserSessions(userEmail, callback) {
+        async.waterfall([
+            (callback) => this.services.users.findIdByEmail(userEmail, callback),
+            (userId, callback) => this.findUserSessions(userId, callback),
+            (sessions, callback) => async.each(sessions,
+                (session, callback) => this.destroySession(session, callback),
+                callback)
         ], callback);
     }
 
@@ -153,14 +166,43 @@ class SessionService extends ServiceBase {
         }
     }
 
-    touchSession(session, callback) {
-        if (this.systemSession.id !== session.id) {
-            this.redisStore.touch(session.id, session, (error) => callback(error));
-        } else {
-            callback(new Error('System session is unexpected here.'))
-        }
+    _initUserSession(session, userId, callback) {
+        async.waterfall([
+            (callback) => this.services.operations.closeSearchOperationsIfAny(session,
+                (error) => callback(error)
+            ),
+            (callback) => {
+                Object.assign(session, {
+                    userId,
+                    type: SESSION_TYPES.USER
+                });
+                callback(null, session);
+            }
+        ], callback)
     }
-    
+
+    ensureNoUserSessions(userId, callback) {
+        async.waterfall([
+            (callback) => this.findUserSessions(userId, callback),
+            (sessions, callback) => sessions.length ? callback(new TooManyUserSessionsError()) : callback(null)
+        ], callback);
+    }
+
+    findUserSessions(userId, callback) {
+        const {client} = this.redisStore;
+        async.waterfall([
+            (callback) => client.keys(`${SESSION_KEY_PREFIX}*`, callback),
+            (sessionKeys, callback) => async.map(sessionKeys, (sessionKey, callback) => {
+                const sessionId = sessionKey.substring(SESSION_KEY_PREFIX.length, sessionKey.length);
+                this.findById(sessionId, (error, session) => callback(error, Object.assign({}, session, {sessionId})));
+            }, callback),
+            (sessions, callback) => {
+                const userSessions = _.filter(sessions, {userId});
+                callback(null, userSessions)
+            }
+        ], callback);
+    }
+
     _stringifySession(session) {
         const operationsString = this.services.operations.stringifyOperations(session.operations);
         const sessionToSerialize = Object.assign({}, session, {

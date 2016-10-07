@@ -1,0 +1,159 @@
+{
+  "fields": [
+    {
+      "name": "INFO_DP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Average Sample Read Depth"
+    },
+    {
+      "name": "INFO_DBSNP",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "dbSNP version which established the rs_id"
+    },
+    {
+      "name": "INFO_AA_AGE",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Esitmated Variant Age in kilo years for the African American Population"
+    },
+    {
+      "name": "INFO_AA_GTC",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "African American Genotype Counts in the order of listed GTS"
+    },
+    {
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "INFO_MAF_0",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_MAF_1",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_GTC",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Total Genotype Counts in the order of listed GTS"
+    },
+    {
+      "name": "INFO_EA_AGE",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Esitmated Variant Age in kilo years for the European American Population"
+    },
+    {
+      "name": "INFO_MAF_2",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_EA_AC",
+      "isMandatory": false,
+      "num": -4,
+      "type": "integer",
+      "desc": "European American Allele Count"
+    },
+    {
+      "name": "POS",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_AA_AC",
+      "isMandatory": false,
+      "num": -4,
+      "type": "integer",
+      "desc": "African American Allele Count"
+    },
+    {
+      "name": "INFO_GTS",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Observed Genotypes. For INDELs, A1, A2, or An refers to the N-th alternate allele while R refers to the reference allele."
+    },
+    {
+      "name": "INFO_GRCh38_POSITION",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "GRCh38 chromosomal postion liftover from the original GRCh37 chromosomal position. A value of -1 means the GRCh37 position can not be mapped to the GRCh38 build."
+    },
+    {
+      "name": "INFO_ID",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "indels mapping predicted with SeattleSeqAnnotation137 on dbSNP v137"
+    },
+    {
+      "name": "CHROM",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "INFO_AA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "chimpAllele"
+    },
+    {
+      "name": "INFO_EA_GTC",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "European American Genotype Counts in the order of listed GTS"
+    },
+    {
+      "name": "FILTER",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Filter status."
+    },
+    {
+      "name": "INFO_TAC",
+      "isMandatory": false,
+      "num": -4,
+      "type": "integer",
+      "desc": "ESP6500 Allele Count"
+    },
+    {
+      "name": "ALT",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    }
+  ],
+  "reference": null
+}

@@ -4,6 +4,7 @@ const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const {ENTITY_TYPES} = require('../utils/Enums');
+const PasswordUtils = require('../utils/PasswordUtils');
 
 const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
 
@@ -32,25 +33,17 @@ class UserService extends ServiceBase {
 
     /**
      * Adds a new user with specified params.
-     * @param defaultLanguId User's default language.
-     * @param name First name.
-     * @param lastName Last name.
-     * @param speciality User's job position name.
-     * @param numberPaidSamples Number of times user is allowed to analyze a new sample.
-     * @param email User email.
-     * @param callback (error, userId)
+     * @param {string} defaultLanguId User's default language.
+     * @param {{firstName: string, lastName: string, gender: string, speciality: string, company: string, email: string, numberPaidSamples: number, phone: string, loginType: string, company: string, password: ?string=}} user
+     * @param {function} callback (error, userId)
      * */
-    add(defaultLanguId, name, lastName, email, speciality, numberPaidSamples, callback) {
-        const user = {
-            name,
-            lastName,
-            email,
-            speciality,
-            language: defaultLanguId,
-            numberPaidSamples
-        };
-
+    add(defaultLanguId, user, callback) {
         this.models.users.add(user, defaultLanguId, callback);
+    }
+
+    findIdByLoginPassword(login, password, callback) {
+        const passwordHash = PasswordUtils.hash(password || '');
+        this.models.users.findIdByEmailPassword(login, passwordHash, callback);
     }
 
     /**

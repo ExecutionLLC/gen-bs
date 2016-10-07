@@ -130,7 +130,16 @@
     "name": "Mariya",
     "last_name": "Ponomareva",
     "email": "ponomareva.mariya@gmail.com",
-    "speciality": "Developer",
+    "speciality": "Tester",
+    "language": "en",
+    "number_paid_samples": 11
+  },
+  {
+    "id": "12322095-b90c-73ac-4937-9d24e0ec3dba",
+    "name": "Artem",
+    "last_name": "Ponomarev",
+    "email": "ponomarev.artem@gmail.com",
+    "speciality": "Tester",
     "language": "en",
     "number_paid_samples": 11
   }

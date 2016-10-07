@@ -71,6 +71,14 @@ class ControllerBase {
         }
     }
 
+    sendErrorOrOk(response, error) {
+        if (error) {
+            this.sendInternalError(response, error);
+        } else {
+            this.sendOk(response);
+        }
+    }
+
     static sendError(response, httpError, errorObject) {
         response
             .status(httpError)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTimeout, WATCH_ALL } from 'redux-timeout';
+import { addTimeout } from 'redux-timeout';
 
 import config from '../../config';
 
@@ -14,24 +14,27 @@ import FileUploadModal from '../components/Modals/FileUploadModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 import AnalysisModal from '../components/Modals/AnalysisModal';
+import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessionsModal';
 
-import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
+import { KeepAliveTask, loginWithGoogle, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
+import UserActions from '../actions/userActions';
 
 
 class App extends Component {
 
     componentDidMount() {
-        const dispatch = this.props.dispatch;
-        dispatch(login());
+        const {dispatch} = this.props;
+        const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
+        dispatch(loginWithGoogle());
 
-        const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT*1000;
+        const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
         const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
-        dispatch(addTimeout(autoLogoutTimeout, WATCH_ALL, autoLogoutFn));
+        dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
 
-        const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
+        const keepAliveTask = new KeepAliveTask(KEEP_ALIVE_TIMEOUT * 1000);
         keepAliveTask.start();
     }
 
@@ -88,6 +91,7 @@ class App extends Component {
                     closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
                 />
                 <SavedFilesModal showModal={savedFiles.showSavedFilesModal} />
+                <CloseAllUserSessionsModal showModal={auth.showCloseAllUserSessionsDialog} />
             </div>
         );
     }

@@ -1,0 +1,810 @@
+{
+  "fields": [
+    {
+      "name": "INFO_AF_FIN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Finnish allele frequency adjusted"
+    },
+    {
+      "name": "INFO_HetF_OTH",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "for chromosomes 1-22"
+    },
+    {
+      "name": "INFO_HetF_SAS",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "for chromosomes 1-22"
+    },
+    {
+      "name": "INFO_Het_SAS",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "South Asian Heterozygous Counts"
+    },
+    {
+      "name": "INFO_AN_MALE",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Allele number among males"
+    },
+    {
+      "name": "INFO_HetF_EAS",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "for chromosomes 1-22"
+    },
+    {
+      "name": "INFO_AC_OTH",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Other Allele Counts"
+    },
+    {
+      "name": "INFO_AC_MALE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Allele count among males"
+    },
+    {
+      "name": "INFO_ReadPosRankSum",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Z-score from Wilcoxon rank sum test of Alt vs. Ref read position bias"
+    },
+    {
+      "name": "INFO_AF_POPMAX",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_AC_SAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "South Asian Allele Counts"
+    },
+    {
+      "name": "INFO_AC_Hemi",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Adjusted Hemizygous Counts"
+    },
+    {
+      "name": "INFO_AC_AFR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "African and African American allele count"
+    },
+    {
+      "name": "INFO_AN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Total number of alleles in called genotypes"
+    },
+    {
+      "name": "INFO_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele Frequency, for each ALT allele, in the same order as listed"
+    },
+    {
+      "name": "INFO_AC",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Allele count in genotypes, for each ALT allele, in the same order as listed"
+    },
+    {
+      "name": "INFO_NCC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of no-called samples"
+    },
+    {
+      "name": "INFO_AF_Adj",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Adjusted allele frequency"
+    },
+    {
+      "name": "INFO_AF_AMR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "American allele frequency adjusted"
+    },
+    {
+      "name": "INFO_GQ_MEAN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Mean of all GQ values"
+    },
+    {
+      "name": "INFO_VQSLOD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Log odds ratio of being a true variant versus being false under the trained gaussian mixture model"
+    },
+    {
+      "name": "INFO_AC_Het",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "Adjusted Heterozygous Counts"
+    },
+    {
+      "name": "INFO_Hom_AFR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "African and African American homozygous individuals adjusted"
+    },
+    {
+      "name": "INFO_AC_FIN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Finnish Allele Counts"
+    },
+    {
+      "name": "INFO_clinvar_conflicted",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Clinvar Conflicted Status"
+    },
+    {
+      "name": "INFO_HWP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "allele and genotype frequency between generations"
+    },
+    {
+      "name": "INFO_AN_FIN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Finnish Chromosome Count"
+    },
+    {
+      "name": "INFO_Hemi_NFE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Non-Finnish European Hemizygous Counts"
+    },
+    {
+      "name": "INFO_AF_Hemi",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_Het_NFE",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "Non-Finnish European Heterozygous Counts"
+    },
+    {
+      "name": "INFO_KG_AF_GLOBAL",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Overall allele frequency in 1000 Genomes"
+    },
+    {
+      "name": "INFO_ESP_AC",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Allele Count in ESP"
+    },
+    {
+      "name": "INFO_KG_AF_POPMAX",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Max allele frequency across populations in 1000 Genomes"
+    },
+    {
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "INFO_AN_OTH",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Other Chromosome Count"
+    },
+    {
+      "name": "INFO_AF_EAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "East Asian allele frequency adjusted"
+    },
+    {
+      "name": "INFO_AF_SAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_HomF_OTH",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_Hemi_OTH",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Other Hemizygous Counts"
+    },
+    {
+      "name": "INFO_Hom_AMR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "American Homozygous Counts"
+    },
+    {
+      "name": "INFO_Het_AMR",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "American Heterozygous Counts"
+    },
+    {
+      "name": "INFO_AN_NFE",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "excluding Finnish"
+    },
+    {
+      "name": "INFO_Hom_CONSANGUINEOUS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Homozygote count among individuals with F > 0.05"
+    },
+    {
+      "name": "INFO_Hom_SAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "South Asian Homozygous Counts"
+    },
+    {
+      "name": "INFO_POPMAX",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Population with max AF"
+    },
+    {
+      "name": "INFO_AF_Het",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_Hemi_EAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "East Asian Hemizygous Counts"
+    },
+    {
+      "name": "INFO_AN_FEMALE",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Allele number among females"
+    },
+    {
+      "name": "INFO_clinvar_pathogenic",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Clinvar Pathogenic Status"
+    },
+    {
+      "name": "INFO_HomF_EAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_AN_EAS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "East Asian Chromosome Count"
+    },
+    {
+      "name": "INFO_HomF_SAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "FILTER",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Filter status."
+    },
+    {
+      "name": "INFO_AC_POPMAX",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "AC in the population with the max AF"
+    },
+    {
+      "name": "INFO_DP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Approximate read depth; some reads may have been filtered"
+    },
+    {
+      "name": "INFO_Hom_EAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "East Asian Homozygous Counts"
+    },
+    {
+      "name": "INFO_DS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Were any of the samples downsampled?"
+    },
+    {
+      "name": "INFO_HomF_AFR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "African and African American heterozygous frequency adjusted"
+    },
+    {
+      "name": "INFO_AF_AFR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "African and African American allele frequency adjusted"
+    },
+    {
+      "name": "INFO_HetF_AMR",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "for chromosomes 1-22"
+    },
+    {
+      "name": "INFO_AF_NFE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "non Finnish"
+    },
+    {
+      "name": "INFO_DB",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "dbSNP Membership"
+    },
+    {
+      "name": "INFO_Hom_NFE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "excluding Finnish"
+    },
+    {
+      "name": "INFO_Het_EAS",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "East Asian Heterozygous Counts"
+    },
+    {
+      "name": "INFO_K3_RUN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Number of ensuing tri-nucleotide repeats."
+    },
+    {
+      "name": "INFO_AC_Adj",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Adjusted Allele Counts"
+    },
+    {
+      "name": "INFO_AN_Adj",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Adjusted Chromosome Count"
+    },
+    {
+      "name": "INFO_clinvar_mut",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Clinvar MUT Flag (is disease allele REF?)"
+    },
+    {
+      "name": "INFO_AN_CONSANGUINEOUS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Allele count among individuals with inbreeding coefficient F > 0.05"
+    },
+    {
+      "name": "ID",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Semi-colon separated list of unique identifiers where available."
+    },
+    {
+      "name": "INFO_Het_OTH",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "Other Heterozygous Counts"
+    },
+    {
+      "name": "INFO_AF_MALE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_ESP_AF_POPMAX",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Max allele frequency across populations in ESP"
+    },
+    {
+      "name": "INFO_HaplotypeScore",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Consistency score of the site with at most two segregating haplotypes"
+    },
+    {
+      "name": "CHROM",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "INFO_ESP_AF_GLOBAL",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Overall allele frequency in ESP"
+    },
+    {
+      "name": "INFO_AC_NFE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "excluding Finnish"
+    },
+    {
+      "name": "INFO_AN_AFR",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "African and African American chromosomes count"
+    },
+    {
+      "name": "INFO_K1_RUN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Number of ensuing single nucleotide repeats."
+    },
+    {
+      "name": "INFO_AF_Hom",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_AC_CONSANGUINEOUS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Allele count among individuals with inbreeding coefficient F > 0.05"
+    },
+    {
+      "name": "INFO_HomF_FIN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_HomF_NFE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "non Finnish"
+    },
+    {
+      "name": "INFO_FS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Phred-scaled p-value using Fisher's exact test to detect strand bias"
+    },
+    {
+      "name": "INFO_K2_RUN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Number of ensuing di-nucleotide repeats."
+    },
+    {
+      "name": "ALT",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "INFO_AF_FEMALE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_Hemi_FIN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Finnish Hemizygous Counts"
+    },
+    {
+      "name": "INFO_Hom_OTH",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Other Homozygous Counts"
+    },
+    {
+      "name": "INFO_clinvar_measureset_id",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Clinvar Measureset ID"
+    },
+    {
+      "name": "INFO_Het_FIN",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "Finnish Heterozygous Counts"
+    },
+    {
+      "name": "INFO_AN_SAS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "South Asian Chromosome Count"
+    },
+    {
+      "name": "INFO_GQ_STDDEV",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Standard deviation of all GQ values"
+    },
+    {
+      "name": "INFO_Hom_FIN",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Finnish Homozygous Counts"
+    },
+    {
+      "name": "INFO_QD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Variant Confidence/Quality by Depth"
+    },
+    {
+      "name": "INFO_AN_AMR",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "American chromosomes count"
+    },
+    {
+      "name": "INFO_KG_AC",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Allele Count in 1000 Genomes"
+    },
+    {
+      "name": "INFO_AN_POPMAX",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "AN in the population with the max AF"
+    },
+    {
+      "name": "INFO_InbreedingCoeff",
+      "isMandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "estimated from the genotype likelihoods per-sample when compared against the Hardy-Weinberg expectation"
+    },
+    {
+      "name": "POS",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_Hemi_AFR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "African and African American hemizygous individuals adjusted"
+    },
+    {
+      "name": "INFO_HetF_FIN",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "for chromosomes 1-22"
+    },
+    {
+      "name": "INFO_HetF_NFE",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "for chromosomes 1-22 (non Finnish)"
+    },
+    {
+      "name": "INFO_AC_EAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "East Asian Allele Counts"
+    },
+    {
+      "name": "INFO_Hemi_SAS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "South Asian Hemizygous Counts"
+    },
+    {
+      "name": "INFO_AC_Hom",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Adjusted Homozygous Counts"
+    },
+    {
+      "name": "INFO_Hemi_AMR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "American Hemizygous Counts"
+    },
+    {
+      "name": "INFO_AF_CONSANGUINEOUS",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency among individuals with inbreeding coefficient F > 0.05"
+    },
+    {
+      "name": "INFO_AC_FEMALE",
+      "isMandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "Allele count among females"
+    },
+    {
+      "name": "INFO_HomF_AMR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_CCC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of called chromosomes"
+    },
+    {
+      "name": "INFO_AC_AMR",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "American Allele Counts"
+    },
+    {
+      "name": "INFO_AF_OTH",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Other allele frequency adjusted"
+    },
+    {
+      "name": "INFO_Het_AFR",
+      "isMandatory": false,
+      "num": -5,
+      "type": "integer",
+      "desc": "African and African American heterozygous individuals adjusted"
+    },
+    {
+      "name": "INFO_HetF_AFR",
+      "isMandatory": false,
+      "num": -5,
+      "type": "float",
+      "desc": "African and African American heterozygous frequency adjusted for chromosomes 1-22"
+    }
+  ],
+  "reference": "Homo_sapiens_assembly19"
+}

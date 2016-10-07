@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import classNames from 'classnames';
 import React from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
@@ -8,9 +9,9 @@ import {
     cancelAnalysesHistoryEdit,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
-    updateAnalysesHistoryItem,
+    updateAnalysesHistoryItemAsync,
     setEditedHistoryItem,
-    deleteServerAnalysesHistoryItem
+    deleteServerAnalysesHistoryItemAsync
 } from '../../../actions/analysesHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
@@ -32,16 +33,20 @@ import {ImmutableHashedArray} from '../../../utils/immutable';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, isOnlyItem, auth: {isDemo}} = this.props;
+        const {historyItem, disabled, isOnlyItem, auth: {isDemo}, isBringToFront} = this.props;
 
         return (
-            <div className='split-right'>
+            <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
-                <div className='split-scroll form-horizontal'>
+                <div className='split-scroll'>
                     <div className='form-padding'>
-                        <div className='form-horizontal form-rows form-rows-2row-xs'>
-                            {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
-                        </div>
+                        {!disabled ?
+                            <div className='form-horizontal form-rows form-rows-2row-xs'>
+                                {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
+                            </div>
+                            :
+                            this.renderDisabledAnalysis(historyItem)
+                        }
                     </div>
                 </div>
             </div>
@@ -58,7 +63,7 @@ export default class AnalysisRightPane extends React.Component {
                     {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
                     {this.renderAnalysisDescription(historyItem.description, isDemo)}
                 </div>
-                {this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
+                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
         );
     }
@@ -501,25 +506,44 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    analysisTypeCaption(type) {
+        return {
+            [analysisType.SINGLE]: 'Single',
+            [analysisType.TUMOR]: 'Tumor/Normal',
+            [analysisType.FAMILY]: 'Family'
+        }[type] || '';
+    }
+
+    sampleTypeCaption(type) {
+        return {
+            [sampleType.SINGLE]: 'Single',
+            [sampleType.TUMOR]: 'Tumor',
+            [sampleType.NORMAL]: 'Normal',
+            [sampleType.PROBAND]: 'Proband',
+            [sampleType.MOTHER]: 'Mother',
+            [sampleType.FATHER]: 'Father'
+        }[type] || '';
+    }
+
     renderAnalysisHeaderTabs(historyItemType, disabled) {
         const {dispatch} = this.props;
         const tabs = [
             {
                 isActive: historyItemType === analysisType.SINGLE,
                 className: 'single-tab',
-                caption: 'Single',
+                caption: this.analysisTypeCaption(analysisType.SINGLE),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.SINGLE}))
             },
             {
                 isActive: historyItemType === analysisType.TUMOR,
                 className: 'tumor-normal-tab',
-                caption: 'Tumor/Normal',
+                caption: this.analysisTypeCaption(analysisType.TUMOR),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.TUMOR}))
             },
             {
                 isActive: historyItemType === analysisType.FAMILY,
                 className: 'family-tab',
-                caption: 'Family',
+                caption: this.analysisTypeCaption(analysisType.FAMILY),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.FAMILY}))
             }
         ];
@@ -577,6 +601,72 @@ export default class AnalysisRightPane extends React.Component {
                     </span>
                 </a>
             </li>
+        );
+    }
+
+    renderDisabledAnalysis(historyItem) {
+        const {
+            samplesList: {hashedArray: {hash: samplesHash}},
+            filtersList: {hashedArray: {hash: filtersHash}},
+            modelsList: {hashedArray: {hash: modelsHash}},
+            viewsList: {hashedArray: {hash: viewsHash}}
+        } = this.props;
+
+        const selectedFilter = filtersHash[historyItem.filterId];
+        const selectedModel = historyItem.modelId && modelsHash[historyItem.modelId];
+        const selectedView = viewsHash[historyItem.viewId];
+
+        return (
+            <div>
+                <dl>
+                    <dt>Analysis type</dt>
+                    <dd>{this.analysisTypeCaption(historyItem.type)}</dd>
+                </dl>
+                {historyItem.samples.map((sampleInfo) => {
+                    const sampleId = sampleInfo.id;
+                    const sample = samplesHash[sampleId];
+
+                    return (
+                        <dl>
+                            <dt><span data-localize='general.sample'>Sample</span>
+                                ({this.sampleTypeCaption(sampleInfo.type)})
+                            </dt>
+                            <dd>{sample && sample.fileName}</dd>
+                        </dl>
+                    );
+                })}
+                <dl>
+                    <dt>Filter</dt>
+                    <dd>{selectedFilter && selectedFilter.name}</dd>
+                </dl>
+                {historyItem.modelId &&
+                    <dl>
+                        <dt>Model</dt>
+                        <dd>{selectedModel && selectedModel.name}</dd>
+                    </dl>
+                }
+                <dl>
+                    <dt>View</dt>
+                    <dd>{selectedView && selectedView.name}</dd>
+                </dl>
+
+                <hr />
+                <div class='btn-toolbar'>
+                    <a
+                       type='button'
+                       className='btn btn-link btn-uppercase'
+                       onClick={() => this.onDuplicateButtonClick()}
+                    ><span>Duplicate</span></a>
+
+                    <a
+                        className='btn btn-link btn-uppercase'
+                        role='button'
+                        onClick={() => this.onAnalyzeButtonClick(false)}
+                    >
+                        <span>View results</span>
+                    </a>
+                </div>
+            </div>
         );
     }
 
@@ -646,7 +736,7 @@ export default class AnalysisRightPane extends React.Component {
     onDeleteAnalysisClick() {
         const {dispatch, historyItem: {id: historyItemId}} = this.props;
         if (historyItemId) {
-            dispatch(deleteServerAnalysesHistoryItem(historyItemId));
+            dispatch(deleteServerAnalysesHistoryItemAsync(historyItemId));
         }
     }
 
@@ -657,7 +747,7 @@ export default class AnalysisRightPane extends React.Component {
         }
         if (historyItem.id) {
             dispatch(editExistentAnalysesHistoryItem({...historyItem, name}));
-            dispatch(updateAnalysesHistoryItem(historyItem.id));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
         } else {
             dispatch(this.actionEdit({name}));
         }
@@ -667,7 +757,7 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem} = this.props;
         if (historyItem.id) {
             dispatch(editExistentAnalysesHistoryItem({...historyItem, description}));
-            dispatch(updateAnalysesHistoryItem(historyItem.id));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
         } else {
             dispatch(this.actionEdit({description}));
         }
@@ -766,7 +856,7 @@ export default class AnalysisRightPane extends React.Component {
     onSamplesClick(sampleIndex) {
         const {dispatch, historyItem} = this.props;
         const selectedSamplesIds = _.map(historyItem.samples, (sample) => sample.id);
-        const action = this.actionEdit({sample: {index: sampleIndex, id: null}});
+        const action = this.actionEdit({sample: {index: sampleIndex, id: selectedSamplesIds[sampleIndex]}});
         dispatch(samplesOnSave(selectedSamplesIds, action, 'changeItem.sample.index', 'changeItem.sample.id'));
         dispatch(openModal('upload'));
     }

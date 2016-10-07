@@ -18,9 +18,9 @@ class RPCProxy {
      * @param {object}logger
      * @param {function(object)}replyCallback
      */
-    constructor(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback) {
+    constructor(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback, returnCallback) {
         Object.assign(this,
-            {host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
+            {host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback, returnCallback}, {
                 consumer: null,
                 publisher: null
             }
@@ -53,18 +53,14 @@ class RPCProxy {
         }
     }
 
-    onMessageReturned(handler) {
-        this.messageReturnedHandler = handler;
-    }
-
     _constructMessage(id, method, replyTo, params) {
         const message = {id, method, params, replyTo};
         return ChangeCaseUtil.convertKeysToSnakeCase(message);
     }
 
     _onMessageReturned(messageObject) {
-        if (this.messageReturnedHandler) {
-            this.messageReturnedHandler(messageObject);
+        if (this.returnCallback) {
+            this.returnCallback(messageObject);
         } else {
             this.logger.error(
                 `Message returned but no handler is registered to`

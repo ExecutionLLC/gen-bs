@@ -53,7 +53,9 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
         async.map(fieldsMetadata, (fieldMetadata, callback) => {
             async.waterfall([
                 (callback) => {
-                    if (fieldMetadata.availableValues && !fieldMetadata.isEditable) {
+                    if (fieldMetadata.availableValues
+                        && fieldMetadata.availableValues.length
+                        && !fieldMetadata.isEditable) {
                         callback(new Error('Available values allowed only for editable fields'));
                     } else {
                         callback(null);
@@ -92,7 +94,8 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
     _loadRequiredAndEditableFields(callback) {
         const requiredFields = ChangeCaseUtil.convertKeysToCamelCase(require(this.requiredFieldsFile));
         const editableFields = ChangeCaseUtil.convertKeysToCamelCase(require(this.editableFieldsFile));
-        callback(null, requiredFields.concat(editableFields));
+        const vepFields = ChangeCaseUtil.convertKeysToCamelCase(require(this.vepFieldsFile));
+        callback(null, requiredFields.concat(editableFields).concat(vepFields));
     }
 
     _buildMetadata(asMetadataTemplatesDir, targetDir, isSample, fieldsMetadata, callback) {

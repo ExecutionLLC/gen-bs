@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
-import {setCurrentAnalysesHistoryIdLoadData} from '../../../actions/analysesHistory';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from '../../../actions/analysesHistory';
 
 
 export default class AnalysisBody extends React.Component {
@@ -47,6 +47,7 @@ export default class AnalysisBody extends React.Component {
                         modelsList={this.props.modelsList}
                         fields={this.props.fields}
                         isOnlyItem={!this.props.historyList.length}
+                        isBringToFront={this.props.isAnalysisBringToFront}
                     />}
                 </div>
             </Modal.Body>
@@ -59,7 +60,8 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) {
-        const {dispatch} = this.props;
-        dispatch(setCurrentAnalysesHistoryIdLoadData(id));
+        const {dispatch, onAnalysisShow} = this.props;
+        dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(id));
+        onAnalysisShow();
     }
 }

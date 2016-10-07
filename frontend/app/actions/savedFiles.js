@@ -1,10 +1,9 @@
 import Moment from 'moment';
-import HttpStatus from 'http-status';
 import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
-import {handleError} from './errorHandler';
+import {handleApiResponseErrorAsync} from './errorHandler';
 import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
 
@@ -15,8 +14,8 @@ export const SAVED_FILE_DOWNLOAD_RESULT_RECEIVED = 'SAVED_FILE_DOWNLOAD_RESULT_R
 export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
 
-const ERROR_UPLOADING_EXPORTED_FILE = 'Error while uploading exported file';
-const ERROR_DOWNLOADING_EXPORTED_FILE = 'Error downloading exported file';
+const UPLOAD_ERROR_MESSAGE = 'Error while uploading exported file';
+const DOWNLOAD_ERROR_MESSAGE = 'Error downloading exported file';
 
 const savedFilesClient = apiFacade.savedFilesClient;
 
@@ -28,7 +27,7 @@ function createUserDownload(fileBlob, fileName) {
     };
 }
 
-function saveExportedFileToServer(fileBlob, fileName, totalResults) {
+function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
@@ -43,14 +42,16 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             name: fileName,
             totalResults
         };
-        savedFilesClient.add(language, fileMetadata, fileBlob, (error, response) => {
-            if (error || response.status !== HttpStatus.OK) {
-                dispatch(handleError(response.status, ERROR_UPLOADING_EXPORTED_FILE));
-            } else {
-                const savedFile = response.body;
-                dispatch(savedFileUploadResultReceived(savedFile));
-            }
-        });
+        return new Promise((resolve) => savedFilesClient.add(
+            language,
+            fileMetadata,
+            fileBlob,
+            (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPLOAD_ERROR_MESSAGE, error, response))
+        ).then(
+            (response) => response.body
+        ).then((savedFile) => dispatch(savedFileUploadResultReceived(savedFile)));
     };
 }
 
@@ -88,20 +89,20 @@ export function receiveSavedFilesList(savedFilesList) {
     };
 }
 
-export function downloadSavedFile(savedFile) {
+export function downloadSavedFileAsync(savedFile) {
     return (dispatch, getState) => {
         const {
             ui: {
                 language
             }
         } = getState();
-        savedFilesClient.download(language, savedFile.id, (error, response) => {
-            if (error || response.status !== HttpStatus.OK) {
-                dispatch(handleError(response.status, ERROR_DOWNLOADING_EXPORTED_FILE));
-            } else {
-                dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name));
-            }
-        });
+        return new Promise((resolve) => savedFilesClient.download(
+            language,
+            savedFile.id,
+            (error, response) => resolve({error, response})
+        )).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
+        ).then((response) => dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name)));
     };
 }
 
@@ -155,7 +156,7 @@ export function exportToFile(exportType) {
         dispatch(createUserDownload(fileBlob, fileName));
 
         if (!isDemo) {
-            dispatch(saveExportedFileToServer(fileBlob, fileName, count));
+            dispatch(saveExportedFileToServerAsync(fileBlob, fileName, count));
         }
     };
 }

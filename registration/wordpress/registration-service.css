@@ -1,0 +1,61 @@
+.warning {
+    background: red;
+    font-weight: bold;
+    color: yellow;
+    display: none;
+}
+
+body.no-password #password {
+    display: none;
+}
+
+body.no-login-type #login-type {
+    display: none;
+}
+
+body.no-register #register-block {
+    display: none;
+}
+
+#warning-password,
+#warning-userdata {
+    display: none;
+}
+
+body.warning-userdata #warning-userdata {
+    display: block;
+}
+
+body.warning-password #warning-password {
+    display: block;
+}
+
+body.register-loading {
+    background: gray;
+}
+
+#register-ok-mail,
+#register-fail {
+    display: none;
+}
+
+body.register-ok-mail #register-ok-mail {
+    display: block;
+}
+
+body.register-ok-mail #registration-header,
+body.register-ok-mail #regcode-container,
+body.register-ok-mail #userinfo,
+body.register-ok-mail #login-type,
+body.register-ok-mail #password,
+body.register-ok-mail #register-block {
+    display: none;
+}
+
+body.register-fail #register-fail {
+    display: block;
+}
+
+body.valid-regcode #wrong-regcode {
+    display: none;
+}
