@@ -23,8 +23,7 @@ export default class ExistentFilterSelect extends Component {
         const filters = filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
-        const isFilterDuplicable = !!filterBuilder.editingFilter.parsedFilter;
-
+        const isFilterDuplicable = selectedFilter.modelType !== 'complex';
         return (
             <div className='form-rows-dynamic'>
                 <div className='form-group'>

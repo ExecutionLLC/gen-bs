@@ -79,7 +79,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const method = METHODS.openSearchSession;
         const sampleIds = _.map(samples, sample => sample.id);
         const viewId = view.id;
-        const appServerSampleIds = _.map(samples, sample => this._getAppServerSampleId(sample));
+        const appServerSampleIds = _.map(samples, sample => {
+            return {
+                sample: this._getAppServerSampleId(sample),
+                type: sample.sampleType,
+                genotype: sample.genotypeName
+            }
+        });
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
         const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
