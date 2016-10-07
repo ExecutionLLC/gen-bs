@@ -51,7 +51,8 @@ class Auth extends Component {
                             { profileMetadata.email }
                         </span>
                         <span className='visible-xs'>
-                            <span className='dropdown-menu-header'>{ profileMetadata.email }</span><i className='md-i md-person md-replace-to-close'></i>
+                            <span className='dropdown-menu-header'>{ profileMetadata.email }</span>
+                            <i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
@@ -83,20 +84,18 @@ class Auth extends Component {
                               className='hidden-xs'>
                             Login
                         </span>
-                        <span className='visible-xs'>
-                            <i className='md-i'>person</i>
-                        </span>
+                        <span claclassNamess="visible-xs">
+                          <span className="dropdown-menu-header">Login</span>
+                          <i className="md-i md-person md-replace-to-close"></i></span>
+                        </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
                        <li class="dropdown-header">Enter in</li>
                         <li>
-                            <a href={config.LOGIN_URL}>
+                            <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
                                 <span title={GOOGLE_ACCOUNT_TITLE}
                                       className='hidden-xs'>
                                     Google Account
-                                </span>
-                                <span className='visible-xs'>
-                                    <i className='md-i'>input</i>
                                 </span>
                             </a>
                         </li>
