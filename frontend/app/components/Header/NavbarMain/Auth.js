@@ -90,7 +90,7 @@ class Auth extends Component {
                         </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                       <li class="dropdown-header">Enter in</li>
+                       <li class="dropdown-header">Login with</li>
                         <li>
                             <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
                                 <span title={GOOGLE_ACCOUNT_TITLE}
