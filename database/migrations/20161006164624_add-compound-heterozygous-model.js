@@ -8,6 +8,15 @@ const modelTables = {
     TEXT: 'model_text'
 };
 
+function removeEmptyRulesModels(knex, Promise) {
+    console.log('==> Deleting old default complex models...');
+    return knex(modelTables.METADATA)
+        .whereNull('rules')
+        .update({
+            is_deleted: true
+        });
+}
+
 function addCompoundHeterozygousModel(knex, Promise) {
     const model = {
         name: 'Compound Heterozygous',
@@ -18,7 +27,7 @@ function addCompoundHeterozygousModel(knex, Promise) {
         rules: {
             name: 'CompoundHeterozygousModel'
         }
-    }
+    };
     return addModel(knex,model);
 }
 
@@ -49,6 +58,7 @@ function addModel(knex, model) {
 exports.up = function (knex, Promise) {
     console.log('=> Add Compound Heterozygous model...');
     return addCompoundHeterozygousModel(knex, Promise)
+        .then(() => removeEmptyRulesModels(knex, Promise))
         .then(() => console.log('=> Complete.'));
 };
 
