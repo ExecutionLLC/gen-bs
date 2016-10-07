@@ -93,11 +93,13 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
         ).then((updatedSample) => {
-            const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
             // If editing selected sample, don't forget to set it as current.
-            if (selectedSampleId === sampleId) {
-                dispatch(sampleSaveCurrent(updatedSample.id));
+            if (onSaveAction) {
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                if (selectedSampleId === sampleId) {
+                    dispatch(sampleSaveCurrent(updatedSample.id));
+                }
             }
             return updatedSample.id;
         });
