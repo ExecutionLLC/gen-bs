@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            search: this.props.search
+            search: this.props.search,
+            showPopup: false
         };
     }
 
     componentWillReceiveProps(newProps) {
         this.state = {
+            ...this.state,
             search: newProps.search
         };
     }
@@ -18,8 +21,14 @@ class NavbarSearch extends Component {
     render() {
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
-            <div className='navbar-search'>
-                <a data-target='#mobileSearch' data-toggle='modal' className='btn navbar-btn btn-block visible-xs' type='button'><i className='md-i'>search</i></a>
+            <div className={classNames({'navbar-search': true, 'search-popup': this.state.showPopup})}>
+                <a
+                    data-target='#mobileSearch'
+                    data-toggle='modal'
+                    className='btn navbar-btn btn-block visible-xs'
+                    type='button'
+                    onClick={() => this.onSearchPopupToggle()}
+                ><i className='md-i'>search</i></a>
                 <div className='navbar-search-field hidden-xs'>
                     <input
                      type='text'
@@ -57,6 +66,10 @@ class NavbarSearch extends Component {
         const { search } = this.state;
         const { onGlobalSearchStringChanged } = this.props;
         onGlobalSearchStringChanged(search);
+    }
+
+    onSearchPopupToggle() {
+        this.setState({...this.state, showPopup: !this.state.showPopup});
     }
 }
 
