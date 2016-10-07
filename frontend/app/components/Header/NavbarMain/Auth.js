@@ -13,10 +13,10 @@ export default class Auth extends Component {
             <div>
                 <div className='dropdown'>
                     <a href='#'
-                       className='btn navbar-btn dropdown-toggle' data-toggle='dropdown' data-target='#sidebarRight'>
+                       className='btn navbar-btn dropdown-toggle' data-toggle="dropdown">
                         <span data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={AUTHORIZED_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>{ profileMetadata.email }</span>
                         <span className='visible-xs'>
-                            <span className='dropdown-menu-header'>Profile</span><i className='md-i md-person md-replace-to-close'></i>
+                            <span className='dropdown-menu-header'>{ profileMetadata.email }</span><i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
@@ -25,13 +25,8 @@ export default class Auth extends Component {
                                 <span data-localize='account.logout'>Logout</span>
                             </a>
                         </li>
-                        <li className='visible-xs dropdown-header'>Language </li>
-                        <li className='visible-xs'><a href='#' type='button' id='en_lang'><span
-                            data-localize='language.lang_sm_En'>English</span></a>
-                        </li>
-                        <li className='visible-xs'><a href='#' type='button' id='ch_lang'><span
-                            data-localize='language.lang_sm_Ch'>中国</span></a>
-                        </li>                    </ul>
+                                
+                      </ul>
                 </div>
             </div>
         );
@@ -40,7 +35,7 @@ export default class Auth extends Component {
     _renderForDemoUser() {
         return (
             <div>
-                <a href={config.LOGIN_URL} className='btn navbar-btn dropdown-toggle' data-toggle='collapse' data-target='#sidebarRight'>
+                <a href={config.LOGIN_URL} className='btn navbar-btn dropdown-toggle' data-toggle="dropdown">
                     <span data-localize='account.login.title'  data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={DEMO_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>
                         Login
                     </span>
