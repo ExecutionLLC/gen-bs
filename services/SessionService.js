@@ -7,6 +7,7 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 
 const ServiceBase = require('./ServiceBase');
+const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
 const SESSION_TYPES = {
     USER: 'USER',
