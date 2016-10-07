@@ -93,11 +93,13 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
         ).then((updatedSample) => {
-            const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
             // If editing selected sample, don't forget to set it as current.
-            if (selectedSampleId === sampleId) {
-                dispatch(sampleSaveCurrent(updatedSample.id));
+            if (onSaveAction) {
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                if (selectedSampleId === sampleId) {
+                    dispatch(sampleSaveCurrent(updatedSample.id));
+                }
             }
             return updatedSample.id;
         });
@@ -116,10 +118,10 @@ export function sampleSaveCurrent(sampleId) {
 
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
         if (!onSaveAction) {
             return;
         }
-        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
             dispatch(
