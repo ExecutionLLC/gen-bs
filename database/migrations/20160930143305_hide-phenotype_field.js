@@ -12,6 +12,7 @@ function hidePhenotypeField(knex, Promise) {
 }
 
 exports.up = function(knex, Promise) {
+    console.log('Hiding phenotype field');
     return hidePhenotypeField(knex, Promise)
         .then(() => console.log('=> Complete.'));
 };

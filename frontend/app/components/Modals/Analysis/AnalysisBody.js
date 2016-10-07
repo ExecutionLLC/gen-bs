@@ -47,6 +47,7 @@ export default class AnalysisBody extends React.Component {
                         modelsList={this.props.modelsList}
                         fields={this.props.fields}
                         isOnlyItem={!this.props.historyList.length}
+                        isBringToFront={this.props.isAnalysisBringToFront}
                     />}
                 </div>
             </Modal.Body>
@@ -59,7 +60,8 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) {
-        const {dispatch} = this.props;
+        const {dispatch, onAnalysisShow} = this.props;
         dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(id));
+        onAnalysisShow();
     }
 }
