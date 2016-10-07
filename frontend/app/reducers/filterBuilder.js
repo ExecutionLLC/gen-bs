@@ -102,7 +102,6 @@ function reduceFBuilderStartEdit(state, action) {
         hashedArray: ImmutableHashedArray.makeFromArray(filtersList.hashedArray.array.filter((model) => model.analysisType === filtersStrategy.analysisType))
     };
 
-    debugger;
     return Object.assign({}, state, {
         filtersStrategy,
         filtersList:newFiltersList,
