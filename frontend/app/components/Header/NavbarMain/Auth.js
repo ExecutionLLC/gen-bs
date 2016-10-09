@@ -56,7 +56,7 @@ class Auth extends Component {
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                        <li className='form-inline'>
+                        <li>
                             <a onClick={ () => { this.props.dispatch(logout()); } }
                                href='#'
                                type='button'
@@ -90,11 +90,10 @@ class Auth extends Component {
                         </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                       <li class="dropdown-header">Login with</li>
-                        <li>
+                        <li class="dropdown-header">Login with</li>
+                        <li className='form-inline'>
                             <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
-                                <span title={GOOGLE_ACCOUNT_TITLE}
-                                      className='hidden-xs'>
+                                <span title={GOOGLE_ACCOUNT_TITLE}>
                                     Google Account
                                 </span>
                             </a>
