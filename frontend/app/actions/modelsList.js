@@ -1,5 +1,6 @@
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 
 const modelsClient = apiFacade.modelsClient;
 
@@ -75,7 +76,7 @@ export function modelsListServerCreateModel(model, languageId) {
 }
 
 export function modelsListServerUpdateModel(model) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(modelsListStartServerOperation());
         return new Promise(
             (resolve) => modelsClient.update(model, (error, response) => resolve({error, response}))
@@ -85,6 +86,8 @@ export function modelsListServerUpdateModel(model) {
         }).then((response) => response.body
         ).then((updatedModel) => {
             dispatch(modelsListEditModel(model.id, updatedModel));
+            const {analysesHistory: {currentHistoryId}} = getState();
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
             return updatedModel;
         });
     };

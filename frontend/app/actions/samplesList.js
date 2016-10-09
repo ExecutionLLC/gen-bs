@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
 import {immutableSetPathProperty, immutableGetPathProperty} from '../utils/immutable';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -12,6 +13,7 @@ export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
+export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
 
 const samplesClient = apiFacade.samplesClient;
 const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
@@ -83,8 +85,17 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
     };
 }
 
+function disableSampleEdit(sampleId, disable) {
+    return {
+        type: DISABLE_SAMPLE_EDIT,
+        sampleId,
+        disable
+    };
+}
+
 export function requestUpdateSampleFieldsAsync(sampleId) {
     return (dispatch, getState) => {
+        dispatch(disableSampleEdit(sampleId, true));
         const {samplesList: {editedSamplesHash, onSaveAction, onSaveActionPropertyId}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
         return new Promise((resolve) => samplesClient.update(
@@ -93,12 +104,17 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
         ).then((updatedSample) => {
-            const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
+            dispatch(disableSampleEdit(sampleId, false));
             // If editing selected sample, don't forget to set it as current.
-            if (selectedSampleId === sampleId) {
-                dispatch(sampleSaveCurrent(updatedSample.id));
+            if (onSaveAction) {
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                if (selectedSampleId === sampleId) {
+                    dispatch(sampleSaveCurrent(updatedSample.id));
+                }
             }
+            const {analysesHistory: {currentHistoryId}} = getState();
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
             return updatedSample.id;
         });
     };
@@ -116,10 +132,10 @@ export function sampleSaveCurrent(sampleId) {
 
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
         if (!onSaveAction) {
             return;
         }
-        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
             dispatch(
