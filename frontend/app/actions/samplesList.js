@@ -96,7 +96,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
             // If editing selected sample, don't forget to set it as current.
             if (onSaveAction) {
-                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);
                 if (selectedSampleId === sampleId) {
                     dispatch(sampleSaveCurrent(updatedSample.id));
                 }
