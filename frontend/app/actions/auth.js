@@ -97,8 +97,8 @@ export class KeepAliveTask {
             .then(() => dispatch(getCookieSessionTypeAsync()))
             .then((sessionType) => {
                 if (sessionType === SESSION_TYPE.INVALID) {
-                    // TODO: Handle this situation.
-                    console.error('Cookie session is invalid.');
+                    console.error('Cookie session is invalid, redirect to login.');
+                    window.location.replace(location.origin);
                 }
             })
             .then(() => dispatch(send(PING_MESSAGE_CONTENTS)));
