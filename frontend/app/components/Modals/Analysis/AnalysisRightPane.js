@@ -25,7 +25,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
-import {entityType} from '../../../utils/entityTypes';
+import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
@@ -776,12 +776,9 @@ export default class AnalysisRightPane extends React.Component {
             viewsList: {hashedArray: {array: views}},
             filtersList: {hashedArray: {array: filters}}
         } = this.props;
-        const sample = _.find(samples, {type: entityType.DEFAULT}) ||
-            _.find(samples, {type: entityType.STANDARD});
-        const filter = _.find(filters, {type: entityType.DEFAULT}) ||
-            _.find(filters, {type: entityType.STANDARD});
-        const view = _.find(views, {type: entityType.DEFAULT}) ||
-            _.find(views, {type: entityType.STANDARD});
+        const sample = getDefaultOrStandardItem(samples);
+        const filter = getDefaultOrStandardItem(filters);
+        const view = getDefaultOrStandardItem(views);
         dispatch(createNewHistoryItem(sample, filter, view));
     }
 

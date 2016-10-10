@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import apiFacade from '../api/ApiFacade';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {
@@ -21,7 +19,7 @@ import {
 import {
     modelsListReceive
 } from './modelsList';
-import {entityType} from '../utils/entityTypes';
+import {getDefaultOrStandardItem} from '../utils/entityTypes';
 import {analyze} from './ui';
 
 /*
@@ -85,12 +83,9 @@ export function fetchUserDataAsync() {
             dispatch(receiveSamplesList(samples));
             dispatch(receiveInitialAnalysesHistory(analyses));
 
-            const sample = _.find(samples, {type: entityType.DEFAULT}) ||
-                _.find(samples, {type: entityType.STANDARD});
-            const filter = _.find(filters, {type: entityType.DEFAULT}) ||
-                _.find(filters, {type: entityType.STANDARD});
-            const view = _.find(views, {type: entityType.DEFAULT}) ||
-                _.find(views, {type: entityType.STANDARD});
+            const sample = getDefaultOrStandardItem(samples);
+            const filter = getDefaultOrStandardItem(filters);
+            const view = getDefaultOrStandardItem(views);
             if (!sample || !filter || !view) {
                 dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 return;
