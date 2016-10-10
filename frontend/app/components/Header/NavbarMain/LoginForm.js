@@ -27,7 +27,7 @@ class LoginForm extends Component {
                        key='password'
                        placeholder='Password'
                        onChange={(e) => this.onPasswordChanged(e)}/>
-                <button className='btn btn-primary login-button'
+                <button className='btn btn-primary  btn-uppercase login-button'
                         type='button'
                         onClick={(e) => this.onLoginClick(e)}
                         disabled={isDisable}
