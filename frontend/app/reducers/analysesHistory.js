@@ -105,13 +105,12 @@ function reduceEditAnalysesHistoryItem(state, action) {
 }
 
 function reduceDeleteAnalysesHistoryItem(state, action) {
-    const {historyItemId, newHistoryItem} = action;
+    const {historyItemId} = action;
     const {history, currentHistoryId} = state;
     const historyItemIndex = _.findIndex(history, {id: historyItemId});
     if (historyItemIndex < 0) {
         return state;
     }
-    const historyItem = history[historyItemIndex];
     var newHistoryItemIndex;
     if (currentHistoryId === historyItemId) {
         newHistoryItemIndex = historyItemIndex >= history.length - 1 ? historyItemIndex - 1 : historyItemIndex;
@@ -121,12 +120,10 @@ function reduceDeleteAnalysesHistoryItem(state, action) {
     const nowHistory = immutableArray.remove(history, historyItemIndex);
     const nowHistoryItem = newHistoryItemIndex < 0 ? null : nowHistory[newHistoryItemIndex];
     const nowHistoryItemId = nowHistoryItem ? nowHistoryItem.id : null;
-    const newNewHistoryItem = newHistoryItem || nowHistory.length ? newHistoryItem : HistoryItemUtils.makeHistoryItem(historyItem);
     return {
         ...state,
         history: nowHistory,
-        currentHistoryId: nowHistoryItemId,
-        newHistoryItem: newNewHistoryItem
+        currentHistoryId: nowHistoryItemId
     };
 }
 
