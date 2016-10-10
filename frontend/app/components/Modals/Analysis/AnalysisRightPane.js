@@ -6,7 +6,7 @@ import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     duplicateAnalysesHistoryItem,
-    cancelAnalysesHistoryEdit,
+    createNewHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -25,6 +25,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
+import {entityType} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
@@ -769,8 +770,19 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {dispatch} = this.props;
-        dispatch(cancelAnalysesHistoryEdit());
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samples}},
+            viewsList: {hashedArray: {array: views}},
+            filtersList: {hashedArray: {array: filters}}
+        } = this.props;
+        const sample = _.find(samples, {type: entityType.DEFAULT}) ||
+            _.find(samples, {type: entityType.STANDARD});
+        const filter = _.find(filters, {type: entityType.DEFAULT}) ||
+            _.find(filters, {type: entityType.STANDARD});
+        const view = _.find(views, {type: entityType.DEFAULT}) ||
+            _.find(views, {type: entityType.STANDARD});
+        dispatch(createNewHistoryItem(sample, filter, view));
     }
 
     onAnalyzeButtonClick(isEditing) {
