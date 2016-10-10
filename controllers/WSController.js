@@ -52,14 +52,17 @@ class WSController extends ControllerBase {
     }
 
     closeSocketsForUserIdAsync(sessionId) {
-        const clientDescriptors = this._findClients(sessionId, null);
-        clientDescriptors.forEach(({ws}) => {
-            this._sendClientMessage(ws, {
-                operationType: CLOSED_BY_USER,
-                resultType: 'success'
+        return Promise.resolve()
+            .then(() => {
+                const clientDescriptors = this._findClients(sessionId, null);
+                clientDescriptors.forEach(({ws}) => {
+                    this._sendClientMessage(ws, {
+                        operationType: CLOSED_BY_USER,
+                        resultType: 'success'
+                    });
+                    ws.close();
+                });
             });
-            ws.close();
-        });
     }
 
     /**

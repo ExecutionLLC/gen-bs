@@ -15,13 +15,14 @@ import {clearAnalysesHistory} from './analysesHistory';
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient';
 
+import {TooManyWebSocketsError} from './websocket';
+
 /*
  * action types
  */
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
-export const CLOSE_OTHER_SOCKETS = 'CLOSE_OTHER_SOCKETS';
 export const SHOW_ANOTHER_PAGE_OPENED_MODAL = 'SHOW_ANOTHER_PAGE_OPENED_MODAL';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
@@ -76,21 +77,31 @@ export class KeepAliveTask {
 
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
-            console.log('Keep-alive tick.');
             // update session on the web server
-            const {dispatch} = reduxStore;
-            dispatch(getCookieSessionTypeAsync())
-                .then((sessionType) => {
-                    if (sessionType === SESSION_TYPE.INVALID) {
-                        // TODO: Handle this situation.
-                        console.error('Cookie session is invalid.');
-                    }
-                })
+            return Promise.resolve()
+                .then(() => this._keepAliveAsync())
                 .catch((error) => console.error('got unexpected error in keep alive task', error))
-                .then(() => dispatch(send(PING_MESSAGE_CONTENTS)))
                 // reschedule task
                 .then(() => this._scheduleTask());
         }, this.period);
+    }
+
+    _keepAliveAsync() {
+        const {dispatch} = reduxStore;
+        if (reduxStore.getState().websocket.closed) {
+            console.log('Web-socket is closed, skipping keep-alive request');
+            return Promise.resolve();
+        }
+        return Promise.resolve()
+            .then(() => console.log('Keep-alive tick.'))
+            .then(() => dispatch(getCookieSessionTypeAsync()))
+            .then((sessionType) => {
+                if (sessionType === SESSION_TYPE.INVALID) {
+                    // TODO: Handle this situation.
+                    console.error('Cookie session is invalid.');
+                }
+            })
+            .then(() => dispatch(send(PING_MESSAGE_CONTENTS)));
     }
 }
 
@@ -222,8 +233,11 @@ export function login() {
                 // restore old session
                 return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO))
                     .catch((error) => {
-                        // TODO: Check error type here.
-                        dispatch(handleError(null, error.message));
+                        if (error.code !== TooManyWebSocketsError.CODE) {
+                            dispatch(handleError(null, error.message));
+                        } else {
+                            dispatch(showAnotherPageOpenedModal(true));
+                        }
                         return Promise.reject(error);
                     });
             } else {

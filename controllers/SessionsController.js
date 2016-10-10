@@ -20,7 +20,7 @@ class SessionsController extends ControllerBase {
             this.check.name,
             this.close.name,
             this.closeAllUserSessions.name,
-            this.closeOpenedSocketsForUserId.name
+            this.closeOpenedSocketsForSession.name
         ]);
 
         this.config = this.services.config;
@@ -75,7 +75,7 @@ class SessionsController extends ControllerBase {
         }
     }
 
-    closeOpenedSocketsForUserId(request, response) {
+    closeOpenedSocketsForSession(request, response) {
         const {session} = request;
         if (this.services.sessions.isSessionValid(session)) {
             this.controllers.wsController.closeSocketsForUserIdAsync(session.id)
@@ -189,7 +189,7 @@ class SessionsController extends ControllerBase {
         router.put('/', checkSessionLimiter, this.check);
         router.delete('/', closeSessionLimiter, this.close);
         router.delete('/all', closeSessionLimiter, this.closeAllUserSessions);
-        router.delete('/socket', closeSessionLimiter, this.closeOpenedSocketsForUserId);
+        router.delete('/socket', closeSessionLimiter, this.closeOpenedSocketsForSession);
 
         return router;
     }

@@ -43,7 +43,7 @@ export default function auth(state = {
                 showCloseAllUserSessionsDialog: action.shouldShow
             });
 
-        case ActionTypes.CLOSE_OTHER_SOCKETS:
+        case ActionTypes.SHOW_ANOTHER_PAGE_OPENED_MODAL:
             return Object.assign({}, state, {
                 showAnotherPageOpenedModal: action.shouldShow
             });

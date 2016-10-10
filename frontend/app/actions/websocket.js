@@ -10,6 +10,7 @@ export const WS_STORE_CONNECTION = 'WS_STORE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
+export const WS_RECEIVE_OPEN = 'WS_RECEIVE_OPEN';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
 export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
@@ -26,7 +27,10 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 export class TooManyWebSocketsError extends Error {
     constructor(message) {
         super(message || 'It seems you have another tab opened. Please close it and reload this page to continue.');
+        this.code = TooManyWebSocketsError.CODE;
     }
+
+    static CODE = 'TooManyWebSocketsError';
 }
 
 let webSocketConnection = null;
@@ -180,10 +184,15 @@ function receiveMessage(msg) {
     };
 }
 
-function receiveClose(msg) {
+function receiveClose() {
     return {
-        type: WS_RECEIVE_CLOSE,
-        msg
+        type: WS_RECEIVE_CLOSE
+    };
+}
+
+function receiveOpen() {
+    return {
+        type: WS_RECEIVE_OPEN
     };
 }
 
@@ -217,9 +226,10 @@ export function subscribeToWsAsync() {
                     dispatch(receiveMessage(messageObject));
                 } else if (operationType === WS_OPERATION_TYPES.OPEN) {
                     if (resultType === WS_RESULT_TYPES.SUCCESS) {
+                        isOpened = true;
+                        dispatch(receiveOpen());
                         resolve();
                     } else {
-                        dispatch(showAnotherPageOpenedModal(true));
                         reject(new TooManyWebSocketsError());
                     }
                 }
@@ -228,7 +238,7 @@ export function subscribeToWsAsync() {
                 dispatch(receiveError(event.data));
             };
             webSocketConnection.onclose = event => {
-                dispatch(receiveClose(event.data));
+                dispatch(receiveClose());
                 if (!event.wasClean) {
                     dispatch(reconnectWS());
                 }

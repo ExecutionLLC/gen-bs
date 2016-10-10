@@ -127,6 +127,10 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 closed: true
             });
+        case ActionTypes.WS_RECEIVE_OPEN:
+            return Object.assign({}, state, {
+                closed: false
+            });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
