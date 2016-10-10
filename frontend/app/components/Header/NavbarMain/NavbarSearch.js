@@ -40,7 +40,11 @@ class NavbarSearch extends Component {
                      disabled={!isEnabled}
                      value={this.state.search}
                     />
-                    <a type='button' className='btn btn-link-inverse btn-field-clean visible-xs' id='closeMobileSearch'><i className='md-i'>close</i></a>
+                    <a
+                        type='button'
+                        className='btn btn-link-inverse btn-field-clean visible-xs'
+                        id='closeMobileSearch'
+                    ><i className='md-i'>close</i></a>
                 </div>
             </div>
         );
