@@ -21,15 +21,13 @@ class NavbarSearch extends Component {
     render() {
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
-            <div className={classNames({'navbar-search': true, '': this.state.showPopup})}>
+            <div className={classNames({'navbar-search': true, 'navbar-search-xs': this.state.showPopup})}>
                 <a
-                    data-target='#mobileSearch'
-                    data-toggle='modal'
                     className='btn navbar-btn btn-block visible-xs'
                     type='button'
                     onClick={() => this.onSearchPopupToggle()}
                 ><i className='md-i'>search</i></a>
-                <div className='navbar-search-field navbar-search-xs'>
+                <div className='navbar-search-field'>
                     <input
                      type='text'
                      data-localize='results.search'
