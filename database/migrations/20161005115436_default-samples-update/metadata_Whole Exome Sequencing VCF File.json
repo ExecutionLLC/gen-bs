@@ -1,0 +1,890 @@
+{
+  "genotype_columns": [
+    "GT_AF",
+    "GT_AO",
+    "GT_DP",
+    "GT_FAO",
+    "GT_FDP",
+    "GT_FRO",
+    "GT_FSAF",
+    "GT_FSAR",
+    "GT_FSRF",
+    "GT_FSRR",
+    "GT_GQ",
+    "GT_GT",
+    "GT_GT_Zygosity",
+    "GT_GT_Genotype",
+    "GT_RO",
+    "GT_SAF",
+    "GT_SAR",
+    "GT_SRF",
+    "GT_SRR"
+  ],
+  "columns": [
+    {
+      "name": "VEP_Feature",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_CELL_TYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_DOMAINS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "INFO_REVB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Reverse strand bias in prediction."
+    },
+    {
+      "name": "VEP_CLIN_SIG",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "INFO_FRO",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator Reference allele observations"
+    },
+    {
+      "name": "VEP_MOTIF_SCORE_CHANGE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "INFO_AO",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Alternate allele observations"
+    },
+    {
+      "name": "INFO_SAR",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Alternate allele observations on the reverse strand"
+    },
+    {
+      "name": "INFO_AF",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency based on Flow Evaluator observation counts"
+    },
+    {
+      "name": "INFO_FSAF",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Flow Evaluator Alternate allele observations on the forward strand"
+    },
+    {
+      "name": "VEP_HGNC_ID",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSc_transcript",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "for use in HGVSc notation (left part before period glyph)"
+    },
+    {
+      "name": "INFO_SAF",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Alternate allele observations on the forward strand"
+    },
+    {
+      "name": "VEP_ALLELE_NUM",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "INFO_MLLD",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Mean log-likelihood delta per read."
+    },
+    {
+      "name": "INFO_FSAR",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Flow Evaluator Alternate allele observations on the reverse strand"
+    },
+    {
+      "name": "INFO_PB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Bias of relative variant position in reference reads versus variant reads. Equals Mann-Whitney U rho statistic P(Y>X)+0.5P(Y=X)"
+    },
+    {
+      "name": "VEP_SWISSPROT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "best match"
+    },
+    {
+      "name": "INFO_HS",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Indicate it is at a hot spot"
+    },
+    {
+      "name": "INFO_OID",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "List of original Hotspot IDs"
+    },
+    {
+      "name": "VEP_NumberOfExons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_TREMBL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "best match"
+    },
+    {
+      "name": "INFO_REFB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Reference Hypothesis bias in prediction."
+    },
+    {
+      "name": "VEP_IntronNumber",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_Protein_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    {
+      "name": "VEP_Protein_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    {
+      "name": "VEP_STRAND",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_CANONICAL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "VEP_ExonNumber",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "starting with 1"
+    },
+    {
+      "name": "VEP_HGMD",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSp_transcript",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "for use in HGVSp notation (left part before period glyph)"
+    },
+    {
+      "name": "INFO_OREF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "List of original reference bases"
+    },
+    {
+      "name": "VEP_HGVS_OFFSET",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "HGVS was calculated after ambiguous repeat shift. Column shows shift size"
+    },
+    {
+      "name": "INFO_LEN",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "allele length"
+    },
+    {
+      "name": "VEP_Feature_type",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "transcript, regulatory, motif"
+    },
+    {
+      "name": "VEP_PHENO",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Indicates if existing variant is associated with a phenotype, disease or trait"
+    },
+    {
+      "name": "VEP_TSL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_IMPACT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "high impact, changed protein effectiveness , no change, no evidence or difficult to predict"
+    },
+    {
+      "name": "INFO_FWDB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Forward strand bias in prediction."
+    },
+    {
+      "name": "INFO_STB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Strand bias in variant relative to reference."
+    },
+    {
+      "name": "REF",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "INFO_SSSB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Strand-specific strand bias for allele."
+    },
+    {
+      "name": "VEP_Amino_acids",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_VARIANT_CLASS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    {
+      "name": "VEP_CDS_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    {
+      "name": "VEP_CDS_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    {
+      "name": "INFO_RO",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Reference allele observations"
+    },
+    {
+      "name": "INFO_FSRF",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator Reference observations on the forward strand"
+    },
+    {
+      "name": "VEP_PUBMED",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "FILTER",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Filter status."
+    },
+    {
+      "name": "VEP_Codons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_SOMATIC",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ""
+    },
+    {
+      "name": "VEP_DISTANCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "INFO_DP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Total read depth at the locus"
+    },
+    {
+      "name": "INFO_VARB",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Variant Hypothesis bias in prediction."
+    },
+    {
+      "name": "INFO_PBP",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Pval of relative variant position in reference reads versus variant reads.  Related to GATK ReadPosRankSumTest"
+    },
+    {
+      "name": "VEP_SYMBOL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Gene ID in database from \"Gene DB\" column"
+    },
+    {
+      "name": "VEP_MOTIF_NAME",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSc_nucleotide_changes",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "in HGVSc transcript coordinates"
+    },
+    {
+      "name": "VEP_cDNA_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    {
+      "name": "VEP_cDNA_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    {
+      "name": "VEP_Gene",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "INFO_RBI",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Distance of bias parameters from zero."
+    },
+    {
+      "name": "VEP_PICK",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ""
+    },
+    {
+      "name": "INFO_OPOS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "List of original allele positions"
+    },
+    {
+      "name": "INFO_TYPE",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "string",
+      "desc": "The type of allele, either snp, mnp, ins, del, or complex."
+    },
+    {
+      "name": "INFO_FSRR",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator Reference observations on the reverse strand"
+    },
+    {
+      "name": "VEP_HIGH_INF_POS",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ""
+    },
+    {
+      "name": "VEP_NumberOfIntrons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSp_nucleotide_changes",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "in HGVSp transcript coordinates"
+    },
+    {
+      "name": "CHROM",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "VEP_MOTIF_POS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_GENE_PHENO",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_SYMBOL_SOURCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "database for \"Gene ID\" column"
+    },
+    {
+      "name": "QUAL",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "float",
+      "desc": "Quality."
+    },
+    {
+      "name": "INFO_FDP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator read depth at the locus"
+    },
+    {
+      "name": "INFO_HRUN",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Run length: the number of consecutive repeats of the alternate allele in the reference genome"
+    },
+    {
+      "name": "INFO_SRF",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of reference observations on the forward strand"
+    },
+    {
+      "name": "VEP_Consequence",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_SIFT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is 0.05"
+    },
+    {
+      "name": "VEP_Zygosity",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Heterozygous, Homozygous, Hemizygous, Unknown. Indels considered equal for zygosity"
+    },
+    {
+      "name": "VEP_Genotype",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Capital case is for alternative alleles and lowercase is for reference allele"
+    },
+    {
+      "name": "VEP_ZYG",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "ALT",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "VEP_Existing_variation",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "INFO_SRR",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of reference observations on the reverse strand"
+    },
+    {
+      "name": "INFO_FR",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Reason why the variant was filtered."
+    },
+    {
+      "name": "INFO_NS",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples with data"
+    },
+    {
+      "name": "INFO_FAO",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Flow Evaluator Alternate allele observations"
+    },
+    {
+      "name": "INFO_QD",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "QualityByDepth as 4*QUAL/FDP (analogous to GATK)"
+    },
+    {
+      "name": "INFO_FXX",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Flow Evaluator failed read ratio"
+    },
+    {
+      "name": "INFO_SSEN",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Strand-specific-error prediction on negative strand."
+    },
+    {
+      "name": "POS",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_SSEP",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Strand-specific-error prediction on positive strand."
+    },
+    {
+      "name": "VEP_CCDS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_BIOTYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Gene type in Havana DB. Protein coding: IGC gene, IGD gene, IG gene, IGJ gene, IGLV gene, IGM gene, IGV gene, IGZ gene, nonsense mediated decay, nontranslating CDS, non stop decay, polymorphic pseudogene, TRC gene, TRD gene, TRJ gene. Pseudogene: disrupted domain, IGC pseudogene, IGJ pseudogene, IG pseudogene, IGV pseudogene, processed pseudogene, transcribed processed pseudogene, transcribed unitary pseudogene, transcribed unprocessed pseudogene, translated processed pseudogene, TRJ pseudogene, unprocessed pseudogene. Long noncoding: 3prime overlapping ncrna, ambiguous orf, antisense, antisense RNA, lincRNA, ncrna host, processed transcript, sense intronic, sense overlapping. Short noncoding: miRNA, miRNA_pseudogene, miscRNA, miscRNA pseudogene, Mt rRNA, Mt tRNA, rRNA, scRNA, snlRNA, snoRNA, snRNA, tRNA, tRNA_pseudogene"
+    },
+    {
+      "name": "INFO_STBP",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Pval of Strand bias in variant relative to reference."
+    },
+    {
+      "name": "VEP_PolyPhen",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": "PolyPhen-2 v2.2.2. Probability(variation is deleterious). Common threshold is 0.95"
+    },
+    {
+      "name": "ID",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Semi-colon separated list of unique identifiers where available."
+    },
+    {
+      "name": "VEP_Allele",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "INFO_OMAPALT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Maps OID,OPOS,OREF,OALT entries to specific ALT alleles"
+    },
+    {
+      "name": "INFO_OALT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "List of original variant bases"
+    },
+    {
+      "name": "VEP_SV",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "GT_FDP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator Read Depth"
+    },
+    {
+      "name": "GT_FSAR",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Flow Evaluator Alternate allele observations on the reverse strand"
+    },
+    {
+      "name": "GT_FSRF",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator reference observations on the forward strand"
+    },
+    {
+      "name": "GT_FRO",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator Reference allele observation count"
+    },
+    {
+      "name": "GT_FAO",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Flow Evaluator Alternate allele observation count"
+    },
+    {
+      "name": "GT_GT",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Genotype"
+    },
+    {
+      "name": "GT_GT_Zygosity",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Zygosity"
+    },
+    {
+      "name": "GT_SAR",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Alternate allele observations on the reverse strand"
+    },
+    {
+      "name": "GT_RO",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Reference allele observation count"
+    },
+    {
+      "name": "GT_DP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Read Depth"
+    },
+    {
+      "name": "GT_AF",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency based on Flow Evaluator observation counts"
+    },
+    {
+      "name": "GT_FSAF",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Flow Evaluator Alternate allele observations on the forward strand"
+    },
+    {
+      "name": "GT_FSRR",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Flow Evaluator reference observations on the reverse strand"
+    },
+    {
+      "name": "GT_SRR",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of reference observations on the reverse strand"
+    },
+    {
+      "name": "GT_SRF",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of reference observations on the forward strand"
+    },
+    {
+      "name": "GT_AO",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Alternate allele observation count"
+    },
+    {
+      "name": "GT_GQ",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Genotype Quality, the Phred-scaled marginal (or unconditional) probability of the called genotype"
+    },
+    {
+      "name": "GT_GT_Genotype",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Genotype"
+    },
+    {
+      "name": "GT_SAF",
+      "is_mandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Alternate allele observations on the forward strand"
+    }
+  ],
+  "reference": "hg19",
+  "genotypes": [
+    "N"
+  ]
+}

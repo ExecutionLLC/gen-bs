@@ -65,6 +65,14 @@
   + .material-label  {
     top:12px;
   }
+  &.material-input-heading { 
+   font-size: 16px;
+  }
+     @media (min-width: @screen-sm){
+       &.material-input-heading { 
+          padding-right: 100px;
+        }
+     }
 }
 
 @-webkit-keyframes input-highlight {
@@ -85,7 +93,29 @@
 }
 
 
+.material-select { 
+  + .select2-container--default { 
+     .select2-selection--single { 
+       border-width: 0 0 1px;
+       border-color:  @gray-lighter;
+       box-shadow: none;
+       background:transparent;
+       border-radius: 0;
+       height: 40px;
+       
+       .select2-selection__rendered { 
+         padding-left: 0;
+         padding-right: 0;
+         line-height: 40px;
+       }
+       .select2-selection__arrow b {
+       border-color: @gray transparent transparent;
+       
+       }
+  }
 
+     }
+} 
 .material-label { 
     z-index: 1;
     font-size: @font-size-small;
@@ -131,4 +161,5 @@
   .material-input-message { 
     bottom: -12px;
   }
+  
 }

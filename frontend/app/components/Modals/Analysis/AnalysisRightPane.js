@@ -1,11 +1,12 @@
 import _ from 'lodash';
+import classNames from 'classnames';
 import React from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     duplicateAnalysesHistoryItem,
-    cancelAnalysesHistoryEdit,
+    createNewHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -24,6 +25,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
+import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
@@ -32,46 +34,37 @@ import {ImmutableHashedArray} from '../../../utils/immutable';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, isOnlyItem, auth: {isDemo}} = this.props;
+        const {historyItem, disabled, isOnlyItem, auth: {isDemo}, isBringToFront} = this.props;
 
         return (
-            <div>
-                {this.renderNewAnalysisTitle()}
+            <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
-                <div className='split-scroll form-horizontal'>
-                    <div className='form-rows'>
-                        {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
+                <div className='split-scroll'>
+                    <div className='form-padding'>
+                        {!disabled ?
+                            <div className='form-horizontal form-rows form-rows-2row-xs'>
+                                {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
+                            </div>
+                            :
+                            this.renderDisabledAnalysis(historyItem)
+                        }
                     </div>
                 </div>
             </div>
         );
     }
 
-    renderNewAnalysisTitle() { // TODO seems like unused block
-        return (
-            <div className='navbar navbar-fixed-top navbar-inverse visible-xs'>
-                <button
-                    type='button'
-                    className='btn navbar-btn pull-right'
-                >
-                    <i className='md-i'>close</i>
-                </button>
-                <h3 className='navbar-text'>
-                    New analysis
-                </h3>
-            </div>
-        );
-    }
 
     renderAnalysisHeader(historyItem, disabled, isDemo) {
         return (
-            <div className='split-right-top split-right-top-tabs form-horizontal'>
-                {this.renderSelectAnalysis()}
-                {historyItem.id && this.renderDeleteAnalysisButton()}
-                {this.renderAnalysisName(historyItem.name, isDemo)}
-                {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
-                {this.renderAnalysisDescription(historyItem.description, isDemo)}
-                {this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
+            <div className='split-top'>
+                <div className='form-horizontal form-padding'>
+                    {historyItem.id && this.renderDeleteAnalysisButton()}
+                    {this.renderAnalysisName(historyItem.name, isDemo)}
+                    {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
+                    {this.renderAnalysisDescription(historyItem.description, isDemo)}
+                </div>
+                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
         );
     }
@@ -95,15 +88,16 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.filter'>Filter</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-10 btn-group-select2'>
-                        <div className='btn-group'>
+                    <div className='col-xs-12 col-md-10 btn-group-select2'>
+                        <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
                                 type='button'
                                 disabled={disabled}
                                 onClick={() => this.onFiltersClick()}
                             >
-                                <span data-localize='filters.title'>Filters</span>
+                                <span className='text-muted' data-localize='filters.title'>Filters</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
                         <div className='btn-group btn-group-select2-max'>
@@ -117,7 +111,6 @@ export default class AnalysisRightPane extends React.Component {
                                 onChange={(item) => this.onFilterSelect(item.value)}
                             />
                         </div>
-                        <div className='col-xs-2'></div>
                     </div>
                 </div>
             </div>
@@ -145,15 +138,16 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.model'>Model</span></h5>
                 <div className='form-group'>
-                    <div className='col-md-10 col-xs-12 btn-group-select2'>
-                        <div className='btn-group'>
+                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                        <div className='btn-group btn-group-icon'>
                             <button
                                 type='button'
                                 className='btn btn-default btn-fix-width'
                                 disabled={disabled}
                                 onClick={() => this.onModelClick()}
                             >
-                                <span data-localize='models.title'>Models</span>
+                                <span className='text-muted' data-localize='models.title'>Models</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
                         <div className='btn-group btn-group-select2-max'>
@@ -179,15 +173,16 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.view'>View</span></h5>
                 <div className='form-group'>
-                    <div className='col-md-10 col-xs-12 btn-group-select2'>
-                        <div className='btn-group'>
+                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                        <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
                                 type='button'
                                 disabled={disabled}
                                 onClick={() => this.onViewsClick()}
                             >
-                                <span data-localize='views.title'>Views</span>
+                                <span className='text-muted' data-localize='views.title'>Views</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
                         <div className='btn-group btn-group-select2-max'>
@@ -253,22 +248,18 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-10 btn-group-select2'>
-                        <div className='btn-group'>
+                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                        <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
                                 disabled={disabled}
                                 onClick={() => this.onSamplesClick(0)}
                             >
-                                <span data-localize='samples.title'>Samples</span>
+                                <span className='text-muted' data-localize='samples.title'>Samples</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
 
-                        <div className='btn-group btn-group btn-group-left'>
-                            <label className='label label-dark-default label-fix-width label-left'>
-                                <span data-localize='query.single.title'>Single</span>
-                            </label>
-                        </div>
                         <div className='btn-group btn-group-select2-max btn-group-right'>
                             <Select
                                 className='select2-search select-right'
@@ -279,6 +270,12 @@ export default class AnalysisRightPane extends React.Component {
                                 onChange={(item) => this.onSampleSelect(0, item.value)}
                             />
                         </div>
+                        <div className='btn-group-prefix'>
+                            <label className='label label-dark-default label-fix-width'>
+                                <span data-localize='query.single.title'>S</span>
+                            </label>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -296,20 +293,16 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group'>
-                <div className='col-xs-10 btn-group-select2 '>
-                    <div className='btn-group'>
+                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(0)}
                         >
-                            <span data-localize='samples.title'>Samples</span>
+                                <span className='text-muted' data-localize='samples.title'>Samples</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
-                    </div>
-                    <div className='btn-group btn-group-left'>
-                        <label className='label label-dark-default  label-fix-width label-left'>
-                            <span data-localize='query.tumor_normal.tumor.title'>Tumor</span>
-                        </label>
                     </div>
                     <div className='btn-group btn-group-select2-max'>
                         <Select
@@ -321,6 +314,12 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
+                    <div className='btn-group-prefix'>
+                        <label className='label label-dark-default  label-fix-width label-left'>
+                            <span data-localize='query.tumor_normal.tumor.title'>T</span>
+                        </label>
+                    </div>
+                    
                 </div>
             </div>
         );
@@ -331,20 +330,16 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group'>
-                <div className='col-xs-10 btn-group-select2 '>
-                    <div className='btn-group'>
+                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(1)}
                         >
-                            <span data-localize='samples.title'>Samples</span>
+                                <span className='text-muted' data-localize='samples.title'>Samples</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
-                    </div>
-                    <div className='btn-group btn-group-left'>
-                        <label className='label label-default  label-fix-width label-left'>
-                            <span data-localize='query.tumor_normal.normal.title'>Normal</span>
-                        </label>
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>
                         <Select
@@ -356,6 +351,12 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(1, item.value)}
                         />
                     </div>
+                    <div className='btn-group-prefix'>
+                        <label className='label label-default label-fix-width'>
+                            <span data-localize='query.tumor_normal.normal.title'>N</span>
+                        </label>
+                    </div>
+                    
                 </div>
             </div>
         );
@@ -372,20 +373,16 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group' key={i}>
-                <div className='col-xs-10 btn-group-select2'>
-                    <div className='btn-group'>
+                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(0)}
                         >
-                            <span data-localize='samples.title'>Samples</span>
+                                <span className='text-muted' data-localize='samples.title'>Samples</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
-                    </div>
-                    <div className='btn-group btn-group-left'>
-                        <label className='label label-dark-default label-fix-width label-left'>
-                            <span data-localize='query.family.proband.title'>Proband</span>
-                        </label>
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>
                         <Select
@@ -397,6 +394,12 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
+                    <div className='btn-group-prefix'>
+                        <label className='label label-dark-default label-fix-width'>
+                            <span data-localize='query.family.proband.title'>P</span>
+                        </label>
+                    </div>
+                    
                 </div>
             </div>
         );
@@ -407,20 +410,16 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group' key={i}>
-                <div className='col-xs-10 btn-group-select2'>
-                    <div className='btn-group'>
+                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(i)}
                         >
-                            <span data-localize='samples.title'>Samples</span>
+                                <span className='text-muted' data-localize='samples.title'>Samples</span>
+                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
-                    </div>
-                    <div className='btn-group btn-group-left'>
-                        <label className='label label-default label-fix-width  label-left'>
-                            <span data-localize='query.family.mother.short'>{sample ? typeLabels[sample.type] : ''}</span>
-                        </label>
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>
                         <Select
@@ -433,6 +432,12 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(i, item.value)}
                         />
                     </div>
+                    <div className='btn-group-prefix'>
+                        <label className='label label-default label-fix-width'>
+                            <span data-localize='query.family.mother.short'>{sample ? typeLabels[sample.type] : ''}</span>
+                        </label>
+                    </div>
+                    
                 </div>
             </div>
         );
@@ -440,51 +445,34 @@ export default class AnalysisRightPane extends React.Component {
 
     renderAnalyzeButton(isEditing, isOnlyItem) {
         return (
-            <div className='form-group'>
-                <div className='col-xs-12'>
-                    {
-                        isEditing ?
-                            isOnlyItem ?
-                                null
-                                :
-                                <button
-                                    className='btn btn-primary'
-                                    title='Click for cancel'
-                                    onClick={() => this.onCancelButtonClick()}
-                                >
-                                    <span>Cancel</span>
-                                </button>
+            <div className='btn-toolbar'>
+                {
+                    isEditing ?
+                        isOnlyItem ?
+                            null
                             :
                             <button
-                                className='btn btn-primary'
-                                title='Click for edit'
-                                onClick={() => this.onDuplicateButtonClick()}
+                                className='btn btn-link btn-uppercase'
+                                title='Click for cancel'
+                                onClick={() => this.onCancelButtonClick()}
                             >
-                                <span>Duplicate</span>
+                                <span>Cancel</span>
                             </button>
-                    }
-                    <button
-                        className='btn btn-primary'
-                        title='Click for analyze with analysis initial versions of filter and view'
-                        onClick={() => this.onAnalyzeButtonClick(isEditing)}
-                    >
-                        <span data-localize='query.analyze.title'>Analyze</span>
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    renderSelectAnalysis() {
-        return (
-            <div className='navbar navbar-list-toggle visible-xs'>
+                        :
+                        <button
+                            className='btn btn-link btn-uppercase'
+                            title='Click for edit'
+                            onClick={() => this.onDuplicateButtonClick()}
+                        >
+                            <span>Duplicate</span>
+                        </button>
+                }
                 <button
-                    id='openAnalisis'
-                    type='button'
-                    className='btn btn-link-default navbar-btn'
+                    className='btn btn-primary'
+                    title='Click for analyze with analysis initial versions of filter and view'
+                    onClick={() => this.onAnalyzeButtonClick(isEditing)}
                 >
-                    <i className='md-i'>menu</i>
-                    <span data-localize='query.select_analysis'>Select analysis</span>
+                    <span data-localize='query.analyze.title'>Analyze</span>
                 </button>
             </div>
         );
@@ -519,32 +507,51 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    analysisTypeCaption(type) {
+        return {
+            [analysisType.SINGLE]: 'Single',
+            [analysisType.TUMOR]: 'Tumor/Normal',
+            [analysisType.FAMILY]: 'Family'
+        }[type] || '';
+    }
+
+    sampleTypeCaption(type) {
+        return {
+            [sampleType.SINGLE]: 'Single',
+            [sampleType.TUMOR]: 'Tumor',
+            [sampleType.NORMAL]: 'Normal',
+            [sampleType.PROBAND]: 'Proband',
+            [sampleType.MOTHER]: 'Mother',
+            [sampleType.FATHER]: 'Father'
+        }[type] || '';
+    }
+
     renderAnalysisHeaderTabs(historyItemType, disabled) {
         const {dispatch} = this.props;
         const tabs = [
             {
                 isActive: historyItemType === analysisType.SINGLE,
                 className: 'single-tab',
-                caption: 'Single',
+                caption: this.analysisTypeCaption(analysisType.SINGLE),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.SINGLE}))
             },
             {
                 isActive: historyItemType === analysisType.TUMOR,
                 className: 'tumor-normal-tab',
-                caption: 'Tumor/Normal',
+                caption: this.analysisTypeCaption(analysisType.TUMOR),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.TUMOR}))
             },
             {
                 isActive: historyItemType === analysisType.FAMILY,
                 className: 'family-tab',
-                caption: 'Family',
+                caption: this.analysisTypeCaption(analysisType.FAMILY),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.FAMILY}))
             }
         ];
         return (
             <ul role='tablist' className='nav nav-tabs' id='analisisTypes'>
+                {disabled && <li className='pull-right text-muted'>Duplicate to make changes</li>}
                 {tabs.filter((tab) => tab.isActive || !disabled).map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
-                {disabled && <li>Duplicate to make changes</li>}
             </ul>
         );
     }
@@ -595,6 +602,72 @@ export default class AnalysisRightPane extends React.Component {
                     </span>
                 </a>
             </li>
+        );
+    }
+
+    renderDisabledAnalysis(historyItem) {
+        const {
+            samplesList: {hashedArray: {hash: samplesHash}},
+            filtersList: {hashedArray: {hash: filtersHash}},
+            modelsList: {hashedArray: {hash: modelsHash}},
+            viewsList: {hashedArray: {hash: viewsHash}}
+        } = this.props;
+
+        const selectedFilter = filtersHash[historyItem.filterId];
+        const selectedModel = historyItem.modelId && modelsHash[historyItem.modelId];
+        const selectedView = viewsHash[historyItem.viewId];
+
+        return (
+            <div>
+                <dl>
+                    <dt>Analysis type</dt>
+                    <dd>{this.analysisTypeCaption(historyItem.type)}</dd>
+                </dl>
+                {historyItem.samples.map((sampleInfo) => {
+                    const sampleId = sampleInfo.id;
+                    const sample = samplesHash[sampleId];
+
+                    return (
+                        <dl>
+                            <dt><span data-localize='general.sample'>Sample</span>
+                                ({this.sampleTypeCaption(sampleInfo.type)})
+                            </dt>
+                            <dd>{sample && sample.fileName}</dd>
+                        </dl>
+                    );
+                })}
+                <dl>
+                    <dt>Filter</dt>
+                    <dd>{selectedFilter && selectedFilter.name}</dd>
+                </dl>
+                {historyItem.modelId &&
+                    <dl>
+                        <dt>Model</dt>
+                        <dd>{selectedModel && selectedModel.name}</dd>
+                    </dl>
+                }
+                <dl>
+                    <dt>View</dt>
+                    <dd>{selectedView && selectedView.name}</dd>
+                </dl>
+
+                <hr />
+                <div class='btn-toolbar'>
+                    <a
+                       type='button'
+                       className='btn btn-link btn-uppercase'
+                       onClick={() => this.onDuplicateButtonClick()}
+                    ><span>Duplicate</span></a>
+
+                    <a
+                        className='btn btn-link btn-uppercase'
+                        role='button'
+                        onClick={() => this.onAnalyzeButtonClick(false)}
+                    >
+                        <span>View results</span>
+                    </a>
+                </div>
+            </div>
         );
     }
 
@@ -697,8 +770,16 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {dispatch} = this.props;
-        dispatch(cancelAnalysesHistoryEdit());
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samples}},
+            viewsList: {hashedArray: {array: views}},
+            filtersList: {hashedArray: {array: filters}}
+        } = this.props;
+        const sample = getDefaultOrStandardItem(samples);
+        const filter = getDefaultOrStandardItem(filters);
+        const view = getDefaultOrStandardItem(views);
+        dispatch(createNewHistoryItem(sample, filter, view));
     }
 
     onAnalyzeButtonClick(isEditing) {
@@ -784,7 +865,7 @@ export default class AnalysisRightPane extends React.Component {
     onSamplesClick(sampleIndex) {
         const {dispatch, historyItem} = this.props;
         const selectedSamplesIds = _.map(historyItem.samples, (sample) => sample.id);
-        const action = this.actionEdit({sample: {index: sampleIndex, id: null}});
+        const action = this.actionEdit({sample: {index: sampleIndex, id: selectedSamplesIds[sampleIndex]}});
         dispatch(samplesOnSave(selectedSamplesIds, action, 'changeItem.sample.index', 'changeItem.sample.id'));
         dispatch(openModal('upload'));
     }

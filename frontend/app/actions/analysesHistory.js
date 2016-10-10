@@ -19,7 +19,6 @@ export const DUPLICATE_ANALYSES_HISTORY_ITEM = 'DUPLICATE_ANALYSES_HISTORY_ITEM'
 export const EDIT_ANALYSES_HISTORY_ITEM = 'EDIT_ANALYSES_HISTORY_ITEM';
 export const DELETE_ANALYSES_HISTORY_ITEM = 'DELETE_ANALYSES_HISTORY_ITEM';
 export const EDIT_EXISTENT_HISTORY_ITEM = 'EDIT_EXISTENT_HISTORY_ITEM';
-export const CANCEL_ANALYSES_HISTORY_EDIT = 'CANCEL_ANALYSES_HISTORY_EDIT';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
@@ -124,13 +123,6 @@ export function editExistentAnalysesHistoryItem(historyItem) {
     return {
         type: EDIT_EXISTENT_HISTORY_ITEM,
         historyItem
-    };
-}
-
-export function cancelAnalysesHistoryEdit(historyItemId) {
-    return {
-        type: CANCEL_ANALYSES_HISTORY_EDIT,
-        historyItemId
     };
 }
 

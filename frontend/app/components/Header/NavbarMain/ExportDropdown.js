@@ -36,11 +36,11 @@ export default class ExportDropdown extends ComponentBase {
 
     renderExportButtonTitle() {
         if (!this.haveSelectedVariants()) {
-            return (<span><span className='hidden-xxs'>Export</span><span className='visible-xxs'><i className='md-i'>file_download</i></span></span>);
+            return (<span><span className='hidden-xs'>Export</span><span className='visible-xs'><span className='dropdown-menu-header'>Select export format</span><i className='md-i md-cloud_download md-replace-to-close'></i></span></span>);
         } else {
             const {selectedRowIndices} = this.props;
             const selectedVariantsCount = selectedRowIndices.length;
-            return (<span><span className='hidden-xxs'>Export</span><span className='visible-xxs'><i className='md-i'>file_download</i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
+            return (<span><span className='hidden-xs'>Export</span><span className='visible-xs'><span className='dropdown-menu-header'>Select export format</span><i className='md-i md-cloud_download md-replace-to-close'></i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
         }
     }
 

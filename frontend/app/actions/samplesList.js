@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import {handleApiResponseErrorAsync} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
-import {immutableSetPathProperty} from '../utils/immutable';
+import {immutableSetPathProperty, immutableGetPathProperty} from '../utils/immutable';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -85,24 +85,32 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFieldsAsync(sampleId) {
     return (dispatch, getState) => {
-        const {samplesList: {editedSamplesHash}} = getState();
+        const {samplesList: {editedSamplesHash, onSaveAction, onSaveActionPropertyId}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
         return new Promise((resolve) => samplesClient.update(
             sampleToUpdate,
             (error, response) => resolve({error, response})
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
-        ).then((updatedSample) => dispatch(receiveUpdatedSample(sampleId, updatedSample)));
+        ).then((updatedSample) => {
+            const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);
+            dispatch(receiveUpdatedSample(sampleId, updatedSample));
+            // If editing selected sample, don't forget to set it as current.
+            if (selectedSampleId === sampleId) {
+                dispatch(sampleSaveCurrent(updatedSample.id));
+            }
+            return updatedSample.id;
+        });
     };
 }
 
-export function sampleSaveCurrent(sample) {
+export function sampleSaveCurrent(sampleId) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionPropertyId} = getState().samplesList;
         if (!onSaveAction) {
             return;
         }
-        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sample));
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sampleId));
     };
 }
 
