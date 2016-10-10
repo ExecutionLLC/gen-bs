@@ -78,19 +78,6 @@ function reduceDuplicateAnalysesHistoryItem(state, action) {
     };
 }
 
-function reduceCancelAnalysesHistoryEdit(state) {
-    const {history, currentHistoryId} = state;
-    if (!history.length) {
-        return state;
-    } else {
-        return {
-            ...state,
-            newHistoryItem: null,
-            currentHistoryId: ensureHistoryId(history, currentHistoryId, false)
-        };
-    }
-}
-
 function reduceEditExistentHistoryItem(state, action) {
     const {history} = state;
     const {historyItem} = action;
@@ -214,8 +201,6 @@ export default function analysesHistory(state = initialState, action) {
             return reduceDeleteAnalysesHistoryItem(state, action);
         case ActionTypes.EDIT_EXISTENT_HISTORY_ITEM:
             return reduceEditExistentHistoryItem(state, action);
-        case ActionTypes.CANCEL_ANALYSES_HISTORY_EDIT:
-            return reduceCancelAnalysesHistoryEdit(state, action);
         case ActionTypes.TOGGLE_LOADING_HISTORY_DATA:
             return reduceToggleLoadingHistoryData(state, action);
         case ActionTypes.CREATE_NEW_HISTORY_ITEM:
