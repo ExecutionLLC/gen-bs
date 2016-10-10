@@ -21,7 +21,13 @@ class AnotherPageOpenedErrorModal extends DialogBase {
 
     renderFooterContents() {
         return (
-            <button type='button' onClick={() => this.closeOtherSockets()}/>
+            <button
+                type='button'
+                onClick={() => this.closeOtherSockets()}
+                className='btn btn-default'
+            >
+                <span>Use Here</span>
+            </button>
         );
     }
 
