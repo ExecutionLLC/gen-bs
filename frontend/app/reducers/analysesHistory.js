@@ -137,7 +137,6 @@ function reduceRequestAnalysesHistory(state) {
 function reduceSetEditedAnalysesHistory(state, action) {
     return {
         ...state,
-        newHistoryItem: null,
         currentHistoryId: action.newHistoryItem.id,
         history: [action.newHistoryItem, ...state.history]
     };
