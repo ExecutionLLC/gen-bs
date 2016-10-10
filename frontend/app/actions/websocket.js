@@ -15,6 +15,7 @@ export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
 export const WS_PROGRESS_MESSAGE = 'WS_PROGRESS_MESSAGE';
 export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
+export const WS_SHOW_ANOTHER_PAGE_OPENED_MODAL = 'WS_SHOW_ANOTHER_PAGE_OPENED_MODAL';
 
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
@@ -41,7 +42,8 @@ const WS_PROGRESS_STATUSES = {
 const WS_OPERATION_TYPES = {
     UPLOAD: 'UploadOperation',
     SEARCH: 'SearchOperation',
-    OPEN: 'OpenSocket'
+    OPEN: 'OpenSocket',
+    CLOSED_BY_USER: 'ClosedByUser'
 };
 
 const WS_RESULT_TYPES = {
@@ -84,6 +86,13 @@ export function storeWsConnection(wsConn) {
     return {
         type: WS_STORE_CONNECTION,
         wsConn
+    };
+}
+
+export function showAnotherPageOpenedModal(shouldShow) {
+    return {
+        type: WS_SHOW_ANOTHER_PAGE_OPENED_MODAL,
+        shouldShow
     };
 }
 
@@ -143,6 +152,12 @@ function receiveUploadMessage(wsData) {
     };
 }
 
+function receiveClosedByUserMessage() {
+    return (dispatch) => {
+
+    }
+}
+
 function receiveErrorMessage(wsData) {
     return (dispatch) => {
         console.error('Error: ' + JSON.stringify(wsData.error));
@@ -164,6 +179,8 @@ function receiveMessage(msg) {
             dispatch(receiveSearchMessage(msg));
         } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
             dispatch(receiveUploadMessage(msg));
+        } else if (operationType == WS_OPERATION_TYPES.CLOSED_BY_USER) {
+            dispatch(receiveClosedByUserMessage());
         } else {
             dispatch(otherMessage(msg));
         }
@@ -195,6 +212,7 @@ function reconnectWS() {
 
 export function subscribeToWsAsync() {
     return (dispatch) => {
+        let isOpened = false;
         return new Promise((resolve, reject) => {
             webSocketConnection.onopen = () => {
                 console.log('Socket connection is open');
@@ -202,14 +220,14 @@ export function subscribeToWsAsync() {
             webSocketConnection.onmessage = ({data}) => {
                 const messageObject = JSON.parse(data);
                 const {operationType, resultType} = messageObject;
-                if (operationType === WS_OPERATION_TYPES.OPEN) {
+                if (isOpened) {
+                    dispatch(receiveMessage(messageObject));
+                } else if (operationType === WS_OPERATION_TYPES.OPEN) {
                     if (resultType === WS_RESULT_TYPES.SUCCESS) {
                         resolve();
                     } else {
                         reject(new TooManyWebSocketsError());
                     }
-                } else {
-                    dispatch(receiveMessage(messageObject));
                 }
             };
             webSocketConnection.onerror = event => {
