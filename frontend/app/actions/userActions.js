@@ -5,6 +5,7 @@ import * as UiActions from './ui';
 import * as ModalActions from './modalWindows';
 import * as VariantsTableActions from './variantsTable';
 import * as SavedFilesActions from './savedFiles';
+import * as FileUpload from './fileUpload';
 
 export default [
     AnalysisActions.REQUEST_ANALYSES_HISTORY,
@@ -38,5 +39,7 @@ export default [
     SavedFilesActions.CREATE_EXPORT_DOWNLOAD,
     SavedFilesActions.RECEIVE_SAVED_FILES_LIST,
     SavedFilesActions.SAVED_FILE_DOWNLOAD_RESULT_RECEIVED,
-    SavedFilesActions.SAVED_FILE_UPLOAD_RESULT_RECEIVED
+    SavedFilesActions.SAVED_FILE_UPLOAD_RESULT_RECEIVED,
+
+    FileUpload.FILE_UPLOAD_CHANGE_PROGRESS
 ];
