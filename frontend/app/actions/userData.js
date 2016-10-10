@@ -98,16 +98,18 @@ export function fetchUserDataAsync() {
             dispatch(createNewHistoryItem(sample, filter, view));
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(null))
                 .then(() => {
-                    const historyItem = getState().analysesHistory.newHistoryItem;
+                    const {
+                        name, description, type, samples, viewId, filterId, modelId
+                    } = getState().analysesHistory.newHistoryItem;
                     dispatch(analyze({
                         id: analyses[0] ? analyses[0].id : null,
-                        name: historyItem.name,
-                        description: historyItem.description,
-                        type: historyItem.type,
-                        samples: historyItem.samples,
-                        viewId: historyItem.viewId,
-                        filterId: historyItem.filterId,
-                        modelId: historyItem.modelId
+                        name,
+                        description,
+                        type,
+                        samples,
+                        viewId,
+                        filterId,
+                        modelId
                     }));
                 });
         });
