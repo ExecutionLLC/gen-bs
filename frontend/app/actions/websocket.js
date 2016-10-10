@@ -1,3 +1,4 @@
+import {showAnotherPageOpenedModal} from './auth';
 import {receiveSearchedResults} from './variantsTable';
 import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
 import config from '../../config';
@@ -15,7 +16,6 @@ export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
 export const WS_PROGRESS_MESSAGE = 'WS_PROGRESS_MESSAGE';
 export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
-export const WS_SHOW_ANOTHER_PAGE_OPENED_MODAL = 'WS_SHOW_ANOTHER_PAGE_OPENED_MODAL';
 
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
@@ -89,13 +89,6 @@ export function storeWsConnection(wsConn) {
     };
 }
 
-export function showAnotherPageOpenedModal(shouldShow) {
-    return {
-        type: WS_SHOW_ANOTHER_PAGE_OPENED_MODAL,
-        shouldShow
-    };
-}
-
 function tableMessage(wsData) {
     return {
         type: WS_TABLE_MESSAGE,
@@ -154,8 +147,8 @@ function receiveUploadMessage(wsData) {
 
 function receiveClosedByUserMessage() {
     return (dispatch) => {
-
-    }
+        dispatch(showAnotherPageOpenedModal(true));
+    };
 }
 
 function receiveErrorMessage(wsData) {
@@ -226,6 +219,7 @@ export function subscribeToWsAsync() {
                     if (resultType === WS_RESULT_TYPES.SUCCESS) {
                         resolve();
                     } else {
+                        dispatch(showAnotherPageOpenedModal(true));
                         reject(new TooManyWebSocketsError());
                     }
                 }

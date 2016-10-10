@@ -2,12 +2,6 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/websocket';
 
-function reduceShowAnotherPageOpenedModal(action, state) {
-    return Object.assign({}, state, {
-        showAnotherPageOpenedModal: action.shouldShow
-    });
-}
-
 function reduceDeleteComment(action, state) {
     const commentVariants = state.variants.slice();
     const deletedVariantIndex = _.findIndex(
@@ -80,7 +74,6 @@ export default function websocket(state = {
     wsConn: null,
     error: null,
     closed: true,
-    showAnotherPageOpenedModal: false,
     variants: null,
     variantsSamples: null,
     variantsView: null,
@@ -148,10 +141,6 @@ export default function websocket(state = {
                 variantsAnalysis: action.analysis // used variantsAnalysis.id and .samples at saveExportedFileToServer, used !!variantsAnalysis and .samples in variants table
             });
         }
-
-        case ActionTypes.WS_SHOW_ANOTHER_PAGE_OPENED_MODAL:
-            return reduceShowAnotherPageOpenedModal(action, state);
-
         default:
             return state;
     }

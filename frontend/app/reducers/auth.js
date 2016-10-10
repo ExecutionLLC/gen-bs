@@ -6,7 +6,8 @@ export default function auth(state = {
     showAutoLogoutDialog: false,
     secondsToAutoLogout: null,
     errorMessage: null,
-    showCloseAllUserSessionsDialog: false
+    showCloseAllUserSessionsDialog: false,
+    showAnotherPageOpenedModal: false
 }, action) {
 
     switch (action.type) {
@@ -40,6 +41,11 @@ export default function auth(state = {
         case ActionTypes.SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG:
             return Object.assign({}, state, {
                 showCloseAllUserSessionsDialog: action.shouldShow
+            });
+
+        case ActionTypes.CLOSE_OTHER_SOCKETS:
+            return Object.assign({}, state, {
+                showAnotherPageOpenedModal: action.shouldShow
             });
 
         default:

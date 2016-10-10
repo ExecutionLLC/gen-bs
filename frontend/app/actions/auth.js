@@ -21,6 +21,8 @@ import SessionsClient from '../api/SessionsClient';
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
+export const CLOSE_OTHER_SOCKETS = 'CLOSE_OTHER_SOCKETS';
+export const SHOW_ANOTHER_PAGE_OPENED_MODAL = 'SHOW_ANOTHER_PAGE_OPENED_MODAL';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
@@ -44,6 +46,7 @@ const PING_MESSAGE_CONTENTS = 'ping';
 const LOGIN_ERROR_MESSAGE = 'Authorization failed. You can reload page and try again.';
 const LOGIN_GOOGLE_ERROR = 'Google authorization failed.';
 const CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE = 'Error while closing all user sessions.';
+const CLOSE_OTHER_SOCKETS_ERROR_MESSAGE = 'Error while closing other sockets. Please reload page and try again.';
 
 /*
  * Start keep alive task, which update session on the WS.
@@ -259,6 +262,23 @@ export function closeAllUserSessionsAsync() {
         ).then(({error, response}) => dispatch(
             handleApiResponseErrorAsync(CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE, error, response)
         ));
+    };
+}
+
+export function showAnotherPageOpenedModal(shouldShow) {
+    return {
+        type: SHOW_ANOTHER_PAGE_OPENED_MODAL,
+        shouldShow
+    };
+}
+
+export function closeOtherSocketsAsync() {
+    return (dispatch) => {
+        return new Promise((resolve) => sessionsClient.closeOtherSockets(
+            (error, response) => resolve({error, response}))
+        ).then(({error, response}) => dispatch(
+            handleApiResponseErrorAsync(CLOSE_OTHER_SOCKETS_ERROR_MESSAGE, error, response))
+        ).then(() => dispatch(login()));
     };
 }
 
