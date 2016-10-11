@@ -1,57 +1,50 @@
 import _ from 'lodash';
 
+import {assign} from '../utils/immutable';
+import immutableArray from '../utils/immutableArray';
 import * as ActionTypes from '../actions/websocket';
 
 function reduceDeleteComment(action, state) {
-    const commentVariants = state.variants.slice();
-    const deletedVariantIndex = _.findIndex(
-        commentVariants, variant => variant.searchKey === action.searchKey
+    const {variants} = state;
+    const variantIndex = _.findIndex(
+        variants, variant => variant.searchKey === action.searchKey
     );
-    const deletedVariant = commentVariants[deletedVariantIndex];
-    const newComments = deletedVariant.comments.slice(1);
-    const newVariant = Object.assign({}, deletedVariant, {
-        comments: newComments
-    });
-    commentVariants[deletedVariantIndex] = newVariant;
-    return Object.assign({}, state, {
-        variants: commentVariants
+    const comments = variants[variantIndex].comments;
+    return assign(state, {
+        variants: immutableArray.assign(variants, variantIndex, {
+            comments: comments.slice(1)
+        })
     });
 }
 
 function reduceUpdateComment(action, state) {
-    const commentVariants = state.variants.slice();
-    const updatedVariantIndex = _.findIndex(
-        commentVariants, variant => variant.searchKey === action.commentData.searchKey
+    const {variants} = state;
+    const {commentData} = action;
+    const variantIndex = _.findIndex(
+        variants, variant => variant.searchKey === commentData.searchKey
     );
-    const updatedVariant = commentVariants[updatedVariantIndex];
-    const newComments = updatedVariant.comments.slice();
-    newComments[0].comment = action.commentData.comment;
-    const newVariant = Object.assign({}, updatedVariant, {
-        comments: newComments
-    });
-    commentVariants[updatedVariantIndex] = newVariant;
-    return Object.assign({}, state, {
-        variants: commentVariants
+    const comments = variants[variantIndex].comments;
+    return assign(state, {
+        variants: immutableArray.assign(variants, variantIndex, {
+            comments: immutableArray.assign(comments, 0, commentData.comment)
+        })
     });
 }
 
 function reduceAddComment(action, state) {
-    const commentVariants = state.variants.slice();
-    const addCommentVariantIndex = _.findIndex(
-        commentVariants, variant => variant.searchKey === action.commentData.searchKey
+    const {variants} = state;
+    const {commentData} = action;
+    const variantIndex = _.findIndex(
+        variants, variant => variant.searchKey === commentData.searchKey
     );
-    const addVariant = commentVariants[addCommentVariantIndex];
-    const newComments = addVariant.comments.slice();
-    newComments.push({
-        'id': action.commentData.id,
-        'comment': action.commentData.comment
-    });
-    const newVariant = Object.assign({}, addVariant, {
-        comments: newComments
-    });
-    commentVariants[addCommentVariantIndex] = newVariant;
-    return Object.assign({}, state, {
-        variants: commentVariants
+    const comments = variants[variantIndex].comments;
+    return assign(state, {
+        variants: immutableArray.assign(variants, variantIndex, {
+            comments: immutableArray.append(comments, {
+                id: commentData.id,
+                comment: commentData.comment
+            })
+        })
     });
 }
 
