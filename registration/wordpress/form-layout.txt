@@ -33,6 +33,14 @@ Choose login method:
 [submit id:reg-submit-log-pass "Login/Password"]  [submit id:reg-google "Google"]
 </div>
 
+<div style="display:none">
+    <label> Login*
+        [text* maxlength:256]</label>
+    <label> Password*
+        <input type="password" maxlength="256" />
+    </label>
+</div>
+
 <div id="password">
     <label> Password *
         <input type="password" id="reg-password" maxlength="256" />
