@@ -6,7 +6,7 @@ import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     duplicateAnalysesHistoryItem,
-    cancelAnalysesHistoryEdit,
+    createNewHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -25,6 +25,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
+import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 
@@ -786,8 +787,16 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {dispatch} = this.props;
-        dispatch(cancelAnalysesHistoryEdit());
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samples}},
+            viewsList: {hashedArray: {array: views}},
+            filtersList: {hashedArray: {array: filters}}
+        } = this.props;
+        const sample = getDefaultOrStandardItem(samples);
+        const filter = getDefaultOrStandardItem(filters);
+        const view = getDefaultOrStandardItem(views);
+        dispatch(createNewHistoryItem(sample, filter, view));
     }
 
     onAnalyzeButtonClick(isEditing) {
