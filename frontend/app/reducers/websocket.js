@@ -1,6 +1,67 @@
 import _ from 'lodash';
 
+import {assign} from '../utils/immutable';
+import immutableArray from '../utils/immutableArray';
 import * as ActionTypes from '../actions/websocket';
+
+function reduceDeleteComment(action, state) {
+    const {variants} = state;
+    const variantIndex = _.findIndex(
+        variants, variant => variant.searchKey === action.searchKey
+    );
+    const comments = variants[variantIndex].comments;
+    return assign(state, {
+        variants: immutableArray.assign(variants, variantIndex, {
+            comments: comments.slice(1)
+        })
+    });
+}
+
+function reduceUpdateComment(action, state) {
+    const {variants} = state;
+    const {commentData} = action;
+    const variantIndex = _.findIndex(
+        variants, variant => variant.searchKey === commentData.searchKey
+    );
+    const comments = variants[variantIndex].comments;
+    return assign(state, {
+        variants: immutableArray.assign(variants, variantIndex, {
+            comments: immutableArray.assign(comments, 0, commentData.comment)
+        })
+    });
+}
+
+function reduceAddComment(action, state) {
+    const {variants} = state;
+    const {commentData} = action;
+    const variantIndex = _.findIndex(
+        variants, variant => variant.searchKey === commentData.searchKey
+    );
+    const comments = variants[variantIndex].comments;
+    return assign(state, {
+        variants: immutableArray.assign(variants, variantIndex, {
+            comments: immutableArray.append(comments, {
+                id: commentData.id,
+                comment: commentData.comment
+            })
+        })
+    });
+}
+
+function reduceTableMessage(action, state) {
+    const resultData = action.wsData.result.data;
+    return Object.assign({}, state, {
+        variants: state.variants === null ?
+            resultData :
+            [...state.variants, ...(resultData || [])],
+        variantsHeader: action.wsData.result.header,
+        currentVariants: resultData,
+        isVariantsEmpty: (resultData && resultData.length === 0),
+        isVariantsLoading: false,
+        isVariantsValid: true,
+        variantsError: null
+    });
+}
 
 export default function websocket(state = {
     wsConn: null,
@@ -20,56 +81,12 @@ export default function websocket(state = {
     progress: null
 }, action) {
     switch (action.type) { // TODO extract reducers
-        case  ActionTypes.WS_DELETE_COMMENT: {
-            const commentVariants = state.variants.slice();
-            const deletedVariantIndex = _.findIndex(
-                commentVariants, variant => variant.searchKey === action.searchKey
-            );
-            const deletedVariant = commentVariants[deletedVariantIndex];
-            const newComments = deletedVariant.comments.slice(1);
-            const newVariant = Object.assign({}, deletedVariant, {
-                comments: newComments
-            });
-            commentVariants[deletedVariantIndex] = newVariant;
-            return Object.assign({}, state, {
-                variants: commentVariants
-            });
-        }
-        case ActionTypes.WS_UPDATE_COMMENT: {
-            const commentVariants = state.variants.slice();
-            const updatedVariantIndex = _.findIndex(
-                commentVariants, variant => variant.searchKey === action.commentData.searchKey
-            );
-            const updatedVariant = commentVariants[updatedVariantIndex];
-            const newComments = updatedVariant.comments.slice();
-            newComments[0].comment = action.commentData.comment;
-            const newVariant = Object.assign({}, updatedVariant, {
-                comments: newComments
-            });
-            commentVariants[updatedVariantIndex] = newVariant;
-            return Object.assign({}, state, {
-                variants: commentVariants
-            });
-        }
-        case ActionTypes.WS_ADD_COMMENT: {
-            const commentVariants = state.variants.slice();
-            const addCommentVariantIndex = _.findIndex(
-                commentVariants, variant => variant.searchKey === action.commentData.searchKey
-            );
-            const addVariant = commentVariants[addCommentVariantIndex];
-            const newComments = addVariant.comments.slice();
-            newComments.push({
-                'id': action.commentData.id,
-                'comment': action.commentData.comment
-            });
-            const newVariant = Object.assign({}, addVariant, {
-                comments: newComments
-            });
-            commentVariants[addCommentVariantIndex] = newVariant;
-            return Object.assign({}, state, {
-                variants: commentVariants
-            });
-        }
+        case  ActionTypes.WS_DELETE_COMMENT:
+            return reduceDeleteComment(action, state);
+        case ActionTypes.WS_UPDATE_COMMENT:
+            return reduceUpdateComment(action, state);
+        case ActionTypes.WS_ADD_COMMENT:
+            return reduceAddComment(action, state);
         case ActionTypes.WS_CLEAR_VARIANTS:
             return Object.assign({}, state, {
                 variants: null,
@@ -80,20 +97,8 @@ export default function websocket(state = {
                 wsConn: action.wsConn,
                 error: null
             });
-        case ActionTypes.WS_TABLE_MESSAGE: {
-            const resultData = action.wsData.result.data;
-            return Object.assign({}, state, {
-                variants: state.variants === null ?
-                    resultData :
-                    [...state.variants, ...(resultData || [])],
-                variantsHeader: action.wsData.result.header,
-                currentVariants: resultData,
-                isVariantsEmpty: (resultData && resultData.length === 0),
-                isVariantsLoading: false,
-                isVariantsValid: true,
-                variantsError: null
-            });
-        }
+        case ActionTypes.WS_TABLE_MESSAGE:
+            return reduceTableMessage(action, state);
         case ActionTypes.WS_PROGRESS_MESSAGE:
             return Object.assign({}, state, {
                 progress: action.wsData.result.progress
@@ -115,6 +120,10 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 closed: true
             });
+        case ActionTypes.WS_RECEIVE_OPEN:
+            return Object.assign({}, state, {
+                closed: false
+            });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
@@ -129,7 +138,6 @@ export default function websocket(state = {
                 variantsAnalysis: action.analysis // used variantsAnalysis.id and .samples at saveExportedFileToServer, used !!variantsAnalysis and .samples in variants table
             });
         }
-
         default:
             return state;
     }
