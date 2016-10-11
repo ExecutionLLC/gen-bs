@@ -648,23 +648,23 @@ export default class AnalysisRightPane extends React.Component {
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && sample.fileName}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(sample.genotypeName ? `${sample.fileName}:${sample.genotypeName}` : sample.fileName, sample.type)}</dd>
                         </dl>
                     );
                 })}
                 <dl>
                     <dt>Filter</dt>
-                    <dd>{selectedFilter && selectedFilter.name}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(selectedFilter.name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
                         <dt>Model</dt>
-                        <dd>{selectedModel && selectedModel.name}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
                     <dt>View</dt>
-                    <dd>{selectedView && selectedView.name}</dd>
+                    <dd>{selectedView && getItemLabelByNameAndType(selectedView.name, selectedView.type)}</dd>
                 </dl>
 
                 <hr />
