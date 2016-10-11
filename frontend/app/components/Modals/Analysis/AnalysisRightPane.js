@@ -26,6 +26,7 @@ import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
 import {ImmutableHashedArray} from '../../../utils/immutable';
+import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -443,6 +444,21 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalyzeButton(isEditing, isOnlyItem) {
+        const {historyItem, modelsList, fields, samplesList} = this.props;
+        const validationRules = [
+            new CompoundHeterozygousModelRule({
+                historyItem,
+                modelsList,
+                fields,
+                samplesList
+            })
+        ];
+        const validationResults = _.map(validationRules, rule => rule.validate());
+        const error = _.find(validationResults, {isValid: false});
+        const buttonParams = {
+            title: error ? error.errorMessage : 'Click for analyze with analysis initial versions of filter and view',
+            disabled: error ? true : false
+        };
         return (
             <div className='btn-toolbar'>
                 {
@@ -468,7 +484,8 @@ export default class AnalysisRightPane extends React.Component {
                 }
                 <button
                     className='btn btn-primary'
-                    title='Click for analyze with analysis initial versions of filter and view'
+                    disabled={buttonParams.disabled}
+                    title={buttonParams.title}
                     onClick={() => this.onAnalyzeButtonClick(isEditing)}
                 >
                     <span data-localize='query.analyze.title'>Analyze</span>
