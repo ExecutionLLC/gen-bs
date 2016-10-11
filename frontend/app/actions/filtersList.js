@@ -87,8 +87,8 @@ export function filtersListServerUpdateFilterAsync(filter) {
         ).then((updatedFilter) => {
             dispatch(filtersListEditFilter(filter.id, updatedFilter));
             const {analysesHistory: {currentHistoryId}} = getState();
-            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
-            return updatedFilter;
+            return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
+                .then(() => updatedFilter);
         });
     };
 }

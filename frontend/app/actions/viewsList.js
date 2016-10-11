@@ -105,8 +105,8 @@ export function viewsListServerUpdateView(view) {
                     const updatedView = response.body;
                     dispatch(viewsListEditView(view.id, updatedView));
                     const {analysesHistory: {currentHistoryId}} = getState();
-                    dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
-                    resolve(updatedView);
+                    return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
+                        .then(() => resolve(updatedView));
                 }
             });
         });
