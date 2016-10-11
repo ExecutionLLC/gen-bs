@@ -15,7 +15,7 @@ import {clearAnalysesHistory} from './analysesHistory';
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient';
 
-import {TooManyWebSocketsError} from './websocket';
+import {closeWs, TooManyWebSocketsError} from './websocket';
 
 /*
  * action types
@@ -249,17 +249,20 @@ export function login() {
 }
 
 export function logout() {
-    sessionsClient.closeSession((error, response) => {
-        if (error || response.status !== HttpStatus.OK) {
-            // We close session on the frontend and don't care about returned
-            // status, because now it is problem of the web server
-            const message = error || response.body;
-            console.log('cannot close session', message);
-        } else {
-            console.log('session closed');
-        }
-        location.replace(location.origin);
-    });
+    return (dispatch) => {
+        dispatch(closeWs());
+        sessionsClient.closeSession((error, response) => {
+            if (error || response.status !== HttpStatus.OK) {
+                // We close session on the frontend and don't care about returned
+                // status, because now it is problem of the web server
+                const message = error || response.body;
+                console.log('cannot close session', message);
+            } else {
+                console.log('session closed');
+            }
+            location.replace(location.origin);
+        });
+    };
 }
 
 export function showCloseAllUserSessionsDialog(shouldShow) {
