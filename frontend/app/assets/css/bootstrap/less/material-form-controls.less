@@ -26,16 +26,15 @@
      z-index: 2;
     }
   }  
-          
+   
   &[disabled],
   &[readonly],
   fieldset[disabled] & {
     background-color: transparent;
-    opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
+    opacity: .55; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
     background-image: -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter)), -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter));
     background-image: -webkit-linear-gradient(@gray-lighter, @gray-lighter), -webkit-linear-gradient(@gray-lighter, @gray-lighter);
     background-image: linear-gradient(@gray-lighter, @gray-lighter), linear-gradient(@gray-lighter, @gray-lighter);
-    color: lighten(@gray-lighter, 5%);
     .placeholder(@color:@gray-lighter);
   }  
 }

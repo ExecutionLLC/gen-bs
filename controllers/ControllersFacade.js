@@ -34,7 +34,7 @@ class ControllersFacade {
         this.modelsController = new ModelController(services);
 
         this.searchController = new SearchController(services);
-        this.sessionsController = new SessionsController(services);
+        this.sessionsController = new SessionsController(this, services);
         this.usersController = new UsersController(services);
 
         this.wsController = new WSController(services);

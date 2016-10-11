@@ -6,7 +6,7 @@ import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     duplicateAnalysesHistoryItem,
-    cancelAnalysesHistoryEdit,
+    createNewHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -25,7 +25,9 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
+import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
+import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -443,6 +445,21 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalyzeButton(isEditing, isOnlyItem) {
+        const {historyItem, modelsList, fields, samplesList} = this.props;
+        const validationRules = [
+            new CompoundHeterozygousModelRule({
+                historyItem,
+                modelsList,
+                fields,
+                samplesList
+            })
+        ];
+        const validationResults = _.map(validationRules, rule => rule.validate());
+        const error = _.find(validationResults, {isValid: false});
+        const buttonParams = {
+            title: error ? error.errorMessage : 'Click for analyze with analysis initial versions of filter and view',
+            disabled: error ? true : false
+        };
         return (
             <div className='btn-toolbar'>
                 {
@@ -468,7 +485,8 @@ export default class AnalysisRightPane extends React.Component {
                 }
                 <button
                     className='btn btn-primary'
-                    title='Click for analyze with analysis initial versions of filter and view'
+                    disabled={buttonParams.disabled}
+                    title={buttonParams.title}
                     onClick={() => this.onAnalyzeButtonClick(isEditing)}
                 >
                     <span data-localize='query.analyze.title'>Analyze</span>
@@ -562,7 +580,7 @@ export default class AnalysisRightPane extends React.Component {
                     <span data-localize='general.created_date'>Created date</span>: <span>{createdDate}</span>
                 </label>
                 <label>
-                    <span data-localize='query.last_query_date'>Last query date</span>: <span>{lastQueryDate}</span>
+                    <span data-localize='query.last_query_date'>Updated</span>: <span>{lastQueryDate}</span>
                 </label>
             </div>
         );
@@ -631,23 +649,23 @@ export default class AnalysisRightPane extends React.Component {
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && sample.fileName}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(sample.genotypeName ? `${sample.fileName}:${sample.genotypeName}` : sample.fileName, sample.type)}</dd>
                         </dl>
                     );
                 })}
                 <dl>
                     <dt>Filter</dt>
-                    <dd>{selectedFilter && selectedFilter.name}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(selectedFilter.name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
                         <dt>Model</dt>
-                        <dd>{selectedModel && selectedModel.name}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
                     <dt>View</dt>
-                    <dd>{selectedView && selectedView.name}</dd>
+                    <dd>{selectedView && getItemLabelByNameAndType(selectedView.name, selectedView.type)}</dd>
                 </dl>
 
                 <hr />
@@ -769,8 +787,16 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {dispatch} = this.props;
-        dispatch(cancelAnalysesHistoryEdit());
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samples}},
+            viewsList: {hashedArray: {array: views}},
+            filtersList: {hashedArray: {array: filters}}
+        } = this.props;
+        const sample = getDefaultOrStandardItem(samples);
+        const filter = getDefaultOrStandardItem(filters);
+        const view = getDefaultOrStandardItem(views);
+        dispatch(createNewHistoryItem(sample, filter, view));
     }
 
     onAnalyzeButtonClick(isEditing) {

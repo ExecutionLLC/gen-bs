@@ -56,7 +56,7 @@ class Auth extends Component {
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                        <li>
+                        <li className='form-inline'>
                             <a onClick={ () => { this.props.dispatch(logout()); } }
                                href='#'
                                type='button'
