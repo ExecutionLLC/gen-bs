@@ -627,7 +627,7 @@ export default class AnalysisRightPane extends React.Component {
                     const sample = samplesHash[sampleId];
 
                     return (
-                        <dl>
+                        <dl key={sampleId}>
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
