@@ -36,15 +36,15 @@ exports.down = function () {
 function updateGtLabels(knex) {
     console.log('==> Update GT_Zygosity/Genotype labels...');
     return _findColumnByNames(knex, vepColumnsNames)
-        .then((vepColumns)=> Promise.map(vepColumns,(vepField)=>{
+        .then((vepColumns) => Promise.map(vepColumns, (vepField)=> {
             return _findColumnByName(knex, vepField.name.replace(vepPrefix, gtPrefix))
-                .then((gtField)=>updateGtFieldsLabel(knex, gtField.id,vepField.label))
+                .then((gtField) => updateGtFieldsLabel(knex, gtField.id, vepField.label))
         }));
 }
 
 function updateGtFieldsLabel(knex, fieldId, label) {
     return knex(fieldsTableNames.Text)
-        .where('field_id',fieldId)
+        .where('field_id', fieldId)
         .update({
             label: label
         });
@@ -67,15 +67,15 @@ function updateVepViews(knex) {
     console.log('==> Update Views...');
     return _findDefaultViews(knex)
         .then((defaultViews)=> {
-            return _findColumnByNames(knex ,vepColumnsNames)
-                .then((vepColumns)=>{
+            return _findColumnByNames(knex, vepColumnsNames)
+                .then((vepColumns)=> {
                     return Promise.map(vepColumns, vepColumn => _findColumnByName(knex, vepColumn.name.replace(vepPrefix, gtPrefix))
                         .then((gtColumn) => ({
                             vepId: vepColumn.id,
                             gtId: gtColumn.id
                         }))
-                    ).then((vepList) =>{
-                        const vepHash = _.keyBy(vepList,'vepId');
+                    ).then((vepList) => {
+                        const vepHash = _.keyBy(vepList, 'vepId');
                         const vepFieldIds = Object.keys(vepHash);
                         const vepViews = _.filter(defaultViews, view => {
                             return _.some(view.viewListItems, item => {
@@ -91,7 +91,7 @@ function updateVepViews(knex) {
                                     });
                                 })
                             });
-                            return updateView(knex,vepView,gtView)
+                            return updateView(knex, vepView, gtView)
 
                         })
                     });
@@ -101,7 +101,7 @@ function updateVepViews(knex) {
 
 function _findDefaultViews(knex) {
     return knex(viewTableNames.Views)
-        .whereIn('type',['default','standard','advanced'])
+        .whereIn('type', ['default', 'standard', 'advanced'])
         .then((results) => ChangeCaseUtil.convertKeysToCamelCase(results))
         .then((viewsMetadata) => {
             const viewIds = _.map(viewsMetadata, view => view.id);
@@ -121,7 +121,7 @@ function updateView(knex, view, viewToUpdate) {
     };
     return knex(viewTableNames.Views)
         .insert(ChangeCaseUtil.convertKeysToSnakeCase(insertedView))
-        .then(()=>{
+        .then(() => {
             const insertedViewText = {
                 viewId: id,
                 languId: view.languId,
@@ -129,7 +129,7 @@ function updateView(knex, view, viewToUpdate) {
             };
             return knex(viewTableNames.ViewTexts)
                 .insert(ChangeCaseUtil.convertKeysToSnakeCase(insertedViewText))
-                .then(() => addViewItems(knex,id,viewToUpdate.viewListItems))
+                .then(() => addViewItems(knex, id, viewToUpdate.viewListItems))
         })
 }
 
@@ -180,7 +180,7 @@ function attachViewsDescriptions(knex, views, viewIds) {
         })
 }
 
-function _attachListItems(knex,views, viewIds) {
+function _attachListItems(knex, views, viewIds) {
     return knex(viewTableNames.ViewItems)
         .whereIn('view_id', viewIds)
         .then((viewsItems) => ChangeCaseUtil.convertKeysToCamelCase(viewsItems))
