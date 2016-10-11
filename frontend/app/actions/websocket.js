@@ -282,3 +282,9 @@ export function requestSetCurrentParams(view, filter, samples, model, analysis) 
         analysis
     };
 }
+
+export function closeWs() {
+    return () => {
+        webSocketConnection.close();
+    };
+}
