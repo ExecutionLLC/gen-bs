@@ -33,7 +33,7 @@ class ControllersFacade {
         this.modelsController = new ModelController(services);
 
         this.searchController = new SearchController(services);
-        this.sessionsController = new SessionsController(services);
+        this.sessionsController = new SessionsController(this, services);
 
         this.wsController = new WSController(services);
         this.apiController = new ApiController(services);

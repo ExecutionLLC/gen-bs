@@ -1,3 +1,4 @@
+import {showAnotherPageOpenedModal} from './auth';
 import {receiveSearchedResults} from './variantsTable';
 import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
 import config from '../../config';
@@ -9,6 +10,7 @@ export const WS_STORE_CONNECTION = 'WS_STORE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
+export const WS_RECEIVE_OPEN = 'WS_RECEIVE_OPEN';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
 export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
@@ -25,7 +27,10 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 export class TooManyWebSocketsError extends Error {
     constructor(message) {
         super(message || 'It seems you have another tab opened. Please close it and reload this page to continue.');
+        this.code = TooManyWebSocketsError.CODE;
     }
+
+    static CODE = 'TooManyWebSocketsError';
 }
 
 let webSocketConnection = null;
@@ -41,7 +46,8 @@ const WS_PROGRESS_STATUSES = {
 const WS_OPERATION_TYPES = {
     UPLOAD: 'UploadOperation',
     SEARCH: 'SearchOperation',
-    OPEN: 'OpenSocket'
+    OPEN: 'OpenSocket',
+    CLOSED_BY_USER: 'ClosedByUser'
 };
 
 const WS_RESULT_TYPES = {
@@ -143,6 +149,12 @@ function receiveUploadMessage(wsData) {
     };
 }
 
+function receiveClosedByUserMessage() {
+    return (dispatch) => {
+        dispatch(showAnotherPageOpenedModal(true));
+    };
+}
+
 function receiveErrorMessage(wsData) {
     return (dispatch) => {
         console.error('Error: ' + JSON.stringify(wsData.error));
@@ -164,16 +176,23 @@ function receiveMessage(msg) {
             dispatch(receiveSearchMessage(msg));
         } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
             dispatch(receiveUploadMessage(msg));
+        } else if (operationType == WS_OPERATION_TYPES.CLOSED_BY_USER) {
+            dispatch(receiveClosedByUserMessage());
         } else {
             dispatch(otherMessage(msg));
         }
     };
 }
 
-function receiveClose(msg) {
+function receiveClose() {
     return {
-        type: WS_RECEIVE_CLOSE,
-        msg
+        type: WS_RECEIVE_CLOSE
+    };
+}
+
+function receiveOpen() {
+    return {
+        type: WS_RECEIVE_OPEN
     };
 }
 
@@ -195,6 +214,7 @@ function reconnectWS() {
 
 export function subscribeToWsAsync() {
     return (dispatch) => {
+        let isOpened = false;
         return new Promise((resolve, reject) => {
             webSocketConnection.onopen = () => {
                 console.log('Socket connection is open');
@@ -202,21 +222,23 @@ export function subscribeToWsAsync() {
             webSocketConnection.onmessage = ({data}) => {
                 const messageObject = JSON.parse(data);
                 const {operationType, resultType} = messageObject;
-                if (operationType === WS_OPERATION_TYPES.OPEN) {
+                if (isOpened) {
+                    dispatch(receiveMessage(messageObject));
+                } else if (operationType === WS_OPERATION_TYPES.OPEN) {
                     if (resultType === WS_RESULT_TYPES.SUCCESS) {
+                        isOpened = true;
+                        dispatch(receiveOpen());
                         resolve();
                     } else {
                         reject(new TooManyWebSocketsError());
                     }
-                } else {
-                    dispatch(receiveMessage(messageObject));
                 }
             };
             webSocketConnection.onerror = event => {
                 dispatch(receiveError(event.data));
             };
             webSocketConnection.onclose = event => {
-                dispatch(receiveClose(event.data));
+                dispatch(receiveClose());
                 if (!event.wasClean) {
                     dispatch(reconnectWS());
                 }

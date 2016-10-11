@@ -26,6 +26,10 @@ export default class SessionsClient extends ClientBase {
         RequestWrapper.del(`${this.urls.session()}/all`, null, null, callback);
     }
 
+    closeOtherSockets(callback) {
+        RequestWrapper.del(`${this.urls.session()}/socket`, null, null, callback);
+    }
+
     /**
      * Gets session from the response.
      *
