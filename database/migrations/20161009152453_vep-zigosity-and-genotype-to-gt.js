@@ -7,7 +7,7 @@ const CollectionUtils = require('../../registration/utils/CollectionUtils');
 
 const vepColumnsNames = ['VEP_Zygosity', 'VEP_Genotype'];
 const vepPrefix = 'VEP_';
-const gtPrefix = 'GT_';
+const gtPrefix = 'GT_GT_';
 const fieldsTableNames = {
     Metadata: 'field_metadata',
     Text: 'field_text',
@@ -23,30 +23,31 @@ const viewTableNames = {
 };
 
 exports.up = function (knex) {
-    return createGtColumnsIfNotExists(knex)
-        .then(() => makeVepFieldsInvisible(knex))
-        .then(() => updateVepViews(knex));
+    console.log('==> VEP_Zygosity/Genotype ->> GT_Zygosity/Genotype...');
+    return makeVepFieldsInvisible(knex)
+        .then(() => updateVepViews(knex))
+        .then(() => updateGtLabels(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
 
-function createGtColumnsIfNotExists(knex) {
-    console.log('==> Create Gt Columns if not exists...');
-    return Promise.map(vepColumnsNames, columnName => {
-        return _findColumnByName(knex, columnName)
-            .then((vepFieldMetaData) => {
-                const gtFieldMetaData = Object.assign({}, vepFieldMetaData, {
-                    name: columnName.replace(vepPrefix, gtPrefix)
-                });
-                return _findIdOfTheSameAsOrNullInTransaction(knex, gtFieldMetaData)
-                    .then((id)=> id ? id : _addField(knex, gtFieldMetaData))
-                    .then((id) => (Object.assign({}, gtFieldMetaData, {
-                        id
-                    })))
-            })
-    });
+function updateGtLabels(knex) {
+    console.log('==> Update GT_Zygosity/Genotype labels...');
+    return _findColumnByNames(knex, vepColumnsNames)
+        .then((vepColumns)=> Promise.map(vepColumns,(vepField)=>{
+            return _findColumnByName(knex, vepField.name.replace(vepPrefix, gtPrefix))
+                .then((gtField)=>updateGtFieldsLabel(knex, gtField.id,vepField.label))
+        }));
+}
+
+function updateGtFieldsLabel(knex, fieldId, label) {
+    return knex(fieldsTableNames.Text)
+        .where('field_id',fieldId)
+        .update({
+            label: label
+        });
 }
 
 function makeVepFieldsInvisible(knex) {
@@ -108,6 +109,7 @@ function _findDefaultViews(knex) {
                 .then((views) => attachViewsDescriptions(knex, views, viewIds));
         })
 }
+
 function updateView(knex, view, viewToUpdate) {
     const id = Uuid.v4();
     const insertedView = {
@@ -212,9 +214,6 @@ function attachKeywords(knex, viewItems) {
         })
 }
 
-
-
-
 function _findColumnByName(knex, name) {
     return _fetchByName(knex, [name])
         .then((columns) => (columns[0]))
@@ -229,41 +228,4 @@ function _fetchByName(knex, names) {
         .innerJoin(fieldsTableNames.Text, `${fieldsTableNames.Text}.field_id`, `${fieldsTableNames.Metadata}.id`)
         .whereIn('name', names)
         .then((results) => ChangeCaseUtil.convertKeysToCamelCase(results))
-}
-
-function _findIdOfTheSameAsOrNullInTransaction(knex, fieldMetadata) {
-    return knex(fieldsTableNames.Metadata)
-        .where('name', fieldMetadata.name)
-        .andWhere('value_type', fieldMetadata.valueType)
-        .andWhere('dimension', fieldMetadata.dimension)
-        .then((results) => (results && results.length) ? results[0].id : null);
-}
-
-function _addField(knex, field) {
-    console.log('==> Add Field :', field.name);
-    const {
-        name, sourceName, valueType, isMandatory, isEditable, isInvisible,
-        dimension, isHyperlink, hyperlinkTemplate, description, label, languId
-    } = field;
-    const id = Uuid.v4();
-    return knex(fieldsTableNames.Metadata)
-        .insert(ChangeCaseUtil.convertKeysToSnakeCase({
-            id,
-            name,
-            sourceName,
-            valueType,
-            isMandatory,
-            isEditable,
-            isInvisible,
-            dimension,
-            isHyperlink: isHyperlink || false,
-            hyperlinkTemplate: hyperlinkTemplate || null,
-        }))
-        .then(() => knex(fieldsTableNames.Text
-        ).insert(ChangeCaseUtil.convertKeysToSnakeCase({
-            fieldId: id,
-            label,
-            description,
-            languId
-        }))).then(() => _findIdOfTheSameAsOrNullInTransaction(knex, field));
 }
