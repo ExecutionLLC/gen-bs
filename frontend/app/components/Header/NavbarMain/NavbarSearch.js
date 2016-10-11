@@ -12,10 +12,9 @@ class NavbarSearch extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.state = {
-            ...this.state,
+        this.setState({
             search: newProps.search
-        };
+        });
     }
 
     render() {
@@ -69,7 +68,9 @@ class NavbarSearch extends Component {
     }
 
     onSearchPopupToggle() {
-        this.setState({...this.state, showPopup: !this.state.showPopup});
+        this.setState({
+            showPopup: !this.state.showPopup
+        });
     }
 }
 
