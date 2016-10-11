@@ -300,7 +300,7 @@ export function closeOtherSocketsAsync() {
             (error, response) => resolve({error, response}))
         ).then(({error, response}) => dispatch(
             handleApiResponseErrorAsync(CLOSE_OTHER_SOCKETS_ERROR_MESSAGE, error, response))
-        ).then(() => dispatch(login()));
+        ).then(() => dispatch(loginWithGoogle()));
     };
 }
 
