@@ -119,8 +119,8 @@ export default class ViewBuilder extends React.Component {
                     </div>
 
                     <div className='col-sm-6'>
-                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>Column Filter
-                            and Keywords
+                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>
+                           Keywords
                         </small>
                     </div>
                 </div>
