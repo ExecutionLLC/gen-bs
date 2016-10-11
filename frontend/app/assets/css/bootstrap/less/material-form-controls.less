@@ -35,11 +35,14 @@
     background-image: -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter)), -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter));
     background-image: -webkit-linear-gradient(@gray-lighter, @gray-lighter), -webkit-linear-gradient(@gray-lighter, @gray-lighter);
     background-image: linear-gradient(@gray-lighter, @gray-lighter), linear-gradient(@gray-lighter, @gray-lighter);
-    color: lighten(@gray-lighter, 5%);
+    color: @gray-lighter;
     .placeholder(@color:@gray-lighter);
   }  
 }
-
+.material-input[disabled]::-webkit-input-placeholder,
+.material-input-sm[disabled]::-webkit-input-placeholder { 
+  color: darken(@gray-lighter, 15%);
+}
 .material-input:focus,
 .material-input-sm:focus {
   outline: none;
