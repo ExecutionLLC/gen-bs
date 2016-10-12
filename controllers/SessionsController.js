@@ -128,10 +128,12 @@ class SessionsController extends ControllerBase {
             if (!userEmail) {
                 const {registrationCodeId} = request.params;
                 const authCallback = passport.authenticate('google', {
-                    scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+                    scope: ['profile','email'],
                     returnURL: googleFullRedirectUrl,
                     realm: baseUrl,
-                    state: registrationCodeId || ''
+                    state: registrationCodeId || '',
+                    accessType:'online',
+                    approvalPrompt:'auto'
                 });
                 authCallback(request, response, next);
             } else {
