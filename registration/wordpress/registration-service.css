@@ -59,3 +59,11 @@ body.register-fail #register-fail {
 body.valid-regcode #wrong-regcode {
     display: none;
 }
+
+#reg-already-registered {
+    display: none;
+}
+
+body.show-app-link #reg-already-registered {
+    display: inline;
+}
