@@ -1,11 +1,16 @@
 var express = require('express'),
     multer  = require('multer'),
     fs = require('fs'),
-    cors = require('cors')
+    cors = require('cors'),
+    bodyParser = require('body-parser')
     ;
 var upload = multer({ dest: 'uploads/' });
 
 var app = express();
+
+app.disable('x-powered-by');
+app.use(bodyParser.json());
+
 
 app.use(cors({
     origin: 'http://localhost:3000',
