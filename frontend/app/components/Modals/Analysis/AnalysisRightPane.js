@@ -635,7 +635,7 @@ export default class AnalysisRightPane extends React.Component {
         const selectedView = viewsHash[historyItem.viewId];
 
         return (
-            <div>
+            <div className='dl-group-view-mode'>
                 <dl>
                     <dt>Analysis type</dt>
                     <dd>{this.analysisTypeCaption(historyItem.type)}</dd>

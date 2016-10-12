@@ -288,12 +288,6 @@
 .btn-group-select2 { 
   .btn-group { 
     white-space: nowrap;
-    .btn { 
-     padding-left: 8px;
-     padding-right: 8px; 
-     
-
-    }
   }
   @media (min-width: @screen-sm){ 
       .btn-group { 
@@ -303,7 +297,9 @@
         width: 1%;
         .btn {
            float: none;
-          
+           display: table-cell;
+            float: none;
+            margin-left: 0;
         }
       &.btn-group-select2-max { 
        width: 100% !important;

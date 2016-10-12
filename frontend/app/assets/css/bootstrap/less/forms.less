@@ -595,19 +595,19 @@ input[type="search"] {
     border-bottom:none;
   }
   > div {
-      padding: 0 45px 0 0; 
+      padding: 0 72px 0 0; 
       margin: 0 0 5px;
 
      .btn-group-select2-max { 
           display: block;
-          margin-right: 42px;
+          
           width: auto !important;
           +.btn-group { 
             display: block;
             position: absolute;
-            right: 37px;
-            top: 0;
-            width: 45px;
+            right: 0;
+            top: 1px;
+            width: 72px;
           }
         }
       + div { 
@@ -617,14 +617,7 @@ input[type="search"] {
   .btn-group-left { 
     display: none;
   }
-  &.row-head-selector {  
-    > div:first-child {
-      padding-right: 90px; 
-      .btn-default { 
-        
-      }
-    }
-  } 
+   
   &.row-new-item { 
     > div {
        padding: 0;
@@ -654,19 +647,7 @@ input[type="search"] {
        }
      }
    }
-  @media (max-width: @screen-xs-max) { 
-    &.row-head-selector {  
-    .btn-group:last-child {
-      padding-right: 90px; 
-      .btn-default { 
-        background:none;
-        border: none;
-        box-shadow: none;
-        float: none; 
-      }
-    }
-  }   
-  }  
+ 
   @media (min-width: @screen-sm) {
     margin: 0 0 10px;  
     padding: 0 5px 0 0;
@@ -707,6 +688,60 @@ input[type="search"] {
 
   }
  }
+  .row-head-selector { 
+    .form-group {
+        border-bottom: none;
+    }
+  }
+  @media (max-width: @screen-xs-max) { 
+     .btn-link-default { 
+        padding: 6px;
+     }
+     .btn-default { 
+        background:none;
+        border: none;
+        box-shadow: none;
+        float: none; 
+      }
+    .alert {
+      font-size: 13px;
+     line-height: 1.2;
+     }
+    .row-head-selector {
+       border: 1px solid rgb(215, 220, 229);
+        border-radius: 3px;
+        padding: 10px 10px 30px;
+        position: relative;
+       .form-group {   
+         .btn-group-select2 { 
+           position:static;
+         }
+         .btn-group:last-child {
+            bottom: 6px;
+            right: 0;
+            top: auto;
+            width: auto;
+          }
+    
+         > div { 
+          padding: 0;
+        }
+
+    }
+       .input-group { 
+         position: static;
+         display: block;
+         float: none;
+       }
+       .btn-group-close {
+          bottom: 2px;
+          display: block;
+          min-width: 32px;
+          position: absolute;
+          right: 10px;
+       }
+     }  
+  } 
 } 
 
 .form-rows  {
