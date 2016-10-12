@@ -238,7 +238,12 @@
   }
 
   // Modal sizes
-  .modal-sm { width: @modal-sm; }
+  .modal-sm { 
+    width: @modal-sm;
+     .modal-content { 
+       max-height: 300px;
+     }  
+  }
   
 }
 .modal-lg {
