@@ -95,7 +95,7 @@ export function fetchUserDataAsync() {
                 .then(() => {
                     const {
                         name, description, type, samples, viewId, filterId, modelId
-                    } = getState().analysesHistory.newHistoryItem;
+                    } = analyses[0] ? analyses[0] : getState().analysesHistory.newHistoryItem;
                     dispatch(analyze({
                         id: analyses[0] ? analyses[0].id : null,
                         name,
