@@ -9,6 +9,10 @@ class AnotherPageOpenedErrorModal extends DialogBase {
         super(props, 'anotherPageOpenedErrorModal');
     }
 
+    getModalClassNames() {
+        return ['modal-sm'];
+    }
+
     renderTitleContents() {
         return (<div>Another Page is Active</div>);
     }
