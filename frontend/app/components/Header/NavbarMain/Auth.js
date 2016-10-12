@@ -10,31 +10,29 @@ import config from '../../../../config';
 const AUTHORIZED_USER_TITLE = '';
 const DEMO_USER_TITLE = 'Register or login for access additional features';
 const GOOGLE_ACCOUNT_TITLE = 'Login using Google Account';
+import {toggleLoginForm} from '../../../actions/ui';
 
 class Auth extends Component {
     constructor(...args) {
         super(...args);
-
-        this.state = {
-            isDropdownOpened: false
-        };
     }
+
     render() {
+        const {auth:{isDemo},ui:{isLoginFormVisible}} = this.props;
         // TODO: Close form on Esc
         const dropdownClasses = classNames({
             dropdown: true,
-            open: this.state.isDropdownOpened
+            open: isLoginFormVisible
         });
-        if (this.props.auth.isDemo) {
+        if (isDemo) {
             return this._renderForDemoUser(dropdownClasses);
         }
         return this._renderForAuthorizedUser(dropdownClasses);
     }
 
     handleClickOutside() {
-        this.setState({
-            isDropdownOpened: false
-        });
+        const {dispatch} = this.props;
+        dispatch(toggleLoginForm(false));
     }
 
     _renderForAuthorizedUser(dropdownClasses) {
@@ -113,9 +111,8 @@ class Auth extends Component {
     }
 
     onLoginDropdownClick() {
-        this.setState({
-            isDropdownOpened: !this.state.isDropdownOpened
-        });
+        const {dispatch,ui:{isLoginFormVisible}} = this.props;
+        dispatch(toggleLoginForm(!isLoginFormVisible));
     }
 }
 
