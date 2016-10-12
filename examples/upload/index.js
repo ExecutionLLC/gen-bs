@@ -26,7 +26,19 @@ app.post('/', upload.single('file'), function(req, res) {
     const {body, file} = req;
     console.log(body); // form fields
     console.log(file); // form files
-    //fs.unlinkSync(`${__dirname}/${file.path}`);
+    if (!file) {
+        console.error('No file');
+        res.status(500).end();
+        return;
+    }
+    if (file.size) {
+        console.log('File is OK!');
+    } else {
+        console.error('Size is zero.');
+        res.status(500).end();
+        return;
+    }
+    fs.unlinkSync(`${__dirname}/${file.path}`);
     res.status(204).end();
 });
 
