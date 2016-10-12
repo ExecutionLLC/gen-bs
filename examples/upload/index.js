@@ -2,7 +2,9 @@ var express = require('express'),
     multer  = require('multer'),
     fs = require('fs'),
     cors = require('cors'),
-    bodyParser = require('body-parser')
+    bodyParser = require('body-parser'),
+    morgan = require('morgan'),
+    compression = require('compression')
     ;
 var upload = multer({ dest: 'uploads/' });
 
@@ -10,7 +12,8 @@ var app = express();
 
 app.disable('x-powered-by');
 app.use(bodyParser.json());
-
+app.use(morgan('combined'));
+app.use(compression());
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -27,4 +30,6 @@ app.post('/', upload.single('file'), function(req, res) {
     res.status(204).end();
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+    console.log('Server ready.');
+});
