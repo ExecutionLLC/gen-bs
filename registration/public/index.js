@@ -62,7 +62,8 @@ const ELEMENT_ID = {
     registerButton: 'reg-submit',
     passwordInputs: ['reg-password', 'reg-re-password'],
     registerFailMessage: 'register-fail-message',
-    acceptDisclaimer: 'accept-disclaimer'
+    acceptDisclaimer: 'accept-disclaimer',
+    applicationLink: 'reg-application-link'
 };
 
 const USER_INFO_SCHEME = [
@@ -233,22 +234,37 @@ function displayNoUserInfo() {
     FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
 }
 
-function onRegcodedUserReceived(user) {
-    if (user.isActivated) {
-        window.location.assign(GENOMICS_URL);
-        return;
+function showAppLink() {
+    const linkEl = document.getElementById(ELEMENT_ID.applicationLink);
+    if (linkEl) {
+        linkEl.setAttribute('href', GENOMICS_URL);
     }
+}
+
+function onRegcodedUserReceived(user) {
     loadedUserId = user.id;
     currentUser.user = Object.assign({}, user);
     currentUser.regcode = checkingUser.requested.regcode;
     FillData.fillUserItem(USER_INFO_SCHEME, currentUser.user);
-    switchPageState({
-        disableRegcode: true,
-        disableUserInfo: false,
-        showLoginType: true,
-        showPassword: false,
-        showRegister: false
-    });
+    if (user.isActivated) {
+        showAppLink();
+        switchPageState({
+            disableRegcode: true,
+            disableUserInfo: true,
+            showLoginType: false,
+            showPassword: false,
+            showRegister: false,
+            showAppLink: true
+        });
+    } else {
+        switchPageState({
+            disableRegcode: true,
+            disableUserInfo: false,
+            showLoginType: true,
+            showPassword: false,
+            showRegister: false
+        });
+    }
 }
 
 function debounce(fn, delay) {
@@ -326,9 +342,21 @@ function addUser(loginInfo) {
     registerAsync
         .then(() => {
             if (loadedUserId) {
-                window.location.assign(GENOMICS_URL);
+                showAppLink();
+                switchPageState({
+                    loading: false,
+                    disableRegcode: true,
+                    disableUserInfo: true,
+                    showLoginType: false,
+                    showPassword: false,
+                    showRegister: false,
+                    showAppLink: true
+                });
             } else {
-                switchPageState({loading: false, register: {mail: true}});
+                switchPageState({
+                    loading: false,
+                    register: {mail: true}
+                });
             }
         })
         .catch((err) => {
@@ -433,7 +461,10 @@ function switchPageState(ops) {
         document.body.classList.toggle('register-fail', !!ops.register.fail);
     }
     if (ops.validRegcode != null) {
-        document.body.classList.toggle('valid-regcode', ops.validRegcode)
+        document.body.classList.toggle('valid-regcode', ops.validRegcode);
+    }
+    if (ops.showAppLink) {
+        document.body.classList.toggle('show-app-link', ops.validRegcode);
     }
 }
 
@@ -445,7 +476,8 @@ function onDocumentLoad() {
         disableUserInfo: true,
         showLoginType: false,
         showPassword: false,
-        showRegister: false
+        showRegister: false,
+        showAppLink: false
     });
 
     const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
