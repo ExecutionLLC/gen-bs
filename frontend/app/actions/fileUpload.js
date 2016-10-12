@@ -101,6 +101,7 @@ function receiveFileOperation(operationId, id) {
 function sendFile(file, onOperationId, onProgress, onError) {
     const formData = new FormData();
     formData.append('sample', file);
+    formData.append('fileName', file.name);
     $.ajax(config.URLS.FILE_UPLOAD, {
         'type': 'POST',
         'data': formData,
