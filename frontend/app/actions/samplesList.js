@@ -114,8 +114,8 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
                 }
             }
             const {analysesHistory: {currentHistoryId}} = getState();
-            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
-            return updatedSample.id;
+            return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
+                .then(() => updatedSample);
         });
     };
 }

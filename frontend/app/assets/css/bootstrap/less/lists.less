@@ -21,7 +21,6 @@
       float: left;
       width: @dl-flex-horizontal-offset;
       padding-right: 20px; 
-      padding-top: 8px;
       clear: left;
       text-align: right;
       .text-overflow(); 
@@ -44,6 +43,17 @@
 
   }
 } 
+.edit-mode { 
+  .flex {
+    @media (min-width: @screen-xs) {
+       dl {
+         dt {
+                padding-top: 8px;  
+         }
+      }
+    } 
+  }
+}
 
 .dl-group { 
   padding: @padding-large-vertical @padding-base-horizontal;

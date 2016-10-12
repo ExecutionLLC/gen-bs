@@ -580,7 +580,7 @@ export default class AnalysisRightPane extends React.Component {
                     <span data-localize='general.created_date'>Created date</span>: <span>{createdDate}</span>
                 </label>
                 <label>
-                    <span data-localize='query.last_query_date'>Last query date</span>: <span>{lastQueryDate}</span>
+                    <span data-localize='query.last_query_date'>Updated</span>: <span>{lastQueryDate}</span>
                 </label>
             </div>
         );
@@ -645,7 +645,7 @@ export default class AnalysisRightPane extends React.Component {
                     const sample = samplesHash[sampleId];
 
                     return (
-                        <dl>
+                        <dl key={sampleId}>
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>

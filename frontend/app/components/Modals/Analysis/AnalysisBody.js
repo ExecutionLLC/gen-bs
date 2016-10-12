@@ -61,7 +61,7 @@ export default class AnalysisBody extends React.Component {
 
     onSelectHistoryId(id) {
         const {dispatch, onAnalysisShow} = this.props;
-        dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(id));
-        onAnalysisShow();
+        dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(id))
+            .then(() => onAnalysisShow());
     }
 }

@@ -87,8 +87,8 @@ export function modelsListServerUpdateModel(model) {
         ).then((updatedModel) => {
             dispatch(modelsListEditModel(model.id, updatedModel));
             const {analysesHistory: {currentHistoryId}} = getState();
-            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
-            return updatedModel;
+            return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
+                .then(() => updatedModel);
         });
     };
 }

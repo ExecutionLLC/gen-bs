@@ -112,17 +112,15 @@ export default class ViewBuilder extends React.Component {
                 <div className='form-group hidden-xs'>
 
                     <div className='col-sm-6'>
-                        <small className='text-muted text-order' data-localize='views.setup.settings.columns_order'>
-                            Order
-                        </small>
+                       
                         <small className='text-muted' data-localize='views.setup.settings.columns_sorting'>Column Name
-                            and Multi Sort Order
+                            and Sort Order
                         </small>
                     </div>
 
                     <div className='col-sm-6'>
-                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>Column Filter
-                            and Keywords
+                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>
+                           Keywords
                         </small>
                     </div>
                 </div>

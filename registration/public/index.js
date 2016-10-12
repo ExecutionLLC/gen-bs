@@ -61,7 +61,8 @@ const ELEMENT_ID = {
     signupGoogleButton: 'reg-google',
     registerButton: 'reg-submit',
     passwordInputs: ['reg-password', 'reg-re-password'],
-    registerFailMessage: 'register-fail-message'
+    registerFailMessage: 'register-fail-message',
+    acceptDisclaimer: 'accept-disclaimer'
 };
 
 const USER_INFO_SCHEME = [
@@ -393,6 +394,12 @@ function onPassword(/*index, psw*/) {
     });
 }
 
+var acceptDisaclaimer = null; // will be defined later
+
+function onAcceptDisclaimer(checked) {
+    acceptDisaclaimer();
+}
+
 function switchPageState(ops) {
     if (ops.disableRegcode != null) {
         const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
@@ -470,6 +477,32 @@ function onDocumentLoad() {
         }
         return passwordInputEl;
     });
+
+    function onAcceptDisclaimer(accept) {
+
+        const toggleAttribute = accept ?
+            (el) => el.removeAttribute('disabled') :
+            (el) => el.setAttribute('disabled', 'disabled');
+
+        function setDisable(el) {
+            if (el) {
+                toggleAttribute(el);
+            }
+        }
+
+        if (signupGoogle) {
+            setDisable(registerButtonEl);
+            setDisable(signupLoginPassword);
+            setDisable(signupGoogle);
+        }
+    }
+
+    const acceptDisclaimerEl = document.getElementById(ELEMENT_ID.acceptDisclaimer);
+    if (acceptDisclaimerEl) {
+        DOMUtils.onClick(acceptDisclaimerEl, () => onAcceptDisclaimer(acceptDisclaimerEl.checked));
+    }
+
+    onAcceptDisclaimer(false);
 
     getPassword = () => {
         return passwordInputEls.reduce(
