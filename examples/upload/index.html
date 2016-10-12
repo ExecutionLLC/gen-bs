@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script>
+        function onUpload() {
+            var formData = new FormData();
+            var files = $('#file-select').prop('files');
+            formData.append('file', files[0]);
+            $.ajax('/', {
+                'type': 'POST',
+                'data': formData,
+                'contentType': false,
+                'processData': false,
+                'xhrFields': {
+                    // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
+                    'onprogress': function (progress) {
+                        // calculate upload progress
+                        var percentage = Math.floor((progress.total / progress.total) * 100);
+                        // log upload progress to console
+                        console.log('sendFile progress', progress, percentage);
+                        if (percentage === 100) {
+                            console.log('sendFile DONE!');
+                        }
+                    }
+                }
+            }).done(function () {
+                alert('Done!');
+            }).fail(function (err) {
+                console.error(error);
+                alert(err.message);
+            });
+        }
+    </script>
+</head>
+<body>
+
+<input
+        id='file-select'
+        type='file'
+        accept='.vcf,.gz'
+        name='files[]'
+/>
+<button onclick="onUpload()">
+    <span>upload</span>
+</button>
+</body>
+</html>
