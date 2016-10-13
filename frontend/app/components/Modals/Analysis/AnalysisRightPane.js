@@ -44,7 +44,7 @@ export default class AnalysisRightPane extends React.Component {
                     <div className='form-padding'>
                         {!disabled ?
                             <div className='form-horizontal form-rows form-rows-2row-xs'>
-                                {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
+                                {historyItem && this.renderAnalysisContent(historyItem, isOnlyItem)}
                             </div>
                             :
                             this.renderDisabledAnalysis(historyItem)
@@ -70,16 +70,16 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent(historyItem, disabled, isOnlyItem) {
+    renderAnalysisContent(historyItem, isOnlyItem) {
         return (
             <div>
-                {this.renderSamplesSelects(historyItem, disabled)}
-                {this.renderFilterSelector(historyItem.filterId, disabled)}
-                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, disabled)}
-                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, disabled)}
-                {this.renderViewSelector(historyItem.viewId, disabled)}
+                {this.renderSamplesSelects(historyItem, false)}
+                {this.renderFilterSelector(historyItem.filterId, false)}
+                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, false)}
+                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, false)}
+                {this.renderViewSelector(historyItem.viewId, false)}
                 <hr className='invisible' />
-                {this.renderAnalyzeButton(!disabled, isOnlyItem)}
+                {this.renderAnalyzeButton(isOnlyItem)}
             </div>
         );
     }
@@ -444,7 +444,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalyzeButton(isEditing, isOnlyItem) {
+    renderAnalyzeButton(isOnlyItem) {
         const {historyItem, modelsList, fields, samplesList} = this.props;
         const validationRules = [
             new CompoundHeterozygousModelRule({
@@ -463,31 +463,22 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='btn-toolbar'>
                 {
-                    isEditing ?
-                        isOnlyItem ?
-                            null
-                            :
-                            <button
-                                className='btn btn-link btn-uppercase'
-                                title='Click for cancel'
-                                onClick={() => this.onCancelButtonClick()}
-                            >
-                                <span>Cancel</span>
-                            </button>
+                    isOnlyItem ?
+                        null
                         :
                         <button
                             className='btn btn-link btn-uppercase'
-                            title='Click for edit'
-                            onClick={() => this.onDuplicateButtonClick()}
+                            title='Click for cancel'
+                            onClick={() => this.onCancelButtonClick()}
                         >
-                            <span>Duplicate</span>
+                            <span>Cancel</span>
                         </button>
                 }
                 <button
                     className='btn btn-primary'
                     disabled={buttonParams.disabled}
                     title={buttonParams.title}
-                    onClick={() => this.onAnalyzeButtonClick(isEditing)}
+                    onClick={() => this.onAnalyzeButtonClick(true)}
                 >
                     <span data-localize='query.analyze.title'>Analyze</span>
                 </button>
