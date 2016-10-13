@@ -114,6 +114,7 @@ class SearchService extends ServiceBase {
     searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         async.waterfall([
             (callback) => this.services.operations.find(session, operationId, callback),
+            (operation, callback) => this._validateAppServerSearchInParams(fieldSearchValues, sortValues, operation, callback),
             (operation, callback) => {
                 this._createAppServerSearchInResultsParams(user, session.id, operationId, operation.getSampleIds(), operation.getViewId(), globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
@@ -348,6 +349,29 @@ class SearchService extends ServiceBase {
         }, (error) => {
             callback(error, appServerRequestParams);
         });
+    }
+
+    _validateAppServerSearchInParams(fieldSearchValues, sortValues, operation, callback) {
+        const operationSampleIds = operation.getSampleIds();
+        const sortValuesSampleIds = _.flatMap(sortValues, sortValue => {
+            if (sortValue.sampleId) {
+                return [sortValue.sampleId];
+            }
+            return [];
+        });
+        const fieldSearchValuesSampleId = _.flatMap(fieldSearchValues, fieldSearchValue => {
+            if (fieldSearchValue.sampleId) {
+                return [fieldSearchValue.sampleId];
+            }
+            return [];
+        });
+        const isSearchSampleValid = _.every(sortValuesSampleIds.concat(fieldSearchValuesSampleId), sampleId => {
+            return _.some(operationSampleIds, sampleId);
+        });
+        if (!isSearchSampleValid) {
+            return callback(new Error('One of searchIn samples not in current operation samples'));
+        }
+        return callback(null, operation);
     }
 }
 
