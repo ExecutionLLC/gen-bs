@@ -355,21 +355,21 @@ class SearchService extends ServiceBase {
         const operationSampleIds = operation.getSampleIds();
         const sortValuesSampleIds = _.flatMap(sortValues, sortValue => {
             if (sortValue.sampleId) {
-                return [sortValue.sampleId]
+                return [sortValue.sampleId];
             }
-            return []
+            return [];
         });
         const fieldSearchValuesSampleId = _.flatMap(fieldSearchValues, fieldSearchValue => {
             if (fieldSearchValue.sampleId) {
-                return [fieldSearchValue.sampleId]
+                return [fieldSearchValue.sampleId];
             }
-            return []
+            return [];
         });
         const isSearchSampleValid = _.every(sortValuesSampleIds.concat(fieldSearchValuesSampleId), sampleId => {
             return _.some(operationSampleIds, sampleId);
         });
         if (!isSearchSampleValid) {
-            return callback(new Error('One of searchIn samples not in current operation samples'))
+            return callback(new Error('One of searchIn samples not in current operation samples'));
         }
         return callback(null, operation);
     }

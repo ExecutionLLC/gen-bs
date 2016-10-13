@@ -105,7 +105,7 @@ export default class VariantsTableRow extends ComponentBase {
             24: 'Y'
         };
         const chromosomeValue = chromosomeHash[value];
-        return chromosomeValue ? `${chromosomeValue}(${value || ''})` : value || ''
+        return chromosomeValue ? `${chromosomeValue}(${value || ''})` : value || '';
     }
 
     renderHyperLink(hyperlinkTemplate, value){
