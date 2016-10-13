@@ -116,6 +116,8 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             const {analysesHistory: {currentHistoryId}} = getState();
             return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
                 .then(() => updatedSample);
+        }).catch(() => {
+            dispatch(disableSampleEdit(sampleId, false));
         });
     };
 }
