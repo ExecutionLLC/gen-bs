@@ -22,10 +22,10 @@ export default class ExportUtils {
     static downloadBlob(blob, fileName) {
         const url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
-        a.style = 'display: none';
-        document.body.appendChild(a);
+        a.style.display = 'none';
         a.href = url;
         a.download = fileName;
+        document.body.appendChild(a);
         a.click();
         setTimeout(() => {
             window.URL.revokeObjectURL(url);
