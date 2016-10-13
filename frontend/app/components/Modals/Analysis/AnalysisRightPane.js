@@ -35,7 +35,7 @@ import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, isOnlyItem, auth: {isDemo}, isBringToFront} = this.props;
+        const {historyItem, disabled, auth: {isDemo}, isBringToFront} = this.props;
 
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
@@ -44,7 +44,7 @@ export default class AnalysisRightPane extends React.Component {
                     <div className='form-padding'>
                         {!disabled ?
                             <div className='form-horizontal form-rows form-rows-2row-xs'>
-                                {historyItem && this.renderAnalysisContent(historyItem, isOnlyItem)}
+                                {historyItem && this.renderAnalysisContent(historyItem)}
                             </div>
                             :
                             this.renderDisabledAnalysis(historyItem)
@@ -70,7 +70,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent(historyItem, isOnlyItem) {
+    renderAnalysisContent(historyItem) {
         return (
             <div>
                 {this.renderSamplesSelects(historyItem, false)}
@@ -79,7 +79,7 @@ export default class AnalysisRightPane extends React.Component {
                 {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, false)}
                 {this.renderViewSelector(historyItem.viewId, false)}
                 <hr className='invisible' />
-                {this.renderAnalyzeButton(isOnlyItem)}
+                {this.renderAnalyzeButton()}
             </div>
         );
     }
@@ -444,7 +444,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalyzeButton(isOnlyItem) {
+    renderAnalyzeButton() {
         const {historyItem, modelsList, fields, samplesList} = this.props;
         const validationRules = [
             new CompoundHeterozygousModelRule({
