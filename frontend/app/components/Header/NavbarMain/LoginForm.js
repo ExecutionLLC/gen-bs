@@ -20,11 +20,13 @@ class LoginForm extends Component {
                        type='text'
                        key='login'
                        placeholder='Login'
+                       name='username'
                        onChange={(e) => this.onLoginChanged(e)}/>
                 <input className='form-control material-input-sm'
                        value={password}
                        type='password'
                        key='password'
+                       name='password'
                        placeholder='Password'
                        onChange={(e) => this.onPasswordChanged(e)}/>
                 <button className='btn btn-primary  btn-uppercase login-button'
