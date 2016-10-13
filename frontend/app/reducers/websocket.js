@@ -26,7 +26,9 @@ function reduceUpdateComment(action, state) {
     const comments = variants[variantIndex].comments;
     return assign(state, {
         variants: immutableArray.assign(variants, variantIndex, {
-            comments: immutableArray.assign(comments, 0, commentData.comment)
+            comments: immutableArray.assign(comments, 0, {
+                comment: commentData.comment
+            })
         })
     });
 }
