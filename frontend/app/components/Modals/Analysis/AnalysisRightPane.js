@@ -462,18 +462,6 @@ export default class AnalysisRightPane extends React.Component {
         };
         return (
             <div className='btn-toolbar'>
-                {
-                    isOnlyItem ?
-                        null
-                        :
-                        <button
-                            className='btn btn-link btn-uppercase'
-                            title='Click for cancel'
-                            onClick={() => this.onCancelButtonClick()}
-                        >
-                            <span>Cancel</span>
-                        </button>
-                }
                 <button
                     className='btn btn-primary'
                     disabled={buttonParams.disabled}
@@ -482,6 +470,11 @@ export default class AnalysisRightPane extends React.Component {
                 >
                     <span data-localize='query.analyze.title'>Analyze</span>
                 </button>
+                <a
+                    type='button'
+                    className='btn btn-link btn-uppercase'
+                    onClick={() => this.onCancelButtonClick()}
+                ><span>Restore to default</span></a>
             </div>
         );
     }
