@@ -6,7 +6,8 @@ export default function ui(state = {
     currentLimit: 100,
     currentOffset: 0,
     isAnalyzeTooltipVisible: false,
-    language: 'en'
+    language: 'en',
+    isLoginFormVisible:false
 }, action) {
 
     switch (action.type) {
@@ -24,6 +25,11 @@ export default function ui(state = {
         case ActionTypes.TOGGLE_ANALYZE_TOOLTIP:
             return Object.assign({}, state, {
                 isAnalyzeTooltipVisible: action.flag
+            });
+
+        case ActionTypes.TOGGLE_LOGIN_FORM:
+            return Object.assign({}, state, {
+                isLoginFormVisible: action.flag
             });
 
         default:
