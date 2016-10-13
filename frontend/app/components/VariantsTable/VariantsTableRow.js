@@ -82,16 +82,32 @@ export default class VariantsTableRow extends ComponentBase {
         });
 
         const field = hash[fieldId];
+        const isChromosome = this.isChromosome(field);
         const isValuedHyperlink = this.isHyperlink(field, resultFieldValue);
         return (
             <td className={sortedActiveClass}
                 key={fieldId + '-' + sampleId}>
                 <div>
-                    {isValuedHyperlink ?(this.renderHyperLink(field.hyperlinkTemplate, value)):(resultFieldValue || '')}
+                    {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
+                        isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}
                 </div>
             </td>
         );
     }
+
+    isChromosome(field) {
+        return field.name === 'CHROM';
+    }
+
+    renderChromosome(value) {
+        const chromosomeHash = {
+            23: 'X',
+            24: 'Y'
+        };
+        const chromosomeValue = chromosomeHash[value];
+        return chromosomeValue ? `${chromosomeValue}(${value || ''})` : value || ''
+    }
+
     renderHyperLink(hyperlinkTemplate, value){
         const replacementValue = encodeURIComponent(value);
         const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
