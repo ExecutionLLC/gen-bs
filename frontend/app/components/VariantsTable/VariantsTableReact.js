@@ -46,12 +46,10 @@ class VariantsTableReact extends Component {
                            ref='variantsTable'>
                         <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props} ref='variantsTableHead'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
-                                           onRendered={() => this.onTablePartRendered(true)}
                         />
                         { !isVariantsEmpty &&
                         <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props} ref='variantsTableRows'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)); } }
-                                           onRendered={() => this.onTablePartRendered(false)}
                         />
                         }
                     </table>
@@ -82,16 +80,6 @@ class VariantsTableReact extends Component {
                 DOMNode.scrollLeft = scrollLeft;
             }
         }
-    }
-
-    onTablePartRendered(isHeader) {
-        const {scrollTarget} = this.state;
-        if (scrollTarget == null) {
-            return;
-        }
-        const tablePartRef = isHeader ? this.refs.variantsTableHead : this.refs.variantsTableRows;
-        const tablePartElement = ReactDOM.findDOMNode(tablePartRef);
-        tablePartElement.scrollLeft = scrollTarget;
     }
 }
 
