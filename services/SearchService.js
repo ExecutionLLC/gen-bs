@@ -366,7 +366,7 @@ class SearchService extends ServiceBase {
             return [];
         });
         const isSearchSampleValid = _.every(sortValuesSampleIds.concat(fieldSearchValuesSampleId), sampleId => {
-            return _.some(operationSampleIds, sampleId);
+            return _.some(operationSampleIds, operationSampleId => operationSampleId === sampleId);
         });
         if (!isSearchSampleValid) {
             return callback(new Error('One of searchIn samples not in current operation samples'));
