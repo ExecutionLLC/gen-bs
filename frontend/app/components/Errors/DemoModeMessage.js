@@ -4,7 +4,6 @@ import {toggleLoginForm} from '../../actions/ui';
 export default class DemoModeMessage extends Component {
 
     render() {
-        debugger;
         return (
             <div className='alert alert-inverse alert-fixed demomode-alert'
                  role='alert'>
