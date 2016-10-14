@@ -15,6 +15,7 @@ const RegistrationCodesModel = require('./models/RegistrationCodesModel');
 const UserRequestService = require('./services/UserRequestService');
 const UserRequestModel = require('./models/UserRequestModel');
 const UsersClient = require('./api/UsersClient');
+const ReCaptchaClient = require('./api/ReCaptchaClient');
 const MailChimpMailService = require('./services/external/MailChimpMailService');
 const PasswordUtils = require('./utils/PasswordUtils');
 
@@ -22,6 +23,7 @@ const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
 const userRequestModel = new UserRequestModel(dbModel, logger);
 const usersClient = new UsersClient(Config);
+const reCaptchaClient =  new ReCaptchaClient(Config);
 
 const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
 const userRequests = new UserRequestService(dbModel, userRequestModel, usersClient);
@@ -124,6 +126,14 @@ app.get('/approve', (request, response) => {
         );
 });
 
+app.post('/recaptcha', (request, response) => {
+    console.log('recaptcha');
+    const {reCaptchaResponse} = request.body;
+    console.log(reCaptchaResponse);
+    reCaptchaClient.checkAsync(reCaptchaResponse)
+        .then((res) => { console.log('recaptcha result', res); return response.send(res); })
+        .catch((err) => { console.log('recaptcha error', err); return response.status(400).send(err); });
+});
 
 app.listen(Config.port, () => {
     console.log('Server is started!');
