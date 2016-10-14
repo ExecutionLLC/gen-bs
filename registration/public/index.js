@@ -48,10 +48,10 @@ const API = {
         return ajaxAsync('PUT', `${REGSERVER_API_BASE_URL}/user`, null, user);
     },
     requestUser(user) {
-        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/user_request`, null, user);
+        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/user_request`, null, {user, reCaptchaResponse});
     },
     registerUser(user) {
-        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/register`, null, user);
+        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/register`, null, {user, reCaptchaResponse});
     }
 };
 

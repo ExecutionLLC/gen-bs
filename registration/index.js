@@ -47,15 +47,28 @@ app.use(helmet({
 
 app.post('/register', (request, response) => {
     console.log('register');
-    const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
+    if (!request.body.user) {
+        response.status(400).send('No request user');
+        return;
+    }
+    const {reCaptchaResponse, user: {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password}} = request.body;
     const user = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
-    console.log(user);
-    registrationCodes.activateAsync(user)
-        .then(() => mailService.sendRegisterCodeMailAsync(user.email, {'UserName': `${user.firstName} ${user.lastName}`}))
-        .then(() => response.send({}))
-        .catch((error) =>
-            response.status(400).send(error.message)
-        );
+    console.log(reCaptchaResponse, user);
+    reCaptchaClient.checkAsync(reCaptchaResponse)
+        .then((res) => {
+            console.log('/register recaptcha result', res);
+            registrationCodes.activateAsync(user)
+                .then(() => mailService.sendRegisterCodeMailAsync(user.email, user))
+                .then(() => response.send({}))
+                .catch((error) =>
+                    response.status(400).send(error.message)
+                );
+        })
+        .catch((err) => {
+            console.log('/register recaptcha error', err);
+            return response.status(400).send(err);
+        });
+
 });
 
 function filterUser(user) {
@@ -97,16 +110,29 @@ app.put('/user', (request, response) => {
 
 app.post('/user_request', (request, response) => {
     console.log('user request');
-    const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
+    if (!request.body.user) {
+        response.status(400).send('No request user');
+        return;
+    }
+    const {reCaptchaResponse, user: {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password}} = request.body;
     const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
-    console.log(userInfo);
-    userRequests.createAsync(userInfo)
-        .then((insertedUser) =>
-            mailService.sendRegisterMailAsync(userInfo.email, userInfo)
-                .then(() => mailService.sendAdminRegisterMailAsync(
-                    Object.assign({}, userInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${insertedUser.id}`}))))
-        .then(() => response.send(userInfo))
-        .catch((err) => response.status(400).send(err.message));
+    console.log(reCaptchaResponse, userInfo);
+
+    reCaptchaClient.checkAsync(reCaptchaResponse)
+        .then((res) => {
+            console.log('/user_request recaptcha result', res);
+            return userRequests.createAsync(userInfo)
+                .then((insertedUser) =>
+                    mailService.sendRegisterMailAsync(userInfo.email, userInfo)
+                        .then(() => mailService.sendAdminRegisterMailAsync(
+                            Object.assign({}, userInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${insertedUser.id}`}))))
+                .then(() => response.send(userInfo))
+                .catch((err) => response.status(400).send(err.message));
+        })
+        .catch((err) => {
+            console.log('/user_request recaptcha error', err);
+            return response.status(400).send(err);
+        });
 });
 
 app.get('/register', (request, response) => {
