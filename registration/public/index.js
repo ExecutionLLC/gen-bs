@@ -422,12 +422,6 @@ function onPassword(/*index, psw*/) {
     });
 }
 
-var acceptDisaclaimer = null; // will be defined later
-
-function onAcceptDisclaimer(checked) {
-    acceptDisaclaimer();
-}
-
 function switchPageState(ops) {
     if (ops.disableRegcode != null) {
         const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
@@ -467,6 +461,39 @@ function switchPageState(ops) {
         document.body.classList.toggle('show-app-link', ops.validRegcode);
     }
 }
+
+
+class SubmitButtons {
+    constructor(buttons) {
+        this._disclaimerAccepted = false;
+        this._buttons = buttons.slice();
+        this._onChanged();
+    }
+
+    _onChanged() {
+
+        const enable = this._disclaimerAccepted;
+
+        const toggleAttribute = enable ?
+            (el) => el.removeAttribute('disabled') :
+            (el) => el.setAttribute('disabled', 'disabled');
+
+        function setDisable(el) {
+            if (el) {
+                toggleAttribute(el);
+            }
+        }
+
+        this._buttons.forEach((el) => setDisable(el));
+    }
+
+    onDisclaimerAcceptedChange(accept) {
+        this._disclaimerAccepted = accept;
+        this._onChanged();
+    }
+}
+
+var submitButtons = null;
 
 function onDocumentLoad() {
 
@@ -510,31 +537,12 @@ function onDocumentLoad() {
         return passwordInputEl;
     });
 
-    function onAcceptDisclaimer(accept) {
-
-        const toggleAttribute = accept ?
-            (el) => el.removeAttribute('disabled') :
-            (el) => el.setAttribute('disabled', 'disabled');
-
-        function setDisable(el) {
-            if (el) {
-                toggleAttribute(el);
-            }
-        }
-
-        if (signupGoogle) {
-            setDisable(registerButtonEl);
-            setDisable(signupLoginPassword);
-            setDisable(signupGoogle);
-        }
-    }
+    submitButtons = new SubmitButtons([registerButtonEl, signupLoginPassword, signupGoogle].filter(el => !!el));
 
     const acceptDisclaimerEl = document.getElementById(ELEMENT_ID.acceptDisclaimer);
     if (acceptDisclaimerEl) {
-        DOMUtils.onClick(acceptDisclaimerEl, () => onAcceptDisclaimer(acceptDisclaimerEl.checked));
+        DOMUtils.onClick(acceptDisclaimerEl, () => submitButtons.onDisclaimerAcceptedChange(acceptDisclaimerEl.checked));
     }
-
-    onAcceptDisclaimer(false);
 
     getPassword = () => {
         return passwordInputEls.reduce(
