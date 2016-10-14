@@ -38,7 +38,7 @@ function ajaxAsync(method, url, params, data) {
 }
 
 const API = {
-    getUserForRegcodeEmailAsync(regcode) {
+    getUserForRegcodeAsync(regcode) {
         return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcode, email: null});
     },
     getUserForRegcodeId(regcodeId) {
@@ -214,7 +214,7 @@ const checkingUser = {
         checkingUser.requested = {
             regcode
         };
-        return API.getUserForRegcodeEmailAsync(regcode, null)
+        return API.getUserForRegcodeAsync(regcode)
             .then((user) => {
                 if (regcode !== checkingUser.requested.regcode) {
                     throw new Error('old request');
