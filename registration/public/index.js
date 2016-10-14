@@ -598,22 +598,10 @@ function onDocumentLoad() {
     }
 }
 
-function checkReCaptchaAsync(reCaptchaResponse) {
-    return ajaxAsync('POST', 'http://37.195.64.171:2030/recaptcha', null, {reCaptchaResponse});
-}
-
 var reCaptchaResponse = null;
 
 function reCaptchaCallback(response) {
     reCaptchaResponse = response;
     console.log('reCaptchaCallback', reCaptchaResponse);
-    checkReCaptchaAsync(reCaptchaResponse)
-        .then((res) => {
-            console.log('reCaptcha result', res);
-            submitButtons.onReCaptchaResultChange(res && res.success);
-        })
-        .catch((err) => {
-            console.log('reCaptcha error', err);
-            submitButtons.onReCaptchaResultChange(false);
-        });
+    submitButtons.onReCaptchaResultChange(true);
 }

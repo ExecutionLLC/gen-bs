@@ -126,15 +126,6 @@ app.get('/approve', (request, response) => {
         );
 });
 
-app.post('/recaptcha', (request, response) => {
-    console.log('recaptcha');
-    const {reCaptchaResponse} = request.body;
-    console.log(reCaptchaResponse);
-    reCaptchaClient.checkAsync(reCaptchaResponse)
-        .then((res) => { console.log('recaptcha result', res); return response.send(res); })
-        .catch((err) => { console.log('recaptcha error', err); return response.status(400).send(err); });
-});
-
 app.listen(Config.port, () => {
     console.log('Server is started!');
 });
