@@ -46,7 +46,6 @@ export default class AnalysisBody extends React.Component {
                         samplesList={this.props.samplesList}
                         modelsList={this.props.modelsList}
                         fields={this.props.fields}
-                        isOnlyItem={!this.props.historyList.length}
                         isBringToFront={this.props.isAnalysisBringToFront}
                     />}
                 </div>
