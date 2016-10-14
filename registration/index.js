@@ -46,17 +46,17 @@ app.use(helmet({
 
 
 app.post('/register', (request, response) => {
-    console.log('register');
+    this.logger.info('register');
     if (!request.body.user) {
         response.status(400).send('No request user');
         return;
     }
     const {reCaptchaResponse, user: {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password}} = request.body;
     const user = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
-    console.log(reCaptchaResponse, user);
+    this.logger.info(reCaptchaResponse, user);
     reCaptchaClient.checkAsync(reCaptchaResponse)
         .then((res) => {
-            console.log('/register recaptcha result', res);
+            this.logger.info('/register recaptcha result', res);
             registrationCodes.activateAsync(user)
                 .then(() => mailService.sendRegisterCodeMailAsync(user.email, user))
                 .then(() => response.send({}))
@@ -65,7 +65,7 @@ app.post('/register', (request, response) => {
                 );
         })
         .catch((err) => {
-            console.log('/register recaptcha error', err);
+            this.logger.info('/register recaptcha error', err);
             return response.status(400).send(err);
         });
 
@@ -79,9 +79,9 @@ function filterUser(user) {
 app.get(
     '/user',
     (request, response) => {
-        console.log('/user', request.query);
+        this.logger.info('/user', request.query);
         const {regcode, regcodeId} = request.query;
-        console.log(regcode, regcodeId);
+        this.logger.info(regcode, regcodeId);
         const findAsync = regcodeId ?
             registrationCodes.findRegcodeIdAsync(regcodeId) :
             registrationCodes.findRegcodeAsync(regcode);
@@ -96,10 +96,10 @@ app.get(
 );
 
 app.put('/user', (request, response) => {
-    console.log('update user');
+    this.logger.info('update user');
     const {id, firstName, lastName, company, email, gender, speciality, telephone} = request.body;
     const regcodeInfo = {id, firstName, lastName, company, email, gender, speciality, telephone};
-    console.log(regcodeInfo);
+    this.logger.info(regcodeInfo);
     registrationCodes.update(regcodeInfo.id, regcodeInfo)
         .then(() => {
             registrationCodes.updateLastDate(regcodeInfo.id, regcodeInfo);
@@ -109,18 +109,18 @@ app.put('/user', (request, response) => {
 });
 
 app.post('/user_request', (request, response) => {
-    console.log('user request');
+    this.logger.info('user request');
     if (!request.body.user) {
         response.status(400).send('No request user');
         return;
     }
     const {reCaptchaResponse, user: {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password}} = request.body;
     const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
-    console.log(reCaptchaResponse, userInfo);
+    this.logger.info(reCaptchaResponse, userInfo);
 
     reCaptchaClient.checkAsync(reCaptchaResponse)
         .then((res) => {
-            console.log('/user_request recaptcha result', res);
+            this.logger.info('/user_request recaptcha result', res);
             return userRequests.createAsync(userInfo)
                 .then((insertedUser) =>
                     mailService.sendRegisterMailAsync(userInfo.email, userInfo)
@@ -130,7 +130,7 @@ app.post('/user_request', (request, response) => {
                 .catch((err) => response.status(400).send(err.message));
         })
         .catch((err) => {
-            console.log('/user_request recaptcha error', err);
+            this.logger.info('/user_request recaptcha error', err);
             return response.status(400).send(err);
         });
 });
@@ -140,9 +140,9 @@ app.get('/register', (request, response) => {
 });
 
 app.get('/approve', (request, response) => {
-    console.log('approve');
+    this.logger.info('approve');
     const {id} = request.query;
-    console.log(id);
+    this.logger.info(id);
     userRequests.activateAsync(id)
         .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)
             .then(() => mailService.sendAdminRegisterApproveMailAsync(user)))
@@ -153,5 +153,5 @@ app.get('/approve', (request, response) => {
 });
 
 app.listen(Config.port, () => {
-    console.log('Server is started!');
+    this.logger.info('Server is started!');
 });
