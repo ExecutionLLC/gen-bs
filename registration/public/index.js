@@ -466,13 +466,14 @@ function switchPageState(ops) {
 class SubmitButtons {
     constructor(buttons) {
         this._disclaimerAccepted = false;
+        this._reCaptchaSuccess = false;
         this._buttons = buttons.slice();
         this._onChanged();
     }
 
     _onChanged() {
 
-        const enable = this._disclaimerAccepted;
+        const enable = this._disclaimerAccepted && this._reCaptchaSuccess;
 
         const toggleAttribute = enable ?
             (el) => el.removeAttribute('disabled') :
@@ -489,6 +490,11 @@ class SubmitButtons {
 
     onDisclaimerAcceptedChange(accept) {
         this._disclaimerAccepted = accept;
+        this._onChanged();
+    }
+
+    onReCaptchaResultChange(success) {
+        this._reCaptchaSuccess = success;
         this._onChanged();
     }
 }
@@ -590,4 +596,24 @@ function onDocumentLoad() {
             showRegister: false
         });
     }
+}
+
+function checkReCaptchaAsync(reCaptchaResponse) {
+    return ajaxAsync('POST', 'http://37.195.64.171:2030/recaptcha', null, {reCaptchaResponse});
+}
+
+var reCaptchaResponse = null;
+
+function reCaptchaCallback(response) {
+    reCaptchaResponse = response;
+    console.log('reCaptchaCallback', reCaptchaResponse);
+    checkReCaptchaAsync(reCaptchaResponse)
+        .then((res) => {
+            console.log('reCaptcha result', res);
+            submitButtons.onReCaptchaResultChange(res && res.success);
+        })
+        .catch((err) => {
+            console.log('reCaptcha error', err);
+            submitButtons.onReCaptchaResultChange(false);
+        });
 }
