@@ -845,8 +845,8 @@ function switchPageState(ops) {
     if (ops.validRegcode != null) {
         toggleClass(document.body, 'valid-regcode', ops.validRegcode);
     }
-    if (ops.showAppLink) {
-        toggleClass(document.body, 'show-app-link', ops.validRegcode);
+    if (ops.showAppLink != null) {
+        toggleClass(document.body, 'show-app-link', ops.showAppLink);
     }
 }
 
