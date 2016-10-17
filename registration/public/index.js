@@ -1,3 +1,5 @@
+document.body.classList.add('loading');
+
 (function(global){
 
 //
@@ -675,6 +677,32 @@ function onSignupLoginPassword() {
     });
 }
 
+(function(){
+    'use strict';
+    
+    var isObject = function (obj) {
+	return obj && typeof obj === 'object';
+    };
+
+    if(Object.assign) return;
+    Object.defineProperty(Object, 'assign', {
+	value: function(target, source){
+	    var s, i, props;
+	    if (!isObject(target)) { throw new TypeError('target must be an object'); }
+	    for (s = 1; s < arguments.length; ++s) {
+		source = arguments[s];
+		if (!isObject(source)) { throw new TypeError('source ' + s + ' must be an object'); }
+		props = Object.keys(Object(source));
+		for (i = 0; i < props.length; ++i) {
+		    target[props[i]] = source[props[i]];
+		}
+	    }
+	    return target;
+	},
+	enumerable: false
+    });
+})();
+
 function addUser(loginInfo) {
     switchPageState({
         showLoginType: false,
@@ -774,6 +802,14 @@ function onAcceptDisclaimer(checked) {
     acceptDisaclaimer();
 }
 
+function toggleClass(el, cls, isSet) {
+    if (isSet) {
+        el.classList.add(cls);
+    } else {
+        el.classList.remove(cls);
+    }
+}
+
 function switchPageState(ops) {
     if (ops.disableRegcode != null) {
         const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
@@ -785,36 +821,37 @@ function switchPageState(ops) {
         MakeLayout.disableControls(USER_INFO_SCHEME, ops.disableUserInfo);
     }
     if (ops.showLoginType != null) {
-        document.body.classList.toggle('no-login-type', !ops.showLoginType);
+        toggleClass(document.body, 'no-login-type', !ops.showLoginType);
     }
     if (ops.showPassword != null) {
-        document.body.classList.toggle('no-password', !ops.showPassword);
+        toggleClass(document.body, 'no-password', !ops.showPassword);
     }
     if (ops.showRegister != null) {
-        document.body.classList.toggle('no-register', !ops.showRegister);
+        toggleClass(document.body, 'no-register', !ops.showRegister);
     }
     if (ops.warningUserdata != null) {
-        document.body.classList.toggle('warning-userdata', ops.warningUserdata);
+        toggleClass(document.body, 'warning-userdata', ops.warningUserdata);
     }
     if (ops.warningPassword != null) {
-        document.body.classList.toggle('warning-password', ops.warningPassword);
+        toggleClass(document.body, 'warning-password', ops.warningPassword);
     }
     if (ops.loading != null) {
-        document.body.classList.toggle('register-loading', ops.loading);
+        toggleClass(document.body, 'register-loading', ops.loading);
     }
     if (ops.register != null) {
-        document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
-        document.body.classList.toggle('register-fail', !!ops.register.fail);
+        toggleClass(document.body, 'register-ok-mail', !!ops.register.mail);
+        toggleClass(document.body, 'register-fail', !!ops.register.fail);
     }
     if (ops.validRegcode != null) {
-        document.body.classList.toggle('valid-regcode', ops.validRegcode);
+        toggleClass(document.body, 'valid-regcode', ops.validRegcode);
     }
     if (ops.showAppLink) {
-        document.body.classList.toggle('show-app-link', ops.validRegcode);
+        toggleClass(document.body, 'show-app-link', ops.validRegcode);
     }
 }
 
 function onDocumentLoad() {
+    document.body.classList.remove('loading');
     switchPageState({
         validRegcode: true,
         disableRegcode: true,
