@@ -1,5 +1,5 @@
-const REGSERVER_API_BASE_URL = 'https://alpha.genomics-exe.com/register';
-const GENOMICS_URL = 'http://alpha.genomics-exe.com/';
+const REGSERVER_API_BASE_URL = 'https://agx.alapy.com/register';
+const GENOMICS_URL = 'https://agx.alapy.com/';
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
@@ -16,11 +16,11 @@ function makeURIParams(params) {
 }
 
 function ajaxAsync(method, url, params, data) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
         const xmlhttp = new XMLHttpRequest();
         xmlhttp.open(method, url + (params ? '?' + makeURIParams(params) : ''));
         xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xmlhttp.onreadystatechange = () => {
+        xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState === xmlhttp.DONE) {
                 if (xmlhttp.status === 200) {
                     try {
@@ -109,40 +109,40 @@ const DOMUtils = {
         el.appendChild(document.createTextNode(text));
     },
     onInput(el, handler) {
-        el.addEventListener('input', () => handler(el.value));
+        el.addEventListener('input', function() { handler(el.value); });
     },
     onClick(el, handler) {
         if (el.getAttribute('type') === 'submit') {
             el.setAttribute('type', 'button');
         }
-        el.addEventListener('click', () => handler());
+        el.addEventListener('click', function() { handler(); });
     }
 };
 
 const MakeLayout = {
     attachHandlers(scheme, onChange) {
-        scheme.forEach((scheme) => {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
-                DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
+                DOMUtils.onInput(inputEl, function(str) { onChange(scheme.id, str); })
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
-                    DOMUtils.onClick(el, () => onChange(scheme.id, el.value))
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
+                    DOMUtils.onClick(el, function() { onChange(scheme.id, el.value); })
                 });
             }
         });
     },
     disableControls(scheme, disable) {
-        scheme.forEach((scheme) => {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 inputEl.disabled = disable;
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
                     el.disabled = disable;
                 });
             }
@@ -166,7 +166,7 @@ const MakeLayout = {
         }
     },
     disableAutocomplete(ids) {
-        ids.forEach((id) => {
+        ids.forEach(function(id) {
             const el = document.getElementById(id);
             if (el) {
                 el.setAttribute('autocomplete', 'off');
@@ -184,14 +184,14 @@ const FillData = {
         }
     },
     fillUserItem(scheme, data) {
-        scheme.forEach((scheme) => {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 FillData.fillDataItemEl(inputEl, data[scheme.id] || '');
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
                     el.checked = el.value === data[scheme.id];
                 });
             }
@@ -215,7 +215,7 @@ const checkingUser = {
             regcode
         };
         return API.getUserForRegcodeEmailAsync(regcode, null)
-            .then((user) => {
+            .then(function(user) {
                 if (regcode !== checkingUser.requested.regcode) {
                     throw new Error('old request');
                 }
@@ -278,14 +278,14 @@ function debounce(fn, delay) {
     };
 }
 
-const checkServerRegcode = debounce(() => {
+const checkServerRegcode = debounce(function() {
     const regcode = currentUser.regcode;
     checkingUser.requestRegcodeAsync(regcode)
-        .then((user) => {
+        .then(function(user) {
             switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true});
             onRegcodedUserReceived(user);
         })
-        .catch(() => {
+        .catch(function() {
             switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode});
         });
 }, 200);
@@ -295,7 +295,7 @@ function checkRegcode(regcode) {
     checkServerRegcode()
 }
 
-const updateServerData = debounce(() => API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})), 200);
+const updateServerData = debounce(function() {API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})); }, 200);
 
 function onUserEdit (fieldId, str) {
     console.log('onUserEdit', fieldId, str);
@@ -340,7 +340,7 @@ function addUser(loginInfo) {
         API.registerUser(Object.assign({}, currentUser.user, loginInfo)) :
         API.requestUser(Object.assign({}, currentUser.user, loginInfo));
     registerAsync
-        .then(() => {
+        .then(function() {
             if (loadedUserId) {
                 showAppLink();
                 switchPageState({
@@ -359,7 +359,7 @@ function addUser(loginInfo) {
                 });
             }
         })
-        .catch((err) => {
+        .catch(function(err) {
             const registerFailMessageEl = document.getElementById(ELEMENT_ID.registerFailMessage);
             if (registerFailMessageEl) {
                 DOMUtils.setElementText(registerFailMessageEl, '' + err);
@@ -390,7 +390,7 @@ function onSignupGoogle() {
 
 function validateUser() {
 
-    const hasAbsent = USER_INFO_SCHEME.reduce((hasAbsent, scheme) => {
+    const hasAbsent = USER_INFO_SCHEME.reduce(function(hasAbsent, scheme) {
         const inputEl = scheme.containerId ?
             document.getElementById(scheme.containerId) :
             document.getElementById(scheme.elementId);
@@ -485,7 +485,7 @@ function onDocumentLoad() {
         DOMUtils.onInput(regcodeEl, checkRegcode);
     }
     MakeLayout.disableAutocomplete(
-        USER_INFO_SCHEME.map((scheme) => scheme.elementId)
+        USER_INFO_SCHEME.map(function(scheme) { return scheme.elementId; })
             .concat([ELEMENT_ID.regcodeInput])
     );
     MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
@@ -502,10 +502,10 @@ function onDocumentLoad() {
     if (registerButtonEl) {
         DOMUtils.onClick(registerButtonEl, onRegister);
     }
-    const passwordInputEls = ELEMENT_ID.passwordInputs.map((id, index) => {
+    const passwordInputEls = ELEMENT_ID.passwordInputs.map(function(id, index) {
         const passwordInputEl = document.getElementById(id);
         if (passwordInputEl) {
-            DOMUtils.onInput(passwordInputEl, (psw) => onPassword(index, psw));
+            DOMUtils.onInput(passwordInputEl, function(psw) { onPassword(index, psw); });
         }
         return passwordInputEl;
     });
@@ -513,8 +513,8 @@ function onDocumentLoad() {
     function onAcceptDisclaimer(accept) {
 
         const toggleAttribute = accept ?
-            (el) => el.removeAttribute('disabled') :
-            (el) => el.setAttribute('disabled', 'disabled');
+            function(el) { el.removeAttribute('disabled'); } :
+            function(el) { el.setAttribute('disabled', 'disabled'); };
 
         function setDisable(el) {
             if (el) {
@@ -531,14 +531,14 @@ function onDocumentLoad() {
 
     const acceptDisclaimerEl = document.getElementById(ELEMENT_ID.acceptDisclaimer);
     if (acceptDisclaimerEl) {
-        DOMUtils.onClick(acceptDisclaimerEl, () => onAcceptDisclaimer(acceptDisclaimerEl.checked));
+        DOMUtils.onClick(acceptDisclaimerEl, function() { onAcceptDisclaimer(acceptDisclaimerEl.checked); });
     }
 
     onAcceptDisclaimer(false);
 
-    getPassword = () => {
+    getPassword = function() {
         return passwordInputEls.reduce(
-            (psw, el, index) => {
+            function(psw, el, index) {
                 if (!index) {
                     return el.value;
                 }
@@ -556,7 +556,7 @@ function onDocumentLoad() {
     if (regcodeId) {
         switchPageState({loading: true});
         API.getUserForRegcodeId(regcodeId)
-            .then((user) => {
+            .then(function(user) {
                 if (regcodeEl) {
                     regcodeEl.value = user.regcode;
                 }
@@ -570,7 +570,7 @@ function onDocumentLoad() {
                 });
                 onRegcodedUserReceived(user);
             })
-            .catch(() => {
+            .catch(function() {
                 displayNoUserInfo();
             });
     } else {
