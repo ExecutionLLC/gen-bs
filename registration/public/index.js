@@ -1,4 +1,5 @@
 document.body.classList.add('loading');
+document.body.classList.add('register-loading');
 
 (function(global){
 
@@ -627,20 +628,23 @@ function debounce(fn, delay) {
 }
 
 const checkServerRegcode = debounce(function() {
+    switchPageState({loading: true});
     const regcode = currentUser.regcode;
     checkingUser.requestRegcodeAsync(regcode)
         .then(function(user) {
-            switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true});
+            switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true, loading: false});
             onRegcodedUserReceived(user);
         })
         .catch(function() {
-            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode});
+            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode, loading: false});
         });
 }, 200);
 
 function checkRegcode(regcode) {
     currentUser.regcode = regcode;
-    checkServerRegcode()
+    if (currentUser.regcode.length === 8) {
+        checkServerRegcode()
+    }
 }
 
 const updateServerData = debounce(function() {API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})); }, 200);
@@ -961,7 +965,8 @@ function onDocumentLoad() {
             disableUserInfo: false,
             showLoginType: true,
             showPassword: false,
-            showRegister: false
+            showRegister: false,
+            loading: false
         });
     }
 }

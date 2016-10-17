@@ -1,8 +1,130 @@
-.warning {
-    background: red;
-    font-weight: bold;
-    color: yellow;
+h1 {
+    font-family: "Roboto", serif !important;
+}
+
+
+h2 {
+    font-family: "Roboto", serif !important;
+}
+
+h3 {
+    font-family: "Roboto", serif !important;
+}
+
+h4 {
+    font-family: "Roboto", serif !important;
+}
+
+h5 {
+    font-family: "Roboto", serif !important;
+}
+
+
+.menu_main_nav > li > a {
+
+    font-family: "Roboto", serif !important;
+
+}
+
+input[type="submit"], input[type="reset"], input[type="button"], button, .sc_button, .woocommerce .widget_price_filter .price_slider_amount .button, .woocommerce-page .widget_price_filter .price_slider_amount .button, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce #respond input#submit, .woocommerce #content input.button, .woocommerce-page a.button, .woocommerce-page button.button, .woocommerce-page input.button, .woocommerce-page #respond input#submit, .woocommerce-page #content input.button, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt, .woocommerce #respond input#submit.alt, .woocommerce #content input.button.alt, .woocommerce-page a.button.alt, .woocommerce-page button.button.alt, .woocommerce-page input.button.alt, .woocommerce-page #respond input#submit.alt, .woocommerce-page #content input.button.alt, .woocommerce-account .addresses .title .edit, .woocommerce .cart .button, .woocommerce .cart input.button  {
+
+    font-family: "Roboto", serif !important;
+
+}
+
+body {
+
+    font-family: "Roboto", serif !important;
+
+}
+
+.logo .logo_text {
+
+    font-size: 2.5rem !important;
+
+}
+
+/* disabled btn state */
+.scheme_original input[type="submit"][disabled],
+.scheme_original input[type="reset"][disabled],
+.scheme_original input[type="button"][disabled],
+.scheme_original button[disabled],
+.scheme_original .sc_button.sc_button_style_filled[disabled]
+{
+    color: rgba(255,255,255, 0.7);
+/*    background:*/
+}
+/* registartion form styles */
+
+#userinfo br {
     display: none;
+}
+.wpcf7[role="form"]{
+    padding: 30px 0;
+}
+.flex-row {
+    display: flex;
+}
+.flex-left {
+    flex-shrink: 1;
+    width: 50%;
+    padding-right: 10px;
+}
+.flex-right {
+    flex-shrink: 1;
+    width: 50%;
+    padding-left: 10px;
+}
+#userinfo .flex-row .wpcf7-form-control-wrap,
+#userinfo .flex-row label {
+    display: block;
+    width: 100%;
+}
+#userinfo .flex-row .wpcf7-form-control {
+    width: 100%;
+}
+.form-inline,
+.flex-row {
+    margin-bottom: 10px;
+}
+#wrong-regcode {
+    padding-top: 34px;
+}
+@media (max-width: 480px) {
+    .header_mobile .side_wrap {
+        top: 74px;
+    }
+    .wpcf7-form-control-wrap {
+        margin-top: 5px;
+        margin-bottom: 5px
+    }
+    .flex-row {
+        display: block;
+    }
+    .flex-left {
+        width: auto;
+        padding-right: 0;
+    }
+    .flex-right {
+        width: auto;
+        padding-left: 0px;
+    }
+    .wpcf7-radio input[type="checkbox"],
+    .wpcf7-radio input[type="radio"] {
+        margin: 0 10px 0 4px;
+    }
+}
+
+/* registration form stypes*/
+
+
+
+
+.warning {
+   background: red;
+   font-weight: bold;
+   color: yellow;
+   display: none;
 }
 
 body.no-password #password {
@@ -17,6 +139,11 @@ body.no-register #register-block {
     display: none;
 }
 
+#warning-password,
+#warning-userdata {
+    display: none;
+}
+
 body.warning-userdata #warning-userdata {
     display: block;
 }
@@ -24,3 +151,90 @@ body.warning-userdata #warning-userdata {
 body.warning-password #warning-password {
     display: block;
 }
+
+body.register-loading {
+    background: gray;
+}
+
+#register-ok-mail,
+#register-fail {
+    display: none;
+}
+
+body.register-ok-mail #register-ok-mail {
+    display: block;
+}
+
+body.register-ok-mail #registration-header,
+body.register-ok-mail #regcode-container,
+body.register-ok-mail #userinfo,
+body.register-ok-mail #login-type,
+body.register-ok-mail #password,
+body.register-ok-mail #register-block {
+    display: none;
+}
+
+body.register-fail #register-fail {
+    display: block;
+}
+
+body.valid-regcode #wrong-regcode {
+    display: none;
+}
+
+#reg-already-registered {
+    display: none;
+}
+
+body.show-app-link #reg-already-registered {
+    display: inline;
+}
+/*
+body.loading form {
+    background: lightgray;
+}
+
+body.register-loading .ajax-loader {
+    visibility: visible !important;
+}
+*/
+
+body.register-loading .ajax-reg-loader {
+    visibility: visible !important;
+}
+
+.scheme_original input[type="submit"][disabled],
+.scheme_original input[type="reset"][disabled],
+.scheme_original input[type="button"][disabled],
+.scheme_original button[disabled],
+.scheme_original .sc_button.sc_button_style_filled[disabled],
+.scheme_original input[type="submit"][disabled]:hover,
+.scheme_original input[type="reset"][disabled]:hover,
+.scheme_original input[type="button"][disabled]:hover,
+.scheme_original button[disabled]:hover,
+.scheme_original .sc_button.sc_button_style_filled[disabled]:hover,
+.scheme_original input[type="submit"][disabled]:focus,
+.scheme_original input[type="reset"][disabled]:focus,
+.scheme_original input[type="button"][disabled]:focus,
+.scheme_original button[disabled]:focus,
+.scheme_original .sc_button.sc_button_style_filled[disabled]:focus
+{
+    color: rgba(255,255,255, 0.7);
+    background: #88cce3;
+    border-color: #88cce3;
+}
+
+
+
+
+@media (max-width: 1920px) and (min-width: 1080px) {
+
+    .sc_services_style_services-1 .sc_services_item {
+
+        min-height: 205px;
+
+    }
+
+}
+
+
