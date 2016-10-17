@@ -1,5 +1,354 @@
-const REGSERVER_API_BASE_URL = 'https://alpha.genomics-exe.com/register';
-const GENOMICS_URL = 'http://alpha.genomics-exe.com/';
+document.body.classList.add('loading');
+
+(function(global){
+
+//
+// Check for native Promise and it has correct interface
+//
+
+var NativePromise = global['Promise'];
+var nativePromiseSupported =
+  NativePromise &&
+  // Some of these methods are missing from
+  // Firefox/Chrome experimental implementations
+  'resolve' in NativePromise &&
+  'reject' in NativePromise &&
+  'all' in NativePromise &&
+  'race' in NativePromise &&
+  // Older version of the spec had a resolver object
+  // as the arg rather than a function
+  (function(){
+    var resolve;
+    new NativePromise(function(r){ resolve = r; });
+    return typeof resolve === 'function';
+  })();
+
+
+//
+// export if necessary
+//
+
+if (typeof exports !== 'undefined' && exports)
+{
+  // node.js
+  exports.Promise = nativePromiseSupported ? NativePromise : Promise;
+  exports.Polyfill = Promise;
+}
+else
+{
+  // AMD
+  if (typeof define == 'function' && define.amd)
+  {
+    define(function(){
+      return nativePromiseSupported ? NativePromise : Promise;
+    });
+  }
+  else
+  {
+    // in browser add to global
+    if (!nativePromiseSupported)
+      global['Promise'] = Promise;
+  }
+}
+
+
+//
+// Polyfill
+//
+
+var PENDING = 'pending';
+var SEALED = 'sealed';
+var FULFILLED = 'fulfilled';
+var REJECTED = 'rejected';
+var NOOP = function(){};
+
+function isArray(value) {
+  return Object.prototype.toString.call(value) === '[object Array]';
+}
+
+// async calls
+var asyncSetTimer = typeof setImmediate !== 'undefined' ? setImmediate : setTimeout;
+var asyncQueue = [];
+var asyncTimer;
+
+function asyncFlush(){
+  // run promise callbacks
+  for (var i = 0; i < asyncQueue.length; i++)
+    asyncQueue[i][0](asyncQueue[i][1]);
+
+  // reset async asyncQueue
+  asyncQueue = [];
+  asyncTimer = false;
+}
+
+function asyncCall(callback, arg){
+  asyncQueue.push([callback, arg]);
+
+  if (!asyncTimer)
+  {
+    asyncTimer = true;
+    asyncSetTimer(asyncFlush, 0);
+  }
+}
+
+
+function invokeResolver(resolver, promise) {
+  function resolvePromise(value) {
+    resolve(promise, value);
+  }
+
+  function rejectPromise(reason) {
+    reject(promise, reason);
+  }
+
+  try {
+    resolver(resolvePromise, rejectPromise);
+  } catch(e) {
+    rejectPromise(e);
+  }
+}
+
+function invokeCallback(subscriber){
+  var owner = subscriber.owner;
+  var settled = owner.state_;
+  var value = owner.data_;  
+  var callback = subscriber[settled];
+  var promise = subscriber.then;
+
+  if (typeof callback === 'function')
+  {
+    settled = FULFILLED;
+    try {
+      value = callback(value);
+    } catch(e) {
+      reject(promise, e);
+    }
+  }
+
+  if (!handleThenable(promise, value))
+  {
+    if (settled === FULFILLED)
+      resolve(promise, value);
+
+    if (settled === REJECTED)
+      reject(promise, value);
+  }
+}
+
+function handleThenable(promise, value) {
+  var resolved;
+
+  try {
+    if (promise === value)
+      throw new TypeError('A promises callback cannot return that same promise.');
+
+    if (value && (typeof value === 'function' || typeof value === 'object'))
+    {
+      var then = value.then;  // then should be retrived only once
+
+      if (typeof then === 'function')
+      {
+        then.call(value, function(val){
+          if (!resolved)
+          {
+            resolved = true;
+
+            if (value !== val)
+              resolve(promise, val);
+            else
+              fulfill(promise, val);
+          }
+        }, function(reason){
+          if (!resolved)
+          {
+            resolved = true;
+
+            reject(promise, reason);
+          }
+        });
+
+        return true;
+      }
+    }
+  } catch (e) {
+    if (!resolved)
+      reject(promise, e);
+
+    return true;
+  }
+
+  return false;
+}
+
+function resolve(promise, value){
+  if (promise === value || !handleThenable(promise, value))
+    fulfill(promise, value);
+}
+
+function fulfill(promise, value){
+  if (promise.state_ === PENDING)
+  {
+    promise.state_ = SEALED;
+    promise.data_ = value;
+
+    asyncCall(publishFulfillment, promise);
+  }
+}
+
+function reject(promise, reason){
+  if (promise.state_ === PENDING)
+  {
+    promise.state_ = SEALED;
+    promise.data_ = reason;
+
+    asyncCall(publishRejection, promise);
+  }
+}
+
+function publish(promise) {
+  var callbacks = promise.then_;
+  promise.then_ = undefined;
+
+  for (var i = 0; i < callbacks.length; i++) {
+    invokeCallback(callbacks[i]);
+  }
+}
+
+function publishFulfillment(promise){
+  promise.state_ = FULFILLED;
+  publish(promise);
+}
+
+function publishRejection(promise){
+  promise.state_ = REJECTED;
+  publish(promise);
+}
+
+/**
+* @class
+*/
+function Promise(resolver){
+  if (typeof resolver !== 'function')
+    throw new TypeError('Promise constructor takes a function argument');
+
+  if (this instanceof Promise === false)
+    throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
+
+  this.then_ = [];
+
+  invokeResolver(resolver, this);
+}
+
+Promise.prototype = {
+  constructor: Promise,
+
+  state_: PENDING,
+  then_: null,
+  data_: undefined,
+
+  then: function(onFulfillment, onRejection){
+    var subscriber = {
+      owner: this,
+      then: new this.constructor(NOOP),
+      fulfilled: onFulfillment,
+      rejected: onRejection
+    };
+
+    if (this.state_ === FULFILLED || this.state_ === REJECTED)
+    {
+      // already resolved, call callback async
+      asyncCall(invokeCallback, subscriber);
+    }
+    else
+    {
+      // subscribe
+      this.then_.push(subscriber);
+    }
+
+    return subscriber.then;
+  },
+
+  'catch': function(onRejection) {
+    return this.then(null, onRejection);
+  }
+};
+
+Promise.all = function(promises){
+  var Class = this;
+
+  if (!isArray(promises))
+    throw new TypeError('You must pass an array to Promise.all().');
+
+  return new Class(function(resolve, reject){
+    var results = [];
+    var remaining = 0;
+
+    function resolver(index){
+      remaining++;
+      return function(value){
+        results[index] = value;
+        if (!--remaining)
+          resolve(results);
+      };
+    }
+
+    for (var i = 0, promise; i < promises.length; i++)
+    {
+      promise = promises[i];
+
+      if (promise && typeof promise.then === 'function')
+        promise.then(resolver(i), reject);
+      else
+        results[i] = promise;
+    }
+
+    if (!remaining)
+      resolve(results);
+  });
+};
+
+Promise.race = function(promises){
+  var Class = this;
+
+  if (!isArray(promises))
+    throw new TypeError('You must pass an array to Promise.race().');
+
+  return new Class(function(resolve, reject) {
+    for (var i = 0, promise; i < promises.length; i++)
+    {
+      promise = promises[i];
+
+      if (promise && typeof promise.then === 'function')
+        promise.then(resolve, reject);
+      else
+        resolve(promise);
+    }
+  });
+};
+
+Promise.resolve = function(value){
+  var Class = this;
+
+  if (value && typeof value === 'object' && value.constructor === Class)
+    return value;
+
+  return new Class(function(resolve){
+    resolve(value);
+  });
+};
+
+Promise.reject = function(reason){
+  var Class = this;
+
+  return new Class(function(resolve, reject){
+    reject(reason);
+  });
+};
+
+})(typeof window != 'undefined' ? window : typeof global != 'undefined' ? global : typeof self != 'undefined' ? self : this);
+
+const REGSERVER_API_BASE_URL = 'https://agx.alapy.com/register';
+const GENOMICS_URL = 'https://agx.alapy.com/';
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
@@ -10,17 +359,17 @@ function makeURIParams(params) {
         if (!params.hasOwnProperty(key)) {
             continue;
         }
-        result.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key] || '')}`)
+        result.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key] || ''))
     }
     return result.join('&');
 }
 
 function ajaxAsync(method, url, params, data) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
         const xmlhttp = new XMLHttpRequest();
         xmlhttp.open(method, url + (params ? '?' + makeURIParams(params) : ''));
         xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xmlhttp.onreadystatechange = () => {
+        xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState === xmlhttp.DONE) {
                 if (xmlhttp.status === 200) {
                     try {
@@ -38,20 +387,20 @@ function ajaxAsync(method, url, params, data) {
 }
 
 const API = {
-    getUserForRegcodeEmailAsync(regcode) {
-        return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcode, email: null});
+    getUserForRegcodeEmailAsync: function(regcode) {
+        return ajaxAsync('GET', REGSERVER_API_BASE_URL +'/user', {regcode: regcode, email: null});
     },
-    getUserForRegcodeId(regcodeId) {
-        return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcodeId});
+    getUserForRegcodeId: function(regcodeId) {
+        return ajaxAsync('GET', REGSERVER_API_BASE_URL + '/user', {regcodeId: regcodeId});
     },
-    updateUser(user) {
-        return ajaxAsync('PUT', `${REGSERVER_API_BASE_URL}/user`, null, user);
+    updateUser: function(user) {
+        return ajaxAsync('PUT', REGSERVER_API_BASE_URL + '/user', null, user);
     },
-    requestUser(user) {
-        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/user_request`, null, user);
+    requestUser: function(user) {
+        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/user_request', null, user);
     },
-    registerUser(user) {
-        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/register`, null, user);
+    registerUser: function(user) {
+        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/register', null, user);
     }
 };
 
@@ -99,56 +448,56 @@ const USER_INFO_SCHEME = [
 ];
 
 const DOMUtils = {
-    removeAllChildren(el) {
+    removeAllChildren: function(el) {
         while(el.firstChild) {
             el.removeChild(el.firstChild);
         }
     },
-    setElementText(el, text) {
+    setElementText: function(el, text) {
         this.removeAllChildren(el);
         el.appendChild(document.createTextNode(text));
     },
-    onInput(el, handler) {
-        el.addEventListener('input', () => handler(el.value));
+    onInput: function(el, handler) {
+        el.addEventListener('input', function() { handler(el.value); });
     },
-    onClick(el, handler) {
+    onClick: function(el, handler) {
         if (el.getAttribute('type') === 'submit') {
             el.setAttribute('type', 'button');
         }
-        el.addEventListener('click', () => handler());
+        el.addEventListener('click', function() { handler(); });
     }
 };
 
 const MakeLayout = {
-    attachHandlers(scheme, onChange) {
-        scheme.forEach((scheme) => {
+    attachHandlers: function(scheme, onChange) {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
-                DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
+                DOMUtils.onInput(inputEl, function(str) { onChange(scheme.id, str); })
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
-                    DOMUtils.onClick(el, () => onChange(scheme.id, el.value))
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
+                    DOMUtils.onClick(el, function() { onChange(scheme.id, el.value); })
                 });
             }
         });
     },
-    disableControls(scheme, disable) {
-        scheme.forEach((scheme) => {
+    disableControls: function(scheme, disable) {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 inputEl.disabled = disable;
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
                     el.disabled = disable;
                 });
             }
         });
     },
-    toggleRequiredAlert(inputEl, showAlert) {
+    toggleRequiredAlert: function(inputEl, showAlert) {
         const nextEl = inputEl.nextElementSibling;
         if (nextEl && nextEl.getAttribute('role') === 'alert') {
             if (showAlert) {
@@ -165,8 +514,8 @@ const MakeLayout = {
             inputEl.parentNode.insertBefore(el, inputEl.nextElementSibling);
         }
     },
-    disableAutocomplete(ids) {
-        ids.forEach((id) => {
+    disableAutocomplete: function(ids) {
+        ids.forEach(function(id) {
             const el = document.getElementById(id);
             if (el) {
                 el.setAttribute('autocomplete', 'off');
@@ -176,29 +525,28 @@ const MakeLayout = {
 };
 
 const FillData = {
-    fillDataItemEl(el, data) {
+    fillDataItemEl: function(el, data) {
         if (typeof el.value !== 'undefined') {
             el.value = data;
         } else {
             el.textContent = data;
         }
     },
-    fillUserItem(scheme, data) {
-        scheme.forEach((scheme) => {
+    fillUserItem: function(scheme, data) {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 FillData.fillDataItemEl(inputEl, data[scheme.id] || '');
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
                     el.checked = el.value === data[scheme.id];
                 });
             }
         });
     }
 };
-
 
 var loadedUserId = null;
 var currentUser = {
@@ -210,12 +558,12 @@ const checkingUser = {
     requested: {
         regcode: ''
     },
-    requestRegcodeAsync(regcode) {
+    requestRegcodeAsync: function(regcode) {
         checkingUser.requested = {
-            regcode
+            regcode: regcode
         };
         return API.getUserForRegcodeEmailAsync(regcode, null)
-            .then((user) => {
+            .then(function(user) {
                 if (regcode !== checkingUser.requested.regcode) {
                     throw new Error('old request');
                 }
@@ -278,14 +626,14 @@ function debounce(fn, delay) {
     };
 }
 
-const checkServerRegcode = debounce(() => {
+const checkServerRegcode = debounce(function() {
     const regcode = currentUser.regcode;
     checkingUser.requestRegcodeAsync(regcode)
-        .then((user) => {
+        .then(function(user) {
             switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true});
             onRegcodedUserReceived(user);
         })
-        .catch(() => {
+        .catch(function() {
             switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode});
         });
 }, 200);
@@ -295,7 +643,7 @@ function checkRegcode(regcode) {
     checkServerRegcode()
 }
 
-const updateServerData = debounce(() => API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})), 200);
+const updateServerData = debounce(function() {API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})); }, 200);
 
 function onUserEdit (fieldId, str) {
     console.log('onUserEdit', fieldId, str);
@@ -329,6 +677,32 @@ function onSignupLoginPassword() {
     });
 }
 
+(function(){
+    'use strict';
+    
+    var isObject = function (obj) {
+	return obj && typeof obj === 'object';
+    };
+
+    if(Object.assign) return;
+    Object.defineProperty(Object, 'assign', {
+	value: function(target, source){
+	    var s, i, props;
+	    if (!isObject(target)) { throw new TypeError('target must be an object'); }
+	    for (s = 1; s < arguments.length; ++s) {
+		source = arguments[s];
+		if (!isObject(source)) { throw new TypeError('source ' + s + ' must be an object'); }
+		props = Object.keys(Object(source));
+		for (i = 0; i < props.length; ++i) {
+		    target[props[i]] = source[props[i]];
+		}
+	    }
+	    return target;
+	},
+	enumerable: false
+    });
+})();
+
 function addUser(loginInfo) {
     switchPageState({
         showLoginType: false,
@@ -340,7 +714,7 @@ function addUser(loginInfo) {
         API.registerUser(Object.assign({}, currentUser.user, loginInfo)) :
         API.requestUser(Object.assign({}, currentUser.user, loginInfo));
     registerAsync
-        .then(() => {
+        .then(function() {
             if (loadedUserId) {
                 showAppLink();
                 switchPageState({
@@ -359,7 +733,7 @@ function addUser(loginInfo) {
                 });
             }
         })
-        .catch((err) => {
+        .catch(function(err) {
             const registerFailMessageEl = document.getElementById(ELEMENT_ID.registerFailMessage);
             if (registerFailMessageEl) {
                 DOMUtils.setElementText(registerFailMessageEl, '' + err);
@@ -390,7 +764,7 @@ function onSignupGoogle() {
 
 function validateUser() {
 
-    const hasAbsent = USER_INFO_SCHEME.reduce((hasAbsent, scheme) => {
+    const hasAbsent = USER_INFO_SCHEME.reduce(function(hasAbsent, scheme) {
         const inputEl = scheme.containerId ?
             document.getElementById(scheme.containerId) :
             document.getElementById(scheme.elementId);
@@ -411,7 +785,7 @@ function onRegister() {
         });
         return;
     }
-    addUser({loginType: 'password', password});
+    addUser({loginType: 'password', password: password});
 }
 
 var getPassword = null; // will be defined later
@@ -428,6 +802,14 @@ function onAcceptDisclaimer(checked) {
     acceptDisaclaimer();
 }
 
+function toggleClass(el, cls, isSet) {
+    if (isSet) {
+        el.classList.add(cls);
+    } else {
+        el.classList.remove(cls);
+    }
+}
+
 function switchPageState(ops) {
     if (ops.disableRegcode != null) {
         const regcodeEl = document.getElementById(ELEMENT_ID.regcodeInput);
@@ -439,37 +821,37 @@ function switchPageState(ops) {
         MakeLayout.disableControls(USER_INFO_SCHEME, ops.disableUserInfo);
     }
     if (ops.showLoginType != null) {
-        document.body.classList.toggle('no-login-type', !ops.showLoginType);
+        toggleClass(document.body, 'no-login-type', !ops.showLoginType);
     }
     if (ops.showPassword != null) {
-        document.body.classList.toggle('no-password', !ops.showPassword);
+        toggleClass(document.body, 'no-password', !ops.showPassword);
     }
     if (ops.showRegister != null) {
-        document.body.classList.toggle('no-register', !ops.showRegister);
+        toggleClass(document.body, 'no-register', !ops.showRegister);
     }
     if (ops.warningUserdata != null) {
-        document.body.classList.toggle('warning-userdata', ops.warningUserdata);
+        toggleClass(document.body, 'warning-userdata', ops.warningUserdata);
     }
     if (ops.warningPassword != null) {
-        document.body.classList.toggle('warning-password', ops.warningPassword);
+        toggleClass(document.body, 'warning-password', ops.warningPassword);
     }
     if (ops.loading != null) {
-        document.body.classList.toggle('register-loading', ops.loading);
+        toggleClass(document.body, 'register-loading', ops.loading);
     }
     if (ops.register != null) {
-        document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
-        document.body.classList.toggle('register-fail', !!ops.register.fail);
+        toggleClass(document.body, 'register-ok-mail', !!ops.register.mail);
+        toggleClass(document.body, 'register-fail', !!ops.register.fail);
     }
     if (ops.validRegcode != null) {
-        document.body.classList.toggle('valid-regcode', ops.validRegcode);
+        toggleClass(document.body, 'valid-regcode', ops.validRegcode);
     }
-    if (ops.showAppLink) {
-        document.body.classList.toggle('show-app-link', ops.validRegcode);
+    if (ops.showAppLink != null) {
+        toggleClass(document.body, 'show-app-link', ops.showAppLink);
     }
 }
 
 function onDocumentLoad() {
-
+    document.body.classList.remove('loading');
     switchPageState({
         validRegcode: true,
         disableRegcode: true,
@@ -485,7 +867,7 @@ function onDocumentLoad() {
         DOMUtils.onInput(regcodeEl, checkRegcode);
     }
     MakeLayout.disableAutocomplete(
-        USER_INFO_SCHEME.map((scheme) => scheme.elementId)
+        USER_INFO_SCHEME.map(function(scheme) { return scheme.elementId; })
             .concat([ELEMENT_ID.regcodeInput])
     );
     MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
@@ -502,10 +884,10 @@ function onDocumentLoad() {
     if (registerButtonEl) {
         DOMUtils.onClick(registerButtonEl, onRegister);
     }
-    const passwordInputEls = ELEMENT_ID.passwordInputs.map((id, index) => {
+    const passwordInputEls = ELEMENT_ID.passwordInputs.map(function(id, index) {
         const passwordInputEl = document.getElementById(id);
         if (passwordInputEl) {
-            DOMUtils.onInput(passwordInputEl, (psw) => onPassword(index, psw));
+            DOMUtils.onInput(passwordInputEl, function(psw) { onPassword(index, psw); });
         }
         return passwordInputEl;
     });
@@ -513,8 +895,8 @@ function onDocumentLoad() {
     function onAcceptDisclaimer(accept) {
 
         const toggleAttribute = accept ?
-            (el) => el.removeAttribute('disabled') :
-            (el) => el.setAttribute('disabled', 'disabled');
+            function(el) { el.removeAttribute('disabled'); } :
+            function(el) { el.setAttribute('disabled', 'disabled'); };
 
         function setDisable(el) {
             if (el) {
@@ -531,14 +913,14 @@ function onDocumentLoad() {
 
     const acceptDisclaimerEl = document.getElementById(ELEMENT_ID.acceptDisclaimer);
     if (acceptDisclaimerEl) {
-        DOMUtils.onClick(acceptDisclaimerEl, () => onAcceptDisclaimer(acceptDisclaimerEl.checked));
+        DOMUtils.onClick(acceptDisclaimerEl, function() { onAcceptDisclaimer(acceptDisclaimerEl.checked); });
     }
 
     onAcceptDisclaimer(false);
 
-    getPassword = () => {
+    getPassword = function() {
         return passwordInputEls.reduce(
-            (psw, el, index) => {
+            function(psw, el, index) {
                 if (!index) {
                     return el.value;
                 }
@@ -556,7 +938,7 @@ function onDocumentLoad() {
     if (regcodeId) {
         switchPageState({loading: true});
         API.getUserForRegcodeId(regcodeId)
-            .then((user) => {
+            .then(function(user) {
                 if (regcodeEl) {
                     regcodeEl.value = user.regcode;
                 }
@@ -570,7 +952,7 @@ function onDocumentLoad() {
                 });
                 onRegcodedUserReceived(user);
             })
-            .catch(() => {
+            .catch(function() {
                 displayNoUserInfo();
             });
     } else {
