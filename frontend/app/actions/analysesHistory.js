@@ -160,11 +160,18 @@ export function updateAnalysesHistoryItemAsync(historyItemId) {
 }
 
 export function deleteServerAnalysesHistoryItemAsync(historyItemId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise(
-            (resolve) => analysesHistoryClient.remove(historyItemId, (error, response) => resolve({error, response}))
+            (resolve) => analysesHistoryClient.remove(historyItemId, (error, response) => resolve({
+                error,
+                response
+            }))
         ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
-        ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId)));
+        ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId))
+        ).then(() => {
+            const {analysesHistory:{currentHistoryId}} = getState();
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
+        });
     };
 }
 
