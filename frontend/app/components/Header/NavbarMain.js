@@ -5,8 +5,6 @@ import SamplesAnalysisButtons from './NavbarMain/SamplesAnalysisButtons';
 import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
-import Language from './NavbarMain/Language';
-import Buy from './NavbarMain/Buy';
 import Auth from './NavbarMain/Auth';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
@@ -36,8 +34,11 @@ class NavbarMain extends Component {
 
                     <div data-localize='brand.help' data-toggle='tooltip' data-placement='left'
                          title='Click for about and help info' data-container='body' data-trigger='hover'><a
-                        className='btn navbar-btn brand' data-toggle='modal' data-target='#info'><span
-                        data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
+                        className='btn navbar-btn brand' data-toggle='modal' data-target='#info'>
+                        <span
+                        data-localize='brand.title'>AGx</span>
+                        </a>
+                    </div>
 
                     <SamplesAnalysisButtons
                         openAnalysisModal={() => this.props.openAnalysisModal()}
@@ -52,8 +53,6 @@ class NavbarMain extends Component {
                                     selectedRowIndices={selectedRowIndices}
                     />
                     <SavedFiles dispatch={this.props.dispatch}/>
-                    <Language />
-                    <Buy />
                     <Auth {...this.props} />
                 </div>
             </nav>

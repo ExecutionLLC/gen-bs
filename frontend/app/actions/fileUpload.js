@@ -1,6 +1,6 @@
 import config from '../../config';
 import {closeModal} from './modalWindows';
-import {fetchSamples} from './samplesList';
+import {fetchSamplesAsync} from './samplesList';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 
@@ -101,6 +101,7 @@ function receiveFileOperation(operationId, id) {
 function sendFile(file, onOperationId, onProgress, onError) {
     const formData = new FormData();
     formData.append('sample', file);
+    formData.append('fileName', file.name);
     $.ajax(config.URLS.FILE_UPLOAD, {
         'type': 'POST',
         'data': formData,
@@ -179,7 +180,7 @@ export function changeFileUploadProgress(progressValue, progressStatus, id) {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
             dispatch(closeModal('upload'));
-            dispatch(fetchSamples());
+            dispatch(fetchSamplesAsync());
         }
     };
 }

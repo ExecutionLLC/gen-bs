@@ -184,6 +184,7 @@ function dropSampleVersionIds(knex, Promise) {
 }
 
 exports.up = function (knex, Promise) {
+    console.log('Multi-Sample Upload:');
     return addSampleTimestamp(knex, Promise)
         .then(() => fixFieldMetadataNameColumn(knex, Promise))
         .then(() => createGenotypeTablesAndColumns(knex, Promise))

@@ -2,6 +2,7 @@
 
 const QueryString = require('querystring');
 const async = require('async');
+const _ = require('lodash');
 const Express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -9,12 +10,18 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const ControllerBase = require('./base/ControllerBase');
 
 class SessionsController extends ControllerBase {
-    constructor(services) {
+    constructor(controllers, services) {
         super(services);
 
-        this.open = this.open.bind(this);
-        this.check = this.check.bind(this);
-        this.close = this.close.bind(this);
+        this.controllers = controllers;
+
+        _.bindAll(this, [
+            this.open.name,
+            this.check.name,
+            this.close.name,
+            this.closeAllUserSessions.name,
+            this.closeOpenedSocketsForSession.name
+        ]);
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
@@ -57,6 +64,28 @@ class SessionsController extends ControllerBase {
         });
     }
 
+    closeAllUserSessions(request, response) {
+        const {session: {userEmail}} = request;
+        if (userEmail) {
+            this.services.sessions.closeAllUserSessions(userEmail, (error) => {
+                this.sendErrorOrOk(response, error);
+            });
+        } else {
+            this.sendInternalError(response, 'Please try to login first.');
+        }
+    }
+
+    closeOpenedSocketsForSession(request, response) {
+        const {session} = request;
+        if (this.services.sessions.isSessionValid(session)) {
+            this.controllers.wsController.closeSocketsForUserIdAsync(session.id)
+                .then(() => this.sendOk(response))
+                .catch((error) => this.sendInternalError(response, error));
+        } else {
+            this.sendInternalError(response, new Error('Invalid session.'));
+        }
+    }
+
     _parseGoogleProfile(accessToken, refreshToken, profile, callback) {
         this.services.logger.debug('Google profile: ' + JSON.stringify(profile, null, 2));
         const userEmail = profile.emails[0].value;
@@ -83,14 +112,20 @@ class SessionsController extends ControllerBase {
         router.use(passport.initialize());
         // Registration code is optional.
         router.get('/auth/google/login/:registrationCodeId?', (request, response, next) => {
-            const {registrationCodeId} = request.params;
-            const authCallback = passport.authenticate('google', {
-                scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
-                returnURL: googleFullRedirectUrl,
-                realm: baseUrl,
-                state: registrationCodeId || ''
-            });
-            authCallback(request, response, next);
+            const {session, session: {userEmail}} = request;
+            if (!userEmail) {
+                const {registrationCodeId} = request.params;
+                const authCallback = passport.authenticate('google', {
+                    scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+                    returnURL: googleFullRedirectUrl,
+                    realm: baseUrl,
+                    state: registrationCodeId || ''
+                });
+                authCallback(request, response, next);
+            } else {
+                // User has already logged in.
+                this._startUserSession(session, userEmail, response);
+            }
         });
 
         router.get(googleRelativeRedirectUrl, (request, response, next) => {
@@ -113,15 +148,20 @@ class SessionsController extends ControllerBase {
                             callback(null);
                         }
                     },
-                    () => this.services.sessions.startForEmail(request.session, userEmail, (error) => {
-                        const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
-                        response.redirect(`/${queryPart}`);
-                    })
+                    () => this._startUserSession(request.session, userEmail, response)
                 ], (error) => next(error)); // We can be here only in case of an error.
 
             });
             authFunc(request, response, next);
         });
+    }
+
+    _startUserSession(session, email, response) {
+        session.userEmail = email;
+        this.services.sessions.startForEmail(session, email, (error) => {
+            const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
+            response.redirect(`/${queryPart}`);
+        })
     }
 
     createRouter(controllerRelativePath) {
@@ -148,6 +188,8 @@ class SessionsController extends ControllerBase {
         router.post('/', openSessionLimiter, this.open);
         router.put('/', checkSessionLimiter, this.check);
         router.delete('/', closeSessionLimiter, this.close);
+        router.delete('/all', closeSessionLimiter, this.closeAllUserSessions);
+        router.delete('/socket', closeSessionLimiter, this.closeOpenedSocketsForSession);
 
         return router;
     }

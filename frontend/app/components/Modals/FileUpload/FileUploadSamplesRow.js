@@ -50,7 +50,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className='panel'>
                 {this.renderHeader()}
-                {this.renderCurrentValues(fieldIdToValuesHash)}
+                {!showValues && this.renderCurrentValues(fieldIdToValuesHash)}
                 {showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
@@ -63,23 +63,21 @@ export default class FileUploadSamplesRow extends Component {
         const {fileName, genotypeName} = sample;
         const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
         return (
-            <div>
-                <div className='panel-heading'>
-                    <h3 className='panel-title'>
-                        {getItemLabelByNameAndType(sampleName, sample.type)}
-                        <span>{sample.description}</span>
-                    </h3>
-                </div>
+            <div className='panel-heading'>
+                <h3 className='panel-title'>
+                    {getItemLabelByNameAndType(sampleName, sample.type)}
+                    <span>{sample.description}</span>
+                </h3>
             </div>
         );
     }
 
     renderFooter() {
-        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}}} = this.props;
+        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}, onSaveAction}} = this.props;
         const sample = samplesHash[sampleId];
         return (
             <div className='panel-footer'>
-                {this.renderSelectButton(isDemoSession, sample)}
+                {onSaveAction && this.renderSelectButton(isDemoSession, sample)}
                 {this.renderEditButton(sample.type)}
             </div>
         );
@@ -136,7 +134,7 @@ export default class FileUploadSamplesRow extends Component {
 
         if (_.some(sample.values, option => option.values)) {
             return (
-                <div className='panel-body'>
+                <div className='panel-body view-mode'>
                     <div className='flex'>
                         {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                     </div>
@@ -159,8 +157,7 @@ export default class FileUploadSamplesRow extends Component {
                 fieldValue = option.value;
             }
             return (
-                <dl key={field.id}
-                    className='dl-horizontal'>
+                <dl key={field.id}>
                     <dt>{field.label}</dt>
                     <dd>{fieldValue}</dd>
                 </dl>

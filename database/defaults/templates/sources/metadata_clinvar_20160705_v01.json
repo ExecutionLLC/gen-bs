@@ -1,0 +1,201 @@
+{
+  "fields": [
+    {
+      "name": "INFO_LSD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Locus specific database was used to submit the variant"
+    },
+    {
+      "name": "INFO_ASP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Assembly specific. This is set if the variant only maps to one assembly"
+    },
+    {
+      "name": "INFO_SYN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "coding region variation where one allele in the set does not change the encoded amino acid"
+    },
+    {
+      "name": "INFO_CDA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "variant studied in clinical assay"
+    },
+    {
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "INFO_CLNSRC",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Variant Clinical Chanels"
+    },
+    {
+      "name": "INFO_CFL",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies."
+    },
+    {
+      "name": "INFO_COMMON",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population"
+    },
+    {
+      "name": "POS",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_VLD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data."
+    },
+    {
+      "name": "CHROM",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "INFO_SSR",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "There are reasons to suspect the variant to be false positive: true, false"
+    },
+    {
+      "name": "INFO_CLNDSDBID",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Variant disease database ID"
+    },
+    {
+      "name": "INFO_CLNDBN",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Variant disease name"
+    },
+    {
+      "name": "INFO_REF",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "coding region variation where one allele in the set is identical to the reference sequence"
+    },
+    {
+      "name": "INFO_CLNACC",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Variant Accession and Versions"
+    },
+    {
+      "name": "INFO_PM",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Variant is Precious(Clinical,Pubmed Cited)"
+    },
+    {
+      "name": "INFO_SAO",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Variant allele origin."
+    },
+    {
+      "name": "INFO_CLNORIGIN",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "unknown, germline, somatic, inherited, parental, maternal, de-novo, biparental, uniparental, not-tested, tested-inconclusive, other"
+    },
+    {
+      "name": "INFO_CLNREVSTAT",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "no_assertion - No assertion provided, no_criteria - No assertion criteria provided, single - Criteria provided single submitter, mult - Criteria provided multiple submitters no conflicts, conf - Criteria provided conflicting interpretations, exp - Reviewed by expert panel, guideline - Practice guideline"
+    },
+    {
+      "name": "INFO_MUT",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources"
+    },
+    {
+      "name": "INFO_VC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    {
+      "name": "INFO_TPA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)"
+    },
+    {
+      "name": "INFO_CLNSIG",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Vuncertain, not provided, benign, likely benign, likely pathogenic, pathogenic, drug response, histocompatibility, 255 - other"
+    },
+    {
+      "name": "INFO_RS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "dbSNP ID (i.e. rs number)"
+    },
+    {
+      "name": "INFO_WTD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Locus specific database was used to submit the variant"
+    },
+    {
+      "name": "ALT",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "INFO_CLNDSDB",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Variant disease database name"
+    }
+  ],
+  "reference": "GRCh37"
+}

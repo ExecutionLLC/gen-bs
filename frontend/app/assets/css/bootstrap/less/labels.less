@@ -4,7 +4,7 @@
 
 .label {
   display: inline;
-  padding: 0.4em 1em;
+  padding:0.2em 0.5em;
   font-size: 90%;
   font-weight: normal;
   line-height: 1;
@@ -12,7 +12,7 @@
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 1.6em;
+  border-radius: 3px;
   font-family: "Roboto-Medium";
 
   // Add hover effects, but only for links
@@ -44,7 +44,11 @@
   .label-variant(@label-default-bg);
   color: @text-color;
 }
-
+.label-dark-default {
+  .label-variant(@label-dark-default-bg);
+  color:#fff;  
+  
+}
 .label-primary {
   .label-variant(@label-primary-bg);
 }
@@ -67,4 +71,43 @@
 .label-inverse {
   background: fade(#fff, 80%);
   color: @brand-primary;
+}
+.label-fix-width { 
+ border-radius: 50%;
+    display: block;
+    font-size: 12px;
+    height: 20px;
+    line-height: 17px;
+    margin-bottom: 0;
+    padding: 2px;
+    text-align: center;
+    width: 20px;
+}
+.label-date { 
+ 
+  font-size: 11px;
+  max-width: 32em;
+  color: darken(@text-muted, 15%);
+  @media (min-width: @screen-sm) {
+    color: @text-muted;
+  }
+  line-height: 1;
+  margin-right: -8px;
+  margin-top: -4px;
+  margin-bottom: 16px;
+  margin-top: 4px;
+  label { 
+   margin:0 8px 2px 0;
+  }
+  .md-i { 
+    font-size: 16px;
+    vertical-align: top;
+    margin: -2px 2px 0 0;
+  }
+  @media (min-width: @screen-sm){ 
+    text-align: right; 
+    float: right;
+    margin-bottom: 0;
+    margin-top: 0;     
+  }
 }

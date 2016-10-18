@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {requestAppendAnalysesHistory} from '../../../actions/analysesHistory';
+import {requestAppendAnalysesHistoryAsync} from '../../../actions/analysesHistory';
 
 
 const PAGINATION = {
@@ -13,11 +13,16 @@ const REFS = {
 };
 
 export default class AnalysisHistoryList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.loadingTimer = null;
+    }
+
     render() {
         const {currentItemId, historyList, newHistoryItem, isHistoryReceivedAll} = this.props;
         return (
             <div className='split-scroll' ref={REFS.CONTAINER}>
-                <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
+                <ul id='analysisTabs' className='nav nav-componentes nav-controls nav-radios nav-with-right-menu'>
                     {newHistoryItem && this.renderListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
                     {!isHistoryReceivedAll && this.renderLoadingListItem()}
@@ -33,15 +38,19 @@ export default class AnalysisHistoryList extends React.Component {
         const loadingElement = this.refs[REFS.LOADING];
 
         if (!isHistoryReceivedAll && !isHistoryRequesting) {
-            if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
-                dispatch(requestAppendAnalysesHistory(historyListSearch, PAGINATION.COUNT, historyList.length));
+            if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
+                dispatch(requestAppendAnalysesHistoryAsync(historyListSearch, PAGINATION.COUNT, historyList.length));
             }
         }
-        setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
+        this.loadingTimer = setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
     }
 
     componentDidMount() {
         this.checkAndLoadNext();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.loadingTimer);
     }
 
     renderListItem(isActive,historyItem) {
@@ -78,8 +87,8 @@ export default class AnalysisHistoryList extends React.Component {
 
     renderLoadingListItem() {
         return (
-            <li className='loading' ref={REFS.LOADING}>
-                <span className='md-i'>autorenew</span>
+            <li className='nav-header text-center loading' ref={REFS.LOADING}>
+                <span className='md-i md-spin'>autorenew</span>
             </li>
         );
     }

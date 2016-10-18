@@ -1,13 +1,12 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
-import {Panel} from 'react-bootstrap';
 import 'react-select/dist/react-select.css';
 
 import Select from '../../shared/Select';
 import ComponentBase from '../../shared/ComponentBase';
 import {
     updateSampleValue, resetSampleInList,
-    requestUpdateSampleFields,
+    requestUpdateSampleFieldsAsync,
     sampleSaveCurrentIfSelected
 } from '../../../actions/samplesList';
 
@@ -25,7 +24,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sampleId))
+        dispatch(requestUpdateSampleFieldsAsync(sampleId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
             });
@@ -40,13 +39,14 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
     render() {
         const {sampleId, fieldIdToValuesHash, fields} = this.props;
+        const visibleEditableFields = _.filter(fields, field => !field.isInvisible);
         return (
-            <Panel className='samples-values'>
+            <div className='panel-body edit-mode'>
                 <div className='flex'>
-                    {fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
+                    {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
                 </div>
-            </Panel>
+            </div>
         );
     }
 
@@ -94,7 +94,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         );
 
         return (
-            <dl key={field.id} className='dl-horizontal'>
+            <dl key={field.id}>
                 <dt>{field.label}</dt>
                 <dd>
                     <Select
@@ -109,7 +109,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
     renderTextField(sampleId, field, fieldValue) {
         return (
-            <dl key={field.id} className='dl-horizontal'>
+            <dl key={field.id}>
                 <dt>{field.label}</dt>
                 <dd>
                     <input

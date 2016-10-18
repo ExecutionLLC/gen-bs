@@ -2,9 +2,7 @@ import React from 'react';
 import AnalysisHistorySearch from './AnalysisHistorySearch';
 import AnalysisHistoryList from './AnalysisHistoryList';
 import {
-    prepareAnalysesHistoryToSearch,
-    requestAnalysesHistory,
-    appendAnalysesHistory
+    prepareAnalysesHistoryToSearch
 } from '../../../actions/analysesHistory';
 
 
@@ -18,7 +16,7 @@ export default class AnalysisLeftPane extends React.Component {
         } = this.props;
 
         return (
-            <div>
+            <div className='split-left'>
                 <AnalysisHistorySearch
                     search={historyListSearch}
                     onSearch={(str) => this.onSearchChange(str)}
@@ -41,11 +39,7 @@ export default class AnalysisLeftPane extends React.Component {
     }
 
     onSearchChange(str) {
-        const {dispatch, initialHistoryList} = this.props;
+        const {dispatch} = this.props;
         dispatch(prepareAnalysesHistoryToSearch(str));
-        if (!str) {
-            dispatch(requestAnalysesHistory());
-            dispatch(appendAnalysesHistory('', 0, initialHistoryList, false));
-        }
     }
 }

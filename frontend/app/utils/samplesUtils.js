@@ -24,3 +24,7 @@ export const typeLabels = {
     [sampleType.MOTHER]: 'M',
     [sampleType.FATHER]: 'F'
 };
+
+export function isMainSample(type) {
+    return type === sampleType.TUMOR || type === sampleType.PROBAND;
+}

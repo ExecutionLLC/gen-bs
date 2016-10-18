@@ -18,9 +18,9 @@ const timeoutMiddleware = reduxTimeout();
 
 const createStoreWithMiddleware = compose(
     applyMiddleware(
-        timeoutMiddleware,
         thunkMiddleware,
         reduxMulti,
+        timeoutMiddleware,
         loggerMiddleware
     ),
     batchedSubscribe(notify => notify())
