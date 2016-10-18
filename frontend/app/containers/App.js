@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTimeout, WATCH_ALL } from 'redux-timeout';
-import classNames from 'classnames';
+import { addTimeout } from 'redux-timeout';
 
 import config from '../../config';
 
@@ -15,11 +14,14 @@ import FileUploadModal from '../components/Modals/FileUploadModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 import AnalysisModal from '../components/Modals/AnalysisModal';
+import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessionsModal';
+import AnotherPageOpenedErrorModal from '../components/Modals/AnotherPageOpenedErrorModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
+import UserActions from '../actions/userActions';
 
 
 class App extends Component {
@@ -30,40 +32,30 @@ class App extends Component {
 
         const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT*1000;
         const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
-        dispatch(addTimeout(autoLogoutTimeout, WATCH_ALL, autoLogoutFn));
+        dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
 
         const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
         keepAliveTask.start();
     }
 
     render() {
-        const {samplesList: {hashedArray: {array: samplesArray}}} = this.props;
-        const { ui } = this.props;
-
-        const mainDivClass = classNames({
-            'main': true,
-            'subnav-closed': ui.queryNavbarClosed
-        });
-
-        const navbarQueryClass = classNames({
-            'collapse-subnav': true,
-            'hidden': ui.queryNavbarClosed
-        });
+        const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
+            modalWindows, savedFiles, showErrorWindow, auth} = this.props;
 
         return (
-            <div className={mainDivClass} id='main'>
+            <div className='main subnav-closed' id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'/>
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain
-                        openAnalysisModal={() => this.props.dispatch(openModal('analysis'))}
+                        openAnalysisModal={() => dispatch(openModal('analysis'))}
                         openSamplesModal={() => {
-                            this.props.dispatch(samplesOnSave(null, null, null, null));
-                            this.props.dispatch(openModal('upload'));
+                            dispatch(samplesOnSave(null, null, null, null));
+                            dispatch(openModal('upload'));
                         }}
                     />
-                     <div className={navbarQueryClass} id='subnav'>
+                     <div className='collapse-subnav hidden' id='subnav'>
                      </div>
                      <VariantsTableReact {...this.props} />
                      <div id='fav-message' className='hidden'>
@@ -72,33 +64,41 @@ class App extends Component {
                  </div>
                 }
                 <AnalysisModal
-                    showModal={this.props.modalWindows.analysis.showModal}
-                    closeModal={ () => { this.props.dispatch(closeModal('analysis')); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.analysis.showModal}
+                    closeModal={ () => { dispatch(closeModal('analysis')); } }
+                    dispatch={dispatch}
                 />
                 <ErrorModal
-                    showModal={this.props.showErrorWindow}
-                    closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
+                    showModal={showErrorWindow}
+                    closeModal={ () => { dispatch(lastErrorResolved()); } }
                 />
                 <AutoLogoutModal
-                    showModal={this.props.auth.showAutoLogoutDialog}
-                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()); } }
+                    showModal={auth.showAutoLogoutDialog}
+                    closeModal={ () => { dispatch(stopAutoLogoutTimer()); } }
                 />
                 <ViewsModal
-                    showModal={this.props.modalWindows.views.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.views.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    dispatch={dispatch}
                 />
                 <FiltersModal
-                    showModal={this.props.modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
-                    dispatch={this.props.dispatch}
+                    showModal={modalWindows.filters.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    dispatch={dispatch}
                 />
                 <FileUploadModal
-                    showModal={this.props.modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    showModal={modalWindows.upload.showModal}
+                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
                 />
-                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
+                <SavedFilesModal
+                    showModal={savedFiles.showSavedFilesModal}
+                />
+                <CloseAllUserSessionsModal
+                    showModal={auth.showCloseAllUserSessionsDialog}
+                />
+                <AnotherPageOpenedErrorModal
+                    showModal={auth.showAnotherPageOpenedModal}
+                />
             </div>
         );
     }

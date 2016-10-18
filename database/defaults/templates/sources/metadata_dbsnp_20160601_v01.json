@@ -1,0 +1,145 @@
+{
+  "fields": [
+    {
+      "name": "INFO_REF",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has reference A coding region variation where one allele in the set is identical to the reference sequence. FxnCode = 8"
+    },
+    {
+      "name": "INFO_SSR",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "There are reasons to suspect the variant to be false positive: true, false"
+    },
+    {
+      "name": "INFO_MUT",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources"
+    },
+    {
+      "name": "INFO_LSD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Submitted from a locus-specific database"
+    },
+    {
+      "name": "INFO_VC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    {
+      "name": "INFO_COMMON",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Common variant based on 1000 genomes project, MAF>=1% for >=1 population"
+    },
+    {
+      "name": "INFO_TPA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)"
+    },
+    {
+      "name": "POS",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_VLD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data."
+    },
+    {
+      "name": "INFO_PM",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Variant is Precious(Clinical,Pubmed Cited)"
+    },
+    {
+      "name": "INFO_SYN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has synonymous A coding region variation where one allele in the set does not change the encoded amino acid. FxnCode = 3"
+    },
+    {
+      "name": "INFO_RS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "dbSNP ID (i.e. rs number)"
+    },
+    {
+      "name": "INFO_WTD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Withdrawn by submitter If one member ss is withdrawn by submitter, then this bit is set.  If all member ss' are withdrawn, then the rs is deleted to SNPHistory"
+    },
+    {
+      "name": "INFO_ASP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Is Assembly specific. This is set if the variant only maps to one assembly"
+    },
+    {
+      "name": "INFO_CDA",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Variation is interrogated in a clinical diagnostic assay"
+    },
+    {
+      "name": "ALT",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "CHROM",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "INFO_SAO",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Variant allele origin."
+    },
+    {
+      "name": "INFO_CFL",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies."
+    }
+  ],
+  "reference": "GRCh37"
+}

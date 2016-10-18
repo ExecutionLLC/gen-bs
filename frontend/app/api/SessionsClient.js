@@ -1,6 +1,5 @@
 'use strict';
 
-import _ from 'lodash';
 import HttpStatus from 'http-status';
 
 import RequestWrapper from './RequestWrapper';
@@ -23,15 +22,20 @@ export default class SessionsClient extends ClientBase {
         RequestWrapper.del(this.urls.session(), null, null, callback);
     }
 
+    closeAllUserSessions(callback) {
+        RequestWrapper.del(`${this.urls.session()}/all`, null, null, callback);
+    }
+
+    closeOtherSockets(callback) {
+        RequestWrapper.del(`${this.urls.session()}/socket`, null, null, callback);
+    }
+
     /**
      * Gets session from the response.
      *
      * @param response Server response object got from RequestWrapper
-     * @param checkSessionType If true, session type will be checked.
-     * @param checkSessionIsNotDemo If this and <param>checkSessionType</param>
-     * are both true, will check the session type is not demo.
      * */
-    static getSessionFromResponse(response, checkSessionType, checkSessionIsNotDemo) {
+    static getSessionFromResponse(response) {
         if (response.status !== HttpStatus.OK) {
             return null;
         }
@@ -39,18 +43,6 @@ export default class SessionsClient extends ClientBase {
         const sessionId = response.body.sessionId;
         if (!sessionId) {
             return null;
-        }
-
-        if (checkSessionType) {
-            const SessionTypes = ['USER', 'DEMO'];
-            const sessionType = response.body.sessionType;
-            if (_.includes(SessionTypes, sessionType)) {
-                return null;
-            }
-
-            if (checkSessionIsNotDemo && sessionType !== 'USER') {
-                return null;
-            }
         }
 
         return sessionId;

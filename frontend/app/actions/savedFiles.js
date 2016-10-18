@@ -1,11 +1,11 @@
 import Moment from 'moment';
-import HttpStatus from 'http-status';
 import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
-import {handleError} from './errorHandler';
-import SamplesUtils from '../utils/samplesUtils';
+import {handleApiResponseErrorAsync} from './errorHandler';
+import * as SamplesUtils from '../utils/samplesUtils';
+import FieldUtils from '../utils/fieldUtils';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
@@ -14,8 +14,8 @@ export const SAVED_FILE_DOWNLOAD_RESULT_RECEIVED = 'SAVED_FILE_DOWNLOAD_RESULT_R
 export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
 
-const ERROR_UPLOADING_EXPORTED_FILE = 'Error while uploading exported file';
-const ERROR_DOWNLOADING_EXPORTED_FILE = 'Error downloading exported file';
+const UPLOAD_ERROR_MESSAGE = 'Error while uploading exported file';
+const DOWNLOAD_ERROR_MESSAGE = 'Error downloading exported file';
 
 const savedFilesClient = apiFacade.savedFilesClient;
 
@@ -27,7 +27,7 @@ function createUserDownload(fileBlob, fileName) {
     };
 }
 
-function saveExportedFileToServer(fileBlob, fileName, totalResults) {
+function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
@@ -42,14 +42,16 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             name: fileName,
             totalResults
         };
-        savedFilesClient.add(language, fileMetadata, fileBlob, (error, response) => {
-            if (error || response.status !== HttpStatus.OK) {
-                dispatch(handleError(response.status, ERROR_UPLOADING_EXPORTED_FILE));
-            } else {
-                const savedFile = response.body;
-                dispatch(savedFileUploadResultReceived(savedFile));
-            }
-        });
+        return new Promise((resolve) => savedFilesClient.add(
+            language,
+            fileMetadata,
+            fileBlob,
+            (error, response) => resolve({error, response}))
+        ).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPLOAD_ERROR_MESSAGE, error, response))
+        ).then(
+            (response) => response.body
+        ).then((savedFile) => dispatch(savedFileUploadResultReceived(savedFile)));
     };
 }
 
@@ -87,20 +89,20 @@ export function receiveSavedFilesList(savedFilesList) {
     };
 }
 
-export function downloadSavedFile(savedFile) {
+export function downloadSavedFileAsync(savedFile) {
     return (dispatch, getState) => {
         const {
             ui: {
                 language
             }
         } = getState();
-        savedFilesClient.download(language, savedFile.id, (error, response) => {
-            if (error || response.status !== HttpStatus.OK) {
-                dispatch(handleError(response.status, ERROR_DOWNLOADING_EXPORTED_FILE));
-            } else {
-                dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name));
-            }
-        });
+        return new Promise((resolve) => savedFilesClient.download(
+            language,
+            savedFile.id,
+            (error, response) => resolve({error, response})
+        )).then(
+            ({error, response}) => dispatch(handleApiResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
+        ).then((response) => dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name)));
     };
 }
 
@@ -129,25 +131,32 @@ export function exportToFile(exportType) {
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && SamplesUtils.typeLabels[variantsAnalysisSamplesHash[listItem.sampleId].type];
-            return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+            const sample = variantsAnalysisSamplesHash[listItem.sampleId];
+            const sampleType = sample && SamplesUtils.typeLabels[sample.type];
+            return FieldUtils.makeFieldSavedCaption(field, sampleType);
         })
         .concat(['Comment']);
 
         const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
-            .map(rowIndex => [...variants[rowIndex].fields, ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]])
+            .map(rowIndex => [
+                ...variants[rowIndex].fields,
+                ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]
+            ])
             .value();
 
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
-        const fileName = `${_.map(variantsSamples, (variantsSample) => variantsSample.fileName).join('-')}_chunk_${createdDate}.${exportType}`;
+        const fileName = `${
+            _.map(variantsSamples, (variantsSample) =>
+                variantsSample.fileName
+            ).join('-')}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
 
         if (!isDemo) {
-            dispatch(saveExportedFileToServer(fileBlob, fileName, count));
+            dispatch(saveExportedFileToServerAsync(fileBlob, fileName, count));
         }
     };
 }

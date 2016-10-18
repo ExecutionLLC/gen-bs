@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 import _ from 'lodash';
 
 import config from '../../../config';
@@ -13,7 +13,8 @@ import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
 
-export const filterBuilderVerb = {
+// Texts that differs filter builder from model builder
+export const filterBuilderTexts = {
     'filter': {
         filter: 'filter',
         filters: 'filters',
@@ -40,39 +41,40 @@ export const filterBuilderVerb = {
 class FiltersModal extends Component {
 
     onClose() {
-        this.props.closeModal('filters');
-        this.props.dispatch(filterBuilderEndEdit());
+        const {dispatch, closeModal} = this.props;
+        closeModal('filters');
+        dispatch(filterBuilderEndEdit());
     }
 
     render() {
-        const {auth: {isDemo}} = this.props;
-        const filters = this.props.filterBuilder.filtersList && this.props.filterBuilder.filtersList.hashedArray.array;
-        const editingFilterObject = this.props.filterBuilder.editingFilter;
+        const {dispatch, auth: {isDemo}, filterBuilder, showModal} = this.props;
+        const filters = filterBuilder.filtersList && filterBuilder.filtersList.hashedArray.array;
+        const editingFilterObject = filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
-        const verb = this.props.filterBuilder.filtersStrategy ? filterBuilderVerb[this.props.filterBuilder.filtersStrategy.name] : {};
+        const texts = filterBuilder.filtersStrategy ? filterBuilderTexts[filterBuilder.filtersStrategy.name] : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
             isFilterEditable,
             editingFilterNameTrimmed,
             filters,
-            verb
+            texts
         ) : '';
 
-        const strategyValidationMessage = verb.getStrategyValidationMessage ?
-            verb.getStrategyValidationMessage(editingFilter, this.props.filterBuilder.filtersStrategy) :
+        const strategyValidationMessage = texts.getStrategyValidationMessage ?
+            texts.getStrategyValidationMessage(editingFilter, filterBuilder.filtersStrategy) :
             '';
 
         const title = isLoginRequired ?
-            `Login or register to select advanced ${verb.filters}` :
+            `Login or register to select advanced ${texts.filters}` :
             strategyValidationMessage;
 
         const confirmButtonParams = {
-            caption: isFilterEditable ? 'Save and Select': 'Select',
+            caption: isFilterEditable ? 'Save and Select' : 'Select',
             title: title,
             disabled: !!title || !!titleValidationMessage
         };
@@ -82,7 +84,7 @@ class FiltersModal extends Component {
             <Modal
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
-                show={this.props.showModal}
+                show={showModal}
                 onHide={() => this.onClose()}
             >
                 { (!editingFilter) &&
@@ -91,7 +93,7 @@ class FiltersModal extends Component {
                 { (editingFilter) &&
                 <div>
                     <FilterBuilderHeader
-                        verb={verb}
+                        texts={texts}
                     />
                     <form>
                         <Modal.Body>
@@ -100,31 +102,31 @@ class FiltersModal extends Component {
                                 <div className='modal-padding'>
                                     <NewFilterInputs
                                         {...this.props}
-                                        verb={verb}
+                                        texts={texts}
                                         validationMessage={titleValidationMessage}
                                     />
                                     <FilterBuilder
                                         {...this.props}
-                                        verb={verb}
+                                        texts={texts}
                                     />
                                 </div>
                                 }
                                 { !editingFilterIsNew &&
                                 <div className='modal-padding'>
                                     <ExistentFilterSelect
-                                        verb={verb}
+                                        texts={texts}
                                         {...this.props}
                                     />
                                     <FilterBuilder
                                         {...this.props}
-                                        verb={verb}
+                                        texts={texts}
                                     />
                                 </div>
                                 }
                             </div>
                         </Modal.Body>
                         <FilterBuilderFooter
-                            dispatch={this.props.dispatch}
+                            dispatch={dispatch}
                             confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
                         />
@@ -141,17 +143,19 @@ class FiltersModal extends Component {
      * @param {boolean}isFilterEditable
      * @param {string}editingFilterName
      * @param {Array<Object>}filters
-     * @param {Object.<string, string>}verb
+     * @param {Object.<string, string>}texts
      * @return {string}
      */
-    getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters, verb) {
+    getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters, texts) {
         const filterNameExists = isFilterEditable && _(filters)
-                .filter(filter => filter.type !== entityType.HISTORY)
+                .filter(filter => filter.type !== entityType.HISTORY
+                // Next line is done to work with models. Filters have no analysis type.
+                && filter.analysisType === editingFilter.analysisType)
                 .some(filter => filter.name.trim() === editingFilterName
                     && filter.id != editingFilter.id
                 );
         if (filterNameExists) {
-            return `${verb.Filter} with this name is already exists.`;
+            return `${texts.Filter} with this name is already exists.`;
         }
 
         if (!editingFilterName) {
@@ -168,7 +172,7 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, fields } = state;
+    const {filterBuilder, ui, auth, fields} = state;
 
     return {
         fields,

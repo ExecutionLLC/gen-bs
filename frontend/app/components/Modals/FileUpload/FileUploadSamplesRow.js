@@ -41,16 +41,17 @@ export default class FileUploadSamplesRow extends Component {
 
     render() {
         const {sampleId, samplesList: {hashedArray: {hash: samplesHash}, editedSamplesHash}} = this.props;
+        const {showValues} = this.state;
         const sample = samplesHash[sampleId];
         const fieldIdToValuesHash = this.makeFieldIdToValuesHash(sample);
-        const editedSample = this.state.showValues && editedSamplesHash[sampleId];
+        const editedSample = showValues && editedSamplesHash[sampleId];
         const editedFieldIdToValuesHash = editedSample && this.makeFieldIdToValuesHash(editedSample);
 
         return (
             <div className='panel'>
                 {this.renderHeader()}
-                {this.renderCurrentValues(fieldIdToValuesHash)}
-                {this.state.showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
+                {!showValues && this.renderCurrentValues(fieldIdToValuesHash)}
+                {showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
         );
@@ -62,23 +63,21 @@ export default class FileUploadSamplesRow extends Component {
         const {fileName, genotypeName} = sample;
         const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
         return (
-            <div>
-                <div className='panel-heading'>
-                    <h3 className='panel-title'>
-                        {getItemLabelByNameAndType(sampleName, sample.type)}
-                        <span>{sample.description}</span>
-                    </h3>
-                </div>
+            <div className='panel-heading'>
+                <h3 className='panel-title'>
+                    {getItemLabelByNameAndType(sampleName, sample.type)}
+                    <span>{sample.description}</span>
+                </h3>
             </div>
         );
     }
 
     renderFooter() {
-        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}}} = this.props;
+        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}, onSaveAction}} = this.props;
         const sample = samplesHash[sampleId];
         return (
             <div className='panel-footer'>
-                {this.renderSelectButton(isDemoSession, sample)}
+                {onSaveAction && this.renderSelectButton(isDemoSession, sample)}
                 {this.renderEditButton(sample.type)}
             </div>
         );
@@ -135,7 +134,7 @@ export default class FileUploadSamplesRow extends Component {
 
         if (_.some(sample.values, option => option.values)) {
             return (
-                <div className='panel-body'>
+                <div className='panel-body view-mode'>
                     <div className='flex'>
                         {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                     </div>
@@ -147,8 +146,9 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderReadOnlyField(field, fieldIdToValuesHash) {
-        if (fieldIdToValuesHash[field.id]) {
-            let fieldValue = fieldIdToValuesHash[field.id];
+        const fieldValues = fieldIdToValuesHash[field.id];
+        if (fieldValues) {
+            let fieldValue = fieldValues;
             // If field has available values, then the value is id of the actual option.
             // We then need to retrieve the actual value corresponding to the option.
             if (!_.isEmpty(field.availableValues)) {
@@ -157,8 +157,7 @@ export default class FileUploadSamplesRow extends Component {
                 fieldValue = option.value;
             }
             return (
-                <dl key={field.id}
-                    className='dl-horizontal'>
+                <dl key={field.id}>
                     <dt>{field.label}</dt>
                     <dd>{fieldValue}</dd>
                 </dl>

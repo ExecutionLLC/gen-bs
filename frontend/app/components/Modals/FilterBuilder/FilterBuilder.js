@@ -480,15 +480,16 @@ export default class FilterBuilder extends React.Component {
         const {
             filterBuilder,
             fields,
-            verb,
+            texts,
             dispatch
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
         const parsedFilter = filterBuilder.editingFilter.parsedFilter;
+        debugger;
         const allowedFields = filterBuilder.allowedFields;
         return (
             <div className='builder-wrapper'>
-                {parsedFilter ?
+                {filter.modelType !== 'complex' ?
                     <FilterQueryBuilder
                         allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                         totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
@@ -496,7 +497,7 @@ export default class FilterBuilder extends React.Component {
                         disabled={!entityTypeIsEditable(filter.type)}
                         dispatch={dispatch}
                     /> :
-                    <div>{`This ${verb.filter} has no rules to setup`}</div>
+                    <div>{`This ${texts.filter} has no rules to setup`}</div>
                 }
             </div>
         );

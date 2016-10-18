@@ -14,9 +14,10 @@ class ErrorModal extends Component {
     }
 
     renderBody() {
+        const {lastError} = this.props;
         var errorMessage = 'Unknown error';
-        if (this.props.lastError && this.props.lastError.errorMessage) {
-            errorMessage = this.props.lastError.errorMessage;
+        if (lastError && lastError.errorMessage) {
+            errorMessage = lastError.errorMessage;
         }
         return (
             <Modal.Body>
@@ -26,10 +27,11 @@ class ErrorModal extends Component {
     }
 
     renderFooter() {
+        const {closeModal} = this.props;
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => {this.props.closeModal();} }
+                    onClick={closeModal}
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
@@ -42,12 +44,13 @@ class ErrorModal extends Component {
     }
 
     render() {
+        const {showModal, closeModal} = this.props;
         return (
             <Modal
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
-                show={this.props.showModal}
-                onHide={ () => {this.props.closeModal();} }
+                show={showModal}
+                onHide={closeModal}
             >
                 { this.renderHeader() }
                 { this.renderBody() }

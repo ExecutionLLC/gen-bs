@@ -1,7 +1,5 @@
-import HttpStatus from 'http-status';
-
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler';
+import {handleApiResponseErrorAsync} from './errorHandler';
 
 const modelsClient = apiFacade.modelsClient;
 
@@ -14,14 +12,9 @@ export const MODELS_LIST_EDIT_MODEL = 'MODELS_LIST_EDIT_MODEL';
 export const MODELS_LIST_SET_HISTORY_MODEL = 'MODELS_LIST_SET_HISTORY_MODEL';
 
 
-const CREATE_MODEL_NETWORK_ERROR = 'Cannot create new model (network error). Please try again.';
-const CREATE_MODEL_SERVER_ERROR = 'Cannot create new model (server error). Please try again.';
-
-const UPDATE_MODEL_NETWORK_ERROR = 'Cannot update model (network error). Please try again.';
-const UPDATE_MODEL_SERVER_ERROR = 'Cannot update model (server error). Please try again.';
-
-const DELETE_MODEL_NETWORK_ERROR = 'Cannot delete model(network error). Please try again.';
-const DELETE_MODEL_SERVER_ERROR = 'Cannot delete model (server error). Please try again.';
+const CREATE_MODEL_ERROR_MESSAGE = 'Cannot create new model. Please try again.';
+const UPDATE_MODEL_ERROR_MESSAGE = 'Cannot update model. Please try again.';
+const DELETE_MODEL_ERROR_MESSAGE = 'Cannot delete model. Please try again.';
 
 
 export function modelsListStartServerOperation() {
@@ -68,21 +61,15 @@ export function modelsListEditModel(modelId, model) {
 export function modelsListServerCreateModel(model, languageId) {
     return (dispatch) => {
         dispatch(modelsListStartServerOperation());
-        return new Promise( (resolve, reject) => {
-            modelsClient.add(languageId, model, (error, response) => {
-                dispatch(modelsListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, CREATE_MODEL_NETWORK_ERROR));
-                    reject();
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, CREATE_MODEL_SERVER_ERROR));
-                    reject();
-                } else {
-                    const newModel = response.body;
-                    dispatch(modelsListAddModel(newModel));
-                    resolve(newModel);
-                }
-            });
+        return new Promise(
+            (resolve) => modelsClient.add(languageId, model, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => {
+            dispatch(modelsListEndServerOperation());
+            return dispatch(handleApiResponseErrorAsync(CREATE_MODEL_ERROR_MESSAGE, error, response));
+        }).then((response) => response.body
+        ).then((newModel) => {
+            dispatch(modelsListAddModel(newModel));
+            return newModel;
         });
     };
 }
@@ -90,21 +77,15 @@ export function modelsListServerCreateModel(model, languageId) {
 export function modelsListServerUpdateModel(model) {
     return (dispatch) => {
         dispatch(modelsListStartServerOperation());
-        return new Promise( (resolve, reject) => {
-            modelsClient.update(model, (error, response) => {
-                dispatch(modelsListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, UPDATE_MODEL_NETWORK_ERROR));
-                    reject();
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_MODEL_SERVER_ERROR));
-                    reject();
-                } else {
-                    const updatedModel = response.body;
-                    dispatch(modelsListEditModel(model.id, updatedModel));
-                    resolve(updatedModel);
-                }
-            });
+        return new Promise(
+            (resolve) => modelsClient.update(model, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => {
+            dispatch(modelsListEndServerOperation());
+            return dispatch(handleApiResponseErrorAsync(UPDATE_MODEL_ERROR_MESSAGE, error, response));
+        }).then((response) => response.body
+        ).then((updatedModel) => {
+            dispatch(modelsListEditModel(model.id, updatedModel));
+            return updatedModel;
         });
     };
 }
@@ -112,21 +93,12 @@ export function modelsListServerUpdateModel(model) {
 export function modelsListServerDeleteModel(modelId) {
     return (dispatch) => {
         dispatch(modelsListStartServerOperation());
-        return new Promise( (resolve, reject) => {
-            modelsClient.remove(modelId, (error, response) => {
-                dispatch(modelsListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, DELETE_MODEL_NETWORK_ERROR));
-                    reject();
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, DELETE_MODEL_SERVER_ERROR));
-                    reject();
-                } else {
-                    dispatch(modelsListDeleteModel(modelId));
-                    resolve();
-                }
-            });
-        });
+        return new Promise(
+            (resolve) => modelsClient.remove(modelId, (error, response) => resolve({error, response}))
+        ).then(({error, response}) => {
+            dispatch(modelsListEndServerOperation());
+            return dispatch(handleApiResponseErrorAsync(DELETE_MODEL_ERROR_MESSAGE, error, response));
+        }).then(() => dispatch(modelsListDeleteModel(modelId)));
     };
 }
 

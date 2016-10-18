@@ -144,20 +144,20 @@ class SearchService extends ServiceBase {
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
-            (user, callback) => this._loadRowsComments(user.id, user.language, data.viewData, callback),
+            (user, callback) => this._loadRowsComments(user.id, user.language, data, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
                 const rows = _.map(data, rowData => {
                     const {viewData, mandatoryFields} = rowData;
                     const fieldValueHash = CollectionUtils.createHash(viewData,
-                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId}`
+                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId||'source'}`
                     );
                     const searchKeyObject = _.find(viewData, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
                     
                     const fieldValueObjects = _.map(header, headerObject => {
-                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId}`];
+                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId||'source'}`];
                         return fieldWithId ? fieldWithId.fieldValue: null
                     });
                     const searchKey = searchKeyObject.fieldValue;
@@ -206,7 +206,7 @@ class SearchService extends ServiceBase {
     _loadRowsComments(userId, languId, redisRows, callback) {
         // Extract search keys from all rows.
         const searchKeys = _.map(redisRows, row => {
-            const searchField = _.find(row, field => {
+            const searchField = _.find(row.viewData, field => {
                 return field.fieldId == this.searchKeyFieldName;
             });
             return searchField.fieldValue;

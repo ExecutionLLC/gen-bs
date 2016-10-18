@@ -44,13 +44,6 @@
       bottom: 0;
       left: 0;
       right: 0;
-
-   @media(min-width: @screen-sm){
-      position: relative;
-      width: auto;
-      margin: 0px;
-  }
-  
 }
 
 // Actual modal
@@ -66,11 +59,8 @@
   
   @media(min-width: @screen-sm){
 
-  border: 1px solid @modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
-  border: 1px solid @modal-content-border-color;
   border-radius: @border-radius-large;
-  overflow: visible;
-  height: auto;
+
   .box-shadow(0 3px 9px rgba(0,0,0,.5));
   }
 }
@@ -93,21 +83,42 @@
 // Top section of the modal w/ title and dismiss
 .modal-header {
   background: @modal-header-bg;
-  padding:0;
-  position: relative;
-  z-index: 3;
+      left: 0;
+      padding: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 4;
+
   //border-bottom: 1px solid @modal-header-border-color;
-  &:extend(.clearfix all);
+  //&:extend(.clearfix all);
     @media(min-width: @screen-sm){ 
-      z-index: auto; 
+     // z-index: auto; 
     }
 }
 // Close icon
-.modal-header .close {
+.modal-header {
+  .close {
     position: absolute;
     right: 15px;
     top:8px;
     z-index: 1;
+    opacity: .8; 
+    &:before {
+       .md-i();
+       content: 'close';
+       font-size: 30px;
+     }
+    span { 
+        display: none;
+      }
+    @media(min-width: @screen-sm){ 
+       opacity: .8;    
+       &:before { 
+        font-size: 24px;
+       } 
+    }
+  }
 }
 
 // Title text within header
@@ -116,20 +127,22 @@
   line-height: @modal-title-line-height;
   color: @modal-title-color;
   padding:@modal-title-padding;
+  big { 
+    line-height: 1;
+  }
 }
 
 // Modal body
 // Where all modal content resides (sibling of .modal-header and .modal-footer)
 .modal-body {
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  left: 0;
-  right: 0;
-  top: @navbar-height;
-  padding: @modal-inner-padding @modal-inner-padding (@modal-footer-height + @modal-inner-padding * 2);
-  min-height: 400px;
-
+      bottom: 0;
+      left: 0;
+      padding: @modal-inner-padding @modal-inner-padding (@modal-footer-height - @modal-inner-padding - 2);
+      position: absolute;
+      right: 0;
+      top:  @navbar-height;
+      height: auto;
+      z-index: 5;
   .modal-body-scroll { 
     overflow: auto;
    -webkit-overflow-scrolling: touch;
@@ -146,36 +159,45 @@
   }
 
   @media(min-width: @screen-sm){
-  top: 0; 
-   position: relative;
-   height: auto;
-   padding:@modal-inner-padding;
-   
-   .modal-body-scroll {
-      overflow: visible;
-      height: auto;
-      margin: -@modal-inner-padding;
-     }
-      + .modal-footer { }
+    z-index: auto;
+    bottom: @modal-inner-padding;
+    padding:@modal-inner-padding;
    }
 }
+.modal-lg {
+  @media (min-width:@screen-sm){
+        margin: 10px;
+    }
+  @media (min-width:@screen-lg){
+      margin: 10px 10%;
+       .modal-content { 
+          max-height: 780px;
 
+        }
+  }
+}
+.modal-full-height  { 
+  @media (min-width:@screen-lg){
+ .modal-lg {
+     .modal-content { 
+        max-height: none;
+     }
+  }
+  }
+}
 // Footer (for actions)
 .modal-footer {
   padding: @modal-footer-padding;
   text-align: right; // right align buttons
+  z-index: 5;
   &:extend(.clearfix all); // clear it in case folks use .pull-* classes on buttons
     bottom: 0;
     left: 0;
-    padding: 16px;
     position: absolute;
     right: 0;
     border-top: solid 1px @gray-lighter;
-    z-index: 2;
-  @media(min-width: @screen-sm){
-   position: static;
-   border-top:none;
-  }
+
+
   // Properly space out buttons
   .btn + .btn {
     margin-left: 5px;
@@ -188,10 +210,6 @@
   // and override it for block buttons as well
   .btn-block + .btn-block {
     margin-left: 0;
-  }
-    &.modal-footer-thin { 
-    padding-top: 0;
-    padding-bottom: 0;
   }
 
 }
@@ -211,20 +229,22 @@
   // Automatically set modal's width for larger viewports
   .modal-dialog {
     width: @modal-md;
-    margin: 30px auto;
+    margin: 12px auto;
   }
   .modal-content {
     .box-shadow(0 5px 15px rgba(0,0,0,.5));
+     max-height: 640px;
   }
 
   // Modal sizes
   .modal-sm { width: @modal-sm; }
+  
 }
 .modal-lg {
   width: auto;
-   @media (min-width: @modal-lg) {
-    margin: 30px 10%;
-    
+
+   @media (min-width: @screen-lg) {
+    margin: 12px 10%;
   }
 }
 
@@ -232,18 +252,13 @@
 .modal-dialog-primary { 
   .modal-title { 
     color: #fff;
-  }
-  .close { 
+   }
+  .modal-header {   
+    .close { 
     color: #fff;
-    opacity: .8;
-    span { 
-      display: none;
+    opacity: 1; 
+     }
     }
-    &:before {
-      &:extend(.md-i);
-      content: "close";
-    } 
-  }
   .modal-content { 
     background-color: transparent;  
   }
@@ -257,4 +272,94 @@
   .modal-footer { 
     background: @default-max-light;
   }
+
+}
+
+.modal.modal-second-layer,
+.modal.modal-third-layer { 
+  .modal-backdrop { 
+    opacity: .7;
+  }
+  .modal-dialog { 
+    z-index: 1041;
+  }
+  @media(min-width: @screen-sm){
+    .modal-dialog { 
+    margin: 32px;
+   }
+  @media (min-width: @screen-lg) {
+    margin: 12px 10%;
+  }
+  }
+}
+.modal.modal-second-layer {
+    z-index: @zindex-modal + 1;
+
+}
+.modal.modal-third-layer { 
+    z-index: @zindex-modal + 2;
+    
+}
+.modal-header {
+  .modal-title { 
+    padding: 11px 15px;
+  }
+ .navbar { 
+   margin: 0;
+ }
+  .navbar-search { 
+     padding-left: 25px;
+  } 
+  .nav-tabs { 
+    display: table-row;
+    float: none;
+   
+    > li { 
+       display: table-cell;
+      float: none; 
+      white-space: nowrap;
+    }
+  }
+  
+  @media(min-width:@screen-sm) {
+   .table-row > div:first-child {
+    min-width: 250px;
+    } 
+  }
+}
+
+.modal-title-label { 
+  .checkbox {
+    position: absolute;
+    left: 16px;
+    top: 10px;
+  }
+}
+
+.modal-dialog-primary { 
+  .modal-title-label {
+      padding-left: 48px;
+    .checkbox { 
+      i {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+   .modal-body {
+    &.modal-body-list { 
+      background: white;
+    }     
+   }
+  }
+
+
+
+.modal-columns {
+  .modal-body:last-child { 
+    padding: 0;
+  }
+}
+.modal-body-white { 
+  background: #fff;
 }

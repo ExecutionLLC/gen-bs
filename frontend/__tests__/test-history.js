@@ -1,6 +1,6 @@
-import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
+import {renewHistoryItem, detachHistoryItem} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
-import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
+import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 //import {analyze} from '../app/actions/ui';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
@@ -336,7 +336,7 @@ describe('History Tests', () => {
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch([
                     renewHistoryItem(historyEntry.id),
-                    filtersListServerCreateFilter(userFilter.id, sessionId, languageId)
+                    filtersListServerCreateFilterAsync(userFilter.id, sessionId, languageId)
                 ])
             }, (globalState) => {
                 const {filters} = mapStateToCollections(globalState);

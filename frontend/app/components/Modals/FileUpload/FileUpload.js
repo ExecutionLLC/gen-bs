@@ -64,7 +64,7 @@ export default class FileUpload extends Component {
                     // onDragEnter={(e) => this.onDragEnter(e)}
                     // onDragOver={(e) => this.onDragOver(e)}
                     // onDrop={(e) => this.onDrop(e)}
-                    className='btn-link-light-default btn-select-file'>
+                    className='btn-link-default btn-select-file'>
                 <input
                     onChange={ (e) => this.onUploadChanged(e.target.files)}
                     style={{display: 'none'}}

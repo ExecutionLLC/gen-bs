@@ -1,14 +1,25 @@
 'use strict';
 
+const Promise = require('bluebird');
 const _ = require('lodash');
 
 const ControllerBase = require('./base/ControllerBase');
 const WebSocketServerProxy = require('../utils/WebSocketServerProxy');
+const InvalidSessionError = require('../utils/errors/InvalidSessionError');
+
+const OPEN_SOCKET_OPERATION_TYPE = 'OpenSocket';
+const CLOSED_BY_USER = 'ClosedByUser';
+const PING_MESSAGE_CONTENTS = 'ping';
 
 /**
  * This controller handles client web socket connections,
  * associates them with sessions and sends application server
  * responses to proper client web sockets.
+ *
+ * TODO: Make it model.
+ * Now it is impossible to put something directly to the client web socket,
+ * which is the reason of using event emitters in multiple levels. Migrating
+ * contents of this class to model will simplify these levels.
  * */
 class WSController extends ControllerBase {
     constructor(services) {
@@ -31,9 +42,27 @@ class WSController extends ControllerBase {
     }
 
     verifyWebSocketClient(info, callback) {
-        const sessionParser = this.services.sessions.getSessionParserMiddleware();
-        // Allow connection only in case session is properly initialized.
-        sessionParser(info.req, {}, () => callback(info.req.session && info.req.session.userId));
+        this._parseSessionAsync(info.req)
+            .then((session) => this._checkSessionIsValidAsync(session))
+            .then(() => callback(true))
+            .catch((error) => {
+                this.logger.warn(`Denying client web-socket connection with error: ${error}`);
+                callback(false);
+            });
+    }
+
+    closeSocketsForUserIdAsync(sessionId) {
+        return Promise.resolve()
+            .then(() => {
+                const clientDescriptors = this._findClients(sessionId, null);
+                clientDescriptors.forEach(({ws}) => {
+                    this._sendClientMessage(ws, {
+                        operationType: CLOSED_BY_USER,
+                        resultType: 'success'
+                    });
+                    ws.close();
+                });
+            });
     }
 
     /**
@@ -49,6 +78,23 @@ class WSController extends ControllerBase {
         } else {
             this.logger.warn(`No web-sockets found for session:user ${targetSessionId}:${targetUserId}`);
         }
+    }
+
+    _parseSessionAsync(request) {
+        // Apply middleware manually to parse session
+        const sessionParser = this.services.sessions.getSessionParserMiddleware();
+        return Promise.fromCallback((done) => sessionParser(request, {}, () => done(null, request.session)))
+    }
+
+    _checkSessionIsValidAsync(session) {
+        return Promise.resolve(
+        ).then(() => {
+            // Check session is initialized.
+            if (session && session.userId) {
+                return Promise.resolve();
+            }
+            return Promise.reject(new InvalidSessionError())
+        });
     }
 
     /**
@@ -82,12 +128,27 @@ class WSController extends ControllerBase {
 
     _onClientConnected(ws) {
         const {id:sessionId, userId} = ws.upgradeReq.session;
-        this.logger.info(`WS client connected, sessionId: ${sessionId}, userId: ${userId}`);
-        this.clients.push({
-            ws,
-            sessionId,
-            userId
-        });
+        const existingClients = this._findClients(sessionId, null);
+        if (existingClients.length) {
+            // Do not allow multiple sockets to be opened for the same session.
+            this._sendClientMessage(ws, {
+                operationType: OPEN_SOCKET_OPERATION_TYPE,
+                resultType: 'error',
+                error: 'Too many sockets for the session.'
+            });
+            ws.close();
+        } else {
+            this.logger.info(`WS client connected, sessionId: ${sessionId}, userId: ${userId}`);
+            this.clients.push({
+                ws,
+                sessionId,
+                userId
+            });
+            this._sendClientMessage(ws, {
+                operationType: OPEN_SOCKET_OPERATION_TYPE,
+                resultType: 'success'
+            });
+        }
     }
 
     _onClientDisconnected(clientWs) {
@@ -96,7 +157,9 @@ class WSController extends ControllerBase {
     }
 
     _onClientMessage(clientWs, message) {
-        this.logger.info(`Unexpected message in web-socket: ${message}`);
+        if (message !== PING_MESSAGE_CONTENTS) {
+            this.logger.debug(`Unexpected message in web-socket: ${message}`);
+        }
     }
 
     /**

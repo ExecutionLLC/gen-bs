@@ -1,5 +1,6 @@
 // See the issue for more information: https://github.com/ExecutionLLC/gen-bs/issues/459
 exports.up = function (knex, Promise) {
+    console.log('Adding registration codes support');
     return knex.schema.createTable('registration_code', (table) => {
         table.uuid('id')
             .primary();

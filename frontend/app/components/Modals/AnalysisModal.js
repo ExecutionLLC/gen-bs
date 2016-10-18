@@ -6,18 +6,26 @@ import AnalysisBody from './Analysis/AnalysisBody';
 
 
 class AnalysisModal extends React.Component {
+    constructor(state) {
+        super(state);
+        this.state = {isAnalysisBringToFront: false};
+    }
+
     render() {
         const {showModal} = this.props;
 
         return (
             <Modal
                 id='analysis-modal'
-                dialogClassName='modal-dialog-primary'
+                dialogClassName='modal-dialog-primary modal-columns'
                 bsSize='lg'
                 show={showModal}
                 onHide={() => this.onClose()}
             >
-                <AnalysisHeader />
+                <AnalysisHeader
+                    showAnalysisHide={this.state.isAnalysisBringToFront}
+                    onAnalysisHide={() => this.onAnalysisHide()}
+                />
                 <AnalysisBody
                     dispatch={this.props.dispatch}
                     auth={this.props.auth}
@@ -33,6 +41,8 @@ class AnalysisModal extends React.Component {
                     samplesList={this.props.samplesList}
                     modelsList={this.props.modelsList}
                     fields={this.props.fields}
+                    isAnalysisBringToFront={this.state.isAnalysisBringToFront}
+                    onAnalysisShow={() => this.onAnalysisShow()}
                 />
             </Modal>
         );
@@ -41,16 +51,24 @@ class AnalysisModal extends React.Component {
     onClose() {
         this.props.closeModal();
     }
+
+    onAnalysisShow() {
+        this.setState({isAnalysisBringToFront: true});
+    }
+
+    onAnalysisHide() {
+        this.setState({isAnalysisBringToFront: false});
+    }
 }
 
 function mapStateToProps(state) {
-    const {auth, queryHistory, viewsList, filtersList, modelsList, samplesList, fields} = state;
+    const {auth, analysesHistory, viewsList, filtersList, modelsList, samplesList, fields} = state;
 
     
-    const historyList = queryHistory.history;
-    const initialHistoryList = queryHistory.initialHistory;
+    const historyList = analysesHistory.history;
+    const initialHistoryList = analysesHistory.initialHistory;
 
-    const newHistoryItem = queryHistory.newHistoryItem;
+    const newHistoryItem = analysesHistory.newHistoryItem;
 
     return {
         auth,
@@ -61,12 +79,12 @@ function mapStateToProps(state) {
         historyList,
         initialHistoryList,
         fields,
-        historyListSearch: queryHistory.search,
-        currentHistoryId: queryHistory.currentHistoryId,
-        isHistoryReceivedAll: queryHistory.isReceivedAll,
-        isHistoryRequesting: queryHistory.isRequesting,
+        historyListSearch: analysesHistory.search,
+        currentHistoryId: analysesHistory.currentHistoryId,
+        isHistoryReceivedAll: analysesHistory.isReceivedAll,
+        isHistoryRequesting: analysesHistory.isRequesting,
         newHistoryItem,
-        isLoadingHistoryData: queryHistory.isLoadingHistoryData
+        isLoadingHistoryData: analysesHistory.isLoadingHistoryData
     };
 }
 

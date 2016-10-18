@@ -1,7 +1,6 @@
 import * as ActionTypes from '../actions/ui';
 
 export default function ui(state = {
-    queryNavbarClosed: true,
     // Workaround for bug #299
     shouldResetTableScrollPosition: false,
     currentLimit: 100,

@@ -1,3 +1,4 @@
+import {showAnotherPageOpenedModal} from './auth';
 import {receiveSearchedResults} from './variantsTable';
 import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
 import config from '../../config';
@@ -5,10 +6,11 @@ import config from '../../config';
 /*
  * action types
  */
-export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
+export const WS_STORE_CONNECTION = 'WS_STORE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
+export const WS_RECEIVE_OPEN = 'WS_RECEIVE_OPEN';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
 export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
@@ -22,6 +24,16 @@ export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
 export const WS_DELETE_COMMENT = 'WS_DELETE_COMMENT';
 export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
+export class TooManyWebSocketsError extends Error {
+    constructor(message) {
+        super(message || 'It seems you have another tab opened. Please close it and reload this page to continue.');
+        this.code = TooManyWebSocketsError.CODE;
+    }
+
+    static CODE = 'TooManyWebSocketsError';
+}
+
+let webSocketConnection = null;
 
 /*
  * other consts
@@ -33,7 +45,9 @@ const WS_PROGRESS_STATUSES = {
 
 const WS_OPERATION_TYPES = {
     UPLOAD: 'UploadOperation',
-    SEARCH: 'SearchOperation'
+    SEARCH: 'SearchOperation',
+    OPEN: 'OpenSocket',
+    CLOSED_BY_USER: 'ClosedByUser'
 };
 
 const WS_RESULT_TYPES = {
@@ -72,9 +86,9 @@ export function clearVariants() {
     };
 }
 
-export function createWsConnection(wsConn) {
+export function storeWsConnection(wsConn) {
     return {
-        type: WS_CREATE_CONNECTION,
+        type: WS_STORE_CONNECTION,
         wsConn
     };
 }
@@ -119,7 +133,8 @@ function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
         if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
             dispatch(tableMessage(wsData));
-            if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
+            const {variantsTable} = getState();
+            if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
                 dispatch(receiveSearchedResults());
             }
         } else {
@@ -131,6 +146,12 @@ function receiveSearchMessage(wsData) {
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
         dispatch(changeFileUploadProgressForOperationId(wsData.result.progress, wsData.result.status, wsData.operationId));
+    };
+}
+
+function receiveClosedByUserMessage() {
+    return (dispatch) => {
+        dispatch(showAnotherPageOpenedModal(true));
     };
 }
 
@@ -148,24 +169,30 @@ function receiveErrorMessage(wsData) {
 
 function receiveMessage(msg) {
     return (dispatch) => {
-        const wsData = JSON.parse(msg);
-        const {operationType, resultType} = wsData;
+        const {operationType, resultType} = msg;
         if (resultType == WS_RESULT_TYPES.ERROR) {
-            dispatch(receiveErrorMessage(wsData));
+            dispatch(receiveErrorMessage(msg));
         } else if (operationType == WS_OPERATION_TYPES.SEARCH) {
-            dispatch(receiveSearchMessage(wsData));
+            dispatch(receiveSearchMessage(msg));
         } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
-            dispatch(receiveUploadMessage(wsData));
+            dispatch(receiveUploadMessage(msg));
+        } else if (operationType == WS_OPERATION_TYPES.CLOSED_BY_USER) {
+            dispatch(receiveClosedByUserMessage());
         } else {
-            dispatch(otherMessage(wsData));
+            dispatch(otherMessage(msg));
         }
     };
 }
 
-function receiveClose(msg) {
+function receiveClose() {
     return {
-        type: WS_RECEIVE_CLOSE,
-        msg
+        type: WS_RECEIVE_CLOSE
+    };
+}
+
+function receiveOpen() {
+    return {
+        type: WS_RECEIVE_OPEN
     };
 }
 
@@ -179,45 +206,62 @@ function sended(msg) {
 function reconnectWS() {
     return (dispatch) => {
         setTimeout(
-            () => dispatch(initWSConnection()),
+            () => dispatch(initWSConnectionAsync()),
             config.WEBSOCKET_RECONNECT_TIME_MS
         );
     };
 }
 
-export function subscribeToWs() {
-    return (dispatch, getState) => {
-        const conn = getState().websocket.wsConn;
-        conn.onopen = () => {
-            console.log('Socket connection is ready');
-        };
-        conn.onmessage = event => dispatch(receiveMessage(event.data));
-        conn.onerror = event => dispatch(receiveError(event.data));
-        conn.onclose = event => {
-            dispatch(receiveClose(event.data));
-            if (!event.wasClean) {
-                dispatch(reconnectWS());
-            }
-        };
+export function subscribeToWsAsync() {
+    return (dispatch) => {
+        let isOpened = false;
+        return new Promise((resolve, reject) => {
+            webSocketConnection.onopen = () => {
+                console.log('Socket connection is open');
+            };
+            webSocketConnection.onmessage = ({data}) => {
+                const messageObject = JSON.parse(data);
+                const {operationType, resultType} = messageObject;
+                if (isOpened) {
+                    dispatch(receiveMessage(messageObject));
+                } else if (operationType === WS_OPERATION_TYPES.OPEN) {
+                    if (resultType === WS_RESULT_TYPES.SUCCESS) {
+                        isOpened = true;
+                        dispatch(receiveOpen());
+                        resolve();
+                    } else {
+                        reject(new TooManyWebSocketsError());
+                    }
+                }
+            };
+            webSocketConnection.onerror = event => {
+                dispatch(receiveError(event.data));
+            };
+            webSocketConnection.onclose = event => {
+                dispatch(receiveClose());
+                if (!event.wasClean) {
+                    dispatch(reconnectWS());
+                }
+            };
+        });
     };
 }
 
-export function initWSConnection() {
+export function initWSConnectionAsync() {
     return (dispatch) => {
         // path just for redirecting to webserver (see nginx rule 'location ~ ^/api/(?<section>.*)'), did not used in webserver
-        var conn = new WebSocket(`${config.URLS.WS}/api/ws`);
-        dispatch([
-            createWsConnection(conn),
-            subscribeToWs()
-        ]);
+        webSocketConnection = new WebSocket(`${config.URLS.WS}/api/ws`);
+        return Promise.resolve(
+        ).then(() => {
+            dispatch(storeWsConnection(null));
+            return dispatch(subscribeToWsAsync());
+        });
     };
 }
 
 export function send(msg) {
-    return (dispatch, getState) => {
-
-        const conn = getState().websocket.wsConn;
-        conn.send(msg);
+    return (dispatch) => {
+        webSocketConnection.send(msg);
         return dispatch(sended(msg));
     };
 }
@@ -236,5 +280,11 @@ export function requestSetCurrentParams(view, filter, samples, model, analysis) 
         samples,
         model,
         analysis
+    };
+}
+
+export function closeWs() {
+    return () => {
+        webSocketConnection.close();
     };
 }

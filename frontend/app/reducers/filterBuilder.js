@@ -4,6 +4,7 @@ import * as ActionTypes from '../actions/filterBuilder';
 import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
 import FieldUtils from '../utils/fieldUtils';
 import {entityType} from '../utils/entityTypes';
+import {ImmutableHashedArray} from '../utils/immutable';
 
 
 /**
@@ -19,7 +20,7 @@ function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allo
     const fieldDefault = _.find(allowedFields, {id: fieldDefaultId});
     const sampleDefaultType = fieldDefault.sampleType;
     /** @type {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
-    const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
+    const parsedRawRules = filterToEdit.modelType === 'complex' ? null: filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = parsedRawRules && genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
     if (validateRulesResult && !_.isEmpty(validateRulesResult.report)) {
@@ -97,9 +98,13 @@ function reduceFBuilderStartEdit(state, action) {
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)), // need for type convert from 'valueType' to 'type'
         allowedFields
     );
+    const newFiltersList = {
+        hashedArray: ImmutableHashedArray.makeFromArray(filtersList.hashedArray.array.filter((model) => model.analysisType === filtersStrategy.analysisType))
+    };
+
     return Object.assign({}, state, {
         filtersStrategy,
-        filtersList,
+        filtersList:newFiltersList,
         editingFilter: editingFilter,
         originalFilter: editingFilter,
         allowedFields

@@ -21,14 +21,16 @@ export default class ExistentViewSelect extends React.Component {
         const isEditableView = entityTypeIsEditable(selectedViewType);
 
         return (
-            <div className='collapse in'>
-                <div className='row grid-toolbar'>
+            <div className='form-rows-dynamic'>
+                <div className='form-group'>
                     {this.renderTitle()}
                 </div>
                 {this.renderWarning(isDemoSession, selectedViewType)}
-                <div className='row grid-toolbar row-head-selector'>
-                    {this.renderViewSelector(views)}
-                    {this.renderButtonGroup(isDemoSession, isEditableView)}
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
+                        {this.renderViewSelector(views)}
+                        {this.renderButtonGroup(isDemoSession, isEditableView)}
+                    </div>  
                 </div>
             </div>
         );
@@ -36,9 +38,7 @@ export default class ExistentViewSelect extends React.Component {
 
     renderTitle() {
         return (
-            <div className='col-sm-6'>
-                <label data-localize='views.setup.selector.label'>Available Views</label>
-            </div>
+            <h5 data-localize='views.setup.selector.label'>Available Views</h5>
         );
     }
 
@@ -64,7 +64,7 @@ export default class ExistentViewSelect extends React.Component {
         }));
 
         return (
-            <div className='col-sm-6'>
+            <div className='btn-group btn-group-select2-max'>
                 <Select
                     options={selectorItems}
                     value={this.getEditingViewId()}
@@ -76,12 +76,10 @@ export default class ExistentViewSelect extends React.Component {
 
     renderButtonGroup(isDemoSession, isEditableView) {
         return (
-            <div className='col-sm-6'>
-                <div className='btn-group'>
-                    {this.renderDuplicateViewButton(isDemoSession)}
-                    {isEditableView && this.renderResetViewButton()}
-                    {isEditableView && this.renderDeleteViewButton()}
-                </div>
+            <div className='btn-group'>
+                {this.renderDuplicateViewButton(isDemoSession)}
+                {isEditableView && this.renderResetViewButton()}
+                {isEditableView && this.renderDeleteViewButton()}
             </div>
         );
     }
@@ -90,7 +88,7 @@ export default class ExistentViewSelect extends React.Component {
         const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
         return (
             <button type='button'
-                    className='btn btn-default collapse in'
+                    className='btn btn-default'
                     id='dblBtn'
                     onClick={() => this.onDuplicateViewClick()}
                     disabled={isDemoSession}
@@ -140,8 +138,8 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onDuplicateViewClick() {
-        const {dispatch} = this.props;
-        const editingView = this.props.viewBuilder.editingView;
+        const {dispatch, viewBuilder} = this.props;
+        const editingView = viewBuilder.editingView;
         dispatch(viewBuilderRestartEdit(true, editingView));
     }
 

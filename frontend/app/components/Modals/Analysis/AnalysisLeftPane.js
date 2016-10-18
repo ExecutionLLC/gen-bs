@@ -2,26 +2,27 @@ import React from 'react';
 import AnalysisHistorySearch from './AnalysisHistorySearch';
 import AnalysisHistoryList from './AnalysisHistoryList';
 import {
-    prepareQueryHistoryToSearch,
-    requestQueryHistory,
-    appendQueryHistory
-} from '../../../actions/queryHistory';
+    prepareAnalysesHistoryToSearch
+} from '../../../actions/analysesHistory';
 
 
 export default class AnalysisLeftPane extends React.Component {
 
     render() {
 
-        const {historyList, initialHistoryList, historyListSearch, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
+        const {
+            dispatch, historyList, initialHistoryList, historyListSearch,
+            isHistoryReceivedAll, isHistoryRequesting, newHistoryItem
+        } = this.props;
 
         return (
-            <div>
+            <div className='split-left'>
                 <AnalysisHistorySearch
                     search={historyListSearch}
                     onSearch={(str) => this.onSearchChange(str)}
                 />
                 <AnalysisHistoryList
-                    dispatch={this.props.dispatch}
+                    dispatch={dispatch}
                     historyList={historyList}
                     initialHistoryList={initialHistoryList}
                     historyListSearch={historyListSearch}
@@ -38,10 +39,7 @@ export default class AnalysisLeftPane extends React.Component {
     }
 
     onSearchChange(str) {
-        this.props.dispatch(prepareQueryHistoryToSearch(str));
-        if (!str) {
-            this.props.dispatch(requestQueryHistory());
-            this.props.dispatch(appendQueryHistory('', 0, this.props.initialHistoryList, false));
-        }
+        const {dispatch} = this.props;
+        dispatch(prepareAnalysesHistoryToSearch(str));
     }
 }

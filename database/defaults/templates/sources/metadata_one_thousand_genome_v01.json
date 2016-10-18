@@ -1,0 +1,222 @@
+{
+  "fields": [
+    {
+      "name": "INFO_DP",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Total read depth; only low coverage data were counted towards the DP, exome data were not used"
+    },
+    {
+      "name": "INFO_IMPRECISE",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Imprecise variant"
+    },
+    {
+      "name": "INFO_MULTI_ALLELIC",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Position/site is multi-allelic in 1000 genomes results (phase 3)"
+    },
+    {
+      "name": "INFO_AMR_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency in the AMR populations calculated from AC and AN, in the range (0,1)"
+    },
+    {
+      "name": "INFO_EUR_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency in the EUR populations calculated from AC and AN, in the range (0,1)"
+    },
+    {
+      "name": "INFO_TSD",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Precise Target Site Duplication for bases, if unknown, value will be NULL"
+    },
+    {
+      "name": "INFO_NS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples with data"
+    },
+    {
+      "name": "INFO_SAS_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency in the SAS populations calculated from AC and AN, in the range (0,1)"
+    },
+    {
+      "name": "INFO_CIPOS",
+      "isMandatory": false,
+      "num": 2,
+      "type": "integer",
+      "desc": "Confidence interval near the end of imprecise variant"
+    },
+    {
+      "name": "REF",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "INFO_EX_TARGET",
+      "isMandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Variant in exon pull down target boundaries"
+    },
+    {
+      "name": "POS",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "INFO_SVLEN",
+      "isMandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "SV length. It is only calculated for structural variation MEIs. For other types of SVs, one may calculate the SV length by INFO:END-START+1, or by finding the difference between lengthes of REF and ALT alleles"
+    },
+    {
+      "name": "INFO_MC",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Merged calls."
+    },
+    {
+      "name": "INFO_CIEND",
+      "isMandatory": false,
+      "num": 2,
+      "type": "integer",
+      "desc": "Confidence interval near the end of imprecise variant"
+    },
+    {
+      "name": "CHROM",
+      "isMandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "INFO_EAS_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency in the EAS populations calculated from AC and AN, in the range (0,1)"
+    },
+    {
+      "name": "INFO_AN",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Total number of alleles in called genotypes"
+    },
+    {
+      "name": "INFO_END",
+      "isMandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "End position"
+    },
+    {
+      "name": "INFO_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Estimated allele frequency in the range (0,1)"
+    },
+    {
+      "name": "INFO_AC",
+      "isMandatory": false,
+      "num": -1,
+      "type": "integer",
+      "desc": "Total number of alternate alleles in called genotypes"
+    },
+    {
+      "name": "INFO_CS",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Source call set."
+    },
+    {
+      "name": "INFO_AFR_AF",
+      "isMandatory": false,
+      "num": -1,
+      "type": "float",
+      "desc": "Allele frequency in the AFR populations calculated from AC and AN, in the range (0,1)"
+    },
+    {
+      "name": "INFO_VT",
+      "isMandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "SNP, INDEL, SV"
+    },
+    {
+      "name": "INFO_AA_1",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Ancestral reference as in vcf format. For InDels only"
+    },
+    {
+      "name": "INFO_AA_0",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Inferred using multiple alignment with Ortheus. For SNPs only"
+    },
+    {
+      "name": "INFO_AA_3",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Ancestral indel type"
+    },
+    {
+      "name": "INFO_AA_2",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Ancestral alternative allele as in vcf format. For InDels only"
+    },
+    {
+      "name": "ALT",
+      "isMandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "INFO_SVTYPE",
+      "isMandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Type of structural variant"
+    },
+    {
+      "name": "INFO_MEINFO",
+      "isMandatory": false,
+      "num": 4,
+      "type": "string",
+      "desc": "Mobile element info of the form NAME,START,END<POLARITY; If there is only 5' OR 3' support for this call, will be NULL NULL for START and END"
+    }
+  ],
+  "reference": "hs37d5"
+}

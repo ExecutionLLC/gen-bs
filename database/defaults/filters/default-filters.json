@@ -1,44 +1,53 @@
 [
   {
-    "id": "87dec897-f757-4742-a4b7-9017be896a90",
-    "name": "Default Test Filter",
-    "description": "Default Test filter description",
+    "id": "fb88a072-68c5-4861-a254-2fdd6cac4839",
+    "name": "Empty Filter",
+    "description": "Empty filter",
     "type": "standard",
     "isCopyDisabled": false,
     "rules": {
       "$or": [
         {
-          "00000000-0000-0000-0000-000000000005": {
-            "$neq": "A"
+          "00000000-0000-0000-0000-000000000001": {
+            "$neq": null
           }
         }
       ]
     }
   },
   {
-    "id": "21d7193c-ca29-4f7f-a29a-0a8c6b19ca86",
-    "name": "Test Filter",
-    "description": "Test filter description",
-    "type": "standard",
+    "id": "837b3868-b3da-4d42-bcc6-9027cb59f063",
+    "name": "Exome Filter",
+    "description": "",
+    "type": "default",
     "isCopyDisabled": false,
     "rules": {
-      "$or": [
+      "$and": [
         {
-          "00000000-0000-0000-0000-000000000005": {
-            "$neq": "A"
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
+            "$neq": null
           }
         },
         {
-          "00000000-0000-0000-0000-000000000007": {
-            "$eq": "PASS"
-          }
-        },
-        {
-          "$and": [
+          "$or": [
             {
-              "00000000-0000-0000-0000-000000000005": {
-                "$neq": "ABC"
+              "806776ec-ea68-4fe9-b72a-ba74729c0af5": {
+                "$begin_with": "NP_"
               }
+            },
+            {
+              "$and": [
+                {
+                  "7f171b90-c897-4ddd-8574-064bbad3cf41": {
+                    "$contains": "splice"
+                  }
+                },
+                {
+                  "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
+                    "$begin_with": "NM_"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -46,22 +55,275 @@
     }
   },
   {
-    "id": "ff838255-1311-4a3c-b338-8ab3a248f4fd",
-    "name": "Another Test Filter",
-    "description": "Test filter description v2",
-    "type": "advanced",
+    "id": "376c9c93-97c7-4a7d-9b59-cc8cb1ea68c3",
+    "name": "Retinoblastoma Filter",
+    "description": "Empty filter",
+    "type": "standard",
     "isCopyDisabled": false,
     "rules": {
-      "$or": [
+      "$and": [
         {
-          "00000000-0000-0000-0000-000000000005": {
-            "$neq": "A"
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
+            "$in": [
+              "RB1"
+            ]
           }
         },
         {
-          "00000000-0000-0000-0000-000000000007": {
-            "$eq": "PASS"
+          "$and": [
+            {
+              "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
+                "$nbegin_with": "X"
+              }
+            }
+          ]
+        },
+        {
+          "$or": [
+            {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
+                "$contains": "high impact"
+              }
+            },
+            {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
+                "$contains": "changed protein"
+              }
+            },
+            {
+              "7f171b90-c897-4ddd-8574-064bbad3cf41": {
+                "$contains": "inframe"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "00000000-0000-0000-0000-000000000007": {
+                "$eq": "PASS"
+              }
+            },
+            {
+              "7fec0a66-e4eb-4153-959f-227898076e2c": {
+                "$gte": 10
+              }
+            },
+            {
+              "$and": [
+                {
+                  "7e4f8290-79cb-47e7-8567-2226498301d9": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$and": [
+                {
+                  "3756ca7b-3889-435a-9daa-3c91d89a4744": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "c2eb1c7c-0d3d-44f1-ad06-fbdb85d192ae",
+    "name": "Breast Cancer Filter",
+    "description": "Empty filter",
+    "type": "standard",
+    "isCopyDisabled": false,
+    "rules": {
+      "$and": [
+        {
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
+            "$in": [
+              "BRCA1",
+              "BRCA2"
+            ]
           }
+        },
+        {
+          "$and": [
+            {
+              "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
+                "$nbegin_with": "X"
+              }
+            }
+          ]
+        },
+        {
+          "$or": [
+            {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
+                "$contains": "high impact"
+              }
+            },
+            {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
+                "$contains": "changed protein"
+              }
+            },
+            {
+              "7f171b90-c897-4ddd-8574-064bbad3cf41": {
+                "$contains": "inframe"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "00000000-0000-0000-0000-000000000007": {
+                "$eq": "PASS"
+              }
+            },
+            {
+              "7fec0a66-e4eb-4153-959f-227898076e2c": {
+                "$gte": 10
+              }
+            },
+            {
+              "$and": [
+                {
+                  "7e4f8290-79cb-47e7-8567-2226498301d9": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$and": [
+                {
+                  "3756ca7b-3889-435a-9daa-3c91d89a4744": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "959ddacc-d8e5-4cb4-8cc7-52d1190404b4",
+    "name": "Colon and Lung Cancer Filter",
+    "description": "",
+    "type": "standard",
+    "isCopyDisabled": false,
+    "rules": {
+      "$and": [
+        {
+          "a118952c-20fc-46b8-b142-61cc7869b989": {
+            "$in": [
+              "KRAS",
+              "EGFR",
+              "BRAF",
+              "PIK3CA",
+              "AKT1",
+              "ERBB2",
+              "PTEN",
+              "NRAS",
+              "STK11",
+              "MAP2K1",
+              "ALK",
+              "DDR2",
+              "CTNNB1",
+              "MET",
+              "TP53",
+              "SMAD4",
+              "FBX7",
+              "FGFR3",
+              "NOTCH1",
+              "ERBB4",
+              "FGFR1",
+              "FGFR2"
+            ]
+          }
+        },
+        {
+          "$and": [
+            {
+              "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4": {
+                "$nbegin_with": "X"
+              }
+            }
+          ]
+        },
+        {
+          "$or": [
+            {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
+                "$contains": "high impact"
+              }
+            },
+            {
+              "1bfdd071-a4e3-4acb-80db-31fa6082b094": {
+                "$contains": "changed protein"
+              }
+            },
+            {
+              "7f171b90-c897-4ddd-8574-064bbad3cf41": {
+                "$contains": "inframe"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "00000000-0000-0000-0000-000000000007": {
+                "$eq": "PASS"
+              }
+            },
+            {
+              "7fec0a66-e4eb-4153-959f-227898076e2c": {
+                "$gte": 10
+              }
+            },
+            {
+              "$and": [
+                {
+                  "7e4f8290-79cb-47e7-8567-2226498301d9": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "$and": [
+                {
+                  "3756ca7b-3889-435a-9daa-3c91d89a4744": {
+                    "$nbetween": [
+                      0.01,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }

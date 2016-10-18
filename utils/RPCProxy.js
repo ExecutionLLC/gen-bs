@@ -70,18 +70,14 @@ class RPCProxy {
         }
     }
 
-    onMessageReturned(handler) {
-        this.messageReturnedHandler = handler;
-    }
-
     _constructMessage(id, method, replyTo, params) {
         const message = {id, method, params, replyTo};
         return ChangeCaseUtil.convertKeysToSnakeCase(message);
     }
 
     _onMessageReturned(messageObject) {
-        if (this.messageReturnedHandler) {
-            this.messageReturnedHandler(messageObject);
+        if (this.returnCallback) {
+            this.returnCallback(messageObject);
         } else {
             this.logger.error(
                 `Message returned but no handler is registered to`

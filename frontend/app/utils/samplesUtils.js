@@ -1,9 +1,7 @@
-import AnalyseUtils from './analyseUtils';
+import {analysisType} from './analyseUtils';
 
 
-const {analysisType} = AnalyseUtils;
-
-const sampleType = {
+export const sampleType = {
     SINGLE: 'single',
     TUMOR: 'tumor',
     NORMAL: 'normal',
@@ -12,13 +10,13 @@ const sampleType = {
     FATHER: 'father'
 };
 
-const sampleTypeForAnalysisType = {
+export const sampleTypesForAnalysisType = {
     [analysisType.SINGLE]: [sampleType.SINGLE],
     [analysisType.TUMOR]: [sampleType.TUMOR, sampleType.NORMAL],
     [analysisType.FAMILY]: [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]
 };
 
-const typeLabels = {
+export const typeLabels = {
     [sampleType.SINGLE]: 'S',
     [sampleType.TUMOR]: 'T',
     [sampleType.NORMAL]: 'N',
@@ -27,10 +25,6 @@ const typeLabels = {
     [sampleType.FATHER]: 'F'
 };
 
-const SamplesUtils = {
-    sampleType,
-    typeLabels,
-    sampleTypeForAnalysisType
-};
-
-export default SamplesUtils;
+export function isMainSample(type) {
+    return type === sampleType.TUMOR || type === sampleType.PROBAND;
+}

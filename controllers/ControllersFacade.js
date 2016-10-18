@@ -35,7 +35,7 @@ class ControllersFacade {
         this.sampleUploadHistoryController = new SampleUploadHistoryController(services);
 
         this.searchController = new SearchController(services);
-        this.sessionsController = new SessionsController(services);
+        this.sessionsController = new SessionsController(this, services);
 
         this.wsController = new WSController(services);
         this.apiController = new ApiController(services);

@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
-import SamplesUtils from '../../utils/samplesUtils';
+import * as SamplesUtils from '../../utils/samplesUtils';
 
 export default class VariantsTableHead extends Component {
 
@@ -59,16 +59,21 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
-                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
+                    this.renderFieldHeader(
+                        fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
                 )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist,isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
-        const fieldMetadata = totalFieldsHash[fieldId];
+        const fieldMetadata = {
+            ...totalFieldsHash[fieldId],
+            isUnique
+        };
         const areControlsEnabled = !!isExist;
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
             dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));
@@ -77,8 +82,11 @@ export default class VariantsTableHead extends Component {
             dispatch(searchInResultsSortFilter());
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
-        const sampleName = sampleId ?
-            _.keyBy(variantsSamples, sample => sample.id)[sampleId].fileName :
+        const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
+        const sampleName = currentSample ?
+            currentSample.genotypeName ?
+                `${currentSample.fileName}:${currentSample.genotypeName}` :
+                currentSample.fileName :
             null;
         return (
             <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}

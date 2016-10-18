@@ -66,6 +66,22 @@ export function immutableSetPathProperty(obj, path, val) {
     return setProp(obj, pathArray, 0, val);
 }
 
+export function immutableGetPathProperty(obj, path) {
+    const pathArray = path.split('.');
+    function getProp(obj, pathArray, pathIndex) {
+        const propName = pathArray[pathIndex];
+        if (pathIndex >= pathArray.length - 1) {
+            return obj[propName];
+        }
+        return getProp(obj[propName], pathArray, pathIndex + 1);
+    }
+
+    return getProp(obj, pathArray, 0);
+}
+
+export function assign(originalObject, mutatedObjectOrSubset) {
+    return Object.assign({}, originalObject, mutatedObjectOrSubset);
+}
 
 export class ImmutableHashedArray {
     static makeFromArray(array) {
