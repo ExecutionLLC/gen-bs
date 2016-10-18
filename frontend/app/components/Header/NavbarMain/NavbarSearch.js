@@ -32,7 +32,6 @@ class NavbarSearch extends Component {
                      data-localize='results.search'
                      className='form-control placeholder-inverse'
                      placeholder='Search for mutations of current sample analysis'
-                     data-localize=''
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
