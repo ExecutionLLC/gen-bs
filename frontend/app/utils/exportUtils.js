@@ -26,17 +26,21 @@ export default class ExportUtils {
     }
 
     static downloadBlob(blob, fileName) {
-        const url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.setAttribute('target', '_blank');
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        }, 100);
+        if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+            window.navigator.msSaveBlob(blob, fileName);
+        } else {
+            const url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.setAttribute('target', '_blank');
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 100);
+        }
     }
 }

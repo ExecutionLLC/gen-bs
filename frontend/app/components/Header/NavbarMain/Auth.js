@@ -10,19 +10,22 @@ import config from '../../../../config';
 const AUTHORIZED_USER_TITLE = '';
 const DEMO_USER_TITLE = 'Register or login for access additional features';
 const GOOGLE_ACCOUNT_TITLE = 'Login using Google Account';
-import {toggleLoginForm} from '../../../actions/ui';
+import DemoModeMessage from '../../Errors/DemoModeMessage';
 
 class Auth extends Component {
     constructor(...args) {
         super(...args);
+        this.state = {
+            isDropdownOpened: false
+        };
     }
 
     render() {
-        const {auth:{isDemo},ui:{isLoginFormVisible}} = this.props;
+        const {auth:{isDemo}} = this.props;
         // TODO: Close form on Esc
         const dropdownClasses = classNames({
             dropdown: true,
-            open: isLoginFormVisible
+            open: this.state.isDropdownOpened
         });
         if (isDemo) {
             return this._renderForDemoUser(dropdownClasses);
@@ -31,8 +34,9 @@ class Auth extends Component {
     }
 
     handleClickOutside() {
-        const {dispatch} = this.props;
-        dispatch(toggleLoginForm(false));
+        this.setState({
+            isDropdownOpened: false
+        });
     }
 
     _renderForAuthorizedUser(dropdownClasses) {
@@ -71,10 +75,18 @@ class Auth extends Component {
     }
 
     _renderForDemoUser(dropdownClasses) {
+        const {dispatch, auth:{isDemo, errorMessage}} = this.props;
         return (
             <div>
 
                 <div className={dropdownClasses}>
+                    { isDemo &&
+                    <DemoModeMessage
+                        errorMessage={errorMessage}
+                        dispatch={dispatch}
+                        onLoginClick={() => this.onLoginDropdownClick()}
+                    />
+                    }
                     <a href='#'
                        onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
@@ -111,8 +123,9 @@ class Auth extends Component {
     }
 
     onLoginDropdownClick() {
-        const {dispatch,ui:{isLoginFormVisible}} = this.props;
-        dispatch(toggleLoginForm(!isLoginFormVisible));
+        this.setState({
+            isDropdownOpened: !this.state.isDropdownOpened
+        });
     }
 }
 
