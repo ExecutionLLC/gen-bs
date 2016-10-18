@@ -93,11 +93,12 @@ export function fetchUserDataAsync() {
             dispatch(createNewHistoryItem(sample, filter, view));
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(null))
                 .then(() => {
+                    const lastHistoryAnalysis = analyses[0];
                     const {
                         name, description, type, samples, viewId, filterId, modelId
-                    } = getState().analysesHistory.newHistoryItem;
+                    } = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
                     dispatch(analyze({
-                        id: analyses[0] ? analyses[0].id : null,
+                        id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
                         name,
                         description,
                         type,
