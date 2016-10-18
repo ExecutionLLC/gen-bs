@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {toggleLoginForm} from '../../actions/ui';
 
 export default class DemoModeMessage extends Component {
 
@@ -17,7 +16,7 @@ export default class DemoModeMessage extends Component {
     }
 
     onLoginClick() {
-        const {dispatch} = this.props;
-        dispatch(toggleLoginForm(true));
+        const {onLoginClick} = this.props;
+        onLoginClick();
     }
 }
