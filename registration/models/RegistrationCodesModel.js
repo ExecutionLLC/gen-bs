@@ -93,9 +93,14 @@ class RegistrationCodesModel extends ModelBase {
     }
 
     _findValidRegcodeAsync(regcode, trx) {
+        // Find unused regcode starting with given
         return new Promise((resolve) => {
             this.findRegcodeAsync(regcode, trx)
-                .then(() => this._findValidRegcodeAsync(this._generateNextRegcode(regcode), trx).then((regcode) => resolve(regcode)))
+                // regcode found - we need to generate next one and repeat the search
+                .then(() =>
+                    this._findValidRegcodeAsync(this._generateNextRegcode(regcode), trx)
+                        .then((regcode) => resolve(regcode)))
+                // did not find regcode - let's return it to use
                 .catch((err) => resolve(regcode));
         });
     }
@@ -135,9 +140,13 @@ class RegistrationCodesModel extends ModelBase {
     }
 
     createManyRegcodeAsync(count, startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
+        // create empty array of desired size to map on it
         const items = new Array(count)
             .fill(null);
 
+        // we'll generate regcodes one by one
+        // because we need to check if next regcode is not createted before
+        // store in this variable next desired regcode
         let currentRegcode = startingRegcode;
 
         return Promise.map(
@@ -151,7 +160,7 @@ class RegistrationCodesModel extends ModelBase {
                         });
                 })
             },
-            {concurrency: 1}
+            {concurrency: 1} // only one promise at a time will executed
         );
     }
 
