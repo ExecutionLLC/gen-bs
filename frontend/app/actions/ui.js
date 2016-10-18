@@ -16,15 +16,6 @@ export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
 export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
 
-export const TOGGLE_LOGIN_FORM = 'TOGGLE_LOGIN_FORM';
-
-export function toggleLoginForm(flag) {
-    return {
-        type: TOGGLE_LOGIN_FORM,
-        flag
-    };
-}
-
 export function requestTableScrollPositionReset() {
     return {
         type: REQUEST_TABLE_SCROLL_POSITION_RESET
