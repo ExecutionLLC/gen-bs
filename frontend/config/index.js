@@ -7,8 +7,7 @@
  SESSION_KEEP_ALIVE_TIMEOUT: false,
  SESSION_LOGOUT_TIMEOUT: false,
  SESSION_LOGOUT_WARNING_TIMEOUT: false,
- USE_SECURE_CONNECTION: false,
- DISABLE_DEV_SERVER: false
+ USE_SECURE_CONNECTION: false
  */
 const HTTP_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'https' : 'http';
 const WS_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'wss' : 'ws';
@@ -20,7 +19,6 @@ const config = {
     PORT,
     HTTP_SCHEME,
     WS_SCHEME,
-    DISABLE_DEV_SERVER,
     URLS: {
         WS: `${WS_SCHEME}://${HOST}:${PORT}`,
         FILE_UPLOAD: `${HTTP_SCHEME}://${HOST}:${PORT}/api/samples/upload`

@@ -1,6 +1,5 @@
 import 'babel-polyfill';
 import 'jszip';
-import config from '../config';
 
 require('file?name=index.html!./index.html');
 const JSZip = require('jszip');
@@ -26,16 +25,6 @@ import Root from './containers/Root';
 import gzip from './utils/gzip';
 window.gzip = gzip;
 import './assets/css/index.less';
-
-// Load WebPack dev server script if necessary.
-if (!config.DISABLE_DEV_SERVER) {
-    const head = document.getElementsByTagName('head')[0];
-    const webPackDevScript = document.createElement('script');
-
-    webPackDevScript.type = 'text/javascript';
-    webPackDevScript.src = `${config.HTTP_SCHEME}://localhost:8080`;
-    head.appendChild(webPackDevScript);
-}
 
 render(
     <Root />,
