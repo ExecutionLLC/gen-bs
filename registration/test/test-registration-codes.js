@@ -53,15 +53,29 @@ describe('Registration Codes', () => {
         it('must add user with desired regcode and next user with next regcode', () => {
             const regcode = '' + (10000000 + Math.floor(Math.random() * 89999999));
             const nextRegcode = '' + (+regcode + 1);
-            return registrationCodes.createRegcodeAsync(regcode, 'en', 'speciality', 'description', 4)
+            const newUser1 = {
+                regcode,
+                speciality: 'speciality1',
+                language: 'en',
+                description: 'description1',
+                numberOfPaidSamples: 4
+            };
+            const newUser2 = {
+                regcode: nextRegcode,
+                speciality: 'speciality2',
+                language: 'ru',
+                description: 'description2',
+                numberOfPaidSamples: 5
+            };
+            return registrationCodes.createRegcodeAsync(newUser1.regcode, newUser1.language, newUser1.speciality, newUser1.description, newUser1.numberOfPaidSamples)
                 .then((createdUser) => {
-                    assert.equal(createdUser.regcode, regcode);
+                    assert.deepEqual(createdUser, Object.assign({}, newUser1, {id: createdUser.id, isActivated: false}));
                 })
                 .then(() =>
-                    registrationCodes.createRegcodeAsync(regcode, 'en', 'speciality', 'description', 4)
+                    registrationCodes.createRegcodeAsync(regcode, newUser2.language, newUser2.speciality, newUser2.description, newUser2.numberOfPaidSamples)
                 )
                 .then((createdUser) => {
-                    assert.equal(createdUser.regcode, nextRegcode);
+                    assert.deepEqual(createdUser, Object.assign({}, newUser2, {id: createdUser.id, isActivated: false}));
                 });
         });
 
