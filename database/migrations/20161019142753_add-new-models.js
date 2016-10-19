@@ -88,3 +88,5 @@ exports.up = function (knex) {
 exports.down = function (knex, Promise) {
     throw new Error('Not implemented');
 };
+
+exports.addNewModels = addNewModels;

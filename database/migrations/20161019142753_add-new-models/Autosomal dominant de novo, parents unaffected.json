@@ -1,5 +1,5 @@
 {
-  "name": "Autosomal recessive inherited, parents unafected",
+  "name": "Autosomal dominant de novo, parents unaffected",
   "description": "Assuming homozygous variants are sequencing errors",
   "type": "standard",
   "modelType": "filter",
@@ -9,7 +9,7 @@
     "rules": [
       {
         "operator": "$contains",
-        "value": "Homozygous",
+        "value": "Heterozygous",
         "field": {
           "name": "GT_GT_Zygosity",
           "value_type": "string",
@@ -24,8 +24,18 @@
             "condition": "$and",
             "rules": [
               {
-                "operator": "$contains",
+                "operator": "$ncontains",
                 "value": "Heterozygous",
+                "field": {
+                  "name": "GT_GT_Zygosity",
+                  "value_type": "string",
+                  "dimension": 1
+                },
+                "sample_type": "mother"
+              },
+              {
+                "operator": "$ncontains",
+                "value": "Homozygous alternative",
                 "field": {
                   "name": "GT_GT_Zygosity",
                   "value_type": "string",
@@ -39,8 +49,18 @@
             "condition": "$and",
             "rules": [
               {
+                "operator": "$eq",
+                "value": null,
+                "field": {
+                  "name": "GT_GT_Zygosity",
+                  "value_type": "string",
+                  "dimension": 1
+                },
+                "sample_type": "mother"
+              },
+              {
                 "operator": "$lte",
-                "value": 5,
+                "value": 10,
                 "field": {
                   "name": "GT_DP",
                   "value_type": "integer",
@@ -59,8 +79,18 @@
             "condition": "$and",
             "rules": [
               {
-                "operator": "$contains",
+                "operator": "$ncontains",
                 "value": "Heterozygous",
+                "field": {
+                  "name": "GT_GT_Zygosity",
+                  "value_type": "string",
+                  "dimension": 1
+                },
+                "sample_type": "father"
+              },
+              {
+                "operator": "$ncontains",
+                "value": "Homozygous alternative",
                 "field": {
                   "name": "GT_GT_Zygosity",
                   "value_type": "string",
@@ -74,8 +104,18 @@
             "condition": "$and",
             "rules": [
               {
+                "operator": "$eq",
+                "value": null,
+                "field": {
+                  "name": "GT_GT_Zygosity",
+                  "value_type": "string",
+                  "dimension": 1
+                },
+                "sample_type": "father"
+              },
+              {
                 "operator": "$lte",
-                "value": 5,
+                "value": 10,
                 "field": {
                   "name": "GT_DP",
                   "value_type": "integer",
