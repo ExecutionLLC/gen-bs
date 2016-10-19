@@ -1,0 +1,600 @@
+{
+  "genotype_columns": [
+    "GT_GT",
+    "GT_GT_Zygosity",
+    "GT_GT_Genotype",
+    "GT_GQ",
+    "GT_SDP",
+    "GT_DP",
+    "GT_RD",
+    "GT_AD",
+    "GT_FREQ",
+    "GT_PVAL",
+    "GT_RBQ",
+    "GT_ABQ",
+    "GT_RDF",
+    "GT_RDR",
+    "GT_ADF",
+    "GT_ADR"
+  ],
+  "columns": [
+    {
+      "name": "INFO_NC",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples not called"
+    },
+    {
+      "name": "VEP_STRAND",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_MOTIF_SCORE_CHANGE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_SYMBOL_SOURCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "database for \"Gene ID\" column"
+    },
+    {
+      "name": "VEP_HGMD",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSp_transcript",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "for use in HGVSp notation (left part before period glyph)"
+    },
+    {
+      "name": "VEP_Feature",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_SIFT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is 0.05"
+    },
+    {
+      "name": "VEP_SYMBOL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Gene ID in database from \"Gene DB\" column"
+    },
+    {
+      "name": "VEP_MOTIF_NAME",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "REF",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "ALT",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "VEP_cDNA_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    {
+      "name": "VEP_ExonNumber",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "starting with 1"
+    },
+    {
+      "name": "VEP_TREMBL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "best match"
+    },
+    {
+      "name": "VEP_PHENO",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Indicates if existing variant is associated with a phenotype, disease or trait"
+    },
+    {
+      "name": "VEP_DOMAINS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_CLIN_SIG",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_Gene",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSc_nucleotide_changes",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "in HGVSc transcript coordinates"
+    },
+    {
+      "name": "VEP_PICK",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ""
+    },
+    {
+      "name": "POS",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "VEP_CANONICAL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": ""
+    },
+    {
+      "name": "INFO_HOM",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples called homozygous-variant"
+    },
+    {
+      "name": "VEP_SOMATIC",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ""
+    },
+    {
+      "name": "VEP_TSL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HIGH_INF_POS",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": ""
+    },
+    {
+      "name": "VEP_NumberOfIntrons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGVSp_nucleotide_changes",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "in HGVSp transcript coordinates"
+    },
+    {
+      "name": "VEP_cDNA_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    {
+      "name": "INFO_ADP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Average per-sample depth of bases with Phred score >= 0"
+    },
+    {
+      "name": "VEP_HGVS_OFFSET",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "HGVS was calculated after ambiguous repeat shift. Column shows shift size"
+    },
+    {
+      "name": "INFO_HET",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples called heterozygous-variant"
+    },
+    {
+      "name": "VEP_ZYG",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_CCDS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_BIOTYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Gene type in Havana DB. Protein coding: IGC gene, IGD gene, IG gene, IGJ gene, IGLV gene, IGM gene, IGV gene, IGZ gene, nonsense mediated decay, nontranslating CDS, non stop decay, polymorphic pseudogene, TRC gene, TRD gene, TRJ gene. Pseudogene: disrupted domain, IGC pseudogene, IGJ pseudogene, IG pseudogene, IGV pseudogene, processed pseudogene, transcribed processed pseudogene, transcribed unitary pseudogene, transcribed unprocessed pseudogene, translated processed pseudogene, TRJ pseudogene, unprocessed pseudogene. Long noncoding: 3prime overlapping ncrna, ambiguous orf, antisense, antisense RNA, lincRNA, ncrna host, processed transcript, sense intronic, sense overlapping. Short noncoding: miRNA, miRNA_pseudogene, miscRNA, miscRNA pseudogene, Mt rRNA, Mt tRNA, rRNA, scRNA, snlRNA, snoRNA, snRNA, tRNA, tRNA_pseudogene"
+    },
+    {
+      "name": "VEP_IntronNumber",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_GENE_PHENO",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "QUAL",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "float",
+      "desc": "Quality."
+    },
+    {
+      "name": "VEP_HGVSc_transcript",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "for use in HGVSc notation (left part before period glyph)"
+    },
+    {
+      "name": "VEP_ALLELE_NUM",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "INFO_WT",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples called reference (wild-type)"
+    },
+    {
+      "name": "VEP_SWISSPROT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "best match"
+    },
+    {
+      "name": "VEP_PolyPhen",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": "PolyPhen-2 v2.2.2. Probability(variation is deleterious). Common threshold is 0.95"
+    },
+    {
+      "name": "ID",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Semi-colon separated list of unique identifiers where available."
+    },
+    {
+      "name": "VEP_Amino_acids",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_VARIANT_CLASS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    {
+      "name": "VEP_CDS_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    {
+      "name": "VEP_CDS_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    {
+      "name": "VEP_Protein_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    {
+      "name": "VEP_Allele",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_HGNC_ID",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "CHROM",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "VEP_CELL_TYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_MOTIF_POS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_Consequence",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_NumberOfExons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_PUBMED",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "FILTER",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Filter status."
+    },
+    {
+      "name": "VEP_Codons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_IMPACT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "high impact, changed protein effectiveness , no change, no evidence or difficult to predict"
+    },
+    {
+      "name": "VEP_DISTANCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    {
+      "name": "VEP_Feature_type",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "transcript, regulatory, motif"
+    },
+    {
+      "name": "VEP_SV",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "VEP_Protein_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    {
+      "name": "VEP_Existing_variation",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "GT_PVAL",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "P-value from Fisher's Exact Test"
+    },
+    {
+      "name": "GT_RBQ",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Average quality of reference-supporting bases (qual1)"
+    },
+    {
+      "name": "GT_DP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Quality Read Depth of bases with Phred score >= 0"
+    },
+    {
+      "name": "GT_FREQ",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Variant allele frequency"
+    },
+    {
+      "name": "GT_GT_Genotype",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Genotype"
+    },
+    {
+      "name": "GT_SDP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Raw Read Depth as reported by SAMtools"
+    },
+    {
+      "name": "GT_RDF",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Depth of reference-supporting bases on forward strand (reads1plus)"
+    },
+    {
+      "name": "GT_ABQ",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Average quality of variant-supporting bases (qual2)"
+    },
+    {
+      "name": "GT_GQ",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Genotype Quality"
+    },
+    {
+      "name": "GT_RDR",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Depth of reference-supporting bases on reverse strand (reads1minus)"
+    },
+    {
+      "name": "GT_ADF",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Depth of variant-supporting bases on forward strand (reads2plus)"
+    },
+    {
+      "name": "GT_GT_Zygosity",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Zygosity"
+    },
+    {
+      "name": "GT_GT",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Genotype"
+    },
+    {
+      "name": "GT_RD",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Depth of reference-supporting bases (reads1)"
+    },
+    {
+      "name": "GT_AD",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Depth of variant-supporting bases (reads2)"
+    },
+    {
+      "name": "GT_ADR",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Depth of variant-supporting bases on reverse strand (reads2minus)"
+    }
+  ],
+  "reference": "GRCh37",
+  "genotypes": [
+    "Sample1"
+  ]
+}
