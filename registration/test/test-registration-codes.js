@@ -16,6 +16,10 @@ function generateRegcode() {
     return '' + (10000000 + Math.floor(Math.random() * 89999999));
 }
 
+function generateNextRegcode(regcode) {
+    return '' + (+regcode + 1);
+}
+
 describe('Registration Codes', () => {
     const {registrationCodes, usersClient} = global.regServer;
 
@@ -63,7 +67,7 @@ describe('Registration Codes', () => {
 
         it('must add user with desired regcode and next user with next regcode', () => {
             const regcode = generateRegcode();
-            const nextRegcode = '' + (+regcode + 1);
+            const nextRegcode = generateNextRegcode(regcode);
             const newRegcodeData1 = createRegcodeData(regcode);
             const newRegcodeData2 = createRegcodeData(nextRegcode);
             return registrationCodes.createRegcodeAsync(newRegcodeData1.regcode, newRegcodeData1.language, newRegcodeData1.speciality, newRegcodeData1.description, newRegcodeData1.numberOfPaidSamples)
