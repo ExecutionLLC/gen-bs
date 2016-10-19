@@ -50,23 +50,22 @@ describe('Registration Codes', () => {
                 });
         });
 
+        function createUserToRegcode(regcode) {
+            const r = Math.random();
+            return {
+                regcode,
+                speciality: 'createUserToRegcode-speciality-' + r,
+                language: ('' + r).slice(-2),
+                description: 'createUserToRegcode-description-' + r,
+                numberOfPaidSamples: Math.floor(r * 10) + 1
+            };
+        }
+
         it('must add user with desired regcode and next user with next regcode', () => {
             const regcode = '' + (10000000 + Math.floor(Math.random() * 89999999));
             const nextRegcode = '' + (+regcode + 1);
-            const newUser1 = {
-                regcode,
-                speciality: 'speciality1',
-                language: 'en',
-                description: 'description1',
-                numberOfPaidSamples: 4
-            };
-            const newUser2 = {
-                regcode: nextRegcode,
-                speciality: 'speciality2',
-                language: 'ru',
-                description: 'description2',
-                numberOfPaidSamples: 5
-            };
+            const newUser1 = createUserToRegcode(regcode);
+            const newUser2 = createUserToRegcode(nextRegcode);
             return registrationCodes.createRegcodeAsync(newUser1.regcode, newUser1.language, newUser1.speciality, newUser1.description, newUser1.numberOfPaidSamples)
                 .then((createdUser) => {
                     assert.deepEqual(createdUser, Object.assign({}, newUser1, {id: createdUser.id, isActivated: false}));
