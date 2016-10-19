@@ -65,3 +65,5 @@ exports.up = function (knex, Promise) {
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+exports.addModel = addModel;
