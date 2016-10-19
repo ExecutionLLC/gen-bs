@@ -23,9 +23,9 @@ describe('Registration Codes', () => {
         return `a${Uuid.v4()}@example.com`;
     }
 
-    function generateCodeIdAsync() {
+    function generateCodeAsync() {
         return registrationCodes.createManyRegcodeAsync(1, null, 'en', 'speciality', 'description', 10)
-            .then((ids) => ids[0].id)
+            .then((ids) => ids[0])
     }
 
     describe('Positive tests', () => {
@@ -37,14 +37,14 @@ describe('Registration Codes', () => {
                     return regcodeUsers;
                 })
                 .then((regcodeUsers) =>
-                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser.id)))
+                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser)))
                 )
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
         );
 
         it('activates successfully', () => {
-            return generateCodeIdAsync()
-                .then((id) => registrationCodes.activateAsync(id))
+            return generateCodeAsync()
+                .then((user) => registrationCodes.activateAsync(user))
                 .catch((error) => {
                     assert.fail(`Activation failed: ${error}`);
                 });
@@ -109,11 +109,11 @@ describe('Registration Codes', () => {
 
     describe('Negative tests', () => {
         it('activates only once', () => {
-            return generateCodeIdAsync()
-                .then((id) =>
-                    registrationCodes.activateAsync(id)
+            return generateCodeAsync()
+                .then((user) =>
+                    registrationCodes.activateAsync(user)
                         .then(() => mustThrowPromise(
-                            registrationCodes.activateAsync(id),
+                            registrationCodes.activateAsync(user),
                             'Activated the same code twice for different emails'
                         ))
                 );
