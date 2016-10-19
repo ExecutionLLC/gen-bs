@@ -32,6 +32,7 @@ const ENTITY_TYPES = createEnum({
 
 const sampleDir = '20161005115436_default-samples-update';
 const defaultSampleName = "Patient's VCF File";
+const defaultsDir = path.join(__dirname, sampleDir);
 
 function deleteOldDefaultSamples(knex) {
     console.log('==> Deleting old default samples...');
@@ -51,8 +52,7 @@ function makeDefaultSample(knex, sampleName) {
         });
 }
 
-function addNewSamplesToDatabase(knex) {
-    const defaultsDir = path.join(__dirname, sampleDir);
+function addNewSamplesToDatabase(knex, defaultsDir) {
     return Promise.fromCallback((callback) => FsUtils.getAllFiles(defaultsDir, '.json', callback))
         .mapSeries((file)=>createSampleFromFile(knex, file));
 }
@@ -258,7 +258,7 @@ exports.up = function (knex) {
     // Mark old default samples as deleted.
     return deleteOldDefaultSamples(knex)
     // Add metadata for new default samples.
-        .then(() => addNewSamplesToDatabase(knex))
+        .then(() => addNewSamplesToDatabase(knex, defaultsDir))
         .then(() => makeDefaultSample(knex, defaultSampleName));
 };
 
@@ -266,3 +266,4 @@ exports.down = function () {
     throw new Error('Not implemented');
 };
 
+exports.addNewSamplesToDatabase = addNewSamplesToDatabase;
