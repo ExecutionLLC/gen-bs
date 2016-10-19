@@ -72,13 +72,13 @@ describe('Registration Codes', () => {
             const newRegcodeData2 = createRegcodeData(nextRegcode);
             return registrationCodes.createRegcodeAsync(newRegcodeData1.regcode, newRegcodeData1.language, newRegcodeData1.speciality, newRegcodeData1.description, newRegcodeData1.numberOfPaidSamples)
                 .then((createdRegcodeData1) => {
-                    assert.deepEqual(createdRegcodeData1, Object.assign({}, newRegcodeData1, {id: createdRegcodeData1.id, isActivated: false}));
+                    assert.deepStrictEqual(createdRegcodeData1, Object.assign({}, newRegcodeData1, {id: createdRegcodeData1.id, isActivated: false}));
                 })
                 .then(() =>
                     registrationCodes.createRegcodeAsync(regcode, newRegcodeData2.language, newRegcodeData2.speciality, newRegcodeData2.description, newRegcodeData2.numberOfPaidSamples)
                 )
                 .then((createdRegcodeData2) => {
-                    assert.deepEqual(createdRegcodeData2, Object.assign({}, newRegcodeData2, {id: createdRegcodeData2.id, isActivated: false}));
+                    assert.deepStrictEqual(createdRegcodeData2, Object.assign({}, newRegcodeData2, {id: createdRegcodeData2.id, isActivated: false}));
                 });
         });
 
@@ -92,16 +92,26 @@ describe('Registration Codes', () => {
                 .then(({regcodeId, regcode}) =>
                     registrationCodes.findRegcodeAsync(regcode)
                         .then((foundRegcode) => {
-                            assert.equal(foundRegcode.id, regcodeId);
-                            assert.equal(foundRegcode.regcode, regcode);
+                            assert.deepStrictEqual(
+                                Object.assign({}, newRegcodeData, {id: regcodeId, isActivated: false}),
+                                {
+                                    id: foundRegcode.id,
+                                    regcode: foundRegcode.regcode,
+                                    isActivated: foundRegcode.isActivated,
+                                    description: foundRegcode.description,
+                                    language: foundRegcode.language,
+                                    numberOfPaidSamples: foundRegcode.numberOfPaidSamples,
+                                    speciality: foundRegcode.speciality
+                                }
+                            );
+                            return foundRegcode;
                         })
-                        .then(() => ({regcodeId, regcode}))
+                        .then((foundRegcode) => ({regcodeId, regcode, foundByRegcode: foundRegcode}))
                 )
-                .then(({regcodeId, regcode}) =>
+                .then(({regcodeId, regcode, foundByRegcode}) =>
                     registrationCodes.findRegcodeIdAsync(regcodeId)
                         .then((foundRegcode) => {
-                            assert.equal(foundRegcode.id, regcodeId);
-                            assert.equal(foundRegcode.regcode, regcode);
+                            assert.deepStrictEqual(foundRegcode, foundByRegcode);
                         })
                 )
         });
