@@ -50,7 +50,7 @@ describe('Registration Codes', () => {
                 });
         });
 
-        function createUserToRegcode(regcode) {
+        function createRegcodeData(regcode) {
             const r = Math.random();
             return {
                 regcode,
@@ -64,17 +64,17 @@ describe('Registration Codes', () => {
         it('must add user with desired regcode and next user with next regcode', () => {
             const regcode = generateRegcode();
             const nextRegcode = '' + (+regcode + 1);
-            const newUser1 = createUserToRegcode(regcode);
-            const newUser2 = createUserToRegcode(nextRegcode);
-            return registrationCodes.createRegcodeAsync(newUser1.regcode, newUser1.language, newUser1.speciality, newUser1.description, newUser1.numberOfPaidSamples)
-                .then((createdUser) => {
-                    assert.deepEqual(createdUser, Object.assign({}, newUser1, {id: createdUser.id, isActivated: false}));
+            const newRegcodeData1 = createRegcodeData(regcode);
+            const newRegcodeData2 = createRegcodeData(nextRegcode);
+            return registrationCodes.createRegcodeAsync(newRegcodeData1.regcode, newRegcodeData1.language, newRegcodeData1.speciality, newRegcodeData1.description, newRegcodeData1.numberOfPaidSamples)
+                .then((createdRegcodeData1) => {
+                    assert.deepEqual(createdRegcodeData1, Object.assign({}, newRegcodeData1, {id: createdRegcodeData1.id, isActivated: false}));
                 })
                 .then(() =>
-                    registrationCodes.createRegcodeAsync(regcode, newUser2.language, newUser2.speciality, newUser2.description, newUser2.numberOfPaidSamples)
+                    registrationCodes.createRegcodeAsync(regcode, newRegcodeData2.language, newRegcodeData2.speciality, newRegcodeData2.description, newRegcodeData2.numberOfPaidSamples)
                 )
-                .then((createdUser) => {
-                    assert.deepEqual(createdUser, Object.assign({}, newUser2, {id: createdUser.id, isActivated: false}));
+                .then((createdRegcodeData2) => {
+                    assert.deepEqual(createdRegcodeData2, Object.assign({}, newRegcodeData2, {id: createdRegcodeData2.id, isActivated: false}));
                 });
         });
 
