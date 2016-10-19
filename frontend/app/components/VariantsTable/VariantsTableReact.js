@@ -72,7 +72,7 @@ class VariantsTableReact extends Component {
             this.variantsTableRows = el;
         }
         const {scrollTarget} = this.state;
-        if (scrollTarget != null && scrollTarget.scrollLeft != scrollTarget) {
+        if (scrollTarget != null && el.scrollLeft != scrollTarget) {
             el.scrollLeft = scrollTarget;
         }
     }
