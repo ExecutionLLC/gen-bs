@@ -14,7 +14,6 @@ class VariantsTableReact extends Component {
 
     constructor(props) {
         super(props);
-        this.scrollTarget = null;
         this.state = {
             scrollTarget: null
         };
@@ -65,6 +64,7 @@ class VariantsTableReact extends Component {
     }
 
     onAppear(isHeader, ref) {
+        // fix scroll position after the element is disappeared (ex. after empty results)
         const el = ReactDOM.findDOMNode(ref);
         if (isHeader) {
             this.variantsTableHead = el;
@@ -72,25 +72,22 @@ class VariantsTableReact extends Component {
             this.variantsTableRows = el;
         }
         const {scrollTarget} = this.state;
-        el.scrollLeft = scrollTarget;
+        if (scrollTarget != null && el.scrollLeft != scrollTarget) {
+            el.scrollLeft = scrollTarget;
+        }
     }
 
     elementXScrollListener(scrollLeft, isHeader) {
+        // sync scroll position in body and header.
         const {scrollTarget} = this.state;
-        // ignore if we want to scroll to already desired place
+        // do nothing if we already there
         if (scrollTarget !== null && scrollLeft == scrollTarget) {
             return;
         }
         const otherDOMNode = isHeader ? this.variantsTableRows : this.variantsTableHead;
-        if (otherDOMNode) {
-            // we should move header manually, because "position" attribute of element is "fixed"
-            if (otherDOMNode.scrollLeft == scrollLeft) {
-                // destination point reached - get ready to scroll again
-                this.setState({scrollTarget: null});
-            } else {
-                this.setState({scrollTarget: scrollLeft});
-                otherDOMNode.scrollLeft = scrollLeft;
-            }
+        if (otherDOMNode && otherDOMNode.scrollLeft != scrollLeft) {
+            this.setState({scrollTarget: scrollLeft});
+            otherDOMNode.scrollLeft = scrollLeft;
         }
     }
 }
