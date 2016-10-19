@@ -83,10 +83,10 @@ describe('Registration Codes', () => {
         });
 
         it('should add regcode and find it', () => {
-            const userRegcode = generateRegcode();
-            return registrationCodes.createRegcodeAsync(userRegcode, 'en', 'speciality', 'description', 4)
+            const newRegcodeData = createRegcodeData(generateRegcode());
+            return registrationCodes.createRegcodeAsync(newRegcodeData.regcode, newRegcodeData.language, newRegcodeData.speciality, newRegcodeData.description, newRegcodeData.numberOfPaidSamples)
                 .then((createdRegcode) => {
-                    assert.ok(createdRegcode, 'Not created user');
+                    assert.ok(createdRegcode, 'Not created regcode');
                     return {regcodeId: createdRegcode.id, regcode: createdRegcode.regcode};
                 })
                 .then(({regcodeId, regcode}) =>
