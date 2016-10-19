@@ -126,7 +126,7 @@ class RegistrationCodesModel extends ModelBase {
                     throw new Error('createRegcodeAsync fails: no valid regcode found');
                 }
                 const itemId = Uuid.v4();
-                return ChangeCaseUtil.convertKeysToSnakeCase({
+                return {
                     id: itemId,
                     regcode,
                     speciality,
@@ -134,9 +134,13 @@ class RegistrationCodesModel extends ModelBase {
                     description,
                     numberOfPaidSamples,
                     isActivated: false
-                });
+                };
             })
-            .then((item) => trx(this.baseTableName).insert(item).then(() => item))
+            .then((returnedItem) =>
+                trx(this.baseTableName)
+                    .insert(ChangeCaseUtil.convertKeysToSnakeCase(returnedItem))
+                    .then(() => returnedItem)
+            );
     }
 
     createManyRegcodeAsync(count, startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
