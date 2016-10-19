@@ -62,7 +62,7 @@ describe('Registration Codes', () => {
         }
 
         it('must add user with desired regcode and next user with next regcode', () => {
-            const regcode = '' + (10000000 + Math.floor(Math.random() * 89999999));
+            const regcode = generateRegcode();
             const nextRegcode = '' + (+regcode + 1);
             const newUser1 = createUserToRegcode(regcode);
             const newUser2 = createUserToRegcode(nextRegcode);
