@@ -197,7 +197,10 @@ class UserModel extends RemovableModelBase {
         }
 
         if (emailOrNull) {
-            query = query.andWhere('user.email', emailOrNull);
+            const email = ('' + emailOrNull)
+                .toLocaleLowerCase()
+                .trim();
+            query = query.andWhere('user.email', email);
         }
 
         if (passwordOrNull) {

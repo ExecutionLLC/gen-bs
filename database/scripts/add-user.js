@@ -7,10 +7,15 @@ const ServicesFacade = require('../../services/ServicesFacade');
 
 const Config = require('../../utils/Config');
 const Logger = require('../../utils/Logger');
+const PasswordUtils = require('../../utils/PasswordUtils');
 
 const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
+
+if ((typeof args.password !== 'string' && typeof args.password !== 'number') || !args.password) {
+    throw new Error('Password must be a string');
+}
 
 if (
     args.firstName &&
@@ -34,7 +39,7 @@ if (
             gender: args.gender,
             phone: args.phone,
             loginType: args.loginType,
-            password: args.password,
+            password: PasswordUtils.hash('' + args.password),
             company: args.company
         },
         (error, user) => {
@@ -49,7 +54,7 @@ if (
 } else {
     console.error('Usage: -- --firstName "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
         + '--defaultLanguage "en" --numberPaidSamples N --email "email@gmail.com" --gender "Male|Female" '
-        + '--phone "phoneNumber" --company "companyName --loginType "password|google" --password "password"');
+        + '--phone "phoneNumber" --company "companyName" --loginType "password|google" --password "password"');
     console.error('Note the "--" before all params, it is required.');
     process.exit(1);
 }

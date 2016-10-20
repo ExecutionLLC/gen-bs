@@ -1,9 +1,11 @@
 'use strict';
 
+const Promise = require('bluebird');
+const _ = require('lodash');
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
-const {ENTITY_TYPES} = require('../utils/Enums');
+const {ENTITY_TYPES, LOGIN_TYPES} = require('../utils/Enums');
 const PasswordUtils = require('../utils/PasswordUtils');
 
 const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
@@ -38,12 +40,15 @@ class UserService extends ServiceBase {
      * @param {function} callback (error, userId)
      * */
     add(defaultLanguId, user, callback) {
-        this.models.users.add(user, defaultLanguId, callback);
+        this._prepareUserAsync(user)
+            .then((user) => this._validateNewUserAsync(user))
+            .then((user) => this.models.users.add(user, defaultLanguId, callback));
     }
 
-    findIdByLoginPassword(login, password, callback) {
+    findIdByEmailPassword(email, password, callback) {
+        const fixedEmail = this._prepareEmail(email);
         const passwordHash = PasswordUtils.hash(password || '');
-        this.models.users.findIdByEmailPassword(login, passwordHash, callback);
+        this.models.users.findIdByEmailPassword(fixedEmail, passwordHash, callback);
     }
 
     /**
@@ -108,6 +113,37 @@ class UserService extends ServiceBase {
                 }
             }
         ], callback);
+    }
+
+    _validateNewUserAsync(user) {
+        return Promise.resolve().then(() => {
+            if (!user) {
+                throw new Error('User is undefined');
+            }
+            if (!user.email) {
+                throw new Error('Email is undefined');
+            }
+            if (!_.includes(LOGIN_TYPES.allValues, user.loginType)) {
+                throw new Error('Unknown login type');
+            }
+            if (user.loginType === LOGIN_TYPES.PASSWORD && !user.password) {
+                throw new Error('Password cannot be empty');
+            }
+            return user;
+        });
+    }
+
+    _prepareUserAsync(user) {
+        return Promise.resolve().then(() => {
+            return Object.assign({}, user, {
+                email: this._prepareEmail(user.email)
+            });
+        })
+    }
+
+    _prepareEmail(email) {
+        return (email + '').trim()
+            .toLocaleLowerCase();
     }
 }
 

@@ -41,7 +41,7 @@ class SessionsController extends ControllerBase {
             (callback) => {
                 if (body && body.login) {
                     const {login, password} = body;
-                    this.sessions.startForLoginPassword(session, login, password, callback);
+                    this.sessions.startForEmailPassword(session, login, password, callback);
                 } else {
                     this.sessions.startDemo(session, callback)
                 }
