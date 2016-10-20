@@ -41,21 +41,19 @@ class UserService extends ServiceBase {
      * */
     add(defaultLanguId, user, callback) {
         async.waterfall([
-            (callback) => this._validateNewUserAsync(user)
+            (callback) => this._prepareUserAsync(user).asCallback(callback),
+            (user, callback) => this._validateNewUserAsync(user)
                 .asCallback(callback),
-            (callback) => {
-                const fixedUser = Object.assign({}, user, {
-                    email: user.email.toLocaleLowerCase()
-                });
-                this.models.users.add(fixedUser, defaultLanguId, callback);
+            (user, callback) => {
+                this.models.users.add(user, defaultLanguId, callback);
             }
         ], callback);
     }
 
-    findIdByLoginPassword(login, password, callback) {
-        const fixedLogin = (login || '').toLocaleLowerCase();
+    findIdByEmailPassword(email, password, callback) {
+        const fixedEmail = this._prepareEmail(email);
         const passwordHash = PasswordUtils.hash(password || '');
-        this.models.users.findIdByEmailPassword(fixedLogin, passwordHash, callback);
+        this.models.users.findIdByEmailPassword(fixedEmail, passwordHash, callback);
     }
 
     /**
@@ -136,7 +134,21 @@ class UserService extends ServiceBase {
             if (user.loginType === LOGIN_TYPES.PASSWORD && !user.password) {
                 throw new Error('Password cannot be empty');
             }
+            return user;
         });
+    }
+
+    _prepareUserAsync(user) {
+        return Promise.resolve().then(() => {
+            return Object.assign({}, user, {
+                email: this._prepareEmail(user.email)
+            });
+        })
+    }
+
+    _prepareEmail(email) {
+        return (email + '').trim()
+            .toLocaleLowerCase();
     }
 }
 
