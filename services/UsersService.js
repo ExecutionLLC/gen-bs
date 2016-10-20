@@ -40,14 +40,9 @@ class UserService extends ServiceBase {
      * @param {function} callback (error, userId)
      * */
     add(defaultLanguId, user, callback) {
-        async.waterfall([
-            (callback) => this._prepareUserAsync(user).asCallback(callback),
-            (user, callback) => this._validateNewUserAsync(user)
-                .asCallback(callback),
-            (user, callback) => {
-                this.models.users.add(user, defaultLanguId, callback);
-            }
-        ], callback);
+        this._prepareUserAsync(user)
+            .then((user) => this._validateNewUserAsync(user))
+            .then((user) => this.models.users.add(user, defaultLanguId, callback));
     }
 
     findIdByEmailPassword(email, password, callback) {
