@@ -413,7 +413,9 @@ const ELEMENT_ID = {
     passwordInputs: ['reg-password', 'reg-re-password'],
     registerFailMessage: 'register-fail-message',
     acceptDisclaimer: 'accept-disclaimer',
-    applicationLink: 'reg-application-link'
+    applicationLink: 'reg-application-link',
+    registerOkMail: 'register-ok-mail',
+    registerFail: 'register-fail'
 };
 
 const USER_INFO_SCHEME = [
@@ -466,6 +468,15 @@ const DOMUtils = {
             el.setAttribute('type', 'button');
         }
         el.addEventListener('click', function() { handler(); });
+    },
+    ensureVisible: function(el) {
+        if (el.scrollIntoViewIfNeeded) {
+            el.scrollIntoViewIfNeeded(false);
+        } else {
+            if (el.scrollIntoView) {
+                el.scrollIntoView(false);
+            }
+        }
     }
 };
 
@@ -847,6 +858,18 @@ function switchPageState(ops) {
     if (ops.register != null) {
         toggleClass(document.body, 'register-ok-mail', !!ops.register.mail);
         toggleClass(document.body, 'register-fail', !!ops.register.fail);
+        if (ops.register.mail) {
+            const registerOkMailEl = document.getElementById(ELEMENT_ID.registerOkMail);
+            if (registerOkMailEl) {
+                DOMUtils.ensureVisible(registerOkMailEl);
+            }
+        }
+        if (ops.register.fail) {
+            const registerFailEl = document.getElementById(ELEMENT_ID.registerFail);
+            if (registerFailEl) {
+                DOMUtils.ensureVisible(registerFailEl);
+            }
+        }
     }
     if (ops.validRegcode != null) {
         toggleClass(document.body, 'valid-regcode', ops.validRegcode);
