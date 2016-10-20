@@ -110,7 +110,6 @@ function reduceSetCurrentSampleId(state, action) {
 }
 
 function reduceSetCurrentSampleSearch(state, action) {
-    debugger;
     return {
         ...state,
         search: action.search

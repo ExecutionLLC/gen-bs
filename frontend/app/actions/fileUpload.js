@@ -1,8 +1,8 @@
 import config from '../../config';
-import {closeModal} from './modalWindows';
 import {fetchSamplesAsync} from './samplesList';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
+import Promise from 'bluebird';
 
 /*
  * action types
@@ -179,7 +179,6 @@ export function changeFileUploadProgress(progressValue, progressStatus, id) {
         if (progressStatus === 'ready') {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
-            dispatch(closeModal('upload'));
             dispatch(fetchSamplesAsync());
         }
     };
@@ -205,26 +204,33 @@ export function fileUploadErrorForOperationId(error, operationId) {
 
 export function addFilesForUpload(files) {
     return (dispatch) => {
-        dispatch(clearUploadState());
-        const filesWithIds = files.map((file) => ({id: idCounter++, file}));
-        dispatch(addNoGZippedForUpload(filesWithIds));
-        filesWithIds.forEach((fileWithId) => {
-            ensureGzippedFile(
-                fileWithId.file,
-                () => {
-                    dispatch(requestGzip(fileWithId.id));
-                },
-                (gzippedFile) => {
-                    dispatch(addGZippedFileForUpload(gzippedFile, fileWithId.id));
-                    if (gzippedFile !== fileWithId.file) {
-                        dispatch(receiveGzip(fileWithId.id));
+        return new Promise((resolve, reject) => {
+            dispatch(clearUploadState());
+            const filesWithIds = files.map((file) => ({id: idCounter++, file}));
+            dispatch(addNoGZippedForUpload(filesWithIds));
+            filesWithIds.forEach((fileWithId) => {
+                ensureGzippedFile(
+                    fileWithId.file,
+                    () => {
+                        dispatch(requestGzip(fileWithId.id));
+                    },
+                    (gzippedFile) => {
+                        dispatch(addGZippedFileForUpload(gzippedFile, fileWithId.id));
+                        if (gzippedFile !== fileWithId.file) {
+                            dispatch(receiveGzip(fileWithId.id));
+                        }
+                        resolve();
+                    },
+                    (message) => {
+                        console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
+                        dispatch(fileUploadError(fileWithId.id, {
+                            code: null,
+                            message
+                        }));
+                        reject(message);
                     }
-                },
-                (message) => {
-                    console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
-                    dispatch(fileUploadError(fileWithId.id, {code: null, message}));
-                }
-            );
+                );
+            });
         });
     };
 }

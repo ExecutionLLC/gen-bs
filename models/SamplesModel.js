@@ -16,7 +16,8 @@ const mappedColumns = [
     'type',
     'isAnalyzed',
     'isDeleted',
-    'values'
+    'values',
+    'timestamp'
 ];
 
 const SampleTableNames = {

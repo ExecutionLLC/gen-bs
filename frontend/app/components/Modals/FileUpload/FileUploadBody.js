@@ -5,42 +5,46 @@ import FileUploadSampleRightPane from './FileUploadSampleRightPane';
 
 export default class FileUploadBody extends React.Component {
 
+    constructor(...args) {
+        super(...args);
+        this.state = {showValues: false};
+    }
+
     render() {
         const {
             dispatch, fileUpload, editableFieldsList, samplesList,
-            sampleSearch, currentSampleId, auth, closeModal
+            sampleSearch, currentSampleId, auth, closeModal, editedSamplesHash
         } = this.props;
-        const {hashedArray:{hash}} = samplesList;
-        const selectedSample = currentSampleId? hash[currentSampleId]:null;
-        debugger;
         return (
             <Modal.Body>
                 <div className='split-layout'>
-                    <div className='split-left'>
-                            <FileUploadLeftPane
-                                dispatch={dispatch}
-                                fileUpload={fileUpload}
-                                samplesList={samplesList}
-                                sampleSearch={sampleSearch}
-                                currentSampleId={currentSampleId}
-                            />
-                    </div>
-                    <div className='split-right tab-content'>
-                        <div className='split-wrap tab-pane active'>
-                            <FileUploadSampleRightPane
-                                dispatch={dispatch}
-                                selectedSample={selectedSample}
-                                samplesList={samplesList}
-                                auth={auth}
-                                fields={editableFieldsList}
-                                disabled={!!currentSampleId}
-                                closeModal={closeModal}
-                                fileUpload={fileUpload}
-                            />
-                        </div>
-                    </div>
+                    <FileUploadLeftPane
+                        dispatch={dispatch}
+                        fileUpload={fileUpload}
+                        samplesList={samplesList}
+                        sampleSearch={sampleSearch}
+                        currentSampleId={currentSampleId}
+                        changeShowValues={(e) => this.setShowValuesState(e)}
+                    />
+                    <FileUploadSampleRightPane
+                        dispatch={dispatch}
+                        currentSampleId={currentSampleId}
+                        samplesHash={editedSamplesHash}
+                        auth={auth}
+                        fields={editableFieldsList}
+                        closeModal={closeModal}
+                        fileUpload={fileUpload}
+                        edited={this.state.showValues}
+                        changeShowValues={(e) => this.setShowValuesState(e)}
+                    />
                 </div>
             </Modal.Body>
         );
+    }
+
+    setShowValuesState(showValues) {
+        this.setState({
+            showValues
+        });
     }
 }

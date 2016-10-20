@@ -1,13 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
+import {formatDate} from './../../../utils/dateUtil';
 
 export default class FileUploadSampleList extends React.Component {
     render() {
         const {sampleList, currentSampleId} = this.props;
         return (
-            <div className='split-scroll' >
-                <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {this.renderNewListItem(currentSampleId ===null)},
+            <div className='split-scroll'>
+                <ul id='analysisTabs'
+                    className='nav nav-componentes nav-controls nav-radios nav-with-right-menu'>
+                    {this.renderNewListItem(currentSampleId === null)}
                     {sampleList.map((sampleItem) => this.renderListItem(sampleItem.id === currentSampleId, sampleItem))}
                 </ul>
             </div>
@@ -26,7 +28,7 @@ export default class FileUploadSampleList extends React.Component {
                     onClick={() => this.onSampleNewItem()}
                 >
                     <label className='radio'>
-                        <input type='radio' name='viewsRadios' />
+                        <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
                     <span className='link-label'>
@@ -40,7 +42,7 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderListItem(isActive,sampleItem) {
+    renderListItem(isActive, sampleItem) {
         return (
             <li
                 key={sampleItem.id}
@@ -53,7 +55,7 @@ export default class FileUploadSampleList extends React.Component {
                     onClick={() => this.onSampleItemClick(sampleItem.id)}
                 >
                     <label className='radio'>
-                        <input type='radio' name='viewsRadios' />
+                        <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
                     <span className='link-label'>
@@ -63,9 +65,7 @@ export default class FileUploadSampleList extends React.Component {
                         Test Description
                     </span>
                     <span className='small link-desc'>
-                        <span data-localize='samples.sample_date'>
-                            Uploaded
-                        </span>: Some Date
+                            Uploaded: {formatDate(sampleItem.timestamp)}
                     </span>
                 </a>
             </li>

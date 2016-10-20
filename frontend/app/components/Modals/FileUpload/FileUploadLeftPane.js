@@ -7,20 +7,19 @@ import {
     setCurrentSampleSearch
 } from '../../../actions/samplesList';
 
-export default class FileUploadLeftPane extends  React.Component {
+export default class FileUploadLeftPane extends React.Component {
 
     render() {
         const {
-            dispatch, fileUpload, samplesList, sampleSearch, currentSampleId
+            samplesList, sampleSearch, currentSampleId
         } = this.props;
         const {hashedArray: {array: samplesArray}} = samplesList;
         const searchWord = sampleSearch.toLowerCase();
         const filteredSamples = searchWord ?
             samplesArray.filter((sample) => sample.fileName.toLocaleLowerCase().indexOf(searchWord) >= 0) :
             samplesArray;
-        debugger;
         return (
-            <div>
+            <div className='split-left'>
                 <FileUploadSampleSearch
                     search={sampleSearch}
                     onSearch={(str) => this.onSampleSearchChange(str)}
@@ -38,7 +37,8 @@ export default class FileUploadLeftPane extends  React.Component {
         this.props.dispatch(setCurrentSampleSearch(str));
     }
 
-    onCurrentSampleIdChange(id){
+    onCurrentSampleIdChange(id) {
+        this.props.changeShowValues(false);
         this.props.dispatch(setCurrentSampleId(id));
     }
 }

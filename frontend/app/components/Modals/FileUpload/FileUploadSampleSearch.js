@@ -14,7 +14,6 @@ export default class FileUploadSampleSearch extends React.Component {
                                 type='text'
                                 value={search}
                                 className='form-control material-input-sm'
-                                placeholder='Search for analyses name or description'
                                 onChange={(e) => onSearch(e.target.value)}
                             />
                         </div>

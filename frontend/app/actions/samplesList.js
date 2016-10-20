@@ -31,14 +31,14 @@ export function setCurrentSampleId(sampleId){
     return {
         type:SET_CURRENT_SAMPLE_ID,
         sampleId
-    }
+    };
 }
 
 export function setCurrentSampleSearch(search){
     return {
         type:SET_CURRENT_SAMPLE_SEARCH,
         search
-    }
+    };
 }
 
 export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
@@ -116,7 +116,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             if (selectedSampleId === sampleId) {
                 dispatch(sampleSaveCurrent(updatedSample.id));
             }
-            return updatedSample.id;
+            return updatedSample;
         });
     };
 }
