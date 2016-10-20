@@ -13,6 +13,10 @@ const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 
+if ((typeof args.password !== 'string' && typeof args.password !== 'number') || !args.password) {
+    throw new Error('Password must be a string');
+}
+
 if (
     args.firstName &&
     args.lastName &&
