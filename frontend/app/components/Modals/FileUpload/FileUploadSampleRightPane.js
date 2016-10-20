@@ -13,7 +13,7 @@ import {formatDate} from './../../../utils/dateUtil';
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {currentSampleId, samplesHash} = this.props;
+        const {currentSampleId, samplesHash, auth:{isDemo}} = this.props;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         return (
             <div className={classNames({'split-right': true})}>
@@ -26,7 +26,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 {this.renderSampleContent(selectedSample)}
                             </div>
                             :
-                            this.renderUpload(selectedSample)
+                            this.renderUpload(isDemo)
                         }
                     </div>
                 </div>
@@ -34,13 +34,13 @@ export default class FileUploadSampleRightPane extends React.Component {
         );
     }
 
-    renderUpload() {
+    renderUpload(isDemo) {
         return (
             <div className='form-horizontal form-padding'>
                 <div className='empty empty-upload collapse sample-mode1 in'>
                     <div className='btn-group btn-group-xlg'>
-                        <button className='btn btn-link-default'
-                                onClick={this.onUploadClick.bind(this)}
+                        {!isDemo && <button className='btn btn-link-default'
+                                 onClick={this.onUploadClick.bind(this)}
                         >
                             <input
                                 onChange={ (e) => this.onUploadChanged(e.target.files)}
@@ -55,7 +55,9 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 className='text-underline'>click here</span> to
                                 select</h3>
                         </button>
-
+                        }
+                        {isDemo && <h3><i className='md-i'>perm_identity</i>Please login or register to upload new samples</h3>
+                        }
                     </div>
                 </div>
             </div>
