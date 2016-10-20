@@ -642,7 +642,9 @@ const checkServerRegcode = debounce(function() {
 
 function checkRegcode(regcode) {
     currentUser.regcode = regcode;
-    if (currentUser.regcode.length === 8) {
+    if (!currentUser.regcode) {
+        switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true, loading: false});
+    } else if (currentUser.regcode.length === 8) {
         checkServerRegcode()
     }
 }
