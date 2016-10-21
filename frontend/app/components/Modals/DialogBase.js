@@ -13,6 +13,10 @@ export default class DialogBase extends ComponentBase {
         return [];
     }
 
+    getModalClassNames() {
+        return [];
+    }
+
     renderTitleContents() {
         return (
             <div>Sample Dialog Title</div>
@@ -69,7 +73,7 @@ export default class DialogBase extends ComponentBase {
 
     render() {
         return (
-            <Modal dialogClassName='modal-dialog-primary'
+            <Modal dialogClassName={classnames(['modal-dialog-primary', ...this.getModalClassNames()])}
                    bsSize='lg'
                    show={this.props.showModal}
                    onHide={ () => {this.onCloseModal();} }

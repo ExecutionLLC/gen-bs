@@ -1,0 +1,105 @@
+{
+  "name": "Autosomal recessive inherited, parents unaffected",
+  "description": "Assuming homozygous variants are sequencing errors",
+  "type": "standard",
+  "modelType": "filter",
+  "analysisType": "family",
+  "rules": {
+    "condition": "$and",
+    "rules": [
+      {
+        "operator": "$contains",
+        "value": "Homozygous",
+        "field": {
+          "name": "GT_GT_Zygosity",
+          "value_type": "string",
+          "dimension": 1
+        },
+        "sample_type": "proband"
+      },
+      {
+        "condition": "$or",
+        "rules": [
+          {
+            "condition": "$and",
+            "rules": [
+              {
+                "operator": "$contains",
+                "value": "Heterozygous",
+                "field": {
+                  "name": "GT_GT_Zygosity",
+                  "value_type": "string",
+                  "dimension": 1
+                },
+                "sample_type": "mother"
+              }
+            ]
+          },
+          {
+            "condition": "$and",
+            "rules": [
+              {
+                "operator": "$lte",
+                "value": 5,
+                "field": {
+                  "name": "GT_DP",
+                  "value_type": "integer",
+                  "dimension": 1
+                },
+                "sample_type": "mother"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "condition": "$or",
+        "rules": [
+          {
+            "condition": "$and",
+            "rules": [
+              {
+                "operator": "$contains",
+                "value": "Heterozygous",
+                "field": {
+                  "name": "GT_GT_Zygosity",
+                  "value_type": "string",
+                  "dimension": 1
+                },
+                "sample_type": "father"
+              }
+            ]
+          },
+          {
+            "condition": "$and",
+            "rules": [
+              {
+                "operator": "$lte",
+                "value": 5,
+                "field": {
+                  "name": "GT_DP",
+                  "value_type": "integer",
+                  "dimension": 1
+                },
+                "sample_type": "father"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "operator": "$between",
+        "value": [
+          1,
+          22
+        ],
+        "field": {
+          "name": "CHROM",
+          "value_type": "integer",
+          "dimension": 1
+        },
+        "sample_type": "proband"
+      }
+    ]
+  }
+}

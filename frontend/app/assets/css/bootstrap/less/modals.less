@@ -144,7 +144,8 @@
       height: auto;
       z-index: 5;
   .modal-body-scroll { 
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
    -webkit-overflow-scrolling: touch;
     height: 100%;
     margin: -(@modal-inner-padding);
@@ -237,7 +238,12 @@
   }
 
   // Modal sizes
-  .modal-sm { width: @modal-sm; }
+  .modal-sm { 
+    width: @modal-sm;
+     .modal-content { 
+       max-height: 300px;
+     }  
+  }
   
 }
 .modal-lg {

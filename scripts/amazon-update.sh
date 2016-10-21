@@ -19,6 +19,10 @@ npm install > /dev/null
 echo "=> Building frontend"
 npm run build > /dev/null
 
+echo "=> Migration DB"
+cd ..
+npm run db:migrate
+
 echo "=> Current WebServer status:"
 pm2 list
 echo "=> Restarting WebServer"

@@ -363,12 +363,7 @@
 
 .navbar-text {
   .navbar-vertical-align(@line-height-computed);
-
-  @media (min-width: @grid-float-breakpoint) {
     float: left;
-    margin-left: @navbar-padding-horizontal;
-    margin-right: @navbar-padding-horizontal;
-  }
 }
 
 
@@ -864,24 +859,30 @@
     }
   }
   @media (max-width: @screen-xs-max) {
-    .navbar-search-field.navbar-search-xs {   
+    .navbar-search-field { 
+       display: none;
+    }
+    &.navbar-search-xs { 
+    .navbar-search-field {   
       background-color: @navbar-inverse-bg;
       left: 0;
       position: fixed;
       right: 0px;
       top: 0;
       z-index: 2;
-
+       display: block;
+     
      &:before { 
       font-size: 30px;
       top:8px;
      }
       .form-control { 
         padding-left: 44px;
+        padding-right: 44px;
       } 
     }
+     }
    }
-  
   @media (min-width: @screen-sm){ 
     .navbar-search-field { 
       .form-control { 
@@ -929,9 +930,9 @@
     float: none;
     line-height: 42px;
     color: @navbar-inverse-color ;
-  
+    
     sup {
-     font-size: 15px;
+    font-size: 15px;
     font-weight: bold;
     left: 0.15em;
     opacity: 0.7;
@@ -952,11 +953,61 @@
      position: relative;
      //white-space: pre;
   }
+ .dropdown-menu { 
 
+   .btn.btn-danger { 
+     color: #fff;
+    &:hover {
+       background: lighten(@btn-danger-bg, 5%)!important;
+       color: #fff;
+    }
+    &:focus {
+      background: @btn-danger-bg!important;
+      color: #fff;
+    }
+    &:active { 
+      background-color:darken(@btn-danger-bg, 5%)!important;
+      color: #fff;
+    }
+   }
+   .btn.btn-primary { 
+    color: #fff;
+    &:hover {
+       background: lighten(@btn-primary-bg, 5%)!important;
+       color: #fff;
+    }
+    &:focus {
+      background: @btn-primary-bg!important;
+      color: #fff;
+    }
+    &:active { 
+      background-color:darken(@btn-primary-bg, 5%)!important;
+      color: #fff;
+    }
+   }
+   .form-inline { 
+     padding: @padding-base-vertical  @padding-base-horizontal;
+     
+     .login-button {
+       margin-top:  @padding-large-vertical;
+     }
+     .form-control:first-child { 
+       margin-top: -@padding-large-vertical;
+     }
+   }
+   li.form-inline{
+       padding-bottom: @padding-large-vertical; 
+   }
+ } 
  .navbar-inner {
     position: relative;
     z-index: 3;
     display: table;
+      .brand { 
+        width: auto;
+        padding: 0;
+        font-size: 22px;
+      }
      .btn, 
      .dropdown-toggle  {
        white-space: nowrap;
@@ -992,12 +1043,7 @@
       &:hover { 
        color: lighten(@navbar-inverse-bg, 30%);
       }
-      &.brand { 
-        width: auto;
-        padding: 0;
-        font-size: 22px;
 
-      }
       &.btn-field-clean { 
          position: absolute;
          right: 16px;
@@ -1010,7 +1056,7 @@
          }
 
      }
-   > div { 
+    > div { 
      display: table-cell;
      vertical-align: top;
      width: 1%;
@@ -1068,13 +1114,14 @@
   @media (min-width: @screen-sm){ 
 
     .navbar-inner {
+      .brand {
+         width: 75px;
+         padding: 0 15px;
+      }
       .btn, .dropdown-toggle {
         padding-left: 12px;
         padding-right: 12px;
-        &.brand {
-         width: 75px;
-         padding: 0 15px;
-         }
+        
          .badge {
         margin-right: 0;
         right: 0;

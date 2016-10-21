@@ -1,0 +1,2 @@
+form-layout.txt - register form layout and use this form at register page
+registration-service.css - http://alapy.com/wp-admin/themes.php?page=kindlycare_options (side bar - kindly care - theme details - theme options - other - Your custom CSS code)

@@ -38,29 +38,29 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
-        const {sampleId, fieldIdToValuesHash, fields} = this.props;
+        const {sampleId, fieldIdToValuesHash, fields, disabled} = this.props;
         const visibleEditableFields = _.filter(fields, field => !field.isInvisible);
         return (
             <div className='panel-body edit-mode'>
                 <div className='flex'>
-                    {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
+                    {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash, disabled))}
                     {this.renderRowButtons()}
                 </div>
             </div>
         );
     }
 
-    renderEditableField(sampleId, field, fieldIdToValuesHash) {
+    renderEditableField(sampleId, field, fieldIdToValuesHash, disabled) {
         const fieldValue = fieldIdToValuesHash[field.id] || '';
         if (!_.isEmpty(field.availableValues)) {
-            return this.renderSelectField(sampleId, field, fieldValue);
+            return this.renderSelectField(sampleId, field, fieldValue, disabled);
         } else {
-            return this.renderTextField(sampleId, field, fieldValue);
+            return this.renderTextField(sampleId, field, fieldValue, disabled);
         }
     }
 
     renderRowButtons() {
-        const {sampleId} = this.props;
+        const {sampleId, disabled} = this.props;
         return (
           <dl className='dl-horizontal dl-btns'>
               <dd>
@@ -69,6 +69,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                           onClick={ (e) => this.onResetSampleClick(e, sampleId) }
                           type='button'
                           className='btn btn-default'
+                          disabled={disabled}
                       >
                           <span>Reset</span>
                       </button>
@@ -77,6 +78,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                           onClick={ (e) => this.onSaveEditedSampleClick(e, sampleId) }
                           type='button'
                           className='btn btn-primary'
+                          disabled={disabled}
                       >
                           <span data-localize='actions.save_select.title'>Save</span>
                       </button>
@@ -86,7 +88,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         );
     }
 
-    renderSelectField(sampleId, field, fieldValue) {
+    renderSelectField(sampleId, field, fieldValue, disabled) {
         const selectOptions = field.availableValues.map(
             option => {
                 return {value: option.id, label: option.value};
@@ -101,13 +103,14 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         options={selectOptions}
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
+                        disabled={disabled}
                     />
                 </dd>
             </dl>
         );
     }
 
-    renderTextField(sampleId, field, fieldValue) {
+    renderTextField(sampleId, field, fieldValue, disabled) {
         return (
             <dl key={field.id}>
                 <dt>{field.label}</dt>
@@ -117,6 +120,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         className='form-control'
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
+                        disabled={disabled}
                     />
                 </dd>
             </dl>
@@ -128,5 +132,6 @@ SampleEditableFieldsPanel.propTypes = {
     sampleId: PropTypes.string.isRequired,
     fieldIdToValuesHash: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
+    disabled: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired
 };
