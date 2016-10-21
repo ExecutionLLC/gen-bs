@@ -70,6 +70,13 @@ describe('Saved Files', () => {
         });
     });
 
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            done();
+        });
+    });
+
     it.skip('should correctly upload exported file', (done) => {
         const fileStream = fs.createReadStream(testFilePath);
         const fileMetadata = generateFileMetadata(sampleId);
