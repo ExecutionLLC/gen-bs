@@ -40,9 +40,21 @@ describe('Users', () => {
     }
 
     it('must add user', (done) => {
-        usersClient.add({key: Config.regserver.ADD_USER_KEY, user: makeUser()}, (err, result) => {
+        const user = makeUser();
+        usersClient.add({key: Config.regserver.ADD_USER_KEY, user}, (err, result) => {
             assert.equal(err, null);
             assert.equal(result.status, 200);
+            const addedUser = result.body;
+            assert.ok(addedUser);
+            assert.ok(addedUser.id);
+            assert.equal(typeof addedUser.id, 'string');
+            assert.deepStrictEqual(addedUser, Object.assign({}, user, {
+                id: addedUser.id,
+                password: null,
+                defaultLanguId: 'en', // language got from header...
+                language: 'en', // ... it is not expected behavior but it is for now
+                isDeleted: false
+            }));
             done();
         });
     });
