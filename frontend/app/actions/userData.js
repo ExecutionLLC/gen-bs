@@ -72,7 +72,7 @@ export function fetchUserDataAsync() {
                 totalFields,
                 savedFiles,
                 analyses,
-                uploads,
+                uploads
             } = userData;
 
             dispatch(receiveUserData(userData));

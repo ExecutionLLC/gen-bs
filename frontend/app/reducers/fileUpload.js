@@ -84,7 +84,7 @@ function reduceFilterListReceive(state, action) {
     return {
         ...state,
         filesProcesses: _.map(action.uploads, upload => {
-            const {created, error, fileName, id, progress, sampleId, status,} = upload;
+            const {created, error, fileName, id, progress, sampleId, status} = upload;
             const fileProcess = createFileProcess({
                 name: fileName
             }, id);
@@ -96,7 +96,7 @@ function reduceFilterListReceive(state, action) {
                 progressValue: progress,
                 progressStatus: status,
                 error
-            }
+            };
         })
     };
 }
@@ -176,7 +176,7 @@ function reduceReceiveFileUpload(state, action) {
 }
 
 function reduceReceiveFileOperation(state, action) {
-    const {created, error, fileName, id, progress, sampleId, status,} = action.upload;
+    const {created, error, id, progress, sampleId, status} = action.upload;
     return {
         ...state,
         filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
@@ -185,7 +185,7 @@ function reduceReceiveFileOperation(state, action) {
             created,
             error,
             progressValue: progress,
-            progressStatus: status,
+            progressStatus: status
         })
     };
 }

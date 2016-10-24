@@ -13,7 +13,7 @@ export default class FileUploadSampleList extends React.Component {
         const samplesUploadHash = _.groupBy(sampleList, 'originalId');
         return (
             <div className='split-scroll'>
-                <ul id="samplesTabs"
+                <ul id='samplesTabs'
                     className='nav nav-componentes nav-controls nav-upload-items nav-radios nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
                     {filesProcesses.map((filesProcess) => this.renderFileUpload(filesProcess, samplesUploadHash))}
@@ -63,7 +63,7 @@ export default class FileUploadSampleList extends React.Component {
                         <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
-                    <i className="icon-state md-i text-success">check_circle</i>
+                    <i className='icon-state md-i text-success'>check_circle</i>
                     <span className='link-label'>
                         {`${sample.fileName}:${sample.genotypeName}`}
                     </span>
@@ -95,7 +95,7 @@ export default class FileUploadSampleList extends React.Component {
                         <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
-                    <i className="icon-state md-i text-danger">error_outline</i>
+                    <i className='icon-state md-i text-danger'>error_outline</i>
                     <span className='link-label'>
                         {fileName}
                     </span>
@@ -117,7 +117,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderProgressBar(uploadItem) {
-        const {file:{name}, progressStatus, progressValue} = uploadItem;
+        const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
             'ajax': {
                 classNames: classNames({
@@ -149,7 +149,7 @@ export default class FileUploadSampleList extends React.Component {
                     </div>
                 </div>
                 <span className='link-desc'>
-            <span className="text-primary">Saving..</span>
+            <span className='text-primary'>Saving..</span>
             </span>
             </div>
         );
