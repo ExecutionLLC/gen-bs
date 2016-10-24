@@ -87,4 +87,17 @@ describe('Users', () => {
             done();
         });
     });
+    it('must fail at add user with existing email', (done) => {
+        const user1 = makeUser();
+        const user2 = Object.assign({}, makeUser(), {email: user1.email});
+        usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user1}, (err, result) => {
+            assert.equal(err, null);
+            assert.equal(result.status, 200);
+            usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+                assert.equal(err, null);
+                assert.equal(result.status, 500);
+                done();
+            });
+        });
+    });
 });
