@@ -17,7 +17,7 @@ export default class FileUploadBody extends React.Component {
         } = this.props;
         return (
             <Modal.Body>
-                <div className='split-layout'>
+                <div id='samplesLayout' className='split-layout'>
                     <FileUploadLeftPane
                         dispatch={dispatch}
                         fileUpload={fileUpload}

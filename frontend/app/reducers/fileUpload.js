@@ -1,7 +1,9 @@
 import * as ActionTypes from '../actions/fileUpload';
+import _ from 'lodash';
 
 const initialState = {
-    filesProcesses: []
+    filesProcesses: [],
+    currentUploadId: null
 };
 
 /**
@@ -69,6 +71,8 @@ function createFileProcess(file, id) {
         operationId: null,
         isUploading: false,
         file: file,
+        sampleId: null,
+        created: null,
         error: null,
         isArchived: false,
         isArchiving: false,
@@ -76,6 +80,26 @@ function createFileProcess(file, id) {
     };
 }
 
+function reduceFilterListReceive(state, action) {
+    return {
+        ...state,
+        filesProcesses: _.map(action.uploads, upload => {
+            const {created, error, fileName, id, progress, sampleId, status,} = upload;
+            const fileProcess = createFileProcess({
+                name: fileName
+            }, id);
+            return {
+                ...fileProcess,
+                created,
+                operationId: id,
+                sampleId,
+                progressValue: progress,
+                progressStatus: status,
+                error
+            }
+        })
+    };
+}
 
 function reduceClearUploadState() {
     return {
@@ -106,7 +130,8 @@ function reduceFileUploadError(state, action) {
     return {
         ...state,
         filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-            error: action.error
+            error: action.error,
+            progressStatus: 'error'
         })
     };
 }
@@ -151,10 +176,16 @@ function reduceReceiveFileUpload(state, action) {
 }
 
 function reduceReceiveFileOperation(state, action) {
+    const {created, error, fileName, id, progress, sampleId, status,} = action.upload;
     return {
         ...state,
         filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-            operationId: action.operationId
+            operationId: id,
+            sampleId,
+            created,
+            error,
+            progressValue: progress,
+            progressStatus: status,
         })
     };
 }
@@ -166,6 +197,13 @@ function reduceFileUploadChangeProgress(state, action) {
             progressValue: action.progressValue,
             progressStatus: action.progressStatus
         })
+    };
+}
+
+function setUploadId(state, action) {
+    return {
+        ...state,
+        currentUploadId: action.uploadId
     };
 }
 
@@ -202,6 +240,12 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS:
             return reduceFileUploadChangeProgress(state, action);
+
+        case ActionTypes.UPLOADS_LIST_RECEIVE:
+            return reduceFilterListReceive(state, action);
+
+        case ActionTypes.SET_CURRENT_UPLOAD_ID:
+            return setUploadId(state, action);
 
         default:
             return state;

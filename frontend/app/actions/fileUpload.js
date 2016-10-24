@@ -17,8 +17,32 @@ export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
 export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
+export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
+export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
+export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
 
 let idCounter = 0;
+
+export function uploadsListReceive(uploads) {
+    return {
+        type: UPLOADS_LIST_RECEIVE,
+        uploads
+    };
+}
+
+export function filtersListAddFilter(upload) {
+    return {
+        type: UPLOADS_LIST_ADD_UPLOAD,
+        upload
+    };
+}
+
+export function setCurrentUploadId(uploadId){
+    return {
+        type:SET_CURRENT_UPLOAD_ID,
+        uploadId
+    };
+}
 
 /*
  * action creators
@@ -90,10 +114,10 @@ function receiveFileUpload(id) {
     };
 }
 
-function receiveFileOperation(operationId, id) {
+function receiveFileOperation(upload, id) {
     return {
         type: RECEIVE_FILE_OPERATION,
-        operationId,
+        upload,
         id
     };
 }
@@ -122,7 +146,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
         }
     })
         .done(json => {
-            onOperationId(json.operationId);
+            onOperationId(json.upload);
         })
         .fail(err => {
             onError(err);
@@ -147,7 +171,7 @@ function findFileProcessForOperationId(state, operationId) {
 export function uploadFile() {
     return (dispatch, getState) => {
         getState().fileUpload.filesProcesses.forEach((fp) => {
-            if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving) {
+            if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving || fp.operationId) {
                 return;
             }
             dispatch(requestFileUpload(fp.id));
@@ -205,7 +229,6 @@ export function fileUploadErrorForOperationId(error, operationId) {
 export function addFilesForUpload(files) {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            dispatch(clearUploadState());
             const filesWithIds = files.map((file) => ({id: idCounter++, file}));
             dispatch(addNoGZippedForUpload(filesWithIds));
             filesWithIds.forEach((fileWithId) => {

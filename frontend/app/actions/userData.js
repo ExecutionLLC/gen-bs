@@ -21,6 +21,7 @@ import {
 } from './modelsList';
 import {getDefaultOrStandardItem} from '../utils/entityTypes';
 import {analyze} from './ui';
+import {uploadsListReceive} from './fileUpload';
 
 /*
  * action types
@@ -70,7 +71,8 @@ export function fetchUserDataAsync() {
                 models,
                 totalFields,
                 savedFiles,
-                analyses
+                analyses,
+                uploads,
             } = userData;
 
             dispatch(receiveUserData(userData));
@@ -82,6 +84,7 @@ export function fetchUserDataAsync() {
             dispatch(receiveTotalFields(totalFields));
             dispatch(receiveSamplesList(samples));
             dispatch(receiveInitialAnalysesHistory(analyses));
+            dispatch(uploadsListReceive(uploads));
 
             const sample = getDefaultOrStandardItem(samples);
             const filter = getDefaultOrStandardItem(filters);

@@ -6,12 +6,13 @@ import {
     setCurrentSampleId,
     setCurrentSampleSearch
 } from '../../../actions/samplesList';
+import {setCurrentUploadId} from '../../../actions/fileUpload';
 
 export default class FileUploadLeftPane extends React.Component {
 
     render() {
         const {
-            samplesList, sampleSearch, currentSampleId
+            samplesList, sampleSearch, currentSampleId, fileUpload
         } = this.props;
         const {hashedArray: {array: samplesArray}} = samplesList;
         const searchWord = sampleSearch.toLowerCase();
@@ -28,17 +29,29 @@ export default class FileUploadLeftPane extends React.Component {
                     sampleList={filteredSamples}
                     currentSampleId={currentSampleId}
                     onSelectSample={(id) => this.onCurrentSampleIdChange(id)}
+                    onSelectUpload={(id) => this.onCurrentUploadIdChange(id)}
+                    fileUpload={fileUpload}
                 />
             </div>
         );
     }
 
     onSampleSearchChange(str) {
-        this.props.dispatch(setCurrentSampleSearch(str));
+        const {dispatch} = this.props;
+        dispatch(setCurrentSampleSearch(str));
     }
 
     onCurrentSampleIdChange(id) {
-        this.props.changeShowValues(false);
-        this.props.dispatch(setCurrentSampleId(id));
+        const {changeShowValues, dispatch} = this.props;
+        changeShowValues(false);
+        dispatch(setCurrentUploadId(null));
+        dispatch(setCurrentSampleId(id));
+    }
+
+    onCurrentUploadIdChange(id) {
+        const {changeShowValues, dispatch} = this.props;
+        changeShowValues(false);
+        dispatch(setCurrentUploadId(id));
+        dispatch(setCurrentSampleId(null));
     }
 }

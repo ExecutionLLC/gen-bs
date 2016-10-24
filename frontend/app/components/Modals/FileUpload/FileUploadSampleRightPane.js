@@ -13,7 +13,7 @@ import {formatDate} from './../../../utils/dateUtil';
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {currentSampleId, samplesHash, auth:{isDemo}} = this.props;
+        const {currentSampleId, samplesHash, auth:{isDemo}, fileUpload:{currentUploadId}} = this.props;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         return (
             <div className={classNames({'split-right': true})}>
@@ -26,12 +26,19 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 {this.renderSampleContent(selectedSample)}
                             </div>
                             :
-                            this.renderUpload(isDemo)
+                            currentUploadId ?
+                                this.renderLoad()
+                                :
+                                this.renderUpload(isDemo)
                         }
                     </div>
                 </div>
             </div>
         );
+    }
+
+    renderLoad() {
+        return null;
     }
 
     renderUpload(isDemo) {
@@ -40,7 +47,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                 <div className='empty empty-upload collapse sample-mode1 in'>
                     <div className='btn-group btn-group-xlg'>
                         {!isDemo && <button className='btn btn-link-default'
-                                 onClick={this.onUploadClick.bind(this)}
+                                            onClick={this.onUploadClick.bind(this)}
                         >
                             <input
                                 onChange={ (e) => this.onUploadChanged(e.target.files)}
@@ -50,13 +57,16 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 type='file'
                                 accept='.vcf,.gz'
                                 name='files[]'
+                                defaultValue=''
                             />
                             <h3> Drop vcf files here or <span
                                 className='text-underline'>click here</span> to
                                 select</h3>
                         </button>
                         }
-                        {isDemo && <h3><i className='md-i'>perm_identity</i>Please login or register to upload new samples</h3>
+                        {isDemo &&
+                        <h3><i className='md-i'>perm_identity</i>Please login or
+                            register to upload new samples</h3>
                         }
                     </div>
                 </div>
@@ -66,7 +76,6 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     onUploadChanged(files) {
         const {dispatch} = this.props;
-        console.log(files);
         dispatch(addFilesForUpload([files[0]]))
             .then(()=>dispatch(uploadFile()));
     }
@@ -218,6 +227,7 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     onSampleCommentChange(description) {
         console.log(description);
+        throw new Error('Not impemented');
     }
 
     renderSampleDates(createdDate, lastQueryDate) {
