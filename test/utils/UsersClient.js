@@ -11,6 +11,10 @@ class UsersClient extends ClientBase {
     add(user, callback) {
         RequestWrapper.post(this.urls.users(), null, user, callback);
     }
+
+    update(user, callback) {
+        RequestWrapper.put(this.urls.users(), null, user, callback);
+    }
 }
 
 module.exports = UsersClient;

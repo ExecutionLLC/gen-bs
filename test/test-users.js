@@ -100,4 +100,26 @@ describe('Users', () => {
             });
         });
     });
+    it('must update user', (done) => {
+        const user1 = makeUser();
+        usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user1}, (err, result) => {
+            assert.equal(err, null);
+            assert.equal(result.status, 200);
+            const addedUser = result.body;
+            const user2 = Object.assign({}, makeUser(), {id: addedUser.id});
+            usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+                assert.equal(err, null);
+                assert.equal(result.status, 200);
+                const updatedUser = result.body;
+                assert.ok(updatedUser);
+                assert.deepStrictEqual(updatedUser, Object.assign({}, user2, {
+                    password: null,
+                    defaultLanguId: 'en', // language got from header...
+                    language: 'en', // ... it is not expected behavior but it is for now
+                    isDeleted: false
+                }));
+                done();
+            });
+        });
+    });
 });

@@ -47,30 +47,41 @@ class UserModel extends RemovableModelBase {
     }
 
     update(userId, languId, user, callback) {
-        const userToUpdate = _.cloneDeep(user);
-        userToUpdate.id = userId;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                //(callback) => this._checkFieldsUnique(userToUpdate, trx, callback),
+                //(callback) => this._checkFieldsUnique(user, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
-                        numberPaidSamples: userToUpdate.numberPaidSamples,
-                        email: userToUpdate.email,
-                        defaultLanguId: languId
+                        numberPaidSamples: user.numberPaidSamples,
+                        email: user.email,
+                        defaultLanguId: languId,
+                        isDeleted: false,
+                        gender: user.gender,
+                        phone: user.phone,
+                        loginType: user.loginType,
+                        password: user.password
                     };
-                    this._unsafeUpdate(userToUpdate.id, dataToUpdate, trx, callback);
+                    this._unsafeUpdate(userId, dataToUpdate, trx, callback);
                 },
                 (id, callback) => {
                     const dataToUpdate = {
+                        userId: id,
                         languId: languId,
-                        name: userToUpdate.name,
-                        lastName: userToUpdate.lastName,
-                        speciality: userToUpdate.speciality
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        speciality: user.speciality,
+                        company: user.company
                     };
-                    this._updateUserText(userToUpdate.id, dataToUpdate, trx, callback);
+                    this._updateUserText(id, dataToUpdate, trx, callback);
                 }
             ], callback);
-        }, callback);
+        }, (error, id) => {
+            if (error) {
+                callback(error);
+            } else {
+                this._fetch(id, callback)
+            }
+        });
     }
 
     appendPaidSamples(userId, samplesCount, callback) {
@@ -179,6 +190,8 @@ class UserModel extends RemovableModelBase {
                 } else {
                     let data = ChangeCaseUtil.convertKeysToCamelCase(userData[0]);
                     data.language = data.defaultLanguId;
+                    delete data.languId;
+                    delete data.userId;
                     callback(null, data);
                 }
             });
