@@ -14,7 +14,7 @@ const ClientBase = require('./utils/ClientBase');
 
 const DefaultViews = require('../database/defaults/views/default-views.json');
 const DefaultFilters = require('../database/defaults/filters/default-filters.json');
-const Sample = require('../database/defaults/samples/test-7.json').sample;
+const Sample = require('../database/defaults/samples/testY.json').sample;
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
