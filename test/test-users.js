@@ -127,4 +127,40 @@ describe('Users', () => {
             });
         });
     });
+    it('must update user with one with same email', (done) => {
+        const user1 = makeUser();
+        usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user1}, (err, result) => {
+            assert.equal(err, null);
+            assert.equal(result.status, 200);
+            const addedUser = result.body;
+            const user2 = Object.assign({}, makeUser(), {id: addedUser.id, email: addedUser.email});
+            usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+                assert.equal(err, null);
+                assert.equal(result.status, 200);
+                const updatedUser = result.body;
+                assert.ok(updatedUser);
+                checkUpdateResult(user2, updatedUser);
+                done();
+            });
+        });
+    });
+    it('must not update user with existing email', (done) => {
+        const user1 = makeUser();
+        const user2 = makeUser();
+        usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user1}, (err, result) => {
+            assert.equal(err, null);
+            assert.equal(result.status, 200);
+            usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+                assert.equal(err, null);
+                assert.equal(result.status, 200);
+                const addeduser2 = result.body;
+                const user2WithEmailOf1 = Object.assign({}, makeUser(), {id: addeduser2.id, email: user1.email});
+                usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2WithEmailOf1}, (err, result) => {
+                    assert.equal(err, null);
+                    assert.equal(result.status, 500);
+                    done();
+                });
+            });
+        });
+    });
 });

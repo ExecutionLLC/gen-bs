@@ -49,7 +49,7 @@ class UserModel extends RemovableModelBase {
     update(userId, languId, user, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                //(callback) => this._checkFieldsUnique(user, trx, callback),
+                (callback) => this._checkFieldsUnique(user, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
@@ -236,10 +236,16 @@ class UserModel extends RemovableModelBase {
      * Checks that unique fields, ex. email, are unique across users collection.
      * */
     _checkFieldsUnique(user, trx, callback) {
-        const {email} = user;
+        const {id, email} = user;
         Promise.all([
             this._findUserAsync(trx, null, email, null)
-                .then(() => Promise.reject(new UserModelError('Duplicate e-mail.')))
+                .then((foundUser) => {
+                    if (foundUser.id !== id) {
+                        return Promise.reject(new UserModelError('Duplicate e-mail.'))
+                    } else {
+                        return Promise.resolve();
+                    }
+                })
                 .catch((error) => {
                     if(error instanceof UserModelError){
                         return Promise.reject(error);
