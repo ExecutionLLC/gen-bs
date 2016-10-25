@@ -35,6 +35,11 @@ const ANALYSIS_TYPES = createEnum({
     FAMILY: 'family'
 });
 
+const LOGIN_TYPES = createEnum({
+    GOOGLE: 'google',
+    PASSWORD: 'password'
+});
+
 /**
  * Types which default elements can have.
  * */
@@ -55,5 +60,6 @@ module.exports = {
     ENTITY_TYPES,
     WS_INSTANCE_MESSAGE_TYPES,
     MODEL_TYPES,
-    ANALYSIS_TYPES
+    ANALYSIS_TYPES,
+    LOGIN_TYPES
 };
