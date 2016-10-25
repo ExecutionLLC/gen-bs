@@ -100,6 +100,16 @@ describe('Users', () => {
             });
         });
     });
+
+    function checkUpdateResult(userToUpdate, userUpdated) {
+        assert.deepStrictEqual(userUpdated, Object.assign({}, userToUpdate, {
+            password: null,
+            defaultLanguId: 'en', // language got from header...
+            language: 'en', // ... it is not expected behavior but it is for now
+            isDeleted: false
+        }));
+    }
+
     it('must update user', (done) => {
         const user1 = makeUser();
         usersClient.add({key: Config.regserver.ADD_USER_KEY, user: user1}, (err, result) => {
@@ -112,12 +122,7 @@ describe('Users', () => {
                 assert.equal(result.status, 200);
                 const updatedUser = result.body;
                 assert.ok(updatedUser);
-                assert.deepStrictEqual(updatedUser, Object.assign({}, user2, {
-                    password: null,
-                    defaultLanguId: 'en', // language got from header...
-                    language: 'en', // ... it is not expected behavior but it is for now
-                    isDeleted: false
-                }));
+                checkUpdateResult(user2, updatedUser);
                 done();
             });
         });
