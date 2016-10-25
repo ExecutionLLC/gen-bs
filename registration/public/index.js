@@ -439,7 +439,8 @@ const USER_INFO_SCHEME = [
     },
     {
         id: 'telephone',
-        elementId: 'reg-telephone'
+        elementId: 'reg-telephone',
+        isOptional: true
     },
     {
         id: 'gender',
@@ -769,6 +770,9 @@ function onSignupGoogle() {
 function validateUser() {
 
     const hasAbsent = USER_INFO_SCHEME.reduce(function(hasAbsent, scheme) {
+        if (scheme.isOptional) {
+            return hasAbsent;
+        }
         const inputEl = scheme.containerId ?
             document.getElementById(scheme.containerId) :
             document.getElementById(scheme.elementId);
