@@ -199,9 +199,8 @@ class UserModel extends RemovableModelBase {
     }
 
     _findUserAsync(trx, userIdOrNull, emailOrNull, passwordOrNull) {
-        let query = trx
-            .select('*')
-            .from('user')
+        let query = trx('user')
+            .select()
             .leftJoin('user_text', 'user_text.user_id', 'user.id')
             .whereRaw('1 = 1');
 
