@@ -34,12 +34,12 @@ class MailChimpMailService {
     }
 
     _sendMailAsync(email, templateName, params, callback) {
-        const {mailChimp:{key, fromMail, fromName}} = this.config;
+        const {mailChimp:{key, fromEmail, fromName}} = this.config;
 
         const mandrillClient = new mandrill.Mandrill(key, true);
         const message = {
-            fromEmail: fromMail,
-            fromName: fromName,
+            fromEmail,
+            fromName,
             to: [{
                 email
             }],
