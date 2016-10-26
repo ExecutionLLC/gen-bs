@@ -158,9 +158,9 @@ class RegistrationCodesModel extends ModelBase {
             () => {
                 return new Promise((resolve) => {
                     this.createRegcodeAsync(currentRegcode, language, speciality, description, numberOfPaidSamples, trx)
-                        .then((user) => {
-                            currentRegcode = currentRegcode && this._generateNextRegcode(user.regcode);
-                            resolve(user);
+                        .then((regcodeInfo) => {
+                            currentRegcode = currentRegcode && this._generateNextRegcode(regcodeInfo.regcode);
+                            resolve(regcodeInfo);
                         });
                 })
             },
