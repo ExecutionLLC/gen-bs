@@ -6,7 +6,7 @@ import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     duplicateAnalysesHistoryItem,
-    cancelAnalysesHistoryEdit,
+    createNewHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -25,6 +25,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
+import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
@@ -38,11 +39,15 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
-                <div className='split-scroll form-horizontal'>
+                <div className='split-scroll'>
                     <div className='form-padding'>
-                        <div className='form-horizontal form-rows form-rows-2row-xs'>
-                            {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
-                        </div>
+                        {!disabled ?
+                            <div className='form-horizontal form-rows form-rows-2row-xs'>
+                                {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
+                            </div>
+                            :
+                            this.renderDisabledAnalysis(historyItem)
+                        }
                     </div>
                 </div>
             </div>
@@ -59,7 +64,7 @@ export default class AnalysisRightPane extends React.Component {
                     {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
                     {this.renderAnalysisDescription(historyItem.description, isDemo)}
                 </div>
-                {this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
+                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
         );
     }
@@ -502,25 +507,44 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    analysisTypeCaption(type) {
+        return {
+            [analysisType.SINGLE]: 'Single',
+            [analysisType.TUMOR]: 'Tumor/Normal',
+            [analysisType.FAMILY]: 'Family'
+        }[type] || '';
+    }
+
+    sampleTypeCaption(type) {
+        return {
+            [sampleType.SINGLE]: 'Single',
+            [sampleType.TUMOR]: 'Tumor',
+            [sampleType.NORMAL]: 'Normal',
+            [sampleType.PROBAND]: 'Proband',
+            [sampleType.MOTHER]: 'Mother',
+            [sampleType.FATHER]: 'Father'
+        }[type] || '';
+    }
+
     renderAnalysisHeaderTabs(historyItemType, disabled) {
         const {dispatch} = this.props;
         const tabs = [
             {
                 isActive: historyItemType === analysisType.SINGLE,
                 className: 'single-tab',
-                caption: 'Single',
+                caption: this.analysisTypeCaption(analysisType.SINGLE),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.SINGLE}))
             },
             {
                 isActive: historyItemType === analysisType.TUMOR,
                 className: 'tumor-normal-tab',
-                caption: 'Tumor/Normal',
+                caption: this.analysisTypeCaption(analysisType.TUMOR),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.TUMOR}))
             },
             {
                 isActive: historyItemType === analysisType.FAMILY,
                 className: 'family-tab',
-                caption: 'Family',
+                caption: this.analysisTypeCaption(analysisType.FAMILY),
                 onSelect: () => dispatch(this.actionEdit({type: analysisType.FAMILY}))
             }
         ];
@@ -578,6 +602,72 @@ export default class AnalysisRightPane extends React.Component {
                     </span>
                 </a>
             </li>
+        );
+    }
+
+    renderDisabledAnalysis(historyItem) {
+        const {
+            samplesList: {hashedArray: {hash: samplesHash}},
+            filtersList: {hashedArray: {hash: filtersHash}},
+            modelsList: {hashedArray: {hash: modelsHash}},
+            viewsList: {hashedArray: {hash: viewsHash}}
+        } = this.props;
+
+        const selectedFilter = filtersHash[historyItem.filterId];
+        const selectedModel = historyItem.modelId && modelsHash[historyItem.modelId];
+        const selectedView = viewsHash[historyItem.viewId];
+
+        return (
+            <div>
+                <dl>
+                    <dt>Analysis type</dt>
+                    <dd>{this.analysisTypeCaption(historyItem.type)}</dd>
+                </dl>
+                {historyItem.samples.map((sampleInfo) => {
+                    const sampleId = sampleInfo.id;
+                    const sample = samplesHash[sampleId];
+
+                    return (
+                        <dl>
+                            <dt><span data-localize='general.sample'>Sample</span>
+                                ({this.sampleTypeCaption(sampleInfo.type)})
+                            </dt>
+                            <dd>{sample && sample.fileName}</dd>
+                        </dl>
+                    );
+                })}
+                <dl>
+                    <dt>Filter</dt>
+                    <dd>{selectedFilter && selectedFilter.name}</dd>
+                </dl>
+                {historyItem.modelId &&
+                    <dl>
+                        <dt>Model</dt>
+                        <dd>{selectedModel && selectedModel.name}</dd>
+                    </dl>
+                }
+                <dl>
+                    <dt>View</dt>
+                    <dd>{selectedView && selectedView.name}</dd>
+                </dl>
+
+                <hr />
+                <div class='btn-toolbar'>
+                    <a
+                       type='button'
+                       className='btn btn-link btn-uppercase'
+                       onClick={() => this.onDuplicateButtonClick()}
+                    ><span>Duplicate</span></a>
+
+                    <a
+                        className='btn btn-link btn-uppercase'
+                        role='button'
+                        onClick={() => this.onAnalyzeButtonClick(false)}
+                    >
+                        <span>View results</span>
+                    </a>
+                </div>
+            </div>
         );
     }
 
@@ -680,8 +770,16 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {dispatch} = this.props;
-        dispatch(cancelAnalysesHistoryEdit());
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samples}},
+            viewsList: {hashedArray: {array: views}},
+            filtersList: {hashedArray: {array: filters}}
+        } = this.props;
+        const sample = getDefaultOrStandardItem(samples);
+        const filter = getDefaultOrStandardItem(filters);
+        const view = getDefaultOrStandardItem(views);
+        dispatch(createNewHistoryItem(sample, filter, view));
     }
 
     onAnalyzeButtonClick(isEditing) {
@@ -767,7 +865,7 @@ export default class AnalysisRightPane extends React.Component {
     onSamplesClick(sampleIndex) {
         const {dispatch, historyItem} = this.props;
         const selectedSamplesIds = _.map(historyItem.samples, (sample) => sample.id);
-        const action = this.actionEdit({sample: {index: sampleIndex, id: null}});
+        const action = this.actionEdit({sample: {index: sampleIndex, id: selectedSamplesIds[sampleIndex]}});
         dispatch(samplesOnSave(selectedSamplesIds, action, 'changeItem.sample.index', 'changeItem.sample.id'));
         dispatch(openModal('upload'));
     }

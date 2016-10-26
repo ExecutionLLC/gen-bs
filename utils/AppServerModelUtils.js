@@ -20,7 +20,7 @@ class AppServerModelUtils {
             }
         });
         const sampleInfoHash = CollectionUtils.createHash(samplesInfo, sampleInfo => sampleInfo.sampleType);
-        const rules = model.modelType == MODEL_TYPES.COMPLEX ? {name: model.name} : AppServerModelUtils._createServerRulesRecursively(model.rules, sampleInfoHash, samples);
+        const rules = model.modelType == MODEL_TYPES.COMPLEX ? model.rules : AppServerModelUtils._createServerRulesRecursively(model.rules, sampleInfoHash, samples);
         return {
             type: model.modelType,
             rules

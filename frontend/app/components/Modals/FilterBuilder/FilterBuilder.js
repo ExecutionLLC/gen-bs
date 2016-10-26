@@ -485,10 +485,11 @@ export default class FilterBuilder extends React.Component {
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
         const parsedFilter = filterBuilder.editingFilter.parsedFilter;
+        debugger;
         const allowedFields = filterBuilder.allowedFields;
         return (
             <div className='builder-wrapper'>
-                {parsedFilter ?
+                {filter.modelType !== 'complex' ?
                     <FilterQueryBuilder
                         allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                         totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
