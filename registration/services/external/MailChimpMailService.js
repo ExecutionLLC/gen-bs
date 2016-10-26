@@ -58,11 +58,11 @@ class MailChimpMailService {
                     message
                 }),
                 (result) => {
-                    const {reject_reason} = result[0];
-                    if (reject_reason == null){
+                    const {rejectReason} = ChangeCaseUtil.convertKeysToCamelCase(result[0]);
+                    if (rejectReason == null){
                         resolve(result[0]);
                     } else {
-                        reject(new Error(reject_reason));
+                        reject(new Error(rejectReason));
                     }
                 },
                 (error) => reject(error)
