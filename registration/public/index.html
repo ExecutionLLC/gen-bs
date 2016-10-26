@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <script src="index.js"></script>
+    <link type="text/css" rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div>
+        Enter
+        <label>
+            <span>Regcode:</span>
+            <input type="text" id="regcode" name="regcode"/>
+        </label>
+    </div>
+    <hr />
+    <div id="regcoded-user">
+        <div id="userinfo">
+            <div>
+                <label>
+                    <span>Email</span><span>: </span><input type="text" id="email-value" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>First name</span><span>: </span><input type="text" id="first-name-value" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>Last name</span><span>: </span><input type="text" id="last-name-value" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>Speciality</span><span>: </span><input type="text" id="speciality-value" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>Phone</span><span>: </span><input type="text" id="phone-value" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>Company</span><span>: </span><input type="text" id="company-value" />
+                </label>
+            </div>
+
+            <span class="wpcf7-list-item first"><span class="wpcf7-list-item-label">Male</span>&nbsp;<input
+                    name="reg-gender" value="Male" checked="checked" type="radio"></span><span
+                class="wpcf7-list-item last"><span class="wpcf7-list-item-label">Female</span>&nbsp;<input
+                name="reg-gender" value="Female" type="radio"></span>
+
+            <div class="warning" id="warning-userdata">
+                Check all data
+            </div>
+        </div>
+        <hr />
+        <div id="login-type">
+            <button id="signup-login-password">Sign Up via Login/Password</button>
+            <button id="signup-google">Sign Up via Google</button>
+        </div>
+        <hr />
+        <div id="password">
+            <div>
+                <label>
+                    <span>Password</span><span>: </span><input type="text" id="password1-value" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    <span>Confirm password</span><span>: </span><input type="text" id="password2-value" />
+                </label>
+            </div>
+            <div class="warning" id="warning-password">
+                Different of empty
+            </div>
+        </div>
+        <div id="register-block">
+            <button id="register">Register</button>
+        </div>
+    </div>
+</body>
+</html>
