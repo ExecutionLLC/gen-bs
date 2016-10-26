@@ -55,3 +55,7 @@ export default class FileUploadLeftPane extends React.Component {
         dispatch(setCurrentSampleId(null));
     }
 }
+
+FileUploadLeftPane.propTypes = {
+    changeShowValues: React.PropTypes.func.isRequired
+};

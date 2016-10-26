@@ -15,7 +15,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {currentSampleId, samplesHash, auth:{isDemo}, fileUpload:{currentUploadId}} = this.props;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         return (
-            <div className={classNames({'split-right': true})}>
+            <div className='split-right'>
                 {selectedSample && this.renderSampleHeader(selectedSample)}
                 <div className='split-scroll'>
                     <div className='form-padding'>
@@ -59,15 +59,14 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 defaultValue=''
                                 multiple
                             />
-                            <h3> Drop vcf files here or <span
+                            <h3>Drop vcf files here or <span
                                 className='text-underline'>click here</span> to
                                 select</h3>
                         </button>
                         }
                         {isDemo &&
                         <h3><i className='md-i'>perm_identity</i>Please login or
-                            register to upload new samples</h3>
-                        }
+                            register to upload new samples</h3>}
                     </div>
                 </div>
             </div>

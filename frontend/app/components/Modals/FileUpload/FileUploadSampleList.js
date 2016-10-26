@@ -1,15 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
-import {formatDate} from './../../../utils/dateUtil';
 import _ from 'lodash';
-import {ProgressBar} from 'react-bootstrap';
+import {formatDate} from './../../../utils/dateUtil';
 
 export default class FileUploadSampleList extends React.Component {
     render() {
         const {sampleList, currentSampleId, fileUpload:{filesProcesses, currentUploadId}} = this.props;
-        const notUserSamples = _.filter(sampleList, sample => {
-            return sample.type != 'user';
-        });
+        const notUserSamples = _.filter(sampleList, sample => sample.type !== 'user');
         const samplesUploadHash = _.groupBy(sampleList, 'originalId');
         return (
             <div className='split-scroll'>
@@ -32,12 +29,11 @@ export default class FileUploadSampleList extends React.Component {
         if (progressStatus == 'ready') {
             const uploadedSamples = samplesUploadHash[sampleId];
             if (uploadedSamples) {
-                return this.renderUploadSamples(samplesUploadHash[sampleId]);
+                return this.renderUploadSamples(uploadedSamples);
             }
             return null;
         }
-        return this.renderProgress(uploadItem, uploadItem.id === currentUploadId);
-
+        return this.renderProgressUpload(uploadItem, uploadItem.id === currentUploadId);
     }
 
     renderUploadSamples(samples) {
@@ -49,16 +45,12 @@ export default class FileUploadSampleList extends React.Component {
 
     renderUploadSample(sample, isActive) {
         return (
-            <li
-                key={sample.id}
+            <li key={sample.id}
                 className={classNames({
                     'active': isActive
-                })}
-            >
-                <a
-                    type='button'
-                    onClick={() => this.onSampleItemClick(sample.id)}
-                >
+                })}>
+                <a type='button'
+                   onClick={() => this.onSampleItemClick(sample.id)}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -81,16 +73,12 @@ export default class FileUploadSampleList extends React.Component {
     renderErrorUpload(uploadItem, isActive) {
         const {id, file:{name:fileName}, error} = uploadItem;
         return (
-            <li
-                key={id}
+            <li key={id}
                 className={classNames({
                     'active': isActive
-                })}
-            >
-                <a
-                    type='button'
-                    onClick={() => this.onUploadErrorItemClick(id)}
-                >
+                })}>
+                <a type='button'
+                   onClick={() => this.onUploadErrorItemClick(id)}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -107,16 +95,7 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderBar(title, now) {
-        return (
-            <div>
-                <ProgressBar now={now} label='%(percent)s%' bsStyle='success'/>
-                <div className='text-center'><strong>{title}</strong></div>
-            </div>
-        );
-    }
-
-    renderProgressBar(uploadItem) {
+    static renderProgressBar(uploadItem) {
         const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
             'ajax': {
@@ -145,7 +124,6 @@ export default class FileUploadSampleList extends React.Component {
                     <div className={currentStage.classNames}
                          role='progressbar'
                          style={{width: `${progressValue}%`}}>
-
                     </div>
                 </div>
                 <span className='link-desc'>
@@ -155,20 +133,16 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderProgress(uploadItem, currentUploadId) {
+    renderProgressUpload(uploadItem, currentUploadId) {
         const {file:{name}} = uploadItem;
 
         return (
-            <li
-                key={uploadItem.operationId}
+            <li key={uploadItem.operationId}
                 className={classNames({
                     'active': currentUploadId
-                })}
-            >
-                <a
-                    type='button'
-                    onClick={() => this.onUploadItemClick(uploadItem.id)}
-                >
+                })}>
+                <a type='button'
+                   onClick={() => this.onUploadItemClick(uploadItem.id)}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -177,7 +151,7 @@ export default class FileUploadSampleList extends React.Component {
                     <span className='link-label'>
                         {name}
                     </span>
-                    {this.renderProgressBar(uploadItem)}
+                    {FileUploadSampleList.renderProgressBar(uploadItem)}
                 </a>
             </li>
         );
@@ -185,15 +159,11 @@ export default class FileUploadSampleList extends React.Component {
 
     renderNewListItem(isActive) {
         return (
-            <li
-                className={classNames({
-                    'active': isActive
-                })}
-            >
-                <a
-                    type='button'
-                    onClick={() => this.onSampleNewItem()}
-                >
+            <li className={classNames({
+                'active': isActive
+            })}>
+                <a type='button'
+                   onClick={() => this.onSampleNewItem()}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -211,16 +181,12 @@ export default class FileUploadSampleList extends React.Component {
 
     renderListItem(isActive, sampleItem) {
         return (
-            <li
-                key={sampleItem.id}
+            <li key={sampleItem.id}
                 className={classNames({
                     'active': isActive
-                })}
-            >
-                <a
-                    type='button'
-                    onClick={() => this.onSampleItemClick(sampleItem.id)}
-                >
+                })}>
+                <a type='button'
+                   onClick={() => this.onSampleItemClick(sampleItem.id)}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -259,3 +225,8 @@ export default class FileUploadSampleList extends React.Component {
         onSelectSample(null);
     }
 }
+
+FileUploadSampleList.propTypes = {
+    onSelectSample: React.PropTypes.func.isRequired,
+    onSelectUpload: React.PropTypes.func.isRequired
+};
