@@ -6,8 +6,7 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
-import {addFilesForUpload} from '../../../actions/fileUpload';
-import {uploadFile} from '../../../actions/fileUpload';
+import {uploadFiles} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 
 export default class FileUploadSampleRightPane extends React.Component {
@@ -76,8 +75,7 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     onUploadChanged(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload([files[0]]))
-            .then(()=>dispatch(uploadFile()));
+        dispatch(uploadFiles(files));
     }
 
     onUploadClick() {

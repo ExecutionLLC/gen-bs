@@ -167,31 +167,38 @@ function findFileProcessForOperationId(state, operationId) {
     return state.fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
 }
 
+export function uploadFiles(files) {
+    return (dispatch) => {
+        return Promise.mapSeries(files, (file) => {
+            return dispatch(addFileForUpload(file))
+                .then((id) => dispatch(uploadFile(id)));
+        })
+    }
+}
 
-export function uploadFile() {
+
+export function uploadFile(fileUploadId) {
     return (dispatch, getState) => {
-        getState().fileUpload.filesProcesses.forEach((fp) => {
-            if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving || fp.operationId) {
-                return;
+        const fp = _.find(getState().fileUpload.filesProcesses,{id:fileUploadId});
+        if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving || fp.operationId) {
+            return;
+        }
+        dispatch(requestFileUpload(fp.id));
+        dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
+        sendFile(
+            fp.file,
+            (operationId) => {
+                dispatch(receiveFileOperation(operationId, fp.id));
+            },
+            (percentage) => {
+                console.log('progress', percentage);
+                dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
+            },
+            (err) => {
+                console.error('Upload FAILED: ', err.responseText);
+                dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
             }
-            dispatch(requestFileUpload(fp.id));
-            dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
-            sendFile(
-                fp.file,
-                (operationId) => {
-                    dispatch(receiveFileOperation(operationId, fp.id));
-                },
-                (percentage) => {
-                    console.log('progress', percentage);
-                    dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
-                },
-                (err) => {
-                    console.error('Upload FAILED: ', err.responseText);
-                    dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
-                }
-            );
-        });
-        
+        );
     };
 
 }
@@ -226,37 +233,37 @@ export function fileUploadErrorForOperationId(error, operationId) {
     };
 }
 
-export function addFilesForUpload(files) {
+
+function addFileForUpload(file) {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            const filesWithIds = files.map((file) => ({id: idCounter++, file}));
-            dispatch(addNoGZippedForUpload(filesWithIds));
-            filesWithIds.forEach((fileWithId) => {
-                ensureGzippedFile(
-                    fileWithId.file,
-                    () => {
-                        dispatch(requestGzip(fileWithId.id));
-                    },
-                    (gzippedFile) => {
-                        dispatch(addGZippedFileForUpload(gzippedFile, fileWithId.id));
-                        if (gzippedFile !== fileWithId.file) {
-                            dispatch(receiveGzip(fileWithId.id));
-                        }
-                        resolve();
-                    },
-                    (message) => {
-                        console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
-                        dispatch(fileUploadError(fileWithId.id, {
-                            code: null,
-                            message
-                        }));
-                        reject(message);
+            const fileWithId = {id: idCounter++, file};
+            dispatch(addNoGZippedForUpload([fileWithId]));
+            ensureGzippedFile(
+                fileWithId.file,
+                () => {
+                    dispatch(requestGzip(fileWithId.id));
+                },
+                (gzippedFile) => {
+                    dispatch(addGZippedFileForUpload(gzippedFile, fileWithId.id));
+                    if (gzippedFile !== fileWithId.file) {
+                        dispatch(receiveGzip(fileWithId.id));
                     }
-                );
-            });
+                    return resolve(fileWithId.id);
+                },
+                (message) => {
+                    console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
+                    dispatch(fileUploadError(fileWithId.id, {
+                        code: null,
+                        message
+                    }));
+                    return resolve(fileWithId.id);
+                }
+            );
         });
     };
 }
+
 
 export function clearUploadState() {
     return {
