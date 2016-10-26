@@ -1,6 +1,7 @@
 .Select-control {
   border-radius: 3px;
   box-shadow: @btn-default-shadow;
+  height: 36px;
 }
 .Select-option.is-disabled{
   color: @gray-lighter;
@@ -21,7 +22,33 @@
   div.Select { 
     width: 100%!important;
   }
-  @media (max-width: @screen-xs-max){
+  .Select-control { 
+     width: 100%!important;
+  }
+:not(.Select--multi)>.Select-control .Select-input {
+    left: 0;
+    position: absolute;
+    right: 16px;
+     > input {
+    max-width: 100%;
+   }
+}
+.Select-arrow-zone {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 8px;
+}
+
+.Select--multi .Select-clear-zone {
+    display: block;
+    position: absolute;
+    right: 24px;
+    top: 8px;
+
+}
+
+@media (max-width: @screen-xs-max){
     .Select--multi {
       .Select-control { 
         display: block;
@@ -48,4 +75,12 @@
 }
 .select2-search__field { 
   outline: none;
+}
+
+.Select-input { 
+  height: 36px;
+}
+.Select-placeholder,
+ *:not(.Select--multi) > .Select-control .Select-value { 
+  line-height: 36px;
 }

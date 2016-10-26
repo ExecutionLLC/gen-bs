@@ -1,5 +1,6 @@
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 
 const filtersClient = apiFacade.filtersClient;
 
@@ -76,7 +77,7 @@ export function filtersListServerCreateFilterAsync(filter, languageId) {
 }
 
 export function filtersListServerUpdateFilterAsync(filter) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(filtersListStartServerOperation());
         return new Promise((resolve) => filtersClient.update(filter, (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
@@ -85,7 +86,9 @@ export function filtersListServerUpdateFilterAsync(filter) {
         }).then((response) => response.body
         ).then((updatedFilter) => {
             dispatch(filtersListEditFilter(filter.id, updatedFilter));
-            return updatedFilter;
+            const {analysesHistory: {currentHistoryId}} = getState();
+            return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
+                .then(() => updatedFilter);
         });
     };
 }

@@ -93,6 +93,7 @@ class ApiController extends ControllerBase {
 
         const searchRouter = controllersFacade.searchController.createRouter();
         const sessionsRouter = controllersFacade.sessionsController.createRouter(controllerRelativePath + sessionsControllerPath);
+        const usersRouter = controllersFacade.usersController.createRouter();
 
         const dataRouter = controllersFacade.dataController.createRouter();
 
@@ -104,6 +105,7 @@ class ApiController extends ControllerBase {
         // Initialize child routes
         router.use('/data', dataRouter);
         router.use(sessionsControllerPath, sessionsRouter);
+        router.use('/users', usersRouter);
         router.use('/comments', commentsRouter);
         router.use('/search', searchRouter);
         router.use('/samples', samplesRouter);

@@ -49,15 +49,19 @@ console.log('');
 
 const devtool = isProductionBuild ? '#cheap-module-source-map' : '#eval';
 
+let entry = [
+    'babel-polyfill',
+    './app/app.js'
+];
+if (!isProductionBuild) {
+    entry = ['webpack-hot-middleware/client', ...entry];
+}
+
 module.exports = {
 
     devtool,
 
-    entry: [
-        'webpack-hot-middleware/client',
-        'babel-polyfill',
-        './app/app.js'
-    ],
+    entry,
 
     output: {
         path: path.resolve(__dirname, '../public'),
@@ -82,8 +86,8 @@ module.exports = {
             {
                 test: /\.js?$/,
                 exclude: /(node_modules|bower_components|vendor)/,
-                loaders: ['react-hot', 'babel-loader'],
-                plugins: ['transform-runtime']
+                loaders: isProductionBuild ? ['babel-loader'] : ['react-hot', 'babel-loader'],
+                plugins: isProductionBuild ? [] : ['transform-runtime']
             },
             {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery'},
 

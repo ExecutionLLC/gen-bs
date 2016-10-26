@@ -44,7 +44,7 @@ export default class FileUploadSamples extends Component {
                 return getSearchValue(editableField, sampleEditableField)
                     .toLocaleLowerCase();
             });
-            sampleSearchValues.push(sample.fileName.toLocaleLowerCase());
+            sampleSearchValues.push(sample.fileName ? sample.fileName.toLocaleLowerCase() : '???');
             return {
                 sampleId: sample.id,
                 searchValues: sampleSearchValues

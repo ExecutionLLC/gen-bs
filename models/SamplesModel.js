@@ -337,7 +337,7 @@ class SamplesModel extends SecureModelBase {
                 this._findSamplesMetadata(trx,
                     userId,
                     sampleIds,
-                    true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions))
+                    false, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions))
             },
             (samplesMetadata, sampleVersions, callback) =>
                 this._createSamplesWithValues(trx, samplesMetadata, sampleVersions,

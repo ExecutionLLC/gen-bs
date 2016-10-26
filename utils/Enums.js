@@ -41,6 +41,11 @@ const SAMPLE_UPLOAD_STATUS = createEnum({
     ERROR: 'error'                  // Failed with error
 });
 
+const LOGIN_TYPES = createEnum({
+    GOOGLE: 'google',
+    PASSWORD: 'password'
+});
+
 /**
  * Types which default elements can have.
  * */
@@ -62,5 +67,6 @@ module.exports = {
     WS_INSTANCE_MESSAGE_TYPES,
     MODEL_TYPES,
     ANALYSIS_TYPES,
-    SAMPLE_UPLOAD_STATUS
+    SAMPLE_UPLOAD_STATUS,
+    LOGIN_TYPES,
 };
