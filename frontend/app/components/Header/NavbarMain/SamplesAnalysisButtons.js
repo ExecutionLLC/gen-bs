@@ -29,7 +29,7 @@ export default class SamplesAnalysisButtons extends Component {
                     ><span
                         className='hidden-xxs'
                         data-localize='samples.title'
-                    >Samples</span><span className='visible-xxs'><i className='md-i'>file_upload</i></span>{/*<span class='badge badge-inverse'>2</span>*/}</a>
+                    >Samples</span><span className='visible-xxs'><i className='md-i'>file_upload</i></span></a>
                 </div>
                 <div>
                     <a
