@@ -652,7 +652,7 @@ export default class AnalysisRightPane extends React.Component {
                 </dl>
 
                 <hr />
-                <div class='btn-toolbar'>
+                <div className='btn-toolbar'>
                     <a
                        type='button'
                        className='btn btn-link btn-uppercase'

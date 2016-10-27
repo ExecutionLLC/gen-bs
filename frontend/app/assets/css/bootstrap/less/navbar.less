@@ -961,13 +961,13 @@
    .btn.btn-danger { 
      color: #fff;
     &:hover {
-       background-color: lighten(@btn-danger-bg, 5%);
+       background: lighten(@btn-danger-bg, 5%)!important;
     }
     &:focus {
-      background-color: @btn-danger-bg;
+      background: @btn-danger-bg!important;
     }
     &:active { 
-      background-color:darken(@btn-danger-bg, 5%)
+      background-color:darken(@btn-danger-bg, 5%)!important;
     }
    }
    .btn.btn-primary { 
