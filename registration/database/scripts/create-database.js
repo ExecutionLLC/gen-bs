@@ -84,7 +84,6 @@ class DatabaseCreator {
     }
 
     _createEmptyDatabase(postgresKnex) {
-        // Create database
         return postgresKnex.raw(`CREATE DATABASE ${this.databaseName}`);
     }
 

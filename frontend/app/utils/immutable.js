@@ -79,6 +79,9 @@ export function immutableGetPathProperty(obj, path) {
     return getProp(obj, pathArray, 0);
 }
 
+export function assign(originalObject, mutatedObjectOrSubset) {
+    return Object.assign({}, originalObject, mutatedObjectOrSubset);
+}
 
 export class ImmutableHashedArray {
     static makeFromArray(array) {

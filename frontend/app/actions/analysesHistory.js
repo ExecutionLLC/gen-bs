@@ -19,7 +19,6 @@ export const DUPLICATE_ANALYSES_HISTORY_ITEM = 'DUPLICATE_ANALYSES_HISTORY_ITEM'
 export const EDIT_ANALYSES_HISTORY_ITEM = 'EDIT_ANALYSES_HISTORY_ITEM';
 export const DELETE_ANALYSES_HISTORY_ITEM = 'DELETE_ANALYSES_HISTORY_ITEM';
 export const EDIT_EXISTENT_HISTORY_ITEM = 'EDIT_EXISTENT_HISTORY_ITEM';
-export const CANCEL_ANALYSES_HISTORY_EDIT = 'CANCEL_ANALYSES_HISTORY_EDIT';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
@@ -127,13 +126,6 @@ export function editExistentAnalysesHistoryItem(historyItem) {
     };
 }
 
-export function cancelAnalysesHistoryEdit(historyItemId) {
-    return {
-        type: CANCEL_ANALYSES_HISTORY_EDIT,
-        historyItemId
-    };
-}
-
 export function setEditedHistoryItem(newHistoryItem) {
     return {
         type: SET_EDITED_ANALYSES_HISTORY,
@@ -168,11 +160,18 @@ export function updateAnalysesHistoryItemAsync(historyItemId) {
 }
 
 export function deleteServerAnalysesHistoryItemAsync(historyItemId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise(
-            (resolve) => analysesHistoryClient.remove(historyItemId, (error, response) => resolve({error, response}))
+            (resolve) => analysesHistoryClient.remove(historyItemId, (error, response) => resolve({
+                error,
+                response
+            }))
         ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
-        ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId)));
+        ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId))
+        ).then(() => {
+            const {analysesHistory:{currentHistoryId}} = getState();
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
+        });
     };
 }
 

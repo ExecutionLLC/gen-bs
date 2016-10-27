@@ -44,6 +44,13 @@ describe('Filters', () => {
         });
     });
 
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            done();
+        });
+    });
+
     describe('positive tests', () => {
         it('should get all filters', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
