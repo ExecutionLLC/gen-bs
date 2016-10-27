@@ -18,7 +18,7 @@ export class SamplesButton extends Component {
                     ><span
                         className='hidden-xs'
                         data-localize='samples.title'
-                    >Samples</span><span className='visible-xs'><i className='ag22 ag-blood-test-3'></i></span>{/*<span class='badge badge-inverse'>2</span>*/}</a>
+                    >Samples</span><span className='visible-xs'><i className='ag22 ag-blood-test-3'></i></span></a>
                 </div>
             </div>
         );

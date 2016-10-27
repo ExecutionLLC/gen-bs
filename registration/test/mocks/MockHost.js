@@ -19,7 +19,7 @@ class MockUsersClient {
     }
 
     addAsync(user) {
-        return new Promise((resolve) => {
+        return new Promise.resolve().then(() => {
             const userId = Uuid.v4();
             const newUser = {
                 id: userId,
@@ -32,18 +32,7 @@ class MockUsersClient {
                 speciality: user.speciality
             };
             this.users[userId] = newUser;
-            resolve(JSON.parse(JSON.stringify(newUser)));
-        });
-    }
-
-    findIdByEmailAsync(email) {
-        return new Promise((resolve, reject) => {
-            const user = _.find(this.users, {email});
-            if (user) {
-                resolve(user.id);
-            } else {
-                reject(new Error('User is not found'));
-            }
+            return JSON.parse(JSON.stringify(newUser));
         });
     }
 }

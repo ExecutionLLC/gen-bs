@@ -13,10 +13,18 @@ const Config = require('../utils/Config');
 const RegcodesClient = require('../api/RegcodesClient');
 
 class SessionsController extends ControllerBase {
-    constructor(services) {
+    constructor(controllers, services) {
         super(services);
 
-        _.bindAll(this, [this.open.name, this.check.name, this.close.name, this.closeAllUserSessions.name])
+        this.controllers = controllers;
+
+        _.bindAll(this, [
+            this.open.name,
+            this.check.name,
+            this.close.name,
+            this.closeAllUserSessions.name,
+            this.closeOpenedSocketsForSession.name
+        ]);
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
@@ -76,6 +84,17 @@ class SessionsController extends ControllerBase {
             });
         } else {
             this.sendInternalError(response, 'Please try to login first.');
+        }
+    }
+
+    closeOpenedSocketsForSession(request, response) {
+        const {session} = request;
+        if (this.services.sessions.isSessionValid(session)) {
+            this.controllers.wsController.closeSocketsForUserIdAsync(session.id)
+                .then(() => this.sendOk(response))
+                .catch((error) => this.sendInternalError(response, error));
+        } else {
+            this.sendInternalError(response, new Error('Invalid session.'));
         }
     }
 
@@ -179,15 +198,11 @@ class SessionsController extends ControllerBase {
             delayMs: 500
         });
 
-        const closeAllSessionsLimiter = this.createLimiter({
-            noDelayCount: 2,
-            delayMs: 500
-        });
-
         router.post('/', openSessionLimiter, this.open);
         router.put('/', checkSessionLimiter, this.check);
         router.delete('/', closeSessionLimiter, this.close);
-        router.delete('/all', closeAllSessionsLimiter, this.closeAllUserSessions);
+        router.delete('/all', closeSessionLimiter, this.closeAllUserSessions);
+        router.delete('/socket', closeSessionLimiter, this.closeOpenedSocketsForSession);
 
         return router;
     }
