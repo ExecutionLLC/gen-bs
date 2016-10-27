@@ -1,6 +1,7 @@
 .Select-control {
   border-radius: 3px;
   box-shadow: @btn-default-shadow;
+  height: 34px;
 }
 .Select-option.is-disabled{
   color: @gray-lighter;
@@ -48,4 +49,12 @@
 }
 .select2-search__field { 
   outline: none;
+}
+
+.Select-input { 
+  height: 34px;
+}
+.Select-placeholder,
+*:not(.Select--multi) > .Select-control .Select-value { 
+  line-height: 34px;
 }

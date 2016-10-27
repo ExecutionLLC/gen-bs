@@ -16,9 +16,9 @@ export class SamplesButton extends Component {
                         type='button'
                         onClick={() => this.props.openSamplesModal()}
                     ><span
-                        className='hidden-xxs'
+                        className='hidden-xs'
                         data-localize='samples.title'
-                    >Samples</span><span className='visible-xxs'><i className='md-i'>file_upload</i></span></a>
+                    >Samples</span><span className='visible-xs'><i className='ag22 ag-blood-test-3'></i></span></a>
                 </div>
             </div>
         );

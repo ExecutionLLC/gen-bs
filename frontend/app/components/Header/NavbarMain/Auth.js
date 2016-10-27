@@ -51,11 +51,12 @@ class Auth extends Component {
                             { profileMetadata.email }
                         </span>
                         <span className='visible-xs'>
-                            <span className='dropdown-menu-header'>Profile</span><i className='md-i md-person md-replace-to-close'></i>
+                            <span className='dropdown-menu-header'>{ profileMetadata.email }</span>
+                            <i className='md-i md-person md-replace-to-close'></i>
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                        <li>
+                        <li className='form-inline'>
                             <a onClick={ () => { this.props.dispatch(logout()); } }
                                href='#'
                                type='button'
@@ -63,13 +64,8 @@ class Auth extends Component {
                                 <span>Logout</span>
                             </a>
                         </li>
-                        <li className='visible-xs dropdown-header'>Language </li>
-                        <li className='visible-xs'><a href='#' type='button' id='en_lang'><span
-                            data-localize='language.lang_sm_En'>English</span></a>
-                        </li>
-                        <li className='visible-xs'><a href='#' type='button' id='ch_lang'><span
-                            data-localize='language.lang_sm_Ch'>中国</span></a>
-                        </li>                    </ul>
+                                
+                      </ul>
                 </div>
             </div>
         );
@@ -78,6 +74,7 @@ class Auth extends Component {
     _renderForDemoUser(dropdownClasses) {
         return (
             <div>
+
                 <div className={dropdownClasses}>
                     <a href='#'
                        onClick={() => this.onLoginDropdownClick()}
@@ -87,22 +84,22 @@ class Auth extends Component {
                               className='hidden-xs'>
                             Login
                         </span>
-                        <span className='visible-xs'>
-                            <i className='md-i'>person</i>
-                        </span>
+                        <span claclassNamess="visible-xs">
+                          <span className="dropdown-menu-header">Login</span>
+                          <i className="md-i md-person md-replace-to-close"></i></span>
+                        </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
+                       <li class="dropdown-header">Enter in</li>
                         <li>
-                            <a href={config.LOGIN_URL}>
+                            <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
                                 <span title={GOOGLE_ACCOUNT_TITLE}
                                       className='hidden-xs'>
                                     Google Account
                                 </span>
-                                <span className='visible-xs'>
-                                    <i className='md-i'>input</i>
-                                </span>
                             </a>
                         </li>
+                        <li class="dropdown-header">OR login</li>
                         <li>
                             <LoginForm
                                 dispatch={this.props.dispatch}
