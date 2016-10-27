@@ -78,19 +78,6 @@ function reduceDuplicateAnalysesHistoryItem(state, action) {
     };
 }
 
-function reduceCancelAnalysesHistoryEdit(state) {
-    const {history, currentHistoryId} = state;
-    if (!history.length) {
-        return state;
-    } else {
-        return {
-            ...state,
-            newHistoryItem: null,
-            currentHistoryId: ensureHistoryId(history, currentHistoryId, false)
-        };
-    }
-}
-
 function reduceEditExistentHistoryItem(state, action) {
     const {history} = state;
     const {historyItem} = action;
@@ -118,13 +105,12 @@ function reduceEditAnalysesHistoryItem(state, action) {
 }
 
 function reduceDeleteAnalysesHistoryItem(state, action) {
-    const {historyItemId, newHistoryItem} = action;
+    const {historyItemId} = action;
     const {history, currentHistoryId} = state;
     const historyItemIndex = _.findIndex(history, {id: historyItemId});
     if (historyItemIndex < 0) {
         return state;
     }
-    const historyItem = history[historyItemIndex];
     var newHistoryItemIndex;
     if (currentHistoryId === historyItemId) {
         newHistoryItemIndex = historyItemIndex >= history.length - 1 ? historyItemIndex - 1 : historyItemIndex;
@@ -134,12 +120,10 @@ function reduceDeleteAnalysesHistoryItem(state, action) {
     const nowHistory = immutableArray.remove(history, historyItemIndex);
     const nowHistoryItem = newHistoryItemIndex < 0 ? null : nowHistory[newHistoryItemIndex];
     const nowHistoryItemId = nowHistoryItem ? nowHistoryItem.id : null;
-    const newNewHistoryItem = newHistoryItem || nowHistory.length ? newHistoryItem : HistoryItemUtils.makeHistoryItem(historyItem);
     return {
         ...state,
         history: nowHistory,
-        currentHistoryId: nowHistoryItemId,
-        newHistoryItem: newNewHistoryItem
+        currentHistoryId: nowHistoryItemId
     };
 }
 
@@ -153,7 +137,6 @@ function reduceRequestAnalysesHistory(state) {
 function reduceSetEditedAnalysesHistory(state, action) {
     return {
         ...state,
-        newHistoryItem: null,
         currentHistoryId: action.newHistoryItem.id,
         history: [action.newHistoryItem, ...state.history]
     };
@@ -214,8 +197,6 @@ export default function analysesHistory(state = initialState, action) {
             return reduceDeleteAnalysesHistoryItem(state, action);
         case ActionTypes.EDIT_EXISTENT_HISTORY_ITEM:
             return reduceEditExistentHistoryItem(state, action);
-        case ActionTypes.CANCEL_ANALYSES_HISTORY_EDIT:
-            return reduceCancelAnalysesHistoryEdit(state, action);
         case ActionTypes.TOGGLE_LOADING_HISTORY_DATA:
             return reduceToggleLoadingHistoryData(state, action);
         case ActionTypes.CREATE_NEW_HISTORY_ITEM:

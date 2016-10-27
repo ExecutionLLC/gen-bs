@@ -20,7 +20,7 @@ function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allo
     const fieldDefault = _.find(allowedFields, {id: fieldDefaultId});
     const sampleDefaultType = fieldDefault.sampleType;
     /** @type {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
-    const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
+    const parsedRawRules = filterToEdit.modelType === 'complex' ? null: filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = parsedRawRules && genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
     if (validateRulesResult && !_.isEmpty(validateRulesResult.report)) {

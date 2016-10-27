@@ -5,6 +5,7 @@ const async = require('async');
 const Uuid = require('node-uuid');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
+const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
 const ServiceBase = require('./ServiceBase');
 

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import apiFacade from '../api/ApiFacade';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {
@@ -21,7 +19,7 @@ import {
 import {
     modelsListReceive
 } from './modelsList';
-import {entityType} from '../utils/entityTypes';
+import {getDefaultOrStandardItem} from '../utils/entityTypes';
 import {analyze} from './ui';
 
 /*
@@ -84,48 +82,32 @@ export function fetchUserDataAsync() {
             dispatch(receiveTotalFields(totalFields));
             dispatch(receiveSamplesList(samples));
             dispatch(receiveInitialAnalysesHistory(analyses));
-            if (analyses[0]) {
-                const historyItem = analyses[0];
-                dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(historyItem.id))
-                    .then(() => {
-                        dispatch(analyze({
-                            id: historyItem.id,
-                            name: historyItem.name,
-                            description: historyItem.description,
-                            type: historyItem.type,
-                            samples: historyItem.samples,
-                            viewId: historyItem.viewId,
-                            filterId: historyItem.filterId,
-                            modelId: historyItem.modelId
-                        }));
-                    });
-            } else {
-                const sample = _.find(samples, {type: entityType.DEFAULT}) ||
-                    _.find(samples, {type: entityType.STANDARD});
-                const filter = _.find(filters, {type: entityType.DEFAULT}) ||
-                    _.find(filters, {type: entityType.STANDARD});
-                const view = _.find(views, {type: entityType.DEFAULT}) ||
-                    _.find(views, {type: entityType.STANDARD});
-                if (!sample || !filter || !view) {
-                    dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
-                } else {
-                    dispatch(createNewHistoryItem(sample, filter, view));
-                    dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(null))
-                        .then(() => {
-                            const historyItem = getState().analysesHistory.newHistoryItem;
-                            dispatch(analyze({
-                                id: null,
-                                name: historyItem.name,
-                                description: historyItem.description,
-                                type: historyItem.type,
-                                samples: historyItem.samples,
-                                viewId: historyItem.viewId,
-                                filterId: historyItem.filterId,
-                                modelId: historyItem.modelId
-                            }));
-                        });
-                }
+
+            const sample = getDefaultOrStandardItem(samples);
+            const filter = getDefaultOrStandardItem(filters);
+            const view = getDefaultOrStandardItem(views);
+            if (!sample || !filter || !view) {
+                dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                return;
             }
+            dispatch(createNewHistoryItem(sample, filter, view));
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(null))
+                .then(() => {
+                    const lastHistoryAnalysis = analyses[0];
+                    const {
+                        name, description, type, samples, viewId, filterId, modelId
+                    } = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
+                    dispatch(analyze({
+                        id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
+                        name,
+                        description,
+                        type,
+                        samples,
+                        viewId,
+                        filterId,
+                        modelId
+                    }));
+                });
         });
     };
 }
