@@ -10,6 +10,13 @@ export default class SessionsClient extends ClientBase {
         super(urls);
     }
 
+    openUserSession(login, password, callback) {
+        RequestWrapper.post(this.urls.session(), null, {
+            login,
+            password
+        }, callback);
+    }
+
     openDemoSession(callback) {
         RequestWrapper.post(this.urls.session(), null, null, callback);
     }
@@ -24,6 +31,10 @@ export default class SessionsClient extends ClientBase {
 
     closeAllUserSessions(callback) {
         RequestWrapper.del(`${this.urls.session()}/all`, null, null, callback);
+    }
+
+    closeOtherSockets(callback) {
+        RequestWrapper.del(`${this.urls.session()}/socket`, null, null, callback);
     }
 
     /**

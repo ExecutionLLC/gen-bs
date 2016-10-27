@@ -203,6 +203,7 @@ function updateSavedFiles(knex, Promise) {
 }
 
 exports.up = function (knex, Promise) {
+    console.log('Adding new analysis types and models support');
     return createAnalysisTables(knex, Promise)
         .then(() => importDefaultModels(knex, Promise))
         .then(() => updateSavedFiles(knex, Promise))

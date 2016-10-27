@@ -15,12 +15,15 @@ import {clearAnalysesHistory} from './analysesHistory';
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient';
 
+import {closeWs, TooManyWebSocketsError} from './websocket';
+
 /*
  * action types
  */
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
+export const SHOW_ANOTHER_PAGE_OPENED_MODAL = 'SHOW_ANOTHER_PAGE_OPENED_MODAL';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
@@ -44,6 +47,7 @@ const PING_MESSAGE_CONTENTS = 'ping';
 const LOGIN_ERROR_MESSAGE = 'Authorization failed. You can reload page and try again.';
 const LOGIN_GOOGLE_ERROR = 'Google authorization failed.';
 const CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE = 'Error while closing all user sessions.';
+const CLOSE_OTHER_SOCKETS_ERROR_MESSAGE = 'Error while closing other sockets. Please reload page and try again.';
 
 /*
  * Start keep alive task, which update session on the WS.
@@ -73,21 +77,31 @@ export class KeepAliveTask {
 
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
-            console.log('Keep-alive tick.');
             // update session on the web server
-            const {dispatch} = reduxStore;
-            dispatch(getCookieSessionTypeAsync())
-                .then((sessionType) => {
-                    if (sessionType === SESSION_TYPE.INVALID) {
-                        // TODO: Handle this situation.
-                        console.error('Cookie session is invalid.');
-                    }
-                })
+            return Promise.resolve()
+                .then(() => this._keepAliveAsync())
                 .catch((error) => console.error('got unexpected error in keep alive task', error))
-                .then(() => dispatch(send(PING_MESSAGE_CONTENTS)))
                 // reschedule task
                 .then(() => this._scheduleTask());
         }, this.period);
+    }
+
+    _keepAliveAsync() {
+        const {dispatch} = reduxStore;
+        if (reduxStore.getState().websocket.closed) {
+            console.log('Web-socket is closed, skipping keep-alive request');
+            return Promise.resolve();
+        }
+        return Promise.resolve()
+            .then(() => console.log('Keep-alive tick.'))
+            .then(() => dispatch(getCookieSessionTypeAsync()))
+            .then((sessionType) => {
+                if (sessionType === SESSION_TYPE.INVALID) {
+                    console.error('Cookie session is invalid, redirect to login.');
+                    window.location.replace(location.origin);
+                }
+            })
+            .then(() => dispatch(send(PING_MESSAGE_CONTENTS)));
     }
 }
 
@@ -116,6 +130,7 @@ function loginError(errorMessage) {
     };
 }
 
+
 function restoreOldSessionAsync(isDemoSession) {
     return (dispatch) => {
         dispatch(receiveSession(isDemoSession));
@@ -129,7 +144,6 @@ function restoreOldSessionAsync(isDemoSession) {
     };
 }
 
-// Create new demo session.
 function openDemoSessionAsync() {
     return (dispatch) => Promise.resolve(
     ).then(() => new Promise(
@@ -144,12 +158,23 @@ function openDemoSessionAsync() {
     ]));
 }
 
+export function openUserSession(login, password) {
+    return (dispatch) => Promise.resolve(
+
+    ).then(() => new Promise(
+        (resolve) => sessionsClient.openUserSession(
+            login, password, (error, response) => resolve({error, response})
+        ))
+    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
+    ).then(() => location.replace(location.origin));
+}
+
+
 /**@callback CheckSessionCallback
  * @param {(Error|null)}error
  * @param {boolean}[isValidSession]
  * @param {boolean}[isDemoSession]
  */
-
 /**
  *  Checks current session state.
  */
@@ -177,6 +202,7 @@ function getCookieSessionTypeAsync() {
     };
 }
 
+
 function displayErrorFromParamsAsync() {
     return (dispatch) => Promise.resolve()
         .then(() => {
@@ -196,16 +222,8 @@ function displayErrorFromParamsAsync() {
         });
 }
 
-// Algorithm:
-// 1. If we stay on the URL returned by google and sessionId is valid, then
-// we should login as real user (not demo).
-// 2. If we got error from google, then we should try to restore old session or
-// create new demo session and send notification about error.
-// 3. In all other situations we should silently try to restore old session or
-// create new demo session.
-//
-// It is legacy of previous developer :)
-export function login() {
+
+export function loginWithGoogle() {
     return dispatch => Promise.resolve(
         // Display auth error from params if any
     ).then(() => dispatch(displayErrorFromParamsAsync())
@@ -219,8 +237,11 @@ export function login() {
                 // restore old session
                 return dispatch(restoreOldSessionAsync(sessionType === SESSION_TYPE.DEMO))
                     .catch((error) => {
-                        // TODO: Check error type here.
-                        dispatch(handleError(null, error.message));
+                        if (error.code !== TooManyWebSocketsError.CODE) {
+                            dispatch(handleError(null, error.message));
+                        } else {
+                            dispatch(showAnotherPageOpenedModal(true));
+                        }
                         return Promise.reject(error);
                     });
             } else {
@@ -231,18 +252,22 @@ export function login() {
     });
 }
 
+
 export function logout() {
-    sessionsClient.closeSession((error, response) => {
-        if (error || response.status !== HttpStatus.OK) {
-            // We close session on the frontend and don't care about returned
-            // status, because now it is problem of the web server
-            const message = error || response.body;
-            console.log('cannot close session', message);
-        } else {
-            console.log('session closed');
-        }
-        location.replace(location.origin);
-    });
+    return (dispatch) => {
+        dispatch(closeWs());
+        sessionsClient.closeSession((error, response) => {
+            if (error || response.status !== HttpStatus.OK) {
+                // We close session on the frontend and don't care about returned
+                // status, because now it is problem of the web server
+                const message = error || response.body;
+                console.log('cannot close session', message);
+            } else {
+                console.log('session closed');
+            }
+            location.replace(location.origin);
+        });
+    };
 }
 
 export function showCloseAllUserSessionsDialog(shouldShow) {
@@ -259,6 +284,23 @@ export function closeAllUserSessionsAsync() {
         ).then(({error, response}) => dispatch(
             handleApiResponseErrorAsync(CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE, error, response)
         ));
+    };
+}
+
+export function showAnotherPageOpenedModal(shouldShow) {
+    return {
+        type: SHOW_ANOTHER_PAGE_OPENED_MODAL,
+        shouldShow
+    };
+}
+
+export function closeOtherSocketsAsync() {
+    return (dispatch) => {
+        return new Promise((resolve) => sessionsClient.closeOtherSockets(
+            (error, response) => resolve({error, response}))
+        ).then(({error, response}) => dispatch(
+            handleApiResponseErrorAsync(CLOSE_OTHER_SOCKETS_ERROR_MESSAGE, error, response))
+        ).then(() => dispatch(login()));
     };
 }
 
@@ -293,7 +335,7 @@ function updateAutoLogoutTimer() {
         if (nextSecondsToAutoLogout < 0) {
             // if auto logout timer is expired, then we should start logout procedure
             dispatch(stopAutoLogoutTimer());
-            logout();
+            dispatch(logout());
             return;
         }
         // updates timer

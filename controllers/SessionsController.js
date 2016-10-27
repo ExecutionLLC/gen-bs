@@ -9,23 +9,43 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const ControllerBase = require('./base/ControllerBase');
 
+const Config = require('../utils/Config');
+const RegcodesClient = require('../api/RegcodesClient');
+
 class SessionsController extends ControllerBase {
-    constructor(services) {
+    constructor(controllers, services) {
         super(services);
 
-        _.bindAll(this, [this.open.name, this.check.name, this.close.name, this.closeAllUserSessions.name])
+        this.controllers = controllers;
+
+        _.bindAll(this, [
+            this.open.name,
+            this.check.name,
+            this.close.name,
+            this.closeAllUserSessions.name,
+            this.closeOpenedSocketsForSession.name
+        ]);
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
+
+        this.regcodesClient = new RegcodesClient(Config);
     }
 
     /**
-     * Opens new demo session.
+     * Opens new session.
      * */
     open(request, response) {
-        const {session} = request;
+        const {session, body} = request;
         async.waterfall([
-            (callback) => this.sessions.startDemo(session, callback),
+            (callback) => {
+                if (body && body.login) {
+                    const {login, password} = body;
+                    this.sessions.startForLoginPassword(session, login, password, callback);
+                } else {
+                    this.sessions.startDemo(session, callback)
+                }
+            },
             (session, callback) => callback(null, {
                     sessionId: session.id,
                     sessionType: session.type
@@ -64,6 +84,17 @@ class SessionsController extends ControllerBase {
             });
         } else {
             this.sendInternalError(response, 'Please try to login first.');
+        }
+    }
+
+    closeOpenedSocketsForSession(request, response) {
+        const {session} = request;
+        if (this.services.sessions.isSessionValid(session)) {
+            this.controllers.wsController.closeSocketsForUserIdAsync(session.id)
+                .then(() => this.sendOk(response))
+                .catch((error) => this.sendInternalError(response, error));
+        } else {
+            this.sendInternalError(response, new Error('Invalid session.'));
         }
     }
 
@@ -113,18 +144,19 @@ class SessionsController extends ControllerBase {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, user, info) => {
+            }, (error, user) => {
                 if (error) {
                     return next(error);
                 }
-                const {firstName, lastName, userEmail} = user;
+                const {userEmail} = user;
                 const registrationCodeId = request.query.state;
 
                 async.waterfall([
                     (callback) => {
                         if (registrationCodeId) {
                             // Activate registration code if any.
-                            this.services.registrationCodes.activate(registrationCodeId, firstName, lastName, userEmail, callback);
+                            this.regcodesClient.activateAsync({id: registrationCodeId})
+                                .then(() => callback(null));
                         } else {
                             callback(null);
                         }
@@ -166,15 +198,11 @@ class SessionsController extends ControllerBase {
             delayMs: 500
         });
 
-        const closeAllSessionsLimiter = this.createLimiter({
-            noDelayCount: 2,
-            delayMs: 500
-        });
-
         router.post('/', openSessionLimiter, this.open);
         router.put('/', checkSessionLimiter, this.check);
         router.delete('/', closeSessionLimiter, this.close);
-        router.delete('/all', closeAllSessionsLimiter, this.closeAllUserSessions);
+        router.delete('/all', closeSessionLimiter, this.closeAllUserSessions);
+        router.delete('/socket', closeSessionLimiter, this.closeOpenedSocketsForSession);
 
         return router;
     }

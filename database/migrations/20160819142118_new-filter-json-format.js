@@ -101,6 +101,7 @@ function processRulesRecursively(rulesObject) {
 }
 
 exports.up = function (knex, Promise) {
+    console.log('Moving filters to new format');
     return updateFiltersRules(knex, Promise)
         .then(() => console.log('=> Complete.'));
 };
