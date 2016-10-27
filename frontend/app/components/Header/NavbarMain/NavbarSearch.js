@@ -20,7 +20,7 @@ class NavbarSearch extends Component {
     render() {
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
-            <div className={classNames({'navbar-search': true, 'search-popup': this.state.showPopup})}>
+            <div className={classNames({'navbar-search': true, '': this.state.showPopup})}>
                 <a
                     data-target='#mobileSearch'
                     data-toggle='modal'
@@ -28,7 +28,7 @@ class NavbarSearch extends Component {
                     type='button'
                     onClick={() => this.onSearchPopupToggle()}
                 ><i className='md-i'>search</i></a>
-                <div className='navbar-search-field hidden-xs'>
+                <div className='navbar-search-field navbar-search-xs'>
                     <input
                      type='text'
                      data-localize='results.search'
@@ -40,6 +40,7 @@ class NavbarSearch extends Component {
                      disabled={!isEnabled}
                      value={this.state.search}
                     />
+                    <a type='button' className='btn btn-link-inverse btn-field-clean visible-xs' id='closeMobileSearch'><i className='md-i'>close</i></a>
                 </div>
             </div>
         );

@@ -31,8 +31,8 @@ class NavbarMain extends Component {
 
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
-                     <div>
-                        <span className='navbar-text'>AGx</span>
+                     <div className='text-center'>
+                        <span className='navbar-text brand'>AGx</span>
                      </div>
 
                     <SamplesButton
