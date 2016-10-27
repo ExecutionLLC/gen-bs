@@ -35,7 +35,7 @@ class MockWebServerHost extends WebServerHost {
                 (callback) => store.get(sessionId, callback),
                 (session, callback) => {
                     if (!session) {
-                        return callback(null, {});
+                        return callback(null, null);
                     }
                     callback(null, Object.assign(session, {
                         id: sessionId,
