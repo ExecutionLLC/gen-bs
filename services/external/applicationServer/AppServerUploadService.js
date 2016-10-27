@@ -93,10 +93,17 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const error = ErrorUtils.createAppServerInternalError(message);
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.update(user, {
-                    id: operation.getId(),
-                    status: SAMPLE_UPLOAD_STATUS.ERROR,
-                    error
-                }, (error) => callback(error)),
+                id: operation.getId(),
+                status: SAMPLE_UPLOAD_STATUS.ERROR,
+                error
+            }, (error) => callback(error)),
+            (callback) => {
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
+                const sampleId = operation.getSampleId();
+                this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
+                    (error, result) => callback(error)
+                );
+            },
             (callback) => this._createOperationResult(
                 session,
                 operation,
