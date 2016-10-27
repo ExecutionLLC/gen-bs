@@ -162,6 +162,14 @@ const MakeLayout = {
             DOMUtils.setElementText(el, 'The field is required.');
             inputEl.parentNode.insertBefore(el, inputEl.nextElementSibling);
         }
+    },
+    disableAutocomplete(ids) {
+        ids.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.setAttribute('autocomplete', 'off');
+            }
+        });
     }
 };
 
@@ -437,6 +445,10 @@ function onDocumentLoad() {
     if (regcodeEl) {
         DOMUtils.onInput(regcodeEl, checkRegcode);
     }
+    MakeLayout.disableAutocomplete(
+        USER_INFO_SCHEME.map((scheme) => scheme.elementId)
+            .concat([ELEMENT_ID.regcodeInput])
+    );
     MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
     displayNoUserInfo();
     const signupLoginPassword = document.getElementById(ELEMENT_ID.signupLoginPasswordButton);
