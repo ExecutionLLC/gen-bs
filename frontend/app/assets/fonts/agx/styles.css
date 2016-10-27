@@ -47,3 +47,9 @@
 .ag-flask:before {
   content: "\63";
 }
+
+.alert-fixed.demomode-alert {
+  top: auto;
+  bottom:30px;
+  right: 30px;
+}

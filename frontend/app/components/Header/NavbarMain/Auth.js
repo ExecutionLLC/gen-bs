@@ -84,13 +84,13 @@ class Auth extends Component {
                               className='hidden-xs'>
                             Login
                         </span>
-                        <span claclassNamess="visible-xs">
-                          <span className="dropdown-menu-header">Login</span>
-                          <i className="md-i md-person md-replace-to-close"></i></span>
+                        <span className='visible-xs'>
+                          <span className='dropdown-menu-header'>Login</span>
+                          <i className='md-i md-person md-replace-to-close'></i>
                         </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                       <li class="dropdown-header">Login with</li>
+                       <li className='dropdown-header'>Login with</li>
                         <li>
                             <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
                                 <span title={GOOGLE_ACCOUNT_TITLE}
@@ -99,7 +99,7 @@ class Auth extends Component {
                                 </span>
                             </a>
                         </li>
-                        <li class="dropdown-header">OR login</li>
+                        <li className='dropdown-header'>OR login</li>
                         <li>
                             <LoginForm
                                 dispatch={this.props.dispatch}
