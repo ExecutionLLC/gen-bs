@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
 import {immutableSetPathProperty, immutableGetPathProperty} from '../utils/immutable';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -112,6 +113,8 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
                     dispatch(sampleSaveCurrent(updatedSample.id));
                 }
             }
+            const {analysesHistory: {currentHistoryId}} = getState();
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
             return updatedSample.id;
         });
     };

@@ -2,6 +2,7 @@ import HttpStatus from 'http-status';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 
 
 const viewsClient = apiFacade.viewsClient;
@@ -89,7 +90,7 @@ export function viewsListServerCreateView(view, languageId) {
 }
 
 export function viewsListServerUpdateView(view) {
-    return (dispatch) => {
+    return (dispatch,getState) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
             viewsClient.update(view, (error, response) => {
@@ -103,6 +104,8 @@ export function viewsListServerUpdateView(view) {
                 } else {
                     const updatedView = response.body;
                     dispatch(viewsListEditView(view.id, updatedView));
+                    const {analysesHistory: {currentHistoryId}} = getState();
+                    dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
                     resolve(updatedView);
                 }
             });
