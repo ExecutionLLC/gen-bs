@@ -12,6 +12,7 @@ export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
+export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
 
 const samplesClient = apiFacade.samplesClient;
 const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
@@ -83,8 +84,17 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
     };
 }
 
+function disableSampleEdit(sampleId, disable) {
+    return {
+        type: DISABLE_SAMPLE_EDIT,
+        sampleId,
+        disable
+    };
+}
+
 export function requestUpdateSampleFieldsAsync(sampleId) {
     return (dispatch, getState) => {
+        dispatch(disableSampleEdit(sampleId, true));
         const {samplesList: {editedSamplesHash, onSaveAction, onSaveActionPropertyId}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
         return new Promise((resolve) => samplesClient.update(
@@ -94,6 +104,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
         ).then((response) => response.body
         ).then((updatedSample) => {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
+            dispatch(disableSampleEdit(sampleId, false));
             // If editing selected sample, don't forget to set it as current.
             if (onSaveAction) {
                 const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);

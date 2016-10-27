@@ -99,9 +99,21 @@ function reduceSamplesListSetHistorySamples(state, action) {
     };
 }
 
+function reduceDisableSampleEdit(state, action) {
+    const {sampleId, disable} = action;
+    return {
+        ...state,
+        disabledSamples: {
+            ...state.disabledSamples,
+            [sampleId]: disable
+        }
+    };
+}
+
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
-    editedSamplesHash: ImmutableHash.makeFromObject({})
+    editedSamplesHash: ImmutableHash.makeFromObject({}),
+    disabledSamples: {}
 }, action) {
 
     switch (action.type) {
@@ -125,6 +137,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLES_LIST_SET_HISTORY_SAMPLES:
             return reduceSamplesListSetHistorySamples(state, action);
+
+        case ActionTypes.DISABLE_SAMPLE_EDIT:
+            return reduceDisableSampleEdit(state, action);
 
         default:
             return state;

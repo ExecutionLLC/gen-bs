@@ -118,12 +118,13 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderEditableValues(fieldIdToValuesHash) {
-        const {dispatch, fields, sampleId} = this.props;
+        const {dispatch, fields, sampleId, samplesList: {disabledSamples}} = this.props;
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
                                        sampleId={sampleId}
                                        fieldIdToValuesHash={fieldIdToValuesHash}
+                                       disabled={!!disabledSamples[sampleId]}
             />
         );
     }
