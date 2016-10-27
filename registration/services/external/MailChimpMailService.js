@@ -34,12 +34,12 @@ class MailChimpMailService {
     }
 
     _sendMailAsync(email, templateName, params, callback) {
-        const {mailChimp:{key, fromMail, fromName}} = this.config;
+        const {mailChimp:{key, fromEmail, fromName}} = this.config;
 
         const mandrillClient = new mandrill.Mandrill(key, true);
         const message = {
-            fromEmail: fromMail,
-            fromName: fromName,
+            fromEmail,
+            fromName,
             to: [{
                 email
             }],
@@ -58,11 +58,11 @@ class MailChimpMailService {
                     message
                 }),
                 (result) => {
-                    const {reject_reason} = result[0];
-                    if (reject_reason == null){
+                    const {rejectReason} = ChangeCaseUtil.convertKeysToCamelCase(result[0]);
+                    if (rejectReason == null){
                         resolve(result[0]);
                     } else {
-                        reject(new Error(reject_reason));
+                        reject(new Error(rejectReason));
                     }
                 },
                 (error) => reject(error)
