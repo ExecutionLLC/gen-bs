@@ -20,15 +20,13 @@ class NavbarSearch extends Component {
     render() {
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
-            <div className={classNames({'navbar-search': true, '': this.state.showPopup})}>
+            <div className={classNames({'navbar-search': true, 'navbar-search-xs': this.state.showPopup})}>
                 <a
-                    data-target='#mobileSearch'
-                    data-toggle='modal'
                     className='btn navbar-btn btn-block visible-xs'
                     type='button'
-                    onClick={() => this.onSearchPopupToggle()}
+                    onClick={() => this.onSearchPopupToggle(true)}
                 ><i className='md-i'>search</i></a>
-                <div className='navbar-search-field navbar-search-xs'>
+                <div className='navbar-search-field'>
                     <input
                      type='text'
                      data-localize='results.search'
@@ -40,7 +38,12 @@ class NavbarSearch extends Component {
                      disabled={!isEnabled}
                      value={this.state.search}
                     />
-                    <a type='button' className='btn btn-link-inverse btn-field-clean visible-xs' id='closeMobileSearch'><i className='md-i'>close</i></a>
+                    <a
+                        type='button'
+                        className='btn btn-link-inverse btn-field-clean visible-xs'
+                        id='closeMobileSearch'
+                        onClick={() => this.onSearchPopupToggle(false)}
+                    ><i className='md-i'>close</i></a>
                 </div>
             </div>
         );
@@ -67,9 +70,9 @@ class NavbarSearch extends Component {
         onGlobalSearchStringChanged(search);
     }
 
-    onSearchPopupToggle() {
+    onSearchPopupToggle(show) {
         this.setState({
-            showPopup: !this.state.showPopup
+            showPopup: show
         });
     }
 }
