@@ -41,6 +41,10 @@ class UserService extends ServiceBase {
         this.models.users.add(user, defaultLanguId, callback);
     }
 
+    update(userId, languId, user, callback) {
+        this.models.users.update(userId, languId, user, callback);
+    }
+
     findIdByLoginPassword(login, password, callback) {
         const passwordHash = PasswordUtils.hash(password || '');
         this.models.users.findIdByEmailPassword(login, passwordHash, callback);
