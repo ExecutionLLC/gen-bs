@@ -12,10 +12,9 @@ class NavbarSearch extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.state = {
-            ...this.state,
+        this.setState({
             search: newProps.search
-        };
+        });
     }
 
     render() {
@@ -35,7 +34,6 @@ class NavbarSearch extends Component {
                      data-localize='results.search'
                      className='form-control placeholder-inverse'
                      placeholder='Search for mutations of current sample analysis'
-                     data-localize=''
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
@@ -69,7 +67,9 @@ class NavbarSearch extends Component {
     }
 
     onSearchPopupToggle() {
-        this.setState({...this.state, showPopup: !this.state.showPopup});
+        this.setState({
+            showPopup: !this.state.showPopup
+        });
     }
 }
 
