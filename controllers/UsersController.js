@@ -7,7 +7,6 @@ const ControllerBase = require('./base/ControllerBase');
 class UsersController extends ControllerBase {
     constructor(services) {
         super(services);
-        console.log('UsersController()');
     }
 
     add(request, response) {
