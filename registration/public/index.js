@@ -1,4 +1,4 @@
-const REGSERVER_API_BASE_URL = 'http://37.195.64.171:2080/register';
+const REGSERVER_API_BASE_URL = 'https://alpha.genomics-exe.com/register';
 const GENOMICS_URL = 'http://alpha.genomics-exe.com/';
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
