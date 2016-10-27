@@ -8,7 +8,6 @@ const RedisStore = require('connect-redis')(session);
 const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
 const ServiceBase = require('./ServiceBase');
-const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
 const SESSION_TYPES = {
     USER: 'USER',
