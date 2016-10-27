@@ -1,3 +1,5 @@
+import {assign} from './immutable';
+
 export default class immutableArray {
     /**
      * @template {T}
@@ -15,6 +17,12 @@ export default class immutableArray {
             item,
             ...arr.slice(index + 1, arr.length)
         ];
+    }
+
+    static assign(array, index, itemOrPart) {
+        const originalItem = array[index];
+        const resultItem = assign(originalItem, itemOrPart);
+        return immutableArray.replace(array, index, resultItem);
     }
 
     /**
