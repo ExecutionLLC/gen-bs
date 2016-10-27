@@ -278,7 +278,7 @@ export function searchInResultsNextDataAsync() {
             (error, response) => resolve({error, response})))
             .then(
                 ({error, response}) => dispatch(handleApiResponseErrorAsync(NEXT_DATA_ERROR_MESSAGE, error, response))
-            ).then(() => dispatch(receiveSearchedResults()));
+            );
     };
 }
 
@@ -303,7 +303,7 @@ export function searchInResultsAsync(flags) {
                 (error, response) => resolve({error, response}))
         ).then(
             ({error, response}) => dispatch(handleApiResponseErrorAsync(SEARCH_IN_RESULTS_ERROR_MESSAGE, error, response))
-        ).then(() => dispatch(receiveSearchedResults()));
+        );
     };
 }
 

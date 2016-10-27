@@ -16,20 +16,27 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response) {
+        const {body, file} = request;
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
-                const sampleFile = request.file;
-                if (sampleFile && sampleFile.path) {
-                    callback(null, sampleFile);
+                if (file && file.path && file.size) {
+                    callback(null, file);
                 } else {
                     callback(new Error('Sample file is not specified.'));
                 }
             }, (sampleFile, callback) => {
+                const fileName = (body && body.fileName) ? body.fileName : sampleFile.originalname;
+                if (!fileName) {
+                    callback(new Error('Sample has no file name.'));
+                } else {
+                    callback(null, sampleFile, fileName);
+                }
+            }, (sampleFile, fileName, callback) => {
                 const fileInfo = {
                     localFilePath: sampleFile.path,
                     fileSize: sampleFile.size,
-                    originalFileName: sampleFile.originalname
+                    originalFileName: fileName
                 };
                 const {user, session} = request;
                 this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
