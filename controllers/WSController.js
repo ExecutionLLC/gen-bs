@@ -8,12 +8,18 @@ const WebSocketServerProxy = require('../utils/WebSocketServerProxy');
 const InvalidSessionError = require('../utils/errors/InvalidSessionError');
 
 const OPEN_SOCKET_OPERATION_TYPE = 'OpenSocket';
+const CLOSED_BY_USER = 'ClosedByUser';
 const PING_MESSAGE_CONTENTS = 'ping';
 
 /**
  * This controller handles client web socket connections,
  * associates them with sessions and sends application server
  * responses to proper client web sockets.
+ *
+ * TODO: Make it model.
+ * Now it is impossible to put something directly to the client web socket,
+ * which is the reason of using event emitters in multiple levels. Migrating
+ * contents of this class to model will simplify these levels.
  * */
 class WSController extends ControllerBase {
     constructor(services) {
@@ -42,6 +48,20 @@ class WSController extends ControllerBase {
             .catch((error) => {
                 this.logger.warn(`Denying client web-socket connection with error: ${error}`);
                 callback(false);
+            });
+    }
+
+    closeSocketsForUserIdAsync(sessionId) {
+        return Promise.resolve()
+            .then(() => {
+                const clientDescriptors = this._findClients(sessionId, null);
+                clientDescriptors.forEach(({ws}) => {
+                    this._sendClientMessage(ws, {
+                        operationType: CLOSED_BY_USER,
+                        resultType: 'success'
+                    });
+                    ws.close();
+                });
             });
     }
 
