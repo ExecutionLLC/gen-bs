@@ -78,7 +78,7 @@
             API.getAllRegcodesAsync()
                 .then(function(regcodes) {
                     const cols = ['id', 'regcode', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'language', 'speciality', 'numberOfPaidSamples', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'firstDate', 'lastDate', 'description'];
-                    document.write('<h1>Requests:</h1>');
+                    document.write('<h1>Regcodes:</h1>');
                     document.write('<table><thead><tr>');
                     cols.forEach(function(col) {
                         document.write('<th>' + col + '</th>');
