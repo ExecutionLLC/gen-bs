@@ -17,7 +17,7 @@ function generateRegcode() {
 }
 
 describe('Registration Codes', () => {
-    const {registrationCodes, usersClient} = global.regServer;
+    const {registrationCodes, usersClient, userRequests} = global.regServer;
 
     function generateEmail() {
         return `a${Uuid.v4()}@example.com`;
@@ -103,6 +103,20 @@ describe('Registration Codes', () => {
                 .then((regcodeInfo) => {
                     assert(regcodeInfo.lastName === userLastName);
                     assert(regcodeInfo.email === userEmail);
+                })
+        });
+
+        it('should found all requests', () => {
+            return userRequests.getAllRequestsAsync()
+                .then(res => {
+                    assert.ok(res);
+                })
+        });
+
+        it('should found all regcodes', () => {
+            return registrationCodes.getAllRegcodesAsync()
+                .then(res => {
+                    assert.ok(res);
                 })
         });
     });

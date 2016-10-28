@@ -32,6 +32,12 @@ class UserRequestService {
         return db.transactionallyAsync((trx) =>
             userRequestModel.createAsync(userInfo, trx));
     }
+
+    getAllRequestsAsync() {
+        const {db, userRequestModel} = this;
+        return db.transactionallyAsync((trx) =>
+            userRequestModel.getAllRequestsAsync(trx));
+    }
 }
 
 module.exports = UserRequestService;

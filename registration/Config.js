@@ -33,6 +33,7 @@ const SETTINGS = {
     baseUrl: makeDefault(ENV.GEN_REG_BASE_URL, `http://localhost:${port}/register`),
     enableCORS: makeDefault(ENV.GEN_REG_CORS_ENABLE, true),
     disableRequestLimits: makeDefault(ENV.GEN_REG_DISABLE_REQUEST_LIMITS, false),
+    adminDataKey: makeDefault(ENV.GEN_REG_ADMIN_DATA_KEY, '3a92a566-caf6-4f17-a23e-1cd7f728d166'),
     database: {
         client: 'pg',
         host: makeDefault(ENV.GEN_REG_DATABASE_HOST, 'localhost'),

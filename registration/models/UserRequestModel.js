@@ -62,6 +62,12 @@ class UserRequestModel extends ModelBase {
             )
             .then(() => userToInsert);
     }
+
+    getAllRequestsAsync(trx) {
+        return trx.select()
+            .from(this.baseTableName)
+            .map((item) => this._mapColumns(item));
+    }
 }
 
 module.exports = UserRequestModel;

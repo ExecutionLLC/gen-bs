@@ -180,6 +180,12 @@ class RegistrationCodesModel extends ModelBase {
                 return this.update(regcodeId, updatedItem, trx);
             });
     }
+
+    getAllRegcodesAsync(trx) {
+        return trx.select()
+            .from(this.baseTableName)
+            .map((item) => this._mapColumns(item));
+    }
 }
 
 module.exports = RegistrationCodesModel;

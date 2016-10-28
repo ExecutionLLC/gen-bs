@@ -124,6 +124,27 @@ app.get('/approve', (request, response) => {
         );
 });
 
+app.get('/requests', (request, response) => {
+    const {key} = request.query;
+    if (key !== Config.adminDataKey) {
+        response.send({});
+        return;
+    }
+    userRequests.getAllRequestsAsync()
+        .then((data) => response.send(data))
+        .catch((error) => response.status(400).send(error.message));
+});
+
+app.get('/regcodes', (request, response) => {
+    const {key} = request.query;
+    if (key !== Config.adminDataKey) {
+        response.send({});
+        return;
+    }
+    registrationCodes.getAllRegcodesAsync()
+        .then((data) => response.send(data))
+        .catch((error) => response.status(400).send(error.message));
+});
 
 app.listen(Config.port, () => {
     console.log('Server is started!');
