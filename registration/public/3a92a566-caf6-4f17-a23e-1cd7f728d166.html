@@ -60,8 +60,7 @@
 
     API.getAllRequestsAsync()
         .then(function(requests) {
-            //const cols = ['id', 'regcode', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'language', 'speciality', 'numberOfPaidSamples', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'firstDate', 'lastDate', 'description'];
-            const cols = ['id', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'language', 'speciality', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'loginType', 'password'];
+            const cols = ['id', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'speciality', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'loginType', 'password'];
             document.write('<h1>Requests:</h1>');
             document.write('<table><thead><tr>');
             cols.forEach(function(col) {
@@ -76,6 +75,24 @@
                 document.write('</tr>');
             });
             document.write('</tbody></table>');
+            API.getAllRegcodesAsync()
+                .then(function(regcodes) {
+                    const cols = ['id', 'regcode', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'language', 'speciality', 'numberOfPaidSamples', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'firstDate', 'lastDate', 'description'];
+                    document.write('<h1>Requests:</h1>');
+                    document.write('<table><thead><tr>');
+                    cols.forEach(function(col) {
+                        document.write('<th>' + col + '</th>');
+                    });
+                    document.write('</tr></thead><tbody>');
+                    regcodes.forEach(function(regcode) {
+                        document.write('<tr>');
+                        cols.forEach(function(col) {
+                            document.write('<td>' + regcode[col] + '</td>');
+                        });
+                        document.write('</tr>');
+                    });
+                    document.write('</tbody></table>');
+                })
         });
 
 </script>
