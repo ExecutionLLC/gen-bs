@@ -90,7 +90,7 @@ function reduceSamplesListSetHistorySamples(state, action) {
     if (samplesArrayWOHistory === hashedArray.array && !samplesToSet.length) {
         return state;
     }
-    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({...sample, type: entityType.HISTORY}));
+    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({
         ...sample,
         type: entityType.HISTORY
     }));
@@ -140,6 +140,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLES_LIST_SET_HISTORY_SAMPLES:
             return reduceSamplesListSetHistorySamples(state, action);
+
+        case ActionTypes.SET_CURRENT_SAMPLE_ID:
+            return reduceSetCurrentSampleId(state, action);
 
         case ActionTypes.DISABLE_SAMPLE_EDIT:
             return reduceDisableSampleEdit(state, action);
