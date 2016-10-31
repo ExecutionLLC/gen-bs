@@ -88,7 +88,9 @@ export default class FileUploadSampleRightPane extends React.Component {
             .value();
     }
 
-    renderCurrentValues(sample, fieldIdToValuesHash, fields) {
+    renderCurrentValues(sample) {
+        const {fields, edited} = this.props;
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
         if (_.some(sample.values, option => option.values)) {
             return (
                 <div className='sample-mode3 collapse in'>
@@ -134,7 +136,7 @@ export default class FileUploadSampleRightPane extends React.Component {
             return (
                 <a onClick={() => this.onShowValuesClick()}
                    className='btn btn-link btn-uppercase' role='button'
-                   href='#collapseOne'>Edit
+                   href='#'>Edit
                 </a>
             );
         }
@@ -169,19 +171,20 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleContent(selectedSample) {
-        const {fields, edited} = this.props;
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(selectedSample);
+        const {edited} = this.props;
         return (
             <div>
-                {!edited && this.renderCurrentValues(selectedSample, fieldIdToValuesHash, fields)}
+                {!edited && this.renderCurrentValues(selectedSample)}
                 {!edited && this.renderFooter(selectedSample)}
-                {edited && this.renderEditableValues(selectedSample.id, fieldIdToValuesHash, fields)}
+                {edited && this.renderEditableValues(selectedSample.id)}
             </div>
         );
     }
 
-    renderEditableValues(sampleId, fieldIdToValuesHash, fields) {
-        const {dispatch, changeShowValues} = this.props;
+    renderEditableValues(sampleId) {
+        const {dispatch, changeShowValues, fields,samplesList:{editedSamplesHash}} = this.props;
+        const selectedSample = editedSamplesHash[sampleId];
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(selectedSample);
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
