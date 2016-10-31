@@ -13,7 +13,7 @@ export default class FileUploadBody extends React.Component {
     render() {
         const {
             dispatch, fileUpload, editableFieldsList, samplesList,
-            currentSampleId, auth, closeModal, editedSamplesHash,currentHistorySamplesIds
+            currentSampleId, auth, closeModal,currentHistorySamplesIds
         } = this.props;
         return (
             <Modal.Body>
@@ -30,7 +30,7 @@ export default class FileUploadBody extends React.Component {
                     <FileUploadSampleRightPane
                         dispatch={dispatch}
                         currentSampleId={currentSampleId}
-                        samplesHash={editedSamplesHash}
+                        samplesList={samplesList}
                         auth={auth}
                         fields={editableFieldsList}
                         closeModal={closeModal}

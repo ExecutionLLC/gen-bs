@@ -11,7 +11,7 @@ import {formatDate} from './../../../utils/dateUtil';
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {currentSampleId, samplesHash, auth:{isDemo}, fileUpload:{currentUploadId}} = this.props;
+        const {currentSampleId, auth:{isDemo}, fileUpload:{currentUploadId}, samplesList:{hashedArray:{hash:samplesHash}}} = this.props;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         return (
             <div className='split-right'>
