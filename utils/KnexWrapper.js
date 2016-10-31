@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const async = require('async');
+const Promise = require('bluebird');
 
 const Knex = require('knex');
 const KnexTransaction = require('./KnexTransaction');
@@ -83,6 +84,22 @@ class KnexWrapper {
                 trx.complete(error, originalStack, data, callback);
             }
         ], callback);
+    }
+
+    transactionallyAsync(queryAsync) {
+        const originalStack = new Error().stack;
+        return Promise.resolve()
+            .then(() => Promise.fromCallback((callback) =>
+                this.beginTransaction((error, trx, knex) => callback(error, {trx, knex}))
+            ))
+            .then(({trx, knex}) =>
+                queryAsync(knex)
+                    .then((data) => ({trx, error: null, data}))
+                    .catch((error) => ({trx, error: error ? error : 'queryAsync error: ' + error, data: null}))
+            )
+            .then(({trx, error, data}) => Promise.fromCallback((callback) =>
+                trx.complete(error, originalStack, data, callback)
+            ));
     }
 }
 

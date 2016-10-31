@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import SamplesAnalysisButtons from './NavbarMain/SamplesAnalysisButtons';
+import {SamplesButton, AnalysisButton} from './NavbarMain/SamplesAnalysisButtons';
 import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
@@ -31,18 +31,15 @@ class NavbarMain extends Component {
 
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
+                     <div className='text-center'>
+                        <span className='navbar-text brand'>AGx</span>
+                     </div>
 
-                    <div data-localize='brand.help' data-toggle='tooltip' data-placement='left'
-                         title='Click for about and help info' data-container='body' data-trigger='hover'><a
-                        className='btn navbar-btn brand' data-toggle='modal' data-target='#info'>
-                        <span
-                        data-localize='brand.title'>AGx</span>
-                        </a>
-                    </div>
-
-                    <SamplesAnalysisButtons
-                        openAnalysisModal={() => this.props.openAnalysisModal()}
+                    <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
+                    />
+                    <AnalysisButton
+                        openAnalysisModal={() => this.props.openAnalysisModal()}
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }

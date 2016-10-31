@@ -16,6 +16,7 @@ const SearchController = require('./SearchController');
 
 const WSController = require('./WSController');
 const SessionsController = require('./SessionsController');
+const UsersController = require('./UsersController');
 const ApiController = require('./ApiController');
 
 class ControllersFacade {
@@ -36,6 +37,7 @@ class ControllersFacade {
 
         this.searchController = new SearchController(services);
         this.sessionsController = new SessionsController(this, services);
+        this.usersController = new UsersController(services);
 
         this.wsController = new WSController(services);
         this.apiController = new ApiController(services);

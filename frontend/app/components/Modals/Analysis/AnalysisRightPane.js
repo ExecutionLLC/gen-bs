@@ -27,6 +27,7 @@ import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils
 import {analysisType} from '../../../utils/analyseUtils';
 import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
+import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -34,7 +35,7 @@ import {ImmutableHashedArray} from '../../../utils/immutable';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, isOnlyItem, auth: {isDemo}, isBringToFront} = this.props;
+        const {historyItem, disabled, auth: {isDemo}, isBringToFront} = this.props;
 
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
@@ -43,7 +44,7 @@ export default class AnalysisRightPane extends React.Component {
                     <div className='form-padding'>
                         {!disabled ?
                             <div className='form-horizontal form-rows form-rows-2row-xs'>
-                                {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
+                                {historyItem && this.renderAnalysisContent(historyItem)}
                             </div>
                             :
                             this.renderDisabledAnalysis(historyItem)
@@ -69,16 +70,16 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent(historyItem, disabled, isOnlyItem) {
+    renderAnalysisContent(historyItem) {
         return (
             <div>
-                {this.renderSamplesSelects(historyItem, disabled)}
-                {this.renderFilterSelector(historyItem.filterId, disabled)}
-                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, disabled)}
-                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, disabled)}
-                {this.renderViewSelector(historyItem.viewId, disabled)}
+                {this.renderSamplesSelects(historyItem, false)}
+                {this.renderFilterSelector(historyItem.filterId, false)}
+                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, false)}
+                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, false)}
+                {this.renderViewSelector(historyItem.viewId, false)}
                 <hr className='invisible' />
-                {this.renderAnalyzeButton(!disabled, isOnlyItem)}
+                {this.renderAnalyzeButton()}
             </div>
         );
     }
@@ -443,37 +444,37 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalyzeButton(isEditing, isOnlyItem) {
+    renderAnalyzeButton() {
+        const {historyItem, modelsList, fields, samplesList} = this.props;
+        const validationRules = [
+            new CompoundHeterozygousModelRule({
+                historyItem,
+                modelsList,
+                fields,
+                samplesList
+            })
+        ];
+        const validationResults = _.map(validationRules, rule => rule.validate());
+        const error = _.find(validationResults, {isValid: false});
+        const buttonParams = {
+            title: error ? error.errorMessage : 'Click for analyze with analysis initial versions of filter and view',
+            disabled: error ? true : false
+        };
         return (
             <div className='btn-toolbar'>
-                {
-                    isEditing ?
-                        isOnlyItem ?
-                            null
-                            :
-                            <button
-                                className='btn btn-link btn-uppercase'
-                                title='Click for cancel'
-                                onClick={() => this.onCancelButtonClick()}
-                            >
-                                <span>Cancel</span>
-                            </button>
-                        :
-                        <button
-                            className='btn btn-link btn-uppercase'
-                            title='Click for edit'
-                            onClick={() => this.onDuplicateButtonClick()}
-                        >
-                            <span>Duplicate</span>
-                        </button>
-                }
                 <button
                     className='btn btn-primary'
-                    title='Click for analyze with analysis initial versions of filter and view'
-                    onClick={() => this.onAnalyzeButtonClick(isEditing)}
+                    disabled={buttonParams.disabled}
+                    title={buttonParams.title}
+                    onClick={() => this.onAnalyzeButtonClick(true)}
                 >
                     <span data-localize='query.analyze.title'>Analyze</span>
                 </button>
+                <a
+                    type='button'
+                    className='btn btn-link btn-uppercase'
+                    onClick={() => this.onCancelButtonClick()}
+                ><span>Restore to default</span></a>
             </div>
         );
     }
@@ -563,7 +564,7 @@ export default class AnalysisRightPane extends React.Component {
                     <span data-localize='general.created_date'>Created date</span>: <span>{createdDate}</span>
                 </label>
                 <label>
-                    <span data-localize='query.last_query_date'>Last query date</span>: <span>{lastQueryDate}</span>
+                    <span data-localize='query.last_query_date'>Updated</span>: <span>{lastQueryDate}</span>
                 </label>
             </div>
         );
@@ -618,7 +619,7 @@ export default class AnalysisRightPane extends React.Component {
         const selectedView = viewsHash[historyItem.viewId];
 
         return (
-            <div>
+            <div className='dl-group-view-mode'>
                 <dl>
                     <dt>Analysis type</dt>
                     <dd>{this.analysisTypeCaption(historyItem.type)}</dd>
@@ -628,31 +629,31 @@ export default class AnalysisRightPane extends React.Component {
                     const sample = samplesHash[sampleId];
 
                     return (
-                        <dl>
+                        <dl key={sampleId}>
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && sample.fileName}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(sample.genotypeName ? `${sample.fileName}:${sample.genotypeName}` : sample.fileName, sample.type)}</dd>
                         </dl>
                     );
                 })}
                 <dl>
                     <dt>Filter</dt>
-                    <dd>{selectedFilter && selectedFilter.name}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(selectedFilter.name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
                         <dt>Model</dt>
-                        <dd>{selectedModel && selectedModel.name}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
                     <dt>View</dt>
-                    <dd>{selectedView && selectedView.name}</dd>
+                    <dd>{selectedView && getItemLabelByNameAndType(selectedView.name, selectedView.type)}</dd>
                 </dl>
 
                 <hr />
-                <div class='btn-toolbar'>
+                <div className='btn-toolbar'>
                     <a
                        type='button'
                        className='btn btn-link btn-uppercase'

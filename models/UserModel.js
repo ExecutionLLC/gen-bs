@@ -2,19 +2,27 @@
 
 const _ = require('lodash');
 const async = require('async');
+const Promise = require('bluebird');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const RemovableModelBase = require('./RemovableModelBase');
+const UserModelError = require('../utils/errors/UserModelError');
 
 const mappedColumns = [
     'id',
-    'name',
-    'isDeleted',
+    'firstName',
     'lastName',
+    'defaultLanguId',
+    'isDeleted',
     'email',
-    'language',
+    'gender',
+    'phone',
+    'loginType',
+    'password',
     'numberPaidSamples',
-    'speciality'
+    'language',
+    'speciality',
+    'company'
 ];
 
 class UserModel extends RemovableModelBase {
@@ -24,15 +32,17 @@ class UserModel extends RemovableModelBase {
 
     findIdByEmail(email, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findIdsByEmailInTransaction(email, trx, (error, userIds) => {
-                if (userIds.length > 1) {
-                    callback(new Error('Too many users'));
-                } else if (userIds.length) {
-                    callback(null, userIds[0]);
-                } else {
-                    callback(new Error('User is not found'));
-                }
-            });
+            this._findUserAsync(trx, null, email, null)
+                .then((user) => user.id)
+                .asCallback(callback);
+        }, callback);
+    }
+
+    findIdByEmailPassword(email, passwordHash, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findUserAsync(trx, null, email, passwordHash)
+                .then((user) => user.id)
+                .asCallback(callback);
         }, callback);
     }
 
@@ -41,7 +51,7 @@ class UserModel extends RemovableModelBase {
         userToUpdate.id = userId;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._checkFieldsUnique(userToUpdate, trx, callback),
+                //(callback) => this._checkFieldsUnique(userToUpdate, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: userToUpdate.numberPaidSamples,
@@ -98,34 +108,41 @@ class UserModel extends RemovableModelBase {
     }
 
     _add(user, languId, shouldGenerateId, callback) {
-        const userToInsert = _.cloneDeep(user);
-        userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => this._checkFieldsUnique(userToInsert, trx, callback),
-                (callback) => {
+        this._addAsync(user, languId, shouldGenerateId)
+            .asCallback(callback);
+    }
+
+    _addAsync(user, languId, shouldGenerateId) {
+        const idToInsert = shouldGenerateId ? this._generateId() : user.id;
+        return this.db.transactionallyAsync((trx) => {
+            return Promise.resolve()
+                .then(() => this._checkEmailUniqueAsync(user, trx))
+                .then(() => {
                     const dataToInsert = {
-                        id: userToInsert.id,
-                        numberPaidSamples: userToInsert.numberPaidSamples,
-                        email: userToInsert.email,
-                        defaultLanguId: languId
+                        id: idToInsert,
+                        numberPaidSamples: user.numberPaidSamples,
+                        email: user.email,
+                        defaultLanguId: languId,
+                        isDeleted: false,
+                        gender: user.gender,
+                        phone: user.phone,
+                        loginType: user.loginType,
+                        password: user.password
                     };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (userId, callback) => {
-                    const dataToInsert = {
-                        userId: userId,
-                        languId: languId,
-                        name: userToInsert.name,
-                        lastName: userToInsert.lastName,
-                        speciality: userToInsert.speciality
-                    };
-                    this._unsafeInsert('user_text', dataToInsert, trx, (error) => {
-                        callback(error, userId);
-                    });
-                }
-            ], callback);
-        }, callback);
+                    return this._insertAsync(dataToInsert, trx)
+                        .then((userId) => {
+                            const dataToInsert = {
+                                userId: userId,
+                                languId: languId,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                speciality: user.speciality,
+                                company: user.company
+                            };
+                            return this._unsafeInsertAsync('user_text', dataToInsert, trx).then(() => userId);
+                        });
+                })
+        });
     }
 
     _updateUserText(userId, dataToUpdate, trx, callback) {
@@ -135,29 +152,6 @@ class UserModel extends RemovableModelBase {
             .asCallback((error) => {
                 callback(error, userId);
             });
-    }
-
-    /**
-     * Tries to find users by specified email.
-     * Returns empty array if no users found.
-     * @param email Email to search for.
-     * @param trx Knex transaction.
-     * @param callback (error, userIds || [])
-     * */
-    _findIdsByEmailInTransaction(email, trx, callback) {
-        async.waterfall([
-            (callback) => trx.select('id')
-                .from(this.baseTableName)
-                .where('email', email)
-                .asCallback(callback),
-            (results, callback) => {
-                if (results && results.length) {
-                    callback(null, _.map(results, obj => obj.id));
-                } else {
-                    callback(null, []);
-                }
-            }
-        ], callback);
     }
 
     _getNumberPaidSamplesInTransaction(userId, trx, callback) {
@@ -191,21 +185,69 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
+    _findUserAsync(trx, userIdOrNull, emailOrNull, passwordOrNull) {
+        let query = trx
+            .select('*')
+            .from('user')
+            .leftJoin('user_text', 'user_text.user_id', 'user.id')
+            .whereRaw('1 = 1');
+
+        if (userIdOrNull) {
+            query = query.andWhere('user.id', userIdOrNull);
+        }
+
+        if (emailOrNull) {
+            const email = ('' + emailOrNull)
+                .toLocaleLowerCase()
+                .trim();
+            query = query.andWhere('user.email', email);
+        }
+
+        if (passwordOrNull) {
+            query = query.andWhere('user.password', passwordOrNull);
+        }
+
+        return query
+            .then((users) => {
+                if (!users || users.length !== 1) {
+                    return Promise.reject(new Error('User is not found'))
+                }
+                return users;
+            })
+            .then((users) => users[0])
+            .then((user) => ChangeCaseUtil.convertKeysToCamelCase(user))
+            .then((user) => {
+                user.language = user.defaultLanguId;
+                return this._mapColumns(user);
+            });
+    }
+
     /**
      * Checks that unique fields, ex. email, are unique across users collection.
      * */
     _checkFieldsUnique(user, trx, callback) {
-        async.waterfall([
-            (callback) => this._findIdsByEmailInTransaction(user.email, trx, (error, userIds) => {
-                if (error) {
-                    callback(error);
-                } else if (userIds.length) {
-                    callback(new Error('Duplicate e-mail.'));
-                } else {
-                    callback(null);
-                }
-            })
-        ], callback);
+        const {email} = user;
+        Promise.all([
+            this._findUserAsync(trx, null, email, null)
+                .then(() => Promise.reject(new UserModelError('Duplicate e-mail.')))
+                .catch((error) => {
+                    if(error instanceof UserModelError){
+                        return Promise.reject(error);
+                    }
+                    return Promise.resolve();
+                })
+        ])
+            .then(() => callback(null))
+            .catch((error) => callback(error))
+    }
+
+    _checkEmailUniqueAsync(user, trx) {
+        const {email} = user;
+        return new Promise((resolve, reject) => {
+            this._findUserAsync(trx, null, email, null)
+                .catch((error) => resolve())
+                .then(() => reject(new Error('Duplicate e-mail.')))
+        });
     }
 }
 

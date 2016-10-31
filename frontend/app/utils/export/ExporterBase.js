@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import ExportUtils from '../exportUtils';
+
 export default class ExporterBase {
     /**
      * @param {string} mimeType
@@ -47,7 +49,9 @@ export default class ExporterBase {
         const rows = _.map(data, /**string[]*/row => this.buildRow(columnsArray, row));
 
         const documentBody = this.buildDocument(headerRow, rows);
-        const blobType = `"${this.mimeType}"`;
+        // Workaround for bug with Blobs downloading in Safari (#613): just display the result as text.
+        const blobType = ExportUtils.isSafariBrowser() ? `text/plain;charset=${document.characterSet}`
+            : `${this.mimeType}`;
         return new Blob(['\uFEFF' + documentBody], {type: blobType});
     }
 }
