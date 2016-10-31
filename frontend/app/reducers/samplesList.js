@@ -109,13 +109,6 @@ function reduceSetCurrentSampleId(state, action) {
     };
 }
 
-function reduceSetCurrentSampleSearch(state, action) {
-    return {
-        ...state,
-        search: action.search
-    };
-}
-
 function reduceDisableSampleEdit(state, action) {
     const {sampleId, disable} = action;
     return {
@@ -130,7 +123,6 @@ function reduceDisableSampleEdit(state, action) {
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
-    search: '',
     currentSampleId: null,
     disabledSamples: {}
 }, action) {
@@ -159,9 +151,6 @@ export default function samplesList(state = {
 
         case ActionTypes.SET_CURRENT_SAMPLE_ID:
             return reduceSetCurrentSampleId(state, action);
-
-        case ActionTypes.SET_CURRENT_SAMPLE_SEARCH:
-            return reduceSetCurrentSampleSearch(state, action);
 
         case ActionTypes.DISABLE_SAMPLE_EDIT:
             return reduceDisableSampleEdit(state, action);

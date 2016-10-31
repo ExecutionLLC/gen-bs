@@ -2,96 +2,147 @@ import React from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
 export default class FileUploadSampleList extends React.Component {
     render() {
-        const {sampleList, currentSampleId, fileUpload:{filesProcesses, currentUploadId}} = this.props;
-        const notUserSamples = _.filter(sampleList, sample => sample.type !== 'user');
-        const samplesUploadHash = _.groupBy(sampleList, 'originalId');
+        const {currentSampleId, fileUpload:{currentUploadId}} = this.props;
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
                     className='nav nav-componentes nav-controls nav-upload-items nav-radios nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
-                    {filesProcesses.map((filesProcess) => this.renderFileUpload(filesProcess, samplesUploadHash))}
-                    {notUserSamples.map((sampleItem) => this.renderListItem(sampleItem.id === currentSampleId, sampleItem))}
+                    {this.renderCurrentUploadData()}
+                    {this.renderUploadedData()}
                 </ul>
             </div>
         );
     }
 
-    renderFileUpload(uploadItem, samplesUploadHash) {
-        const {fileUpload:{currentUploadId}} = this.props;
-        const {progressStatus, sampleId} = uploadItem;
-        if (progressStatus === 'error') {
-            return this.renderErrorUpload(uploadItem, uploadItem.id === currentUploadId);
-        }
-        if (progressStatus == 'ready') {
-            const uploadedSamples = samplesUploadHash[sampleId];
-            if (uploadedSamples) {
-                return this.renderUploadSamples(uploadedSamples);
+    renderCurrentUploadData(){
+        const {fileUpload:{filesProcesses, currentUploadId}} = this.props;
+        const currentUploads = _.filter(filesProcesses, upload => {
+            return !_.includes(['error', 'ready'], upload.progressStatus);
+        });
+        return (
+            currentUploads.map((upload) => this.renderProgressUpload(upload, upload.id === currentUploadId))
+        );
+    }
+
+    renderUploadedData(){
+        const {search, samplesSearchHash, sampleList, fileUpload:{filesProcesses}} = this.props;
+        const uploadHash = _.keyBy(filesProcesses,'sampleId');
+        const errorUploads = _.filter(filesProcesses,upload => upload.progressStatus === 'error');
+        const errorsData = _.map(errorUploads, errorUpload => {
+            return {
+                label: errorUpload.file.name,
+                upload: errorUpload
+            };
+        });
+        const samplesData =_.map(sampleList.hashedArray.array,sample => {
+            const {genotypeName,fileName, type, originalId} = sample;
+            const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+            return {
+                label: getItemLabelByNameAndType(sampleName, type),
+                upload: uploadHash[originalId],
+                sample: sample
+            };
+        });
+        const finishedUploads = _.union(errorsData,samplesData);
+        const filteredUploadedSamples = _.filter(finishedUploads, finishedUpload => {
+            const {label, sample} = finishedUpload;
+            const sampleSearch = search.toLowerCase();
+            if (!sampleSearch) {
+                return true;
             }
-            return null;
+            if (sample) {
+                const searchValues = samplesSearchHash[sample.id].searchValues;
+                return _.some(searchValues, searchValue => searchValue.indexOf(sampleSearch) >= 0) || label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
+            } else {
+                return label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
+            }
+        });
+        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples,['label']);
+        return (
+            sortedFilteredUploads.map((item) => this._renderUploadedData(item))
+        );
+    }
+
+
+    _renderUploadedData(uploadData) {
+        const {currentHistorySamplesIds, currentSampleId, fileUpload:{currentUploadId}} = this.props;
+        const {label, upload, sample} = uploadData;
+        if (sample){
+            if (upload){
+                if (sample.type !=='history' || _.includes(currentHistorySamplesIds,sample.id)){
+                    return this.renderListItem(
+                        sample.id,
+                        sample.id === currentSampleId,
+                        true,
+                        (id) => this.onSampleItemClick(id),
+                        label,
+                        'Test description',
+                        sample.timestamp
+                    );
+                }
+                return null;
+            }
+            return this.renderListItem(
+                sample.id,
+                sample.id === currentSampleId,
+                null,
+                (id) => this.onSampleItemClick(id),
+                label,
+                'Test description',
+                sample.timestamp
+            );
         }
-        return this.renderProgressUpload(uploadItem, uploadItem.id === currentUploadId);
-    }
-
-    renderUploadSamples(samples) {
-        const {currentSampleId} = this.props;
-        return (
-            samples.map((sample) => this.renderUploadSample(sample, sample.id === currentSampleId))
+        return this.renderListItem(
+            upload.id,
+            upload.id === currentUploadId,
+            false,
+            (id) => this.onUploadErrorItemClick(id),
+            label,
+            upload.error.message,
+            null
         );
     }
 
-    renderUploadSample(sample, isActive) {
-        return (
-            <li key={sample.id}
-                className={classNames({
-                    'active': isActive
-                })}>
-                <a type='button'
-                   onClick={() => this.onSampleItemClick(sample.id)}>
-                    <label className='radio'>
-                        <input type='radio' name='viewsRadios'/>
-                        <i />
-                    </label>
-                    <i className='icon-state md-i text-success'>check_circle</i>
-                    <span className='link-label'>
-                        {`${sample.fileName}:${sample.genotypeName}`}
-                    </span>
-                    <span className='link-desc'>
-                        Test Description
-                    </span>
-                    <span className='link-desc'>
-                       Uploaded: {formatDate(sample.timestamp)}
-                    </span>
-                </a>
-            </li>
-        );
-    }
-
-    renderErrorUpload(uploadItem, isActive) {
-        const {id, file:{name:fileName}, error} = uploadItem;
+    renderListItem(id, isActive, isSuccessOrNull, onClick, label, description, uploadedTimeOrNull) {
         return (
             <li key={id}
                 className={classNames({
                     'active': isActive
                 })}>
                 <a type='button'
-                   onClick={() => this.onUploadErrorItemClick(id)}>
+                   onClick={() => onClick(id)}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
-                    <i className='icon-state md-i text-danger'>error_outline</i>
+                    {!_.isNull(isSuccessOrNull) && this.renderIcon(isSuccessOrNull)}
                     <span className='link-label'>
-                        {fileName}
+                        {label}
                     </span>
                     <span className='link-desc'>
-                        {error.message}
+                        {description}
                     </span>
+                    {uploadedTimeOrNull && <span className='link-desc'>
+                       Uploaded: {formatDate(uploadedTimeOrNull)}
+                    </span>}
                 </a>
             </li>
+        );
+    }
+
+    renderIcon(isSuccessOrNull){
+        if (isSuccessOrNull) {
+            return (
+                <i className='icon-state md-i text-success'>check_circle</i>
+            );
+        }
+        return (
+            <i className='icon-state md-i text-danger'>error_outline</i>
         );
     }
 
@@ -173,32 +224,6 @@ export default class FileUploadSampleList extends React.Component {
                     </span>
                     <span className='link-desc'>
                         Upload vcf file
-                    </span>
-                </a>
-            </li>
-        );
-    }
-
-    renderListItem(isActive, sampleItem) {
-        return (
-            <li key={sampleItem.id}
-                className={classNames({
-                    'active': isActive
-                })}>
-                <a type='button'
-                   onClick={() => this.onSampleItemClick(sampleItem.id)}>
-                    <label className='radio'>
-                        <input type='radio' name='viewsRadios'/>
-                        <i />
-                    </label>
-                    <span className='link-label'>
-                        {sampleItem.fileName}
-                    </span>
-                    <span className='link-desc'>
-                        Test Description
-                    </span>
-                    <span className='small link-desc'>
-                            Uploaded: {formatDate(sampleItem.timestamp)}
                     </span>
                 </a>
             </li>

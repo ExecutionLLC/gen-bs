@@ -172,8 +172,8 @@ export function uploadFiles(files) {
         return Promise.mapSeries(files, (file) => {
             return dispatch(addFileForUpload(file))
                 .then((id) => dispatch(uploadFile(id)));
-        })
-    }
+        });
+    };
 }
 
 
@@ -236,7 +236,7 @@ export function fileUploadErrorForOperationId(error, operationId) {
 
 function addFileForUpload(file) {
     return (dispatch) => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const fileWithId = {id: idCounter++, file};
             dispatch(addNoGZippedForUpload([fileWithId]));
             ensureGzippedFile(

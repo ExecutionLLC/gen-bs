@@ -42,7 +42,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
-        const {sampleId, fieldIdToValuesHash, fields, disabled} = this.props;
+        const {sampleId, fieldIdToValuesHash, fields} = this.props;
         const visibleEditableFields = _.filter(fields, field => !field.isInvisible);
         return (
             <div className='sample-mode3 collapse in'>
@@ -62,7 +62,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     renderRowButtons() {
-        const {sampleId, disabled} = this.props;
+        const {sampleId} = this.props;
         return (
             <div className='btn-toolbar'>
                 <button
