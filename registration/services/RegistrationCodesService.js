@@ -8,9 +8,7 @@ class RegistrationCodesService {
      **/
 
     constructor(db, registrationCodesModel, usersClient) {
-        this.db = db;
-        this.registrationCodesModel = registrationCodesModel;
-        this.usersClient = usersClient;
+        Object.assign(this, {db, registrationCodesModel, usersClient});
     }
 
     activateAsync(user) {

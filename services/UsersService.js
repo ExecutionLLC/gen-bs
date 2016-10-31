@@ -45,6 +45,10 @@ class UserService extends ServiceBase {
             .then((user) => this.models.users.add(user, defaultLanguId, callback));
     }
 
+    update(userId, languId, user, callback) {
+        this.models.users.update(userId, languId, user, callback);
+    }
+
     findIdByEmailPassword(email, password, callback) {
         const fixedEmail = this._prepareEmail(email);
         const passwordHash = PasswordUtils.hash(password || '');

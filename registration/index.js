@@ -107,10 +107,6 @@ app.post('/user_request', (request, response) => {
         .catch((err) => response.status(400).send(err.message));
 });
 
-app.get('/register', (request, response) => {
-    response.send('Got hello!');
-});
-
 app.get('/approve', (request, response) => {
     console.log('approve');
     const {id} = request.query;
