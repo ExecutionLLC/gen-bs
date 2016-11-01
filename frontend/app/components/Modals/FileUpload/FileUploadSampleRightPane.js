@@ -85,9 +85,8 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     onFilesDrop(files) {
-        console.log('drop', files);
         const {dispatch} = this.props;
-        dispatch(uploadFiles(Array.prototype.slice.call(files)));
+        dispatch(uploadFiles(files));
     }
 
     onUploadClick() {
