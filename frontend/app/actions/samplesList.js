@@ -16,7 +16,6 @@ export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLE
 export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
 
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
-export const SET_CURRENT_SAMPLE_SEARCH = 'SET_CURRENT_SAMPLE_SEARCH';
 
 const samplesClient = apiFacade.samplesClient;
 const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
@@ -33,14 +32,7 @@ export function setCurrentSampleId(sampleId){
     return {
         type:SET_CURRENT_SAMPLE_ID,
         sampleId
-    }
-}
-
-export function setCurrentSampleSearch(search){
-    return {
-        type:SET_CURRENT_SAMPLE_SEARCH,
-        search
-    }
+    };
 }
 
 export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {

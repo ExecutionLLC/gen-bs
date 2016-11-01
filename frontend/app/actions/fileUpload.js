@@ -1,8 +1,8 @@
 import config from '../../config';
-import {closeModal} from './modalWindows';
 import {fetchSamplesAsync} from './samplesList';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
+import Promise from 'bluebird';
 
 /*
  * action types
@@ -17,8 +17,32 @@ export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
 export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
+export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
+export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
+export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
 
 let idCounter = 0;
+
+export function uploadsListReceive(uploads) {
+    return {
+        type: UPLOADS_LIST_RECEIVE,
+        uploads
+    };
+}
+
+export function filtersListAddFilter(upload) {
+    return {
+        type: UPLOADS_LIST_ADD_UPLOAD,
+        upload
+    };
+}
+
+export function setCurrentUploadId(uploadId){
+    return {
+        type:SET_CURRENT_UPLOAD_ID,
+        uploadId
+    };
+}
 
 /*
  * action creators
@@ -90,10 +114,10 @@ function receiveFileUpload(id) {
     };
 }
 
-function receiveFileOperation(operationId, id) {
+function receiveFileOperation(upload, id) {
     return {
         type: RECEIVE_FILE_OPERATION,
-        operationId,
+        upload,
         id
     };
 }
@@ -122,7 +146,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
         }
     })
         .done(json => {
-            onOperationId(json.operationId);
+            onOperationId(json.upload);
         })
         .fail(err => {
             onError(err);
@@ -143,31 +167,38 @@ function findFileProcessForOperationId(state, operationId) {
     return state.fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
 }
 
-
-export function uploadFile() {
-    return (dispatch, getState) => {
-        getState().fileUpload.filesProcesses.forEach((fp) => {
-            if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving) {
-                return;
-            }
-            dispatch(requestFileUpload(fp.id));
-            dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
-            sendFile(
-                fp.file,
-                (operationId) => {
-                    dispatch(receiveFileOperation(operationId, fp.id));
-                },
-                (percentage) => {
-                    console.log('progress', percentage);
-                    dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
-                },
-                (err) => {
-                    console.error('Upload FAILED: ', err.responseText);
-                    dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
-                }
-            );
+export function uploadFiles(files) {
+    return (dispatch) => {
+        return Promise.mapSeries(files, (file) => {
+            return dispatch(addFileForUpload(file))
+                .then((id) => dispatch(uploadFile(id)));
         });
-        
+    };
+}
+
+
+export function uploadFile(fileUploadId) {
+    return (dispatch, getState) => {
+        const fp = _.find(getState().fileUpload.filesProcesses,{id:fileUploadId});
+        if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving || fp.operationId) {
+            return;
+        }
+        dispatch(requestFileUpload(fp.id));
+        dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
+        sendFile(
+            fp.file,
+            (operationId) => {
+                dispatch(receiveFileOperation(operationId, fp.id));
+            },
+            (percentage) => {
+                console.log('progress', percentage);
+                dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
+            },
+            (err) => {
+                console.error('Upload FAILED: ', err.responseText);
+                dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
+            }
+        );
     };
 
 }
@@ -179,7 +210,6 @@ export function changeFileUploadProgress(progressValue, progressStatus, id) {
         if (progressStatus === 'ready') {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
-            dispatch(closeModal('upload'));
             dispatch(fetchSamplesAsync());
         }
     };
@@ -203,12 +233,12 @@ export function fileUploadErrorForOperationId(error, operationId) {
     };
 }
 
-export function addFilesForUpload(files) {
+
+function addFileForUpload(file) {
     return (dispatch) => {
-        dispatch(clearUploadState());
-        const filesWithIds = files.map((file) => ({id: idCounter++, file}));
-        dispatch(addNoGZippedForUpload(filesWithIds));
-        filesWithIds.forEach((fileWithId) => {
+        return new Promise((resolve) => {
+            const fileWithId = {id: idCounter++, file};
+            dispatch(addNoGZippedForUpload([fileWithId]));
             ensureGzippedFile(
                 fileWithId.file,
                 () => {
@@ -219,15 +249,21 @@ export function addFilesForUpload(files) {
                     if (gzippedFile !== fileWithId.file) {
                         dispatch(receiveGzip(fileWithId.id));
                     }
+                    return resolve(fileWithId.id);
                 },
                 (message) => {
                     console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
-                    dispatch(fileUploadError(fileWithId.id, {code: null, message}));
+                    dispatch(fileUploadError(fileWithId.id, {
+                        code: null,
+                        message
+                    }));
+                    return resolve(fileWithId.id);
                 }
             );
         });
     };
 }
+
 
 export function clearUploadState() {
     return {

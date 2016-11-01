@@ -16,7 +16,7 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response) {
-        const {body, file} = request;
+        const {body, file ,user, session} = request;
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
@@ -38,15 +38,18 @@ class SampleController extends UserEntityControllerBase {
                     fileSize: sampleFile.size,
                     originalFileName: fileName
                 };
-                const {user, session} = request;
                 this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
                     callback(error, operationId);
                 });
+            }, (operationId, callback) => {
+                this.services.sampleUploadHistory.find(user, operationId, (error, upload) => {
+                    callback(error, operationId, upload)
+                });
             }
-        ], (error, operationId) => {
-            this.sendErrorOrJson(response, error, {operationId});
+        ], (error, operationId, upload) => {
+            this.sendErrorOrJson(response, error, {operationId, upload});
         });
     }
 

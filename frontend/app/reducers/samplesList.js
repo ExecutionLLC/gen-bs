@@ -102,6 +102,13 @@ function reduceSamplesListSetHistorySamples(state, action) {
     };
 }
 
+function reduceSetCurrentSampleId(state, action) {
+    return {
+        ...state,
+        currentSampleId: action.sampleId
+    };
+}
+
 function reduceDisableSampleEdit(state, action) {
     const {sampleId, disable} = action;
     return {
@@ -116,6 +123,7 @@ function reduceDisableSampleEdit(state, action) {
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
+    currentSampleId: null,
     disabledSamples: {}
 }, action) {
 

@@ -35,16 +35,15 @@ const ANALYSIS_TYPES = createEnum({
     FAMILY: 'family'
 });
 
-<<<<<<< HEAD
 const SAMPLE_UPLOAD_STATUS = createEnum({
     IN_PROGRESS: 'in_progress',     // Currently active
     READY: 'ready',                 // Successfully uploaded
     ERROR: 'error'                  // Failed with error
-=======
+});
+
 const LOGIN_TYPES = createEnum({
     GOOGLE: 'google',
     PASSWORD: 'password'
->>>>>>> testing
 });
 
 /**
@@ -68,9 +67,6 @@ module.exports = {
     WS_INSTANCE_MESSAGE_TYPES,
     MODEL_TYPES,
     ANALYSIS_TYPES,
-<<<<<<< HEAD
-    SAMPLE_UPLOAD_STATUS
-=======
+	SAMPLE_UPLOAD_STATUS,
     LOGIN_TYPES
->>>>>>> testing
 };

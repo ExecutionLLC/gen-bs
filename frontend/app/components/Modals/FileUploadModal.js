@@ -25,6 +25,8 @@ class FileUploadModal extends Component {
                     sampleSearch={this.props.sampleSearch}
                     currentSampleId={this.props.currentSampleId}
                     auth={this.props.auth}
+                    editedSamplesHash={this.props.editedSamplesHash}
+                    currentHistorySamplesIds={this.props.currentHistorySamplesIds}
                     closeModal={ () => this.onClose() }
                 />
             </Modal>
@@ -37,16 +39,18 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, ui, fileUpload, samplesList, fields: {editableFields}} = state;
-
+    const {auth, ui, fileUpload, analysesHistory:{newHistoryItem}, samplesList, fields: {editableFields}} = state;
+    const currentHistorySamplesIds = newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : [];
     return {
         auth,
         ui,
         fileUpload,
         samplesList,
+        currentHistorySamplesIds,
         editableFieldsList: editableFields,
         sampleSearch: samplesList.search,
         currentSampleId: samplesList.currentSampleId,
+        editedSamplesHash: samplesList.editedSamplesHash
     };
 }
 

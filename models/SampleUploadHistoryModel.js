@@ -24,7 +24,7 @@ class SampleUploadHistoryModel extends ModelBase {
             this._findEntriesAsync(trx, [entryId], userId, false, null, null, null)
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
-        });
+        }, callback);
     }
 
     findAll(userId, limit, offset, callback) {
