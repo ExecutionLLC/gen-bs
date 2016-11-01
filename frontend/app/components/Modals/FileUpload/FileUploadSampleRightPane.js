@@ -8,6 +8,11 @@ import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {uploadFiles} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 
+function cancelDOMEvent(e) {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
@@ -50,9 +55,12 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <div className='btn-group btn-group-xlg'>
                         {!isDemo && <button className='btn btn-link-default'
                                             onClick={this.onUploadClick.bind(this)}
-                                            onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
-                                            onDragOver={(e) => {e.stopPropagation();e.preventDefault();}}
-                                            onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
+                                            onDragEnter={cancelDOMEvent}
+                                            onDragOver={cancelDOMEvent}
+                                            onDrop={(e) => {
+                                                cancelDOMEvent(e);
+                                                this.onFilesDrop(e.dataTransfer.files);
+                                            }}
                         >
                             <input
                                 onChange={ (e) => this.onUploadChanged(e.target.files)}
