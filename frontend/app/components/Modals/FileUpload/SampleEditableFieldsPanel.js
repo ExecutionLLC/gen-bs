@@ -129,6 +129,5 @@ SampleEditableFieldsPanel.propTypes = {
     sampleId: PropTypes.string.isRequired,
     fieldIdToValuesHash: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
-    disabled: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired
 };

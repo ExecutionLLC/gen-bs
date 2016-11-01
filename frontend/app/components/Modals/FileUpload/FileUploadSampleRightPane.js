@@ -18,21 +18,24 @@ export default class FileUploadSampleRightPane extends React.Component {
                 {selectedSample && this.renderSampleHeader(selectedSample)}
                 <div className='split-scroll'>
                     <div className='form-padding'>
-                        {selectedSample ?
-                            <div
-                                className='form-horizontal form-rows form-rows-2row-xs'>
-                                {this.renderSampleContent(selectedSample)}
-                            </div>
-                            :
-                            currentUploadId ?
-                                this.renderLoad()
-                                :
-                                this.renderUpload(isDemo)
-                        }
+                        {this.renderSample()}
                     </div>
                 </div>
             </div>
         );
+    }
+    renderSample(){
+        const {currentSampleId, auth:{isDemo}, fileUpload:{currentUploadId}, samplesList:{hashedArray:{hash:samplesHash}}} = this.props;
+        const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
+        if (selectedSample){
+            return (
+                <div
+                    className='form-horizontal form-rows form-rows-2row-xs'>
+                    {this.renderSampleContent(selectedSample)}
+                </div>
+            );
+        }
+        return currentUploadId ? this.renderLoad() : this.renderUpload(isDemo)
     }
 
     renderLoad() {
@@ -89,7 +92,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderCurrentValues(sample) {
-        const {fields, edited} = this.props;
+        const {fields} = this.props;
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
         if (_.some(sample.values, option => option.values)) {
             return (
