@@ -52,12 +52,12 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         );
     }
 
-    renderEditableField(sampleId, field, fieldIdToValuesHash, disabled) {
+    renderEditableField(sampleId, field, fieldIdToValuesHash) {
         const fieldValue = fieldIdToValuesHash[field.id] || '';
         if (!_.isEmpty(field.availableValues)) {
-            return this.renderSelectField(sampleId, field, fieldValue, disabled);
+            return this.renderSelectField(sampleId, field, fieldValue);
         } else {
-            return this.renderTextField(sampleId, field, fieldValue, disabled);
+            return this.renderTextField(sampleId, field, fieldValue);
         }
     }
 
@@ -85,7 +85,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         );
     }
 
-    renderSelectField(sampleId, field, fieldValue, disabled) {
+    renderSelectField(sampleId, field, fieldValue) {
         const selectOptions = field.availableValues.map(
             option => {
                 return {value: option.id, label: option.value};
@@ -100,14 +100,13 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         options={selectOptions}
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
-                        disabled={disabled}
                     />
                 </dd>
             </dl>
         );
     }
 
-    renderTextField(sampleId, field, fieldValue, disabled) {
+    renderTextField(sampleId, field, fieldValue) {
         return (
             <dl key={field.id}>
                 <dt>{field.label}</dt>
@@ -117,7 +116,6 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         className='form-control'
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
-                        disabled={disabled}
                     />
                 </dd>
             </dl>

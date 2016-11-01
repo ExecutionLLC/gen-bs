@@ -30,22 +30,26 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderUploadedData(){
+        debugger;
         const {search, samplesSearchHash, sampleList, fileUpload:{filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses,'sampleId');
         const errorUploads = _.filter(filesProcesses,upload => upload.progressStatus === 'error');
         const errorsData = _.map(errorUploads, errorUpload => {
             return {
                 label: errorUpload.file.name,
-                upload: errorUpload
+                upload: errorUpload,
+                date: errorUpload.created
             };
         });
         const samplesData =_.map(sampleList.hashedArray.array,sample => {
             const {genotypeName,fileName, type, originalId} = sample;
             const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+            const currentUpload = uploadHash[originalId];
             return {
                 label: getItemLabelByNameAndType(sampleName, type),
-                upload: uploadHash[originalId],
-                sample: sample
+                upload: currentUpload,
+                sample: sample,
+                date: currentUpload?currentUpload.created:sample.timestamp
             };
         });
         const finishedUploads = _.union(errorsData,samplesData);
@@ -62,7 +66,7 @@ export default class FileUploadSampleList extends React.Component {
                 return label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
             }
         });
-        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples,['label']);
+        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples,['date']).reverse();
         return (
             sortedFilteredUploads.map((item) => this._renderUploadedData(item))
         );

@@ -72,7 +72,7 @@ function createFileProcess(file, id) {
         isUploading: false,
         file: file,
         sampleId: null,
-        created: null,
+        created: new Date().getTime(),
         error: null,
         isArchived: false,
         isArchiving: false,
