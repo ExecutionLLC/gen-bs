@@ -50,6 +50,9 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <div className='btn-group btn-group-xlg'>
                         {!isDemo && <button className='btn btn-link-default'
                                             onClick={this.onUploadClick.bind(this)}
+                                            onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
+                                            onDragOver={(e) => {e.stopPropagation();e.preventDefault();}}
+                                            onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
                         >
                             <input
                                 onChange={ (e) => this.onUploadChanged(e.target.files)}
@@ -79,6 +82,12 @@ export default class FileUploadSampleRightPane extends React.Component {
     onUploadChanged(files) {
         const {dispatch} = this.props;
         dispatch(uploadFiles(files));
+    }
+
+    onFilesDrop(files) {
+        console.log('drop', files);
+        const {dispatch} = this.props;
+        dispatch(uploadFiles(Array.prototype.slice.call(files)));
     }
 
     onUploadClick() {
