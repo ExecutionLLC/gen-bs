@@ -60,7 +60,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 accept='.vcf,.gz'
                                 name='files[]'
                                 defaultValue=''
-                                multiple
+                                multiple='multiple'
                             />
                             <h3>Drop vcf files here or <span
                                 className='text-underline'>click here</span> to
