@@ -8,6 +8,11 @@ import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {uploadFiles} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 
+function cancelDOMEvent(e) {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
@@ -50,6 +55,12 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <div className='btn-group btn-group-xlg'>
                         {!isDemo && <button className='btn btn-link-default'
                                             onClick={this.onUploadClick.bind(this)}
+                                            onDragEnter={cancelDOMEvent}
+                                            onDragOver={cancelDOMEvent}
+                                            onDrop={(e) => {
+                                                cancelDOMEvent(e);
+                                                this.onFilesDrop(e.dataTransfer.files);
+                                            }}
                         >
                             <input
                                 onChange={ (e) => this.onUploadChanged(e.target.files)}
@@ -60,7 +71,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                 accept='.vcf,.gz'
                                 name='files[]'
                                 defaultValue=''
-                                multiple
+                                multiple='multiple'
                             />
                             <h3>Drop vcf files here or <span
                                 className='text-underline'>click here</span> to
@@ -77,6 +88,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     onUploadChanged(files) {
+        const {dispatch} = this.props;
+        dispatch(uploadFiles(files));
+    }
+
+    onFilesDrop(files) {
         const {dispatch} = this.props;
         dispatch(uploadFiles(files));
     }
