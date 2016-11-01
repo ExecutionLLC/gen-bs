@@ -19,7 +19,7 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderCurrentUploadData(){
+    renderCurrentUploadData() {
         const {fileUpload:{filesProcesses, currentUploadId}} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
             return !_.includes(['error', 'ready'], upload.progressStatus);
@@ -29,11 +29,10 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderUploadedData(){
-        debugger;
+    renderUploadedData() {
         const {search, samplesSearchHash, sampleList, fileUpload:{filesProcesses}} = this.props;
-        const uploadHash = _.keyBy(filesProcesses,'sampleId');
-        const errorUploads = _.filter(filesProcesses,upload => upload.progressStatus === 'error');
+        const uploadHash = _.keyBy(filesProcesses, 'sampleId');
+        const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === 'error');
         const errorsData = _.map(errorUploads, errorUpload => {
             return {
                 label: errorUpload.file.name,
@@ -41,18 +40,18 @@ export default class FileUploadSampleList extends React.Component {
                 date: errorUpload.created
             };
         });
-        const samplesData =_.map(sampleList.hashedArray.array,sample => {
-            const {genotypeName,fileName, type, originalId} = sample;
+        const samplesData = _.map(sampleList.hashedArray.array, sample => {
+            const {genotypeName, fileName, type, originalId} = sample;
             const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
             const currentUpload = uploadHash[originalId];
             return {
                 label: getItemLabelByNameAndType(sampleName, type),
                 upload: currentUpload,
                 sample: sample,
-                date: currentUpload?currentUpload.created:sample.timestamp
+                date: currentUpload ? currentUpload.created : sample.timestamp
             };
         });
-        const finishedUploads = _.union(errorsData,samplesData);
+        const finishedUploads = _.union(errorsData, samplesData);
         const filteredUploadedSamples = _.filter(finishedUploads, finishedUpload => {
             const {label, sample} = finishedUpload;
             const sampleSearch = search.toLowerCase();
@@ -66,7 +65,7 @@ export default class FileUploadSampleList extends React.Component {
                 return label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
             }
         });
-        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples,['date']).reverse();
+        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples, ['date']).reverse();
         return (
             sortedFilteredUploads.map((item) => this._renderUploadedData(item))
         );
@@ -76,9 +75,9 @@ export default class FileUploadSampleList extends React.Component {
     _renderUploadedData(uploadData) {
         const {currentHistorySamplesIds, currentSampleId, fileUpload:{currentUploadId}} = this.props;
         const {label, upload, sample} = uploadData;
-        if (sample){
-            if (upload){
-                if (sample.type !=='history' || _.includes(currentHistorySamplesIds,sample.id)){
+        if (sample) {
+            if (upload) {
+                if (sample.type !== 'history' || _.includes(currentHistorySamplesIds, sample.id)) {
                     return this.renderListItem(
                         sample.id,
                         sample.id === currentSampleId,
@@ -139,7 +138,7 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderIcon(isSuccessOrNull){
+    renderIcon(isSuccessOrNull) {
         if (isSuccessOrNull) {
             return (
                 <i className='icon-state md-i text-success'>check_circle</i>

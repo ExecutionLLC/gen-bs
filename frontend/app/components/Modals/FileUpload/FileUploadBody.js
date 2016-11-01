@@ -13,7 +13,7 @@ export default class FileUploadBody extends React.Component {
     render() {
         const {
             dispatch, fileUpload, editableFieldsList, samplesList,
-            currentSampleId, auth, closeModal,currentHistorySamplesIds
+            currentSampleId, auth, closeModal, currentHistorySamplesIds
         } = this.props;
         return (
             <Modal.Body>

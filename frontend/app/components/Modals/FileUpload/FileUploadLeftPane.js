@@ -58,7 +58,7 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     render() {
-        const { samplesList, fileUpload, currentSampleId, currentHistorySamplesIds} = this.props;
+        const {samplesList, fileUpload, currentSampleId, currentHistorySamplesIds} = this.props;
         const {searchWord, samplesSearchHash} = this.state;
 
         return (

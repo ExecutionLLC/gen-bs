@@ -11,7 +11,7 @@ import {formatDate} from './../../../utils/dateUtil';
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {currentSampleId,samplesList:{hashedArray:{hash:samplesHash}}} = this.props;
+        const {currentSampleId, samplesList:{hashedArray:{hash:samplesHash}}} = this.props;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         return (
             <div className='split-right'>
@@ -24,10 +24,11 @@ export default class FileUploadSampleRightPane extends React.Component {
             </div>
         );
     }
-    renderSample(){
+
+    renderSample() {
         const {currentSampleId, auth:{isDemo}, fileUpload:{currentUploadId}, samplesList:{hashedArray:{hash:samplesHash}}} = this.props;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
-        if (selectedSample){
+        if (selectedSample) {
             return (
                 <div
                     className='form-horizontal form-rows form-rows-2row-xs'>
@@ -185,7 +186,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderEditableValues(sampleId) {
-        const {dispatch, changeShowValues, fields,samplesList:{editedSamplesHash}} = this.props;
+        const {dispatch, changeShowValues, fields, samplesList:{editedSamplesHash}} = this.props;
         const selectedSample = editedSamplesHash[sampleId];
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(selectedSample);
         return (

@@ -24,7 +24,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     onSaveEditedSampleClick(e, sampleId) {
         e.preventDefault();
 
-        const {dispatch,changeShowValues} = this.props;
+        const {dispatch, changeShowValues} = this.props;
         dispatch(requestUpdateSampleFieldsAsync(sampleId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
