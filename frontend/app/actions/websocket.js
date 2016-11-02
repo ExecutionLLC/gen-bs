@@ -149,7 +149,7 @@ function receiveSearchMessage(wsData) {
 
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
-        const {operationId, result:{progress, status, metadata}} = wsData;
+        const {operationId, result: {progress, status, metadata}} = wsData;
         if (wsData.result.status === 'ready') {
             dispatch(samplesListAddSamples(metadata))
         }

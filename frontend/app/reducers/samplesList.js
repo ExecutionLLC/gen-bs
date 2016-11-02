@@ -122,7 +122,7 @@ function reduceDisableSampleEdit(state, action) {
 
 function addSamples(state, action) {
     const {samples} = action;
-    const {hashedArray:{array:currentSamples}} = state;
+    const {hashedArray: {array: currentSamples}} = state;
     const newSampleList = currentSamples.concat(samples);
     const sortedSamples = _.sortBy(newSampleList, (sample) => sample.fileName.toLowerCase());
     return {
