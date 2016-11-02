@@ -2,7 +2,10 @@ import _ from 'lodash';
 
 import {handleApiResponseErrorAsync} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
-import {immutableSetPathProperty, immutableGetPathProperty} from '../utils/immutable';
+import {
+    immutableSetPathProperty,
+    immutableGetPathProperty
+} from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 
 
@@ -14,6 +17,7 @@ export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
+export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
 
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 
@@ -28,9 +32,16 @@ const FETCH_SAMPLES_ERROR_MESSAGE = 'We are really sorry, but there is an error 
  * Action Creators
  */
 
-export function setCurrentSampleId(sampleId){
+export function samplesListAddSamples(samples) {
     return {
-        type:SET_CURRENT_SAMPLE_ID,
+        type: SAMPLES_LIST_ADD_SAMPLES,
+        samples
+    };
+}
+
+export function setCurrentSampleId(sampleId) {
+    return {
+        type: SET_CURRENT_SAMPLE_ID,
         sampleId
     };
 }
@@ -64,7 +75,10 @@ export function fetchSamplesAsync() {
 
     return (dispatch) => {
         dispatch(requestSamples());
-        return new Promise((resolve) => samplesClient.getAll((error, response) => resolve({error, response}))
+        return new Promise((resolve) => samplesClient.getAll((error, response) => resolve({
+                error,
+                response
+            }))
         ).then(
             ({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response))
         ).then((response) => response.body

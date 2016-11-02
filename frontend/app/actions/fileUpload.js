@@ -37,9 +37,9 @@ export function filtersListAddFilter(upload) {
     };
 }
 
-export function setCurrentUploadId(uploadId){
+export function setCurrentUploadId(uploadId) {
     return {
-        type:SET_CURRENT_UPLOAD_ID,
+        type: SET_CURRENT_UPLOAD_ID,
         uploadId
     };
 }
@@ -88,7 +88,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
         gzip(file).then(gzippedFile => onGzipped(gzippedFile));
     } else {
         onError('Unsupported file type: must be Variant Call Format'
-            +' (VCF) 4.1 or higher or VCF compressed with gzip');
+            + ' (VCF) 4.1 or higher or VCF compressed with gzip');
     }
 }
 
@@ -179,7 +179,7 @@ export function uploadFiles(files) {
 
 export function uploadFile(fileUploadId) {
     return (dispatch, getState) => {
-        const fp = _.find(getState().fileUpload.filesProcesses,{id:fileUploadId});
+        const fp = _.find(getState().fileUpload.filesProcesses, {id: fileUploadId});
         if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving || fp.operationId) {
             return;
         }
@@ -196,7 +196,10 @@ export function uploadFile(fileUploadId) {
             },
             (err) => {
                 console.error('Upload FAILED: ', err.responseText);
-                dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
+                dispatch(fileUploadError(fp.id, {
+                    code: null,
+                    message: err.responseText
+                }));
             }
         );
     };
@@ -210,7 +213,6 @@ export function changeFileUploadProgress(progressValue, progressStatus, id) {
         if (progressStatus === 'ready') {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
-            dispatch(fetchSamplesAsync());
         }
     };
 }

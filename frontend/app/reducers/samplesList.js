@@ -120,6 +120,18 @@ function reduceDisableSampleEdit(state, action) {
     };
 }
 
+function addSamples(state, action) {
+    const {samples} = action;
+    const {hashedArray:{array:currentSamples}} = state;
+    const newSampleList = currentSamples.concat(samples);
+    const sortedSamples = _.sortBy(newSampleList, (sample) => sample.fileName.toLowerCase());
+    return {
+        ...state,
+        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
+        editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
+    };
+}
+
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
@@ -154,6 +166,9 @@ export default function samplesList(state = {
 
         case ActionTypes.DISABLE_SAMPLE_EDIT:
             return reduceDisableSampleEdit(state, action);
+
+        case ActionTypes.SAMPLES_LIST_ADD_SAMPLES:
+            return addSamples(state, action);
 
         default:
             return state;
