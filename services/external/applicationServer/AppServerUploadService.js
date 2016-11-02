@@ -19,7 +19,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
         super(services, models);
     }
-    
+
     uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
             (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
@@ -128,7 +128,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 error: null
             }, (error) => callback(error)),
             (callback) => super._createOperationResult(session, operation, null, operation.getUserId(),
-                EVENTS.onOperationResultReceived, false, {status, progress}, null, callback)
+                EVENTS.onOperationResultReceived, false, {
+                    status,
+                    progress
+                }, null, callback)
         ], callback);
     }
 
@@ -162,7 +165,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 status: SAMPLE_UPLOAD_STATUS.READY,
                 progress: 100,
                 error: null
-            }, (error) => callback(error))
+            }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
