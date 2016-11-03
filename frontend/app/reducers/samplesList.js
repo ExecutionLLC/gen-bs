@@ -10,6 +10,7 @@ function reduceRequestSamples(state) {
 }
 
 function reduceUpdateSampleValue(state, action) {
+    debugger;
     const {valueFieldId, value, sampleId} = action;
     const {editingSample} = state;
 
@@ -17,12 +18,12 @@ function reduceUpdateSampleValue(state, action) {
         return state;
     }
 
-    const newValue = {fieldId: valueFieldId, values: value};
-    const sampleValues = editingSample.values;
+    const newValue = {fieldId: valueFieldId, value: value};
+    const sampleValues = editingSample.editableFields.fields;
     const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
 
     const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
-    const newEditingSample = {...editingSample, values: newSampleValues};
+    const newEditingSample = {...editingSample, editableFields: {...editingSample.editableFields, fields:  newSampleValues}};
 
     return {
         ...state,
@@ -67,8 +68,8 @@ function reduceResetSampleInList(state, action) {
     }
 
     const sample = hashedArray.hash[sampleId];
-    const sampleValues = sample.values;
-    const newEditingSample = {...editingSample, values: sampleValues};
+    const sampleValues = sample.editableFields;
+    const newEditingSample = {...editingSample, editableFields: sampleValues};
 
     return {
         ...state,
