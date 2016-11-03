@@ -103,7 +103,7 @@ class FieldsMetadataModel extends ModelBase {
         async.waterfall([
             (callback) => this.models.samples.findMany(userId, sampleIds, callback),
             (samples, callback) => {
-                const fieldIds =_.uniq([].concat.apply([],_.map(samples, sample => _.map(sample.values,'fieldId'))));
+                const fieldIds =_.uniq([].concat.apply([],_.map(samples, sample => _.map(sample.sampleFields,'fieldId'))));
                 this.findMany(fieldIds, callback);
             }
         ], callback);

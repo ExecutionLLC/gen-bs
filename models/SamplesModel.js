@@ -403,7 +403,11 @@ class SamplesModel extends SecureModelBase {
                             originalId: sampleId,
                             genotypeId,
                             genotypeName,
-                            sampleFields: _.map(sampleFieldsValues[genotypeId], field => field.fieldId),
+                            sampleFields: _.map(sampleFieldsValues[genotypeId], field => {
+                                return {
+                                    fieldId: field.fieldId
+                                };
+                            }),
                             editableFields: {
                                 versionId,
                                 fields: _.map(editableValues[versionId], field => {
