@@ -33,19 +33,19 @@ export default class FileUploadLeftPane extends React.Component {
 
         // Calculates search value for the specified editable field.
         function getSearchValue(editableField, sampleEditableFieldValue) {
-            if (_.isNull(sampleEditableFieldValue.values)) {
+            if (_.isNull(sampleEditableFieldValue.value)) {
                 return '';
             }
             if (_.isEmpty(editableField.availableValues)) {
-                return sampleEditableFieldValue.values;
+                return sampleEditableFieldValue.value;
             }
-            return _.find(editableField.availableValues, {'id': sampleEditableFieldValue.values}).value;
+            return _.find(editableField.availableValues, {'id': sampleEditableFieldValue.value}).value;
         }
 
         const sampleSearchArray = _.map(samplesArray, sample => {
-            const sampleFieldsHash = _.keyBy(sample.values, 'fieldId');
+            const editableFieldHash = _.keyBy(sample.editableFields.fields, 'fieldId');
             const sampleSearchValues = _.map(editableFields, editableField => {
-                const sampleEditableField = sampleFieldsHash[editableField.fieldId];
+                const sampleEditableField = editableFieldHash[editableField.fieldId];
                 return getSearchValue(editableField, sampleEditableField)
                     .toLocaleLowerCase();
             });

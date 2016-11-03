@@ -24,7 +24,6 @@ class SamplesService extends UserEntityServiceBase {
 
     update(user, sample, callback) {
         async.waterfall([
-            (callback) => this._ensureOnlyEditableFieldsHaveValues(sample, callback),
             (callback) => super.update(user, sample, callback)
         ], callback);
     }

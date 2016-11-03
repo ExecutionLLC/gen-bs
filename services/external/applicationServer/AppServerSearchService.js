@@ -243,7 +243,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
             } else {
                 if (_.some(notDuplicatedColumnNames, notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)) {
-                    const exist = _.some(samples[0].values, field => field.fieldId == viewField.id);
+                    const exist = _.some(samples[0].sampleFields, field => field.fieldId == viewField.id);
                     resultHeader.push({
                         fieldId: viewField.id,
                         sampleId: samples[0].id,
@@ -252,7 +252,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     });
                 } else {
                     _.forEach(samples, sample => {
-                        const exist = _.some(sample.values, field => field.fieldId == viewField.id);
+                        const exist = _.some(sample.sampleFields, field => field.fieldId == viewField.id);
                         resultHeader.push({
                             fieldId: viewField.id,
                             sampleId: sample.id,
@@ -289,7 +289,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 );
                 // Create array of objects containing samples' info and it's fields.
                 const sampleFieldMapArray = _.map(samples, sample => {
-                    const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
+                    const sampleFieldIds = _.map(sample.sampleFields, fieldValue => fieldValue.fieldId);
                     const sampleFields = _.filter(samplesFields, sampleField => {
                         return _.some(sampleFieldIds, sampleFieldId => {
                             return sampleFieldId === sampleField.id
