@@ -132,10 +132,10 @@ class SamplesModel extends SecureModelBase {
                         // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
                         ({fieldsWithIds, editableFields}, callback) => {
                             const sampleWithValues = Object.assign({}, sample, {
-                                sampleFields:_.map(editableFields, fieldWithId => ({
+                                sampleFields:_.map(fieldsWithIds, fieldWithId => ({
                                     fieldId: fieldWithId.id
                                 })),
-                                editableFields: _.map(fieldsWithIds, fieldWithId => ({
+                                editableFields: _.map(editableFields, fieldWithId => ({
                                     fieldId: fieldWithId.id,
                                     value: null
                                 }))
@@ -199,7 +199,7 @@ class SamplesModel extends SecureModelBase {
                     this._unsafeUpdate(genotypeId, dataToUpdate, trx, (error) => callback(error, genotypeId));
                 },
                 (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
-                (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.editableFields,
+                (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.editableFields.fields,
                     (error) => callback(error, versionId)),
                 (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
                 (samples, callback) => callback(null, samples[0])
@@ -308,11 +308,11 @@ class SamplesModel extends SecureModelBase {
      * @param {function(Error, Array<Object>)}callback (error, resulting values list)
      * */
     _addGenotypeValues(trx, versionId, values, callback) {
-        async.map(values, ({fieldId, values}, callback) => {
+        async.map(values, ({fieldId, value}, callback) => {
             const dataToInsert = {
                 genotypeVersionId: versionId,
                 fieldId,
-                values
+                values:value
             };
             this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
         }, callback);
