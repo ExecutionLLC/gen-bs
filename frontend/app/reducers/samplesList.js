@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/samplesList';
 import immutableArray from '../utils/immutableArray';
-import {ImmutableHash, ImmutableHashedArray} from '../utils/immutable';
+import {ImmutableHashedArray} from '../utils/immutable';
 import {entityType} from '../utils/entityTypes';
 
 function reduceRequestSamples(state) {

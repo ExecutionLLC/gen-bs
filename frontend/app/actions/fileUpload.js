@@ -1,5 +1,4 @@
 import config from '../../config';
-import {fetchSamplesAsync} from './samplesList';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';

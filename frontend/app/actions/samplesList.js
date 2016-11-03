@@ -76,13 +76,12 @@ export function fetchSamplesAsync() {
     return (dispatch) => {
         dispatch(requestSamples());
         return new Promise((resolve) => samplesClient.getAll((error, response) => resolve({
-                error,
-                response
-            }))
-        ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response))
-        ).then((response) => response.body
-        ).then((samples) => dispatch(receiveSamplesList(samples)));
+            error,
+            response
+        })))
+            .then(({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response)))
+            .then((response) => response.body)
+            .then((samples) => dispatch(receiveSamplesList(samples)));
     };
 }
 
