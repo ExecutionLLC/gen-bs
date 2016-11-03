@@ -24,7 +24,8 @@ const SampleTableNames = {
     Metadata: 'vcf_file_sample',
     Genotypes: 'sample_genotype',
     Versions: 'genotype_version',
-    Values: 'vcf_file_sample_value'
+    Values: 'vcf_file_sample_value',
+    Fields: 'genotype_field'
 };
 
 class SamplesModel extends SecureModelBase {
@@ -105,25 +106,36 @@ class SamplesModel extends SecureModelBase {
                         // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
                         (callback) =>
                             this.models.fields.addMissingFields(languId, fields, trx, (error, fieldsWithIds) => {
-                                callback(error, fieldsWithIds);
+                                const mappedFields = _.map(fieldsWithIds, fieldWithId => {
+                                    return {
+                                        id: fieldWithId.id,
+                                        fieldWithId
+                                    }
+                                });
+                                callback(error, mappedFields);
                             }),
                         // Add editable fields to the field list.
                         (fieldsWithIds, callback) => {
                             this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
-                                const mappedFields = _.map(fieldsMetadata || [], fieldMetadata => {
+                                const editableFields = _.map(fieldsMetadata || [], fieldMetadata => {
                                     return {
                                         id: fieldMetadata.id,
                                         fieldMetadata
                                     }
                                 });
-                                const aggregatedFields = fieldsWithIds.concat(mappedFields);
-                                callback(error, aggregatedFields);
+                                callback(error, {
+                                    fieldsWithIds,
+                                    editableFields
+                                });
                             });
                         },
                         // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
-                        (fieldsWithIds, callback) => {
+                        ({fieldsWithIds, editableFields}, callback) => {
                             const sampleWithValues = Object.assign({}, sample, {
-                                values: _.map(fieldsWithIds, fieldWithId => ({
+                                sampleFields:_.map(editableFields, fieldWithId => ({
+                                    fieldId: fieldWithId.id
+                                })),
+                                editableFields: _.map(fieldsWithIds, fieldWithId => ({
                                     fieldId: fieldWithId.id,
                                     value: null
                                 }))
@@ -187,7 +199,7 @@ class SamplesModel extends SecureModelBase {
                     this._unsafeUpdate(genotypeId, dataToUpdate, trx, (error) => callback(error, genotypeId));
                 },
                 (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
-                (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.values,
+                (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.editableFields,
                     (error) => callback(error, versionId)),
                 (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
                 (samples, callback) => callback(null, samples[0])
@@ -239,13 +251,18 @@ class SamplesModel extends SecureModelBase {
             (sampleId, callback) => this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback),
             (sampleId, callback) => this._createGenotypes(sampleId, genotypesOrNull, trx,
                 (error, genotypeIds) => callback(error, sampleId, genotypeIds)),
+            (sampleId, genotypeIds, callback) => {
+                async.each(genotypeIds, (genotypeId, callback) => {
+                    this._addGenotypeFields(trx, genotypeId, sample.sampleFields, callback)
+                }, (error) => callback(error, sampleId, genotypeIds))
+            },
             (sampleId, genotypeIds, callback) => async.map(genotypeIds,
                 (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
                 (error, genotypeVersionIds) => callback(error, sampleId, genotypeIds, genotypeVersionIds)),
             (sampleId, genotypeIds, genotypeVersionIds, callback) => {
                 // Each genotype should have different fields.
                 async.each(genotypeVersionIds, (genotypeVersionId, callback) => {
-                    this._addGenotypeValues(trx, genotypeVersionId, sample.values, callback)
+                    this._addGenotypeValues(trx, genotypeVersionId, sample.editableFields, callback)
                 }, (error) => callback(error, genotypeVersionIds))
             }
         ], callback);
@@ -298,6 +315,16 @@ class SamplesModel extends SecureModelBase {
                 values
             };
             this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
+        }, callback);
+    }
+
+    _addGenotypeFields(trx, genotypeId, values, callback) {
+        async.map(values, ({fieldId}, callback) => {
+            const dataToInsert = {
+                fieldId,
+                genotypeId
+            };
+            this._unsafeInsert(SampleTableNames.Fields, dataToInsert, trx, callback);
         }, callback);
     }
 
@@ -355,10 +382,17 @@ class SamplesModel extends SecureModelBase {
      * */
     _createSamplesWithValues(trx, samplesMetadata, genotypeVersions, callback) {
         const versionIds = _.map(genotypeVersions, version => version.versionId);
+        const genotypeIds = _.map(genotypeVersions, version => version.genotypeId);
         async.waterfall([
-            (callback) => this._findValuesForVersions(trx, versionIds, callback),
-            (values, callback) => {
-                const samplesValues = _.groupBy(values, 'genotypeVersionId');
+            (callback) => async.parallel({
+                values: (callback) => this._findValuesForVersions(trx, versionIds, callback),
+                fields: (callback) => this._findFieldForGenotypeId(trx, genotypeIds, callback),
+            }, (error, results) => {
+                callback(error, results);
+            }),
+            ({values,fields}, callback) => {
+                const editableValues = _.groupBy(values, 'genotypeVersionId');
+                const sampleFieldsValues = _.groupBy(fields, 'genotypeId');
                 const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');
                 const resultSamples = genotypeVersions
                     .map(genotypeVersion => {
@@ -369,12 +403,34 @@ class SamplesModel extends SecureModelBase {
                             originalId: sampleId,
                             genotypeId,
                             genotypeName,
-                            values: samplesValues[versionId]
+                            sampleFields: _.map(sampleFieldsValues[genotypeId], field => field.fieldId),
+                            editableFields: {
+                                versionId,
+                                fields: _.map(editableValues[versionId], field => {
+                                    const {fieldId, values} = field;
+                                    return {
+                                        fieldId,
+                                        value: values
+                                    }
+                                })
+                            }
                         })
                     });
                 callback(null, resultSamples);
             }
         ], callback);
+    }
+
+    _findFieldForGenotypeId(trx, genotypeIds, callback) {
+        async.waterfall([
+            (callback) => trx.select()
+                .from(SampleTableNames.Fields)
+                .whereIn('genotype_id', genotypeIds)
+                .asCallback((error, rows) => callback(error, rows)),
+            (rows, callback) => this._toCamelCase(rows, callback)
+        ], (error, rows) => {
+            callback(error, rows);
+        });
     }
 
     _findValuesForVersions(trx, genotypeVersionIds, callback) {
