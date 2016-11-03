@@ -112,7 +112,7 @@ function reduceSetCurrentSampleId(state, action) {
 function reduceDisableSampleEdit(state, action) {
     const {sampleId, disable} = action;
     const {editingSample} = state;
-    if (sampleId !== editingSample.id) {
+    if (!editingSample || editingSample.id !== sampleId) {
         return state;
     }
     return {
