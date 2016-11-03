@@ -10,7 +10,6 @@ function reduceRequestSamples(state) {
 }
 
 function reduceUpdateSampleValue(state, action) {
-    debugger;
     const {valueFieldId, value, sampleId} = action;
     const {editingSample} = state;
 

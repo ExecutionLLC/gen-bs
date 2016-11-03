@@ -106,23 +106,19 @@ class SamplesModel extends SecureModelBase {
                         // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
                         (callback) =>
                             this.models.fields.addMissingFields(languId, fields, trx, (error, fieldsWithIds) => {
-                                const mappedFields = _.map(fieldsWithIds, fieldWithId => {
-                                    return {
-                                        id: fieldWithId.id,
-                                        fieldWithId
-                                    }
-                                });
+                                const mappedFields = _.map(fieldsWithIds, fieldWithId => ({
+                                    id: fieldWithId.id,
+                                    fieldWithId
+                                }));
                                 callback(error, mappedFields);
                             }),
                         // Add editable fields to the field list.
                         (fieldsWithIds, callback) => {
                             this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
-                                const editableFields = _.map(fieldsMetadata || [], fieldMetadata => {
-                                    return {
-                                        id: fieldMetadata.id,
-                                        fieldMetadata
-                                    }
-                                });
+                                const editableFields = _.map(fieldsMetadata || [], fieldMetadata => ({
+                                    id: fieldMetadata.id,
+                                    fieldMetadata
+                                }));
                                 callback(error, {
                                     fieldsWithIds,
                                     editableFields
@@ -132,7 +128,7 @@ class SamplesModel extends SecureModelBase {
                         // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
                         ({fieldsWithIds, editableFields}, callback) => {
                             const sampleWithValues = Object.assign({}, sample, {
-                                sampleFields:_.map(fieldsWithIds, fieldWithId => ({
+                                sampleFields: _.map(fieldsWithIds, fieldWithId => ({
                                     fieldId: fieldWithId.id
                                 })),
                                 editableFields: _.map(editableFields, fieldWithId => ({
@@ -312,7 +308,7 @@ class SamplesModel extends SecureModelBase {
             const dataToInsert = {
                 genotypeVersionId: versionId,
                 fieldId,
-                values:value
+                values: value
             };
             this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
         }, callback);
@@ -403,11 +399,9 @@ class SamplesModel extends SecureModelBase {
                             originalId: sampleId,
                             genotypeId,
                             genotypeName,
-                            sampleFields: _.map(sampleFieldsValues[genotypeId], field => {
-                                return {
-                                    fieldId: field.fieldId
-                                };
-                            }),
+                            sampleFields: _.map(sampleFieldsValues[genotypeId], field => ({
+                                fieldId: field.fieldId
+                            })),
                             editableFields: {
                                 versionId,
                                 fields: _.map(editableValues[versionId], field => {
