@@ -202,7 +202,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderEditableValues(sampleId) {
-        const {dispatch, changeShowValues, fields, samplesList:{editedSamplesHash}} = this.props;
+        const {dispatch, changeShowValues, fields, samplesList: {editedSamplesHash, editingSampleDisabled}} = this.props;
         const selectedSample = editedSamplesHash[sampleId];
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(selectedSample);
         return (
@@ -211,6 +211,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                        sampleId={sampleId}
                                        fieldIdToValuesHash={fieldIdToValuesHash}
                                        changeShowValues={changeShowValues}
+                                       disabled={editingSampleDisabled}
             />
         );
     }
