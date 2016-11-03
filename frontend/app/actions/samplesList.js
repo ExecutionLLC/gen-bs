@@ -18,7 +18,7 @@ export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
 export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
-
+export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 
 const samplesClient = apiFacade.samplesClient;
@@ -118,11 +118,13 @@ function disableSampleEdit(sampleId, disable) {
 
 export function requestUpdateSampleFieldsAsync(sampleId) {
     return (dispatch, getState) => {
+        const {samplesList: {editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
+        if (!editingSample || editingSample.id !== sampleId) {
+            return new Promise.resolve();
+        }
         dispatch(disableSampleEdit(sampleId, true));
-        const {samplesList: {editedSamplesHash, onSaveAction, onSaveActionPropertyId}} = getState();
-        const sampleToUpdate = editedSamplesHash[sampleId];
         return new Promise((resolve) => samplesClient.update(
-            sampleToUpdate,
+            editingSample,
             (error, response) => resolve({error, response})
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
@@ -178,5 +180,12 @@ export function samplesListSetHistorySamples(samples) {
     return {
         type: SAMPLES_LIST_SET_HISTORY_SAMPLES,
         samples
+    };
+}
+
+export function setEditingSampleId(sampleId) {
+    return {
+        type: SET_EDITING_SAMPLE_ID,
+        sampleId
     };
 }

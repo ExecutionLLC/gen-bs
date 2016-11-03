@@ -8,7 +8,8 @@ import {
     updateSampleValue, resetSampleInList,
     requestUpdateSampleFieldsAsync,
     sampleSaveCurrentIfSelected,
-    setCurrentSampleId
+    setCurrentSampleId,
+    setEditingSampleId
 } from '../../../actions/samplesList';
 
 export default class SampleEditableFieldsPanel extends ComponentBase {
@@ -29,6 +30,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
                 dispatch(setCurrentSampleId(newSample.id));
+                dispatch(setEditingSampleId(newSample.id));
                 changeShowValues(false);
             });
     }
@@ -42,22 +44,22 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
-        const {sampleId, fieldIdToValuesHash, fields} = this.props;
+        const {sampleId, fieldIdToValuesHash, fields, disabled} = this.props;
         const visibleEditableFields = _.filter(fields, field => !field.isInvisible);
         return (
             <div className='sample-mode3 collapse in'>
-                {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
+                {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash, disabled))}
                 {this.renderRowButtons()}
             </div>
         );
     }
 
-    renderEditableField(sampleId, field, fieldIdToValuesHash) {
+    renderEditableField(sampleId, field, fieldIdToValuesHash, disabled) {
         const fieldValue = fieldIdToValuesHash[field.id] || '';
         if (!_.isEmpty(field.availableValues)) {
-            return this.renderSelectField(sampleId, field, fieldValue);
+            return this.renderSelectField(sampleId, field, fieldValue, disabled);
         } else {
-            return this.renderTextField(sampleId, field, fieldValue);
+            return this.renderTextField(sampleId, field, fieldValue, disabled);
         }
     }
 
@@ -85,7 +87,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         );
     }
 
-    renderSelectField(sampleId, field, fieldValue) {
+    renderSelectField(sampleId, field, fieldValue, disabled) {
         const selectOptions = field.availableValues.map(
             option => {
                 return {value: option.id, label: option.value};
@@ -100,13 +102,14 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         options={selectOptions}
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
+                        disabled={disabled}
                     />
                 </dd>
             </dl>
         );
     }
 
-    renderTextField(sampleId, field, fieldValue) {
+    renderTextField(sampleId, field, fieldValue, disabled) {
         return (
             <dl key={field.id}>
                 <dt>{field.label}</dt>
@@ -116,6 +119,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         className='form-control'
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
+                        disabled={disabled}
                     />
                 </dd>
             </dl>
@@ -127,5 +131,6 @@ SampleEditableFieldsPanel.propTypes = {
     sampleId: PropTypes.string.isRequired,
     fieldIdToValuesHash: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
+    disabled: PropTypes.bool,
     dispatch: PropTypes.func.isRequired
 };
