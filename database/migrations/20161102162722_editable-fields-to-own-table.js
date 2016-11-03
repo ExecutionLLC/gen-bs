@@ -92,12 +92,10 @@ function _createGenotypeVersion(genotypeGroup) {
     const {genotypeVersionId} = camelCaseGenotypeVersion[0];
     return {
         id: genotypeVersionId,
-        fields: _.map(camelCaseGenotypeVersion, sampleValue => {
-            return {
-                id: sampleValue.fieldId,
-                value: sampleValue.values
-            }
-        })
+        fields: _.map(camelCaseGenotypeVersion, sampleValue => ({
+            id: sampleValue.fieldId,
+            value: sampleValue.values
+        }))
     };
 }
 
