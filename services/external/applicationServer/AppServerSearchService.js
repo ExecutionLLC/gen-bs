@@ -433,7 +433,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
-        const mainSampleMetadata = _.map(sample.values, field => fieldIdToMetadata[field.fieldId]);
+        const mainSampleMetadata = _.map(sample.sampleFields, field => fieldIdToMetadata[field.fieldId]);
         const sourceMetadata = _.filter(fieldIdToMetadata, metaData => metaData.sourceName != 'sample');
         const availableMetadata = mainSampleMetadata.concat(sourceMetadata);
         const availableFieldIdToMetadata = CollectionUtils.createHash(availableMetadata, fieldMetadata => fieldMetadata.id);
