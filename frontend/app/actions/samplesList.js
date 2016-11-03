@@ -118,11 +118,13 @@ function disableSampleEdit(sampleId, disable) {
 
 export function requestUpdateSampleFieldsAsync(sampleId) {
     return (dispatch, getState) => {
+        const {samplesList: {editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
+        if (!editingSample || editingSample.id !== sampleId) {
+            return new Promise.resolve();
+        }
         dispatch(disableSampleEdit(sampleId, true));
-        const {samplesList: {editedSamplesHash, onSaveAction, onSaveActionPropertyId}} = getState();
-        const sampleToUpdate = editedSamplesHash[sampleId];
         return new Promise((resolve) => samplesClient.update(
-            sampleToUpdate,
+            editingSample,
             (error, response) => resolve({error, response})
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
