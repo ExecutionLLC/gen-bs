@@ -111,13 +111,15 @@ function reduceSetCurrentSampleId(state, action) {
 
 function reduceDisableSampleEdit(state, action) {
     const {sampleId, disable} = action;
-    return {
-        ...state,
-        disabledSamples: {
-            ...state.disabledSamples,
-            [sampleId]: disable
-        }
-    };
+    const {editingSample} = state;
+    if (sampleId === editingSample.id) {
+        return {
+            ...state,
+            editingSampleDisabled: disable
+        };
+    } else {
+        return state;
+    }
 }
 
 function addSamples(state, action) {
@@ -137,7 +139,8 @@ function reduceSetEditingSampleId(state, action) {
     const {hashedArray: {hash: samplesHash}} = state;
     return {
         ...state,
-        editingSample: sampleId && samplesHash[sampleId] || null
+        editingSample: sampleId && samplesHash[sampleId] || null,
+        editingSampleDisabled: false
     };
 }
 
@@ -145,8 +148,8 @@ export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
     editingSample: null,
-    currentSampleId: null,
-    disabledSamples: {}
+    editingSampleDisabled: false,
+    currentSampleId: null
 }, action) {
 
     switch (action.type) {
