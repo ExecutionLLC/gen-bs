@@ -3,7 +3,8 @@ import FileUploadSampleSearch from './FileUploadSampleSearch';
 import FileUploadSampleList from './FileUploadSampleList';
 
 import {
-    setCurrentSampleId
+    setCurrentSampleId,
+    setEditingSampleId
 } from '../../../actions/samplesList';
 import {setCurrentUploadId} from '../../../actions/fileUpload';
 
@@ -90,6 +91,7 @@ export default class FileUploadLeftPane extends React.Component {
         changeShowValues(false);
         dispatch(setCurrentUploadId(null));
         dispatch(setCurrentSampleId(id));
+        dispatch(setEditingSampleId(id));
     }
 
     onCurrentUploadIdChange(id) {
@@ -97,6 +99,7 @@ export default class FileUploadLeftPane extends React.Component {
         changeShowValues(false);
         dispatch(setCurrentUploadId(id));
         dispatch(setCurrentSampleId(null));
+        dispatch(setEditingSampleId(null));
     }
 }
 

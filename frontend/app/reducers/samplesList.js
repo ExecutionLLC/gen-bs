@@ -11,35 +11,39 @@ function reduceRequestSamples(state) {
 
 function reduceUpdateSampleValue(state, action) {
     const {valueFieldId, value, sampleId} = action;
-    const {editedSamplesHash} = state;
-    const newValue = {fieldId: valueFieldId, values: value};
+    const {editingSample} = state;
 
-    const editedSample = editedSamplesHash[sampleId];
-    const sampleValues = editedSample.values;
+    if (!editingSample || editingSample.id !== sampleId) {
+        return state;
+    }
+
+    const newValue = {fieldId: valueFieldId, values: value};
+    const sampleValues = editingSample.values;
     const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
 
     const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
-    const newEditedSample = {...editedSample, values: newSampleValues};
-    const newEditedSamplesHash = ImmutableHash.replace(editedSamplesHash, sampleId, newEditedSample);
+    const newEditingSample = {...editingSample, values: newSampleValues};
 
     return {
         ...state,
-        editedSamplesHash: newEditedSamplesHash
+        editingSample: newEditingSample
     };
 }
 
 function reduceReceiveUpdatedSample(state, action) {
     const {updatedSample, updatedSampleId} = action;
-    const {hashedArray, editedSamplesHash} = state;
-    const newSampleId = updatedSample.id;
+    const {hashedArray, editingSample} = state;
 
     const newHashedArray = ImmutableHashedArray.replaceItemId(hashedArray, updatedSampleId, updatedSample);
-    const newEditedSamplesHash = ImmutableHash.replaceAsNewKey(editedSamplesHash, updatedSampleId, newSampleId, updatedSample);
+
+    const newEditingSample = editingSample && editingSample.id === updatedSampleId ?
+        updatedSample :
+        editingSample;
 
     return {
         ...state,
         hashedArray: newHashedArray,
-        editedSamplesHash: newEditedSamplesHash
+        editingsample: newEditingSample
     };
 }
 
@@ -50,24 +54,25 @@ function reduceReceiveSamplesList(state, action) {
     return {
         ...state,
         hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
-        editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
+        editingSample: null
     };
 }
 
 function reduceResetSampleInList(state, action) {
     const {sampleId} = action;
-    const {hashedArray, editedSamplesHash} = state;
+    const {hashedArray, editingSample} = state;
+
+    if (!editingSample || editingSample.id !== sampleId) {
+        return state;
+    }
+
     const sample = hashedArray.hash[sampleId];
-
-    const editedSample = editedSamplesHash[sampleId];
     const sampleValues = sample.values;
-
-    const newEditedSample = {...editedSample, values: sampleValues};
-    const newEditedSamplesHash = ImmutableHash.replace(editedSamplesHash, sampleId, newEditedSample);
+    const newEditingSample = {...editingSample, values: sampleValues};
 
     return {
         ...state,
-        editedSamplesHash: newEditedSamplesHash
+        editingSample: newEditingSample
     };
 }
 
@@ -111,12 +116,13 @@ function reduceSetCurrentSampleId(state, action) {
 
 function reduceDisableSampleEdit(state, action) {
     const {sampleId, disable} = action;
+    const {editingSample} = state;
+    if (!editingSample || editingSample.id !== sampleId) {
+        return state;
+    }
     return {
         ...state,
-        disabledSamples: {
-            ...state.disabledSamples,
-            [sampleId]: disable
-        }
+        editingSampleDisabled: disable
     };
 }
 
@@ -128,15 +134,25 @@ function addSamples(state, action) {
     return {
         ...state,
         hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
-        editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
+        editingSample: null
+    };
+}
+
+function reduceSetEditingSampleId(state, action) {
+    const {sampleId} = action;
+    const {hashedArray: {hash: samplesHash}} = state;
+    return {
+        ...state,
+        editingSample: sampleId && samplesHash[sampleId] || null,
+        editingSampleDisabled: false
     };
 }
 
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
-    editedSamplesHash: ImmutableHash.makeFromObject({}),
-    currentSampleId: null,
-    disabledSamples: {}
+    editingSample: null,
+    editingSampleDisabled: false,
+    currentSampleId: null
 }, action) {
 
     switch (action.type) {
@@ -169,6 +185,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLES_LIST_ADD_SAMPLES:
             return addSamples(state, action);
+
+        case ActionTypes.SET_EDITING_SAMPLE_ID:
+            return reduceSetEditingSampleId(state, action);
 
         default:
             return state;
