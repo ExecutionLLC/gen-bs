@@ -8,7 +8,8 @@ import {
     updateSampleValue, resetSampleInList,
     requestUpdateSampleFieldsAsync,
     sampleSaveCurrentIfSelected,
-    setCurrentSampleId
+    setCurrentSampleId,
+    setEditingSampleId
 } from '../../../actions/samplesList';
 
 export default class SampleEditableFieldsPanel extends ComponentBase {
@@ -29,6 +30,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
                 dispatch(setCurrentSampleId(newSample.id));
+                dispatch(setEditingSampleId(newSample.id));
                 changeShowValues(false);
             });
     }

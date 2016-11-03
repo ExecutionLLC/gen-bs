@@ -18,7 +18,7 @@ export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
 export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
-
+export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 
 const samplesClient = apiFacade.samplesClient;
@@ -178,5 +178,12 @@ export function samplesListSetHistorySamples(samples) {
     return {
         type: SAMPLES_LIST_SET_HISTORY_SAMPLES,
         samples
+    };
+}
+
+export function setEditingSampleId(sampleId) {
+    return {
+        type: SET_EDITING_SAMPLE_ID,
+        sampleId
     };
 }

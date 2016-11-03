@@ -132,9 +132,19 @@ function addSamples(state, action) {
     };
 }
 
+function reduceSetEditingSampleId(state, action) {
+    const {sampleId} = action;
+    const {hashedArray: {hash: samplesHash}} = state;
+    return {
+        ...state,
+        editingSample: sampleId && samplesHash[sampleId] || null
+    };
+}
+
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
+    editingSample: null,
     currentSampleId: null,
     disabledSamples: {}
 }, action) {
@@ -169,6 +179,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLES_LIST_ADD_SAMPLES:
             return addSamples(state, action);
+
+        case ActionTypes.SET_EDITING_SAMPLE_ID:
+            return reduceSetEditingSampleId(state, action);
 
         default:
             return state;
