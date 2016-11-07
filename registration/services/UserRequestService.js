@@ -28,7 +28,7 @@ class UserRequestService {
     }
 
     createAsync(userInfo) {
-        const {db, userRequestModel} = this;
+        const {db, /**@type {UserRequestModel}*/userRequestModel} = this;
         return db.transactionallyAsync((trx) =>
             userRequestModel.createAsync(userInfo, trx));
     }
