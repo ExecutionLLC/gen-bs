@@ -100,9 +100,8 @@ app.post('/user_request', (request, response) => {
     console.log(userInfo);
     userRequests.createAsync(userInfo)
         .then((insertedUser) =>
-            mailService.sendRegisterMailAsync(userInfo.email, userInfo)
-                .then(() => mailService.sendAdminRegisterMailAsync(
-                    Object.assign({}, userInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${insertedUser.id}`}))))
+            mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
+                .then(() => userRequests.emailConfirmSentAsync(insertedUser.id)))
         .then(() => response.send(userInfo))
         .catch((err) => response.status(400).send(err.message));
 });
@@ -124,6 +123,17 @@ app.get('/approve', (request, response) => {
         );
 });
 
+app.get('/confirm', (request, response) => {
+    console.log('confirm');
+    const {id: confirmUUID} = request.query;
+    console.log(confirmUUID);
+    userRequests.emailConfirmReceivedAsync(confirmUUID)
+        .then((requestInfo) =>
+            mailService.sendAdminRegisterMailAsync(
+                Object.assign({}, requestInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${requestInfo.id}`})
+            )
+        );
+});
 
 app.listen(Config.port, () => {
     console.log('Server is started!');
