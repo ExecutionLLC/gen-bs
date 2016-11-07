@@ -81,16 +81,6 @@ class UserRequestModel extends ModelBase {
                 })));
     }
 
-    _emailConfirmReceivedAsync(id, trx) {
-        return this.findInactiveAsync(id, trx)
-            .then((item) => trx(this.baseTableName)
-                .where('id', id)
-                .update(ChangeCaseUtil.convertKeysToSnakeCase({
-                    emailConfirmed: true,
-                    emailConfirmedTimestamp: new Date()
-                })));
-    }
-
     emailConfirmReceivedAsync(confirmUUID, trx) {
         return trx.select()
             .from(this.baseTableName)
@@ -100,13 +90,19 @@ class UserRequestModel extends ModelBase {
                 if (items && items.length) {
                     return items[0];
                 } else {
-                    return Promise.reject('User is not found.');
+                    return Promise.reject('Confirm id not found.');
                 }
             })
-            .then((item) => {
-                this._emailConfirmReceivedAsync(item.id, trx);
-                return item;
-            });
+            .then((item) =>
+                Promise.resolve()
+                    .then(() => trx(this.baseTableName)
+                        .where('id', item.id)
+                        .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                            emailConfirmed: true,
+                            emailConfirmedTimestamp: new Date()
+                        })))
+                    .then(() => item)
+            );
     }
 }
 
