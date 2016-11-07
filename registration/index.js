@@ -132,6 +132,8 @@ app.get('/confirm', (request, response) => {
             mailService.sendAdminRegisterMailAsync(
                 Object.assign({}, requestInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${requestInfo.id}`})
             )
+        ).then(() =>
+           response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
         );
 });
 
