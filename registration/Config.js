@@ -61,7 +61,8 @@ const SETTINGS = {
     },
     registrationFrontend: {
         site: makeDefault(ENV.GEN_REG_FRONTEND_SITE, 'http://alapy.com'),
-        regcodeIdPath: makeDefault(ENV.GEN_REG_FRONTEND_REGCODE_ID_PATH, '/test-register/')
+        regcodeIdPath: makeDefault(ENV.GEN_REG_FRONTEND_REGCODE_ID_PATH, '/test-register/'),
+        emailConfirmedPath: makeDefault(ENV.GEN_REG_FRONTEND_EMAIL_CONFIRMED, '/email-confirmed'),
     },
     mailChimp: {
         key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),
