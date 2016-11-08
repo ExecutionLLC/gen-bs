@@ -129,15 +129,16 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 error: null
             }, (error) => callback(error)),
             (callback) => this._createUploadProgressResult(user, session, operation, message, callback),
-            (result, callback) => super._createOperationResult(session, operation, null, operation.getUserId(),
-                EVENTS.onOperationResultReceived, false,result, null, callback)
+            (result, callback) => super._createOperationResult(
+                session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, false, result, null, callback
+            )
         ], callback);
     }
 
     _createUploadProgressResult(user, session, operation, message, callback) {
         const {result:{status, progress, genotypes}} = message;
         if (genotypes) {
-            const sampleGenotypes = _.isEmpty(genotypes)?[null]:genotypes;
+            const sampleGenotypes = _.isEmpty(genotypes) ? [null] : genotypes;
             const sampleId = operation.getSampleId();
             const sampleFileName = operation.getSampleFileName();
             async.waterfall([
@@ -149,10 +150,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     callback(null, {
                         status,
                         progress,
-                        metadata:samples
+                        metadata: samples
                     });
                 }
-            ],callback);
+            ], callback);
         } else {
             callback(null, {
                 status,
@@ -174,7 +175,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         // Usual fields metadata. Values of these fields are the same for all genotypes.
         const commonFieldsMetadata = sampleMetadata.columns;
         // Array of names of the genotypes found in the file.
-        const genotypes = sampleMetadata.genotypes||[null];
+        const genotypes = sampleMetadata.genotypes || [null];
 
         async.waterfall([
             (callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId, commonFieldsMetadata, genotypes,

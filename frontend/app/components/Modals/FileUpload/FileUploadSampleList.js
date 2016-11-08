@@ -25,7 +25,7 @@ export default class FileUploadSampleList extends React.Component {
             return !_.includes(['error', 'ready'], upload.progressStatus);
         });
         const currentUploadsData = _.map(currentUploads, upload => {
-            const uploadSamples = _.filter(sampleList.hashedArray.array,sample => sample.originalId === upload.sampleId);
+            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.originalId === upload.sampleId);
             return {
                 upload,
                 samples: uploadSamples
@@ -200,7 +200,7 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderProgressUploadSample(uploadData){
+    renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
         return (
             samples.map((sample) => this.renderProgressUpload(upload, sample))

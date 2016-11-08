@@ -80,15 +80,15 @@ class SamplesModel extends SecureModelBase {
     attachSampleFields(userId, language, sampleId, sampleFields, genotypes, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findGenotypeIdsForSampleIds([sampleId],trx, callback),
+                (callback) => this._findGenotypeIdsForSampleIds([sampleId], trx, callback),
                 (genotypeIds, callback) => {
                     async.each(genotypeIds, (genotypeId, callback) => {
                         this._addGenotypeFields(trx, genotypeId, sampleFields, callback)
                     }, (error) => callback(error, genotypeIds))
                 },
-                (genotypeIds, callback) => this._findLastVersionsByGenotypeIds(trx,genotypeIds, callback),
-                (sampleVersionsIds, callback)=> callback (null,_.map(sampleVersionsIds, sampleVersionsId => sampleVersionsId.versionId))
-            ],callback)
+                (genotypeIds, callback) => this._findLastVersionsByGenotypeIds(trx, genotypeIds, callback),
+                (sampleVersionsIds, callback)=> callback(null, _.map(sampleVersionsIds, sampleVersionsId => sampleVersionsId.versionId))
+            ], callback)
         }, callback);
     }
 
@@ -391,7 +391,7 @@ class SamplesModel extends SecureModelBase {
             }, (error, results) => {
                 callback(error, results);
             }),
-            ({values,fields}, callback) => {
+            ({values, fields}, callback) => {
                 const editableValues = _.groupBy(values, 'genotypeVersionId');
                 const sampleFieldsValues = _.groupBy(fields, 'genotypeId');
                 const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');

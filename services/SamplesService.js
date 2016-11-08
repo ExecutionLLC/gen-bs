@@ -54,8 +54,7 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId,
-                                    appServerSampleFields, genotypes, callback) {
+    createMetadataForUploadedSample(user, sampleId, appServerSampleFields, genotypes, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
             asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
@@ -86,7 +85,7 @@ class SamplesService extends UserEntityServiceBase {
                 const {maxCountPerUser} = this.config.samplesUpload;
                 if (activeCount < maxCountPerUser) {
                     // More uploads - lower priority.
-                    callback(null,  maxCountPerUser - activeCount);
+                    callback(null, maxCountPerUser - activeCount);
                 } else {
                     callback(new Error(`Too many uploads for user ${user.id} (${user.email})`));
                 }
