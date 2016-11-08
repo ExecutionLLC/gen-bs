@@ -163,7 +163,6 @@ function updateSampleFields(state, action) {
             return sample;
         }
     });
-    debugger;
     return {
         ...state,
         hashedArray: ImmutableHashedArray.makeFromArray(newSampleList),

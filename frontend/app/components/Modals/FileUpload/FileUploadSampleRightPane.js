@@ -7,6 +7,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {uploadFiles} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
 function cancelDOMEvent(e) {
     e.stopPropagation();
@@ -219,11 +220,13 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleHeader(sampleItem) {
+        const {genotypeName, fileName, type} = sampleItem;
+        const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
                     {sampleItem.id && this.renderDeleteSampleButton()}
-                    {this.renderSampleFileName(sampleItem.fileName)}
+                    {this.renderSampleFileName(getItemLabelByNameAndType(sampleName, type))}
                     {this.renderSampleDates(sampleItem.timestamp, 'Some Date')}
                     {this.renderSampleDescription('Some description')}
                 </div>
