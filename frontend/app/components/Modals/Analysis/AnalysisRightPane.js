@@ -727,7 +727,7 @@ export default class AnalysisRightPane extends React.Component {
     getSampleOptions(value, selectedSamplesHash) {
         const samples = this.props.samplesList.hashedArray.array;
         return samples.map((sampleItem) => {
-            const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id]);
+            const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
             const {fileName, genotypeName, type: sampleType, id: sampleId} = sampleItem;
             const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
             const label = getItemLabelByNameAndType(sampleName, sampleType);
