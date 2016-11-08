@@ -6,6 +6,7 @@ import {
 } from './fileUpload';
 import config from '../../config';
 import {samplesListAddSamples} from './samplesList';
+import {samplesListUpdateSamplesFields} from './samplesList';
 
 /*
  * action types
@@ -150,8 +151,11 @@ function receiveSearchMessage(wsData) {
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
         const {operationId, result: {progress, status, metadata}} = wsData;
-        if (wsData.result.status === 'ready') {
+        if (metadata && status !== 'ready') {
             dispatch(samplesListAddSamples(metadata));
+        }
+        if (metadata && status === 'ready') {
+            dispatch(samplesListUpdateSamplesFields(metadata));
         }
         dispatch(changeFileUploadProgressForOperationId(progress, status, operationId));
     };
