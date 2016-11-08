@@ -54,20 +54,21 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
-                                    appServerSampleFields, genotypes,
-                                    asGenotypesFieldsNames, callback) {
+    createMetadataForUploadedSample(user, sampleId,
+                                    appServerSampleFields, genotypes, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
             asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
+        this.theModel.attachSampleFields(user.id, user.language, sampleId, sampleFields, genotypes, callback);
+    }
 
+    initMetadataForUploadedSample(user, sampleId, sampleFileName, genotypes, callback) {
         const sample = {
             id: sampleId,
             fileName: sampleFileName,
             hash: null
         };
-
-        this.theModel.addSamplesWithFields(user.id, user.language, sample, sampleFields, genotypes, callback);
+        this.theModel.addSamplesWithFields(user.id, user.language, sample, [], genotypes, callback);
     }
 
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {

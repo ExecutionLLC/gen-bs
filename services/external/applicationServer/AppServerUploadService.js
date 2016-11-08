@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const async = require('async');
+const _ = require('lodash');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
@@ -127,12 +128,37 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 progress,
                 error: null
             }, (error) => callback(error)),
-            (callback) => super._createOperationResult(session, operation, null, operation.getUserId(),
-                EVENTS.onOperationResultReceived, false, {
-                    status,
-                    progress
-                }, null, callback)
+            (callback) => this._createUploadProgressResult(user, session, operation, message, callback),
+            (result, callback) => super._createOperationResult(session, operation, null, operation.getUserId(),
+                EVENTS.onOperationResultReceived, false,result, null, callback)
         ], callback);
+    }
+
+    _createUploadProgressResult(user, session, operation, message, callback) {
+        const {result:{status, progress, genotypes}} = message;
+        if (genotypes) {
+            const sampleGenotypes = _.isEmpty(genotypes)?[null]:genotypes;
+            const sampleId = operation.getSampleId();
+            const sampleFileName = operation.getSampleFileName();
+            async.waterfall([
+                (callback) => this.services.samples.initMetadataForUploadedSample(
+                    user, sampleId, sampleFileName, sampleGenotypes, callback
+                ),
+                (sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback),
+                (samples, callback) => {
+                    callback(null, {
+                        status,
+                        progress,
+                        metadata:samples
+                    });
+                }
+            ],callback);
+        } else {
+            callback(null, {
+                status,
+                progress
+            });
+        }
     }
 
     _completeUpload(user, session, operation, message, callback) {
@@ -148,15 +174,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         // Usual fields metadata. Values of these fields are the same for all genotypes.
         const commonFieldsMetadata = sampleMetadata.columns;
         // Array of names of the genotypes found in the file.
-        const genotypes = sampleMetadata.genotypes;
-        // Fields whose values are specific for the genotypes.
-        const genotypesFieldsMetadata = sampleMetadata.genotypeColumns;
-        const sampleReference = sampleMetadata.reference;
-        const sampleFileName = operation.getSampleFileName();
+        const genotypes = sampleMetadata.genotypes||[null];
 
         async.waterfall([
-            (callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata,
+            (callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId, commonFieldsMetadata, genotypes,
                 (error, sampleVersionIds) => callback(error, sampleVersionIds)
             ),
             (sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback),

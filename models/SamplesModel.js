@@ -77,6 +77,21 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    attachSampleFields(userId, language, sampleId, sampleFields, genotypes, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findGenotypeIdsForSampleIds([sampleId],trx, callback),
+                (genotypeIds, callback) => {
+                    async.each(genotypeIds, (genotypeId, callback) => {
+                        this._addGenotypeFields(trx, genotypeId, sampleFields, callback)
+                    }, (error) => callback(error, genotypeIds))
+                },
+                (genotypeIds, callback) => this._findLastVersionsByGenotypeIds(trx,genotypeIds, callback),
+                (sampleVersionsIds, callback)=> callback (null,_.map(sampleVersionsIds, sampleVersionsId => sampleVersionsId.versionId))
+            ],callback)
+        }, callback);
+    }
+
     /**
      * Adds sample with specified params, if it doesn't already exist in database.
      *
@@ -97,55 +112,45 @@ class SamplesModel extends SecureModelBase {
         // 4. add fields for each version created
         const sampleId = sample.id;
         this.db.transactionally((trx, callback) => {
-            // Check that the sample is not yet inserted, to be graceful to messages redelivered by RabbitMQ.
-            this._findLastVersionsByGenotypeIds(trx, [sampleId], (error, versionIds) => {
-                // TODO: Fix here not to ignore the error.
-                if (error || _.isEmpty(versionIds)) {
-                    // Sample is not found, so insert it.
-                    async.waterfall([
-                        // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
-                        (callback) =>
-                            this.models.fields.addMissingFields(languId, fields, trx, (error, fieldsWithIds) => {
-                                const mappedFields = _.map(fieldsWithIds, fieldWithId => ({
-                                    id: fieldWithId.id,
-                                    fieldWithId
-                                }));
-                                callback(error, mappedFields);
-                            }),
-                        // Add editable fields to the field list.
-                        (fieldsWithIds, callback) => {
-                            this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
-                                const editableFields = _.map(fieldsMetadata || [], fieldMetadata => ({
-                                    id: fieldMetadata.id,
-                                    fieldMetadata
-                                }));
-                                callback(error, {
-                                    fieldsWithIds,
-                                    editableFields
-                                });
-                            });
-                        },
-                        // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
-                        ({fieldsWithIds, editableFields}, callback) => {
-                            const sampleWithValues = Object.assign({}, sample, {
-                                sampleFields: _.map(fieldsWithIds, fieldWithId => ({
-                                    fieldId: fieldWithId.id
-                                })),
-                                editableFields: _.map(editableFields, fieldWithId => ({
-                                    fieldId: fieldWithId.id,
-                                    value: null
-                                }))
-                            });
+            async.waterfall([
+                // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
+                (callback) =>
+                    this.models.fields.addMissingFields(languId, fields, trx, (error, fieldsWithIds) => {
+                        const mappedFields = _.map(fieldsWithIds, fieldWithId => ({
+                            id: fieldWithId.id,
+                            fieldWithId
+                        }));
+                        callback(error, mappedFields);
+                    }),
+                // Add editable fields to the field list.
+                (fieldsWithIds, callback) => {
+                    this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
+                        const editableFields = _.map(fieldsMetadata || [], fieldMetadata => ({
+                            id: fieldMetadata.id,
+                            fieldMetadata
+                        }));
+                        callback(error, {
+                            fieldsWithIds,
+                            editableFields
+                        });
+                    });
+                },
+                // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
+                ({fieldsWithIds, editableFields}, callback) => {
+                    const sampleWithValues = Object.assign({}, sample, {
+                        sampleFields: _.map(fieldsWithIds, fieldWithId => ({
+                            fieldId: fieldWithId.id
+                        })),
+                        editableFields: _.map(editableFields, fieldWithId => ({
+                            fieldId: fieldWithId.id,
+                            value: null
+                        }))
+                    });
 
-                            // Add sample entries and return version id.
-                            this._addInTransaction(userId, sampleWithValues, genotypes, false, trx, callback);
-                        }
-                    ], callback);
-                } else {
-                    // Sample has already been added, just return the version id found.
-                    callback(null, _.first(versionIds));
+                    // Add sample entries and return version id.
+                    this._addInTransaction(userId, sampleWithValues, genotypes, false, trx, callback);
                 }
-            });
+            ], callback);
         }, callback);
     }
 
