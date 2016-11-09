@@ -228,7 +228,6 @@ export default class FileUploadSampleList extends React.Component {
                        if (sample) {
                            this.onSampleItemClick(sample.id);
                        } else {
-
                            this.onUploadItemClick(upload.id);
                        }
                    }}>
