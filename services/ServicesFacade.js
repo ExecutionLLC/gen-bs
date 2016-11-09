@@ -20,6 +20,7 @@ const AnalysisService = require('./AnalysisService');
 const UserDataService = require('./UserDataService');
 const ObjectStorageService = require('./ObjectStorageService');
 const ModelsService = require('./ModelsService');
+const EventsService = require('./EventsService');
 
 const AmazonS3Service = require('./external/AmazonS3Service');
 const AliyunOSSService = require('./external/AliyunOSSService');
@@ -49,6 +50,7 @@ class ServiceFacade {
         this.userData = new UserDataService(this, models);
         this.search = new SearchService(this, models);
         this.models = new ModelsService(this, models);
+        this.events = new EventsService(this, models);
 
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
