@@ -59,6 +59,9 @@ const SETTINGS = {
         port: makeDefault(ENV.GEN_REG_WS_PORT, 80),
         ADD_USER_KEY: makeDefault(ENV.GEN_REG_WS_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
     },
+    reCaptcha: {
+        SECRET: '6LeJIAkUAAAAAGj8peLFmyG1Olmv9E6aOajh43Nx'
+    },
     registrationFrontend: {
         site: makeDefault(ENV.GEN_REG_FRONTEND_SITE, 'http://alapy.com'),
         regcodeIdPath: makeDefault(ENV.GEN_REG_FRONTEND_REGCODE_ID_PATH, '/test-register/'),
