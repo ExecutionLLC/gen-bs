@@ -151,10 +151,10 @@ function receiveSearchMessage(wsData) {
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
         const {operationId, result: {progress, status, metadata}} = wsData;
-        if (metadata && status !== 'ready') {
+        if (metadata && status !== WS_PROGRESS_STATUSES.READY) {
             dispatch(samplesListAddSamples(metadata));
         }
-        if (metadata && status === 'ready') {
+        if (metadata && status === WS_PROGRESS_STATUSES.READY) {
             dispatch(samplesListUpdateSamplesFields(metadata));
         }
         dispatch(changeFileUploadProgressForOperationId(progress, status, operationId));
