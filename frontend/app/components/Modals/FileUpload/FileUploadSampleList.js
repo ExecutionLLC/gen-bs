@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {entityType} from '../../../utils/entityTypes';
 
 export default class FileUploadSampleList extends React.Component {
     render() {
@@ -90,7 +91,7 @@ export default class FileUploadSampleList extends React.Component {
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
-                if ((sample.type !== 'history' || _.includes(currentHistorySamplesIds, sample.id)) && _.includes(['error', 'ready'], upload.progressStatus)) {
+                if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && _.includes(['error', 'ready'], upload.progressStatus)) {
                     return this.renderListItem(
                         sample.id,
                         sample.id === currentSampleId,
