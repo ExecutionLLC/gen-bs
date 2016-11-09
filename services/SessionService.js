@@ -179,7 +179,7 @@ class SessionService extends ServiceBase {
                 });
                 callback(null, session);
             },
-            (session, callback) => this.services.events.addEvent(userId, EVENT_TYPES.LOGIN, (error)=> callback (error, session))
+            (session, callback) => this.services.events.addEvent(userId, EVENT_TYPES.LOGIN, (error) => callback (error, session))
         ], callback)
     }
 
