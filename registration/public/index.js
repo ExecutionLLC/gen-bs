@@ -529,7 +529,7 @@ function switchPageState(ops) {
 }
 
 
-function SubmitButtons {
+function SubmitButtons(buttons) {
     this._disclaimerAccepted = false;
     this._reCaptchaSuccess = false;
     this._buttons = buttons.slice();
@@ -551,17 +551,17 @@ SubmitButtons.prototype._onChanged = function() {
     }
 
     this._buttons.forEach(function(el) { setDisable(el); });
-}
+};
 
 SubmitButtons.prototype.onDisclaimerAcceptedChange = function(accept) {
     this._disclaimerAccepted = accept;
     this._onChanged();
-}
+};
 
 SubmitButtons.prototype.onReCaptchaResultChange = function(success) {
     this._reCaptchaSuccess = success;
     this._onChanged();
-}
+};
 
 
 var submitButtons = null;
