@@ -10,6 +10,8 @@ const KnexWrapper = require('../../utils/KnexWrapper');
 
 const RegistrationCodesService = require('../../services/RegistrationCodesService');
 const RegistrationCodesModel = require('../../models/RegistrationCodesModel');
+const UserRequestService = require('../../services/UserRequestService');
+const UserRequestModel = require('../../models/UserRequestModel');
 
 
 class MockUsersClient {
@@ -54,9 +56,11 @@ class MockHost {
         const logger = new Logger(Config.logger);
         const dbModel = new KnexWrapper(Config, logger);
         const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
+        const userRequestModel = new UserRequestModel(dbModel, logger);
         const usersClient = new MockUsersClient(Config);
         this.usersClient = usersClient;
         this.registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
+        this.userRequests = new UserRequestService(dbModel, userRequestModel, usersClient);
     }
 
     startAsync() {

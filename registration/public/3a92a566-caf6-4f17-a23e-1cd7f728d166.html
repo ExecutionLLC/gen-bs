@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="config.js"></script>
+    <script src="promise.js"></script>
+</head>
+<body>
+
+</body>
+
+<script>
+
+    const REGSERVER_ADMIN_KEY = '3a92a566-caf6-4f17-a23e-1cd7f728d166';
+
+
+    function makeURIParams(params) {
+        var result = [];
+        var key;
+        for (key in params) {
+            if (!params.hasOwnProperty(key)) {
+                continue;
+            }
+            result.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key] || ''))
+        }
+        return result.join('&');
+    }
+
+    function ajaxAsync(method, url, params, data) {
+        return new Promise(function(resolve, reject) {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.open(method, url + (params ? '?' + makeURIParams(params) : ''));
+            xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState === xmlhttp.DONE) {
+                    if (xmlhttp.status === 200) {
+                        try {
+                            resolve(JSON.parse(xmlhttp.responseText));
+                        } catch(e) {
+                            reject('Not a JSON answer');
+                        }
+                    } else {
+                        reject(xmlhttp.response || xmlhttp.statusText);
+                    }
+                }
+            };
+            xmlhttp.send(JSON.stringify(data));
+        });
+    }
+
+    const API = {
+        getAllRegcodesAsync: function() {
+            return ajaxAsync('GET', REGSERVER_API_BASE_URL +'/regcodes', {key: REGSERVER_ADMIN_KEY});
+        },
+        getAllRequestsAsync: function() {
+            return ajaxAsync('GET', REGSERVER_API_BASE_URL +'/requests', {key: REGSERVER_ADMIN_KEY});
+        }
+    };
+
+    API.getAllRequestsAsync()
+        .then(function(requests) {
+            const cols = ['id', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'speciality', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'loginType', 'password'];
+            document.write('<h1>Requests:</h1>');
+            document.write('<table><thead><tr>');
+            cols.forEach(function(col) {
+                document.write('<th>' + col + '</th>');
+            });
+            document.write('</tr></thead><tbody>');
+            requests.forEach(function(request) {
+                document.write('<tr>');
+                cols.forEach(function(col) {
+                    document.write('<td>' + request[col] + '</td>');
+                });
+                document.write('</tr>');
+            });
+            document.write('</tbody></table>');
+            API.getAllRegcodesAsync()
+                .then(function(regcodes) {
+                    const cols = ['id', 'regcode', 'isActivated', 'createdTimestamp', 'activatedTimestamp', 'language', 'speciality', 'numberOfPaidSamples', 'email', 'firstName', 'lastName', 'gender', 'telephone', 'company', 'firstDate', 'lastDate', 'description'];
+                    document.write('<h1>Regcodes:</h1>');
+                    document.write('<table><thead><tr>');
+                    cols.forEach(function(col) {
+                        document.write('<th>' + col + '</th>');
+                    });
+                    document.write('</tr></thead><tbody>');
+                    regcodes.forEach(function(regcode) {
+                        document.write('<tr>');
+                        cols.forEach(function(col) {
+                            document.write('<td>' + regcode[col] + '</td>');
+                        });
+                        document.write('</tr>');
+                    });
+                    document.write('</tbody></table>');
+                })
+        });
+
+</script>
+
+</html>

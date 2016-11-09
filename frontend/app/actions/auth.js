@@ -335,7 +335,7 @@ function updateAutoLogoutTimer() {
         if (nextSecondsToAutoLogout < 0) {
             // if auto logout timer is expired, then we should start logout procedure
             dispatch(stopAutoLogoutTimer());
-            logout();
+            dispatch(logout());
             return;
         }
         // updates timer

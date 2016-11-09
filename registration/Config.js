@@ -33,6 +33,7 @@ const SETTINGS = {
     baseUrl: makeDefault(ENV.GEN_REG_BASE_URL, `http://localhost:${port}/register`),
     enableCORS: makeDefault(ENV.GEN_REG_CORS_ENABLE, true),
     disableRequestLimits: makeDefault(ENV.GEN_REG_DISABLE_REQUEST_LIMITS, false),
+    adminDataKey: makeDefault(ENV.GEN_REG_ADMIN_DATA_KEY, '3a92a566-caf6-4f17-a23e-1cd7f728d166'),
     database: {
         client: 'pg',
         host: makeDefault(ENV.GEN_REG_DATABASE_HOST, 'localhost'),
@@ -68,7 +69,7 @@ const SETTINGS = {
     mailChimp: {
         key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),
         adminEmail: makeDefault(ENV.GEN_WS_MAIL_ADMIN_MAIL, 'petr.ponomarenko@alapy.com'),
-        fromMail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'mailchimp@alapy.com'),
+        fromMail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'info@alapy.com'),
         fromName: makeDefault(ENV.GEN_WS_MAIL_FROM_NAME, 'ALAPY'),
         userRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
         userRegisterCodeTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_CODE_TEMPLATE, 'V-objem: Successful user register'),

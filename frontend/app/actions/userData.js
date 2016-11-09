@@ -90,14 +90,15 @@ export function fetchUserDataAsync() {
                 dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 return;
             }
+            const lastHistoryAnalysis = analyses[0];
             dispatch(createNewHistoryItem(sample, filter, view));
-            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(null))
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(lastHistoryAnalysis ? lastHistoryAnalysis.id : null))
                 .then(() => {
                     const {
                         name, description, type, samples, viewId, filterId, modelId
-                    } = getState().analysesHistory.newHistoryItem;
+                    } = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
                     dispatch(analyze({
-                        id: analyses[0] ? analyses[0].id : null,
+                        id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
                         name,
                         description,
                         type,

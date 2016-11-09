@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import 'jszip';
 
-
 require('file?name=index.html!./index.html');
 const JSZip = require('jszip');
 window.JSZip = JSZip;

@@ -1,10 +1,6 @@
 import pako from 'pako';
 
-function isSafariBrowser() {
-    // Origin: http://stackoverflow.com/questions/7944460/detect-safari-browser
-    return navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-        navigator.userAgent && !navigator.userAgent.match('CriOS');
-}
+import ExportUtils from './exportUtils';
 
 /**
  * gzip file
@@ -21,7 +17,7 @@ export default function gzip(file) {
             const content = pako.gzip(ch);
             const blobParams = {type: 'application/gzip', lastModified: new Date()};
             // Workaround for bug with File constructor in Safari: #613
-            if (isSafariBrowser()) {
+            if (ExportUtils.isSafariBrowser()) {
                 const blob = new Blob([content], blobParams);
                 blob.name = file.name;
                 resolve(blob);

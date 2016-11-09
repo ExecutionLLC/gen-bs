@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import VariantsTableHead from './VariantsTableHead';
 import VariantsTableRows from './VariantsTableRows';
 import VariantsTableEmpty from './VariantsTableEmpty';
-import DemoModeMessage from '../Errors/DemoModeMessage';
 
 
 import VariantsTableLoadError from '../Errors/VariantsTableLoadError';
@@ -15,14 +14,15 @@ class VariantsTableReact extends Component {
 
     constructor(props) {
         super(props);
-        this.scrollTarget = null;
         this.state = {
             scrollTarget: null
         };
+        this.variantsTableHead = null;
+        this.variantsTableRows = null;
     }
 
     render() {
-        const {auth, fields} = this.props;
+        const {fields} = this.props;
         const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.ws;
 
         return (
@@ -39,19 +39,16 @@ class VariantsTableReact extends Component {
                 }
                 { !isVariantsLoading && isVariantsValid &&
                 <div className='table-variants-container'>
-                    { auth.isDemo &&
-                    <DemoModeMessage errorMessage={auth.errorMessage} {...this.props} />
-                    }
                     <table className='table table-striped table-variants header-fixed' id='variants_table'
                            ref='variantsTable'>
-                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props} ref='variantsTableHead'
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
-                                           onRendered={() => this.onTablePartRendered(true)}
+                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
+                                           ref={(ref) => ref && this.onAppear(true, ref)}
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props} ref='variantsTableRows'
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)); } }
-                                           onRendered={() => this.onTablePartRendered(false)}
+                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props}
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
+                                           ref={(ref) => ref && this.onAppear(false, ref)}
                         />
                         }
                     </table>
@@ -66,32 +63,32 @@ class VariantsTableReact extends Component {
         );
     }
 
-    elementXScrollListener(scrollLeft, DOMNode) {
-        const {scrollTarget} = this.state;
-        // ignore if we want to scroll to already desired place
-        if (scrollTarget !== null && scrollLeft == scrollTarget) {
-            return;
+    onAppear(isHeader, ref) {
+        // fix scroll position after the element is disappeared (ex. after empty results)
+        const el = ReactDOM.findDOMNode(ref);
+        if (isHeader) {
+            this.variantsTableHead = el;
+        } else {
+            this.variantsTableRows = el;
         }
-        if (DOMNode) {
-            // we should move header manually, because "position" attribute of element is "fixed"
-            if (DOMNode.scrollLeft == scrollLeft) {
-                // destination point reached - get ready to scroll again
-                this.setState({scrollTarget: null});
-            } else {
-                this.setState({scrollTarget: scrollLeft});
-                DOMNode.scrollLeft = scrollLeft;
-            }
+        const {scrollTarget} = this.state;
+        if (scrollTarget != null && el.scrollLeft != scrollTarget) {
+            el.scrollLeft = scrollTarget;
         }
     }
 
-    onTablePartRendered(isHeader) {
+    elementXScrollListener(scrollLeft, isHeader) {
+        // sync scroll position in body and header.
         const {scrollTarget} = this.state;
-        if (scrollTarget == null) {
+        // do nothing if we already there
+        if (scrollTarget !== null && scrollLeft == scrollTarget) {
             return;
         }
-        const tablePartRef = isHeader ? this.refs.variantsTableHead : this.refs.variantsTableRows;
-        const tablePartElement = ReactDOM.findDOMNode(tablePartRef);
-        tablePartElement.scrollLeft = scrollTarget;
+        const otherDOMNode = isHeader ? this.variantsTableRows : this.variantsTableHead;
+        if (otherDOMNode && otherDOMNode.scrollLeft != scrollLeft) {
+            this.setState({scrollTarget: scrollLeft});
+            otherDOMNode.scrollLeft = scrollLeft;
+        }
     }
 }
 

@@ -1,5 +1,5 @@
-const REGSERVER_API_BASE_URL = 'https://alpha.genomics-exe.com/register';
-const GENOMICS_URL = 'http://alpha.genomics-exe.com/';
+document.body.classList.add('loading');
+document.body.classList.add('register-loading');
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad, false);
 
@@ -10,17 +10,17 @@ function makeURIParams(params) {
         if (!params.hasOwnProperty(key)) {
             continue;
         }
-        result.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key] || '')}`)
+        result.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key] || ''))
     }
     return result.join('&');
 }
 
 function ajaxAsync(method, url, params, data) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
         const xmlhttp = new XMLHttpRequest();
         xmlhttp.open(method, url + (params ? '?' + makeURIParams(params) : ''));
         xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        xmlhttp.onreadystatechange = () => {
+        xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState === xmlhttp.DONE) {
                 if (xmlhttp.status === 200) {
                     try {
@@ -38,20 +38,20 @@ function ajaxAsync(method, url, params, data) {
 }
 
 const API = {
-    getUserForRegcodeAsync(regcode) {
-        return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcode, email: null});
+    getUserForRegcodeAsync: function(regcode) {
+        return ajaxAsync('GET', REGSERVER_API_BASE_URL +'/user', {regcode: regcode, email: null});
     },
-    getUserForRegcodeId(regcodeId) {
-        return ajaxAsync('GET', `${REGSERVER_API_BASE_URL}/user`, {regcodeId});
+    getUserForRegcodeId: function(regcodeId) {
+        return ajaxAsync('GET', REGSERVER_API_BASE_URL + '/user', {regcodeId: regcodeId});
     },
-    updateUser(user) {
-        return ajaxAsync('PUT', `${REGSERVER_API_BASE_URL}/user`, null, user);
+    updateUser: function(user) {
+        return ajaxAsync('PUT', REGSERVER_API_BASE_URL + '/user', null, user);
     },
-    requestUser(user) {
-        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/user_request`, null, {user, reCaptchaResponse});
+    requestUser: function(user) {
+        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/user_request', null, {user: user, reCaptchaResponse: reCaptchaResponse});
     },
-    registerUser(user) {
-        return ajaxAsync('POST', `${REGSERVER_API_BASE_URL}/register`, null, {user, reCaptchaResponse});
+    registerUser: function(user) {
+        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/register', null, {user: user, reCaptchaResponse: reCaptchaResponse});
     }
 };
 
@@ -63,7 +63,9 @@ const ELEMENT_ID = {
     passwordInputs: ['reg-password', 'reg-re-password'],
     registerFailMessage: 'register-fail-message',
     acceptDisclaimer: 'accept-disclaimer',
-    applicationLink: 'reg-application-link'
+    applicationLink: 'reg-application-link',
+    registerOkMail: 'register-ok-mail',
+    registerFail: 'register-fail'
 };
 
 const USER_INFO_SCHEME = [
@@ -89,7 +91,8 @@ const USER_INFO_SCHEME = [
     },
     {
         id: 'telephone',
-        elementId: 'reg-telephone'
+        elementId: 'reg-telephone',
+        isOptional: true
     },
     {
         id: 'gender',
@@ -99,56 +102,65 @@ const USER_INFO_SCHEME = [
 ];
 
 const DOMUtils = {
-    removeAllChildren(el) {
+    removeAllChildren: function(el) {
         while(el.firstChild) {
             el.removeChild(el.firstChild);
         }
     },
-    setElementText(el, text) {
+    setElementText: function(el, text) {
         this.removeAllChildren(el);
         el.appendChild(document.createTextNode(text));
     },
-    onInput(el, handler) {
-        el.addEventListener('input', () => handler(el.value));
+    onInput: function(el, handler) {
+        el.addEventListener('input', function() { handler(el.value); });
     },
-    onClick(el, handler) {
+    onClick: function(el, handler) {
         if (el.getAttribute('type') === 'submit') {
             el.setAttribute('type', 'button');
         }
-        el.addEventListener('click', () => handler());
+        el.addEventListener('click', function() { handler(); });
+    },
+    ensureVisible: function(el) {
+        if (el.scrollIntoViewIfNeeded) {
+            el.scrollIntoViewIfNeeded(false);
+        } else {
+            if (el.scrollIntoView) {
+                el.scrollIntoView(false);
+            }
+        }
     }
 };
 
 const MakeLayout = {
-    attachHandlers(scheme, onChange) {
-        scheme.forEach((scheme) => {
+    attachHandlers: function(scheme, onChange) {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
-                DOMUtils.onInput(inputEl, (str) => onChange(scheme.id, str))
+                DOMUtils.onInput(inputEl, function(str) { onChange(scheme.id, str); })
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
-                    DOMUtils.onClick(el, () => onChange(scheme.id, el.value))
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
+                    DOMUtils.onClick(el, function() { onChange(scheme.id, el.value); })
                 });
             }
         });
     },
-    disableControls(scheme, disable) {
-        scheme.forEach((scheme) => {
+    disableControls: function(scheme, disable) {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 inputEl.disabled = disable;
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
                     el.disabled = disable;
                 });
             }
         });
     },
-    toggleRequiredAlert(inputEl, showAlert) {
+    toggleRequiredAlert: function(inputEl, showAlert) {
         const nextEl = inputEl.nextElementSibling;
         if (nextEl && nextEl.getAttribute('role') === 'alert') {
             if (showAlert) {
@@ -165,8 +177,8 @@ const MakeLayout = {
             inputEl.parentNode.insertBefore(el, inputEl.nextElementSibling);
         }
     },
-    disableAutocomplete(ids) {
-        ids.forEach((id) => {
+    disableAutocomplete: function(ids) {
+        ids.forEach(function(id) {
             const el = document.getElementById(id);
             if (el) {
                 el.setAttribute('autocomplete', 'off');
@@ -176,22 +188,22 @@ const MakeLayout = {
 };
 
 const FillData = {
-    fillDataItemEl(el, data) {
+    fillDataItemEl: function(el, data) {
         if (typeof el.value !== 'undefined') {
             el.value = data;
         } else {
             el.textContent = data;
         }
     },
-    fillUserItem(scheme, data) {
-        scheme.forEach((scheme) => {
+    fillUserItem: function(scheme, data) {
+        scheme.forEach(function(scheme) {
             const inputEl = scheme.elementId && document.getElementById(scheme.elementId);
             if (inputEl) {
                 FillData.fillDataItemEl(inputEl, data[scheme.id] || '');
             }
             const radioEls = scheme.radioName && document.getElementsByName(scheme.radioName);
             if (radioEls && radioEls.length) {
-                Array.prototype.slice.call(radioEls).forEach((el) => {
+                Array.prototype.slice.call(radioEls).forEach(function(el) {
                     el.checked = el.value === data[scheme.id];
                 });
             }
@@ -210,12 +222,12 @@ const checkingUser = {
     requested: {
         regcode: ''
     },
-    requestRegcodeAsync(regcode) {
+    requestRegcodeAsync: function(regcode) {
         checkingUser.requested = {
-            regcode
+            regcode: regcode
         };
         return API.getUserForRegcodeAsync(regcode)
-            .then((user) => {
+            .then(function(user) {
                 if (regcode !== checkingUser.requested.regcode) {
                     throw new Error('old request');
                 }
@@ -278,24 +290,29 @@ function debounce(fn, delay) {
     };
 }
 
-const checkServerRegcode = debounce(() => {
+const checkServerRegcode = debounce(function() {
+    switchPageState({loading: true});
     const regcode = currentUser.regcode;
     checkingUser.requestRegcodeAsync(regcode)
-        .then((user) => {
-            switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true});
+        .then(function(user) {
+            switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true, loading: false});
             onRegcodedUserReceived(user);
         })
-        .catch(() => {
-            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode});
+        .catch(function() {
+            switchPageState({validRegcode: !regcode, disableUserInfo: !!regcode, showLoginType: !regcode, loading: false});
         });
 }, 200);
 
 function checkRegcode(regcode) {
     currentUser.regcode = regcode;
-    checkServerRegcode()
+    if (!currentUser.regcode) {
+        switchPageState({validRegcode: true, disableUserInfo: false, showLoginType: true, loading: false});
+    } else if (currentUser.regcode.length === 8) {
+        checkServerRegcode()
+    }
 }
 
-const updateServerData = debounce(() => API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})), 200);
+const updateServerData = debounce(function() {API.updateUser(Object.assign({}, currentUser.user, {id: loadedUserId})); }, 200);
 
 function onUserEdit (fieldId, str) {
     console.log('onUserEdit', fieldId, str);
@@ -329,6 +346,32 @@ function onSignupLoginPassword() {
     });
 }
 
+(function(){
+    'use strict';
+
+    var isObject = function (obj) {
+	return obj && typeof obj === 'object';
+    };
+
+    if(Object.assign) return;
+    Object.defineProperty(Object, 'assign', {
+	value: function(target, source){
+	    var s, i, props;
+	    if (!isObject(target)) { throw new TypeError('target must be an object'); }
+	    for (s = 1; s < arguments.length; ++s) {
+		source = arguments[s];
+		if (!isObject(source)) { throw new TypeError('source ' + s + ' must be an object'); }
+		props = Object.keys(Object(source));
+		for (i = 0; i < props.length; ++i) {
+		    target[props[i]] = source[props[i]];
+		}
+	    }
+	    return target;
+	},
+	enumerable: false
+    });
+})();
+
 function addUser(loginInfo) {
     switchPageState({
         showLoginType: false,
@@ -340,7 +383,7 @@ function addUser(loginInfo) {
         API.registerUser(Object.assign({}, currentUser.user, loginInfo)) :
         API.requestUser(Object.assign({}, currentUser.user, loginInfo));
     registerAsync
-        .then(() => {
+        .then(function() {
             if (loadedUserId) {
                 showAppLink();
                 switchPageState({
@@ -359,7 +402,7 @@ function addUser(loginInfo) {
                 });
             }
         })
-        .catch((err) => {
+        .catch(function(err) {
             const registerFailMessageEl = document.getElementById(ELEMENT_ID.registerFailMessage);
             if (registerFailMessageEl) {
                 DOMUtils.setElementText(registerFailMessageEl, '' + err);
@@ -390,7 +433,10 @@ function onSignupGoogle() {
 
 function validateUser() {
 
-    const hasAbsent = USER_INFO_SCHEME.reduce((hasAbsent, scheme) => {
+    const hasAbsent = USER_INFO_SCHEME.reduce(function(hasAbsent, scheme) {
+        if (scheme.isOptional) {
+            return hasAbsent;
+        }
         const inputEl = scheme.containerId ?
             document.getElementById(scheme.containerId) :
             document.getElementById(scheme.elementId);
@@ -411,7 +457,7 @@ function onRegister() {
         });
         return;
     }
-    addUser({loginType: 'password', password});
+    addUser({loginType: 'password', password: password});
 }
 
 var getPassword = null; // will be defined later
@@ -420,6 +466,14 @@ function onPassword(/*index, psw*/) {
     switchPageState({
         warningPassword: !getPassword()
     });
+}
+
+function toggleClass(el, cls, isSet) {
+    if (isSet) {
+        el.classList.add(cls);
+    } else {
+        el.classList.remove(cls);
+    }
 }
 
 function switchPageState(ops) {
@@ -433,76 +487,87 @@ function switchPageState(ops) {
         MakeLayout.disableControls(USER_INFO_SCHEME, ops.disableUserInfo);
     }
     if (ops.showLoginType != null) {
-        document.body.classList.toggle('no-login-type', !ops.showLoginType);
+        toggleClass(document.body, 'no-login-type', !ops.showLoginType);
     }
     if (ops.showPassword != null) {
-        document.body.classList.toggle('no-password', !ops.showPassword);
+        toggleClass(document.body, 'no-password', !ops.showPassword);
     }
     if (ops.showRegister != null) {
-        document.body.classList.toggle('no-register', !ops.showRegister);
+        toggleClass(document.body, 'no-register', !ops.showRegister);
     }
     if (ops.warningUserdata != null) {
-        document.body.classList.toggle('warning-userdata', ops.warningUserdata);
+        toggleClass(document.body, 'warning-userdata', ops.warningUserdata);
     }
     if (ops.warningPassword != null) {
-        document.body.classList.toggle('warning-password', ops.warningPassword);
+        toggleClass(document.body, 'warning-password', ops.warningPassword);
     }
     if (ops.loading != null) {
-        document.body.classList.toggle('register-loading', ops.loading);
+        toggleClass(document.body, 'register-loading', ops.loading);
     }
     if (ops.register != null) {
-        document.body.classList.toggle('register-ok-mail', !!ops.register.mail);
-        document.body.classList.toggle('register-fail', !!ops.register.fail);
-    }
-    if (ops.validRegcode != null) {
-        document.body.classList.toggle('valid-regcode', ops.validRegcode);
-    }
-    if (ops.showAppLink) {
-        document.body.classList.toggle('show-app-link', ops.validRegcode);
-    }
-}
-
-
-class SubmitButtons {
-    constructor(buttons) {
-        this._disclaimerAccepted = false;
-        this._reCaptchaSuccess = false;
-        this._buttons = buttons.slice();
-        this._onChanged();
-    }
-
-    _onChanged() {
-
-        const enable = this._disclaimerAccepted && this._reCaptchaSuccess;
-
-        const toggleAttribute = enable ?
-            (el) => el.removeAttribute('disabled') :
-            (el) => el.setAttribute('disabled', 'disabled');
-
-        function setDisable(el) {
-            if (el) {
-                toggleAttribute(el);
+        toggleClass(document.body, 'register-ok-mail', !!ops.register.mail);
+        toggleClass(document.body, 'register-fail', !!ops.register.fail);
+        if (ops.register.mail) {
+            const registerOkMailEl = document.getElementById(ELEMENT_ID.registerOkMail);
+            if (registerOkMailEl) {
+                DOMUtils.ensureVisible(registerOkMailEl);
             }
         }
-
-        this._buttons.forEach((el) => setDisable(el));
+        if (ops.register.fail) {
+            const registerFailEl = document.getElementById(ELEMENT_ID.registerFail);
+            if (registerFailEl) {
+                DOMUtils.ensureVisible(registerFailEl);
+            }
+        }
     }
-
-    onDisclaimerAcceptedChange(accept) {
-        this._disclaimerAccepted = accept;
-        this._onChanged();
+    if (ops.validRegcode != null) {
+        toggleClass(document.body, 'valid-regcode', ops.validRegcode);
     }
-
-    onReCaptchaResultChange(success) {
-        this._reCaptchaSuccess = success;
-        this._onChanged();
+    if (ops.showAppLink != null) {
+        toggleClass(document.body, 'show-app-link', ops.showAppLink);
     }
 }
+
+
+function SubmitButtons {
+    this._disclaimerAccepted = false;
+    this._reCaptchaSuccess = false;
+    this._buttons = buttons.slice();
+    this._onChanged();
+}
+
+SubmitButtons.prototype._onChanged = function() {
+
+    const enable = this._disclaimerAccepted && this._reCaptchaSuccess;
+
+    const toggleAttribute = enable ?
+        function(el) { el.removeAttribute('disabled'); } :
+        function(el) { el.setAttribute('disabled', 'disabled'); };
+
+    function setDisable(el) {
+        if (el) {
+            toggleAttribute(el);
+        }
+    }
+
+    this._buttons.forEach(function(el) { setDisable(el); });
+}
+
+SubmitButtons.prototype.onDisclaimerAcceptedChange = function(accept) {
+    this._disclaimerAccepted = accept;
+    this._onChanged();
+}
+
+SubmitButtons.prototype.onReCaptchaResultChange = function(success) {
+    this._reCaptchaSuccess = success;
+    this._onChanged();
+}
+
 
 var submitButtons = null;
 
 function onDocumentLoad() {
-
+    document.body.classList.remove('loading');
     switchPageState({
         validRegcode: true,
         disableRegcode: true,
@@ -518,7 +583,7 @@ function onDocumentLoad() {
         DOMUtils.onInput(regcodeEl, checkRegcode);
     }
     MakeLayout.disableAutocomplete(
-        USER_INFO_SCHEME.map((scheme) => scheme.elementId)
+        USER_INFO_SCHEME.map(function(scheme) { return scheme.elementId; })
             .concat([ELEMENT_ID.regcodeInput])
     );
     MakeLayout.attachHandlers(USER_INFO_SCHEME, onUserEdit);
@@ -535,24 +600,24 @@ function onDocumentLoad() {
     if (registerButtonEl) {
         DOMUtils.onClick(registerButtonEl, onRegister);
     }
-    const passwordInputEls = ELEMENT_ID.passwordInputs.map((id, index) => {
+    const passwordInputEls = ELEMENT_ID.passwordInputs.map(function(id, index) {
         const passwordInputEl = document.getElementById(id);
         if (passwordInputEl) {
-            DOMUtils.onInput(passwordInputEl, (psw) => onPassword(index, psw));
+            DOMUtils.onInput(passwordInputEl, function(psw) { onPassword(index, psw); });
         }
         return passwordInputEl;
     });
 
-    submitButtons = new SubmitButtons([registerButtonEl, signupLoginPassword, signupGoogle].filter(el => !!el));
+    submitButtons = new SubmitButtons([registerButtonEl, signupLoginPassword, signupGoogle].filter(function(el) { return !!el; }));
 
     const acceptDisclaimerEl = document.getElementById(ELEMENT_ID.acceptDisclaimer);
     if (acceptDisclaimerEl) {
-        DOMUtils.onClick(acceptDisclaimerEl, () => submitButtons.onDisclaimerAcceptedChange(acceptDisclaimerEl.checked));
+        DOMUtils.onClick(acceptDisclaimerEl, function() { submitButtons.onDisclaimerAcceptedChange(acceptDisclaimerEl.checked); });
     }
 
-    getPassword = () => {
+    getPassword = function() {
         return passwordInputEls.reduce(
-            (psw, el, index) => {
+            function(psw, el, index) {
                 if (!index) {
                     return el.value;
                 }
@@ -570,7 +635,7 @@ function onDocumentLoad() {
     if (regcodeId) {
         switchPageState({loading: true});
         API.getUserForRegcodeId(regcodeId)
-            .then((user) => {
+            .then(function(user) {
                 if (regcodeEl) {
                     regcodeEl.value = user.regcode;
                 }
@@ -584,7 +649,7 @@ function onDocumentLoad() {
                 });
                 onRegcodedUserReceived(user);
             })
-            .catch(() => {
+            .catch(function() {
                 displayNoUserInfo();
             });
     } else {
@@ -593,10 +658,12 @@ function onDocumentLoad() {
             disableUserInfo: false,
             showLoginType: true,
             showPassword: false,
-            showRegister: false
+            showRegister: false,
+            loading: false
         });
     }
 }
+
 
 var reCaptchaResponse = null;
 
