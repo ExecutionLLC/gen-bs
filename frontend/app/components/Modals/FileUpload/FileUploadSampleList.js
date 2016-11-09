@@ -5,6 +5,7 @@ import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
 import {fileUploadStatus} from '../../../actions/fileUpload';
+import {makeSampleLabel} from '../../../utils/samplesUtils';
 
 function fileUploadStatusErrorOrReady(status) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
@@ -85,8 +86,8 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     _createSampleLabel(sample) {
-        const {genotypeName, fileName, type} = sample;
-        const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+        const {type} = sample;
+        const sampleName = makeSampleLabel(sample);
         return getItemLabelByNameAndType(sampleName, type);
     }
 

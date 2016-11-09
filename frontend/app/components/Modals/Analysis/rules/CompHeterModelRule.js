@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import BaseRule from './BaseRule';
+import {makeSampleLabelAsFileGenotype} from '../../../../utils/samplesUtils';
 
 const compoundHeterozygousModelRuleName = 'Compound Heterozygous';
 const gtGtField = 'GT_GT';
@@ -38,7 +39,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
         if (invalidGtFieldSample) {
             return {
                 isValid: false,
-                errorMessage: `Sample '${invalidGtFieldSample.fileName}:${invalidGtFieldSample.genotypeName}' doesn't have ${gtGtField} field.`
+                errorMessage: `Sample '${makeSampleLabelAsFileGenotype(invalidGtFieldSample)}' doesn't have ${gtGtField} field.`
             };
         }
         return {

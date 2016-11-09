@@ -8,6 +8,7 @@ import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {uploadFiles} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {makeSampleLabel} from '../../../utils/samplesUtils';
 
 function cancelDOMEvent(e) {
     e.stopPropagation();
@@ -220,8 +221,8 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleHeader(sampleItem) {
-        const {genotypeName, fileName, type} = sampleItem;
-        const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+        const {type} = sampleItem;
+        const sampleName = makeSampleLabel(sampleItem);
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
