@@ -151,9 +151,9 @@ app.get('/approve', (request, response) => {
 });
 
 app.get('/confirm', (request, response) => {
-    console.log('confirm');
+    logger.info('confirm');
     const {id: confirmUUID} = request.query;
-    console.log(confirmUUID);
+    logger.info(confirmUUID);
     userRequests.emailConfirmReceivedAsync(confirmUUID)
         .then((requestInfo) =>
             mailService.sendAdminRegisterMailAsync(
