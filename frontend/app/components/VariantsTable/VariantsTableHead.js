@@ -84,7 +84,7 @@ export default class VariantsTableHead extends Component {
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
         const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
         const sampleName = currentSample ?
-            SamplesUtils.makeSampleLabel(curentSample) :
+            SamplesUtils.makeSampleLabel(currentSample) :
             null;
         return (
             <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
