@@ -67,7 +67,7 @@ class UserDataService extends ServiceBase {
                     analyses: (callback) => {
                         this.services.analysis.findAll(user, this.defaultLimit, 0, undefined, undefined, callback);
                     },
-                    models: (callback)=> {
+                    models: (callback) => {
                         this.services.models.findAll(user, callback)
                     },
                     savedFiles: (callback) => {

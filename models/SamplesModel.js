@@ -87,7 +87,7 @@ class SamplesModel extends SecureModelBase {
                     }, (error) => callback(error, genotypeIds))
                 },
                 (genotypeIds, callback) => this._findLastVersionsByGenotypeIds(trx, genotypeIds, callback),
-                (sampleVersionsIds, callback)=> callback(null, _.map(sampleVersionsIds, sampleVersionsId => sampleVersionsId.versionId))
+                (sampleVersionsIds, callback) => callback(null, _.map(sampleVersionsIds, sampleVersionsId => sampleVersionsId.versionId))
             ], callback)
         }, callback);
     }

@@ -136,7 +136,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     _createUploadProgressResult(user, session, operation, message, callback) {
-        const {result:{status, progress, genotypes}} = message;
+        const {result: {status, progress, genotypes}} = message;
         if (genotypes) {
             const sampleGenotypes = _.isEmpty(genotypes) ? [null] : genotypes;
             const sampleId = operation.getSampleId();
