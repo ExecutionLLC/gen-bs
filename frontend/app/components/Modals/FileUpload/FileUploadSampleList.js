@@ -4,6 +4,11 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
+import {fileUploadStatus} from '../../../actions/fileUpload';
+
+function fileUploadStatusErrorOrReady(status) {
+    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
+}
 
 export default class FileUploadSampleList extends React.Component {
     render() {
@@ -23,7 +28,7 @@ export default class FileUploadSampleList extends React.Component {
     renderCurrentUploadData() {
         const {fileUpload:{filesProcesses}, sampleList} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
-            return !_.includes(['error', 'ready'], upload.progressStatus);
+            return !fileUploadStatusErrorOrReady(upload.progressStatus);
         });
         const currentUploadsData = _.map(currentUploads, upload => {
             const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.originalId === upload.sampleId);
@@ -40,7 +45,7 @@ export default class FileUploadSampleList extends React.Component {
     renderUploadedData() {
         const {search, samplesSearchHash, sampleList, fileUpload:{filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'sampleId');
-        const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === 'error');
+        const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === fileUploadStatus.ERROR);
         const errorsData = _.map(errorUploads, errorUpload => {
             return {
                 label: errorUpload.file.name,
@@ -91,7 +96,7 @@ export default class FileUploadSampleList extends React.Component {
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
-                if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && _.includes(['error', 'ready'], upload.progressStatus)) {
+                if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
                     return this.renderListItem(
                         sample.id,
                         sample.id === currentSampleId,
