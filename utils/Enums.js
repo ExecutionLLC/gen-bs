@@ -40,6 +40,10 @@ const LOGIN_TYPES = createEnum({
     PASSWORD: 'password'
 });
 
+const EVENT_TYPES = createEnum({
+    LOGIN: 'login'
+});
+
 /**
  * Types which default elements can have.
  * */
@@ -61,5 +65,6 @@ module.exports = {
     WS_INSTANCE_MESSAGE_TYPES,
     MODEL_TYPES,
     ANALYSIS_TYPES,
-    LOGIN_TYPES
+    LOGIN_TYPES,
+    EVENT_TYPES
 };
