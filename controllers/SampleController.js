@@ -53,6 +53,19 @@ class SampleController extends UserEntityControllerBase {
         });
     }
 
+    cancel(request, response){
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const operationId = request.params.id;
+                this.services.samples.cancelUpload(user, operationId, callback);
+            }
+        ], (error, item) => {
+            this.sendErrorOrJson(response, error, item);
+        });
+    }
+
     _removeSampleFile(localFilePath) {
         fs.unlink(localFilePath, (error) => {
             if (error) {

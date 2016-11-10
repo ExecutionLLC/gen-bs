@@ -54,6 +54,22 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
+    cancelUpload(session, user, operationId, callback){
+        this.logger.debug('Cancel uploading operationId: ' + JSON.stringify(operationId, null, 2));
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.services.operations.find(session, operationId, callback),
+            (operation, callback) => {
+                operation.setSendCloseToAppServer(false);
+
+                async.waterfall([
+                    (callback) => this.services.sessions.findSystemSession(callback),
+                    (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
+                ], () => callback(error));
+            },
+        ], callback);
+    }
+
     createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
                                     appServerSampleFields, genotypes,
                                     asGenotypesFieldsNames, callback) {
