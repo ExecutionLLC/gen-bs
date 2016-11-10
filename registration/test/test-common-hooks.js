@@ -15,7 +15,7 @@ global.regServer = regServer;
 before(function(done) {
     this.timeout(10000);
     regServer.startAsync()
-        .then(()=>{
+        .then(() => {
             console.log('Mock server is started, waiting for ' + START_TIMEOUT + ' ms for it to complete loading...');
             setTimeout(done, START_TIMEOUT);
         })

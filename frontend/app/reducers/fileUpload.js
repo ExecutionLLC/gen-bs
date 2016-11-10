@@ -1,4 +1,5 @@
 import * as ActionTypes from '../actions/fileUpload';
+import {fileUploadStatus} from '../actions/fileUpload';
 import _ from 'lodash';
 
 const initialState = {
@@ -131,7 +132,7 @@ function reduceFileUploadError(state, action) {
         ...state,
         filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
             error: action.error,
-            progressStatus: 'error'
+            progressStatus: fileUploadStatus.ERROR
         })
     };
 }
