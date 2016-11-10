@@ -119,7 +119,11 @@ app.post('/user_request', (request, response) => {
 
     reCaptchaClient.checkAsync(reCaptchaResponse)
         .then((res) => {
-            logger.info('/user_request recaptcha result', res);
+            logger.info('/user_request recaptcha result');
+            logger.info(JSON.stringify(res));
+            if (!res || !res.success) {
+                throw new Error('reCaptcha check fails')
+            }
             return userRequests.createAsync(userInfo)
                 .then((insertedUser) =>
                     mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
@@ -128,8 +132,9 @@ app.post('/user_request', (request, response) => {
                 .catch((err) => response.status(400).send(err.message));
         })
         .catch((err) => {
-            logger.info('/user_request recaptcha error', err);
-            return response.status(400).send(err);
+            logger.info('/user_request recaptcha error');
+            logger.info(JSON.stringify(err.message));
+            return response.status(400).send(err.message);
         });
 });
 
