@@ -22,7 +22,12 @@ function reduceUpdateSampleValue(state, action) {
     const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
 
     const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
-    const newEditingSample = {...editingSample, editableFields: {...editingSample.editableFields, fields:  newSampleValues}};
+    const newEditingSample = {...editingSample,
+        editableFields: {
+            ...editingSample.editableFields,
+            fields: newSampleValues
+        }
+    };
 
     return {
         ...state,
@@ -148,6 +153,28 @@ function reduceSetEditingSampleId(state, action) {
     };
 }
 
+function updateSampleFields(state, action) {
+    const {samples} = action;
+    const {hashedArray: {array: currentSamples}} = state;
+    const updatedSampleHash = _.keyBy(samples, 'genotypeId');
+    const newSampleList = _.map(currentSamples, sample => {
+        const updatedSample = updatedSampleHash[sample.genotypeId];
+        if (updatedSample) {
+            return {
+                ...sample,
+                sampleFields: updatedSample.sampleFields
+            };
+        } else {
+            return sample;
+        }
+    });
+    return {
+        ...state,
+        hashedArray: ImmutableHashedArray.makeFromArray(newSampleList),
+        editingSample: null
+    };
+}
+
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editingSample: null,
@@ -188,6 +215,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SET_EDITING_SAMPLE_ID:
             return reduceSetEditingSampleId(state, action);
+
+        case ActionTypes.SAMPLES_LIST_UPDATE_SAMPLES_FIELDS:
+            return updateSampleFields(state, action);
 
         default:
             return state;

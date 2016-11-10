@@ -3,6 +3,13 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {entityType} from '../../../utils/entityTypes';
+import {fileUploadStatus} from '../../../actions/fileUpload';
+import {makeSampleLabel} from '../../../utils/samplesUtils';
+
+function fileUploadStatusErrorOrReady(status) {
+    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
+}
 
 export default class FileUploadSampleList extends React.Component {
     render() {
@@ -20,19 +27,26 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderCurrentUploadData() {
-        const {fileUpload:{filesProcesses, currentUploadId}} = this.props;
+        const {fileUpload:{filesProcesses}, sampleList} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
-            return !_.includes(['error', 'ready'], upload.progressStatus);
+            return !fileUploadStatusErrorOrReady(upload.progressStatus);
+        });
+        const currentUploadsData = _.map(currentUploads, upload => {
+            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.originalId === upload.sampleId);
+            return {
+                upload,
+                samples: uploadSamples
+            };
         });
         return (
-            currentUploads.map((upload) => this.renderProgressUpload(upload, upload.id === currentUploadId))
+            currentUploadsData.map((data) => this.renderProgressUploadSample(data))
         );
     }
 
     renderUploadedData() {
         const {search, samplesSearchHash, sampleList, fileUpload:{filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'sampleId');
-        const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === 'error');
+        const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === fileUploadStatus.ERROR);
         const errorsData = _.map(errorUploads, errorUpload => {
             return {
                 label: errorUpload.file.name,
@@ -40,12 +54,13 @@ export default class FileUploadSampleList extends React.Component {
                 date: errorUpload.created
             };
         });
-        const samplesData = _.map(sampleList.hashedArray.array, sample => {
-            const {genotypeName, fileName, type, originalId} = sample;
-            const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
+        const samplesData = _.map(uploadedSamples, sample => {
+            const {originalId} = sample;
+            const sampleName = this._createSampleLabel(sample);
             const currentUpload = uploadHash[originalId];
             return {
-                label: getItemLabelByNameAndType(sampleName, type),
+                label: sampleName,
                 upload: currentUpload,
                 sample: sample,
                 date: currentUpload ? currentUpload.created : sample.timestamp
@@ -71,13 +86,19 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    _createSampleLabel(sample) {
+        const {type} = sample;
+        const sampleName = makeSampleLabel(sample);
+        return getItemLabelByNameAndType(sampleName, type);
+    }
+
 
     _renderUploadedData(uploadData) {
         const {currentHistorySamplesIds, currentSampleId, fileUpload:{currentUploadId}} = this.props;
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
-                if (sample.type !== 'history' || _.includes(currentHistorySamplesIds, sample.id)) {
+                if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
                     return this.renderListItem(
                         sample.id,
                         sample.id === currentSampleId,
@@ -187,16 +208,31 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderProgressUpload(uploadItem, currentUploadId) {
-        const {file:{name}} = uploadItem;
-
+    renderProgressUploadSample(uploadData) {
+        const {upload, samples} = uploadData;
         return (
-            <li key={uploadItem.operationId}
+            samples.map((sample) => this.renderProgressUpload(upload, sample))
+        );
+    }
+
+    renderProgressUpload(upload, sample) {
+        const {currentSampleId, fileUpload:{currentUploadId}} = this.props;
+        const key = sample ? sample.id : upload.operationId;
+        const isActive = sample ? sample.id === currentSampleId : upload.id === currentUploadId;
+        const name = sample ? this._createSampleLabel(sample) : upload.file.name;
+        return (
+            <li key={key}
                 className={classNames({
-                    'active': currentUploadId
+                    'active': isActive
                 })}>
                 <a type='button'
-                   onClick={() => this.onUploadItemClick(uploadItem.id)}>
+                   onClick={() => {
+                       if (sample) {
+                           this.onSampleItemClick(sample.id);
+                       } else {
+                           this.onUploadItemClick(upload.id);
+                       }
+                   }}>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -205,7 +241,7 @@ export default class FileUploadSampleList extends React.Component {
                     <span className='link-label'>
                         {name}
                     </span>
-                    {FileUploadSampleList.renderProgressBar(uploadItem)}
+                    {FileUploadSampleList.renderProgressBar(upload)}
                 </a>
             </li>
         );

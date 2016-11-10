@@ -20,6 +20,7 @@ export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
 export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
 export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
+export const SAMPLES_LIST_UPDATE_SAMPLES_FIELDS = 'SAMPLES_LIST_UPDATE_SAMPLES_FIELDS';
 
 const samplesClient = apiFacade.samplesClient;
 const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
@@ -35,6 +36,13 @@ const FETCH_SAMPLES_ERROR_MESSAGE = 'We are really sorry, but there is an error 
 export function samplesListAddSamples(samples) {
     return {
         type: SAMPLES_LIST_ADD_SAMPLES,
+        samples
+    };
+}
+
+export function samplesListUpdateSamplesFields(samples) {
+    return {
+        type: SAMPLES_LIST_UPDATE_SAMPLES_FIELDS,
         samples
     };
 }

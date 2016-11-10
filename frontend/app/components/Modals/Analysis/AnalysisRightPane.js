@@ -23,7 +23,7 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
-import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
+import {sampleType, sampleTypesForAnalysisType, typeLabels, makeSampleLabel} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
 import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
@@ -633,7 +633,7 @@ export default class AnalysisRightPane extends React.Component {
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && getItemLabelByNameAndType(sample.genotypeName ? `${sample.fileName}:${sample.genotypeName}` : sample.fileName, sample.type)}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(makeSampleLabel(sample), sample.type)}</dd>
                         </dl>
                     );
                 })}
@@ -727,9 +727,9 @@ export default class AnalysisRightPane extends React.Component {
     getSampleOptions(value, selectedSamplesHash) {
         const samples = this.props.samplesList.hashedArray.array;
         return samples.map((sampleItem) => {
-            const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id]);
-            const {fileName, genotypeName, type: sampleType, id: sampleId} = sampleItem;
-            const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+            const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
+            const {type: sampleType, id: sampleId} = sampleItem;
+            const sampleName = makeSampleLabel(sampleItem);
             const label = getItemLabelByNameAndType(sampleName, sampleType);
             return {value: sampleId, label, disabled: isDisabled};
         });

@@ -20,6 +20,11 @@ export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
 export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
 export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
 
+export const fileUploadStatus = {
+    ERROR: 'error',
+    READY: 'ready'
+};
+
 let idCounter = 0;
 
 export function uploadsListReceive(uploads) {
@@ -209,7 +214,7 @@ export function uploadFile(fileUploadId) {
 export function changeFileUploadProgress(progressValue, progressStatus, id) {
     return (dispatch) => {
         dispatch(changeFileUploadProgressState(progressValue, progressStatus, id));
-        if (progressStatus === 'ready') {
+        if (progressStatus === fileUploadStatus.READY) {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
         }
