@@ -77,13 +77,20 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    attachSampleFields(userId, language, sampleId, sampleFields, genotypes, callback) {
+    attachSampleFields(userId, languId, sampleId, sampleFields, genotypes, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findGenotypeIdsForSampleIds([sampleId], trx, callback),
-                (genotypeIds, callback) => {
+                (callback) =>
+                    this.models.fields.addMissingFields(languId, sampleFields, trx, (error, fieldsWithIds) => {
+                        const fieldIds = _.map(fieldsWithIds, fieldWithId => ({
+                            fieldId: fieldWithId.id,
+                        }));
+                        callback(error, fieldIds);
+                    }),
+                (fieldIds, callback) => this._findGenotypeIdsForSampleIds([sampleId], trx, (error, genotypeIds) => callback(error, fieldIds, genotypeIds)),
+                (fieldIds, genotypeIds, callback) => {
                     async.each(genotypeIds, (genotypeId, callback) => {
-                        this._addGenotypeFields(trx, genotypeId, sampleFields, callback)
+                        this._addGenotypeFields(trx, genotypeId, fieldIds, callback)
                     }, (error) => callback(error, genotypeIds))
                 },
                 (genotypeIds, callback) => this._findLastVersionsByGenotypeIds(trx, genotypeIds, callback),
