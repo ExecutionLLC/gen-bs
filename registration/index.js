@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use(Express.static('public'));
 app.use(cors({
-    origin: Config.registrationFrontend.site,
+    origin: '*', // must be 'Config.registrationFrontend.site', but did not work at some case
     credentials: true
 }));
 app.use(helmet({
