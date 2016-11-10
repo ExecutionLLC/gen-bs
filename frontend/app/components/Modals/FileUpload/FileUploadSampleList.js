@@ -54,7 +54,7 @@ export default class FileUploadSampleList extends React.Component {
                 date: errorUpload.created
             };
         });
-        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample =>!_.isEmpty(sample.sampleFields));
+        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
             const {originalId} = sample;
             const sampleName = this._createSampleLabel(sample);

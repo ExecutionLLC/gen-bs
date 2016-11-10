@@ -94,7 +94,7 @@ class SavedFilesService extends UserEntityServiceBase {
                     const sampleIds = _.uniq(_.flatMap(analyses, analysis => {
                         return _.map( analysis.samples, sample => sample.id)
                     }));
-                    const modelIds = _.filter(_.uniq(_.map(analyses, analysis => analysis.modelId)), modelId =>!_.isNull(modelId));
+                    const modelIds = _.filter(_.uniq(_.map(analyses, analysis => analysis.modelId)), modelId => !_.isNull(modelId));
                     async.parallel({
                             analyses: async.constant(analyses),
                             views: (callback) => this.services.views.findMany(user, viewIds, callback),
