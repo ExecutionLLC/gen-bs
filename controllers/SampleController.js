@@ -87,7 +87,7 @@ class SampleController extends UserEntityControllerBase {
         // Cannot upload many samples here simultaneously, as the client
         // will be unable to distinguish upload operation ids.
         router.post('/upload', Upload.single('sample'), this.upload.bind(this));
-
+        router.delete('/cancel/:id', this.cancel);
         return router;
     }
 }
