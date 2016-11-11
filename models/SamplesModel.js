@@ -25,7 +25,8 @@ const SampleTableNames = {
     Genotypes: 'sample_genotype',
     Versions: 'genotype_version',
     Values: 'vcf_file_sample_value',
-    Fields: 'genotype_field'
+    Fields: 'genotype_field',
+    Text: 'genotype_text'
 };
 
 class SamplesModel extends SecureModelBase {
@@ -258,22 +259,43 @@ class SamplesModel extends SecureModelBase {
             },
             (sampleId, callback) => this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback),
             (sampleId, callback) => this._createGenotypes(sampleId, genotypesOrNull, trx,
-                (error, genotypeIds) => callback(error, sampleId, genotypeIds)),
-            (sampleId, genotypeIds, callback) => {
-                async.each(genotypeIds, (genotypeId, callback) => {
-                    this._addGenotypeFields(trx, genotypeId, sample.sampleFields, callback)
-                }, (error) => callback(error, sampleId, genotypeIds))
+                (error, genotypes) => callback(error, sampleId, genotypes)),
+            (sampleId, genotypes, callback) => {
+                async.each(genotypes, (genotype, callback) => {
+                    this._addGenotypeFields(trx, genotype.genotypeId, sample.sampleFields, callback)
+                }, (error) => callback(error, sampleId, genotypes))
             },
-            (sampleId, genotypeIds, callback) => async.map(genotypeIds,
-                (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
-                (error, genotypeVersionIds) => callback(error, sampleId, genotypeIds, genotypeVersionIds)),
-            (sampleId, genotypeIds, genotypeVersionIds, callback) => {
+            (sampleId, genotypes, callback) => async.map(genotypes,
+                (genotype, callback) => this._addNewGenotypeVersion(genotype.genotypeId, trx, (error, genotypeVersionId) => callback(error, {
+                    genotypeId: genotype.genotypeId,
+                    genotypeVersionId,
+                    genotypeName: genotype.genotypeName,
+                })),
+                (error, genotypeVersions) => callback(error, sampleId, genotypeVersions)),
+            (sampleId, genotypeVersions, callback) => async.map(genotypeVersions,
+                (genotype, callback) => {
+                    const {fileName, description} =sample;
+                    const {genotypeVersionId, genotypeName} =genotype;
+                    const name = this._createGenotypeName(fileName, genotypeName);
+                    const genotypeText = {
+                        genotypeVersionId,
+                        name,
+                        description
+                    };
+                    this._addGenotypeVersionText(trx, genotypeText, callback)
+                },
+                (error) => callback(error, sampleId, genotypeVersions)),
+            (sampleId, genotypeVersions, callback) => {
                 // Each genotype should have different fields.
-                async.each(genotypeVersionIds, (genotypeVersionId, callback) => {
-                    this._addGenotypeValues(trx, genotypeVersionId, sample.editableFields, callback)
-                }, (error) => callback(error, genotypeVersionIds))
+                async.map(genotypeVersions, (genotypeVersion, callback) => {
+                    this._addGenotypeValues(trx, genotypeVersion.genotypeVersionId, sample.editableFields, (error) => callback(error, genotypeVersion.genotypeVersionId))
+                }, callback)
             }
         ], callback);
+    }
+
+    _createGenotypeName(fileName, genotype) {
+        return genotype ? `${fileName}:${genotype}` : fileName;
     }
 
     /**
@@ -292,7 +314,10 @@ class SamplesModel extends SecureModelBase {
                     vcfFileSampleId: sampleId,
                     genotypeName
                 }))
-                .asCallback((error) => callback(error, genotypeId))
+                .asCallback((error) => callback(error, {
+                    genotypeId,
+                    genotypeName
+                }))
         }, callback);
     }
 
@@ -303,6 +328,18 @@ class SamplesModel extends SecureModelBase {
                 id: genotypeVersionId,
                 sampleGenotypeId: genotypeId,
                 timestamp: new Date()
+            }))
+            .asCallback((error) => callback(error, genotypeVersionId));
+    }
+
+    _addGenotypeVersionText(trx, genotypeText, callback) {
+        const {genotypeVersionId, name, description} = genotypeText;
+        return trx(SampleTableNames.Text)
+            .insert(ChangeCaseUtil.convertKeysToSnakeCase({
+                genotypeVersionId,
+                name,
+                description,
+                languId: Config.defaultLanguId
             }))
             .asCallback((error) => callback(error, genotypeVersionId));
     }
@@ -395,17 +432,20 @@ class SamplesModel extends SecureModelBase {
             (callback) => async.parallel({
                 values: (callback) => this._findValuesForVersions(trx, versionIds, callback),
                 fields: (callback) => this._findFieldForGenotypeId(trx, genotypeIds, callback),
+                texts: (callback) => this._findTextForVersions(trx, versionIds, callback),
             }, (error, results) => {
                 callback(error, results);
             }),
-            ({values, fields}, callback) => {
+            ({values, fields, texts}, callback) => {
                 const editableValues = _.groupBy(values, 'genotypeVersionId');
+                const sampleTexts = _.groupBy(texts, 'genotypeVersionId');
                 const sampleFieldsValues = _.groupBy(fields, 'genotypeId');
                 const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');
                 const resultSamples = genotypeVersions
                     .map(genotypeVersion => {
                         const {sampleId, versionId, genotypeId, genotypeName} = genotypeVersion;
                         const sampleMetadata = sampleIdToMetadataHash[sampleId];
+                        const {name, description} = sampleTexts[versionId];
                         return Object.assign({}, sampleMetadata, {
                             id: versionId,
                             originalId: sampleId,
@@ -416,6 +456,8 @@ class SamplesModel extends SecureModelBase {
                             })),
                             editableFields: {
                                 versionId,
+                                name,
+                                description,
                                 fields: _.map(editableValues[versionId], field => {
                                     const {fieldId, values} = field;
                                     return {
@@ -447,6 +489,18 @@ class SamplesModel extends SecureModelBase {
         async.waterfall([
             (callback) => trx.select()
                 .from(SampleTableNames.Values)
+                .whereIn('genotype_version_id', genotypeVersionIds)
+                .asCallback((error, rows) => callback(error, rows)),
+            (rows, callback) => this._toCamelCase(rows, callback)
+        ], (error, rows) => {
+            callback(error, rows);
+        });
+    }
+
+    _findTextForVersions(trx, genotypeVersionIds, callback) {
+        async.waterfall([
+            (callback) => trx.select()
+                .from(SampleTableNames.Text)
                 .whereIn('genotype_version_id', genotypeVersionIds)
                 .asCallback((error, rows) => callback(error, rows)),
             (rows, callback) => this._toCamelCase(rows, callback)
