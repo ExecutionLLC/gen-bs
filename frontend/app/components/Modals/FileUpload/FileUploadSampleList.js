@@ -12,6 +12,23 @@ function fileUploadStatusErrorOrReady(status) {
 }
 
 export default class FileUploadSampleList extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            showPopup: null
+        };
+        this.onDocumentClick = this.onDocumentClick.bind(this);
+    }
+
+    componentDidMount() {
+        document.addEventListener('click', this.onDocumentClick, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', this.onDocumentClick, false);
+    }
+
     render() {
         const {currentSampleId, fileUpload:{currentUploadId}} = this.props;
         return (
@@ -104,6 +121,8 @@ export default class FileUploadSampleList extends React.Component {
                         sample.id === currentSampleId,
                         true,
                         (id) => this.onSampleItemClick(id),
+                        null/*(id) => this.onSampleItemSelectForAnalysis(id)*/,
+                        (id) => this.onSampleItemDelete(id),
                         label,
                         'Test description',
                         sample.timestamp
@@ -116,6 +135,8 @@ export default class FileUploadSampleList extends React.Component {
                 sample.id === currentSampleId,
                 null,
                 (id) => this.onSampleItemClick(id),
+                (id) => this.onSampleItemSelectForAnalysis(id),
+                (id) => this.onSampleItemDelete(id),
                 label,
                 'Test description',
                 sample.timestamp
@@ -126,13 +147,15 @@ export default class FileUploadSampleList extends React.Component {
             upload.id === currentUploadId,
             false,
             (id) => this.onUploadErrorItemClick(id),
+            null,
+            (id) => this.onUploadErrorDelete(id),
             label,
             upload.error.message,
             null
         );
     }
 
-    renderListItem(id, isActive, isSuccessOrNull, onClick, label, description, uploadedTimeOrNull) {
+    renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
         return (
             <li key={id}
                 className={classNames({
@@ -155,7 +178,40 @@ export default class FileUploadSampleList extends React.Component {
                        Uploaded: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
+                {this.renderDropdown(id, onSelectForAnalysis, onDelete)}
             </li>
+        );
+    }
+
+    renderDropdown(id, onSelectForAnalysis, onDelete) {
+        const isOpen = this.state.showPopup === id;
+        const className = classNames({'dropdown': true, 'right-menu': true, 'open': isOpen});
+        return (
+            <div className={className}>
+                <button
+                    className='btn btn-link-light-default dropdown-toggle popup-show-button'
+                    type='button'
+                    onClick={() => this.onShowPopup(id)}
+                >
+                    <i className='md-i'>more_horiz</i>
+                    <span className='caret'></span>
+                </button>
+                <ul className='dropdown-menu dropdown-menu-right'>
+                    {onSelectForAnalysis && <li>
+                        <a
+                            href='#'
+                            className='selectForAnalysisBtn'
+                            onClick={onSelectForAnalysis(id)}
+                        > Select for analysis</a>
+                    </li>}
+                    {onDelete && <li>
+                        <a
+                            href='#'
+                            onClick={onDelete(id)}
+                        >Delete</a>
+                    </li>}
+                </ul>
+            </div>
         );
     }
 
@@ -274,6 +330,9 @@ export default class FileUploadSampleList extends React.Component {
         onSelectUpload(id);
     }
 
+    onUploadErrorDelete(id) {
+    }
+
     onUploadItemClick(id) {
         const {onSelectUpload} = this.props;
         onSelectUpload(id);
@@ -287,6 +346,44 @@ export default class FileUploadSampleList extends React.Component {
     onSampleNewItem() {
         const {onSelectSample} = this.props;
         onSelectSample(null);
+    }
+
+    onSampleItemSelectForAnalysis(id) {
+    }
+
+    onSampleItemDelete(id) {
+    }
+
+    onUploadItemDelete(id) {
+    }
+
+    onShowPopup(id) {
+        console.log('onShowPopup', id);
+        this.setState({
+            showPopup: id
+        });
+    }
+
+    onDocumentClick(e) {
+
+        function findClosestPopupShowButton(el) {
+            let currentEl = el;
+            while (currentEl) {
+                if (currentEl.classList && currentEl.classList.contains('popup-show-button')) {
+                    return true;
+                }
+                currentEl = currentEl.parentNode;
+            }
+            return false;
+        }
+
+        console.log('onDocumentClick', findClosestPopupShowButton(e.target));
+        if (!findClosestPopupShowButton(e.target)) {
+            this.setState({
+                showPopup: null
+            });
+        }
+        return false;
     }
 }
 
