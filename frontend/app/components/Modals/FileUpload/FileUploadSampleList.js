@@ -201,13 +201,13 @@ export default class FileUploadSampleList extends React.Component {
                         <a
                             href='#'
                             className='selectForAnalysisBtn'
-                            onClick={onSelectForAnalysis(id)}
+                            onClick={() => onSelectForAnalysis(id)}
                         > Select for analysis</a>
                     </li>}
                     {onDelete && <li>
                         <a
                             href='#'
-                            onClick={onDelete(id)}
+                            onClick={() => onDelete(id)}
                         >Delete</a>
                     </li>}
                 </ul>
