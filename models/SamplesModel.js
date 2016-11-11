@@ -81,7 +81,7 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._findGenotypeIdByVersionId(trx, genotypeVersionId, callback),
-                (genotypeId, callback) => this._deleteGenotype(trx, genotypeId)
+                (genotypeId, callback) => this._deleteGenotype(trx, genotypeId, callback)
             ], callback);
         }, callback);
 
