@@ -6,6 +6,7 @@ import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
 import {fileUploadStatus} from '../../../actions/fileUpload';
 import {makeSampleLabel} from '../../../utils/samplesUtils';
+import {samplesListServerRemoveSample} from '../../../actions/samplesList';
 
 function fileUploadStatusErrorOrReady(status) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
@@ -352,6 +353,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     onSampleItemDelete(id) {
+        this.props.dispatch(samplesListServerRemoveSample(id));
     }
 
     onUploadItemDelete(id) {

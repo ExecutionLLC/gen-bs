@@ -21,6 +21,7 @@ export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
 export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 export const SAMPLES_LIST_UPDATE_SAMPLES_FIELDS = 'SAMPLES_LIST_UPDATE_SAMPLES_FIELDS';
+export const SAMPLES_LIST_REMOVE_SAMPLE = 'SAMPLES_LIST_REMOVE_SAMPLE';
 
 const samplesClient = apiFacade.samplesClient;
 const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
@@ -195,4 +196,24 @@ export function setEditingSampleId(sampleId) {
         type: SET_EDITING_SAMPLE_ID,
         sampleId
     };
+}
+
+function samplesListRemoveSample(sampleId) {
+    return {
+        type: SAMPLES_LIST_REMOVE_SAMPLE,
+        sampleId
+    };
+}
+
+export function samplesListServerRemoveSample(sampleId) {
+    return (dispatch) => new Promise((resolve, reject) => {
+        apiFacade.samplesClient.remove(sampleId, (error) => {
+            if (error) {
+                reject(error);
+            } else {
+                dispatch(samplesListRemoveSample(sampleId));
+                resolve();
+            }
+        })
+    });
 }

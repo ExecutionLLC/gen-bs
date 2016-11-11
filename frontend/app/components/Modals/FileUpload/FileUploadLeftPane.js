@@ -59,7 +59,7 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     render() {
-        const {samplesList, fileUpload, currentSampleId, currentHistorySamplesIds} = this.props;
+        const {dispatch, samplesList, fileUpload, currentSampleId, currentHistorySamplesIds} = this.props;
         const {searchWord, samplesSearchHash} = this.state;
 
         return (
@@ -69,6 +69,7 @@ export default class FileUploadLeftPane extends React.Component {
                     onSearch={(e) => this.onSampleSearchChange(e)}
                 />
                 <FileUploadSampleList
+                    dispatch={dispatch}
                     sampleList={samplesList}
                     currentSampleId={currentSampleId}
                     onSelectSample={(id) => this.onCurrentSampleIdChange(id)}
