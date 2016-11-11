@@ -210,6 +210,15 @@ class SamplesModel extends SecureModelBase {
                 (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
                 (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.editableFields.fields,
                     (error) => callback(error, versionId)),
+                (versionId, callback) => {
+                    const {description, name} =sampleToUpdate;
+                    const genotypeText = {
+                        genotypeVersionId: versionId,
+                        name,
+                        description
+                    };
+                    this._addGenotypeVersionText(trx, genotypeText, (error) => callback(error, versionId))
+                },
                 (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
                 (samples, callback) => callback(null, samples[0])
             ], callback);
