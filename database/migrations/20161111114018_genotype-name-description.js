@@ -68,7 +68,6 @@ function createGenotypeName(fileName, genotype) {
 }
 
 function addGenotypeVersionText(knex, genotypeText) {
-    console.log(genotypeText);
     const {genotypeVersionId, name, description} = genotypeText;
     return knex(SampleTables.GenotypeVersionText)
         .insert(ChangeCaseUtil.convertKeysToSnakeCase({
