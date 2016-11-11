@@ -447,7 +447,7 @@ class SamplesModel extends SecureModelBase {
             }),
             ({values, fields, texts}, callback) => {
                 const editableValues = _.groupBy(values, 'genotypeVersionId');
-                const sampleTexts = _.groupBy(texts, 'genotypeVersionId');
+                const sampleTexts = _.keyBy(texts, 'genotypeVersionId');
                 const sampleFieldsValues = _.groupBy(fields, 'genotypeId');
                 const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');
                 const resultSamples = genotypeVersions
