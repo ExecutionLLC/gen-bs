@@ -66,7 +66,7 @@ class ViewsModel extends SecureModelBase {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : view.id,
                         creator: userId,
-                        name: view.name,
+                        name: view.name.trim(),
                         type: view.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
