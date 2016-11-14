@@ -43,6 +43,7 @@ class ViewsModal extends React.Component {
                 bsSize='lg'
                 show={showModal}
                 onHide={() => this.onClose()}
+                backdrop='static'
             >
                 { !editingView &&
                 <div>&nbsp;</div>
