@@ -28,7 +28,8 @@ const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an
     ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 const FETCH_SAMPLES_ERROR_MESSAGE = 'We are really sorry, but there is an error while getting the list of samples' +
     ' from our server. Be sure we are working on resolving the issue. You can also try to reload page and try again.';
-
+const DELETE_SAMPLE_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting sample.' +
+    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 /*
  * Action Creators
@@ -206,14 +207,12 @@ function samplesListRemoveSample(sampleId) {
 }
 
 export function samplesListServerRemoveSample(sampleId) {
-    return (dispatch) => new Promise((resolve, reject) => {
-        apiFacade.samplesClient.remove(sampleId, (error) => {
-            if (error) {
-                reject(error);
-            } else {
-                dispatch(samplesListRemoveSample(sampleId));
-                resolve();
-            }
-        })
-    });
+    return (dispatch) => {
+        return new Promise((resolve) => {
+            samplesClient.remove(sampleId, (error, response) => resolve({error, response}))
+        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response))
+        ).then(() => {
+            dispatch(samplesListRemoveSample(sampleId));
+        });
+    }
 }
