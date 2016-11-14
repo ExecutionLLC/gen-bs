@@ -19,6 +19,7 @@ export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
 export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
 export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
+export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
 
 export const fileUploadStatus = {
     ERROR: 'error',
@@ -48,6 +49,12 @@ export function setCurrentUploadId(uploadId) {
     };
 }
 
+export function uploadsListRemoveUpload(uploadId) {
+    return {
+        type: UPLOADS_LIST_REMOVE_UPLOAD,
+        uploadId
+    };
+}
 /*
  * action creators
  */

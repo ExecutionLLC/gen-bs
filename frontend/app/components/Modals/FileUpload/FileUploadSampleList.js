@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus} from '../../../actions/fileUpload';
+import {fileUploadStatus, uploadsListRemoveUpload} from '../../../actions/fileUpload';
 import {makeSampleLabel} from '../../../utils/samplesUtils';
 import {samplesListServerRemoveSample} from '../../../actions/samplesList';
 
@@ -332,6 +332,8 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     onUploadErrorDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(uploadsListRemoveUpload(id));
     }
 
     onUploadItemClick(id) {
