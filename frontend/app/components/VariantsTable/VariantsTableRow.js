@@ -8,6 +8,8 @@ import VariantsTableComment from './VariantsTableComment';
 
 import FieldUtils from '../../utils/fieldUtils.js';
 
+import {Popover, OverlayTrigger} from 'react-bootstrap';
+
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
@@ -62,7 +64,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       comments={comments}
                 />
                 {_.map(rowFields, (value, index) =>
-                    this.renderFieldValue(variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
+                    this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
                 )}
             </tr>
         );
@@ -73,7 +75,7 @@ export default class VariantsTableRow extends ComponentBase {
         onSelected(rowIndex, !isSelected);
     }
 
-    renderFieldValue(fieldId, sampleId, value, sortState) {
+    renderFieldValue(index, fieldId, sampleId, value, sortState) {
         const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
         const resultFieldValue = value;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
@@ -88,8 +90,23 @@ export default class VariantsTableRow extends ComponentBase {
             <td className={sortedActiveClass}
                 key={fieldId + '-' + sampleId}>
                 <div>
-                    {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
-                        isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}
+                    <OverlayTrigger
+                        trigger='click'
+                        ref='overlay'
+                        rootClose={true}
+                        placement='right'
+                        overlay={
+                            <Popover id={`${index}-${field.fieldId}`}>
+                                {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
+                                    isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}
+                            </Popover>
+                        }
+                    >
+                        <div>
+                            <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
+                                {isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}</a>
+                        </div>
+                    </OverlayTrigger>
                 </div>
             </td>
         );
