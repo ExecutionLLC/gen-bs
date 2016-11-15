@@ -3,6 +3,9 @@ import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
 
+import apiFacade from '../api/ApiFacade';
+import {handleApiResponseErrorAsync} from './errorHandler';
+
 /*
  * action types
  */
@@ -25,6 +28,11 @@ export const fileUploadStatus = {
     ERROR: 'error',
     READY: 'ready'
 };
+
+const {sampleUploadsClient} = apiFacade;
+
+const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting upload.' +
+    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
 
@@ -55,6 +63,18 @@ export function uploadsListRemoveUpload(uploadId) {
         uploadId
     };
 }
+
+export function uploadsListServerRemoveUpload(uploadId) {
+    return (dispatch) => {
+        return new Promise((resolve) => {
+            sampleUploadsClient.remove(uploadId, (error, response) => resolve({error, response}));
+        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_UPLOAD_ERROR_MESSAGE, error, response))
+        ).then(() => {
+            dispatch(uploadsListRemoveUpload(uploadId));
+        });
+    };
+}
+
 /*
  * action creators
  */
