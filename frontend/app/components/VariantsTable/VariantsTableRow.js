@@ -86,6 +86,14 @@ export default class VariantsTableRow extends ComponentBase {
         const field = hash[fieldId];
         const isChromosome = this.isChromosome(field);
         const isValuedHyperlink = this.isHyperlink(field, resultFieldValue);
+
+        const popover = (
+            <Popover id={`${index}-${field.fieldId}`}>
+                {isValuedHyperlink ? this.renderHyperLink(field.hyperlinkTemplate, value) :
+                    isChromosome ? this.renderChromosome(resultFieldValue) : resultFieldValue || ''}
+            </Popover>
+        );
+
         return (
             <td className={sortedActiveClass}
                 key={fieldId + '-' + sampleId}>
@@ -94,18 +102,10 @@ export default class VariantsTableRow extends ComponentBase {
                         trigger='click'
                         ref='overlay'
                         rootClose={true}
-                        placement='right'
-                        overlay={
-                            <Popover id={`${index}-${field.fieldId}`}>
-                                {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
-                                    isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}
-                            </Popover>
-                        }
+                        placement='left'
+                        overlay={popover}
                     >
-                        <div>
-                            <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}</a>
-                        </div>
+                        <span>{isChromosome ? this.renderChromosome(resultFieldValue) : resultFieldValue || ''}</span>
                     </OverlayTrigger>
                 </div>
             </td>
