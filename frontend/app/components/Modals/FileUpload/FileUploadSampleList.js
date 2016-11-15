@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus, uploadsListRemoveUpload} from '../../../actions/fileUpload';
+import {fileUploadStatus, uploadsListRemoveUpload, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
 import {makeSampleLabel} from '../../../utils/samplesUtils';
 import {samplesListServerRemoveSample} from '../../../actions/samplesList';
 
@@ -123,7 +123,7 @@ export default class FileUploadSampleList extends React.Component {
                         true,
                         (id) => this.onSampleItemClick(id),
                         null/*(id) => this.onSampleItemSelectForAnalysis(id)*/,
-                        (id) => this.onSampleItemDelete(id),
+                        (id) => this.onUploadItemDelete(id),
                         label,
                         'Test description',
                         sample.timestamp
@@ -142,18 +142,33 @@ export default class FileUploadSampleList extends React.Component {
                 'Test description',
                 sample.timestamp
             );
+        } else {
+            if (typeof upload.id === 'string') {
+                return this.renderListItem(
+                    upload.id,
+                    upload.id === currentUploadId,
+                    false,
+                    (id) => this.onUploadErrorItemClick(id),
+                    null,
+                    (id) => this.onUploadErrorDelete(id),
+                    label,
+                    upload.error.message,
+                    null
+                );
+            } else {
+                return this.renderListItem(
+                    upload.id,
+                    upload.id === currentUploadId,
+                    false,
+                    (id) => this.onNotUploadedErrorItemClick(id),
+                    null,
+                    (id) => this.onNotUploadedErrorItemDelete(id),
+                    label,
+                    upload.error.message,
+                    null
+                );
+            }
         }
-        return this.renderListItem(
-            upload.id,
-            upload.id === currentUploadId,
-            false,
-            (id) => this.onUploadErrorItemClick(id),
-            null,
-            (id) => this.onUploadErrorDelete(id),
-            label,
-            upload.error.message,
-            null
-        );
     }
 
     renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
@@ -326,6 +341,16 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    onNotUploadedErrorItemClick(id) {
+        const {onSelectUpload} = this.props;
+        onSelectUpload(id);
+    }
+
+    onNotUploadedErrorItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(uploadsListRemoveUpload(id));
+    }
+
     onUploadErrorItemClick(id) {
         const {onSelectUpload} = this.props;
         onSelectUpload(id);
@@ -333,7 +358,7 @@ export default class FileUploadSampleList extends React.Component {
 
     onUploadErrorDelete(id) {
         const {dispatch} = this.props;
-        dispatch(uploadsListRemoveUpload(id));
+        dispatch(uploadsListServerRemoveUpload(id));
     }
 
     onUploadItemClick(id) {
@@ -355,7 +380,8 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     onSampleItemDelete(id) {
-        this.props.dispatch(samplesListServerRemoveSample(id));
+        const {dispatch} = this.props;
+        dispatch(samplesListServerRemoveSample(id));
     }
 
     onUploadItemDelete(id) {
