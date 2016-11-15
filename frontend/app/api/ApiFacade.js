@@ -13,6 +13,7 @@ import SearchClient from './SearchClient';
 import SessionsClient from './SessionsClient';
 import ViewsClient from './ViewsClient';
 import SavedFilesClient from './SavedFilesClient';
+import SampleUploadsClient from './SampleUploadsClient';
 
 class ApiFacade {
     constructor() {
@@ -28,6 +29,7 @@ class ApiFacade {
         this._sessionsClient = new SessionsClient(urls);
         this._savedFilesClient = new SavedFilesClient(urls);
         this._viewsClient = new ViewsClient(urls);
+        this._sampleUploadsClient = new SampleUploadsClient(urls);
     }
 
     get dataClient() {
@@ -68,6 +70,10 @@ class ApiFacade {
 
     get viewsClient() {
         return this._viewsClient;
+    }
+
+    get sampleUploadsClient() {
+        return this._sampleUploadsClient;
     }
 }
 
