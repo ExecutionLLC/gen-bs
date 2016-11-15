@@ -15,6 +15,7 @@ class FileUploadModal extends Component {
                 bsSize='lg'
                 show={this.props.showModal}
                 onHide={ () => this.props.closeModal('upload') }
+                backdrop='static'
             >
                 <FileUploadHeader />
                 <Modal.Body>

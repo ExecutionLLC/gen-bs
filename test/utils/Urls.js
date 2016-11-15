@@ -132,6 +132,10 @@ class Urls {
         return new SavedFilesUrls('/files', this.host, this.port);
     }
 
+    users() {
+        return this._constructApiUrl('/users', this.host, this.port);
+    }
+
     _constructApiUrl(subUrl) {
         return _constructApiUrl(subUrl, this.host, this.port);
     }

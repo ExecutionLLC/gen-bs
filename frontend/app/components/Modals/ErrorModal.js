@@ -51,6 +51,7 @@ class ErrorModal extends Component {
                 bsSize='lg'
                 show={showModal}
                 onHide={closeModal}
+                backdrop='static'
             >
                 { this.renderHeader() }
                 { this.renderBody() }

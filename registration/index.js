@@ -138,10 +138,6 @@ app.post('/user_request', (request, response) => {
         });
 });
 
-app.get('/register', (request, response) => {
-    response.send('Got hello!');
-});
-
 app.get('/approve', (request, response) => {
     logger.info('approve');
     const {id} = request.query;

@@ -21,6 +21,7 @@ class AnalysisModal extends React.Component {
                 bsSize='lg'
                 show={showModal}
                 onHide={() => this.onClose()}
+                backdrop='static'
             >
                 <AnalysisHeader
                     showAnalysisHide={this.state.isAnalysisBringToFront}

@@ -71,7 +71,9 @@ class NavbarSearch extends Component {
     }
 
     onSearchPopupToggle(show) {
-        this.setState({showPopup: show});
+        this.setState({
+            showPopup: show
+        });
     }
 }
 

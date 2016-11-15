@@ -86,6 +86,7 @@ class FiltersModal extends Component {
                 bsSize='lg'
                 show={showModal}
                 onHide={() => this.onClose()}
+                backdrop='static'
             >
                 { (!editingFilter) &&
                 <div>&nbsp;</div>
