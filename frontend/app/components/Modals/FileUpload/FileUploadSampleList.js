@@ -112,7 +112,7 @@ export default class FileUploadSampleList extends React.Component {
 
 
     _renderUploadedData(uploadData) {
-        const {currentHistorySamplesIds, currentSampleId, fileUpload:{currentUploadId}} = this.props;
+        const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}} = this.props;
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
