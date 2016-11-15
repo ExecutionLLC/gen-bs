@@ -123,7 +123,7 @@ export default class FileUploadSampleList extends React.Component {
                         true,
                         (id) => this.onSampleItemClick(id),
                         null/*(id) => this.onSampleItemSelectForAnalysis(id)*/,
-                        (id) => this.onUploadItemDelete(id),
+                        (id) => this.onSampleItemDelete(id),
                         label,
                         'Test description',
                         sample.timestamp
@@ -315,6 +315,15 @@ export default class FileUploadSampleList extends React.Component {
                     </span>
                     {FileUploadSampleList.renderProgressBar(upload)}
                 </a>
+                <div className='right-menu'>
+                    <button className='btn btn-link-light-default'
+                            type='button'
+                            onClick={() => sample ? this.onSampleItemDelete(sample.id) : this.onUploadItemDelete(upload.operationId)}>
+                        <i className='md-i'>highlight_off</i>
+
+                    </button>
+
+                </div>
             </li>
         );
     }
@@ -385,6 +394,8 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     onUploadItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(uploadsListServerRemoveUpload());
     }
 
     onShowPopup(id) {

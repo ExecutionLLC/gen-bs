@@ -83,6 +83,10 @@ class SessionService extends ServiceBase {
             && session.userId;
     }
 
+    isSystemSessionId(sessionId) {
+        return sessionId === this.systemSession.id;
+    }
+
     startForEmailPassword(session, email, password, callback) {
         async.waterfall([
             (callback) => this.services.users.findIdByEmailPassword(email, password, callback),

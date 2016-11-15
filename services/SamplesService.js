@@ -54,18 +54,41 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
+    remove(user, itemId, callback) {
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.find(user, itemId, callback),
+            (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item)),
+            (item, callback) => {
+                this.theModel.findGenotypeIdsForSampleIds([item.originalId], true, (error, genotypeIds) => callback(error, genotypeIds, item));
+            },
+            (genotypeIds, item, callback) => {
+                if(genotypeIds.length == 0){
+                    async.waterfall([
+                        (callback) => this.services.sessions.findSystemSession(callback),
+                        (session, callback) => {
+                            this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,(error, history) => callback(error, session, history.id));
+                        },
+                        (session, operationId, callback) => this.cancelUpload(session, user, operationId, callback)
+                    ],(error) => callback(error,item));
+                }else {
+                    callback(null, item);
+                }
+            },
+        ], callback);
+    }
+
     cancelUpload(session, user, operationId, callback){
         this.logger.debug('Cancel uploading operationId: ' + JSON.stringify(operationId, null, 2));
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.operations.find(session, operationId, callback),
             (operation, callback) => {
-                operation.setSendCloseToAppServer(false);
-
-                async.waterfall([
+				async.waterfall([
                     (callback) => this.services.sessions.findSystemSession(callback),
                     (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
-                ], () => callback(error));
+                ], (error) => callback(error));
             },
         ], callback);
     }

@@ -21,7 +21,7 @@ class SampleUploadHistoryModel extends ModelBase {
 
     find(userId, entryId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, [entryId], userId, false, null, null, null)
+            this._findEntriesAsync(trx, [entryId], userId, false, null, null, null, null)
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         }, callback);
@@ -29,9 +29,18 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findAll(userId, limit, offset, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, null, limit, offset)
+            this._findEntriesAsync(trx, null, userId, true, null, null, limit, offset)
                 .asCallback(callback);
         }, callback);
+    }
+
+    findBySampleId(userId, sampleId, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findEntriesAsync(trx, null, userId, true, null, sampleId, null, null)
+                .asCallback(callback);
+        }, (error, result) =>{
+            callback(error, result[0]);
+        });
     }
 
     /**
@@ -55,14 +64,14 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findActive(userId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null)
+            this._findEntriesAsync(trx, null, userId, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null, null)
                 .asCallback(callback);
         }, callback);
     }
 
     findActiveForAllUsers(entryId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, [entryId], null, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null)
+            this._findEntriesAsync(trx, [entryId], null, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null, null)
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         }, callback);
@@ -75,7 +84,7 @@ class SampleUploadHistoryModel extends ModelBase {
                     id: entryId
                 }))
                 .update(ChangeCaseUtil.convertKeysToSnakeCase(entry))
-                .then(() => this._findEntriesAsync(trx, [entryId], userId, false, null, null, null))
+                .then(() => this._findEntriesAsync(trx, [entryId], userId, false, null, null, null, null))
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         }, callback);
@@ -86,7 +95,7 @@ class SampleUploadHistoryModel extends ModelBase {
     }
 
     _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted,
-                      statusOrNull, limitOrNull, offsetOrNull) {
+                      statusOrNull, samplesOrNull, limitOrNull, offsetOrNull) {
         let query = trx.select()
             .from(this.baseTableName)
             .whereRaw('1 = 1');
@@ -96,6 +105,10 @@ class SampleUploadHistoryModel extends ModelBase {
 
         if (userIdOrNull) {
             query = query.andWhere('user_id', userIdOrNull);
+        }
+
+        if (samplesOrNull) {
+            query = query.andWhere('sample_id', samplesOrNull);
         }
 
         if (excludeDeleted) {

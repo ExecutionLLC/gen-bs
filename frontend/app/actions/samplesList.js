@@ -210,7 +210,9 @@ export function samplesListServerRemoveSample(sampleId) {
     return (dispatch) => {
         return new Promise((resolve) => {
             samplesClient.remove(sampleId, (error, response) => resolve({error, response}));
-        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response))
+        }).then(({error, response}) => {
+                dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response));
+            }
         ).then(() => {
             dispatch(samplesListRemoveSample(sampleId));
         });

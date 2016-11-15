@@ -252,6 +252,12 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    findGenotypeIdsForSampleIds(sampleIds, shouldExcludeDeletedEntries, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findGenotypeIdsForSampleIds(sampleIds, shouldExcludeDeletedEntries, trx, callback)
+        }, callback);
+    }
+
     _findGenotypeIdsForSampleIds(sampleIds, shouldExcludeDeletedEntries, trx, callback) {
         let baseQuery = trx(SampleTableNames.Genotypes)
             .select('id')
