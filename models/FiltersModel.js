@@ -72,7 +72,7 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         filterId: filterId,
                         languId: languId,
-                        name: filter.name,
+                        name: filter.name.trim(),
                         description: filter.description
                     };
                     this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
