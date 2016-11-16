@@ -16,7 +16,7 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response) {
-        const {body, file} = request;
+        const {body, file ,user, session} = request;
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
@@ -38,15 +38,31 @@ class SampleController extends UserEntityControllerBase {
                     fileSize: sampleFile.size,
                     originalFileName: fileName
                 };
-                const {user, session} = request;
                 this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
                     callback(error, operationId);
                 });
+            }, (operationId, callback) => {
+                this.services.sampleUploadHistory.find(user, operationId, (error, upload) => {
+                    callback(error, operationId, upload)
+                });
             }
-        ], (error, operationId) => {
-            this.sendErrorOrJson(response, error, {operationId});
+        ], (error, operationId, upload) => {
+            this.sendErrorOrJson(response, error, {operationId, upload});
+        });
+    }
+
+    cancel(request, response){
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const operationId = request.params.id;
+                this.services.samples.cancelUpload(user, operationId, callback);
+            }
+        ], (error, item) => {
+            this.sendErrorOrJson(response, error, item);
         });
     }
 
@@ -71,7 +87,7 @@ class SampleController extends UserEntityControllerBase {
         // Cannot upload many samples here simultaneously, as the client
         // will be unable to distinguish upload operation ids.
         router.post('/upload', Upload.single('sample'), this.upload.bind(this));
-
+        router.delete('/cancel/:id', this.cancel);
         return router;
     }
 }

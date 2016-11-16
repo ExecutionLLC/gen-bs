@@ -19,6 +19,10 @@ class ObjectStorageService extends ServiceBase {
         this.objectService.uploadObject(bucketName, keyName, fileStream, callback);
     }
 
+    deleteObject(bucketName, keyName, callback) {
+        this.objectService.deleteObject(bucketName, keyName, callback);
+    }
+
     createObjectStream(bucketName, keyName, callback) {
         this.objectService.createObjectStream(bucketName, keyName, callback);
     }

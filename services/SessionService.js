@@ -10,6 +10,8 @@ const {EVENT_TYPES} = require('./../utils/Enums');
 const ServiceBase = require('./ServiceBase');
 const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
+const SYSTEM_SESSION_ID = 'eea1eefa-f8d6-4003-b2b7-c444dafcb092';
+
 const SESSION_TYPES = {
     USER: 'USER',
     DEMO: 'DEMO',
@@ -47,7 +49,7 @@ class SessionService extends ServiceBase {
         // between different web server instances.
         this.systemSession = {
             id: Uuid.v4(),
-            operations:{}
+            operations: {}
         };
 
         const {sessionCookieName, sessionSecret} = this.config.sessions;
@@ -80,6 +82,10 @@ class SessionService extends ServiceBase {
             && session.id
             && session.type
             && session.userId;
+    }
+
+    isSystemSessionId(sessionId) {
+        return sessionId === this.systemSession.id;
     }
 
     startForEmailPassword(session, email, password, callback) {

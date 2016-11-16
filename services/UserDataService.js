@@ -67,7 +67,7 @@ class UserDataService extends ServiceBase {
                     analyses: (callback) => {
                         this.services.analysis.findAll(user, this.defaultLimit, 0, undefined, undefined, callback);
                     },
-                    models: (callback)=> {
+                    models: (callback) => {
                         this.services.models.findAll(user, callback)
                     },
                     savedFiles: (callback) => {
@@ -76,28 +76,17 @@ class UserDataService extends ServiceBase {
                     totalFields: (callback) => {
                         this.services.fieldsMetadata.findTotalMetadata(callback);
                     },
-                    activeOperations: (callback) => {
-                        this._findActiveSystemOperations(user, callback);
+                    activeUploads: (callback) => {
+                        this.services.sampleUploadHistory.findActive(user, callback);
+                    },
+                    uploads: (callback) => {
+                        this.services.sampleUploadHistory.findAll(user, null, null, callback);
                     }
                 }, callback);
             }
         ], (error, results) => {
             callback(error, results);
         });
-    }
-
-    _findActiveSystemOperations(user, callback) {
-        async.waterfall([
-            (callback) => this.services.operations.findSystemOperationsForUser(user, callback),
-            (operations, callback) => {
-                const operationsWithLastMessage = _.map(operations, operation => ({
-                    id: operation.getId(),
-                    type: operation.getType(),
-                    lastMessage: operation.getLastAppServerMessage()
-                }));
-                callback(null, operationsWithLastMessage);
-            }
-        ], callback);
     }
 }
 

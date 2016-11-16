@@ -141,7 +141,7 @@ export default class FieldUtils {
      * @returns {Object.<string, TField>}
      */
     static getSampleFields(sample, totalFieldsHash) {
-        const sampleValues = sample.values;
+        const sampleValues = sample.sampleFields;
         const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
         return sampleFields;
     }

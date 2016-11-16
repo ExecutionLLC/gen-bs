@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Modal} from 'react-bootstrap';
 
 
-export default class FileUploadHeader extends Component {
+export default class FileUploadHeader extends React.Component {
 
     render() {
         return (
 
             <Modal.Header closeButton>
-                <Modal.Title data-localize='views.heading'>
+                <Modal.Title >
                     Upload VCF Files
                 </Modal.Title>
             </Modal.Header>

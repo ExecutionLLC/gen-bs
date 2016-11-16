@@ -78,10 +78,12 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      * @param session Session the request is related to.
      * @param operationId Id of the upload operation.
      * @param sampleId Id of the sample to be converted.
+     * @param priority Priority of the request (larger number corresponds to a higher priority).
      * @param callback (error, operationId)
      * */
-    requestSampleProcessing(session, operationId, sampleId, callback) {
-        this.services.applicationServerUpload.requestSampleProcessing(session, operationId, sampleId, callback);
+    requestSampleProcessing(session, operationId, sampleId, priority, callback) {
+        this.services.applicationServerUpload.requestSampleProcessing(session, operationId,
+            sampleId, priority, callback);
     }
 
     /**

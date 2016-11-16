@@ -11,7 +11,7 @@ class AppServerModelUtils {
             return null;
         }
         const samplesInfo = _.map(samples, sample => {
-            const sampleFields = _.map(sample.values, value => fieldIdToMetadata[value.fieldId]);
+            const sampleFields = _.map(sample.sampleFields, value => fieldIdToMetadata[value.fieldId]);
             const sampleFieldHash = CollectionUtils.createHash(sampleFields, fieldMetadata => fieldMetadata.id);
             return {
                 sampleFieldHash,

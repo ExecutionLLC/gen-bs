@@ -34,6 +34,15 @@ class AmazonS3Service extends ServiceBase {
             .send((error) => callback(error));
     }
 
+    deleteObject(bucketName, keyName, callback) {
+        this.s3.deleteObject(
+            {
+                Bucket: bucketName,
+                Key: keyName
+            }, callback
+        );
+    }
+
     /**
      * @param {string}bucketName
      * @param {string}keyName Key in the bucket.

@@ -38,7 +38,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (callback) => {
                 this.services.operations.find(session, operationId, callback);
             },
-            (operation, callback) => this._rpcSend(session, operation, method, searchDataRequest, callback)
+            (operation, callback) => this._rpcSend(session, operation, method, searchDataRequest, null, callback)
         ], callback);
     }
 
@@ -115,7 +115,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(userId, sample.id, (error) => {
                 callback(error, operation);
             }),
-            (operation, callback) => this._rpcSend(session, operation, method, searchSessionRequest, callback)
+            (operation, callback) => this._rpcSend(session, operation, method, searchSessionRequest, null, callback)
         ], callback);
     }
 
@@ -145,7 +145,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 const setFilterRequest = this._createSearchInResultsParams(
                     samples, fieldsMetadata, filter, fieldSearchValues, sortValues, offset, limit
                 );
-                this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
+                this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, null,
+                    (error) => callback(error, operation)
+                );
             }
         ], callback);
     }
@@ -241,7 +243,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
             } else {
                 if (_.some(notDuplicatedColumnNames, notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)) {
-                    const exist = _.some(samples[0].values, field => field.fieldId == viewField.id);
+                    const exist = _.some(samples[0].sampleFields, field => field.fieldId == viewField.id);
                     resultHeader.push({
                         fieldId: viewField.id,
                         sampleId: samples[0].id,
@@ -250,7 +252,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     });
                 } else {
                     _.forEach(samples, sample => {
-                        const exist = _.some(sample.values, field => field.fieldId == viewField.id);
+                        const exist = _.some(sample.sampleFields, field => field.fieldId == viewField.id);
                         resultHeader.push({
                             fieldId: viewField.id,
                             sampleId: sample.id,
@@ -287,7 +289,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 );
                 // Create array of objects containing samples' info and it's fields.
                 const sampleFieldMapArray = _.map(samples, sample => {
-                    const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
+                    const sampleFieldIds = _.map(sample.sampleFields, fieldValue => fieldValue.fieldId);
                     const sampleFields = _.filter(samplesFields, sampleField => {
                         return _.some(sampleFieldIds, sampleFieldId => {
                             return sampleFieldId === sampleField.id
@@ -431,7 +433,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
-        const mainSampleMetadata = _.map(sample.values, field => fieldIdToMetadata[field.fieldId]);
+        const mainSampleMetadata = _.map(sample.sampleFields, field => fieldIdToMetadata[field.fieldId]);
         const sourceMetadata = _.filter(fieldIdToMetadata, metaData => metaData.sourceName != 'sample');
         const availableMetadata = mainSampleMetadata.concat(sourceMetadata);
         const availableFieldIdToMetadata = CollectionUtils.createHash(availableMetadata, fieldMetadata => fieldMetadata.id);

@@ -10,13 +10,14 @@ export default class AnalysisHeader extends React.Component {
             <Modal.Header closeButton>
                 <Modal.Title>
                     {showAnalysisHide && <button
-                            className='btn btn-link-inverse btn-back-to-left'
-                            type='button'
-                            id='backToSplitLeftAn'
-                            onClick={onAnalysisHide}
-                        ><i className='md-i'>keyboard_backspace</i></button>
+                        className='btn btn-link-inverse btn-back-to-left'
+                        type='button'
+                        id='backToSplitLeftAn'
+                        onClick={onAnalysisHide}
+                    ><i className='md-i'>keyboard_backspace</i></button>
                     }
-                    <span className='modal-title-text' data-localize='query.title'>Analyses</span>
+                    <span className='modal-title-text'
+                          data-localize='query.title'>Analyses</span>
                 </Modal.Title>
             </Modal.Header>
         );

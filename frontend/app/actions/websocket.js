@@ -1,7 +1,12 @@
 import {showAnotherPageOpenedModal} from './auth';
 import {receiveSearchedResults} from './variantsTable';
-import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
+import {
+    changeFileUploadProgressForOperationId,
+    fileUploadErrorForOperationId
+} from './fileUpload';
 import config from '../../config';
+import {samplesListAddSamples} from './samplesList';
+import {samplesListUpdateSamplesFields} from './samplesList';
 
 /*
  * action types
@@ -145,7 +150,14 @@ function receiveSearchMessage(wsData) {
 
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
-        dispatch(changeFileUploadProgressForOperationId(wsData.result.progress, wsData.result.status, wsData.operationId));
+        const {operationId, result: {progress, status, metadata}} = wsData;
+        if (metadata && status !== WS_PROGRESS_STATUSES.READY) {
+            dispatch(samplesListAddSamples(metadata));
+        }
+        if (metadata && status === WS_PROGRESS_STATUSES.READY) {
+            dispatch(samplesListUpdateSamplesFields(metadata));
+        }
+        dispatch(changeFileUploadProgressForOperationId(progress, status, operationId));
     };
 }
 

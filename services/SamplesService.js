@@ -8,6 +8,7 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
+const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
@@ -23,7 +24,6 @@ class SamplesService extends UserEntityServiceBase {
 
     update(user, sample, callback) {
         async.waterfall([
-            (callback) => this._ensureOnlyEditableFieldsHaveValues(sample, callback),
             (callback) => super.update(user, sample, callback)
         ], callback);
     }
@@ -38,25 +38,81 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(session,
-                operationId, sampleId, callback)
+            (operationId, callback) => this._createHistoryEntry(
+                user,
+                operationId,
+                sampleId,
+                localFileInfo.originalFileName,
+                (error) => callback(error, operationId)
+            ),
+            (operationId, callback) => this._loadAndVerifyPriority(
+                user,
+                (error, priority) => callback(error, operationId, priority)
+            ),
+            (operationId, priority, callback) => this.services.applicationServer.requestSampleProcessing(session,
+                operationId, sampleId, priority, (error) => callback(error, operationId))
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
-                                    appServerSampleFields, genotypes,
-                                    asGenotypesFieldsNames, callback) {
+    remove(user, itemId, callback) {
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.find(user, itemId, callback),
+            (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item)),
+            (item, callback) => {
+                this.theModel.findGenotypeIdsForSampleIds([item.originalId], true, (error, genotypeIds) => callback(error, genotypeIds, item));
+            },
+            (genotypeIds, item, callback) => {
+                if(genotypeIds.length == 0){
+                    async.waterfall([
+                        (callback) => this.services.sessions.findSystemSession(callback),
+                        (session, callback) => {
+                            this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,(error, history) => callback(error, session, history));
+                        },
+                        (session, history, callback) => {
+                            if(history && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],history.status)){
+                                this.cancelUpload(session, user, operationId, callback);
+                            }else {
+                                callback(null,null);
+                            }
+                        }
+                    ],(error) => callback(error,item));
+                }else {
+                    callback(null, item);
+                }
+            },
+        ], callback);
+    }
+
+    cancelUpload(session, user, operationId, callback){
+        this.logger.debug('Cancel uploading operationId: ' + JSON.stringify(operationId, null, 2));
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.services.operations.find(session, operationId, callback),
+            (operation, callback) => {
+				async.waterfall([
+                    (callback) => this.services.sessions.findSystemSession(callback),
+                    (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
+                ], (error) => callback(error));
+            },
+        ], callback);
+    }
+
+    createMetadataForUploadedSample(user, sampleId, appServerSampleFields, genotypes, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
             asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
+        this.theModel.attachSampleFields(user.id, user.language, sampleId, sampleFields, genotypes, callback);
+    }
 
+    initMetadataForUploadedSample(user, sampleId, sampleFileName, genotypes, callback) {
         const sample = {
             id: sampleId,
             fileName: sampleFileName,
             hash: null
         };
-
-        this.theModel.addSamplesWithFields(user.id, user.language, sample, sampleFields, genotypes, callback);
+        this.theModel.addSamplesWithFields(user.id, user.language, sample, [], genotypes, callback);
     }
 
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
@@ -65,6 +121,32 @@ class SamplesService extends UserEntityServiceBase {
         } else {
             callback(null, false);
         }
+    }
+
+    _loadAndVerifyPriority(user, callback) {
+        async.waterfall([
+            (callback) => this.services.sampleUploadHistory.countActive(user.id, callback),
+            (activeCount, callback) => {
+                const {maxCountPerUser} = this.config.samplesUpload;
+                if (activeCount < maxCountPerUser) {
+                    // More uploads - lower priority.
+                    callback(null, maxCountPerUser - activeCount);
+                } else {
+                    callback(new Error(`Too many uploads for user ${user.id} (${user.email})`));
+                }
+            }
+        ], callback);
+    }
+
+    _createHistoryEntry(user, operationId, sampleId, fileName, callback) {
+        this.services.sampleUploadHistory.add(user, user.language, {
+            id: operationId,
+            sampleId,
+            fileName,
+            userId: user.id,
+            status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
+            progress: 0
+        }, callback);
     }
 
     _ensureOnlyEditableFieldsHaveValues(sample, callback) {

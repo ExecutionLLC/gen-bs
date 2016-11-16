@@ -28,9 +28,13 @@ const checkUserData = (userData, isDemoUser, callback) => {
         assert.equal(profile.id, TestUser.id);
     }
 
-    // No session operations.
-    const operations = userData.activeOperations;
-    assert.ok(_.isEmpty(operations), 'There should be no operations for the newly created demo session');
+    // Empty list of uploads.
+    const uploads = userData.uploads;
+    assert.ok(_.isEmpty(uploads));
+
+    // Empty list of active uploads.
+    const activeUploads = userData.activeUploads;
+    assert.ok(_.isEmpty(activeUploads));
 
     // Only default filters.
     const filters = userData.filters;
