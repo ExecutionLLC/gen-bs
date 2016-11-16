@@ -177,11 +177,11 @@ function updateSampleFields(state, action) {
 
 function reduceSamplesListRemoveSample(state, action) {
     const {sampleId} = action;
-    const {hashedArray: {array: currentSamples}, editingSample, currentSampleId} = state;
-    const newSamplesList = _.filter(currentSamples, (sample) => sample.id !== sampleId);
+    const {hashedArray, editingSample, currentSampleId} = state;
+    const newSamplesHashedArray = ImmutableHashedArray.deleteItemId(hashedArray, sampleId);
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(newSamplesList),
+        hashedArray: newSamplesHashedArray,
         editingSample: !editingSample || editingSample.id === sampleId ? null : editingSample,
         currentSampleId: currentSampleId === sampleId ? null : currentSampleId
     };

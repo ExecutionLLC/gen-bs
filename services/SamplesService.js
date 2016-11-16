@@ -66,35 +66,14 @@ class SamplesService extends UserEntityServiceBase {
             (genotypeIds, item, callback) => {
                 if(genotypeIds.length == 0){
                     async.waterfall([
-                        (callback) => this.services.sessions.findSystemSession(callback),
-                        (session, callback) => {
-                            this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,(error, history) => callback(error, session, history));
-                        },
-                        (session, history, callback) => {
-                            if(history && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],history.status)){
-                                this.cancelUpload(session, user, operationId, callback);
-                            }else {
-                                callback(null,null);
-                            }
+                        (callback) => this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,callback),
+                        (history, callback) => {
+                            this.services.sampleUploadHistory.remove(user, history.id,callback);
                         }
                     ],(error) => callback(error,item));
                 }else {
                     callback(null, item);
                 }
-            },
-        ], callback);
-    }
-
-    cancelUpload(session, user, operationId, callback){
-        this.logger.debug('Cancel uploading operationId: ' + JSON.stringify(operationId, null, 2));
-        async.waterfall([
-            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.services.operations.find(session, operationId, callback),
-            (operation, callback) => {
-				async.waterfall([
-                    (callback) => this.services.sessions.findSystemSession(callback),
-                    (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
-                ], (error) => callback(error));
             },
         ], callback);
     }

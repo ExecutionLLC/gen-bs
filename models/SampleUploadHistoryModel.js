@@ -36,7 +36,7 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findBySampleId(userId, sampleId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, null, sampleId, null, null)
+            this._findEntriesAsync(trx, null, userId, false, null, sampleId, null, null)
                 .asCallback(callback);
         }, (error, result) =>{
             callback(error, result[0]);

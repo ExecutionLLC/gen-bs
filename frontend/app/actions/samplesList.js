@@ -7,6 +7,7 @@ import {
     immutableGetPathProperty
 } from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
+import {changeFileUploadProgressState} from './fileUpload';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -207,12 +208,23 @@ function samplesListRemoveSample(sampleId) {
 }
 
 export function samplesListServerRemoveSample(sampleId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise((resolve) => {
             samplesClient.remove(sampleId, (error, response) => resolve({error, response}));
         }).then(({error, response}) => {
             dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response));
         }).then(() => {
+            const deletingSample = getState().samplesList.hashedArray.hash[sampleId];
+            if (deletingSample) {
+                const fileSampleId = deletingSample.originalId;
+                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.originalId === fileSampleId && s.id !== sampleId);
+                if (isLastSample) {
+                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {sampleId: fileSampleId});
+                    if (fileProcess) {
+                        dispatch(changeFileUploadProgressState(100, 'ready', fileProcess.id));
+                    }
+                }
+            }
             dispatch(samplesListRemoveSample(sampleId));
         });
     };
