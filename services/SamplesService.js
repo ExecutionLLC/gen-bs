@@ -127,32 +127,6 @@ class SamplesService extends UserEntityServiceBase {
             progress: 0
         }, callback);
     }
-
-    _ensureOnlyEditableFieldsHaveValues(sample, callback) {
-        const values = sample.values;
-        async.waterfall([
-            (callback) => {
-                if (!values) {
-                    callback(new Error('Sample metadata should have "values" property.'));
-                } else {
-                    callback(null);
-                }
-            },
-            (callback) => {
-                const onlyEditableHaveValues = _.every(
-                    values,
-                    value => this.editableFields[value.fieldId] || !value.fieldValue
-                );
-
-                if (!onlyEditableHaveValues) {
-                    callback(new Error('Only editable fields can have a value.'));
-                } else {
-                    callback(null);
-                }
-            }
-        ], callback);
-
-    }
 }
 
 module.exports = SamplesService;

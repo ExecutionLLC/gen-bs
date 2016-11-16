@@ -23,7 +23,7 @@ class AppServerViewUtils {
 
     static getDuplicatedSampleColumns(sampleItem, samples) {
         return _(samples)
-            .filter(sample => _.some(sample.values, value => value.fieldId === sampleItem.fieldId))
+            .filter(sample => _.some(sample.sampleFields, value => value.fieldId === sampleItem.fieldId))
             .map(sample => {
                 return {
                     columnName: AppServerUtils.createColumnName(sampleItem.fieldName, sample.genotypeName),

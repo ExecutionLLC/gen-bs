@@ -42,10 +42,10 @@ export default class SamplesClient extends UserEntityClientBase {
             return false;
         }
         if (shouldCheckFieldValues) {
-            if (!sample.values || !sample.values.length) {
+            if (!sample.sampleFields || !sample.sampleFields.length) {
                 return false;
             }
-            if (_.any(sample.values, sampleValue => !sampleValue.fieldId)) {
+            if (_.any(sample.sampleFields, sampleValue => !sampleValue.fieldId)) {
                 return false;
             }
         }
