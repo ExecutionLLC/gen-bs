@@ -185,7 +185,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
 
 }
 
-function changeFileUploadProgressState(progressValue, progressStatus, id) {
+export function changeFileUploadProgressState(progressValue, progressStatus, id) {
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValue,
