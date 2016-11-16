@@ -172,8 +172,8 @@ export default class FileUploadSampleList extends React.Component {
                 );
             } else {
                 return this.renderListItem(
-                    upload.id,
-                    upload.id === currentUploadId,
+                    upload.operationId,
+                    upload.operationId === currentUploadId,
                     false,
                     (id) => this.onNotUploadedErrorItemClick(id),
                     null,
@@ -377,7 +377,7 @@ export default class FileUploadSampleList extends React.Component {
 
     onNotUploadedErrorItemDelete(id) {
         const {dispatch} = this.props;
-        dispatch(uploadsListRemoveUpload(id));
+        dispatch(uploadsListServerRemoveUpload(id));
     }
 
     onUploadErrorItemClick(id) {
