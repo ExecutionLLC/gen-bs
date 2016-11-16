@@ -1,7 +1,7 @@
 'use strict';
 
 const async = require('async');
-const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
+
 const UserEntityControllerBase = require('./base/UserEntityControllerBase');
 
 class SampleUploadHistoryController extends UserEntityControllerBase {
@@ -25,27 +25,6 @@ class SampleUploadHistoryController extends UserEntityControllerBase {
         ], (error, items) => {
             this.sendErrorOrJson(response, error, items);
         });
-    }
-
-    remove(user, itemId, callback) {
-        async.waterfall([
-            (callback) => this._checkUserIsSet(user, callback),
-            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.find(user, itemId, callback),
-            (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item)),
-            (item, callback) => {
-                async.waterfall([
-                    (callback) => this.services.sessions.findSystemSession(callback),
-                    (session, callback) => {
-                        if(history && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],item.status)){
-                            this.cancelUpload(session, user, item.id, callback);
-                        }else {
-                            callback(null,null);
-                        }
-                    }
-                ],(error) => callback(error, item));
-            },
-        ], callback);
     }
 
     add(request, response) {
