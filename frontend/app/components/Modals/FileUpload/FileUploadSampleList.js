@@ -112,7 +112,7 @@ export default class FileUploadSampleList extends React.Component {
 
 
     _renderUploadedData(uploadData) {
-        const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}} = this.props;
+        const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
@@ -130,18 +130,33 @@ export default class FileUploadSampleList extends React.Component {
                     );
                 }
                 return null;
+            } else {
+                if (samplesHash[sample.id].type === entityType.USER) {
+                    return this.renderListItem(
+                        sample.id,
+                        sample.id === currentSampleId,
+                        null,
+                        (id) => this.onSampleItemClick(id),
+                        (id) => this.onSampleItemSelectForAnalysis(id),
+                        (id) => this.onSampleItemDelete(id),
+                        label,
+                        'User sample',
+                        sample.timestamp
+                    );
+                } else {
+                    return this.renderListItem(
+                        sample.id,
+                        sample.id === currentSampleId,
+                        null,
+                        (id) => this.onSampleItemClick(id),
+                        (id) => this.onSampleItemSelectForAnalysis(id),
+                        null,
+                        label,
+                        'Built-in sample',
+                        sample.timestamp
+                    );
+                }
             }
-            return this.renderListItem(
-                sample.id,
-                sample.id === currentSampleId,
-                null,
-                (id) => this.onSampleItemClick(id),
-                (id) => this.onSampleItemSelectForAnalysis(id),
-                (id) => this.onSampleItemDelete(id),
-                label,
-                'Test description',
-                sample.timestamp
-            );
         } else {
             if (typeof upload.id === 'string') {
                 return this.renderListItem(
