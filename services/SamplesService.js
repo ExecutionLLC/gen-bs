@@ -68,9 +68,15 @@ class SamplesService extends UserEntityServiceBase {
                     async.waterfall([
                         (callback) => this.services.sessions.findSystemSession(callback),
                         (session, callback) => {
-                            this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,(error, history) => callback(error, session, history.id));
+                            this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,(error, history) => callback(error, session, history));
                         },
-                        (session, operationId, callback) => this.cancelUpload(session, user, operationId, callback)
+                        (session, history, callback) => {
+                            if(history && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],history.status)){
+                                this.cancelUpload(session, user, operationId, callback);
+                            }else {
+                                callback(null,null);
+                            }
+                        }
                     ],(error) => callback(error,item));
                 }else {
                     callback(null, item);
