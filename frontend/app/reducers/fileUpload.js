@@ -1,7 +1,6 @@
 import * as ActionTypes from '../actions/fileUpload';
 import {fileUploadStatus} from '../actions/fileUpload';
 import _ from 'lodash';
-import immutableArray from '../utils/immutableArray';
 
 const initialState = {
     filesProcesses: [],
@@ -213,7 +212,7 @@ function reduceUploadsListRemoveUpload(state, action) {
     const {uploadId} = action;
     const {filesProcesses, currentUploadId} = state;
     return {
-        filesProcesses: immutableArray.remove(filesProcesses, findFileProcessIndex(filesProcesses, uploadId)),
+        filesProcesses: _.filter(filesProcesses, (fp) => fp.operationId !== uploadId),
         currentUploadId: currentUploadId === uploadId ? null : currentUploadId
     };
 }
