@@ -6,7 +6,7 @@ import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
 import {fileUploadStatus, uploadsListRemoveUpload, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
 import {makeSampleLabel} from '../../../utils/samplesUtils';
-import {samplesListServerRemoveSample} from '../../../actions/samplesList';
+import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 
 function fileUploadStatusErrorOrReady(status) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
@@ -122,7 +122,7 @@ export default class FileUploadSampleList extends React.Component {
                         sample.id === currentSampleId,
                         true,
                         (id) => this.onSampleItemClick(id),
-                        null/*(id) => this.onSampleItemSelectForAnalysis(id)*/,
+                        null,
                         (id) => this.onSampleItemDelete(id),
                         label,
                         'Test description',
@@ -390,6 +390,9 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     onSampleItemSelectForAnalysis(id) {
+        const {dispatch, closeModal} = this.props;
+        dispatch(sampleSaveCurrent(id));
+        closeModal('upload');
     }
 
     onSampleItemDelete(id) {
@@ -434,5 +437,6 @@ export default class FileUploadSampleList extends React.Component {
 
 FileUploadSampleList.propTypes = {
     onSelectSample: React.PropTypes.func.isRequired,
-    onSelectUpload: React.PropTypes.func.isRequired
+    onSelectUpload: React.PropTypes.func.isRequired,
+    closeModal: React.PropTypes.func.isRequired
 };
