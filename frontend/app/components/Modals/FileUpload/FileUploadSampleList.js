@@ -282,7 +282,7 @@ export default class FileUploadSampleList extends React.Component {
 
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
-        if (samples) {
+        if (!samples.length) {
             return this.renderProgressUpload(upload, null);
         } else {
             return (
