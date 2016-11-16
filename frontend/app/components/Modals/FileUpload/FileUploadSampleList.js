@@ -282,9 +282,13 @@ export default class FileUploadSampleList extends React.Component {
 
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
-        return (
-            samples.map((sample) => this.renderProgressUpload(upload, sample))
-        );
+        if (samples) {
+            return this.renderProgressUpload(upload, null);
+        } else {
+            return (
+                samples.map((sample) => this.renderProgressUpload(upload, sample))
+            );
+        }
     }
 
     renderProgressUpload(upload, sample) {
@@ -395,7 +399,7 @@ export default class FileUploadSampleList extends React.Component {
 
     onUploadItemDelete(id) {
         const {dispatch} = this.props;
-        dispatch(uploadsListServerRemoveUpload());
+        dispatch(uploadsListServerRemoveUpload(id));
     }
 
     onShowPopup(id) {
