@@ -72,7 +72,7 @@ class SamplesService extends UserEntityServiceBase {
                         },
                         (session, history, callback) => {
                             if(history && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],history.status)){
-                                this.cancelUpload(session, user, operationId, callback);
+                                this.cancelUpload(session, user, history.id, callback);
                             }else {
                                 callback(null,null);
                             }

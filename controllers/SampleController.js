@@ -53,19 +53,6 @@ class SampleController extends UserEntityControllerBase {
         });
     }
 
-    cancel(request, response){
-        async.waterfall([
-            (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => {
-                const user = request.user;
-                const operationId = request.params.id;
-                this.services.samples.cancelUpload(user, operationId, callback);
-            }
-        ], (error, item) => {
-            this.sendErrorOrJson(response, error, item);
-        });
-    }
-
     _removeSampleFile(localFilePath) {
         fs.unlink(localFilePath, (error) => {
             if (error) {
@@ -87,7 +74,6 @@ class SampleController extends UserEntityControllerBase {
         // Cannot upload many samples here simultaneously, as the client
         // will be unable to distinguish upload operation ids.
         router.post('/upload', Upload.single('sample'), this.upload.bind(this));
-        router.delete('/cancel/:id', this.cancel);
         return router;
     }
 }
