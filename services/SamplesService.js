@@ -68,7 +68,7 @@ class SamplesService extends UserEntityServiceBase {
                     async.waterfall([
                         (callback) => this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,callback),
                         (history, callback) => {
-                            this.services.sampleUploadHistory.remove(user.id, item.originalId,callback);
+                            this.services.sampleUploadHistory.remove(user, history.id,callback);
                         }
                     ],(error) => callback(error,item));
                 }else {

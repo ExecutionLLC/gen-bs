@@ -1,8 +1,10 @@
 'use strict';
 
 const async = require('async');
+const _ = require('lodash');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
+const {SAMPLE_UPLOAD_STATUS} =  require('../utils/Enums');
 
 class SampleUploadHistoryService extends UserEntityServiceBase {
     constructor(services, models) {
@@ -54,8 +56,8 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
                 async.waterfall([
                     (callback) => this.services.sessions.findSystemSession(callback),
                     (session, callback) => {
-                        if(history && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],item.status)){
-                            this.cancelUpload(session, user, item.id, callback);
+                        if(item && !_.includes([SAMPLE_UPLOAD_STATUS.READY,SAMPLE_UPLOAD_STATUS.ERROR],item.status)){
+                            this.cancelUpload(user, item.id, callback);
                         }else {
                             callback(null,null);
                         }
@@ -72,8 +74,7 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.sessions.findSystemSession(callback),
-            (session, callback) => this.services.operations.find(session, operationId, (error,operation) =>callback(error,operation, session)),
-            (operation, session, callback) =>(callback) => this.services.operations.remove(session, operation.getId(), (error) => callback(error)),
+            (session, callback) => this.services.operations.remove(session, operationId, (error) => callback(error))
         ], callback);
     }
 }
