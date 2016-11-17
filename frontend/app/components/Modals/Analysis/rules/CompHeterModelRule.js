@@ -31,7 +31,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
             };
         }
         const invalidGtFieldSample = _.find(analysesSamples, sample => {
-            const sampleFields = _.map(sample.values, value =>fields.totalFieldsHashedArray.hash[value.fieldId]);
+            const sampleFields = _.map(sample.sampleFields, value =>fields.totalFieldsHashedArray.hash[value.fieldId]);
             return !_.some(sampleFields, sampleField => {
                 return sampleField.name === gtGtField;
             });

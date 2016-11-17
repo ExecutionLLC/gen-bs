@@ -87,7 +87,7 @@ export function setViewVariantsSort(view, samplesInfos) {
 
         const {samplesList: {hashedArray: {hash: samplesHash}}} = getState();
         const samples = _.map(samplesInfos, (sample) => samplesHash[sample.id]);
-        const samplesFieldsHashes = _.map(samples, (sample) => _.keyBy(sample.values, (value) => value.fieldId));
+        const samplesFieldsHashes = _.map(samples, (sample) => _.keyBy(sample.sampleFields, (value) => value.fieldId));
         const sortOrder = _(view.viewListItems)
             .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;

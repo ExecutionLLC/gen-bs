@@ -208,6 +208,15 @@ function setUploadId(state, action) {
     };
 }
 
+function reduceUploadsListRemoveUpload(state, action) {
+    const {uploadId} = action;
+    const {filesProcesses, currentUploadId} = state;
+    return {
+        filesProcesses: _.filter(filesProcesses, (fp) => fp.operationId !== uploadId),
+        currentUploadId: currentUploadId === uploadId ? null : currentUploadId
+    };
+}
+
 export default function fileUpload(state = initialState, action) {
 
     switch (action.type) {
@@ -247,6 +256,9 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.SET_CURRENT_UPLOAD_ID:
             return setUploadId(state, action);
+
+        case ActionTypes.UPLOADS_LIST_REMOVE_UPLOAD:
+            return reduceUploadsListRemoveUpload(state, action);
 
         default:
             return state;

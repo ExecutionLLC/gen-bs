@@ -137,4 +137,8 @@ export default class Urls {
     analysesHistoryUrls() {
         return new CollectionUrls('/analysis', this.httpScheme, this.host, this.port);
     }
+
+    sampleUploadsUrls() {
+        return new UploadableEntityUrls('/uploads', this.httpScheme, this.host, this.port);
+    }
 }

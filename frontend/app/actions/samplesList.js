@@ -7,6 +7,7 @@ import {
     immutableGetPathProperty
 } from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
+import {changeFileUploadProgressState} from './fileUpload';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -21,13 +22,15 @@ export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
 export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 export const SAMPLES_LIST_UPDATE_SAMPLES_FIELDS = 'SAMPLES_LIST_UPDATE_SAMPLES_FIELDS';
+export const SAMPLES_LIST_REMOVE_SAMPLE = 'SAMPLES_LIST_REMOVE_SAMPLE';
 
 const samplesClient = apiFacade.samplesClient;
 const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
     ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 const FETCH_SAMPLES_ERROR_MESSAGE = 'We are really sorry, but there is an error while getting the list of samples' +
     ' from our server. Be sure we are working on resolving the issue. You can also try to reload page and try again.';
-
+const DELETE_SAMPLE_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting sample.' +
+    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 /*
  * Action Creators
@@ -194,5 +197,35 @@ export function setEditingSampleId(sampleId) {
     return {
         type: SET_EDITING_SAMPLE_ID,
         sampleId
+    };
+}
+
+function samplesListRemoveSample(sampleId) {
+    return {
+        type: SAMPLES_LIST_REMOVE_SAMPLE,
+        sampleId
+    };
+}
+
+export function samplesListServerRemoveSample(sampleId) {
+    return (dispatch, getState) => {
+        return new Promise((resolve) => {
+            samplesClient.remove(sampleId, (error, response) => resolve({error, response}));
+        }).then(({error, response}) => {
+            dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response));
+        }).then(() => {
+            const deletingSample = getState().samplesList.hashedArray.hash[sampleId];
+            if (deletingSample) {
+                const fileSampleId = deletingSample.originalId;
+                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.originalId === fileSampleId && s.id !== sampleId);
+                if (isLastSample) {
+                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {sampleId: fileSampleId});
+                    if (fileProcess) {
+                        dispatch(changeFileUploadProgressState(100, 'ready', fileProcess.id));
+                    }
+                }
+            }
+            dispatch(samplesListRemoveSample(sampleId));
+        });
     };
 }
