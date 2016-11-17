@@ -4,8 +4,7 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus, uploadsListRemoveUpload, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
-import {makeSampleLabel} from '../../../utils/samplesUtils';
+import {fileUploadStatus, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 
 function fileUploadStatusErrorOrReady(status) {
@@ -75,7 +74,7 @@ export default class FileUploadSampleList extends React.Component {
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
             const {originalId} = sample;
-            const sampleName = this._createSampleLabel(sample);
+            const sampleName = sample.editableFields.name;
             const currentUpload = uploadHash[originalId];
             return {
                 label: sampleName,
@@ -106,7 +105,7 @@ export default class FileUploadSampleList extends React.Component {
 
     _createSampleLabel(sample) {
         const {type} = sample;
-        const sampleName = makeSampleLabel(sample);
+        const sampleName = sample.editableFields.name;
         return getItemLabelByNameAndType(sampleName, type);
     }
 
@@ -125,7 +124,7 @@ export default class FileUploadSampleList extends React.Component {
                         null,
                         (id) => this.onSampleItemDelete(id),
                         label,
-                        'Test description',
+                        sample.editableFields.description,
                         sample.timestamp
                     );
                 }
@@ -140,7 +139,7 @@ export default class FileUploadSampleList extends React.Component {
                         (id) => this.onSampleItemSelectForAnalysis(id),
                         (id) => this.onSampleItemDelete(id),
                         label,
-                        'User sample',
+                        sample.editableFields.description,
                         sample.timestamp
                     );
                 } else {
@@ -152,7 +151,7 @@ export default class FileUploadSampleList extends React.Component {
                         (id) => this.onSampleItemSelectForAnalysis(id),
                         null,
                         label,
-                        'Built-in sample',
+                        sample.editableFields.description,
                         sample.timestamp
                     );
                 }

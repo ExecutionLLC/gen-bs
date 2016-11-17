@@ -222,14 +222,15 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     renderSampleHeader(sampleItem) {
         const {type} = sampleItem;
-        const sampleName = makeSampleLabel(sampleItem);
+        const sampleName = sampleItem.editableFields.name;
+        const sampleDescription = sampleItem.editableFields.description;
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
                     {sampleItem.id && this.renderDeleteSampleButton()}
                     {this.renderSampleFileName(getItemLabelByNameAndType(sampleName, type))}
                     {this.renderSampleDates(sampleItem.timestamp, 'Some Date')}
-                    {this.renderSampleDescription('Some description')}
+                    {this.renderSampleDescription(sampleDescription)}
                 </div>
             </div>
         );
@@ -242,7 +243,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <Input
                         value={description}
                         disabled={true}
-                        placeholder='Analysis description (optional)'
+                        placeholder='Sample description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
                         onChange={(str) => this.onSampleCommentChange(str)}
@@ -278,7 +279,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                         value={name}
                         disabled={true}
                         className='form-control material-input-sm material-input-heading text-primary'
-                        placeholder="Analysis name (it can't be empty)"
+                        placeholder="Sample name (it can't be empty)"
                         data-localize='query.settings.name'
                         maxLength={50}
                         onChange={(str) => this.onSampleNameChange(str)}
