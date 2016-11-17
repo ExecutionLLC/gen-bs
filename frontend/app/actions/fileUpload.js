@@ -3,6 +3,9 @@ import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
 
+import apiFacade from '../api/ApiFacade';
+import {handleApiResponseErrorAsync} from './errorHandler';
+
 /*
  * action types
  */
@@ -19,11 +22,17 @@ export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
 export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
 export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
+export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
 
 export const fileUploadStatus = {
     ERROR: 'error',
     READY: 'ready'
 };
+
+const {sampleUploadsClient} = apiFacade;
+
+const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting upload.' +
+    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
 
@@ -45,6 +54,24 @@ export function setCurrentUploadId(uploadId) {
     return {
         type: SET_CURRENT_UPLOAD_ID,
         uploadId
+    };
+}
+
+export function uploadsListRemoveUpload(uploadId) {
+    return {
+        type: UPLOADS_LIST_REMOVE_UPLOAD,
+        uploadId
+    };
+}
+
+export function uploadsListServerRemoveUpload(uploadId) {
+    return (dispatch) => {
+        return new Promise((resolve) => {
+            sampleUploadsClient.remove(uploadId, (error, response) => resolve({error, response}));
+        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_UPLOAD_ERROR_MESSAGE, error, response))
+        ).then(() => {
+            dispatch(uploadsListRemoveUpload(uploadId));
+        });
     };
 }
 
@@ -158,7 +185,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
 
 }
 
-function changeFileUploadProgressState(progressValue, progressStatus, id) {
+export function changeFileUploadProgressState(progressValue, progressStatus, id) {
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValue,

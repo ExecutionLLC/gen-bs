@@ -175,6 +175,18 @@ function updateSampleFields(state, action) {
     };
 }
 
+function reduceSamplesListRemoveSample(state, action) {
+    const {sampleId} = action;
+    const {hashedArray, editingSample, currentSampleId} = state;
+    const newSamplesHashedArray = ImmutableHashedArray.deleteItemId(hashedArray, sampleId);
+    return {
+        ...state,
+        hashedArray: newSamplesHashedArray,
+        editingSample: !editingSample || editingSample.id === sampleId ? null : editingSample,
+        currentSampleId: currentSampleId === sampleId ? null : currentSampleId
+    };
+}
+
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editingSample: null,
@@ -218,6 +230,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLES_LIST_UPDATE_SAMPLES_FIELDS:
             return updateSampleFields(state, action);
+
+        case ActionTypes.SAMPLES_LIST_REMOVE_SAMPLE:
+            return reduceSamplesListRemoveSample(state, action);
 
         default:
             return state;

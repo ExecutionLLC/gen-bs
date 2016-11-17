@@ -26,6 +26,7 @@ export default class FileUploadBody extends React.Component {
                         changeShowValues={(e) => this.setShowValuesState(e)}
                         editableFields={editableFieldsList}
                         currentHistorySamplesIds={currentHistorySamplesIds}
+                        closeModal={closeModal}
                     />
                     <FileUploadSampleRightPane
                         dispatch={dispatch}

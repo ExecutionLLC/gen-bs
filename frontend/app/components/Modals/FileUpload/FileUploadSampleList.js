@@ -4,14 +4,32 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus} from '../../../actions/fileUpload';
+import {fileUploadStatus, uploadsListRemoveUpload, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
 import {makeSampleLabel} from '../../../utils/samplesUtils';
+import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 
 function fileUploadStatusErrorOrReady(status) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
 }
 
 export default class FileUploadSampleList extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            showPopup: null
+        };
+        this.onDocumentClick = this.onDocumentClick.bind(this);
+    }
+
+    componentDidMount() {
+        document.addEventListener('click', this.onDocumentClick, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', this.onDocumentClick, false);
+    }
+
     render() {
         const {currentSampleId, fileUpload:{currentUploadId}} = this.props;
         return (
@@ -94,7 +112,7 @@ export default class FileUploadSampleList extends React.Component {
 
 
     _renderUploadedData(uploadData) {
-        const {currentHistorySamplesIds, currentSampleId, fileUpload:{currentUploadId}} = this.props;
+        const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
@@ -104,35 +122,71 @@ export default class FileUploadSampleList extends React.Component {
                         sample.id === currentSampleId,
                         true,
                         (id) => this.onSampleItemClick(id),
+                        null,
+                        (id) => this.onSampleItemDelete(id),
                         label,
                         'Test description',
                         sample.timestamp
                     );
                 }
                 return null;
+            } else {
+                if (samplesHash[sample.id].type === entityType.USER) {
+                    return this.renderListItem(
+                        sample.id,
+                        sample.id === currentSampleId,
+                        null,
+                        (id) => this.onSampleItemClick(id),
+                        (id) => this.onSampleItemSelectForAnalysis(id),
+                        (id) => this.onSampleItemDelete(id),
+                        label,
+                        'User sample',
+                        sample.timestamp
+                    );
+                } else {
+                    return this.renderListItem(
+                        sample.id,
+                        sample.id === currentSampleId,
+                        null,
+                        (id) => this.onSampleItemClick(id),
+                        (id) => this.onSampleItemSelectForAnalysis(id),
+                        null,
+                        label,
+                        'Built-in sample',
+                        sample.timestamp
+                    );
+                }
             }
-            return this.renderListItem(
-                sample.id,
-                sample.id === currentSampleId,
-                null,
-                (id) => this.onSampleItemClick(id),
-                label,
-                'Test description',
-                sample.timestamp
-            );
+        } else {
+            if (typeof upload.id === 'string') {
+                return this.renderListItem(
+                    upload.id,
+                    upload.id === currentUploadId,
+                    false,
+                    (id) => this.onUploadErrorItemClick(id),
+                    null,
+                    (id) => this.onUploadErrorDelete(id),
+                    label,
+                    upload.error.message,
+                    null
+                );
+            } else {
+                return this.renderListItem(
+                    upload.operationId,
+                    upload.operationId === currentUploadId,
+                    false,
+                    (id) => this.onNotUploadedErrorItemClick(id),
+                    null,
+                    (id) => this.onNotUploadedErrorItemDelete(id),
+                    label,
+                    upload.error.message,
+                    null
+                );
+            }
         }
-        return this.renderListItem(
-            upload.id,
-            upload.id === currentUploadId,
-            false,
-            (id) => this.onUploadErrorItemClick(id),
-            label,
-            upload.error.message,
-            null
-        );
     }
 
-    renderListItem(id, isActive, isSuccessOrNull, onClick, label, description, uploadedTimeOrNull) {
+    renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
         return (
             <li key={id}
                 className={classNames({
@@ -155,7 +209,40 @@ export default class FileUploadSampleList extends React.Component {
                        Uploaded: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
+                {this.renderDropdown(id, onSelectForAnalysis, onDelete)}
             </li>
+        );
+    }
+
+    renderDropdown(id, onSelectForAnalysis, onDelete) {
+        const isOpen = this.state.showPopup === id;
+        const className = classNames({'dropdown': true, 'right-menu': true, 'open': isOpen});
+        return (
+            <div className={className}>
+                <button
+                    className='btn btn-link-light-default dropdown-toggle popup-show-button'
+                    type='button'
+                    onClick={() => this.onShowPopup(id)}
+                >
+                    <i className='md-i'>more_horiz</i>
+                    <span className='caret'></span>
+                </button>
+                <ul className='dropdown-menu dropdown-menu-right'>
+                    {onSelectForAnalysis && <li>
+                        <a
+                            href='#'
+                            className='selectForAnalysisBtn'
+                            onClick={() => onSelectForAnalysis(id)}
+                        > Select for analysis</a>
+                    </li>}
+                    {onDelete && <li>
+                        <a
+                            href='#'
+                            onClick={() => onDelete(id)}
+                        >Delete</a>
+                    </li>}
+                </ul>
+            </div>
         );
     }
 
@@ -210,9 +297,13 @@ export default class FileUploadSampleList extends React.Component {
 
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
-        return (
-            samples.map((sample) => this.renderProgressUpload(upload, sample))
-        );
+        if (!samples.length) {
+            return this.renderProgressUpload(upload, null);
+        } else {
+            return (
+                samples.map((sample) => this.renderProgressUpload(upload, sample))
+            );
+        }
     }
 
     renderProgressUpload(upload, sample) {
@@ -243,6 +334,16 @@ export default class FileUploadSampleList extends React.Component {
                     </span>
                     {FileUploadSampleList.renderProgressBar(upload)}
                 </a>
+                <div className='right-menu'>
+                    {(sample || upload.operationId) &&
+                        <button className='btn btn-link-light-default'
+                                type='button'
+                                onClick={() => sample ? this.onSampleItemDelete(sample.id) : this.onUploadItemDelete(upload.operationId)}>
+                            <i className='md-i'>highlight_off</i>
+
+                        </button>
+                    }
+                </div>
             </li>
         );
     }
@@ -269,9 +370,24 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    onNotUploadedErrorItemClick(id) {
+        const {onSelectUpload} = this.props;
+        onSelectUpload(id);
+    }
+
+    onNotUploadedErrorItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(uploadsListServerRemoveUpload(id));
+    }
+
     onUploadErrorItemClick(id) {
         const {onSelectUpload} = this.props;
         onSelectUpload(id);
+    }
+
+    onUploadErrorDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(uploadsListServerRemoveUpload(id));
     }
 
     onUploadItemClick(id) {
@@ -288,9 +404,55 @@ export default class FileUploadSampleList extends React.Component {
         const {onSelectSample} = this.props;
         onSelectSample(null);
     }
+
+    onSampleItemSelectForAnalysis(id) {
+        const {dispatch, closeModal} = this.props;
+        dispatch(sampleSaveCurrent(id));
+        closeModal('upload');
+    }
+
+    onSampleItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(samplesListServerRemoveSample(id));
+    }
+
+    onUploadItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(uploadsListServerRemoveUpload(id));
+    }
+
+    onShowPopup(id) {
+        console.log('onShowPopup', id);
+        this.setState({
+            showPopup: id
+        });
+    }
+
+    onDocumentClick(e) {
+
+        function findClosestPopupShowButton(el) {
+            let currentEl = el;
+            while (currentEl) {
+                if (currentEl.classList && currentEl.classList.contains('popup-show-button')) {
+                    return true;
+                }
+                currentEl = currentEl.parentNode;
+            }
+            return false;
+        }
+
+        console.log('onDocumentClick', findClosestPopupShowButton(e.target));
+        if (!findClosestPopupShowButton(e.target)) {
+            this.setState({
+                showPopup: null
+            });
+        }
+        return false;
+    }
 }
 
 FileUploadSampleList.propTypes = {
     onSelectSample: React.PropTypes.func.isRequired,
-    onSelectUpload: React.PropTypes.func.isRequired
+    onSelectUpload: React.PropTypes.func.isRequired,
+    closeModal: React.PropTypes.func.isRequired
 };

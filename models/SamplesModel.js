@@ -56,7 +56,7 @@ class SamplesModel extends SecureModelBase {
                     callback(null, sampleIds);
                 },
                 (sampleIds, callback) => {
-                    this._findGenotypeIdsForSampleIds(sampleIds, trx, callback);
+                    this._findGenotypeIdsForSampleIds(sampleIds, true, trx, callback);
                 },
                 // Find last version for each genotype
                 (genotypeIds, callback) => {
@@ -77,6 +77,25 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    remove(userId, genotypeVersionId, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findGenotypeIdByVersionId(trx, genotypeVersionId, callback),
+                (genotypeId, callback) => this._deleteGenotype(trx, genotypeId, callback)
+            ], callback);
+        }, callback);
+
+    }
+
+    _deleteGenotype(trx, genotypeId, callback) {
+        trx(SampleTableNames.Genotypes)
+            .where('id', genotypeId)
+            .update({is_deleted: true})
+            .asCallback((error) => {
+                callback(error, genotypeId);
+            });
+    }
+
     attachSampleFields(userId, languId, sampleId, sampleFields, genotypes, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
@@ -87,7 +106,7 @@ class SamplesModel extends SecureModelBase {
                         }));
                         callback(error, fieldIds);
                     }),
-                (fieldIds, callback) => this._findGenotypeIdsForSampleIds([sampleId], trx, (error, genotypeIds) => callback(error, fieldIds, genotypeIds)),
+                (fieldIds, callback) => this._findGenotypeIdsForSampleIds([sampleId], false, trx, (error, genotypeIds) => callback(error, fieldIds, genotypeIds)),
                 (fieldIds, genotypeIds, callback) => {
                     async.each(genotypeIds, (genotypeId, callback) => {
                         this._addGenotypeFields(trx, genotypeId, fieldIds, callback)
@@ -233,12 +252,23 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    _findGenotypeIdsForSampleIds(sampleIds, trx, callback) {
-        trx(SampleTableNames.Genotypes)
+    findGenotypeIdsForSampleIds(sampleIds, shouldExcludeDeletedEntries, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findGenotypeIdsForSampleIds(sampleIds, shouldExcludeDeletedEntries, trx, callback)
+        }, callback);
+    }
+
+    _findGenotypeIdsForSampleIds(sampleIds, shouldExcludeDeletedEntries, trx, callback) {
+        let baseQuery = trx(SampleTableNames.Genotypes)
             .select('id')
-            .whereIn('vcf_file_sample_id', sampleIds)
-            .map(result => result.id)
-            .asCallback(callback);
+            .whereIn('vcf_file_sample_id', sampleIds);
+        if (shouldExcludeDeletedEntries) {
+            baseQuery = baseQuery.andWhereNot('is_deleted', true);
+        }
+        async.waterfall([
+            (callback) => baseQuery.asCallback((error, results) => callback(error, results)),
+            (results, callback) => callback(null, _.map(results, result => result.id))
+        ], callback);
     }
 
     /**
