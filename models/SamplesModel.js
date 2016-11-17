@@ -230,7 +230,7 @@ class SamplesModel extends SecureModelBase {
                 (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.editableFields.fields,
                     (error) => callback(error, versionId)),
                 (versionId, callback) => {
-                    const {description, name} =sampleToUpdate;
+                    const {description, name} = sampleToUpdate.editableFields;
                     const genotypeText = {
                         genotypeVersionId: versionId,
                         name,

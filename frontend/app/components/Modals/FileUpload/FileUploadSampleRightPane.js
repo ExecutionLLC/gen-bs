@@ -7,8 +7,12 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {uploadFiles} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
-import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {makeSampleLabel} from '../../../utils/samplesUtils';
+import {
+    updateSampleText,
+    requestUpdateSampleTextAsync,
+    sampleSaveCurrentIfSelected,
+    setCurrentSampleId
+} from '../../../actions/samplesList';
 
 function cancelDOMEvent(e) {
     e.stopPropagation();
@@ -18,11 +22,10 @@ function cancelDOMEvent(e) {
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {currentSampleId, samplesList:{hashedArray:{hash:samplesHash}}} = this.props;
-        const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
+        const {samplesList:{editingSample}} = this.props;
         return (
             <div className='split-right'>
-                {selectedSample && this.renderSampleHeader(selectedSample)}
+                {editingSample && this.renderSampleHeader()}
                 <div className='split-scroll'>
                     <div className='form-padding'>
                         {this.renderSample()}
@@ -65,7 +68,10 @@ export default class FileUploadSampleRightPane extends React.Component {
                                             }}
                         >
                             <input
-                                onChange={ (e) => {this.onUploadChanged(e.target.files); e.target.value = null; }}
+                                onChange={ (e) => {
+                                    this.onUploadChanged(e.target.files);
+                                    e.target.value = null;
+                                }}
                                 style={{display: 'none'}}
                                 ref='fileInput'
                                 id='file-select'
@@ -220,33 +226,31 @@ export default class FileUploadSampleRightPane extends React.Component {
         );
     }
 
-    renderSampleHeader(sampleItem) {
-        const {type} = sampleItem;
-        const sampleName = sampleItem.editableFields.name;
-        const sampleDescription = sampleItem.editableFields.description;
+    renderSampleHeader() {
+        const {samplesList:{editingSample}} = this.props;
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
-                    {sampleItem.id && this.renderDeleteSampleButton()}
-                    {this.renderSampleFileName(getItemLabelByNameAndType(sampleName, type))}
-                    {this.renderSampleDates(sampleItem.timestamp, 'Some Date')}
-                    {this.renderSampleDescription(sampleDescription)}
+                    {this.renderDeleteSampleButton()}
+                    {this.renderSampleFileName()}
+                    {this.renderSampleDates(editingSample.timestamp)}
+                    {this.renderSampleDescription()}
                 </div>
             </div>
         );
     }
 
-    renderSampleDescription(description) {
+    renderSampleDescription() {
+        const {samplesList:{editingSample:{editableFields:{description}},id}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={description}
-                        disabled={true}
                         placeholder='Sample description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
-                        onChange={(str) => this.onSampleCommentChange(str)}
+                        onChange={(e) => this.onSampleTextChange(id, null, e)}
                     />
                 </div>
             </div>
@@ -258,40 +262,44 @@ export default class FileUploadSampleRightPane extends React.Component {
         throw new Error('Not impemented');
     }
 
-    renderSampleDates(createdDate, lastQueryDate) {
+    renderSampleDates(createdDate) {
         return (
             <div className='label-date'>
                 <label>
                     Uploaded: {formatDate(createdDate)}
                 </label>
-                <label>
-                    {lastQueryDate || 'Some Date'}
-                </label>
             </div>
         );
     }
 
-    renderSampleFileName(name) {
+    renderSampleFileName() {
+        const {samplesList:{editingSample:{editableFields:{name}},id}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={name}
-                        disabled={true}
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Sample name (it can't be empty)"
                         data-localize='query.settings.name'
                         maxLength={50}
-                        onChange={(str) => this.onSampleNameChange(str)}
+                        onChange={(e) => this.onSampleTextChange(id, e, null)}
                     />
                 </div>
             </div>
         );
     }
 
-    onSampleNameChange(name) {
-        console.log(name);
-        throw new Error('Not impemented');
+    onSampleTextChange(sampleId, sampleName, sampleDescription) {
+        const {dispatch, samplesList:{editingSample:{editableFields:{name, description}}}} = this.props;
+        const newName = sampleName ? sampleName : name;
+        const newDescription = sampleDescription ? sampleDescription : description;
+        dispatch(updateSampleText(sampleId, newName, newDescription));
+        dispatch(requestUpdateSampleTextAsync(sampleId))
+            .then((newSample) => {
+                dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
+                dispatch(setCurrentSampleId(newSample.id));
+            });
     }
 
     renderDeleteSampleButton() {

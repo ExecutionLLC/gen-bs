@@ -13,6 +13,7 @@ import {changeFileUploadProgressState} from './fileUpload';
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
 export const RECEIVE_SAMPLES_LIST = 'RECEIVE_SAMPLES_LIST';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
+export const UPDATE_SAMPLE_TEXT = 'UPDATE_SAMPLE_TEXT';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
@@ -82,6 +83,15 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
     };
 }
 
+export function updateSampleText(sampleId, name, description) {
+    return {
+        type: UPDATE_SAMPLE_TEXT,
+        sampleId,
+        name,
+        description
+    };
+}
+
 export function fetchSamplesAsync() {
 
     return (dispatch) => {
@@ -141,6 +151,46 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
         ).then((updatedSample) => {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
             dispatch(disableSampleEdit(sampleId, false));
+            // If editing selected sample, don't forget to set it as current.
+            if (onSaveAction) {
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                if (selectedSampleId === sampleId) {
+                    dispatch(sampleSaveCurrent(updatedSample.id));
+                }
+            }
+            const {analysesHistory: {currentHistoryId}} = getState();
+            return dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId))
+                .then(() => updatedSample);
+        }).catch(() => {
+            dispatch(disableSampleEdit(sampleId, false));
+        });
+    };
+}
+
+export function requestUpdateSampleTextAsync(sampleId) {
+    return (dispatch, getState) => {
+        const {samplesList: {hashedArray:{hash}, editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
+        const currentEditedSample = hash[sampleId];
+        if (!editingSample || editingSample.id !== sampleId) {
+            return new Promise.resolve();
+        }
+        dispatch(disableSampleEdit(sampleId, true));
+        const newEditingSample = {
+            ...currentEditedSample,
+            editableFields: {
+                ...currentEditedSample.editableFields,
+                name: editingSample.editableFields.name,
+                description: editingSample.editableFields.description
+            }
+        };
+        return new Promise((resolve) => samplesClient.update(
+            newEditingSample,
+            (error, response) => resolve({error, response})
+        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
+        ).then((response) => response.body
+        ).then((updatedSample) => {
+            dispatch(receiveUpdatedSample(sampleId, updatedSample));
+            dispatch(disableSampleEdit(updatedSample.id, false));
             // If editing selected sample, don't forget to set it as current.
             if (onSaveAction) {
                 const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
