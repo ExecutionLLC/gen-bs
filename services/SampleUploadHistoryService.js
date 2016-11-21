@@ -26,6 +26,13 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
         ], callback);
     }
 
+    findNotFinishedUploads(user, limit, offset, callback) {
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.models.sampleUploadHistory.findNoTFinishedUploads(user.id, limit, offset, callback)
+        ], callback);
+    }
+
     findActive(user, callback) {
         if (user && this.services.users.isDemoUserId(user.id)) {
             callback(null, []);

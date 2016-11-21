@@ -80,7 +80,7 @@ class UserDataService extends ServiceBase {
                         this.services.sampleUploadHistory.findActive(user, callback);
                     },
                     uploads: (callback) => {
-                        this.services.sampleUploadHistory.findAll(user, null, null, callback);
+                        this.services.sampleUploadHistory.findNotFinishedUploads(user, null, null, callback);
                     }
                 }, callback);
             }

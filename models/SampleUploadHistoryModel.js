@@ -43,6 +43,13 @@ class SampleUploadHistoryModel extends ModelBase {
         });
     }
 
+    findNoTFinishedUploads(userId, limit, offset, callback){
+        this.db.transactionally((trx, callback) => {
+            this._findEntriesAsync(trx, null, userId, true, [SAMPLE_UPLOAD_STATUS.IN_PROGRESS,SAMPLE_UPLOAD_STATUS.ERROR], null, limit, offset)
+                .asCallback(callback);
+        }, callback);
+    }
+
     /**
      * Gets number of active uploads for the specified user.
      * */
@@ -64,14 +71,14 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findActive(userId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null, null)
+            this._findEntriesAsync(trx, null, userId, true, [SAMPLE_UPLOAD_STATUS.IN_PROGRESS], null, null, null)
                 .asCallback(callback);
         }, callback);
     }
 
     findActiveForAllUsers(entryId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, [entryId], null, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null, null)
+            this._findEntriesAsync(trx, [entryId], null, true, [SAMPLE_UPLOAD_STATUS.IN_PROGRESS], null, null, null)
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         }, callback);
@@ -95,7 +102,7 @@ class SampleUploadHistoryModel extends ModelBase {
     }
 
     _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted,
-                      statusOrNull, samplesOrNull, limitOrNull, offsetOrNull) {
+                      statusesOrNull, samplesOrNull, limitOrNull, offsetOrNull) {
         let query = trx.select()
             .from(this.baseTableName)
             .whereRaw('1 = 1');
@@ -115,8 +122,8 @@ class SampleUploadHistoryModel extends ModelBase {
             query = query.andWhere('is_deleted', false);
         }
 
-        if (statusOrNull != null) {
-            query = query.andWhere('status', statusOrNull);
+        if (statusesOrNull != null) {
+            query = query.andWhere('status', 'in', statusesOrNull);
         }
 
         if (limitOrNull != null) {
