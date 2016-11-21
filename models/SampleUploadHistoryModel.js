@@ -43,9 +43,10 @@ class SampleUploadHistoryModel extends ModelBase {
         });
     }
 
-    findNoTFinishedUploads(userId, limit, offset, callback){
+    findNotFinishedUploads(userId, limit, offset, callback) {
+        const statusesToShow = [SAMPLE_UPLOAD_STATUS.IN_PROGRESS, SAMPLE_UPLOAD_STATUS.ERROR];
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, [SAMPLE_UPLOAD_STATUS.IN_PROGRESS,SAMPLE_UPLOAD_STATUS.ERROR], null, limit, offset)
+            this._findEntriesAsync(trx, null, userId, true, statusesToShow, null, limit, offset)
                 .asCallback(callback);
         }, callback);
     }
@@ -122,7 +123,7 @@ class SampleUploadHistoryModel extends ModelBase {
             query = query.andWhere('is_deleted', false);
         }
 
-        if (statusesOrNull != null) {
+        if (statusesOrNull) {
             query = query.andWhere('status', 'in', statusesOrNull);
         }
 
