@@ -1,6 +1,8 @@
+const just = require('string-just');
+const Num = require('./../../utils/Num');
 const commentTable = 'comment';
-const CHROM_MASK = parseInt('1' * 16, 2);
-const POS_MASK = parseInt('1' * 28, 2);
+const CHROM_MASK = parseInt(new Array(16).fill('1').join(''), 2);
+const POS_MASK = parseInt(new Array(28).fill('1').join(''), 2);
 
 exports.up = function (knex, Promise) {
     return updateComments(knex, Promise);
@@ -17,17 +19,33 @@ function findComments(knex) {
 }
 
 function convertSearchKey(searchKey) {
-    var index = searchKey;
+    var index = parseInt(searchKey);
     const chrom = CHROM_MASK & index;
-    index >>= 16;
+    index = moveRight(index, 16);
     const pos = POS_MASK & index;
-    index >>= 28;
+    index = moveRight(index, 28);
     const mutation_code = index;
-    return chrom << 56 | pos << 24 | mutation_code
+    const strRes = `${intToString(chrom, 8)}${intToString(pos, 32)}${intToString(mutation_code, 24)}`;
+    return convert(strRes, 2);
+}
+
+function convert(numStr, base) {
+    var fullNum = new Num(numStr, base);
+    return fullNum.fmt();
+}
+
+function moveRight(intValue, count) {
+    const str = intValue.toString(2);
+    const newStr = str.substr(0, str.length - count);
+    return parseInt(newStr, 2)
+}
+
+function intToString(value, maxValue) {
+    var str = just.rjust(value.toString(2), maxValue, '0');
+    return str;
 }
 
 function updateCommentSearchKey(knex, oldSearchKey, newSearchKey) {
-    console.log(`${newSearchKey}-${oldSearchKey}`);
     return knex(commentTable)
         .where('search_key', oldSearchKey)
         .update({
