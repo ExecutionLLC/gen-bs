@@ -216,19 +216,21 @@ export default class FileUploadSampleList extends React.Component {
 
     renderDropdown(id, onSelectForAnalysis, onDelete) {
         const isOpen = this.state.showPopup === id;
+        const {sampleList:{onSaveAction}} = this.props;
+        const isRenderDropDown = (onSaveAction && onSelectForAnalysis) || onDelete;
         const className = classNames({'dropdown': true, 'right-menu': true, 'open': isOpen});
         return (
             <div className={className}>
-                <button
+                {isRenderDropDown && <button
                     className='btn btn-link-light-default dropdown-toggle popup-show-button'
                     type='button'
                     onClick={() => this.onShowPopup(id)}
                 >
                     <i className='md-i'>more_horiz</i>
                     <span className='caret'></span>
-                </button>
+                </button>}
                 <ul className='dropdown-menu dropdown-menu-right'>
-                    {onSelectForAnalysis && <li>
+                    {onSelectForAnalysis && onSaveAction && <li>
                         <a
                             href='#'
                             className='selectForAnalysisBtn'
