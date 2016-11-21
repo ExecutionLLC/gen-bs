@@ -122,7 +122,7 @@ export default class FileUploadSampleList extends React.Component {
                         sample.id === currentSampleId,
                         true,
                         (id) => this.onSampleItemClick(id),
-                        null,
+                        (id) => this.onSampleItemSelectForAnalysis(id),
                         (id) => this.onSampleItemDelete(id),
                         label,
                         'Test description',
