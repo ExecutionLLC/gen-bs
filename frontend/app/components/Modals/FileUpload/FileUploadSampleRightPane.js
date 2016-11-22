@@ -125,7 +125,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderFooter(selectedSample) {
-        const {auth: {isDemo}, samplesList:{onSaveAction}} = this.props;
+        const {auth: {isDemo}, samplesList: {onSaveAction}} = this.props;
         return (
             <div className='panel-footer'>
                 {onSaveAction && this.renderSelectButton(isDemo, selectedSample)}
