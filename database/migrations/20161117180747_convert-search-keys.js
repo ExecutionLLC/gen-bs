@@ -37,7 +37,7 @@ function convert(numStr, base) {
 function moveRight(intValue, count) {
     const str = intValue.toString(2);
     const newStr = str.substr(0, str.length - count);
-    return parseInt(newStr, 2)
+    return parseInt(newStr, 2) || 0;
 }
 
 function intToString(value, maxValue) {
