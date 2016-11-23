@@ -6,47 +6,49 @@ import * as ActionTypes from '../actions/websocket';
 
 function reduceDeleteComment(action, state) {
     const {variants} = state;
-    const variantIndex = _.findIndex(
-        variants, variant => variant.searchKey === action.searchKey
-    );
-    const comments = variants[variantIndex].comments;
+    const {searchKey} = action;
+    const newVariants = _.map(variants, variant => {
+        return variant.searchKey === searchKey ? {
+            ...variant,
+            comments: variant.comments.slice(1)
+        } : variant;
+    });
     return assign(state, {
-        variants: immutableArray.assign(variants, variantIndex, {
-            comments: comments.slice(1)
-        })
+        variants: newVariants
     });
 }
 
 function reduceUpdateComment(action, state) {
     const {variants} = state;
-    const {commentData} = action;
-    const variantIndex = _.findIndex(
-        variants, variant => variant.searchKey === commentData.searchKey
-    );
-    const comments = variants[variantIndex].comments;
-    return assign(state, {
-        variants: immutableArray.assign(variants, variantIndex, {
-            comments: immutableArray.assign(comments, 0, {
-                comment: commentData.comment
+    const {commentData:{searchKey, comment}} = action;
+
+    const newVariants = _.map(variants, variant => {
+        return variant.searchKey === searchKey ? {
+            ...variant,
+            comments: immutableArray.assign(variant.comments, 0, {
+                comment
             })
-        })
+        } : variant;
+    });
+    return assign(state, {
+        variants: newVariants
     });
 }
 
 function reduceAddComment(action, state) {
     const {variants} = state;
-    const {commentData} = action;
-    const variantIndex = _.findIndex(
-        variants, variant => variant.searchKey === commentData.searchKey
-    );
-    const comments = variants[variantIndex].comments;
-    return assign(state, {
-        variants: immutableArray.assign(variants, variantIndex, {
-            comments: immutableArray.append(comments, {
-                id: commentData.id,
-                comment: commentData.comment
+    const {commentData:{searchKey, comment, id}} = action;
+    const newVariants = _.map(variants, variant => {
+        return variant.searchKey === searchKey ? {
+            ...variant,
+            comments: immutableArray.append(variant.comments, {
+                id,
+                comment
             })
-        })
+        } : variant;
+    });
+    return assign(state, {
+        variants: newVariants
     });
 }
 
