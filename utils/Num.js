@@ -1,3 +1,5 @@
+// got from https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
+
 class Num {
 
     constructor(s, base) {
