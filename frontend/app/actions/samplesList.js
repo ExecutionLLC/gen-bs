@@ -169,7 +169,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
 
 export function requestUpdateSampleTextAsync(sampleId) {
     return (dispatch, getState) => {
-        const {samplesList: {hashedArray:{hash}, editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
+        const {samplesList: {hashedArray: {hash}, editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
         const currentEditedSample = hash[sampleId];
         if (!editingSample || editingSample.id !== sampleId) {
             return Promise.resolve();

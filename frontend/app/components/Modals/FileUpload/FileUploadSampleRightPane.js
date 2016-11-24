@@ -227,7 +227,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleHeader() {
-        const {samplesList:{editingSample}} = this.props;
+        const {samplesList: {editingSample}} = this.props;
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
@@ -291,7 +291,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList:{editingSample:{editableFields:{name, description}}}} = this.props;
+        const {dispatch, samplesList: {editingSample: {editableFields: {name, description}}}} = this.props;
         const newName = sampleName ? sampleName : name;
         const newDescription = sampleDescription ? sampleDescription : description;
         dispatch(updateSampleText(sampleId, newName, newDescription));
