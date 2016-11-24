@@ -241,7 +241,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleDescription() {
-        const {samplesList:{editingSample:{editableFields:{description}},id}} = this.props;
+        const {samplesList: {editingSample: {editableFields: {description}, id}}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -273,7 +273,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleFileName() {
-        const {samplesList:{editingSample:{editableFields:{name}},id}} = this.props;
+        const {samplesList: {editingSample: {editableFields: {name}, id}}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
