@@ -204,7 +204,7 @@ export default class FileUploadSampleList extends React.Component {
                     <span className='link-desc'>
                         {description}
                     </span>
-                    {uploadedTimeOrNull && <span className='link-desc'>
+                    {uploadedTimeOrNull && <span className='small link-desc'>
                        Uploaded: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
