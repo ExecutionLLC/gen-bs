@@ -46,31 +46,32 @@ export default class FileUploadSampleList extends React.Component {
     renderCurrentUploadData() {
         const {fileUpload:{filesProcesses}, sampleList} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
-            return !fileUploadStatusErrorOrReady(upload.progressStatus);
+            return /*!fileUploadStatusErrorOrReady(upload.progressStatus)*/upload.progressStatus !== fileUploadStatus.READY;
         });
         const currentUploadsData = _.map(currentUploads, upload => {
             const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.originalId === upload.sampleId);
             return {
                 upload,
-                samples: uploadSamples
+                samples: uploadSamples,
+                isError: upload.progressStatus === fileUploadStatus.ERROR
             };
         });
         return (
-            currentUploadsData.map((data) => this.renderProgressUploadSample(data))
+            currentUploadsData.map((data) => data.isError ? this._renderUploadedData({label: data.upload.file.name, upload: data.upload, date: data.upload.created}) : this.renderProgressUploadSample(data))
         );
     }
 
     renderUploadedData() {
-        const {search, samplesSearchHash, sampleList, fileUpload:{filesProcesses}} = this.props;
+        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'sampleId');
-        const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === fileUploadStatus.ERROR);
-        const errorsData = _.map(errorUploads, errorUpload => {
-            return {
-                label: errorUpload.file.name,
-                upload: errorUpload,
-                date: errorUpload.created
-            };
-        });
+        //const errorUploads = _.filter(filesProcesses, upload => upload.progressStatus === fileUploadStatus.ERROR);
+        // const errorsData = _.map(errorUploads, errorUpload => {
+        //     return {
+        //         label: errorUpload.file.name,
+        //         upload: errorUpload,
+        //         date: errorUpload.created
+        //     };
+        // });
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
             const {originalId} = sample;
@@ -83,7 +84,7 @@ export default class FileUploadSampleList extends React.Component {
                 date: currentUpload ? currentUpload.created : sample.timestamp
             };
         });
-        const finishedUploads = _.union(errorsData, samplesData);
+        const finishedUploads = samplesData/*_.union(errorsData, samplesData)*/;
         const filteredUploadedSamples = _.filter(finishedUploads, finishedUpload => {
             const {label, sample} = finishedUpload;
             const sampleSearch = search.toLowerCase();
@@ -170,17 +171,31 @@ export default class FileUploadSampleList extends React.Component {
                     null
                 );
             } else {
-                return this.renderListItem(
-                    upload.operationId,
-                    upload.operationId === currentUploadId,
-                    false,
-                    (id) => this.onNotUploadedErrorItemClick(id),
-                    null,
-                    (id) => this.onNotUploadedErrorItemDelete(id),
-                    label,
-                    upload.error.message,
-                    null
-                );
+                if (upload.operationId) {
+                    return this.renderListItem(
+                        upload.operationId,
+                        upload.operationId === currentUploadId,
+                        false,
+                        (id) => this.onNotUploadedErrorItemClick(id),
+                        null,
+                        (id) => this.onNotUploadedErrorItemDelete(id),
+                        label,
+                        upload.error.message,
+                        null
+                    );
+                } else {
+                    return this.renderListItem(
+                        upload.id,
+                        upload.id === currentUploadId,
+                        false,
+                        (id) => this.onNotUploadedErrorItemClick(id),
+                        null,
+                        (id) => this.onNotUploadedErrorItemDelete(id),
+                        label,
+                        upload.error.message,
+                        null
+                    );
+                }
             }
         }
     }
@@ -306,7 +321,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderProgressUpload(upload, sample) {
-        const {currentSampleId, fileUpload:{currentUploadId}} = this.props;
+        const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
         const key = sample ? sample.id : upload.operationId;
         const isActive = sample ? sample.id === currentSampleId : upload.id === currentUploadId;
         const name = sample ? this._createSampleLabel(sample) : upload.file.name;
