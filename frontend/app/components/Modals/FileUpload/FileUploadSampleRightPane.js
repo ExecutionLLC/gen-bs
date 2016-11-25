@@ -120,9 +120,12 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {fields} = this.props;
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
         if (_.some(sample.editableFields.fields, option => option.value)) {
-            return (
+            const fieldsRenders = fields
+                .filter(field => !field.isInvisible)
+                .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
+            return (_.some(fieldsRenders, fieldRender => !!fieldRender) &&
                 <div className='sample-mode3 collapse in'>
-                    {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
+                    {fieldsRenders}
                 </div>
             );
         } else {
