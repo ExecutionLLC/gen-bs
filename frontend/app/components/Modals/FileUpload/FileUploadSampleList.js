@@ -44,7 +44,34 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderCurrentUploadData() {
-        const {fileUpload:{filesProcesses}, sampleList} = this.props;
+        const {fileUpload: {filesProcesses}, sampleList} = this.props;
+/*
+        return _.map(filesProcesses, (fp) => {
+            if (fp.error) {
+                if (fp.operationId) {
+                    // AJAX completed, file at WS, fails
+                    const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.originalId === fp.sampleId);
+                    if (uploadSamples.length) {
+                        // sample with sampleId
+                    } else {
+                        // sampleId is a file id, not parsed
+                    }
+                } else {
+                    // AJAX fails
+                }
+            } else {
+
+            }
+
+            if (fileUploadStatusErrorOrReady(fp.progressStatus)) {
+
+            } else {
+                const currentUploads = _.filter(filesProcesses, upload => {
+                    return !fileUploadStatusErrorOrReady(upload.progressStatus);
+                });
+            }
+        });
+*/
         const currentUploads = _.filter(filesProcesses, upload => {
             return /*!fileUploadStatusErrorOrReady(upload.progressStatus)*/upload.progressStatus !== fileUploadStatus.READY;
         });
@@ -56,6 +83,7 @@ export default class FileUploadSampleList extends React.Component {
                 isError: upload.progressStatus === fileUploadStatus.ERROR
             };
         });
+        console.log('currentUploadsData', currentUploadsData);
         return (
             currentUploadsData.map((data) => data.isError ? this._renderUploadedData({label: data.upload.file.name, upload: data.upload, date: data.upload.created}) : this.renderProgressUploadSample(data))
         );
