@@ -7,6 +7,7 @@ class UploadOperation extends SystemOperation {
     constructor(sessionId, method, id) {
         super(sessionId, method, id);
         this.setSendCloseToAppServer(true);
+        this._isActive = false;
     }
 
     /**
@@ -36,6 +37,14 @@ class UploadOperation extends SystemOperation {
 
     setSampleFileName(sampleFileName) {
         this.sampleFileName = sampleFileName;
+    }
+
+    get isActive(){
+        return this._isActive;
+    }
+
+    set isActive(isActive) {
+        this._isActive = isActive;
     }
 
     static recreate(id, systemSessionId, userId, sampleId, sampleFileName) {

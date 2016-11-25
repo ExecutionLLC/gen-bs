@@ -81,8 +81,8 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      * @param priority Priority of the request (larger number corresponds to a higher priority).
      * @param callback (error, operationId)
      * */
-    requestSampleProcessing(session, operationId, sampleId, priority, callback) {
-        this.services.applicationServerUpload.requestSampleProcessing(session, operationId,
+    requestUploadProcessing(session, operationId, sampleId, priority, callback) {
+        this.services.applicationServerUpload.requestUploadProcessing(session, operationId,
             sampleId, priority, callback);
     }
 
