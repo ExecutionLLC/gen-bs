@@ -7,14 +7,16 @@ const SampleTables = {
     Versions: 'genotype_version',
     Files: 'vcf_file_sample',
     GenotypeVersionText: 'genotype_text',
-    EditableFields: 'vcf_file_sample_value'
+    EditableFields: 'vcf_file_sample_value',
+    FieldMetadata: 'field_metadata'
 };
 
 const CommentFieldId = '00000000-0000-0000-0000-000000000017';
 
 exports.up = function (knex) {
     return addGenotypeColumns(knex)
-        .then(()=> updateGenotypeNameAndDescription(knex));
+        .then(()=> updateGenotypeNameAndDescription(knex))
+        .then(() => makeCommentInvisible(knex));
 };
 
 exports.down = function () {
@@ -61,6 +63,12 @@ function findGenotypeVersionsOldText(knex) {
                 description: result.values || ''
             };
         });
+}
+
+function makeCommentInvisible(knex) {
+    return knex(SampleTables.FieldMetadata)
+        .where('id', CommentFieldId)
+        .update({'is_invisible': true});
 }
 
 function createGenotypeName(fileName, genotype) {
