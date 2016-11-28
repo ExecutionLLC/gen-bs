@@ -13,6 +13,8 @@ import {
     sampleSaveCurrentIfSelected,
     setCurrentSampleId
 } from '../../../actions/samplesList';
+import config from '../../../../config';
+
 
 function cancelDOMEvent(e) {
     e.stopPropagation();
@@ -253,6 +255,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                         placeholder='Sample description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
+                        maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, null, e)}
                     />
                 </div>
@@ -285,7 +288,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Sample name (it can't be empty)"
                         data-localize='query.settings.name'
-                        maxLength={50}
+                        maxLength={config.UPLOADS.MAX_NAME_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, e, null)}
                     />
                 </div>
