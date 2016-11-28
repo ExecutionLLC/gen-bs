@@ -298,8 +298,8 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
         const {dispatch, samplesList: {editingSample: {editableFields: {name, description}}}} = this.props;
-        const newName = sampleName ? sampleName : name;
-        const newDescription = sampleDescription ? sampleDescription : description;
+        const newName = sampleName || name;
+        const newDescription = sampleDescription || description;
         dispatch(updateSampleText(sampleId, newName, newDescription));
         dispatch(requestUpdateSampleTextAsync(sampleId))
             .then((newSample) => {

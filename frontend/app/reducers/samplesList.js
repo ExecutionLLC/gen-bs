@@ -43,8 +43,8 @@ function reduceUpdateSampleText(state, action) {
         return state;
     }
 
-    const newName = name ? name : editingSample.name;
-    const newDescription = description ? description : editingSample.description;
+    const newName = name || editingSample.name;
+    const newDescription = description || editingSample.description;
     const newEditingSample = {...editingSample,
         editableFields: {
             ...editingSample.editableFields,
