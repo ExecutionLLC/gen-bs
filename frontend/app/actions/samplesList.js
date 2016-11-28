@@ -158,7 +158,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             dispatch(disableSampleEdit(sampleId, false));
             // If editing selected sample, don't forget to set it as current.
             if (onSaveAction) {
-                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);
                 if (selectedSampleId === sampleId) {
                     dispatch(sampleSaveCurrent(updatedSample.id));
                 }
@@ -172,6 +172,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
     };
 }
 
+// TODO refactor requestUpdateSampleFieldsAsync and requestUpdateSampleTextAsync, it have huge common part
 export function requestUpdateSampleTextAsync(sampleId) {
     return (dispatch, getState) => {
         const {samplesList: {hashedArray: {hash}, editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
@@ -203,7 +204,7 @@ export function requestUpdateSampleTextAsync(sampleId) {
             dispatch(disableSampleEdit(updatedSample.id, false));
             // If editing selected sample, don't forget to set it as current.
             if (onSaveAction) {
-                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId); // TODO check if
+                const selectedSampleId = immutableGetPathProperty(onSaveAction, onSaveActionPropertyId);
                 if (selectedSampleId === sampleId) {
                     dispatch(sampleSaveCurrent(updatedSample.id));
                 }
