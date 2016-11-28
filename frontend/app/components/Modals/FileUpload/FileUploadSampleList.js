@@ -251,7 +251,16 @@ export default class FileUploadSampleList extends React.Component {
                        Uploaded: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
-                {this.renderDropdown(id, onSelectForAnalysis, onDelete)}
+                {onDelete && !onSelectForAnalysis ?
+                    <div className='right-menu'>
+                        <button className='btn btn-link-light-default'
+                                type='button'
+                                onClick={() => onDelete(id)}>
+                            <i className='md-i'>highlight_off</i>
+                        </button>
+                    </div> :
+                    this.renderDropdown(id, onSelectForAnalysis, onDelete)
+                }
             </li>
         );
     }
