@@ -56,7 +56,6 @@ export default class FileUploadSampleList extends React.Component {
                 isError: upload.progressStatus === fileUploadStatus.ERROR
             };
         });
-        console.log('currentUploadsData', currentUploadsData);
         return (
             currentUploadsData.map((data) =>
                 data.isError ?
@@ -446,7 +445,6 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     onShowPopup(id) {
-        console.log('onShowPopup', id);
         this.setState({
             showPopup: id
         });
@@ -465,7 +463,6 @@ export default class FileUploadSampleList extends React.Component {
             return false;
         }
 
-        console.log('onDocumentClick', findClosestPopupShowButton(e.target));
         if (!findClosestPopupShowButton(e.target)) {
             this.setState({
                 showPopup: null
