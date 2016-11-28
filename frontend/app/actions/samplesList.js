@@ -100,7 +100,10 @@ export function fetchSamplesAsync() {
             error,
             response
         })))
-            .then(({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response)))
+            .then(
+                ({error, response}) =>
+                    dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response))
+            )
             .then((response) => response.body)
             .then((samples) => dispatch(receiveSamplesList(samples)));
     };
@@ -146,7 +149,9 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
         return new Promise((resolve) => samplesClient.update(
             editingSample,
             (error, response) => resolve({error, response})
-        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
+        )).then(
+            ({error, response}) =>
+                dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
         ).then((updatedSample) => {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
@@ -186,7 +191,9 @@ export function requestUpdateSampleTextAsync(sampleId) {
         return new Promise((resolve) => samplesClient.update(
             newEditingSample,
             (error, response) => resolve({error, response})
-        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
+        )).then(
+            ({error, response}) =>
+                dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
         ).then((response) => response.body
         ).then((updatedSample) => {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));

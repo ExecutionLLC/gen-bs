@@ -304,12 +304,21 @@ class SamplesModel extends SecureModelBase {
                     this._addGenotypeFields(trx, genotype.genotypeId, sample.sampleFields, callback)
                 }, (error) => callback(error, sampleId, genotypes))
             },
-            (sampleId, genotypes, callback) => async.map(genotypes,
-                (genotype, callback) => this._addNewGenotypeVersion(genotype.genotypeId, trx, (error, genotypeVersionId) => callback(error, {
-                    genotypeId: genotype.genotypeId,
-                    genotypeVersionId,
-                    genotypeName: genotype.genotypeName,
-                })),
+            (sampleId, genotypes, callback) => async.map(
+                genotypes,
+                (genotype, callback) => this._addNewGenotypeVersion(
+                    genotype.genotypeId,
+                    trx,
+                    (error, genotypeVersionId) =>
+                        callback(
+                            error,
+                            {
+                                genotypeId: genotype.genotypeId,
+                                genotypeVersionId,
+                                genotypeName: genotype.genotypeName,
+                            }
+                        )
+                ),
                 (error, genotypeVersions) => callback(error, sampleId, genotypeVersions)),
             (sampleId, genotypeVersions, callback) => async.map(genotypeVersions,
                 (genotype, callback) => {
@@ -327,7 +336,12 @@ class SamplesModel extends SecureModelBase {
             (sampleId, genotypeVersions, callback) => {
                 // Each genotype should have different fields.
                 async.map(genotypeVersions, (genotypeVersion, callback) => {
-                    this._addGenotypeValues(trx, genotypeVersion.genotypeVersionId, sample.editableFields, (error) => callback(error, genotypeVersion.genotypeVersionId))
+                    this._addGenotypeValues(
+                        trx,
+                        genotypeVersion.genotypeVersionId,
+                        sample.editableFields,
+                        (error) => callback(error, genotypeVersion.genotypeVersionId)
+                    );
                 }, callback)
             }
         ], callback);
