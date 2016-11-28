@@ -22,7 +22,7 @@ function cancelDOMEvent(e) {
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {samplesList:{editingSample}} = this.props;
+        const {samplesList: {editingSample}} = this.props;
         return (
             <div className='split-right'>
                 {editingSample && this.renderSampleHeader()}
