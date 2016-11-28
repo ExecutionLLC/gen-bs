@@ -67,7 +67,6 @@ function findGenotypeVersionsOldText(knex) {
         )
         .where('field_id', CommentFieldId)
         .map(result => {
-            console.log(result);
             const name = createGenotypeName(result['file_name'], result['genotype_name']);
             return {
                 genotypeVersionId: result['genotype_version_id'],
