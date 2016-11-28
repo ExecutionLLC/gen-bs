@@ -221,9 +221,11 @@ export default class FileUploadSampleList extends React.Component {
                 </a>
                 {onDelete && !onSelectForAnalysis ?
                     <div className='right-menu'>
-                        <button className='btn btn-link-light-default'
-                                type='button'
-                                onClick={() => onDelete(id)}>
+                        <button
+                            className='btn btn-link-light-default'
+                            type='button'
+                            onClick={() => onDelete(id)}
+                        >
                             <i className='md-i'>highlight_off</i>
                         </button>
                     </div> :
@@ -335,14 +337,16 @@ export default class FileUploadSampleList extends React.Component {
                 className={classNames({
                     'active': isActive
                 })}>
-                <a type='button'
-                   onClick={() => {
-                       if (sample) {
-                           this.onSampleItemClick(sample.id);
-                       } else {
-                           this.onUploadItemClick(upload.id);
-                       }
-                   }}>
+                <a
+                    type='button'
+                    onClick={() => {
+                        if (sample) {
+                            this.onSampleItemClick(sample.id);
+                        } else {
+                            this.onUploadItemClick(upload.id);
+                        }
+                    }}
+                >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -355,11 +359,12 @@ export default class FileUploadSampleList extends React.Component {
                 </a>
                 <div className='right-menu'>
                     {(sample || upload.operationId) &&
-                        <button className='btn btn-link-light-default'
-                                type='button'
-                                onClick={() => sample ? this.onSampleItemDelete(sample.id) : this.onUploadItemDelete(upload.operationId)}>
+                        <button
+                            className='btn btn-link-light-default'
+                            type='button'
+                            onClick={() => sample ? this.onSampleItemDelete(sample.id) : this.onUploadItemDelete(upload.operationId)}
+                        >
                             <i className='md-i'>highlight_off</i>
-
                         </button>
                     }
                 </div>
