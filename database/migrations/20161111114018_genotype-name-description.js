@@ -50,12 +50,23 @@ function updateGenotypeNameAndDescription(knex) {
 function findGenotypeVersionsOldText(knex) {
     return knex.select()
         .from(SampleTables.Versions)
-        .leftJoin(SampleTables.Genotypes, `${SampleTables.Genotypes}.id`, `${SampleTables.Versions}.sample_genotype_id`)
-        .leftJoin(SampleTables.Files, `${SampleTables.Files}.id`, `${SampleTables.Genotypes}.vcf_file_sample_id`)
-        .leftJoin(SampleTables.EditableFields, `${SampleTables.EditableFields}.genotype_version_id`, `${SampleTables.Versions}.id`)
+        .leftJoin(
+            SampleTables.Genotypes,
+            `${SampleTables.Genotypes}.id`,
+            `${SampleTables.Versions}.sample_genotype_id`
+        )
+        .leftJoin(
+            SampleTables.Files,
+            `${SampleTables.Files}.id`,
+            `${SampleTables.Genotypes}.vcf_file_sample_id`
+        )
+        .leftJoin(
+            SampleTables.EditableFields,
+            `${SampleTables.EditableFields}.genotype_version_id`,
+            `${SampleTables.Versions}.id`
+        )
         .where('field_id', CommentFieldId)
         .map(result => {
-            console.log(result);
             const name = createGenotypeName(result['file_name'], result['genotype_name']);
             return {
                 genotypeVersionId: result['genotype_version_id'],
