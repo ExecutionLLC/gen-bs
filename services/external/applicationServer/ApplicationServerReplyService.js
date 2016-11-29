@@ -65,7 +65,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 const operation = operationResult.operation;
                 if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
                     && !operationResult.shouldCompleteOperation) {
-                    operation.setLastAppServerMessage(operationResult);
+                    operation.setLastAppServerMessage(operationResult.result);
                 }
                 callback(null, operationResult);
             },

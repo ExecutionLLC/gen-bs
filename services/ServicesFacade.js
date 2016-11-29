@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const LanguService = require('./LanguService');
@@ -74,6 +75,16 @@ class ServiceFacade {
         _.map(this)
             .filter(service => service instanceof ServiceBase)
             .forEach(service => service.init());
+    }
+
+    start(callback){
+        const serviceBaseInstances = _.map(this).filter(service => service instanceof ServiceBase);
+        async.forEach(serviceBaseInstances, (service, callback) => service.start(callback), callback);
+    }
+
+    stop(callback){
+        const serviceBaseInstances = _.map(this).filter(service => service instanceof ServiceBase);
+        async.forEach(serviceBaseInstances, (service, callback) => service.stop(callback), callback);
     }
 }
 

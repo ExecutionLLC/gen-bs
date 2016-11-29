@@ -108,7 +108,7 @@ class RPCProxy {
                     publisher: (callback) => RabbitMqUtils.createPublisher(connection,
                         this.logger, this.requestExchangeName, callback),
                     consumer: (callback) => RabbitMqUtils.createConsumer(connection,
-                        this.logger, null, null, null, true, callback)
+                        this.logger, this.wsQueueName, null, null, true, callback)
                 }, (error, context) => callback(error, context))
             },
             (context, callback) => {
