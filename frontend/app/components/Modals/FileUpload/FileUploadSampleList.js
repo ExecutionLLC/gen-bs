@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus, uploadsListRemoveUpload, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
+import {fileUploadStatus, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
 import {makeSampleLabel} from '../../../utils/samplesUtils';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 
@@ -35,7 +35,7 @@ export default class FileUploadSampleList extends React.Component {
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
-                    className='nav nav-componentes nav-controls nav-upload-items nav-radios nav-with-right-menu'>
+                    className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
                     {this.renderCurrentUploadData()}
                     {this.renderUploadedData()}

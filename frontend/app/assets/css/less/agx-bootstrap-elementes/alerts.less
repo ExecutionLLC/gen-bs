@@ -1,0 +1,140 @@
+
+.alert {
+ border:none; 
+ position: relative; 
+}
+
+// Alternate styles
+//
+// Generate contextual modifier classes for colorizing the alert.
+.alert-primary {
+  .alert-variant(@alert-primary-bg; @alert-primary-border; @alert-primary-text; @alert-primary-state-icon);
+}
+
+.alert-success {
+  .alert-variant(@alert-success-bg; @alert-success-border; @alert-success-text; @alert-success-state-icon);
+}
+
+.alert-info {
+  .alert-variant(@alert-info-bg; @alert-info-border; @alert-info-text; @alert-info-state-icon);
+}
+
+.alert-warning {
+  .alert-variant(@alert-warning-bg; @alert-warning-border; @alert-warning-text; @alert-warning-state-icon);
+}
+
+.alert-danger {
+  .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text; @alert-danger-state-icon);
+}
+.alert-inverse {
+  .alert-variant(@alert-inverse-bg; @alert-inverse-border; @alert-inverse-text; @alert-inverse-state-icon);
+    margin: 0;
+    padding: 15px 15px 15px 30px;
+    &:before {
+      top:16px;
+      left:10px;
+    }
+  .close { 
+    color: @alert-inverse-text;
+    .opacity(.6);
+    &:hover,
+    &:focus  { 
+      .opacity(.9);
+    }
+  }
+  .text-success { 
+    color: @brand-success;
+  }
+  .text-warning { 
+    color: @brand-warning;
+  }
+  .text-danger { 
+    color: lighten(saturate(@brand-danger, 10%), 10%);
+  }
+  
+}
+.alert-help { 
+  .alert-variant(@alert-help-bg; @alert-help-border; @alert-help-text; @alert-help-state-icon); 
+   padding:  0 0 0 20px;
+  &:before { 
+    top:0;
+  }
+  p + p {
+    margin-top: 0;
+  }
+}
+.alert-fixed { 
+  position: fixed; 
+  z-index: @zindex-alert-fixed;
+  bottom: 30px;
+  right: 30px;
+  max-width: 260px;
+  min-width: 140px;
+}
+
+
+
+.alert + .form-group { 
+  margin-top: -10px;
+}
+.alert { 
+  btn-group.pull-right { 
+    margin: 0 5px 0 0;
+  }
+    @media (min-width: @screen-sm) {
+   .btn-group { 
+     margin: -10px 0px 0 0;
+    &.pull-right { 
+      margin-left: 5px;
+    }
+    }
+  }
+}
+.quolity-box-temp { 
+  position: relative;
+
+  .warning { 
+    position: absolute;
+    left: 960px;
+
+    &.warning1 {
+     top:24px;      
+    }
+    &.warning2 {
+     top:77px;      
+    }
+    &.warning3 {
+     top:130px;      
+    }
+    &.warning4 {
+     top:184px;      
+    }
+
+  }
+  
+  .measure { 
+    background: #616e7e none repeat scroll 0 0;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 12px;
+    padding: 0.2em 0.5em;
+    position: absolute;
+    &.measure1 {
+    left: 525px;
+    top: 4px;     
+    }
+    &.measure2 {
+     left: 558px;
+    top: 58px;     
+    }
+    &.measure3 {
+    left: 889px;
+    top: 113px;    
+    }
+    &.measure4 {
+    left: 893px;
+    top: 166px;      
+    }
+
+  }
+}

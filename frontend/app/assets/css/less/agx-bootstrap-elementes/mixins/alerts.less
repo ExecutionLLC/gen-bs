@@ -1,0 +1,23 @@
+// Alerts
+
+.alert-variant(@background; @border; @text-color; @icon-content) {
+  background-color:@background;
+  border-bottom-color: @border;
+  color: @text-color;
+  padding-left: 20px;
+  &:before { 
+    font-family: @alert-icon-font-family;
+    content: @icon-content;
+    color: @text-color;
+    left: 0px;
+    line-height: 1;
+    position: absolute;
+    font-size: 18px;
+  }
+  hr {
+    border-top-color: darken(@border, 5%);
+  }
+  .alert-link {
+    color: darken(@text-color, 10%);
+  }
+}

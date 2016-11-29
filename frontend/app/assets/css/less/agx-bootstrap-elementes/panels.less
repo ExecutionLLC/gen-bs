@@ -1,0 +1,100 @@
+// Panel contents
+.panel-body {
+  &.nopadding {
+    padding: 0;
+  }
+}
+.panel-title {
+  + p { 
+    font-size: @font-size-small;
+    margin-bottom: 0;
+    margin-top: @padding-base-vertical;
+  }
+}
+.panel-group {
+
+  .panel {
+    margin-bottom: @padding-large-vertical;
+    + .panel {
+      margin-top:-1px;
+    }
+  }
+  .panel-heading { 
+   border-bottom: 1px solid @panel-inner-border;
+  }
+  .panel-title { 
+    font-size: @font-size-h4;
+  }
+  .panel-body {
+    padding: @padding-large-vertical;
+  }
+  .panel-footer {
+    + .panel-collapse .panel-body {
+      border-bottom: 1px solid @panel-inner-border;
+      padding: @padding-large-vertical;
+    }
+  }
+  .panel.active { 
+         background: @component-active-bg;
+         color: desaturate(darken(@component-active-bg, 60%), 10%);
+         border-top-color: desaturate(darken(@component-active-bg, 10%), 10%);
+       * {
+         color: desaturate(darken(@component-active-bg, 60%), 10%);
+       }
+    }
+  .panel-collapse { 
+    .panel-body { 
+      background: @default-max-light;
+      padding: @padding-large-vertical;
+    }
+  }
+  
+}
+.panel { 
+  &.panel-material:hover {       
+     .box-shadow(@panel-hover-shadow);
+  }
+}
+
+//bootstrap react fix
+.panel { 
+  .panel,
+  .panel-default {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    margin: 0 0 -1px;
+    padding: 0;
+    border-radius:0;
+    border: none;
+  }
+}
+
+//panel-group
+.panel-group-scroll { 
+    @media (min-width: @screen-sm){
+    height: 250px;
+    margin-right: -16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 16px;
+
+    }
+}
+.panel {
+  &.edit-mode {
+    dl.editable { 
+     dd {
+       display: none;
+       + dd { 
+         display: block;
+       }
+     }
+   }
+  }
+  &.panel-file-upload { 
+    margin-bottom: 16px;
+  }
+}  
+

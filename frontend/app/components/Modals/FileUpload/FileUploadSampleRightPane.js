@@ -52,38 +52,36 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     renderUpload(isDemo) {
         return (
-            <div className='form-horizontal form-padding'>
-                <div className='empty empty-upload collapse sample-mode1 in'>
-                    <div className='btn-group btn-group-xlg'>
-                        {!isDemo && <button className='btn btn-link-default'
-                                            onClick={this.onUploadClick.bind(this)}
-                                            onDragEnter={cancelDOMEvent}
-                                            onDragOver={cancelDOMEvent}
-                                            onDrop={(e) => {
-                                                cancelDOMEvent(e);
-                                                this.onFilesDrop(e.dataTransfer.files);
-                                            }}
-                        >
-                            <input
-                                onChange={ (e) => {this.onUploadChanged(e.target.files); e.target.value = null; }}
-                                style={{display: 'none'}}
-                                ref='fileInput'
-                                id='file-select'
-                                type='file'
-                                accept='.vcf,.gz'
-                                name='files[]'
-                                defaultValue=''
-                                multiple='multiple'
-                            />
-                            <h3>Drop vcf files here or <span
-                                className='text-underline'>click here</span> to
-                                select</h3>
-                        </button>
-                        }
-                        {isDemo &&
-                        <h3><i className='md-i'>perm_identity</i>Please login or
-                            register to upload new samples</h3>}
-                    </div>
+            <div className='empty'>
+                <div className='btn-group btn-group-xlg'>
+                    {!isDemo && <button className='btn btn-link-default'
+                                        onClick={this.onUploadClick.bind(this)}
+                                        onDragEnter={cancelDOMEvent}
+                                        onDragOver={cancelDOMEvent}
+                                        onDrop={(e) => {
+                                            cancelDOMEvent(e);
+                                            this.onFilesDrop(e.dataTransfer.files);
+                                        }}
+                    >
+                        <input
+                            onChange={ (e) => {this.onUploadChanged(e.target.files); e.target.value = null; }}
+                            style={{display: 'none'}}
+                            ref='fileInput'
+                            id='file-select'
+                            type='file'
+                            accept='.vcf,.gz'
+                            name='files[]'
+                            defaultValue=''
+                            multiple='multiple'
+                        />
+                        <h3>Drop vcf files here or <span
+                            className='text-underline'>click here</span> to
+                            select</h3>
+                    </button>
+                    }
+                    {isDemo &&
+                    <h3><i className='md-i'>perm_identity</i>Please login or
+                        register to upload new samples</h3>}
                 </div>
             </div>
         );
@@ -115,7 +113,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
         if (_.some(sample.editableFields.fields, option => option.value)) {
             return (
-                <div className='sample-mode3 collapse in'>
+                <div className='dl-group-view-mode'>
                     {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                 </div>
             );
@@ -127,7 +125,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderFooter(selectedSample) {
         const {auth: {isDemo}} = this.props;
         return (
-            <div className='panel-footer'>
+            <div className='btn-toolbar'>
                 {this.renderSelectButton(isDemo, selectedSample)}
                 {this.renderEditButton(selectedSample.type)}
             </div>

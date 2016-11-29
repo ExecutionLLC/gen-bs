@@ -1,0 +1,19 @@
+.dl-horizontal {
+  margin-bottom: @padding-large-vertical;
+  dd {
+    &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
+  }
+
+  @media (min-width: @dl-horizontal-breakpoint) {
+    dt {
+      float: left;
+      width: (@dl-horizontal-offset - 20);
+      clear: left;
+      
+      .text-overflow();
+    }
+    dd {
+      margin-left: @dl-horizontal-offset;
+    }
+  }
+}

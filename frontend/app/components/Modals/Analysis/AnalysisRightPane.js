@@ -249,7 +249,7 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='col-xs-12 col-md-10 btn-group-select2'>
                         <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
@@ -261,7 +261,7 @@ export default class AnalysisRightPane extends React.Component {
                             </button>
                         </div>
 
-                        <div className='btn-group btn-group-select2-max btn-group-right'>
+                        <div className='btn-group btn-group-select2-max'>
                             <Select
                                 className='select2-search select-right'
                                 tabindex='-1'
@@ -316,7 +316,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-dark-default  label-fix-width label-left'>
+                        <label className='label label-dark-default label-fix-width'>
                             <span data-localize='query.tumor_normal.tumor.title'>T</span>
                         </label>
                     </div>
@@ -342,7 +342,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
-                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                    <div className='btn-group btn-group-select2-max'>
                         <Select
                             tabindex='-1'
                             className='select2-search select-right'
@@ -396,7 +396,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-dark-default label-fix-width'>
+                        <label className='label label-default label-fix-width'>
                             <span data-localize='query.family.proband.title'>P</span>
                         </label>
                     </div>

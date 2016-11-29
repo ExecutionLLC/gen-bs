@@ -6,7 +6,7 @@ export default class VariantsTableEmpty extends Component {
         return (
             <div className='table-variants-message'>
                 <div className='empty'>
-                      <h3 className='text-center'>
+                      <h3>
                       <i className='md-i'>hourglass_empty</i>
                           Results are empty!
                       </h3>
