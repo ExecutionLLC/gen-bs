@@ -19,39 +19,37 @@ export default class NewFilterInputs extends Component {
                         </span>
                 </div>
                 }
-                <div className='row-head-selector'>
-                    <div className='form-group'>
-                          <div className='col-sm-6'>
-                              <label data-localize='filters.setup.new.name.title'>New {texts.Filter}</label>
-                              <input
-                                  type='text'
-                                  className='form-control text-primary'
-                                  data-localize='filters.setup.new.name.help'
-                                  placeholder={`Set ${texts.filter} name`}
-                                  value={editingFilter.name}
-                                  maxLength={config.FILTERS.MAX_NAME_LENGTH}
-                                  onChange={(e) => this.onNameChange(e.target.value)}
-                              />
+                <div className='form-group row-head-selector'>
+                      <div className='col-sm-6'>
+                          <label data-localize='filters.setup.new.name.title'>New {texts.Filter}</label>
+                          <input
+                              type='text'
+                              className='form-control text-primary'
+                              data-localize='filters.setup.new.name.help'
+                              placeholder={`Set ${texts.filter} name`}
+                              value={editingFilter.name}
+                              maxLength={config.FILTERS.MAX_NAME_LENGTH}
+                              onChange={(e) => this.onNameChange(e.target.value)}
+                          />
+                      </div>
+                      <div className='col-sm-6 input-group'>
+                          <label data-localize='general.description'>Description</label>
+                          <input
+                              type='text'
+                              className='form-control'
+                              data-localize='filters.setup.new.description'
+                              placeholder={`Set ${texts.filter} description (optional)`}
+                              value={editingFilter.description}
+                              maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
+                              onChange={(e) => this.onDescriptionChange(e.target.value)}
+                          />
+                          <div className='input-group-btn  btn-group-close'>
+                              <button type='button' className='btn-link-default'
+                                      onClick={() => this.onCancelClick()}>
+                                  <i className='md-i'>close</i>
+                              </button>
                           </div>
-                          <div className='col-sm-6 input-group'>
-                              <label data-localize='general.description'>Description</label>
-                              <input
-                                  type='text'
-                                  className='form-control'
-                                  data-localize='filters.setup.new.description'
-                                  placeholder={`Set ${texts.filter} description (optional)`}
-                                  value={editingFilter.description}
-                                  maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
-                                  onChange={(e) => this.onDescriptionChange(e.target.value)}
-                              />
-                              <div className='input-group-btn  btn-group-close'>
-                                  <button type='button' className='btn-link-default'
-                                          onClick={() => this.onCancelClick()}>
-                                      <i className='md-i'>close</i>
-                                  </button>
-                              </div>
-                          </div> 
-                    </div>
+                      </div> 
                 </div>
             </div>
         );

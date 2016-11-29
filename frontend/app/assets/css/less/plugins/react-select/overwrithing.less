@@ -1,0 +1,424 @@
+// Variables
+// ------------------------------
+
+// common
+@select-primary-color:             @brand-primary;
+
+// control options
+@select-input-bg:                  @dropdown-bg;
+@select-input-bg-disabled:         @input-bg-disabled;
+@select-input-border-color:        @dropdown-border;
+@select-input-border-radius:       @input-border-radius;
+@select-input-border-focus:        @select-primary-color;
+@select-input-border-width:        1px;
+@select-input-height:              @input-height-base;
+@select-input-internal-height:     (@select-input-height - (@select-input-border-width * 2));
+@select-input-placeholder:         @input-color-placeholder;
+@select-text-color:                @dropdown-link-color;
+@select-link-hover-color:          @select-input-border-focus;
+
+@select-padding-vertical:          @padding-base-vertical;
+@select-padding-horizontal:        @padding-base-horizontal;
+@select-default-shadow:            @btn-default-shadow;
+// menu options
+@select-menu-zindex:               3;
+@select-menu-max-height:           200px;
+
+@select-option-color:              @select-text-color;
+@select-option-bg:                 @select-input-bg;
+@select-option-focused-color:      @dropdown-link-hover-color;
+@select-option-focused-bg:         @dropdown-link-hover-bg;
+@select-option-disabled-color:     @gray-lighter;
+
+@select-noresults-color:           lighten(@select-text-color, 40%);
+@select-dropdown-shadow:           @dropdown-shadow;
+// clear "x" button
+@select-clear-size:                floor((@select-input-height / 2));
+@select-clear-color:               @gray-light;
+@select-clear-hover-color:         @brand-danger; // red
+@select-clear-width:               (@select-input-internal-height / 2);
+
+// arrow indicator
+@select-arrow-color:               @gray-light;
+@select-arrow-color-hover:         @gray;
+@select-arrow-width:               5px;
+
+// loading indicator
+@select-loading-size:              16px;
+@select-loading-color:             @select-text-color;
+@select-loading-color-bg:          @select-input-border-color;
+
+// multi-select item
+@select-item-font-size:            .9em;
+
+@select-item-bg:                   fade(@select-primary-color, 8%);
+@select-item-color:                @select-primary-color;
+@select-item-border-color:         fade(@select-primary-color, 24%);
+@select-item-hover-color:          darken(@select-item-color, 5%);
+@select-item-hover-bg:             darken(@select-item-bg, 5%);
+@select-item-disabled-color:       #333;
+@select-item-disabled-bg:          #fcfcfc;
+@select-item-disabled-border-color: darken(@select-item-disabled-bg, 10%);
+
+@select-item-border-radius:        2px;
+@select-item-gutter:               5px;
+
+@select-item-padding-horizontal:   5px;
+@select-item-padding-vertical:     2px;
+
+//
+// Control
+// ------------------------------
+
+// Mixins
+.border-top-radius(@radius) {
+	border-top-right-radius: @radius;
+	border-top-left-radius: @radius;
+}
+.border-right-radius(@radius) {
+	border-bottom-right-radius: @radius;
+	border-top-right-radius: @radius;
+}
+.border-bottom-radius(@radius) {
+	border-bottom-right-radius: @radius;
+	border-bottom-left-radius: @radius;
+}
+.border-left-radius(@radius) {
+	border-bottom-left-radius: @radius;
+	border-top-left-radius: @radius;
+}
+
+// focused styles
+.Select-focus-state(@color) {
+	border-color: @color;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px fade(@color, 10%);
+  border-radius: @select-input-border-radius;
+  box-shadow: @btn-default-shadow;
+  height: 36px;
+}
+// "classic" focused styles: maintain for legacy
+.Select-focus-state-classic() {
+	border-color: @select-input-border-focus lighten(@select-input-border-focus, 5%) lighten(@select-input-border-focus, 5%);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px -1px fade(@select-input-border-focus,50%);
+}
+
+// base
+
+.Select-control {
+	background-color: @select-input-bg;
+	border-color: lighten(@select-input-border-color, 5%) @select-input-border-color darken(@select-input-border-color, 10%);
+	border-radius: @select-input-border-radius;
+	border: @select-input-border-width solid @select-input-border-color;
+	box-shadow: @select-default-shadow;
+	color: @select-text-color;
+	height: @select-input-height;
+
+	&:hover {
+		box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+	}
+}
+
+
+.is-open > .Select-control {
+	.border-bottom-radius( 0 );
+	background: @select-input-bg;
+	border-color: darken(@select-input-border-color, 10%) @select-input-border-color lighten(@select-input-border-color, 5%);
+
+	// flip the arrow so its pointing up when the menu is open
+	> .Select-arrow {
+		border-color: transparent transparent @select-arrow-color;
+		border-width: 0 @select-arrow-width @select-arrow-width;
+	}
+}
+.is-focused:not(.is-open) > .Select-control {
+	.Select-focus-state(@select-input-border-focus);
+}
+
+// placeholder
+
+.Select-placeholder,
+:not(.Select--multi) > .Select-control .Select-value {
+	color: @select-input-placeholder;
+	line-height: @select-input-internal-height;
+	padding-left: @select-padding-horizontal;
+	padding-right: @select-padding-horizontal;
+}
+
+.has-value:not(.Select--multi) > .Select-control > .Select-value,
+.has-value.is-pseudo-focused:not(.Select--multi) > .Select-control > .Select-value {
+	.Select-value-label {
+		color: @select-text-color;
+	}
+	a.Select-value-label {
+
+		&:hover,
+		&:focus {
+			color: @select-link-hover-color;
+		}
+	}
+}
+
+
+// the <input> element users type in
+
+.Select-input {
+	height: @select-input-internal-height;  //height: 36px;
+	padding-left: @select-padding-horizontal;
+	padding-right: @select-padding-horizontal;
+	vertical-align: middle;
+
+	> input {
+		height: @select-input-internal-height;
+	}
+}
+
+
+
+// the little cross that clears the field
+
+.Select-clear-zone {
+	color: @select-clear-color;
+
+	&:hover {
+		color: @select-clear-hover-color;
+	}
+}
+.Select-clear {
+	font-size: @select-clear-size;
+}
+.Select--multi .Select-clear-zone {
+	width: @select-clear-width;
+}
+
+
+// arrow indicator
+
+.Select-arrow-zone {
+	width: (@select-arrow-width * 5);
+	padding-right: @select-arrow-width;
+}
+
+.Select-arrow {
+	border-color: @select-arrow-color transparent transparent;
+	border-width: @select-arrow-width @select-arrow-width (@select-arrow-width / 2);
+}
+.is-open .Select-arrow,
+.Select-arrow-zone:hover > .Select-arrow {
+	border-top-color: @select-arrow-color-hover;
+}
+
+.is-disabled > .Select-control {
+    background-color: transparent;
+    border-color:  @gray-lighter;
+    box-shadow: none; 
+  .Select-arrow { 
+    color: @gray-lighter;
+  }
+}
+
+//
+// Select Menu
+// ------------------------------
+
+
+// wrapper around the menu
+
+.Select-menu-outer {
+	.border-bottom-radius( @select-input-border-radius );
+	background-color: @select-input-bg;
+	border-color: @select-input-border-color;
+	border-top-color: mix(@select-input-bg, @select-input-border-color, 50%);
+  box-shadow: @select-dropdown-shadow;
+	max-height: @select-menu-max-height;
+}
+
+
+.Select-menu {
+	max-height: (@select-menu-max-height - 2px);
+}
+
+// options
+
+.Select-option {
+	background-color: @select-option-bg;
+	color: @select-option-color;
+	padding: @select-padding-vertical @select-padding-horizontal;
+
+	&:last-child {
+		.border-bottom-radius( @select-input-border-radius );
+	}
+
+	&.is-focused {
+		background-color: @select-option-focused-bg;
+		color: @select-option-focused-color;
+	}
+
+	&.is-disabled {
+		color: @select-option-disabled-color;
+	}
+
+}
+
+
+// no results
+
+.Select-noresults {
+	color: @select-noresults-color;
+	padding: @select-padding-vertical @select-padding-horizontal;
+}
+.Select-placeholder,
+ *:not(.Select--multi) > .Select-control .Select-value { 
+  line-height: 36px;
+}
+
+//
+// Multi-Select
+// ------------------------------
+
+
+// Base
+
+.Select--multi {
+
+	// add margin to the input element
+	.Select-input {
+    border: none;
+		margin-left: @select-padding-horizontal;
+	}
+
+	// reduce margin once there is value
+	&.has-value .Select-input {
+		margin-left: @select-item-gutter;
+	}
+
+	// Items
+	.Select-value {
+		background-color: @select-item-bg;
+		border-radius: @select-item-border-radius;
+		border-color: @select-item-border-color;
+		color: @select-item-color;
+		font-size: @select-item-font-size;
+		margin-left: @select-item-gutter;
+		margin-top: @select-item-gutter;
+	}
+
+
+
+	// label
+	.Select-value-label {
+		.border-right-radius( @select-item-border-radius );
+		padding: @select-item-padding-vertical @select-item-padding-horizontal;
+	}
+	a.Select-value-label {
+		color: @select-item-color;
+		cursor: pointer;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	// icon
+	.Select-value-icon {
+		cursor: pointer;
+		.border-left-radius( @select-item-border-radius );
+		border-right-color: @select-item-border-color;
+
+		// move the baseline up by 1px
+		padding: (@select-item-padding-vertical - 1) @select-item-padding-horizontal (@select-item-padding-vertical + 1);
+
+		&:hover,
+		&:focus {
+			background-color: @select-item-hover-bg;
+			color: @select-item-hover-color;
+		}
+		&:active {
+			background-color: @select-item-border-color;
+		}
+	}
+
+}
+
+.Select--multi.is-disabled {
+	.Select-value {
+		background-color: @select-item-disabled-bg;
+		border-color: @select-item-disabled-border-color;
+		color: @select-item-disabled-color;
+	}
+	// icon
+	.Select-value-icon {
+		border-right-color:  @select-item-disabled-border-color;
+
+		&:hover,
+		&:focus,
+		&:active {
+			background-color: @select-item-disabled-bg;
+		}
+	}
+}
+
+
+////
+
+.btn-group-select2-max {
+  
+  div.Select { 
+    width: 100%!important;
+  }
+  .Select-control { 
+     width: 100%!important;
+  }
+  :not(.Select--multi)>.Select-control .Select-input {
+    left: 0;
+    position: absolute;
+    right: 16px;
+     > input {
+    max-width: 100%;
+   }
+}
+  .Select-arrow-zone {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 8px;
+  }
+}
+.btn-group-select2-max {
+  .Select--multi {
+    .Select-clear-zone {
+    display: block;
+    position: absolute;
+    right: 24px;
+    top: 8px;
+   }
+     @media (max-width: @screen-xs-max){
+   
+      .Select-control { 
+        display: block;
+        white-space: normal;
+        height: auto;
+      }
+      .Select-arrow-zone,
+      .Select-clear-zone { 
+        float: right;
+      }
+      .Select-value { 
+        position: relative;
+        padding-left: 17px;
+        line-height: 1.2;  
+      }
+      .Select-value-icon {
+        position: absolute;
+        border-bottom: 1px solid rgba(66,165,245,.24);
+        left: 0;
+        }
+    }
+   }
+  }
+
+.select2-search__field { 
+  outline: none;
+}
+
+

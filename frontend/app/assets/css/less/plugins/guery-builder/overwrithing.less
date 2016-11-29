@@ -1,4 +1,40 @@
-//query-builder overwriting
+//==query-builder overwriting
+
+//color overwriting
+.query-builder .rule-container,
+.query-builder .rule-placeholder,
+.query-builder .rules-group-container {
+	border-radius: @border-radius-small;
+	border-color: @default-max-light;
+  background: @default-max-light ;
+  border-color: darken(@default-max-light, 5%);
+}
+
+.query-builder .rules-group-container {
+	border-color: darken(@default-max-light, 10%);
+}
+.query-builder .rule-container .rule-value-container {
+	border-left-color: darken(@default-max-light, 10%);
+}
+.query-builder .has-error {
+	background-color: @state-danger-text;
+	border-color: @state-danger-bg;
+}
+.query-builder .rules-list>:after,.query-builder .rules-list>:before {
+	border-color:darken(@default-max-light, 15%);
+}
+
+.query-builder p.filter-description {
+	background: @state-info-bg;
+	border-color: @state-info-bg;
+	color:@state-info-text;
+}
+.query-builder .rule-placeholder {
+	border-color:darken(@default-max-light, 15%);
+}
+
+
+//layout overwriting
 .query-builder { 
  .drag-handle,
  .error-container,
@@ -8,7 +44,6 @@
   .select2-container { 
     width: 100%!important;
   } 
-
 }
 
  .rule-container .rule-filter-container {
@@ -157,16 +192,40 @@
 
 .group-conditions {
   label.active {
-    //.btn-primary();
+   .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+
   }
 }
 .query-builder .rules-group-container .rules-group-header .group-actions .btn-success { 
-     //.btn-primary();
+   .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+
 }
 
 .query-builder .rules-group-container .rules-list .btn-danger,
 .query-builder .rules-group-container .rules-group-header .group-actions .btn-danger { 
-     //.btn-default();
+  .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+  box-shadow: @btn-default-shadow;
+  &:hover { 
+    background-color: lighten(@default-max-light, 2%);
+    border-color: lighten(@default-max-light, 2%); 
+  }
+  &:active,
+  &.active,
+  .open > .dropdown-toggle& {
+   background-color: lighten(@gray-lighter, 5%);
+   border-color: lighten(@gray-lighter, 5%);
+   border-top-color: @gray-lighter;
+   box-shadow: none;
+    &:hover,
+        &:focus,
+        &.focus {
+          background-color: @gray-lighter;
+          border-color:  @gray-lighter;
+           border-top-color:@gray-lighter;
+           box-shadow: none;
+        }
+      }
+
 }
 
 //combine filters

@@ -18,40 +18,38 @@ export default class NewViewInputs extends React.Component {
                         </span>
                 </div>
                 }
-                <div className='row-head-selector'>
-                    <div className='form-group'>
-                        <div className='col-sm-6'>
-                            <label data-localize='views.setup.new.name.title'>New View</label>
-                            <input
-                                type='text'
-                                className='form-control text-primary'
-                                data-localize='views.setup.new.name.help'
-                                placeholder='Set view name'
-                                value={newView.name}
-                                maxLength={config.VIEWS.MAX_NAME_LENGTH}
-                                onChange={(e) => this.onNameChange(e.target.value)}
-                            />
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-6'>
+                        <label data-localize='views.setup.new.name.title'>New View</label>
+                        <input
+                            type='text'
+                            className='form-control text-primary'
+                            data-localize='views.setup.new.name.help'
+                            placeholder='Set view name'
+                            value={newView.name}
+                            maxLength={config.VIEWS.MAX_NAME_LENGTH}
+                            onChange={(e) => this.onNameChange(e.target.value)}
+                        />
+                    </div>
+                    <div className='col-sm-6 input-group'>
+                        <label data-localize='general.description'>Description</label>
+                        <input
+                            type='text'
+                            className='form-control'
+                            data-localize='views.setup.new.description'
+                            placeholder='Set view description (optional)'
+                            value={newView.description}
+                            maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
+                            onChange={(e) => this.onDescriptionChange(e.target.value)}
+                        />
+                        <div className='input-group-btn btn-group-close'>
+                            <button type='button' className='btn-link-default'
+                                    onClick={() => this.onCancelClick()}>
+                                <i className='md-i'>close</i>
+                            </button>
                         </div>
-                        <div className='col-sm-6 input-group'>
-                            <label data-localize='general.description'>Description</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                data-localize='views.setup.new.description'
-                                placeholder='Set view description (optional)'
-                                value={newView.description}
-                                maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
-                                onChange={(e) => this.onDescriptionChange(e.target.value)}
-                            />
-                            <div className='input-group-btn btn-group-close'>
-                                <button type='button' className='btn-link-default'
-                                        onClick={() => this.onCancelClick()}>
-                                    <i className='md-i'>close</i>
-                                </button>
-                            </div>
-                        </div>
-                      </div>  
-                </div>
+                    </div>
+                  </div>  
             </div>
         );
     }

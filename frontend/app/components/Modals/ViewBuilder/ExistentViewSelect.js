@@ -25,14 +25,12 @@ export default class ExistentViewSelect extends React.Component {
                 <div className='form-group'>
                     {this.renderTitle()}
                 </div>
-                <div className='row-head-selector'>                
-                    {this.renderWarning(isDemoSession, selectedViewType)}
-                    <div className='form-group'>
-                        <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
-                            {this.renderViewSelector(views)}
-                            {this.renderButtonGroup(isDemoSession, isEditableView)}
-                        </div>  
-                    </div>
+                {this.renderWarning(isDemoSession, selectedViewType)}
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
+                        {this.renderViewSelector(views)}
+                        {this.renderButtonGroup(isDemoSession, isEditableView)}
+                    </div>  
                 </div>
             </div>
         );

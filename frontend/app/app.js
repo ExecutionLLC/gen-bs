@@ -7,8 +7,6 @@ window.JSZip = JSZip;
 
 require('file?name=[path][name].[ext]&context=./app'
     + '!./assets/vendor/jQuery-QueryBuilder/js/genomics-query-builder.standalone.js');
-require('file?name=[path][name].[ext]&context=./app'
-    + '!./assets/css/fonts/font-awesome/css/font-awesome.min.css');
 
 import React from 'react';
 import { render } from 'react-dom';
