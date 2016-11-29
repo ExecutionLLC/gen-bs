@@ -18,21 +18,20 @@ const controllers = new ControllersFacade(logger, services);
 const webServerHost = new WebServerHost(controllers, services, models);
 
 
-
 function setOnExitCallback() {
 
-    process.on('exit', () =>  {
+    process.on('exit', () => {
         webServerHost.stop((error) => {
             logger.error(error);
         })
     });
 
-    process.on('uncaughtException',(error) => {
+    process.on('uncaughtException', (error) => {
         logger.error(error);
         process.exit(99);
     });
 
-    process.on('SIGINT',() => {
+    process.on('SIGINT', () => {
         logger.info('Caught signal: SIGINT');
         process.exit(2);
     });

@@ -81,6 +81,7 @@ class SessionService extends ServiceBase {
         ], callback);
 
     }
+
     _stop(callback) {
         this._saveSession(this.systemSession, callback);
     }
@@ -153,7 +154,7 @@ class SessionService extends ServiceBase {
         ], callback);
     }
 
-    _findSystemRedisSession(callback){
+    _findSystemRedisSession(callback) {
         async.waterfall([
             (callback) => this.redisStore.get(this.systemSessionId, (error, result) => callback(error, result || null)),
             (rawSession, callback) => {

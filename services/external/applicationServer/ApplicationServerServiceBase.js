@@ -20,7 +20,12 @@ class ApplicationServerServiceBase extends ServiceBase {
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
 
         this.logger = this.services.logger;
-        const {rabbitMq:{host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName}, serverId} = this.services.config;
+        const {
+            rabbitMq: {
+                host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName
+            },
+            serverId
+        } = this.services.config;
         const wsQueueName = `ws_private_${serverId}`;
         /**
          * @type RpcProxyParams

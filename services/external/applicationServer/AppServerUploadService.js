@@ -59,12 +59,12 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (callback) => this.services.sessions.findSystemSession(callback),
             (systemSession, callback) => {
                 const currentOperation = _.find(systemSession.operations, operation => {
-                            return operation.getId() == currentOperationId;
+                            return operation.getId() === currentOperationId;
                         }
                     ) || null;
                 const currentUserId = !_.isNull(currentOperation) ? currentOperation.getUserId() : null;
                 const activeOperationUsersIds = _.filter(systemSession.operations, operation => {
-                    return operation.isActive && operation.getUserId() != currentUserId;
+                    return operation.isActive && operation.getUserId() !== currentUserId;
                 }).map(operation => operation.getUserId());
                 const orderedOperations = _.orderBy(systemSession.operations, ['timestamp'], ['asc']);
                 const nextOperation = _.find(orderedOperations, operation => {
@@ -74,7 +74,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     nextOperation.isActive = true;
                     async.waterfall([
                         (callback) => this.services.sessions.findById(nextOperation.getSessionId(), callback),
-                        (session, callback) => this.requestSampleProcessing(session, nextOperation.getId(), nextOperation.getSampleId(), null, (error) => callback(error))
+                        (session, callback) => this.requestSampleProcessing(
+                            session, nextOperation.getId(), nextOperation.getSampleId(), null, (error) => callback(error)
+                        )
                     ], callback)
                 } else {
                     callback(null);
@@ -107,19 +109,19 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (callback) => this.services.sessions.findSystemSession(callback),
             (systemSession, callback) => {
                 const currentOperation = _.find(systemSession.operations, operation => {
-                        return operation.getId() == operationId;
+                        return operation.getId() === operationId;
                     }
                 );
                 const userOperations = _.filter(systemSession.operations, operation => {
                     return operation.getUserId() == userId;
                 });
-                const activeUserOperation = _.filter(userOperations,operation =>{
-                   return operation.isActive;
+                const activeUserOperation = _.filter(userOperations, operation => {
+                    return operation.isActive;
                 });
-                if (activeUserOperation.length == 0 ){
+                if (activeUserOperation.length === 0) {
                     currentOperation.isActive = true;
                     this.requestSampleProcessing(session, operationId, sampleId, priority, callback);
-                }else {
+                } else {
                     callback(null, operationId);
                 }
             }
@@ -256,11 +258,20 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     } else {
                         // The upload operation is already completed on the app server.
                         operation.setSendCloseToAppServer(false);
-                        this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
-                            status: SESSION_STATUS.READY,
-                            progress: 100,
-                            metadata: samplesMetadata
-                        }, null, callback);
+                        this._createOperationResult(session,
+                            operation,
+                            null,
+                            operation.getUserId(),
+                            EVENTS.onOperationResultReceived,
+                            true,
+                            {
+                                status: SESSION_STATUS.READY,
+                                progress: 100,
+                                metadata: samplesMetadata
+                            },
+                            null,
+                            callback
+                        );
                     }
                 }
             ], callback);
