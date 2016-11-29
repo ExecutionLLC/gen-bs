@@ -34,6 +34,7 @@ class NavbarMain extends Component {
             dispatch(searchInResultsSortFilter());
         };
 
+        // count the same way as they displaying in FileUploadLeftPane
         const uploadHash = _.keyBy(filesProcesses, 'sampleId');
         const uploadedSamples = _.filter(samplesList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
