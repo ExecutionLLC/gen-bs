@@ -81,7 +81,8 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.sessions.findSystemSession(callback),
-            (session, callback) => this.services.operations.remove(session, operationId, (error) => callback(error))
+            (session, callback) => this.services.operations.remove(session, operationId, (error) => callback(error)),
+            (callback) => this.services.applicationServerUpload.toggleNextOperation(operationId, callback)
         ], callback);
     }
 }
