@@ -36,14 +36,10 @@ function setOnExitCallback() {
         logger.info('Caught signal: SIGINT');
         process.exit(2);
     });
-
-    // process.on('SIGTERM',() => {
-    //     logger.info('Caught signal: SIGTERM');
-    //     process.exit(3);
-    // });
 }
 
 setOnExitCallback();
+
 webServerHost.start((error) => {
     if (error) {
         logger.error(error);
