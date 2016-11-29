@@ -68,7 +68,7 @@ class SessionService extends ServiceBase {
 
     _start(callback) {
         async.waterfall([
-            (callback) =>this._findSystemRedisSession(callback),
+            (callback) => this._findSystemRedisSession(callback),
             (session, callback) => {
                 this.systemSession = Object.assign(session, {
                     cookie: {
