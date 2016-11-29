@@ -151,14 +151,14 @@ class SearchService extends ServiceBase {
                 const rows = _.map(data, rowData => {
                     const {viewData, mandatoryFields} = rowData;
                     const fieldValueHash = CollectionUtils.createHash(viewData,
-                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId||'source'}`
+                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId || 'source'}`
                     );
                     const searchKeyObject = _.find(viewData, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
                     
                     const fieldValueObjects = _.map(header, headerObject => {
-                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId||'source'}`];
+                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId || 'source'}`];
                         return fieldWithId ? fieldWithId.fieldValue: null
                     });
                     const searchKey = searchKeyObject.fieldValue;
