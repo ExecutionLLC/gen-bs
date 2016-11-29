@@ -348,7 +348,8 @@ class SamplesModel extends SecureModelBase {
     }
 
     _createGenotypeName(fileName, genotype) {
-        return genotype ? `${fileName}:${genotype}` : fileName;
+        const name = genotype ? `${fileName}:${genotype}` : fileName;
+        return name.substr(-50, 50);
     }
 
     /**
