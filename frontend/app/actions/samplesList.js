@@ -151,8 +151,9 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             editingSample,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) =>
-                dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                return dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response));
+            }
         ).then((response) => response.body
         ).then((updatedSample) => {
             dispatch(receiveUpdatedSample(sampleId, updatedSample));
