@@ -62,9 +62,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                             return operation.getId() == currentOperationId;
                         }
                     ) || null;
-                const operationId = !_.isNull(currentOperation) ? currentOperation.getUserId() : null;
+                const currentUserId = !_.isNull(currentOperation) ? currentOperation.getUserId() : null;
                 const activeOperationUsersIds = _.filter(systemSession.operations, operation => {
-                    return operation.isActive && operation.getUserId() != operationId;
+                    return operation.isActive && operation.getUserId() != currentUserId;
                 }).map(operation => operation.getUserId());
                 const orderedOperations = _.orderBy(systemSession.operations, ['timestamp'], ['asc']);
                 const nextOperation = _.find(orderedOperations, operation => {
@@ -245,24 +245,26 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 error: null
             }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
-            if (error) {
-                this.logger.error(`Error inserting new sample into database: ${error}`);
-                this._createOperationResult(session, operation, null, operation.getUserId(),
-                    EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
+            async.waterfall([
+                (callback) => this.toggleNextOperation(operation.getId(), callback),
+                (callback) => {
+                    if (error) {
+                        this.logger.error(`Error inserting new sample into database: ${error}`);
+                        this._createOperationResult(session, operation, null, operation.getUserId(),
+                            EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
 
-            } else {
-                // The upload operation is already completed on the app server.
-                operation.setSendCloseToAppServer(false);
-                async.waterfall([
-                    (callback) => this.toggleNextOperation(operation.getId(), callback),
-                    (callback) => this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
-                        status: SESSION_STATUS.READY,
-                        progress: 100,
-                        metadata: samplesMetadata
-                    }, null, callback)
-                ], callback);
+                    } else {
+                        // The upload operation is already completed on the app server.
+                        operation.setSendCloseToAppServer(false);
+                        this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
+                            status: SESSION_STATUS.READY,
+                            progress: 100,
+                            metadata: samplesMetadata
+                        }, null, callback);
+                    }
+                }
+            ], callback);
 
-            }
         });
     }
 }
