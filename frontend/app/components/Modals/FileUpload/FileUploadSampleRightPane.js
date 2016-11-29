@@ -48,7 +48,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                 </div>
             );
         }
-        return currentUploadId ? this.renderLoad() : this.renderUpload(isDemo);
+        return currentUploadId != null ? this.renderLoad() : this.renderUpload(isDemo);
     }
 
     renderLoad() {
