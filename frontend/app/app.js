@@ -5,8 +5,6 @@ require('file?name=index.html!./index.html');
 const JSZip = require('jszip');
 window.JSZip = JSZip;
 
-import './assets/vendor/select2/js/select2.full.min.js';
-
 require('file?name=[path][name].[ext]&context=./app'
     + '!./assets/vendor/jQuery-QueryBuilder/js/genomics-query-builder.standalone.js');
 require('file?name=[path][name].[ext]&context=./app'
