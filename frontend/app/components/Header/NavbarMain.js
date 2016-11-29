@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
@@ -8,6 +9,9 @@ import SavedFiles from './NavbarMain/SavedFiles';
 import Auth from './NavbarMain/Auth';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
+import {fileUploadStatus} from '../../actions/fileUpload';
+import {entityType} from '../../utils/entityTypes';
+
 
 class NavbarMain extends Component {
 
@@ -18,7 +22,9 @@ class NavbarMain extends Component {
     render() {
         const {
             dispatch,
-            variantsTable: {selectedRowIndices,searchInResultsParams:{topSearch:{search}}}
+            variantsTable: {selectedRowIndices, searchInResultsParams: {topSearch: {search}}},
+            samplesList,
+            fileUpload: {filesProcesses}
         } = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
@@ -27,6 +33,34 @@ class NavbarMain extends Component {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
             dispatch(searchInResultsSortFilter());
         };
+
+        // count the same way as they displaying in FileUploadLeftPane
+        const uploadHash = _.keyBy(filesProcesses, 'sampleId');
+        const uploadedSamples = _.filter(samplesList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
+        const samplesData = _.map(uploadedSamples, sample => {
+            const {originalId} = sample;
+            const currentUpload = uploadHash[originalId];
+            return {
+                upload: currentUpload,
+                sample: sample
+            };
+        });
+        const newSamplesCount = samplesData.reduce(
+            (count, uploadData) => {
+                const {upload, sample} = uploadData;
+                if (sample &&
+                    upload &&
+                    sample.type !== entityType.HISTORY &&
+                    _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus)
+                ) {
+                    return count + 1;
+                } else {
+                    return count;
+                }
+            },
+            0
+        );
+
         return (
 
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
@@ -37,6 +71,7 @@ class NavbarMain extends Component {
 
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
+                        badge={newSamplesCount || null}
                     />
                     <AnalysisButton
                         openAnalysisModal={() => this.props.openAnalysisModal()}
@@ -60,14 +95,16 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ui, ws, variantsTable} = state;
+    const {auth, userData, ui, ws, variantsTable, samplesList, fileUpload} = state;
 
     return {
         auth,
         userData,
         ui,
         ws,
-        variantsTable
+        variantsTable,
+        samplesList,
+        fileUpload
     };
 }
 
