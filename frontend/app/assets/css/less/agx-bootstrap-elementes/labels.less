@@ -1,5 +1,5 @@
 //
-// Labels
+// Additional labels styles
 // --------------------------------------------------
 
 .label {
@@ -10,35 +10,8 @@
   font-family: "Roboto-Medium";
 }
 
-// Add new color
-.label-default {
-  .label-variant(@label-default-bg);
-  color: @text-color;
-}
-.label-dark-default {
-  .label-variant(@label-dark-default-bg);
-  color:#fff;  
-  
-}
-
-.label-inverse {
-  background: fade(#fff, 80%);
-  color: @brand-primary;
-}
-//Add round label 
-.label-fix-width { 
- border-radius: 50%;
-    display: block;
-    font-size: 12px;
-    height: 20px;
-    line-height: 17px;
-    margin-bottom: 0;
-    padding: 2px;
-    text-align: center;
-    width: 20px;
-}
-
-.label-date { 
+//Define group text labels
+.label-group-date { 
   font-size: @font-size-small;
   color: darken(@text-muted, 15%);
   @media (min-width: @screen-sm) {
@@ -62,3 +35,34 @@
     margin-top: 0;     
   }
 }
+//==label modificators, use as class="label-group label-group-[x]"
+
+// Add new color
+.label-default {
+  .label-variant(@label-default-bg);
+  color: @text-color;
+}
+.label-dark-default {
+  .label-variant(@label-dark-default-bg);
+  color:#fff;  
+  
+}
+.label-inverse {
+  background: fade(#fff, 80%);
+  color: @brand-primary;
+}
+
+//Add new form  
+.label-round { 
+ border-radius: 50%;
+    display: block;
+    font-size: 12px;
+    height: 20px;
+    line-height: 17px;
+    margin-bottom: 0;
+    padding: 2px;
+    text-align: center;
+    width: 20px;
+}
+
+

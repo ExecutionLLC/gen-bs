@@ -63,8 +63,8 @@ export default class ViewBuilder extends React.Component {
 
                 <div className='form-group' key={Math.round(Math.random()*100000000).toString()}>
 
-                    <div className='col-xs-12 col-sm-6 btn-group-select2'>
-                        <div className='btn-group btn-group-select2-max'>
+                    <div className='col-xs-12 col-sm-6 btn-group-select-group'>
+                        <div className='btn-group btn-group-select-group-max'>
                             <Select
                                 options={selectOptions}
                                 value={currentValue}
@@ -77,8 +77,8 @@ export default class ViewBuilder extends React.Component {
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
                     </div>
-                    <div className='col-xs-12 col-sm-6 btn-group-select2'>
-                        <div className='btn-group btn-group-select2-max'>
+                    <div className='col-xs-12 col-sm-6 btn-group-select-group'>
+                        <div className='btn-group btn-group-select-group-max'>
                             <Select
                                 options={keywordsSelectOptions}
                                 multi={true}

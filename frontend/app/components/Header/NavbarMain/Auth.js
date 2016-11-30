@@ -62,7 +62,7 @@ class Auth extends Component {
                             <a onClick={ () => { this.props.dispatch(logout()); } }
                                href='#'
                                type='button'
-                               className='btn btn-link btn-uppercase'
+                               className='btn btn-primary btn-uppercase'
                                id='logout'>
                                 <span>Logout</span>
                             </a>

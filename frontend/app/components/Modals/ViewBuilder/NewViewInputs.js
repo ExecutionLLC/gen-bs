@@ -18,7 +18,7 @@ export default class NewViewInputs extends React.Component {
                         </span>
                 </div>
                 }
-                <div className='form-group row-head-selector'>
+                <div className='form-group row-new-item'>
                     <div className='col-sm-6'>
                         <label data-localize='views.setup.new.name.title'>New View</label>
                         <input

@@ -1,74 +1,50 @@
-
-.btn-group-full-width { 
-  width: 100%;
-   padding: 0 !important;
-  > button { 
-     width: 100%;
-     text-align: left;
-     .caret { 
-      position: absolute;
-    right: 10px;
-    top: 14px;
-     }
-  }
+.btn-group-vertical>.btn.active,
+.btn-group-vertical>.btn:active,
+.btn-group-vertical>.btn:focus,
+.btn-group-vertical>.btn:hover,
+.btn-group>.btn.active,
+.btn-group>.btn:active,
+.btn-group>.btn:focus,
+.btn-group>.btn:hover { 
+  z-index: auto;
 }
 
-
-.btn-group-tools { 
-   position: absolute;
-    right: 15px;
-    top: 0px;
-//visibility: hidden;
-    .btn { 
-      color:#888;
-    }
-}
-
-.btn-group-confirm { 
-  display: none;
-}
-
-.btn-group-fix { 
-  button { 
-    float: left;
-    i { 
-      margin: -4px;
-    }
-  }
-}
-
+//==btn-group modificators, use as class="btn-group btn-group-[x]"
 .btn-group-close { 
   padding-top: 2.2em;
   min-width: 82px;
 }
-.btn-group-select2 { 
+
+//for group with select component, contain inner block class="btn-group"
+.btn-group-select-group { 
   .btn-group { 
     white-space: nowrap;
     .btn { 
-     
       +.btn { 
-      margin-left: -0.4em;
+        margin-left: -0.4em;
       }
     }
   }
   @media (min-width: @screen-sm){ 
-      .btn-group { 
-        display: table-cell;
-        vertical-align: top;
-        padding-right: 5px;
-        width: 1%;
-        .btn {
-           float: none;
-        }
-      &.btn-group-select2-max { 
-       width: 100% !important;
+    .btn-group { 
+      display: table-cell;
+      vertical-align: top;
+      padding-right: 5px;
+      width: 1%;
+      .btn {
+        float: none;
+      }
+      &.btn-group-select-group-max { 
+        width: 100% !important;
       } 
     }
   } 
 }
+
+//btn-group modificator for future interface versia
 .btn-group-xlg { 
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
   .btn {
     min-height: 80px;
     min-width: 80px;
@@ -81,12 +57,43 @@
       margin-right: 8px;
     }
     span { 
-    color: darken(@text-muted, 15%);
-  @media (min-width: @screen-sm) {
-    color: @text-muted;
-  }
+      color: darken(@text-muted, 15%);
+      @media (min-width: @screen-sm) {
+        color: @text-muted;
+      }
     }
-
+  }
+}
+.btn-group-full-width { 
+  width: 100%;
+  padding: 0 !important;
+  > button { 
+    width: 100%;
+    text-align: left;
+    .caret { 
+      position: absolute;
+      right: 10px;
+      top: 14px;
+    }
+  }
+}
+.btn-group-tools { 
+  position: absolute;
+  right: 15px;
+  top: 0px;
+  .btn { 
+    color:#888;
+  }
+}
+.btn-group-confirm { 
+  display: none;
+}
+.btn-group-fix { 
+  button { 
+    float: left;
+    i { 
+      margin: -4px;
+    }
   }
 }
 .btn-group-with-tooltip { 
@@ -101,15 +108,17 @@
       .btn { 
         border-radius:@btn-border-radius-base 0 0  @btn-border-radius-base;
       }  
-     }
+    }
     &:last-child { 
       .btn { 
         border-radius:0 @btn-border-radius-base  @btn-border-radius-base 0 ;
       }  
-     }
+    }
   }
 }
-
 .btn-group-edit-btns {
-  z-index: 2; position: relative; top: 16px; float: right;
+  z-index: 2;
+  position: relative;
+  top: 16px;
+  float: right;
 }

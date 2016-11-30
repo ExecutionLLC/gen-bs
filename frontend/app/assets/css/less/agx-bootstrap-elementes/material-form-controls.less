@@ -1,4 +1,4 @@
-
+// Materail design modificator for form-control, use as class="form-control material-input" class="form-control material-input-sm" 
 .form-control.material-input,
 .form-control.material-input-sm {
   padding-left: 0;
@@ -95,29 +95,7 @@
 }
 
 
-.material-select { 
-  + .select2-container--default { 
-     .select2-selection--single { 
-       border-width: 0 0 1px;
-       border-color:  @gray-lighter;
-       box-shadow: none;
-       background:transparent;
-       border-radius: 0;
-       height: 40px;
-       
-       .select2-selection__rendered { 
-         padding-left: 0;
-         padding-right: 0;
-         line-height: 40px;
-       }
-       .select2-selection__arrow b {
-       border-color: @gray transparent transparent;
-       
-       }
-  }
-
-     }
-} 
+//Add specify animate label over input, use only with .material-input
 .material-label { 
     z-index: 1;
     font-size: @font-size-small;
@@ -132,7 +110,15 @@
      line-height: 1em;
      position: absolute;
 }
+//Add specify text message label after input, use only with .material-input
+.material-input-message { 
+  position: relative;
+  font-size: @font-size-small;
+  position: absolute;
+  line-height: @font-size-small;
+}
 
+//material-input-group must contain block class="form-control material-input" + block class="material-label" + optional block class="material-input-message"
 .material-input-group { 
   position: relative;
   height:  @material-input-group-height;
@@ -148,12 +134,7 @@
   }
 }
 
-.material-input-message { 
-  position: relative;
-  font-size: @font-size-small;
-  position: absolute;
-  line-height: @font-size-small;
-}
+
 .material-input-group {
   .material-input-message { 
      bottom: -6px;

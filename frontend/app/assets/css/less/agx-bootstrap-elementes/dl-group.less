@@ -1,10 +1,10 @@
 .dl-group-flex-horizontal {
-    align-items: stretch;
-    display: flex;
-    flex-wrap: wrap;
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
     
   dl {
-   width: 100%; 
+    width: 100%; 
     margin-bottom: 12px;
     dt {
       float: left;
@@ -17,14 +17,14 @@
     }
     dd {
       margin-left: @dl-flex-horizontal-offset;
-    &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
-   }
+      &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
+    }
     &.dl-btns { 
       margin-right: 50%;
     }
-  @media (min-width: @screen-sm) {
-    width: 50%; 
-   }
+    @media (min-width: @screen-sm) {
+      width: 50%; 
+    }
   }
 } 
 
@@ -40,7 +40,7 @@
       display: inline;
     }
     dt:after { 
-      content: ':';
-      margin-left: .1em;
-    }
+    content: ':';
+    margin-left: .1em;
+  }
 }

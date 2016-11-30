@@ -1,4 +1,22 @@
-
+//Additional list-group styles, it will in new interface versia 
+.list-group-header {
+  padding: 10px 20px;
+  border-bottom: 1px solid @gray-lighter;
+} 
+.list-group-results { 
+ >li { 
+   &:hover{ 
+     background: @default-max-light;
+   }
+   &:active { 
+     background:@component-active-bg;
+     color: @component-active-color;
+     * {
+        color: @component-active-color;
+     }
+   }
+ }  
+}
 .list-group { 
   &.list-group-media {
      margin: 0;
@@ -52,22 +70,4 @@
        padding: 0;
      }
   }
-}
-.list-group-header {
-  padding: 10px 20px;
-  border-bottom: 1px solid @gray-lighter;
-} 
-.list-group-results { 
- >li { 
-   &:hover{ 
-     background: @default-max-light;
-   }
-   &:active { 
-     background:@component-active-bg;
-     color: @component-active-color;
-     * {
-        color: @component-active-color;
-     }
-   }
- }  
 }

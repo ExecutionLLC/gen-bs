@@ -31,7 +31,7 @@ export default class ExistentFilterSelect extends Component {
                 </div>
                 {this.renderWarning(isDemoSession, selectedFilter.type, texts)}
                 <div className='form-group row-head-selector'>
-                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select-group'>
                         {this.renderFiltersSelector(filters)}
                         {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts)}
                     </div>
@@ -68,7 +68,7 @@ export default class ExistentFilterSelect extends Component {
         }));
 
         return (
-            <div className='btn-group btn-group-select2-max'>
+            <div className='btn-group btn-group-select-group-max'>
                 <Select
                     options={selectItems}
                     value={this.getSelectedFilter().id}

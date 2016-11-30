@@ -1,12 +1,14 @@
+// Additional style for alert
 
 .alert {
- border:none; 
- position: relative; 
+  border:none; 
+  position: relative; 
 }
 
 // Alternate styles
 //
-// Generate contextual modifier classes for colorizing the alert.
+// Generate contextual modifier classes for colorizing the alert. Different from bootstrap - alert state-icon 
+
 .alert-primary {
   .alert-variant(@alert-primary-bg; @alert-primary-border; @alert-primary-text; @alert-primary-state-icon);
 }
@@ -72,8 +74,6 @@
   min-width: 140px;
 }
 
-
-
 .alert + .form-group { 
   margin-top: -10px;
 }
@@ -81,60 +81,12 @@
   btn-group.pull-right { 
     margin: 0 5px 0 0;
   }
-    @media (min-width: @screen-sm) {
+  @media (min-width: @screen-sm) {
    .btn-group { 
-     margin: -10px 0px 0 0;
-    &.pull-right { 
-      margin-left: 5px;
+      margin: -10px 0px 0 0;
+      &.pull-right { 
+        margin-left: 5px;
+      }
     }
-    }
-  }
-}
-.quolity-box-temp { 
-  position: relative;
-
-  .warning { 
-    position: absolute;
-    left: 960px;
-
-    &.warning1 {
-     top:24px;      
-    }
-    &.warning2 {
-     top:77px;      
-    }
-    &.warning3 {
-     top:130px;      
-    }
-    &.warning4 {
-     top:184px;      
-    }
-
-  }
-  
-  .measure { 
-    background: #616e7e none repeat scroll 0 0;
-    border-radius: 2px;
-    color: #fff;
-    font-size: 12px;
-    padding: 0.2em 0.5em;
-    position: absolute;
-    &.measure1 {
-    left: 525px;
-    top: 4px;     
-    }
-    &.measure2 {
-     left: 558px;
-    top: 58px;     
-    }
-    &.measure3 {
-    left: 889px;
-    top: 113px;    
-    }
-    &.measure4 {
-    left: 893px;
-    top: 166px;      
-    }
-
   }
 }

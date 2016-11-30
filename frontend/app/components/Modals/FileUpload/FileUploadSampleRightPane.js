@@ -257,7 +257,7 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     renderSampleDates(createdDate, lastQueryDate) {
         return (
-            <div className='label-date'>
+            <div className='label-group-date'>
                 <label>
                     Uploaded: {formatDate(createdDate)}
                 </label>

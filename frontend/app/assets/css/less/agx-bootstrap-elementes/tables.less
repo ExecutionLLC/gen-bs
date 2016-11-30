@@ -1,3 +1,4 @@
+// Overwriten bootstrap styles for table
 .table-row-variant(active; @table-bg-active);
 
 .table { 
@@ -11,7 +12,7 @@
 }
 
 
-
+//Modifiers for table, use as class ="table table-[x]"
 .table {
   &.table-transparent {
     background: transparent; 
@@ -32,12 +33,7 @@
     min-width: 100%;
     > tbody + tbody {
        border-top-width: 0px;
-     }
-   .table { 
-     margin-bottom: 0;
-     
-   }
-    
+    }
     .table-variants-head {
       background-color: #fff;
    
@@ -171,136 +167,123 @@
      }
     .table-variants-head,
     .table-variants-body { 
-   
-      tr { 
-      td { 
+      tr {
+        &:hover { 
+         cursor: pointer; 
+        }  
+        td { 
           font-size: ceil((@font-size-base * 0.98));
           padding: 0;
           border:none;
           height: 35px;
           @media (min-width: @screen-sm) { 
-             font-size: ceil((@font-size-base * 0.92));
-
+            font-size: ceil((@font-size-base * 0.92));
           }
-
-           > div { 
-               width: 120px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap; 
-                &.table-loader {
-                   position: absolute;
-                   left: 0;
-                   right: 0;
-                   text-align: center;
-                   width: auto;
-                   line-height: 1;
-                   padding: 0;
-                   overflow: visible;
-                   margin-top:9px;
-                   .md-i { 
-                     margin: -12px 0;
-                   }
-                }
+          > div { 
+              width: 120px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; 
+              &.table-loader {
+                 position: absolute;
+                 left: 0;
+                 right: 0;
+                 text-align: center;
+                 width: auto;
+                 line-height: 1;
+                 padding: 0;
+                 overflow: visible;
+                 margin-top:9px;
+                 .md-i { 
+                   margin: -12px 0;
+                 }
+              }
            }
-          &.btntd {
-  
-            
-             > div {
+            &.btntd {
+              > div {
                 text-align: center; 
                 width: 32px; 
                 max-width: 32px;
-                padding: 1px 4px;
-             }
-            
-             .checkbox { 
-               margin: 0;
-             }
-             button { 
+                padding: 5px 4px;
+              }
+              .checkbox { 
+                margin:0;
+              }
+              button { 
                 float: right;
-             }
+              }
               .md-i { 
                 font-size: 18px;
                 margin: -4px -8px;
                 vertical-align: middle;
               }     
-           }
-      
-          &.comment {
-  
-            > div{ 
-              width: 158px; 
-              max-width:  158px;
             }
-            .comment-link { 
-              &:extend(.btn-link-default);
+            &.comment {
+              > div { 
+                width: 158px; 
+                max-width:  158px;
+              }
+              .comment-link { 
+                &:extend(.btn-link-default);
+              }          
             }
-          
-        }
-          &.tooltip-in-td {
-            > div {           
-            overflow: visible;
-              > span { 
-                display: inline-block;
+            &.tooltip-in-td {
+              > div {           
+              overflow: visible;
+                > span { 
+                  display: inline-block;
+                }
               }
             }
+          }
+        td:first-child { 
+          display: table-cell;
+          border-right: 1px solid #f3f4f7;
+          + td { 
+            display: none;
+          }
         }
       }
-      td:first-child { 
-        display: table-cell;
-        border-right: 1px solid #f3f4f7;
-        + td { 
-          display: none;
-        }
-      }
-        &:hover { 
-         cursor: pointer; 
-        } 
-  
-      
-    
-     }
-      
-   }
+    }
     .table-variants-body { 
-       height: auto!important; 
-       z-index: 2;
-       background: -webkit-linear-gradient(
-                    to bottom,
-                    @table-bg-accent,
-                    @table-bg-accent  50%,
-                    #fff  50%,
-                    #fff
-                  );
-         background: -o-linear-gradient(
-                    to bottom,
-                    @table-bg-accent,
-                    @table-bg-accent  50%,
-                    #fff  50%,
-                    #fff
-                  );
-         background: linear-gradient(
-                    to bottom,
-                    @table-bg-accent,
-                    @table-bg-accent  50%,
-                    #fff  50%,
-                    #fff
-                  );
-        background-size: 100% 70px;
-        background-attachment: local; 
-
-
+      height: auto!important; 
+      z-index: 2;
+      background:#fff;
       tr { 
-         td {
-           > div {
+        td {
+            > div {
                padding:@table-cell-padding @table-cell-padding/2 ;
             }
         }
-       } 
-
+      } 
+      @media (min-width: @screen-sm) {
+          background: -webkit-linear-gradient(
+                    to bottom,
+                    @table-bg-accent,
+                    @table-bg-accent  50%,
+                    #fff  50%,
+                    #fff
+                  );
+          background: -o-linear-gradient(
+                    to bottom,
+                    @table-bg-accent,
+                    @table-bg-accent  50%,
+                    #fff  50%,
+                    #fff
+                  );
+          background: linear-gradient(
+                    to bottom,
+                    @table-bg-accent,
+                    @table-bg-accent  50%,
+                    #fff  50%,
+                    #fff
+                  );
+          background-size: 100% 70px;
+          background-attachment: local; 
+        }
     }
-  
-   &.table-select-mode { 
+    //modifier for table-variants, show checkboxes
+    &.table-select-mode { 
      .table-variants-head,
     .table-variants-body { 
       border-top: solid 1px @default-max-light;
@@ -340,13 +323,11 @@
      }
    }
   @media (max-width:@grid-float-breakpoint-max) {
-      &.table-responsive-transform { 
+    &.table-responsive-transform { 
       thead { 
         display: none;
-      }
-      
+      }      
       tbody {
-     
         > tr { 
           display: block;
           position: relative;
@@ -383,6 +364,8 @@
     }
   }
 }
+
+//utilites
 .table-variant-footer { 
     bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -444,16 +427,6 @@
       margin-left: .25em;
     }
  }                 
-
-
-
-.table-history { 
-  dl {
-    .dl-horizontal();
-    margin-bottom: 8px;
-  }
-}
-
 .table-link { 
   &:hover { 
     cursor: pointer;

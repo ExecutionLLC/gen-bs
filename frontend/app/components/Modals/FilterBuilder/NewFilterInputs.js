@@ -19,7 +19,7 @@ export default class NewFilterInputs extends Component {
                         </span>
                 </div>
                 }
-                <div className='form-group row-head-selector'>
+                <div className='form-group row-new-item'>
                       <div className='col-sm-6'>
                           <label data-localize='filters.setup.new.name.title'>New {texts.Filter}</label>
                           <input
