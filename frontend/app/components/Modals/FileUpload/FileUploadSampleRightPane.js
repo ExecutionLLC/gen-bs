@@ -69,7 +69,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                                 this.onFilesDrop(e.dataTransfer.files);
                                             }}
                         >
-                            <input // FIXME limit input
+                            <input
                                 onChange={ (e) => {
                                     this.onUploadChanged(e.target.files);
                                     e.target.value = null;

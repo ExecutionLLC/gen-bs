@@ -11,6 +11,7 @@ import {
     setCurrentSampleId,
     setEditingSampleId
 } from '../../../actions/samplesList';
+import config from '../../../../config';
 
 export default class SampleEditableFieldsPanel extends ComponentBase {
     constructor(...args) {
@@ -114,10 +115,11 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
             <dl key={field.id}>
                 <dt>{field.label}</dt>
                 <dd>
-                    <input // FIXME limit
+                    <input
                         type='text'
                         className='form-control'
                         value={fieldValue}
+                        maxLength={config.SAMPLES.MAX_PROPERTY_LENGTH}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
                         disabled={disabled}
                     />
