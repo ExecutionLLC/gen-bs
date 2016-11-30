@@ -168,8 +168,7 @@ function addSamples(state, action) {
     const sortedSamples = _.sortBy(newSampleList, (sample) => sample.fileName.toLowerCase());
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
-        editingSample: null
+        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples)
     };
 }
 
@@ -200,8 +199,7 @@ function updateSampleFields(state, action) {
     });
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(newSampleList),
-        editingSample: null
+        hashedArray: ImmutableHashedArray.makeFromArray(newSampleList)
     };
 }
 
