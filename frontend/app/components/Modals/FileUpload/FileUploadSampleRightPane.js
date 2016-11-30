@@ -11,7 +11,8 @@ import {
     updateSampleText,
     requestUpdateSampleTextAsync,
     sampleSaveCurrentIfSelected,
-    setCurrentSampleId
+    setCurrentSampleId,
+    samplesListServerRemoveSample
 } from '../../../actions/samplesList';
 import config from '../../../../config';
 
@@ -246,7 +247,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleDescription() {
-        const {samplesList: {editingSample: {editableFields: {description}, id}}} = this.props;
+        const {auth: {isDemo}, samplesList: {editingSample: {editableFields: {description}, id, type}}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -257,6 +258,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                         data-localize='query.settings.description'
                         maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, null, e)}
+                        disabled={!entityTypeIsEditable(type) || isDemo}
                     />
                 </div>
             </div>
@@ -274,7 +276,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleFileName() {
-        const {samplesList: {editingSample: {editableFields: {name}, id}}} = this.props;
+        const {auth: {isDemo}, samplesList: {editingSample: {editableFields: {name}, id, type}}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -285,6 +287,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                         data-localize='query.settings.name'
                         maxLength={config.UPLOADS.MAX_NAME_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, e, null)}
+                        disabled={!entityTypeIsEditable(type) || isDemo}
                     />
                 </div>
             </div>
@@ -304,14 +307,17 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderDeleteSampleButton() {
-        return (
-            <button
-                className='btn btn-sm btn-link-light-default pull-right btn-right-in-form disabled'
-                onClick={() => this.onDeleteSampleClick()}
-            >
-                <span data-localize='query.delete_sample'>Delete sample</span>
-            </button>
-        );
+        const {samplesList: {editingSample}} = this.props;
+        if (entityTypeIsEditable(editingSample.type)) {
+            return (
+                <button
+                    className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
+                    onClick={() => this.onSampleItemDelete(editingSample.id)}
+                >
+                    <span data-localize='query.delete_sample'>Delete sample</span>
+                </button>
+            );
+        }
     }
 
     onSelectForAnalysisClick(e, sampleId) {
@@ -321,7 +327,8 @@ export default class FileUploadSampleRightPane extends React.Component {
         closeModal('upload');
     }
 
-    onDeleteSampleClick() {
-        throw new Error('Not implemented');
+    onSampleItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(samplesListServerRemoveSample(id));
     }
 }
