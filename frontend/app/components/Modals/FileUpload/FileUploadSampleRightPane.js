@@ -251,7 +251,7 @@ export default class FileUploadSampleRightPane extends React.Component {
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
-                        value={description}
+                        value={description || ''}
                         placeholder='Sample description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
@@ -261,11 +261,6 @@ export default class FileUploadSampleRightPane extends React.Component {
                 </div>
             </div>
         );
-    }
-
-    onSampleCommentChange(description) {
-        console.log(description);
-        throw new Error('Not impemented');
     }
 
     renderSampleDates(createdDate) {

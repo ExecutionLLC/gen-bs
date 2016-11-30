@@ -149,6 +149,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
 
     _handleUploadError(user, session, operation, message, callback) {
         const error = ErrorUtils.createAppServerInternalError(message);
+        this._handleError(user, operation, error, session, callback)
+    }
+
+    _handleError(user, operation, error, session, callback) {
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.update(user, {
                 id: operation.getId(),
@@ -171,7 +175,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 EVENTS.onOperationResultReceived,
                 true,
                 null,
-                ErrorUtils.createAppServerInternalError(message),
+                error,
                 callback
             )
         ], callback);
@@ -252,9 +256,8 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 (callback) => {
                     if (error) {
                         this.logger.error(`Error inserting new sample into database: ${error}`);
-                        this._createOperationResult(session, operation, null, operation.getUserId(),
-                            EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
-
+                        const serverError = ErrorUtils.createInternalError(error.message);
+                        this._handleError(user, operation, serverError, session, callback);
                     } else {
                         // The upload operation is already completed on the app server.
                         operation.setSendCloseToAppServer(false);
