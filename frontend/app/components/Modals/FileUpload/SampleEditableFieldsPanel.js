@@ -114,7 +114,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
             <dl key={field.id}>
                 <dt>{field.label}</dt>
                 <dd>
-                    <input
+                    <input // FIXME limit
                         type='text'
                         className='form-control'
                         value={fieldValue}
