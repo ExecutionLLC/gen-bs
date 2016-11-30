@@ -66,13 +66,13 @@ function reduceReceiveUpdatedSample(state, action) {
     const newHashedArray = ImmutableHashedArray.replaceItemId(hashedArray, updatedSampleId, updatedSample);
 
     const newEditingSample = editingSample && editingSample.id === updatedSampleId ?
-        {
+        ({ // brackets to calm down the linter
             ...updatedSample,
             editableFields: {
                 ...updatedSample.editableFields,
                 fields: editingSample.editableFields.fields
             }
-        } :
+        }) :
         editingSample;
 
     return {
