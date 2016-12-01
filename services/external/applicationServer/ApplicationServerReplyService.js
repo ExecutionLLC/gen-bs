@@ -52,6 +52,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
      * @param callback
      */
     onRpcReplyReceived(sessionId, operationId, rpcMessage, callback) {
+        const {replyTo} = rpcMessage;
         async.waterfall([
             (callback) => this.services.sessions.findById(sessionId, callback),
             (session, callback) => this.services.operations.find(session, operationId,
@@ -76,7 +77,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
             // We are working with the session by ourselves, so need to explicitly save it here.
             (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
         ], (error) => {
-            if (error instanceof OperationNotFoundError) {
+            if (error instanceof OperationNotFoundError && replyTo) {
                 this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
             } else {
                 callback(error);
@@ -87,7 +88,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
     _sendRpcNotFoundOperation(operationId, rpcMessage, callback) {
         const {id, replyTo} = rpcMessage;
         const method = METHODS.closeSession;
-        this._rpcProxySend(id, operationId, method, null, replyTo, null, (error)=> callback(error));
+        this._rpcProxySend(id, operationId, method, null, replyTo, null, (error) => callback(error));
     }
 
     _emitEvent(eventName, operationResult, callback) {
