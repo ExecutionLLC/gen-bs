@@ -3,13 +3,14 @@
 const async = require('async');
 const _ = require('lodash');
 
-const ServiceBase = require('../../ServiceBase');
+const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const ReflectionUtils = require('../../../utils/ReflectionUtils');
 const UploadOperation = require('../../operations/UploadOperation');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
+const OperationNotFoundError = require('../../../utils/errors/OperationNotFoundError');
 
 /**
  * @typedef {Object} AppServerResult
@@ -22,7 +23,7 @@ const EVENTS = require('./AppServerEvents');
  * @property {(AppServerErrorResult|undefined)}error
  * */
 
-class ApplicationServerReplyService extends ServiceBase {
+class ApplicationServerReplyService extends ApplicationServerServiceBase {
     constructor(services, models) {
         super(services, models);
 
@@ -75,8 +76,18 @@ class ApplicationServerReplyService extends ServiceBase {
             // We are working with the session by ourselves, so need to explicitly save it here.
             (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
         ], (error) => {
-            callback(error);
+            if (error instanceof OperationNotFoundError) {
+                this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
+            } else {
+                callback(error);
+            }
         });
+    }
+
+    _sendRpcNotFoundOperation(operationId, rpcMessage, callback) {
+        const {id, replyTo} = rpcMessage;
+        const method = METHODS.closeSession;
+        this._rpcProxySend(id, operationId, method, null, replyTo, null, (error)=> callback(error));
     }
 
     _emitEvent(eventName, operationResult, callback) {

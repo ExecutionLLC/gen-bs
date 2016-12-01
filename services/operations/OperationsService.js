@@ -10,6 +10,7 @@ const UploadOperation = require('./UploadOperation');
 const SystemOperation = require('./SystemOperation');
 const KeepAliveOperation = require('./KeepAliveOperation');
 const ReflectionUtils = require('../../utils/ReflectionUtils');
+const OperationNotFoundError = require('../../utils/errors/OperationNotFoundError');
 
 const OPERATION_CLASSES = [SearchOperation, UploadOperation, SystemOperation, KeepAliveOperation];
 
@@ -150,7 +151,7 @@ class OperationsService extends ServiceBase {
     }
 
     _onOperationNotFound(callback) {
-        callback(new Error('Operation is not found'));
+        callback(new OperationNotFoundError('Operation is not found'));
     }
 
     _closeOperationIfNeeded(session, operation, callback) {

@@ -74,6 +74,10 @@ class ApplicationServerServiceBase extends ServiceBase {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
         const messageId = this.createAppServerSessionId(operation);
+        this._rpcProxySend(messageId, operationId, method, params, queryNameOrNull, priority, callback);
+    }
+
+    _rpcProxySend(messageId, operationId, method, params, queryNameOrNull, priority, callback) {
         this.rpcProxy.send(messageId, method, params, queryNameOrNull, priority, (error) => {
             if (error) {
                 callback(error);
