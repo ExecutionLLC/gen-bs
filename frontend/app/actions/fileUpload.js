@@ -161,9 +161,11 @@ function sendFile(file, onOperationId, onProgress, onError) {
     request.onreadystatechange = () => {
         if (request.readyState === 4) {
             let resp;
-            try {
-                resp = JSON.parse(request.response);
-            } catch (err) { }
+            if (request.status === 200) {
+                try {
+                    resp = JSON.parse(request.response);
+                } catch (err) { }
+            }
             if (!resp) {
                 onError(new Error('Invalid upload response'));
             } else {
