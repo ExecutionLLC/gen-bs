@@ -37,8 +37,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         if (selectedSample) {
             return (
-                <div
-                    className='form-horizontal form-rows form-rows-2row-xs'>
+                <div>
                     {this.renderSampleContent(selectedSample)}
                 </div>
             );
@@ -125,7 +124,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderFooter(selectedSample) {
         const {auth: {isDemo}} = this.props;
         return (
-            <div className='btn-toolbar'>
+            <div className='btn-toolbar btn-toolbar-form-actions'>
                 {this.renderSelectButton(isDemo, selectedSample)}
                 {this.renderEditButton(selectedSample.type)}
             </div>
@@ -193,7 +192,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderSampleContent(selectedSample) {
         const {edited} = this.props;
         return (
-            <div>
+            <div className='dl-group-edit-mode'>
                 {!edited && this.renderCurrentValues(selectedSample)}
                 {!edited && this.renderFooter(selectedSample)}
                 {edited && this.renderEditableValues(selectedSample.id)}

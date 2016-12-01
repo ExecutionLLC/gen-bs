@@ -22,8 +22,11 @@
 .editable-buttons-bottom { 
   text-align: right;
 }
-.editableform { 
+.editableform {
+    min-width: none; 
+  @media (min-width: @screen-sm){ 
   min-width: 300px;
+  }
 }
 .editableform {
   .form-control { 
@@ -33,6 +36,9 @@
  
   textarea.form-control { 
     height: 140px;
+    min-width: none;
+    @media (min-width: @screen-sm){
     min-width: 300px;
+    }
   }
 }

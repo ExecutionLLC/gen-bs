@@ -8,11 +8,14 @@
 .dropdown {
   .dropdown-menu-header { 
     display: none;
-      + i { 
-      margin-right: 16px;
-    } 
   }
-  
+  &.open {
+   .dropdown-menu-header {
+    + i { 
+      margin-right: 16px;
+    }
+   } 
+  }
   @media (max-width: @screen-xxs-max){
     &.open {
       z-index: 2;

@@ -47,7 +47,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         const {sampleId, fieldIdToValuesHash, fields, disabled} = this.props;
         const visibleEditableFields = _.filter(fields, field => !field.isInvisible);
         return (
-            <div className='collapse in'>
+            <div>
                 {visibleEditableFields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash, disabled))}
                 {this.renderRowButtons()}
             </div>
@@ -66,7 +66,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     renderRowButtons() {
         const {sampleId} = this.props;
         return (
-            <div className='btn-toolbar'>
+            <div className='btn-toolbar btn-toolbar-form-actions'>
                 <button
                     onClick={ (e) => this.onSaveEditedSampleClick(e, sampleId) }
                     type='button'

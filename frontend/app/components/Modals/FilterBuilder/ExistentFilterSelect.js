@@ -25,7 +25,7 @@ export default class ExistentFilterSelect extends Component {
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
         const isFilterDuplicable = selectedFilter.modelType !== 'complex';
         return (
-            <div className='form-rows-dynamic'>
+            <div className='form-rows'>
                 <div className='form-group'>
                     {this.renderTitle(texts)}
                 </div>

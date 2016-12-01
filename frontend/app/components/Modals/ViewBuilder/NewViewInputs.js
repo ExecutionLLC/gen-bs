@@ -10,7 +10,7 @@ export default class NewViewInputs extends React.Component {
         const newView = viewBuilder.editingView;
 
         return (
-            <div className='form-rows-dynamic'>
+            <div className='form-rows'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='views.setup.selector.description'>

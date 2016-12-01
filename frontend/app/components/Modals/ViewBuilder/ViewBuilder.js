@@ -107,7 +107,7 @@ export default class ViewBuilder extends React.Component {
 
         return (
 
-            <div className='form-rows-dynamic'>
+            <div className='form-rows'>
                 <h5 data-localize='views.setup.settings.title'>Table Columns</h5>
                 <div className='form-group hidden-xs'>
 

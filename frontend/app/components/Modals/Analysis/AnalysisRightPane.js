@@ -43,7 +43,7 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='split-scroll'>
                     <div className='form-padding'>
                         {!disabled ?
-                            <div className='form-horizontal form-rows form-rows-2row-xs'>
+                            <div className='form-rows  form-rows-xsicons'>
                                 {historyItem && this.renderAnalysisContent(historyItem)}
                             </div>
                             :
@@ -461,7 +461,7 @@ export default class AnalysisRightPane extends React.Component {
             disabled: error ? true : false
         };
         return (
-            <div className='btn-toolbar'>
+            <div className='btn-toolbar btn-toolbar-form-actions'>
                 <button
                     className='btn btn-primary'
                     disabled={buttonParams.disabled}
@@ -653,7 +653,7 @@ export default class AnalysisRightPane extends React.Component {
                 </dl>
 
                 <hr />
-                <div className='btn-toolbar'>
+                <div className='btn-toolbar btn-toolbar-form-actions'>
                     <a
                        type='button'
                        className='btn btn-link btn-uppercase'

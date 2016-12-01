@@ -11,7 +11,7 @@ export default class NewFilterInputs extends Component {
         const {validationMessage, texts} = this.props;
 
         return (
-            <div className='form-rows-dynamic collapse in'>
+            <div className='form-rows'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='filters.setup.selector.description'>

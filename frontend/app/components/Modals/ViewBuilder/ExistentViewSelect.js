@@ -21,7 +21,7 @@ export default class ExistentViewSelect extends React.Component {
         const isEditableView = entityTypeIsEditable(selectedViewType);
 
         return (
-            <div className='form-rows-dynamic'>
+            <div className='form-rows'>
                 <div className='form-group'>
                     {this.renderTitle()}
                 </div>
