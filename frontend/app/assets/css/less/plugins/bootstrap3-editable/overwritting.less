@@ -15,7 +15,8 @@
      line-height: 1.1;
      display: inline-block;
      text-decoration: none;
-     border-bottom: dashed 1px @gray-lighter;
+   &:extend(.btn-link-default); 
+
   }
   
 
@@ -23,9 +24,11 @@
   text-align: right;
 }
 .editableform {
-    min-width: none; 
+  min-width: none; 
+ 
   @media (min-width: @screen-sm){ 
   min-width: 300px;
+ 
   }
 }
 .editableform {
@@ -39,6 +42,8 @@
     min-width: none;
     @media (min-width: @screen-sm){
     min-width: 300px;
+    font-size: 12px;
+    .placeholder(@text-color);
     }
   }
 }

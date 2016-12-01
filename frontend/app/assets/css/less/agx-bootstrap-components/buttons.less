@@ -59,57 +59,6 @@
    .button-variant(@btn-inverse-color; @btn-inverse-bg; @btn-inverse-border); 
 }
 
-// Link buttons
-// -------------------------
-
-.btn-link {
-  .btn-link-variant(@brand-primary);
-}
-
-.btn-link-default { 
-  .btn-link-variant(@gray-dark); 
-}
-.btn-link-light-default { 
-  .btn-link-variant(@gray-lighter); 
-}
-.btn-link-primary {
-  .btn-link-variant(@brand-primary); 
-}
-.btn-link-warning {
-  .btn-link-variant(@brand-warning); 
-}
-.btn-link-success {
-  .btn-link-variant(@brand-success); 
-}
-.btn-link-inverse { 
-  .btn-link-variant(#fff); 
- &:hover,
- &:focus,
- &:active { 
-   color: #fff;
- }  
-}
-
-.btn-link-info {
-  .btn-link-variant(@brand-info); 
-}
-.btn-link-muted {
-  .btn-link-variant(@text-muted); 
-}
-.btn-link small { 
-  text-decoration: underline;
-  color: darken(@text-muted, 15%);
-  @media (min-width: @screen-sm) {
-    color: @text-muted;
-  }
-}
- 
-label.btn-link { 
-  text-decoration: none;
-  span { 
-    text-decoration: none;
-  }
-}
 
 
 
@@ -121,11 +70,9 @@ input[type="button"] {
     width: 100%;
   }
 }
-.btn-link { 
-  &.text-left { 
-    text-align: left;
-  }
-}
+
+
+
 
 .btn-sort { 
   background-position: center center;
