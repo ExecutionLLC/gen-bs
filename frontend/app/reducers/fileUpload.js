@@ -212,7 +212,7 @@ function reduceUploadsListRemoveUpload(state, action) {
     const {uploadId} = action;
     const {filesProcesses, currentUploadId} = state;
     return {
-        filesProcesses: _.filter(filesProcesses, (fp) => fp.operationId !== uploadId),
+        filesProcesses: _.filter(filesProcesses, (fp) => fp.operationId !== uploadId && fp.id !== uploadId),
         currentUploadId: currentUploadId === uploadId ? null : currentUploadId
     };
 }
