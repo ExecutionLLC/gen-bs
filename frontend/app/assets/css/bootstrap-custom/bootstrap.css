@@ -5912,7 +5912,7 @@ button.close {
   position: relative;
   background-color: #ffffff;
   border: 1px solid #949eac;
-  border: 1px solid tranparent;
+  border: 1px solid transparent;
   border-radius: 6px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);

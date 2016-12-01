@@ -257,7 +257,7 @@
     "@modal-title-padding": "11px @padding-base-horizontal",
     "@modal-title-line-height": "@line-height-base",
     "@modal-content-bg": "#fff",
-    "@modal-content-border-color": "tranparent",
+    "@modal-content-border-color": "transparent",
     "@modal-content-fallback-border-color": "@gray-light",
     "@modal-backdrop-bg": "desaturate(@brand-primary, 50%)",
     "@modal-backdrop-opacity": ".7",
