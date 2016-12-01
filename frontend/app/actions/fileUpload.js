@@ -157,32 +157,31 @@ function sendFile(file, onOperationId, onProgress, onError) {
     const formData = new FormData();
     formData.append('sample', file);
     formData.append('fileName', file.name);
-    $.ajax(config.URLS.FILE_UPLOAD, {
-        'type': 'POST',
-        'data': formData,
-        'contentType': false,
-        'processData': false,
-        'xhrFields': {
-            // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
-            'onprogress': function (progress) {
-                // calculate upload progress
-                var percentage = Math.floor((progress.total / progress.total) * 100);
-                // log upload progress to console
-                console.log('sendFile progress', progress, percentage);
-                onProgress(percentage);
-                if (percentage === 100) {
-                    console.log('sendFile DONE!');
-                }
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = () => {
+        if (request.readyState === 4) {
+            let resp;
+            try {
+                resp = JSON.parse(request.response);
+            } catch (err) { }
+            if (!resp) {
+                onError(new Error('Invalid upload response'));
+            } else {
+                onOperationId(resp.upload);
             }
         }
-    })
-        .done(json => {
-            onOperationId(json.upload);
-        })
-        .fail(err => {
-            onError(err);
+    };
+    if (request.upload) {
+        request.upload.addEventListener('progress', (progress) => {
+            const percentage = Math.floor((progress.loaded / progress.total) * 100);
+            if (percentage === 100) {
+                console.log('sendFile DONE!');
+            }
+            onProgress(percentage);
         });
-
+    }
+    request.open('POST', config.URLS.FILE_UPLOAD);
+    request.send(formData);
 }
 
 export function changeFileUploadProgressState(progressValue, progressStatus, id) {
