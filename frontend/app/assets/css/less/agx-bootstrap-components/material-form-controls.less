@@ -17,16 +17,16 @@
   box-shadow: none;
   z-index: 1;
   position: relative;
- 
-  &:focus { 
-  .placeholder(@color:transparent);
-  + .material-label { 
-     font-size: @font-size-x-small;
-     color: @input-color-placeholder;
-     z-index: 2;
+
+  &:focus {
+    .placeholder(@color:transparent);
+    + .material-label {
+      font-size: @font-size-x-small;
+      color: @input-color-placeholder;
+      z-index: 2;
     }
-  }  
-          
+  }
+
   &[disabled],
   &[readonly],
   fieldset[disabled] & {
@@ -37,10 +37,10 @@
     background-image: linear-gradient(@gray-lighter, @gray-lighter), linear-gradient(@gray-lighter, @gray-lighter);
     color: lighten(@gray-lighter, 5%);
     .placeholder(@color:@gray-lighter);
-  }  
+  }
 }
 .form-control.material-input {
-    .input-size(@material-input-height; @material-input-padding; @material-input-padding-horizontal; @material-input-font-size; @material-input-line-height; @material-input-border-radius) ; 
+  .input-size(@material-input-height; @material-input-padding; @material-input-padding-horizontal; @material-input-font-size; @material-input-line-height; @material-input-border-radius) ;
 }
 .form-control.material-input:focus,
 .form-control.material-input-sm:focus {
@@ -49,32 +49,32 @@
   animation: input-highlight .5s forwards;
   -webkit-box-shadow: none;
   box-shadow: none;
- + .material-label { 
-   color:@brand-primary;
-   opacity: 1;
-   font-style: @font-size-base;
-  }        
+  + .material-label {
+    color:@brand-primary;
+    opacity: 1;
+    font-style: @font-size-base;
+  }
 }
 .form-control.material-input {
-  margin-bottom: @material-input-bottom-indent; 
+  margin-bottom: @material-input-bottom-indent;
   + .material-label  {
     top:0px;
   }
-}  
+}
 .form-control.material-input-sm {
- .input-size(@material-input-sm-height; @material-input-sm-padding; @material-input-padding-horizontal; @material-input-sm-font-size; @material-input-sm-line-height; @material-input-border-radius);
+  .input-size(@material-input-sm-height; @material-input-sm-padding; @material-input-padding-horizontal; @material-input-sm-font-size; @material-input-sm-line-height; @material-input-border-radius);
   margin-bottom: @material-input-sm-bottom-indent;
   + .material-label  {
     top:0px;
   }
-  &.material-input-heading { 
-   font-size: 14px;
+  &.material-input-heading {
+    font-size: 14px;
   }
-   @media (min-width: @screen-sm){
-     &.material-input-heading { 
-        padding-right: 100px;
-      }
-   }
+  @media (min-width: @screen-sm){
+    &.material-input-heading {
+      padding-right: 100px;
+    }
+  }
 }
 
 @-webkit-keyframes input-highlight {
@@ -96,22 +96,22 @@
 
 
 //Add specify animate label over input, use only with .material-input
-.material-label { 
-    z-index: 1;
-    font-size: @font-size-small;
-    line-height: @font-size-small;
-    color: @input-color-placeholder;
-    .transition(top .15s linear);
-    .transition(color .15s linear);
-    .transition(font .15s linear);
-     opacity: 0;
-     z-index: 0;
-     height: 1em;
-     line-height: 1em;
-     position: absolute;
+.material-label {
+  z-index: 1;
+  font-size: @font-size-small;
+  line-height: @font-size-small;
+  color: @input-color-placeholder;
+  .transition(top .15s linear);
+  .transition(color .15s linear);
+  .transition(font .15s linear);
+  opacity: 0;
+  z-index: 0;
+  height: 1em;
+  line-height: 1em;
+  position: absolute;
 }
 //Add specify text message label after input, use only with .material-input
-.material-input-message { 
+.material-input-message {
   position: relative;
   font-size: @font-size-small;
   position: absolute;
@@ -119,30 +119,30 @@
 }
 
 //material-input-group must contain block class="form-control material-input" + block class="material-label" + optional block class="material-input-message"
-.material-input-group { 
+.material-input-group {
   position: relative;
   height:  @material-input-group-height;
   padding-top: 16px;
-  
+
 }
 .material-input-group-sm {
   position: relative;
   height:  @material-input-group-sm-height;
   padding-top: 16px;
-  .material-label { 
+  .material-label {
     top:16px;
   }
 }
 
 
 .material-input-group {
-  .material-input-message { 
-     bottom: -6px;
+  .material-input-message {
+    bottom: -6px;
   }
 }
 .material-input-group-sm {
-  .material-input-message { 
+  .material-input-message {
     bottom: -12px;
   }
-  
+
 }

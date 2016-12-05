@@ -5,28 +5,28 @@
 .btn-group>.btn.active,
 .btn-group>.btn:active,
 .btn-group>.btn:focus,
-.btn-group>.btn:hover { 
+.btn-group>.btn:hover {
   z-index: auto;
 }
 
 //==btn-group modificators, use as class="btn-group btn-group-[x]"
-.btn-group-close { 
+.btn-group-close {
   padding-top: 2.2em;
   min-width: 82px;
 }
 
 //for group with select component, contain inner block class="btn-group"
-.btn-group-select-group { 
-  .btn-group { 
+.btn-group-select-group {
+  .btn-group {
     white-space: nowrap;
-    .btn { 
-      +.btn { 
+    .btn {
+      +.btn {
         margin-left: -0.4em;
       }
     }
   }
-  @media (min-width: @screen-sm){ 
-    .btn-group { 
+  @media (min-width: @screen-sm){
+    .btn-group {
       display: table-cell;
       vertical-align: top;
       padding-right: 5px;
@@ -34,15 +34,15 @@
       .btn {
         float: none;
       }
-      &.btn-group-select-group-max { 
+      &.btn-group-select-group-max {
         width: 100% !important;
-      } 
+      }
     }
-  } 
+  }
 }
 
 //btn-group modificator for future interface versia
-.btn-group-xlg { 
+.btn-group-xlg {
   display: block;
   width: 100%;
   .btn {
@@ -52,11 +52,11 @@
     white-space: normal;
     border-radius: 0;
     width: 100%;
-    .md-i { 
+    .md-i {
       vertical-align: middle;
       margin-right: 8px;
     }
-    span { 
+    span {
       color: darken(@text-muted, 15%);
       @media (min-width: @screen-sm) {
         color: @text-muted;
@@ -64,55 +64,55 @@
     }
   }
 }
-.btn-group-full-width { 
+.btn-group-full-width {
   width: 100%;
   padding: 0 !important;
-  > button { 
+  > button {
     width: 100%;
     text-align: left;
-    .caret { 
+    .caret {
       position: absolute;
       right: 10px;
       top: 14px;
     }
   }
 }
-.btn-group-tools { 
+.btn-group-tools {
   position: absolute;
   right: 15px;
   top: 0px;
-  .btn { 
+  .btn {
     color:#888;
   }
 }
-.btn-group-confirm { 
+.btn-group-confirm {
   display: none;
 }
-.btn-group-fix { 
-  button { 
+.btn-group-fix {
+  button {
     float: left;
-    i { 
+    i {
       margin: -4px;
     }
   }
 }
-.btn-group-with-tooltip { 
+.btn-group-with-tooltip {
   float: right;
-  > span { 
+  > span {
     display: block;
     float: left;
-    .btn { 
+    .btn {
       border-radius: 0;
     }
-    &:first-child { 
-      .btn { 
+    &:first-child {
+      .btn {
         border-radius:@btn-border-radius-base 0 0  @btn-border-radius-base;
-      }  
+      }
     }
-    &:last-child { 
-      .btn { 
+    &:last-child {
+      .btn {
         border-radius:0 @btn-border-radius-base  @btn-border-radius-base 0 ;
-      }  
+      }
     }
   }
 }
@@ -124,13 +124,13 @@
 }
 
 //btn-toolbar modificator
-.btn-toolbar-form-actions { 
+.btn-toolbar-form-actions {
+  margin-left: 0;
+  margin-bottom: 80px;
+  .btn-group {
     margin-left: 0;
-    margin-bottom: 80px;
-    .btn-group {
-     margin-left: 0; 
-    }
-    .btn-uppercase:first-child{ 
-      margin-left: -@padding-base-horizontal;
-    } 
+  }
+  .btn-uppercase:first-child{
+    margin-left: -@padding-base-horizontal;
+  }
 }

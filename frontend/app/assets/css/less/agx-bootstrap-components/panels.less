@@ -1,7 +1,7 @@
 // Overwritten bootstrap styles for panel
 
 .panel-title {
-  + p { 
+  + p {
     font-size: @font-size-small;
     margin-bottom: 0;
     margin-top: @padding-base-vertical;
@@ -14,10 +14,10 @@
       margin-top:-1px;
     }
   }
-  .panel-heading { 
-   border-bottom: 1px solid @panel-inner-border;
+  .panel-heading {
+    border-bottom: 1px solid @panel-inner-border;
   }
-  .panel-title { 
+  .panel-title {
     font-size: @font-size-h4;
   }
   .panel-body {
@@ -29,21 +29,21 @@
       padding: @padding-large-vertical;
     }
   }
-  .panel.active { 
-         background: @component-active-bg;
-         color: desaturate(darken(@component-active-bg, 60%), 10%);
-         border-top-color: desaturate(darken(@component-active-bg, 10%), 10%);
-       * {
-         color: desaturate(darken(@component-active-bg, 60%), 10%);
-       }
+  .panel.active {
+    background: @component-active-bg;
+    color: desaturate(darken(@component-active-bg, 60%), 10%);
+    border-top-color: desaturate(darken(@component-active-bg, 10%), 10%);
+    * {
+      color: desaturate(darken(@component-active-bg, 60%), 10%);
     }
-  .panel-collapse { 
-    .panel-body { 
+  }
+  .panel-collapse {
+    .panel-body {
       background: @default-max-light;
       padding: @padding-large-vertical;
     }
   }
-  
+
 }
 
 

@@ -1,24 +1,24 @@
 //Big page loader, vertical and horizontal centered
-.loader { 
-    background: fade(@modal-backdrop-bg, 70%);
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    color: @light-primary-color2;
+.loader {
+  background: fade(@modal-backdrop-bg, 70%);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  color: @light-primary-color2;
 }
-.loader:before { 
-  
+.loader:before {
+
   &:extend(.md-i);
-   content: "autorenew";
-   position: absolute;
-   left: 50%;
-   margin-top: -30px;
-   margin-left: -30px;
-   font-size: 72px;
-   color: fade(#fff, 96%);
-   top: 50%;
+  content: "autorenew";
+  position: absolute;
+  left: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+  font-size: 72px;
+  color: fade(#fff, 96%);
+  top: 50%;
   -webkit-animation: rotating 2s linear infinite;
   -moz-animation: rotating 2s linear infinite;
   -ms-animation: rotating 2s linear infinite;

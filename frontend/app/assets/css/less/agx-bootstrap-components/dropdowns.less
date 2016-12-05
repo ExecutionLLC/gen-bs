@@ -1,43 +1,43 @@
 //
 // Owerwriting and additional style for dropdown 
 // --------------------------------------------------
-.caret { 
+.caret {
   display: none;
 }
 .dropup,
 .dropdown {
-  .dropdown-menu-header { 
+  .dropdown-menu-header {
     display: none;
   }
   &.open {
-   .dropdown-menu-header {
-    + i { 
-      margin-right: 16px;
+    .dropdown-menu-header {
+      + i {
+        margin-right: 16px;
+      }
     }
-   } 
   }
   @media (max-width: @screen-xxs-max){
     &.open {
       z-index: 2;
-      background: #fff;  
+      background: #fff;
       position: fixed;
       top:0;
       left: 0;
       right: 0;
       bottom: 0;
-    .dropdown-menu-header { 
-      display: inline;
-      float: left;
-      padding-left: 16px;
-    }
-    .md-replace-to-close {  // icon change when the button change states
-      display: inline !important;
-    }
-    .md-replace-to-close:before { 
+      .dropdown-menu-header {
+        display: inline;
+        float: left;
+        padding-left: 16px;
+      }
+      .md-replace-to-close {  // icon change when the button change states
+        display: inline !important;
+      }
+      .md-replace-to-close:before {
         content: 'close'!important;
+      }
     }
   }
- }
 }
 
 
@@ -45,37 +45,37 @@
   margin: 0; // override default ul
   .box-shadow(none);
   > li > a {
-    padding:10px 16px;  
-    font-weight: normal; 
+    padding:10px 16px;
+    font-weight: normal;
   }
 
-  @media (max-width: @screen-xxs-max){ 
+  @media (max-width: @screen-xxs-max){
     position: static;
     float: none;
   }
   @media (min-width: @screen-xs){
     min-width: 160px;
-   .box-shadow(@dropdown-shadow);
+    .box-shadow(@dropdown-shadow);
   }
-  @media (min-width: @screen-sm){ 
-        border-radius: 0 0 1px 1px ;
-      > li > a {
-      padding: 8px 16px; 
+  @media (min-width: @screen-sm){
+    border-radius: 0 0 1px 1px ;
+    > li > a {
+      padding: 8px 16px;
     }
   }
 }
 
 
-.form-control:focus { 
-  + .dropdown-menu-context { 
+.form-control:focus {
+  + .dropdown-menu-context {
     display: block;
-    .table-list-xs { 
+    .table-list-xs {
       display: block !important;
     }
   }
 }
-.dropdown-menu { 
-  .btn { 
+.dropdown-menu {
+  .btn {
     text-align: left;
   }
 }

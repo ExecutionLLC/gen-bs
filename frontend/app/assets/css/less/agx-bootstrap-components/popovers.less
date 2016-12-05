@@ -1,36 +1,36 @@
 // Overwritten bootstrap styles for popover
 
 .popover {
-   max-width:none;
+  max-width:none;
   .box-shadow(@popover-shadow);
-   .popover-content {
+  .popover-content {
     max-width: 400px;
   }
 
-   @media (max-width: @screen-xxs-max) {
+  @media (max-width: @screen-xxs-max) {
     left: 0 !important;
     margin: 10px !important;
     max-width: none;
     right: 0 !important;
     top: 0 !important;
-     &:before { 
-       background: @modal-backdrop-bg;
-       position: fixed;
-       left: 0;
-       top:0;
-       right: 0;
-       bottom: 0;
-       opacity: @modal-backdrop-opacity;
-       content: '';
-     } 
-     .arrow { 
-       display: none !important;
-     } 
-     .popover-content {
+    &:before {
+      background: @modal-backdrop-bg;
+      position: fixed;
+      left: 0;
+      top:0;
+      right: 0;
+      bottom: 0;
+      opacity: @modal-backdrop-opacity;
+      content: '';
+    }
+    .arrow {
+      display: none !important;
+    }
+    .popover-content {
       background: #fff ;
       position: relative;
-      }
     }
+  }
 }
 
 

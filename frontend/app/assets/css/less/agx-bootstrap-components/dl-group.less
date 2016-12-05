@@ -2,9 +2,9 @@
   align-items: stretch;
   display: flex;
   flex-wrap: wrap;
-    
+
   dl {
-    width: 100%; 
+    width: 100%;
     margin-bottom: 12px;
     dt {
       float: left;
@@ -19,39 +19,39 @@
       margin-left: @dl-flex-horizontal-offset;
       &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
     }
-    &.dl-btns { 
+    &.dl-btns {
       margin-right: 50%;
     }
     @media (min-width: @screen-sm) {
-      width: 50%; 
+      width: 50%;
     }
   }
-} 
+}
 
-.dl-group { 
+.dl-group {
   padding: @padding-large-vertical @padding-base-horizontal;
 }
 
 .dl-group-view-mode {
-    dl { 
-      &:extend(.dl-horizontal);
-    } 
-    dt, dd { 
-      display: inline;
-    }
-    dt:after { 
+  dl {
+    &:extend(.dl-horizontal);
+  }
+  dt, dd {
+    display: inline;
+  }
+  dt:after {
     content: ':';
     margin-left: .1em;
   }
 }
 
 .dl-group-edit-mode {
-    dl { 
-      &:extend(.dl-horizontal);
-    } 
+  dl {
+    &:extend(.dl-horizontal);
+  }
 
-    dt {
-      padding-bottom: @padding-base-vertical;    
-    }
+  dt {
+    padding-bottom: @padding-base-vertical;
+  }
 
- }
+}

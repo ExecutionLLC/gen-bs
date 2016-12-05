@@ -2,72 +2,72 @@
 .list-group-header {
   padding: 10px 20px;
   border-bottom: 1px solid @gray-lighter;
-} 
-.list-group-results { 
- >li { 
-   &:hover{ 
-     background: @default-max-light;
-   }
-   &:active { 
-     background:@component-active-bg;
-     color: @component-active-color;
-     * {
-        color: @component-active-color;
-     }
-   }
- }  
 }
-.list-group { 
-  &.list-group-media {
-     margin: 0;
-     .list-group-item { 
-    border-left: none;
-    border-right: solid 1px ;
-    position: relative;
-    padding-left: 180px;
-    min-height: 135px;
-    border-right: 0;
-    &:first-child { 
-      border-top:none;
+.list-group-results {
+  >li {
+    &:hover{
+      background: @default-max-light;
     }
-    &:last-child { 
-      border-bottom: none;
-    }
-
-    &:before { 
-      .md-i();
-      font-size: 48px;
-      content: "local_hospital";
-      height: 40px;
-      left: 20px;
-      margin-top: -20px;
-      position: absolute;
-      text-align: center;
-      text-rendering: auto;
-      top: 30%;
-      width: 120px;
-      color: @link-color;
-    }
-    .list-group-item-heading { 
-      color: @link-color;
-      bottom: 20%;
-      left: 20px;
-      position: absolute;
-      text-align: center;
-      width: 120px;
-      font-size: 16px;
-      line-height: 1.2;
-    }
-    .list-group-item-text {
-      list-style: none;
-      margin: 0;
+    &:active {
+      background:@component-active-bg;
+      color: @component-active-color;
+      * {
+        color: @component-active-color;
+      }
     }
   }
+}
+.list-group {
+  &.list-group-media {
+    margin: 0;
+    .list-group-item {
+      border-left: none;
+      border-right: solid 1px ;
+      position: relative;
+      padding-left: 180px;
+      min-height: 135px;
+      border-right: 0;
+      &:first-child {
+        border-top:none;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:before {
+        .md-i();
+        font-size: 48px;
+        content: "local_hospital";
+        height: 40px;
+        left: 20px;
+        margin-top: -20px;
+        position: absolute;
+        text-align: center;
+        text-rendering: auto;
+        top: 30%;
+        width: 120px;
+        color: @link-color;
+      }
+      .list-group-item-heading {
+        color: @link-color;
+        bottom: 20%;
+        left: 20px;
+        position: absolute;
+        text-align: center;
+        width: 120px;
+        font-size: 16px;
+        line-height: 1.2;
+      }
+      .list-group-item-text {
+        list-style: none;
+        margin: 0;
+      }
+    }
     .list-group-item:hover {
       background-color: @default-max-light;
     }
-     .list-group-item-text { 
-       padding: 0;
-     }
+    .list-group-item-text {
+      padding: 0;
+    }
   }
 }
