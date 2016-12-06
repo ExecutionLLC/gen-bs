@@ -1,4 +1,4 @@
-import config from '../../config';
+import _ from 'lodash';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
@@ -154,6 +154,19 @@ function receiveFileOperation(upload, id) {
 }
 
 function sendFile(file, onOperationId, onProgress, onError) {
+
+    return sampleUploadsClient.upload(
+        file,
+        onProgress,
+        (err, res) => {
+            if (err) {
+                onError(err);
+            } else {
+                onOperationId(res)
+            }
+        }
+    );
+/*
     const formData = new FormData();
     formData.append('sample', file);
     formData.append('fileName', file.name);
@@ -184,6 +197,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
     }
     request.open('POST', config.URLS.FILE_UPLOAD);
     request.send(formData);
+*/
 }
 
 export function changeFileUploadProgressState(progressValue, progressStatus, id) {
