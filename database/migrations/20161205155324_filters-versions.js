@@ -11,13 +11,15 @@ const tables = {
     Analysis: 'analysis'
 };
 
-
 exports.up = function (knex) {
     console.log('=> Update filters schema...');
     return createFilterVersionsTable(knex)
         .then(() => appendAnalysesFieldFilterVersion(knex))
         .then(() => findFilters(knex))
-        .then((filters) => BluebirdPromise.mapSeries(filters, filter => addFilters(filter, knex)))
+        .then((filters) => {
+            return BluebirdPromise.mapSeries(filters, filter => addFilters(filter, knex))
+                .then(() => deleteRemovedFilters(filters, knex));
+        })
         .then(() => removeAnalysesFilterRef(knex))
         .then(() => deleteVersionsFromFilterTable(knex));
 };
@@ -25,6 +27,20 @@ exports.up = function (knex) {
 exports.down = function (knex, Promise) {
 
 };
+
+function deleteRemovedFilters(filters, knex) {
+    const deletedFilters = _.filter(filters, filter => filter.isDeleted && !_.isNull(filter.originalFilterId));
+    return BluebirdPromise.mapSeries(deletedFilters, filter => deleteFilter(filter, knex));
+}
+
+function deleteFilter(filter, knex) {
+    const {originalFilterId, isDeleted} = filter;
+    return knex(tables.Filter)
+        .where('id', originalFilterId)
+        .update(ChangeCaseUtil.convertKeysToSnakeCase({
+            isDeleted
+        }));
+}
 
 function addFilters(filter, knex) {
     const {id, originalFilterId, rules, timestamp} =filter;
