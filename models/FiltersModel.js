@@ -64,7 +64,6 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        // rules: filter.rules,
                         type: filter.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
