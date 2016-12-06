@@ -21,7 +21,8 @@ exports.up = function (knex) {
                 .then(() => deleteRemovedFilters(filters, knex));
         })
         .then(() => removeAnalysesFilterRef(knex))
-        .then(() => deleteVersionsFromFilterTable(knex));
+        .then(() => deleteVersionsFromFilterTable(knex))
+        .then(() => removeOldFiltersColumns(knex));
 };
 
 exports.down = function (knex, Promise) {
@@ -86,6 +87,13 @@ function appendAnalysesFieldFilterVersion(knex) {
 function removeAnalysesFilterRef(knex) {
     return knex.schema.table(tables.Analysis, (table) => {
         table.dropColumn('filter_id');
+    })
+}
+
+function removeOldFiltersColumns(knex) {
+    return knex.schema.table(tables.Filter, (table) => {
+        table.dropColumn('original_filter_id');
+        table.dropColumn('rules');
     })
 }
 
