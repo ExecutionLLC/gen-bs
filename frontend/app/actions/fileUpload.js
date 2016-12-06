@@ -1,4 +1,4 @@
-import config from '../../config';
+import _ from 'lodash';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
@@ -154,35 +154,17 @@ function receiveFileOperation(upload, id) {
 }
 
 function sendFile(file, onOperationId, onProgress, onError) {
-    const formData = new FormData();
-    formData.append('sample', file);
-    formData.append('fileName', file.name);
-    $.ajax(config.URLS.FILE_UPLOAD, {
-        'type': 'POST',
-        'data': formData,
-        'contentType': false,
-        'processData': false,
-        'xhrFields': {
-            // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
-            'onprogress': function (progress) {
-                // calculate upload progress
-                var percentage = Math.floor((progress.total / progress.total) * 100);
-                // log upload progress to console
-                console.log('sendFile progress', progress, percentage);
-                onProgress(percentage);
-                if (percentage === 100) {
-                    console.log('sendFile DONE!');
-                }
+    sampleUploadsClient.upload(
+        file,
+        onProgress,
+        (err, res) => {
+            if (err) {
+                onError(err);
+            } else {
+                onOperationId(res)
             }
         }
-    })
-        .done(json => {
-            onOperationId(json.upload);
-        })
-        .fail(err => {
-            onError(err);
-        });
-
+    );
 }
 
 export function changeFileUploadProgressState(progressValue, progressStatus, id) {

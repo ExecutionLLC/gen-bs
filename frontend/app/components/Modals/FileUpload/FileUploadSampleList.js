@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
+import {fileUploadStatus, uploadsListRemoveUpload, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 
 function fileUploadStatusErrorOrReady(status) {
@@ -173,7 +173,7 @@ export default class FileUploadSampleList extends React.Component {
                         false,
                         (id) => this.onNotUploadedErrorItemClick(id),
                         null,
-                        (id) => this.onNotUploadedErrorItemDelete(id),
+                        (id) => this.onUploadErrorDelete(id),
                         label,
                         upload.error.message,
                         null
@@ -402,7 +402,7 @@ export default class FileUploadSampleList extends React.Component {
 
     onNotUploadedErrorItemDelete(id) {
         const {dispatch} = this.props;
-        dispatch(uploadsListServerRemoveUpload(id));
+        dispatch(uploadsListRemoveUpload(id));
     }
 
     onUploadErrorItemClick(id) {
