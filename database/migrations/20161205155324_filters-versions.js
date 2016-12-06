@@ -78,7 +78,6 @@ function deleteVersionsFromFilterTable(knex) {
         .then((filters) => {
             const deletingFilters = _.filter(filters, filter => !_.isNull(filter.originalFilterId));
             const deleteFiltersIds = _.map(deletingFilters, filter => filter.id);
-            console.log(deletingFilters,deleteFiltersIds);
             return knex(tables.FilterText)
                 .whereIn('filter_id', deleteFiltersIds)
                 .del()
