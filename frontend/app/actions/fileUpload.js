@@ -35,6 +35,7 @@ const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error 
     ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
+const requestAbortFunctions = {};
 
 export function uploadsListReceive(uploads) {
     return {
@@ -154,14 +155,14 @@ function receiveFileOperation(upload, id) {
 }
 
 function sendFile(file, onOperationId, onProgress, onError) {
-    sampleUploadsClient.upload(
+    return sampleUploadsClient.upload(
         file,
         onProgress,
         (err, res) => {
             if (err) {
                 onError(err);
             } else {
-                onOperationId(res)
+                onOperationId(res);
             }
         }
     );
@@ -198,9 +199,10 @@ export function uploadFile(fileUploadId) {
         }
         dispatch(requestFileUpload(fp.id));
         dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
-        sendFile(
+        const abortRequest = sendFile(
             fp.file,
             (operationId) => {
+                delete requestAbortFunctions[fp.id];
                 dispatch(receiveFileOperation(operationId, fp.id));
             },
             (percentage) => {
@@ -209,16 +211,26 @@ export function uploadFile(fileUploadId) {
             },
             (err) => {
                 console.error('Upload FAILED: ', err.responseText);
+                delete requestAbortFunctions[fp.id];
                 dispatch(fileUploadError(fp.id, {
                     code: null,
                     message: err.responseText
                 }));
             }
         );
+        requestAbortFunctions[fp.id] = abortRequest;
     };
-
 }
 
+export function abortRequest(id) {
+    return (dispatch) => {
+        if (requestAbortFunctions[id]) {
+            requestAbortFunctions[id]();
+            delete requestAbortFunctions[id];
+        }
+        dispatch(uploadsListRemoveUpload(id));
+    };
+}
 
 export function changeFileUploadProgress(progressValue, progressStatus, id) {
     return (dispatch) => {
@@ -286,7 +298,7 @@ export function clearUploadState() {
     };
 }
 
-export function fileUploadError(id, error) {
+function fileUploadError(id, error) {
     return {
         type: FILE_UPLOAD_ERROR,
         error,

@@ -114,11 +114,17 @@ export default class RequestWrapper {
                 onComplete(err);
             } else {
                 if (res && res.body && res.body.upload) {
-                    onComplete(null, res.body.upload)
+                    onComplete(null, res.body.upload);
                 } else {
                     onComplete(new Error('Invalid upload response'));
                 }
             }
         });
+
+        function abortRequest() {
+            request.abort();
+        }
+
+        return abortRequest;
     }
 }

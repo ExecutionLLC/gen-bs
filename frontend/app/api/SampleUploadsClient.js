@@ -9,7 +9,7 @@ export default class SampleUploadsClient extends UserEntityClientBase {
     }
 
     upload(file, onProgress, onComplete) {
-        RequestWrapper.upload(
+        return RequestWrapper.upload(
             config.URLS.FILE_UPLOAD,
             null,
             null,

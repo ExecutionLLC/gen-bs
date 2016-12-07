@@ -17,6 +17,10 @@ class SampleController extends UserEntityControllerBase {
 
     upload(request, response) {
         const {body, file ,user, session} = request;
+        let isCancelled = false;
+        request.on('close', function () {
+            isCancelled = true;
+        });
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
@@ -49,7 +53,13 @@ class SampleController extends UserEntityControllerBase {
                 });
             }
         ], (error, operationId, upload) => {
-            this.sendErrorOrJson(response, error, {operationId, upload});
+            if (isCancelled) {
+                this.services.sampleUploadHistory.remove(user, operationId, () => {
+                    this.sendInternalError(response, new Error('Upload cancelled'));
+                });
+            } else {
+                this.sendErrorOrJson(response, error, {operationId, upload});
+            }
         });
     }
 
