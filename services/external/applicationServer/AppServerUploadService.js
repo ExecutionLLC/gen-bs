@@ -15,6 +15,7 @@ const SESSION_STATUS = {
     UPLOADING: 'uploading',
     READY: 'ready'
 };
+const UploadOperation = require('../../operations/UploadOperation');
 
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
@@ -58,15 +59,16 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.sessions.findSystemSession(callback),
             (systemSession, callback) => {
-                const currentOperation = _.find(systemSession.operations, operation => {
+                const uploadOperations = this.getUploadOperations(systemSession);
+                const currentOperation = _.find(uploadOperations, operation => {
                             return operation.getId() === currentOperationId;
                         }
                     ) || null;
                 const currentUserId = !_.isNull(currentOperation) ? currentOperation.getUserId() : null;
-                const activeOperationUsersIds = _.filter(systemSession.operations, operation => {
+                const activeOperationUsersIds = _.filter(uploadOperations, operation => {
                     return operation.isActive && operation.getUserId() !== currentUserId;
                 }).map(operation => operation.getUserId());
-                const orderedOperations = _.orderBy(systemSession.operations, ['timestamp'], ['asc']);
+                const orderedOperations = _.orderBy(uploadOperations, ['timestamp'], ['asc']);
                 const nextOperation = _.find(orderedOperations, operation => {
                     return !_.includes(activeOperationUsersIds, operation.getUserId()) && !operation.isActive;
                 });
@@ -108,11 +110,12 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
             (systemSession, callback) => {
-                const currentOperation = _.find(systemSession.operations, operation => {
+                const uploadOperations = this.getUploadOperations(systemSession);
+                const currentOperation = _.find(uploadOperations, operation => {
                         return operation.getId() === operationId;
                     }
                 );
-                const userOperations = _.filter(systemSession.operations, operation => {
+                const userOperations = _.filter(uploadOperations, operation => {
                     return operation.getUserId() == userId;
                 });
                 const activeUserOperation = _.filter(userOperations, operation => {
@@ -280,6 +283,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             ], callback);
 
         });
+    }
+
+    getUploadOperations(sesssion) {
+        return _.filter(sesssion.operations, operation => operation instanceof UploadOperation);
     }
 }
 
