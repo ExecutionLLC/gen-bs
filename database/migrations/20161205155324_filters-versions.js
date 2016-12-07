@@ -25,8 +25,8 @@ exports.up = function (knex) {
         .then(() => removeOldFiltersColumns(knex));
 };
 
-exports.down = function (knex, Promise) {
-
+exports.down = function () {
+    throw new Error('Not implemented');
 };
 
 function deleteRemovedFilters(filters, knex) {
@@ -44,14 +44,14 @@ function deleteFilter(filter, knex) {
 }
 
 function addFilters(filter, knex) {
-    const {id, originalFilterId, rules, timestamp} =filter;
+    const {id, originalFilterId, rules, timestamp} = filter;
     const filterVersion = {
-        filterId: originalFilterId ? originalFilterId : id,
+        filterId: originalFilterId || id,
         rules,
         created: timestamp
     };
     return addFilterVersion(filterVersion, knex)
-        .then((filerVersionId) => updateAnalyses(id, filerVersionId, knex));
+        .then((filterVersionId) => updateAnalyses(id, filterVersionId, knex));
 }
 
 function updateAnalyses(filterId, filterVersionId, knex) {
@@ -121,7 +121,7 @@ function findFilters(knex) {
 
 function addFilterVersion(filterVersion, knex) {
     const {id, filterId, rules, created} = filterVersion;
-    const newId = id ? id : Uuid.v4();
+    const newId = id || Uuid.v4();
     return knex(tables.FilterVersion)
         .insert(ChangeCaseUtil.convertKeysToSnakeCase({
             filterId,

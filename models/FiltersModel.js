@@ -11,7 +11,7 @@ const SecureModelBase = require('./SecureModelBase');
 const TableNames = {
     Filters: 'filter',
     FilterTexts: 'filter_text',
-    FiltersVersions:'filter_version'
+    FiltersVersions: 'filter_version'
 };
 
 const mappedColumns = [
@@ -191,11 +191,11 @@ class FiltersModel extends SecureModelBase {
             callback => query.asCallback(callback),
             (filters, callback) => this._toCamelCase(filters, callback),
             (filters, callback) => {
-              if(includeLastVersionsOnly){
-                  this._getLastFilterVersions(filters, callback);
-              }else {
-                  callback(null, filters)
-              }
+                if (includeLastVersionsOnly) {
+                    this._getLastFilterVersions(filters, callback);
+                } else {
+                    callback(null, filters)
+                }
             },
             (filters, callback) => {
                 if (filterIdsOrNull) {
@@ -204,15 +204,13 @@ class FiltersModel extends SecureModelBase {
                     callback(null, filters);
                 }
             }
-        ],(error, result) =>  {
-            callback(error, result);
-        });
+        ], callback);
     }
 
     _getLastFilterVersions(filters, callback) {
         const filterVersionGroup = _.groupBy(filters, 'filterId');
         const lastVersions = _.map(filterVersionGroup, filterGroup => {
-            const orderedFilters = _.orderBy(filterGroup, ['created'],['desc']);
+            const orderedFilters = _.orderBy(filterGroup, ['created'], ['desc']);
             return _.head(orderedFilters);
         });
         callback(null, lastVersions)

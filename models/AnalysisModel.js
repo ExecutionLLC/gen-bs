@@ -154,7 +154,7 @@ class AnalysisModel extends SecureModelBase {
                     id: shouldGenerateId ? this._generateId() : id,
                     creator: userId,
                     viewId,
-                    filterVersionId:filterId,
+                    filterVersionId: filterId,
                     modelId,
                     type,
                     lastQueryDate: new Date()
@@ -310,7 +310,7 @@ class AnalysisModel extends SecureModelBase {
             id,
             name,
             description,
-            filterId:filterVersionId,
+            filterId: filterVersionId,
             viewId,
             modelId,
             createdDate: timestamp,
