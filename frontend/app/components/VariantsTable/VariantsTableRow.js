@@ -100,13 +100,13 @@ export default class VariantsTableRow extends ComponentBase {
                         overlay={
                             <Popover id={`${index}-${field.fieldId}`}>
                                 {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
-                                    isChromosome ? (this.renderChromosome(value)) : value}
+                                    isChromosome ? this.renderChromosome(value) : value}
                             </Popover>
                         }
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {isChromosome ? (this.renderChromosome(value)) : value}</a>
+                                {isChromosome ? this.renderChromosome(value) : value}</a>
                         </div>
                     </OverlayTrigger>
                 </div>
