@@ -77,7 +77,6 @@ export default class VariantsTableRow extends ComponentBase {
 
     renderFieldValue(index, fieldId, sampleId, value, sortState) {
         const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
-        const resultFieldValue = value;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
         const sortedActiveClass = classNames({
             'active': columnSortParams
@@ -85,7 +84,10 @@ export default class VariantsTableRow extends ComponentBase {
 
         const field = hash[fieldId];
         const isChromosome = this.isChromosome(field);
-        const isValuedHyperlink = this.isHyperlink(field, resultFieldValue);
+        const isValuedHyperlink = this.isHyperlink(field, value);
+        if (!value) {
+            return this.renderEmptyFieldValue(sortedActiveClass, fieldId, sampleId);
+        }
         return (
             <td className={sortedActiveClass}
                 key={fieldId + '-' + sampleId}>
@@ -98,16 +100,25 @@ export default class VariantsTableRow extends ComponentBase {
                         overlay={
                             <Popover id={`${index}-${field.fieldId}`}>
                                 {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
-                                    isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}
+                                    isChromosome ? (this.renderChromosome(value)) : value}
                             </Popover>
                         }
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}</a>
+                                {isChromosome ? (this.renderChromosome(value)) : value}</a>
                         </div>
                     </OverlayTrigger>
                 </div>
+            </td>
+        );
+    }
+
+    renderEmptyFieldValue(sortedActiveClass, fieldId, sampleId) {
+        return (
+            <td className={sortedActiveClass}
+                key={fieldId + '-' + sampleId}>
+                <div></div>
             </td>
         );
     }
