@@ -364,22 +364,20 @@ export default class FileUploadSampleList extends React.Component {
                     {FileUploadSampleList.renderProgressBar(upload)}
                 </a>
                 <div className='right-menu'>
-                    {
-                        <button
-                            className='btn btn-link-light-default'
-                            type='button'
-                            onClick={
-                                () =>
-                                    sample ?
-                                        this.onSampleItemDelete(sample.id) :
-                                        upload.operationId ?
-                                            this.onUploadItemDelete(upload.operationId) :
-                                            this.onUploadAbort(upload.id)
-                            }
-                        >
-                            <i className='md-i'>highlight_off</i>
-                        </button>
-                    }
+                    <button
+                        className='btn btn-link-light-default'
+                        type='button'
+                        onClick={
+                            () =>
+                                sample ?
+                                    this.onSampleItemDelete(sample.id) :
+                                    upload.operationId ?
+                                        this.onUploadItemDelete(upload.operationId) :
+                                        this.onUploadAbort(upload.id)
+                        }
+                    >
+                        <i className='md-i'>highlight_off</i>
+                    </button>
                 </div>
             </li>
         );
