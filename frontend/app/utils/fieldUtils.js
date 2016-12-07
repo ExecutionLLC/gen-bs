@@ -108,8 +108,8 @@ export default class FieldUtils {
     static getFieldInputValidationRegex(field){
         const fieldType = field.type;
         const jsType = {
-            'char': '^((?!,).)*$',
-            'string': '^((?!,).)*$',
+            'char': null,
+            'string': null,
             'integer': null,
             'float': null,
             'double': null,
