@@ -345,13 +345,7 @@ export default class FileUploadSampleList extends React.Component {
                 })}>
                 <a
                     type='button'
-                    onClick={() => {
-                        if (sample) {
-                            this.onSampleItemClick(sample.id);
-                        } else {
-                            this.onUploadItemClick(upload.id);
-                        }
-                    }}
+                    onClick={() => this.onProgressUploadClick(upload, sample)}
                 >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
@@ -367,14 +361,7 @@ export default class FileUploadSampleList extends React.Component {
                     <button
                         className='btn btn-link-light-default'
                         type='button'
-                        onClick={
-                            () =>
-                                sample ?
-                                    this.onSampleItemDelete(sample.id) :
-                                    upload.operationId ?
-                                        this.onUploadItemDelete(upload.operationId) :
-                                        this.onUploadAbort(upload.id)
-                        }
+                        onClick={() => this.onProgressUploadDelete(upload, sample)}
                     >
                         <i className='md-i'>highlight_off</i>
                     </button>
@@ -403,6 +390,26 @@ export default class FileUploadSampleList extends React.Component {
                 </a>
             </li>
         );
+    }
+
+    onProgressUploadClick(upload, sample) {
+        if (sample) {
+            this.onSampleItemClick(sample.id);
+        } else {
+            this.onUploadItemClick(upload.id);
+        }
+    }
+
+    onProgressUploadDelete(upload, sample) {
+        if (sample) {
+            this.onSampleItemDelete(sample.id)
+        } else {
+            if (upload.operationId) {
+                this.onUploadItemDelete(upload.operationId)
+            } else {
+                this.onUploadAbort(upload.id)
+            }
+        }
     }
 
     onNotUploadedErrorItemClick(id) {
