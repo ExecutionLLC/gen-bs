@@ -386,10 +386,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     // converts VCF specific values into a human-readable form.
     _convertVcfValue(actualFieldValue) {
-        if (actualFieldValue === 'nan') // This is VCF way to mark empty field values.
+        if (actualFieldValue === 'nan') { // This is VCF way to mark empty field values.
             return '.';
-        else
+        } else {
             return actualFieldValue.replace(/\\x2c/g, ','); // replace '\x2c' -> ','
+        }
     }
 
     _createSearchDataResult(error, session, operation, tableData, callback) {
