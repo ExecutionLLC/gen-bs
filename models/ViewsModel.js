@@ -13,6 +13,7 @@ const TableNames = {
     Views: 'view',
     ViewItems: 'view_item',
     ViewTexts: 'view_text',
+    ViewVersions: 'view_versions',
     ViewItemKeywords: 'view_item_keyword'
 };
 
