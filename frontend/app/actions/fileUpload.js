@@ -162,7 +162,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
             if (err) {
                 onError(err);
             } else {
-                onOperationId(res)
+                onOperationId(res);
             }
         }
     );
@@ -223,7 +223,7 @@ export function uploadFile(fileUploadId) {
 }
 
 export function abortRequest(id) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         if (requestAbortFunctions[id]) {
             requestAbortFunctions[id]();
             delete requestAbortFunctions[id];
