@@ -116,8 +116,10 @@ export default class VariantsTableRow extends ComponentBase {
 
     renderEmptyFieldValue(sortedActiveClass, fieldId, sampleId) {
         return (
-            <td className={sortedActiveClass}
-                key={fieldId + '-' + sampleId}>
+            <td
+                className={sortedActiveClass}
+                key={`${fieldId}-${sampleId}`}
+            >
                 <div></div>
             </td>
         );
