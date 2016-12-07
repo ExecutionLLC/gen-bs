@@ -120,5 +120,11 @@ export default class RequestWrapper {
                 }
             }
         });
+
+        function abortRequest() {
+            request.abort();
+        }
+
+        return abortRequest;
     }
 }
