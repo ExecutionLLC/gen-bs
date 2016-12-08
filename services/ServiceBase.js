@@ -17,6 +17,22 @@ class ServiceBase {
         }
     }
 
+    start(callback) {
+        this._start(callback);
+    }
+
+    _start(callback) {
+        callback(null);
+    }
+
+    stop(callback) {
+        this._stop(callback);
+    }
+
+    _stop(callback) {
+        callback(null);
+    }
+
     /**
      * @description This function will be executed right after all the services are constructed.
      * */

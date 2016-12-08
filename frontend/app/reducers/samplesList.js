@@ -35,6 +35,30 @@ function reduceUpdateSampleValue(state, action) {
     };
 }
 
+function reduceUpdateSampleText(state, action) {
+    const {name, description, sampleId} = action;
+    const {editingSample} = state;
+
+    if (!editingSample || editingSample.id !== sampleId) {
+        return state;
+    }
+
+    const newName = name || editingSample.name;
+    const newDescription = description || editingSample.description;
+    const newEditingSample = {...editingSample,
+        editableFields: {
+            ...editingSample.editableFields,
+            name: newName,
+            description:newDescription
+        }
+    };
+
+    return {
+        ...state,
+        editingSample: newEditingSample
+    };
+}
+
 function reduceReceiveUpdatedSample(state, action) {
     const {updatedSample, updatedSampleId} = action;
     const {hashedArray, editingSample} = state;
@@ -42,13 +66,19 @@ function reduceReceiveUpdatedSample(state, action) {
     const newHashedArray = ImmutableHashedArray.replaceItemId(hashedArray, updatedSampleId, updatedSample);
 
     const newEditingSample = editingSample && editingSample.id === updatedSampleId ?
-        updatedSample :
+        ({ // brackets to calm down the linter
+            ...updatedSample,
+            editableFields: {
+                ...updatedSample.editableFields,
+                fields: editingSample.editableFields.fields
+            }
+        }) :
         editingSample;
 
     return {
         ...state,
         hashedArray: newHashedArray,
-        editingsample: newEditingSample
+        editingSample: newEditingSample
     };
 }
 
@@ -138,8 +168,7 @@ function addSamples(state, action) {
     const sortedSamples = _.sortBy(newSampleList, (sample) => sample.fileName.toLowerCase());
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
-        editingSample: null
+        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples)
     };
 }
 
@@ -170,8 +199,7 @@ function updateSampleFields(state, action) {
     });
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(newSampleList),
-        editingSample: null
+        hashedArray: ImmutableHashedArray.makeFromArray(newSampleList)
     };
 }
 
@@ -200,6 +228,9 @@ export default function samplesList(state = {
 
         case ActionTypes.UPDATE_SAMPLE_VALUE:
             return reduceUpdateSampleValue(state, action);
+
+        case ActionTypes.UPDATE_SAMPLE_TEXT:
+            return reduceUpdateSampleText(state, action);
 
         case ActionTypes.RECEIVE_UPDATED_SAMPLE:
             return reduceReceiveUpdatedSample(state, action);

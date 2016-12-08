@@ -54,6 +54,37 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
+    toggleNextOperation(currentOperationId, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => {
+                const currentOperation = _.find(systemSession.operations, operation => {
+                            return operation.getId() === currentOperationId;
+                        }
+                    ) || null;
+                const currentUserId = !_.isNull(currentOperation) ? currentOperation.getUserId() : null;
+                const activeOperationUsersIds = _.filter(systemSession.operations, operation => {
+                    return operation.isActive && operation.getUserId() !== currentUserId;
+                }).map(operation => operation.getUserId());
+                const orderedOperations = _.orderBy(systemSession.operations, ['timestamp'], ['asc']);
+                const nextOperation = _.find(orderedOperations, operation => {
+                    return !_.includes(activeOperationUsersIds, operation.getUserId()) && !operation.isActive;
+                });
+                if (nextOperation) {
+                    nextOperation.isActive = true;
+                    async.waterfall([
+                        (callback) => this.services.sessions.findById(nextOperation.getSessionId(), callback),
+                        (session, callback) => this.requestSampleProcessing(
+                            session, nextOperation.getId(), nextOperation.getSampleId(), null, (error) => callback(error)
+                        )
+                    ], callback)
+                } else {
+                    callback(null);
+                }
+            }
+        ], callback);
+    }
+
     requestSampleProcessing(session, operationId, sampleId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
@@ -67,6 +98,32 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     bucket: newSamplesBucket
                 };
                 this._rpcSend(session, operation, method, params, priority, callback);
+            }
+        ], callback);
+    }
+
+    requestUploadProcessing(session, operationId, sampleId, priority, callback) {
+        const {userId} = session;
+        async.waterfall([
+            // Upload operations lay in the system session.
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => {
+                const currentOperation = _.find(systemSession.operations, operation => {
+                        return operation.getId() === operationId;
+                    }
+                );
+                const userOperations = _.filter(systemSession.operations, operation => {
+                    return operation.getUserId() == userId;
+                });
+                const activeUserOperation = _.filter(userOperations, operation => {
+                    return operation.isActive;
+                });
+                if (activeUserOperation.length === 0) {
+                    currentOperation.isActive = true;
+                    this.requestSampleProcessing(session, operationId, sampleId, priority, callback);
+                } else {
+                    callback(null, operationId);
+                }
             }
         ], callback);
     }
@@ -92,6 +149,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
 
     _handleUploadError(user, session, operation, message, callback) {
         const error = ErrorUtils.createAppServerInternalError(message);
+        this._handleError(user, operation, error, session, callback)
+    }
+
+    _handleError(user, operation, error, session, callback) {
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.update(user, {
                 id: operation.getId(),
@@ -105,6 +166,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     (error, result) => callback(error)
                 );
             },
+            (callback) => this.toggleNextOperation(operation.getId(), callback),
             (callback) => this._createOperationResult(
                 session,
                 operation,
@@ -113,7 +175,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 EVENTS.onOperationResultReceived,
                 true,
                 null,
-                ErrorUtils.createAppServerInternalError(message),
+                error,
                 callback
             )
         ], callback);
@@ -189,20 +251,34 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 error: null
             }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
-            if (error) {
-                this.logger.error(`Error inserting new sample into database: ${error}`);
-                this._createOperationResult(session, operation, null, operation.getUserId(),
-                    EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
+            async.waterfall([
+                (callback) => this.toggleNextOperation(operation.getId(), callback),
+                (callback) => {
+                    if (error) {
+                        this.logger.error(`Error inserting new sample into database: ${error}`);
+                        const serverError = ErrorUtils.createInternalError(error.message);
+                        this._handleError(user, operation, serverError, session, callback);
+                    } else {
+                        // The upload operation is already completed on the app server.
+                        operation.setSendCloseToAppServer(false);
+                        this._createOperationResult(session,
+                            operation,
+                            null,
+                            operation.getUserId(),
+                            EVENTS.onOperationResultReceived,
+                            true,
+                            {
+                                status: SESSION_STATUS.READY,
+                                progress: 100,
+                                metadata: samplesMetadata
+                            },
+                            null,
+                            callback
+                        );
+                    }
+                }
+            ], callback);
 
-            } else {
-                // The upload operation is already completed on the app server.
-                operation.setSendCloseToAppServer(false);
-                this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
-                    status: SESSION_STATUS.READY,
-                    progress: 100,
-                    metadata: samplesMetadata
-                }, null, callback);
-            }
         });
     }
 }

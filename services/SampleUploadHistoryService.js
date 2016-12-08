@@ -26,6 +26,13 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
         ], callback);
     }
 
+    findNotFinishedUploads(user, limit, offset, callback) {
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.models.sampleUploadHistory.findNotFinishedUploads(user.id, limit, offset, callback)
+        ], callback);
+    }
+
     findActive(user, callback) {
         if (user && this.services.users.isDemoUserId(user.id)) {
             callback(null, []);
@@ -74,7 +81,8 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.sessions.findSystemSession(callback),
-            (session, callback) => this.services.operations.remove(session, operationId, (error) => callback(error))
+            (session, callback) => this.services.operations.remove(session, operationId, (error) => callback(error)),
+            (callback) => this.services.applicationServerUpload.toggleNextOperation(operationId, callback)
         ], callback);
     }
 }

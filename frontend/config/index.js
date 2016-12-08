@@ -46,6 +46,13 @@ const config = {
         MAX_COMMENT_LENGTH: 1024,
         MAX_FILTER_LENGTH: 50
     },
+    UPLOADS: {
+        MAX_NAME_LENGTH: 50,
+        MAX_DESCRIPTION_LENGTH: 512
+    },
+    SAMPLES: {
+        MAX_PROPERTY_LENGTH: 100
+    },
     WEBSOCKET_RECONNECT_TIME_MS: 2000
 };
 

@@ -20,7 +20,13 @@ class ApplicationServerServiceBase extends ServiceBase {
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
 
         this.logger = this.services.logger;
-        const {host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
+        const {
+            rabbitMq: {
+                host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName
+            },
+            serverId
+        } = this.services.config;
+        const wsQueueName = `ws_private_${serverId}`;
         /**
          * @type RpcProxyParams
          * */
@@ -34,7 +40,8 @@ class ApplicationServerServiceBase extends ServiceBase {
             reconnectTimeout,
             requestExchangeName,
             replyCallback: this._rpcReply,
-            returnCallback: this._rpcReturned
+            returnCallback: this._rpcReturned,
+            wsQueueName
         };
         /**
          * @type {RPCProxy}
@@ -67,6 +74,10 @@ class ApplicationServerServiceBase extends ServiceBase {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
         const messageId = this.createAppServerSessionId(operation);
+        this._rpcProxySend(messageId, operationId, method, params, queryNameOrNull, priority, callback);
+    }
+
+    _rpcProxySend(messageId, operationId, method, params, queryNameOrNull, priority, callback) {
         this.rpcProxy.send(messageId, method, params, queryNameOrNull, priority, (error) => {
             if (error) {
                 callback(error);
