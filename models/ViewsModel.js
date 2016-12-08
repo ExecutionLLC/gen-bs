@@ -186,7 +186,7 @@ class ViewsModel extends SecureModelBase {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(views[0]));
                     }
                 }
-            ],callback);
+            ], callback);
         }, callback);
     }
 

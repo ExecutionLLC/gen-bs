@@ -35,19 +35,19 @@ exports.down = function() {
 function removeAnalysesViewRef(knex) {
     return knex.schema.table(tables.Analysis, (table) => {
         table.dropColumn('view_id');
-    })
+    });
 }
 
 function removeViewItemViewRef(knex) {
     return knex.schema.table(tables.ViewItem, (table) => {
         table.dropColumn('view_id');
-    })
+    });
 }
 
 function removeOldViewsColumns(knex) {
     return knex.schema.table(tables.View, (table) => {
         table.dropColumn('original_view_id');
-    })
+    });
 }
 
 function deleteVersionsFromViewTable(knex) {
@@ -62,7 +62,7 @@ function deleteVersionsFromViewTable(knex) {
                     .whereNotNull('original_view_id')
                     .del()
                 );
-        })
+        });
 }
 
 function deleteRemovedViews(views, knex) {
