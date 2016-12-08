@@ -51,7 +51,7 @@ export default function auth(state = {
                 isWaitingForCloseAnotherPageOpenedModal: !action.shouldShow
             };
 
-        case ActionTypes.IS_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL:
+        case ActionTypes.SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL:
             return {
                 ...state,
                 isWaitingForCloseAnotherPageOpenedModal: true
