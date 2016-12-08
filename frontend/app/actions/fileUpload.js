@@ -1,4 +1,4 @@
-import config from '../../config';
+import _ from 'lodash';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
@@ -35,6 +35,7 @@ const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error 
     ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
+const requestAbortFunctions = {};
 
 export function uploadsListReceive(uploads) {
     return {
@@ -154,35 +155,17 @@ function receiveFileOperation(upload, id) {
 }
 
 function sendFile(file, onOperationId, onProgress, onError) {
-    const formData = new FormData();
-    formData.append('sample', file);
-    formData.append('fileName', file.name);
-    $.ajax(config.URLS.FILE_UPLOAD, {
-        'type': 'POST',
-        'data': formData,
-        'contentType': false,
-        'processData': false,
-        'xhrFields': {
-            // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
-            'onprogress': function (progress) {
-                // calculate upload progress
-                var percentage = Math.floor((progress.total / progress.total) * 100);
-                // log upload progress to console
-                console.log('sendFile progress', progress, percentage);
-                onProgress(percentage);
-                if (percentage === 100) {
-                    console.log('sendFile DONE!');
-                }
+    return sampleUploadsClient.upload(
+        file,
+        onProgress,
+        (err, res) => {
+            if (err) {
+                onError(err);
+            } else {
+                onOperationId(res);
             }
         }
-    })
-        .done(json => {
-            onOperationId(json.upload);
-        })
-        .fail(err => {
-            onError(err);
-        });
-
+    );
 }
 
 export function changeFileUploadProgressState(progressValue, progressStatus, id) {
@@ -216,9 +199,10 @@ export function uploadFile(fileUploadId) {
         }
         dispatch(requestFileUpload(fp.id));
         dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
-        sendFile(
+        const abortRequest = sendFile(
             fp.file,
             (operationId) => {
+                delete requestAbortFunctions[fp.id];
                 dispatch(receiveFileOperation(operationId, fp.id));
             },
             (percentage) => {
@@ -227,16 +211,26 @@ export function uploadFile(fileUploadId) {
             },
             (err) => {
                 console.error('Upload FAILED: ', err.responseText);
+                delete requestAbortFunctions[fp.id];
                 dispatch(fileUploadError(fp.id, {
                     code: null,
                     message: err.responseText
                 }));
             }
         );
+        requestAbortFunctions[fp.id] = abortRequest;
     };
-
 }
 
+export function abortRequest(id) {
+    return (dispatch) => {
+        if (requestAbortFunctions[id]) {
+            requestAbortFunctions[id]();
+            delete requestAbortFunctions[id];
+        }
+        dispatch(uploadsListRemoveUpload(id));
+    };
+}
 
 export function changeFileUploadProgress(progressValue, progressStatus, id) {
     return (dispatch) => {
@@ -304,7 +298,7 @@ export function clearUploadState() {
     };
 }
 
-export function fileUploadError(id, error) {
+function fileUploadError(id, error) {
     return {
         type: FILE_UPLOAD_ERROR,
         error,

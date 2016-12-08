@@ -101,4 +101,30 @@ export default class RequestWrapper {
             }
         };
     }
+
+    static upload(url, headers, queryParams, file, onProgress, onComplete) {
+        const formData = new FormData();
+        formData.append('sample', file);
+        formData.append('fileName', file.name);
+        const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
+        request.on('progress', (p) => onProgress(p.percent));
+        request.send(formData);
+        RequestWrapper._sendRequest(request, (err, res) => {
+            if (err) {
+                onComplete(err);
+            } else {
+                if (res && res.body && res.body.upload) {
+                    onComplete(null, res.body.upload);
+                } else {
+                    onComplete(new Error('Invalid upload response'));
+                }
+            }
+        });
+
+        function abortRequest() {
+            request.abort();
+        }
+
+        return abortRequest;
+    }
 }
