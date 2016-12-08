@@ -349,7 +349,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                                 if (fieldMetadata) {
                                     return {
                                         fieldId: fieldMetadata.id,
-                                        fieldValue: this._mapFieldValue(rowField.fieldValue),
+                                        fieldValue: this._convertVcfValue(rowField.fieldValue),
                                         sampleId: currentSampleFieldHash.sampleId == 'source' ? null : currentSampleFieldHash.sampleId
                                     };
                                 } else {
@@ -386,9 +386,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    _mapFieldValue(actualFieldValue) {
-        // This is VCF way to mark empty field values.
-        return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
+    // converts VCF specific values into a human-readable form.
+    _convertVcfValue(actualFieldValue) {
+        if (actualFieldValue === 'nan') { // This is VCF way to mark empty field values.
+            return '.';
+        } else {
+            return actualFieldValue.replace(/\\x2c/g, ','); // replace '\x2c' -> ','
+        }
     }
 
     _createSearchDataResult(error, session, operation, tableData, callback) {

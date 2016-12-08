@@ -257,6 +257,19 @@ class SearchService extends ServiceBase {
         });
     }
 
+    _transformCommasInRules(ruleObj) {
+        if (ruleObj.rules && ruleObj.rules.length) {
+            ruleObj.rules.forEach((part, index, theArray) => {
+                this._transformCommasInRules(theArray[index]);
+            });
+        } else {
+            const strOld = ruleObj.value;
+            if (strOld) {
+                ruleObj.value = strOld.replace(/,/g, '\\x2c');
+            }
+        }
+    }
+
     _createAppServerSearchParams(user, languId, samples, viewId, filterId, modelId, limit, offset, callback) {
         const sampleIds = _.map(samples, (sample) => sample.id);
         async.parallel({
@@ -318,6 +331,7 @@ class SearchService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
+                this._transformCommasInRules(filter.rules);
                 const appServerSearchParams = {
                     langu,
                     userId: user.id,
