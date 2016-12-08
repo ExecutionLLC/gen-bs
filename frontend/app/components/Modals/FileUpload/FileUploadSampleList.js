@@ -4,7 +4,12 @@ import _ from 'lodash';
 import {formatDate} from './../../../utils/dateUtil';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {entityType} from '../../../utils/entityTypes';
-import {fileUploadStatus, uploadsListServerRemoveUpload} from '../../../actions/fileUpload';
+import {
+    fileUploadStatus,
+    uploadsListRemoveUpload,
+    uploadsListServerRemoveUpload,
+    abortRequest
+} from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 
 function fileUploadStatusErrorOrReady(status) {
@@ -173,7 +178,7 @@ export default class FileUploadSampleList extends React.Component {
                         false,
                         (id) => this.onNotUploadedErrorItemClick(id),
                         null,
-                        (id) => this.onNotUploadedErrorItemDelete(id),
+                        (id) => this.onUploadErrorDelete(id),
                         label,
                         upload.error.message,
                         null
@@ -340,13 +345,7 @@ export default class FileUploadSampleList extends React.Component {
                 })}>
                 <a
                     type='button'
-                    onClick={() => {
-                        if (sample) {
-                            this.onSampleItemClick(sample.id);
-                        } else {
-                            this.onUploadItemClick(upload.id);
-                        }
-                    }}
+                    onClick={() => this.onProgressUploadClick(upload, sample)}
                 >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
@@ -359,15 +358,13 @@ export default class FileUploadSampleList extends React.Component {
                     {FileUploadSampleList.renderProgressBar(upload)}
                 </a>
                 <div className='right-menu'>
-                    {(sample || upload.operationId) &&
-                        <button
-                            className='btn btn-link-light-default'
-                            type='button'
-                            onClick={() => sample ? this.onSampleItemDelete(sample.id) : this.onUploadItemDelete(upload.operationId)}
-                        >
-                            <i className='md-i'>highlight_off</i>
-                        </button>
-                    }
+                    <button
+                        className='btn btn-link-light-default'
+                        type='button'
+                        onClick={() => this.onProgressUploadDelete(upload, sample)}
+                    >
+                        <i className='md-i'>highlight_off</i>
+                    </button>
                 </div>
             </li>
         );
@@ -395,6 +392,26 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    onProgressUploadClick(upload, sample) {
+        if (sample) {
+            this.onSampleItemClick(sample.id);
+        } else {
+            this.onUploadItemClick(upload.id);
+        }
+    }
+
+    onProgressUploadDelete(upload, sample) {
+        if (sample) {
+            this.onSampleItemDelete(sample.id)
+        } else {
+            if (upload.operationId) {
+                this.onUploadItemDelete(upload.operationId)
+            } else {
+                this.onUploadAbort(upload.id)
+            }
+        }
+    }
+
     onNotUploadedErrorItemClick(id) {
         const {onSelectUpload} = this.props;
         onSelectUpload(id);
@@ -402,7 +419,7 @@ export default class FileUploadSampleList extends React.Component {
 
     onNotUploadedErrorItemDelete(id) {
         const {dispatch} = this.props;
-        dispatch(uploadsListServerRemoveUpload(id));
+        dispatch(uploadsListRemoveUpload(id));
     }
 
     onUploadErrorItemClick(id) {
@@ -444,6 +461,11 @@ export default class FileUploadSampleList extends React.Component {
     onUploadItemDelete(id) {
         const {dispatch} = this.props;
         dispatch(uploadsListServerRemoveUpload(id));
+    }
+
+    onUploadAbort(id) {
+        const {dispatch} = this.props;
+        dispatch(abortRequest(id));
     }
 
     onShowPopup(id) {
