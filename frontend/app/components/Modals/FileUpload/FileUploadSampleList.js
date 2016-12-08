@@ -402,12 +402,12 @@ export default class FileUploadSampleList extends React.Component {
 
     onProgressUploadDelete(upload, sample) {
         if (sample) {
-            this.onSampleItemDelete(sample.id)
+            this.onSampleItemDelete(sample.id);
         } else {
             if (upload.operationId) {
-                this.onUploadItemDelete(upload.operationId)
+                this.onUploadItemDelete(upload.operationId);
             } else {
-                this.onUploadAbort(upload.id)
+                this.onUploadAbort(upload.id);
             }
         }
     }
