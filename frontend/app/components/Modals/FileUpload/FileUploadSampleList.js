@@ -34,7 +34,7 @@ export default class FileUploadSampleList extends React.Component {
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
-                    className='nav nav-componentes nav-controls nav-upload-items nav-radios nav-with-right-menu'>
+                    className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
                     {this.renderCurrentUploadData()}
                     {this.renderUploadedData()}

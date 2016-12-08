@@ -1,0 +1,26 @@
+//Overwritten bootstrap styles for tooltip
+.tooltip.right {
+  .tooltip-inner {
+    text-align: left;
+  }
+}
+.tooltip.fadeInUp {
+  margin-top: 78px;
+}
+
+//==Additional styles for tooltip
+
+//new color
+.tooltip {
+  &.tooltip-warning {
+    .tooltip-variant (@tooltip-warning-bg, @tooltip-warning-color);
+  }
+  &.tooltip-primary {
+    .tooltip-variant (@tooltip-primary-bg, @tooltip-primary-color);
+  }
+  &.tooltip-inverse {
+    .tooltip-variant (@tooltip-inverse-bg, @tooltip-inverse-color);
+  }
+}
+
+

@@ -11,7 +11,7 @@ class FileUploadModal extends Component {
         return (
             <Modal
                 id='file-upload-modal'
-                dialogClassName='modal-dialog-primary'
+                dialogClassName='modal-dialog-primary modal-columns'
                 bsSize='lg'
                 show={showModal}
                 onHide={ () => this.onClose()}

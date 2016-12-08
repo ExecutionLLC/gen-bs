@@ -1,0 +1,49 @@
+// Overwritten bootstrap styles for progress
+
+.progress {
+  height: @progress-bar-height;
+  margin-bottom: 0;
+}
+.progress-bar {
+  line-height:  @progress-bar-height;
+  position: relative;
+  > span {
+    background-color: @progress-bar-bg;
+    color: @progress-bar-color;
+    border-radius: @border-radius-small;
+    padding: 5px 2px 5px 3px;
+    position: absolute;
+    right: -16px;
+    top: 9px;
+    &:before {
+      border-color: transparent;
+      border-bottom-color: @progress-bar-bg;
+      border-style: solid;
+      border-width: 5px;
+      content: "";
+      display: block;
+      height: 0;
+      margin-right: 8px;
+      margin-top: -14px;
+      position: absolute;
+      right: 0;
+      width: 0;
+    }
+  }
+  &.progress-bar-success {
+    > span:before {
+      border-bottom-color: @progress-bar-success-bg;
+    }
+  }
+  &.progress-bar-warning {
+    > span:before {
+      border-bottom-color: @progress-bar-warning-bg;
+    }
+  }
+  &.progress-bar-danger {
+    > span:before {
+      border-bottom-color: @progress-bar-danger-bg;
+    }
+  }
+
+}

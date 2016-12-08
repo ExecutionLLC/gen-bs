@@ -1,0 +1,81 @@
+/*!
+ * LESS lib dependent Bootstrap v3.3.5-3.3.7 (http://getbootstrap.com)
+  * Created the LESS Modification by @elenabaranova
+  * Released under MIT
+ 
+ * Bootstrap Copyright 2011-2015 Twitter, Inc. 
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+
+ */
+
+// Custom variables and mixins
+//## 
+
+// All needed variables
+
+//== Bootstrap custom variables, variables values identify ../../css/bootstrap-custom/config.json 
+@import "variables.less";
+
+//AGX variables
+@import "agx-variables.less";
+
+//== AGX mixins
+@import "mixins.less";
+
+//== Overwrites, addons and modifications for Bootstrap Core CSS
+//## Save the list of necessary components as in https://github.com/twbs/bootstrap/blob/master/less/bootstrap.less to understand that each component below appends. Unnecessary components are missing.
+@import "scaffolding.less";
+@import "type.less";
+@import "tables.less";
+@import "forms.less";
+@import "buttons.less";
+
+//== Overwrites, addons and modifications for Bootstrap Components
+@import "component-animations.less";
+@import "dropdowns.less";
+@import "button-groups.less";
+@import "input-groups.less";
+@import "navs.less";
+@import "navbar.less";
+@import "badges.less";
+@import "labels.less";
+@import "alerts.less";
+@import "progress-bars.less";
+@import "list-group.less";
+@import "panels.less";
+@import "wells.less";
+@import "close.less";
+
+//== Overwrites, addons and modifications for Bootstrap Components
+@import "modals.less";
+@import "tooltip.less";
+@import "popovers.less";
+
+// Overwritten Bootstrap Utility classes
+@import "responsive-utilities.less";
+
+//==AGX (New) Components 
+//Material design view for input
+@import "material-form-controls.less";
+//Material design view for checkboxes and radiobuttons
+@import "checkbox-radio.less";
+
+//Expended bootstrap .btn-link  by new color modificators
+@import "btn-link.less";
+
+//Flex flex base fluid layout for options list
+@import "dl-group.less";
+
+//New form types
+@import "form-rows.less";
+
+//Responsive position variants table on page
+@import "table-variantes-page-wrap.less";
+//Responsive flex base two-colunm fixed layout for modal componenent
+@import "split-layout.less";
+
+//Empty block
+@import "empty.less";
+
+//Loader animate 24x24px
+@import "loader.less";

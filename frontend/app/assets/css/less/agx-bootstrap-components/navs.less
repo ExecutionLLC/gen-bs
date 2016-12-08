@@ -1,0 +1,242 @@
+// Overwritten bootstrap styles for nav
+
+.nav-tabs {
+  > li {
+    float: left;
+    > a {
+      margin-right: 2px;
+      line-height: 48px;
+      color: @text-color;
+      padding: 0 8px;
+      text-transform: uppercase;
+      font-family: "Roboto-Medium";
+      background: none;
+      border: none;
+      border-bottom: solid 2px transparent;
+      &:hover {
+        color: @nav-tabs-active-link-hover-color;
+        background: none;
+        border: none;
+      }
+    }
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color:@nav-tabs-active-link-hover-color;
+        border: none;
+        border-bottom:solid 2px @nav-tabs-active-link-hover-border-color;
+      }
+    }
+  }
+}
+
+//New components
+.nav-componentes {
+  padding: 0;
+  > li.new > a {
+    border-left: solid 6px @default-max-light;
+    padding-left: 26px;
+  }
+  > li {
+    > a {
+      white-space: normal;
+      display: block;
+      overflow: hidden;
+      padding: 16px 20px 16px 32px;
+      position: relative;
+      border-bottom:none;
+      border-top: solid 1px @default-max-light;
+
+      > label {
+        position: absolute;
+        display: none;
+        left: @padding-base-horizontal; top: @padding-large-vertical;
+      }
+
+    }
+    a:hover,
+    a:focus,
+    a:active {
+      background-color:@default-max-light;
+    }
+
+
+    &:first-child{
+      a { border-top: none;}
+    }
+
+    &.nav-header {
+      color: @gray-light;
+      border-bottom: solid 1px @default-max-light;
+      padding: @padding-base-vertical  @padding-large-vertical;
+    }
+    &.nav-header:first-child {
+      border-top:none;
+    }
+  }
+  > .active > a,
+  > .active > a:hover,
+  > .active > a:focus {
+    background-color:@default-max-light;
+  }
+  .link-right {
+    display: block;
+    float: right;
+    font-size: 80%;
+    max-width: 25%;
+    text-align: right;
+    white-space: normal;
+    color: @gray-light;
+  }
+  .link-label {
+    color: @text-color;
+    display: block;
+    word-wrap: break-word;
+    line-height: 1.1;
+    margin-bottom: 8px;
+
+  }
+  .link-desc {
+    color: darken(@text-muted, 15%);
+    @media (min-width: @screen-sm) {
+      color: @text-muted;
+    }
+    display: block;
+  }
+  .progress {
+    margin-top: 6px;
+
+  }
+  .icon-state {
+    font-size: 18px;
+    left: 12px;
+    position: absolute;
+    top: 14px;
+  }
+  .right-menu {
+    position: absolute;
+    right:4px;
+    top:50%;
+    margin-top: -17px;
+  }
+  &.nav-upload-items {
+    > li {
+      > a {
+        min-height: 93px;
+      }
+    }
+  }
+  &.nav-with-right-menu {
+    > li {
+      > a {
+        padding-right:  60px ;
+      }
+    }
+  }
+  &.nav-controls {
+    > li {
+      > a {
+        padding-left: 48px;
+        > label {
+          display: block;
+        }
+      }
+    }
+  }
+  @media (max-width: @screen-xs-max){
+
+    .right-menu.open {
+      bottom: 0;
+      left: 0;
+      margin-top: 0;
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+      .dropdown-toggle {
+        width: 100%;
+        text-align: right;
+        padding-right: 20px;
+        background: @brand-primary;
+        color: #fff;
+        min-height: 44px;
+      }
+    }
+  }
+}
+
+.nav-tabs {
+  &.nav-componentes  {
+    background: #fff;
+  }
+}
+.nav-notes-list {
+  >li {
+    display: table;
+    width: 100%;
+
+
+    > a,
+    > span {
+      display: table-cell;
+      vertical-align: top;
+      width: 1%;
+      em {
+        font-style: normal;
+        margin-left: 4px;
+        font-size: @font-size-base * 0.85;
+      }
+    }
+    span:last-child {
+      padding: 4px 12px 0 0;
+    }
+    > a {
+      line-height: 1.1;
+      padding: 8px 8px 8px 32px;
+      position: relative;
+      width: 100%;
+      .md-i {
+        vertical-align: middle;
+        margin: 0 4px 0 0;
+        font-size: 18px;
+        position: absolute;
+        left: 12px;
+        top: 8px;
+      }
+    }
+  }
+  &.dot-status {
+    > li {
+      padding-left: 16px;
+      position: relative;
+
+      &:before{
+        position:absolute;
+        content: '•';
+        font-size: 16px;
+        left: 0;
+        top: .75em;
+      }
+    }
+    >li.success {
+      &:before {
+        color: @brand-success;
+      }
+    }
+    >li.error {
+      &:before {
+        color: @brand-danger;
+      }
+    }
+    >li.warning {
+      &:before {
+        color: @brand-warning;
+      }
+    }
+
+
+  }
+}
+
+

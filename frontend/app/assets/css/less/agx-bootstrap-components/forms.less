@@ -1,0 +1,41 @@
+
+//Overwrites
+.form-control {
+  .box-shadow(none);
+  .form-control-focus();
+}
+.form-control[readonly]{
+  background: transparent;
+  border: none;
+  padding-right: 0;
+  padding-left: 0;
+}
+.form-control.elipsis {
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  background: none;
+  &:focus,
+  &:hover {
+    box-shadow: none;
+  }
+  &:focus {
+    color: @brand-primary;
+  }
+}
+.form-control {
+  .form-control-focus(); // overwrite .box-shadow
+  &.text-primary {
+    color: @brand-primary;
+  }
+  &.text-success {
+    color: @brand-success;
+    font-weight: bold;
+  }
+  &.text-danger {
+    color: @brand-success;
+    font-weight: bold;
+  }
+}
+
+

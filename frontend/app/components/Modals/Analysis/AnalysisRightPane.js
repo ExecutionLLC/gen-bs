@@ -43,7 +43,7 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='split-scroll'>
                     <div className='form-padding'>
                         {!disabled ?
-                            <div className='form-horizontal form-rows form-rows-2row-xs'>
+                            <div className='form-rows  form-rows-xsicons'>
                                 {historyItem && this.renderAnalysisContent(historyItem)}
                             </div>
                             :
@@ -89,7 +89,7 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.filter'>Filter</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select2'>
+                    <div className='col-xs-12 col-md-10 btn-group-select-group'>
                         <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
@@ -101,7 +101,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
-                        <div className='btn-group btn-group-select2-max'>
+                        <div className='btn-group btn-group-select-group-max'>
                             <Select
                                 tabIndex='-1'
                                 className='select2-search'
@@ -139,7 +139,7 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.model'>Model</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='col-xs-12 col-md-10 btn-group-select-group '>
                         <div className='btn-group btn-group-icon'>
                             <button
                                 type='button'
@@ -151,7 +151,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
-                        <div className='btn-group btn-group-select2-max'>
+                        <div className='btn-group btn-group-select-group-max'>
                             <Select
                                 id='modelSelect'
                                 className='select2'
@@ -174,7 +174,7 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.view'>View</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='col-xs-12 col-md-10 btn-group-select-group '>
                         <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
@@ -186,7 +186,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
-                        <div className='btn-group btn-group-select2-max'>
+                        <div className='btn-group btn-group-select-group-max'>
                             <Select
                                 tabIndex='-1'
                                 className='select2'
@@ -249,7 +249,7 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
                 <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                    <div className='col-xs-12 col-md-10 btn-group-select-group'>
                         <div className='btn-group btn-group-icon'>
                             <button
                                 className='btn btn-default btn-fix-width'
@@ -261,7 +261,7 @@ export default class AnalysisRightPane extends React.Component {
                             </button>
                         </div>
 
-                        <div className='btn-group btn-group-select2-max btn-group-right'>
+                        <div className='btn-group btn-group-select-group-max'>
                             <Select
                                 className='select2-search select-right'
                                 tabindex='-1'
@@ -272,7 +272,7 @@ export default class AnalysisRightPane extends React.Component {
                             />
                         </div>
                         <div className='btn-group-prefix'>
-                            <label className='label label-dark-default label-fix-width'>
+                            <label className='label label-dark-default label-round'>
                                 <span data-localize='query.single.title'>S</span>
                             </label>
                         </div>
@@ -294,7 +294,7 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                <div className='col-xs-12 col-md-10 btn-group-select-group '>
                     <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
@@ -305,7 +305,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
-                    <div className='btn-group btn-group-select2-max'>
+                    <div className='btn-group btn-group-select-group-max'>
                         <Select
                             className='select2-search'
                             tabindex='-1'
@@ -316,7 +316,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-dark-default  label-fix-width label-left'>
+                        <label className='label label-dark-default label-round'>
                             <span data-localize='query.tumor_normal.tumor.title'>T</span>
                         </label>
                     </div>
@@ -331,7 +331,7 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                <div className='col-xs-12 col-md-10 btn-group-select-group '>
                     <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
@@ -342,7 +342,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
-                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                    <div className='btn-group btn-group-select-group-max'>
                         <Select
                             tabindex='-1'
                             className='select2-search select-right'
@@ -353,7 +353,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-default label-fix-width'>
+                        <label className='label label-default label-round'>
                             <span data-localize='query.tumor_normal.normal.title'>N</span>
                         </label>
                     </div>
@@ -374,7 +374,7 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group' key={i}>
-                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                <div className='col-xs-12 col-md-10 btn-group-select-group '>
                     <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
@@ -385,7 +385,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
-                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                    <div className='btn-group btn-group-select-group-max btn-group-right'>
                         <Select
                             className='select2-search select-right'
                             tabindex='-1'
@@ -396,7 +396,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-dark-default label-fix-width'>
+                        <label className='label label-default label-round'>
                             <span data-localize='query.family.proband.title'>P</span>
                         </label>
                     </div>
@@ -411,7 +411,7 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='form-group' key={i}>
-                <div className='col-xs-12 col-md-10 btn-group-select2 '>
+                <div className='col-xs-12 col-md-10 btn-group-select-group '>
                     <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
@@ -422,7 +422,7 @@ export default class AnalysisRightPane extends React.Component {
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
-                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                    <div className='btn-group btn-group-select-group-max btn-group-right'>
                         <Select
                             aria-hidden='true'
                             tabindex='-1'
@@ -434,7 +434,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-default label-fix-width'>
+                        <label className='label label-default label-round'>
                             <span data-localize='query.family.mother.short'>{sample ? typeLabels[sample.type] : ''}</span>
                         </label>
                     </div>
@@ -461,7 +461,7 @@ export default class AnalysisRightPane extends React.Component {
             disabled: error ? true : false
         };
         return (
-            <div className='btn-toolbar'>
+            <div className='btn-toolbar btn-toolbar-form-actions'>
                 <button
                     className='btn btn-primary'
                     disabled={buttonParams.disabled}
@@ -559,7 +559,7 @@ export default class AnalysisRightPane extends React.Component {
     
     renderAnalysisDates(createdDate, lastQueryDate) {
         return (
-            <div className='label-date'>
+            <div className='label-group-date'>
                 <label>
                     <span data-localize='general.created_date'>Created date</span>: <span>{createdDate}</span>
                 </label>
@@ -653,7 +653,7 @@ export default class AnalysisRightPane extends React.Component {
                 </dl>
 
                 <hr />
-                <div className='btn-toolbar'>
+                <div className='btn-toolbar btn-toolbar-form-actions'>
                     <a
                        type='button'
                        className='btn btn-link btn-uppercase'

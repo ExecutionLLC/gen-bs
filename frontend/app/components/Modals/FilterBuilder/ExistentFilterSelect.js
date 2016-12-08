@@ -25,19 +25,17 @@ export default class ExistentFilterSelect extends Component {
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
         const isFilterDuplicable = selectedFilter.modelType !== 'complex';
         return (
-            <div className='form-rows-dynamic'>
+            <div className='form-rows'>
                 <div className='form-group'>
                     {this.renderTitle(texts)}
                 </div>
-                <div className='row-head-selector'>               
-                    {this.renderWarning(isDemoSession, selectedFilter.type, texts)}
-                    <div className='form-group'>
-                        <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
-                            {this.renderFiltersSelector(filters)}
-                            {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts)}
-                        </div>
+                {this.renderWarning(isDemoSession, selectedFilter.type, texts)}
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select-group'>
+                        {this.renderFiltersSelector(filters)}
+                        {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts)}
                     </div>
-                </div>
+                </div>                
             </div>
         );
     }
@@ -70,7 +68,7 @@ export default class ExistentFilterSelect extends Component {
         }));
 
         return (
-            <div className='btn-group btn-group-select2-max'>
+            <div className='btn-group btn-group-select-group-max'>
                 <Select
                     options={selectItems}
                     value={this.getSelectedFilter().id}

@@ -1,0 +1,49 @@
+.editable-pre-wrapped { 
+  border: medium none;
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+
+
+.editable-click,
+   a.editable-click,
+    a.editable-click:hover { 
+     line-height: 1.1;
+     display: inline-block;
+     text-decoration: none;
+   &:extend(.btn-link-default); 
+
+  }
+  
+
+.editable-buttons-bottom { 
+  text-align: right;
+}
+.editableform {
+  min-width: 0; 
+ 
+  @media (min-width: @screen-sm){ 
+  min-width: 300px;
+ 
+  }
+}
+.editableform {
+  .form-control { 
+  width: 100%;
+  font-size: 15px;
+}
+ 
+  textarea.form-control { 
+    height: 140px;
+    min-width: 0;
+    @media (min-width: @screen-sm){
+    min-width: 300px;
+    font-size: 12px;
+    .placeholder(@text-color);
+    }
+  }
+}

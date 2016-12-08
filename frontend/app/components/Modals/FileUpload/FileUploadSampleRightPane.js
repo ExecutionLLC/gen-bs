@@ -43,8 +43,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
         if (selectedSample) {
             return (
-                <div
-                    className='form-horizontal form-rows form-rows-2row-xs'>
+                <div>
                     {this.renderSampleContent(selectedSample)}
                 </div>
             );
@@ -58,41 +57,39 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     renderUpload(isDemo) {
         return (
-            <div className='form-horizontal form-padding'>
-                <div className='empty empty-upload collapse sample-mode1 in'>
-                    <div className='btn-group btn-group-xlg'>
-                        {!isDemo && <button className='btn btn-link-default'
-                                            onClick={this.onUploadClick.bind(this)}
-                                            onDragEnter={cancelDOMEvent}
-                                            onDragOver={cancelDOMEvent}
-                                            onDrop={(e) => {
-                                                cancelDOMEvent(e);
-                                                this.onFilesDrop(e.dataTransfer.files);
-                                            }}
-                        >
-                            <input
-                                onChange={ (e) => {
+            <div className='empty'>
+                <div className='btn-group btn-group-xlg'>
+                    {!isDemo && <button className='btn btn-link-default'
+                                        onClick={this.onUploadClick.bind(this)}
+                                        onDragEnter={cancelDOMEvent}
+                                        onDragOver={cancelDOMEvent}
+                                        onDrop={(e) => {
+                                            cancelDOMEvent(e);
+                                            this.onFilesDrop(e.dataTransfer.files);
+                                        }}
+                    >
+                        <input
+                            onChange={ (e) => {
                                     this.onUploadChanged(e.target.files);
                                     e.target.value = null;
                                 }}
-                                style={{display: 'none'}}
-                                ref='fileInput'
-                                id='file-select'
-                                type='file'
-                                accept='.vcf,.gz'
-                                name='files[]'
-                                defaultValue=''
-                                multiple='multiple'
-                            />
-                            <h3>Drop vcf files here or <span
-                                className='text-underline'>click here</span> to
-                                select</h3>
-                        </button>
-                        }
-                        {isDemo &&
-                        <h3><i className='md-i'>perm_identity</i>Please login or
-                            register to upload new samples</h3>}
-                    </div>
+                            style={{display: 'none'}}
+                            ref='fileInput'
+                            id='file-select'
+                            type='file'
+                            accept='.vcf,.gz'
+                            name='files[]'
+                            defaultValue=''
+                            multiple='multiple'
+                        />
+                        <h3>Drop vcf files here or <span
+                            className='text-underline'>click here</span> to
+                            select</h3>
+                    </button>
+                    }
+                    {isDemo &&
+                    <h3><i className='md-i'>perm_identity</i>Please login or
+                        register to upload new samples</h3>}
                 </div>
             </div>
         );
@@ -127,7 +124,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                 .filter(field => !field.isInvisible)
                 .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
             return (_.some(fieldsRenders, fieldRender => !!fieldRender) &&
-                <div className='sample-mode3 collapse in'>
+                <div className='dl-group-view-mode'>
                     {fieldsRenders}
                 </div>
             );
@@ -139,7 +136,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderFooter(selectedSample) {
         const {auth: {isDemo}, samplesList: {onSaveAction}} = this.props;
         return (
-            <div className='panel-footer'>
+            <div className='btn-toolbar btn-toolbar-form-actions'>
                 {onSaveAction && this.renderSelectButton(isDemo, selectedSample)}
                 {this.renderEditButton(selectedSample.type)}
             </div>
@@ -207,7 +204,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderSampleContent(selectedSample) {
         const {edited} = this.props;
         return (
-            <div>
+            <div className='dl-group-edit-mode'>
                 {!edited && this.renderCurrentValues(selectedSample)}
                 {!edited && this.renderFooter(selectedSample)}
                 {edited && this.renderEditableValues(selectedSample.id)}
@@ -267,7 +264,7 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     renderSampleDates(createdDate) {
         return (
-            <div className='label-date'>
+            <div className='label-group-date'>
                 <label>
                     Uploaded: {formatDate(createdDate)}
                 </label>
