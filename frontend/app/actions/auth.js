@@ -24,6 +24,7 @@ export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
 export const SHOW_ANOTHER_PAGE_OPENED_MODAL = 'SHOW_ANOTHER_PAGE_OPENED_MODAL';
+export const SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL = 'SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
@@ -291,6 +292,12 @@ export function showAnotherPageOpenedModal(shouldShow) {
     return {
         type: SHOW_ANOTHER_PAGE_OPENED_MODAL,
         shouldShow
+    };
+}
+
+export function setWaitStateForModal() {
+    return {
+        type: SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL
     };
 }
 

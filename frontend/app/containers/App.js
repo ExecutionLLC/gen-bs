@@ -99,6 +99,7 @@ class App extends Component {
                 />
                 <AnotherPageOpenedErrorModal
                     showModal={auth.showAnotherPageOpenedModal}
+                    isWaitingForClose={auth.isWaitingForCloseAnotherPageOpenedModal}
                 />
             </div>
         );
