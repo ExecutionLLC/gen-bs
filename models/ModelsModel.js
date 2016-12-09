@@ -108,7 +108,7 @@ class ModelsModel extends SecureModelBase {
 
     _fetch(userId, modelId, callback) {
         async.waterfall([
-            (callback) => this._fetchModel(userId,modelId, callback),
+            (callback) => this._fetchModel(userId, modelId, callback),
             (model, callback) => this._checkUserIsCorrect(userId, model, callback)
         ], callback);
     }
