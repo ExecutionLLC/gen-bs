@@ -41,7 +41,7 @@ export default function variantsTable(state = initialState, action) {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
                 }),
                 isNextDataLoading: true,
-                isFetching: true,
+                isFetching: true
             });
         }
         case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
