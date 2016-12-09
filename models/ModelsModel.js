@@ -157,7 +157,7 @@ class ModelsModel extends SecureModelBase {
             `${TableNames.Model}.creator`
         ])
             .from(TableNames.ModelVersion)
-            .leftJoin(TableNames.Model,`${TableNames.ModelVersion}.model_id`,`${TableNames.Model}.id`)
+            .leftJoin(TableNames.Model, `${TableNames.ModelVersion}.model_id`, `${TableNames.Model}.id`)
             .whereRaw('1 = 1');
 
         if (userIdOrNull) {
