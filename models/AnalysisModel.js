@@ -155,7 +155,7 @@ class AnalysisModel extends SecureModelBase {
                     creator: userId,
                     viewVersionId: viewId,
                     filterVersionId: filterId,
-                    modelId,
+                    modelVersionId: modelId,
                     type,
                     lastQueryDate: new Date()
                 };
@@ -288,7 +288,7 @@ class AnalysisModel extends SecureModelBase {
             description,
             filterVersionId,
             viewVersionId,
-            modelId,
+            modelVersionId,
             timestamp,
             lastQueryDate,
             type,
@@ -312,7 +312,7 @@ class AnalysisModel extends SecureModelBase {
             description,
             filterId: filterVersionId,
             viewId: viewVersionId,
-            modelId,
+            modelId: modelVersionId,
             createdDate: timestamp,
             lastQueryDate,
             type,
