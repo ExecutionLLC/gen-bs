@@ -78,7 +78,6 @@ export default class VariantsTableRows extends Component {
             const loadingElement = this.refs[REFS.LOADING];
             // check visibility of the 'loading' element
             if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
-                console.log('Dispatched getNextPartOfData');
                 dispatch(getNextPartOfData());
             }
         }
