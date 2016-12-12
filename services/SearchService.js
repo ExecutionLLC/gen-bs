@@ -264,7 +264,7 @@ class SearchService extends ServiceBase {
             });
         } else {
             const strOld = ruleObj.value;
-            if (strOld) {
+            if (typeof strOld === 'string' && strOld) {
                 ruleObj.value = strOld.replace(/,/g, '\\x2c');
             }
         }
