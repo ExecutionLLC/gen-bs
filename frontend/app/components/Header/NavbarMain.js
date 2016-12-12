@@ -65,10 +65,10 @@ class NavbarMain extends Component {
 
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
-                     <div className='text-center'>
-                        <span className='navbar-text brand'>AGx</span>
-                     </div>
-
+                    <div className='dropdown'>
+                        <a role="button" className="btn navbar-btn brand dropdown-toggle">
+                            AGx </a>
+                    </div>
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
                         badge={newSamplesCount || null}
