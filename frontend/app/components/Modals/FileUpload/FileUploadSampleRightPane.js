@@ -160,18 +160,14 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderCurrentValues(sample) {
         const {fields} = this.props;
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
-        if (_.some(sample.editableFields.fields, option => option.value)) {
-            const fieldsRenders = fields
-                .filter(field => !field.isInvisible)
-                .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
-            return (_.some(fieldsRenders, fieldRender => !!fieldRender) &&
-                <div className='dl-group-view-mode'>
-                    {fieldsRenders}
-                </div>
-            );
-        } else {
-            return null;
-        }
+        const fieldsRenders = fields
+            .filter(field => !field.isInvisible)
+            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
+        return (
+            <div className='dl-group-view-mode'>
+                {fieldsRenders}
+            </div>
+        );
     }
 
     renderFooter(selectedSample) {
@@ -222,24 +218,20 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderReadOnlyField(field, fieldIdToValuesHash) {
-        if (fieldIdToValuesHash[field.id]) {
-            let fieldValue = fieldIdToValuesHash[field.id];
-            // If field has available values, then the value is id of the actual option.
-            // We then need to retrieve the actual value corresponding to the option.
-            if (!_.isEmpty(field.availableValues)) {
-                const option = _.find(field.availableValues,
-                    availableValue => availableValue.id === fieldValue);
-                fieldValue = option.value;
-            }
-            return (
-                <dl key={field.id}>
-                    <dt>{field.label}</dt>
-                    <dd>{fieldValue}</dd>
-                </dl>
-            );
-        } else {
-            return null;
+        let fieldValue = fieldIdToValuesHash[field.id];
+        // If field has available values, then the value is id of the actual option.
+        // We then need to retrieve the actual value corresponding to the option.
+        if (!_.isEmpty(field.availableValues)) {
+            const option = _.find(field.availableValues,
+                availableValue => availableValue.id === fieldValue);
+            fieldValue = option && option.value || '';
         }
+        return (
+            <dl key={field.id}>
+                <dt>{field.label}</dt>
+                <dd>{fieldValue}</dd>
+            </dl>
+        );
     }
 
     renderSampleContent(selectedSample) {
