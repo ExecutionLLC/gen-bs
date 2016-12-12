@@ -54,13 +54,12 @@ function reduceAddComment(action, state) {
 
 function reduceTableMessage(action, state) {
     const resultData = action.wsData.result.data;
+    const newVariants = state.variants === null ? resultData : [...state.variants, ...(resultData || [])];
     return Object.assign({}, state, {
-        variants: state.variants === null ?
-            resultData :
-            [...state.variants, ...(resultData || [])],
+        variants: newVariants,
         variantsHeader: action.wsData.result.header,
         currentVariants: resultData,
-        isVariantsEmpty: (resultData && resultData.length === 0),
+        isVariantsEmpty: (newVariants && newVariants.length === 0),
         isVariantsLoading: false,
         isVariantsValid: true,
         variantsError: null
