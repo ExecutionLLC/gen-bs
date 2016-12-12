@@ -39,18 +39,26 @@ const SAMPLE_UPLOAD_STATUS = createEnum({
     ERROR: 'error'                  // Failed with error
 });
 
+const ENTITY_TYPES = createEnum({
+    STANDARD: 'standard', // Available for demo user
+    ADVANCED: 'advanced', // Shown in demo, but locked. Available for registered users.
+    USER: 'user', // Created by user.
+    DEFAULT: 'default' //default entity type
+});
 
 exports.up = function (knex) {
     console.log('=> Update sample schema...');
     return updateVcfTable(knex)
-        .then(() => updateUploadFileInformation(knex))
         .then(() => updateSampleGenotypeTable(knex))
         .then(() => createSampleTables(knex))
+        .then(() => updateSampleInformation(knex))
+        .then(() => updateUploadFileInformation(knex))
         .then(() => appendAnalysesSampleId(knex))
         .then(() => updateSampleTablesData(knex))
         .then(() => removeAnalysesSampleGenotypeVersionRef(knex))
         .then(() => dropGenotypeTables(knex))
-        .then(() => dropDefaultVcfTable(knex));
+        .then(() => dropDefaultVcfTable(knex))
+        .then(() => dropVcfFileOldTable(knex));
 };
 
 exports.down = function () {
@@ -63,6 +71,14 @@ function appendAnalysesSampleId(knex) {
             .references('id')
             .inTable(tables.Sample);
     });
+}
+
+function dropVcfFileOldTable(knex) {
+    return knex.schema.table(tables.VcfFile, (table) => {
+        table.dropColumn('is_analyzed');
+        table.dropColumn('analyzed_timestamp');
+        table.dropColumn('type');
+    })
 }
 
 function dropGenotypeTables(knex) {
@@ -186,12 +202,24 @@ function updateSampleGenotypeTable(knex) {
     return knex.schema.renameTable(oldTables.SampleGenotype, tables.Sample)
         .table(tables.Sample, table => {
             table.renameColumn('vcf_file_sample_id', 'vcf_file_id');
+            table.boolean('is_analyzed')
+                .defaultTo(false);
+            table.timestamp('analyzed_timestamp');
+            table.enu('type', [
+                ENTITY_TYPES.USER,
+                ENTITY_TYPES.ADVANCED,
+                ENTITY_TYPES.DEFAULT,
+                ENTITY_TYPES.STANDARD
+            ]);
+            table.timestamp('created')
+                .defaultTo(knex.fn.now());
         });
 }
 
 function dropDefaultVcfTable(knex) {
     return knex.raw(`ALTER TABLE ${tables.VcfFile} ALTER COLUMN status DROP DEFAULT`)
         .then(() => knex.raw(`ALTER TABLE ${tables.VcfFile} ALTER COLUMN progress DROP DEFAULT`))
+        .then(() => knex.raw(`ALTER TABLE ${tables.Sample} ALTER COLUMN type DROP DEFAULT`))
 
 }
 
@@ -225,6 +253,19 @@ function dropUploadHistoryModel(knex) {
     return knex.schema.dropTable(oldTables.SampleUploadHistory);
 }
 
+function updateSampleInformation(knex) {
+    return findVcfFileSample(knex)
+        .then((vcfFileSamples) => {
+            return Promise.mapSeries(vcfFileSamples, vcfFileSample => updateVcfFileSample(vcfFileSample, knex));
+        });
+}
+
+function findVcfFileSample(knex) {
+    return knex.select()
+        .from(tables.VcfFile)
+        .then((results) => _.map(results, result => ChangeCaseUtil.convertKeysToCamelCase(result)));
+}
+
 function findUploadHistories(knex) {
     return knex.select()
         .from(oldTables.SampleUploadHistory)
@@ -241,5 +282,16 @@ function updateVcfFile(history, knex) {
             error,
             isDeleted,
             created
+        }));
+}
+
+function updateVcfFileSample(vcfFileSample, knex) {
+    const {id, isAnalyzed, analyzedTimestamp, type} = vcfFileSample;
+    return knex(tables.Sample)
+        .where('vcf_file_id', id)
+        .update(ChangeCaseUtil.convertKeysToSnakeCase({
+            isAnalyzed,
+            analyzedTimestamp,
+            type
         }));
 }
