@@ -9,7 +9,7 @@ export default class FileUploadHeader extends React.Component {
 
             <Modal.Header closeButton>
                 <Modal.Title >
-                    Upload VCF Files
+                    Samples
                 </Modal.Title>
             </Modal.Header>
 
