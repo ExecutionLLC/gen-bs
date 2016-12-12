@@ -6,11 +6,15 @@ import VariantsTableRow from './VariantsTableRow';
 import {getNextPartOfData, selectTableRow} from '../../actions/variantsTable';
 import {completeTableScrollPositionReset} from '../../actions/ui';
 
+const REFS = {
+    CONTAINER: 'variantsTableBody',
+    LOADING: 'variantsTableLoading'
+};
+
 export default class VariantsTableRows extends Component {
 
     render() {
         const sampleRows = this.props.variants;
-        const {currentVariants} = this.props.ws;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
         const {fields, variantsHeader, variantsAnalysis} = this.props;
@@ -18,17 +22,17 @@ export default class VariantsTableRows extends Component {
         return (
             <tbody className='table-variants-body'
                    id='variants_table_body'
-                   ref='variantsTableBody'>
+                   ref={REFS.CONTAINER}>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
                 !!variantsAnalysis, variantsHeader, fields, selectedRowIndices)}
-            {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
+            {!isFilteringOrSorting && this.canLoadMore() && VariantsTableRows.renderLoadingItem()}
             </tbody>
         );
     }
 
     componentDidMount() {
         const containerElement = document.getElementsByClassName('table-variants-container').item(0);
-        const scrollElement = this.refs.variantsTableBody;
+        const scrollElement = this.refs[REFS.CONTAINER];
         scrollElement.style.height = `${containerElement.clientHeight - 100}px`;
 
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
@@ -42,20 +46,13 @@ export default class VariantsTableRows extends Component {
     }
 
     componentWillUnmount() {
-        const scrollElement = this.refs.variantsTableBody;
+        const scrollElement = this.refs[REFS.CONTAINER];
         scrollElement.removeEventListener('scroll', this.handleScroll);
     }
 
     renderTableBody(rows, sortState, isFilteringOrSorting, variantsAnalysisPresent, variantsHeader, fields, selectedRowIndices) {
         if (isFilteringOrSorting || !variantsAnalysisPresent) {
-            return (
-                <tr>
-                    <td colSpan='100'>
-                        <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
-                        </div>
-                    </td>
-                </tr>
-            );
+            return VariantsTableRows.renderLoadingItem();
         } else {
             return _.map(rows,
                 (row, index) =>
@@ -65,28 +62,36 @@ export default class VariantsTableRows extends Component {
     }
 
     handleScroll(e) {
-        const {dispatch, ws: {currentVariants}, ui: {shouldResetTableScrollPosition}} = this.props;
+        const {dispatch, ui: {shouldResetTableScrollPosition}, variantsTable: {isFetching, isNextDataLoading}} = this.props;
         // Workaround for bug #299
         if (shouldResetTableScrollPosition) {
             setTimeout(() => {
-                this.refs.variantsTableBody.scrollTop = 0;
+                this.refs[REFS.CONTAINER].scrollTop = 0;
                 dispatch(completeTableScrollPositionReset());
             }, 10);
         }
-        if (!currentVariants) {
+
+        if (!this.canLoadMore() || isNextDataLoading || isFetching) {
             return;
+        } else {
+            const containerElement = this.refs[REFS.CONTAINER];
+            const loadingElement = this.refs[REFS.LOADING];
+            // check visibility of the 'loading' element
+            if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
+                dispatch(getNextPartOfData());
+            }
         }
+
         const el = e.target;
-        const variantsLength = currentVariants.length;
-
-        if (el.scrollHeight - el.scrollTop === el.clientHeight
-            && variantsLength > this.props.variantsTable.searchInResultsParams.limit - 1) {
-            this.props.dispatch(getNextPartOfData());
-        }
-
         if (this.props.xScrollListener) {
             this.props.xScrollListener(el.scrollLeft);
         }
+    }
+
+    // checks if the last results size (currentVariants.length) is greater or equal to the limit of single request
+    canLoadMore() {
+        const {ws: {currentVariants}, variantsTable: {searchInResultsParams: {limit}}} = this.props;
+        return currentVariants && currentVariants.length >= limit;
     }
 
     renderRow(row, rowIndex, sortState, variantsHeader, fields, selectedRowIndices) {
@@ -108,20 +113,15 @@ export default class VariantsTableRows extends Component {
         );
     }
 
-    renderWaitingIfNeeded(isFilteringOrSorting, currentVariants) {
-        const variantsLength = (!currentVariants) ? 0 : currentVariants.length;
-        if (!isFilteringOrSorting && variantsLength > 99) {
-            return (
-                <tr>
-                    <td colSpan='100'>
-                        <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
-                        </div>
-                    </td>
-                </tr>
-            );
-        } else {
-            return null;
-        }
+    static renderLoadingItem() {
+        return (
+            <tr ref={REFS.LOADING}>
+                <td colSpan='100'>
+                    <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
+                    </div>
+                </td>
+            </tr>
+        );
     }
 
     onTableRowSelected(rowIndex, isNowSelected) {

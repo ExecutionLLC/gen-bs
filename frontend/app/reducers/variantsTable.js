@@ -39,7 +39,9 @@ export default function variantsTable(state = initialState, action) {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-                })
+                }),
+                isNextDataLoading: true,
+                isFetching: true
             });
         }
         case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
