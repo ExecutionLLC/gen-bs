@@ -66,7 +66,7 @@ class NavbarMain extends Component {
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
                     <div className='dropdown'>
-                        <a role="button" className="btn navbar-btn brand dropdown-toggle">
+                        <a role='button' className='btn navbar-btn brand dropdown-toggle'>
                             AGx </a>
                     </div>
                     <SamplesButton
