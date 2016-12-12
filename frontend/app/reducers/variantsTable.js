@@ -23,6 +23,7 @@ const initialState = {
     needUpdate: false,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
+    isReceivedAll: false,
     selectedRowIndices: []
 };
 
@@ -174,7 +175,8 @@ export default function variantsTable(state = initialState, action) {
                 isNextDataLoading: false,
                 isFilteringOrSorting: false,
                 isFetching: false,
-                lastUpdated: action.receivedAt
+                lastUpdated: action.receivedAt,
+                isReceivedAll: action.isReceivedAll
             });
         }
         case ActionTypes.SELECT_VARIANTS_ROW: {

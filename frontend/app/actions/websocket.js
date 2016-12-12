@@ -138,9 +138,10 @@ function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
         if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
             dispatch(tableMessage(wsData));
-            const {variantsTable} = getState();
+            const {variantsTable, variantsTable: {searchInResultsParams: {limit}}} = getState();
             if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
-                dispatch(receiveSearchedResults());
+                const isReceivedAll = wsData.result.data && wsData.result.data.length < limit;
+                dispatch(receiveSearchedResults(isReceivedAll));
             }
         } else {
             dispatch(progressMessage(wsData));
