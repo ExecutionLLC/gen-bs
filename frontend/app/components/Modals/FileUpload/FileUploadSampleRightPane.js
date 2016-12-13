@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import classNames from 'classnames';
 import React from 'react';
 import Input from '../../shared/Input';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
@@ -25,9 +26,9 @@ function cancelDOMEvent(e) {
 export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
-        const {samplesList: {editingSample}} = this.props;
+        const {samplesList: {editingSample}, isBringToFront} = this.props;
         return (
-            <div className='split-right'>
+            <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 <div className='split-top'>
                     {editingSample && this.renderSampleHeader()}
                 </div>
