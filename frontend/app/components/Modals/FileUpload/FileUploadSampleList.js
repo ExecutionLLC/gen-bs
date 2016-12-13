@@ -300,17 +300,20 @@ export default class FileUploadSampleList extends React.Component {
             'ajax': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
-                }), message: 'Loading..'
+                }),
+                message: 'Loading..'
             },
             'task_running': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
-                }), message: 'Saving..'
+                }),
+                message: 'Saving..'
             },
             'in_progress': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
-                }), message: 'Saving..'
+                }),
+                message: 'Saving..'
             }
         };
         const currentStage = STAGES[progressStatus] || STAGES['ajax'];
@@ -320,14 +323,16 @@ export default class FileUploadSampleList extends React.Component {
         return (
             <div>
                 <div className='progress'>
-                    <div className={currentStage.classNames}
-                         role='progressbar'
-                         style={{width: `${progressValue}%`}}>
+                    <div
+                        className={currentStage.classNames}
+                        role='progressbar'
+                        style={{width: `${progressValue}%`}}
+                    >
                     </div>
                 </div>
                 <span className='link-desc'>
-            <span className='text-primary'>Saving..</span>
-            </span>
+                    <span className='text-primary'>Saving..</span>
+                </span>
             </div>
         );
     }
