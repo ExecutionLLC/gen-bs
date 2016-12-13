@@ -30,11 +30,11 @@ export function isMainSample(type) {
 }
 
 export function makeSampleLabelAsFileGenotype(sample) {
-    const {genotypeName, fileName} = sample;
-    return `${fileName}:${genotypeName}`;
+    const {genotypeName, fileName} = sample; // TODO 757 fileName
+    return `${fileName}:${genotypeName}`; // TODO 757 fileName
 }
 
 export function makeSampleLabel(sample) {
-    const {genotypeName, fileName} = sample;
-    return genotypeName ? makeSampleLabelAsFileGenotype(sample) : fileName;
+    const {genotypeName, fileName} = sample; // TODO 757 fileName
+    return genotypeName ? makeSampleLabelAsFileGenotype(sample) : fileName; // TODO 757 fileName
 }

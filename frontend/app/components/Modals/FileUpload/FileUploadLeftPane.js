@@ -49,7 +49,7 @@ export default class FileUploadLeftPane extends React.Component {
                 return getSearchValue(editableField, sampleEditableField)
                     .toLocaleLowerCase();
             });
-            sampleSearchValues.push(sample.fileName ? sample.fileName.toLocaleLowerCase() : '???');
+            sampleSearchValues.push(sample.fileName ? sample.fileName.toLocaleLowerCase() : '???'); // TODO 757 remove fileName
             return {
                 sampleId: sample.id,
                 searchValues: sampleSearchValues

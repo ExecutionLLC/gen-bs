@@ -78,6 +78,7 @@ class SavedFilesModal extends DialogBase {
 
     renderSavedFileRow(savedFile) {
         const {filter, view, model, samples, timestamp} = savedFile;
+        // TODO 757: do not use fileName below
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>

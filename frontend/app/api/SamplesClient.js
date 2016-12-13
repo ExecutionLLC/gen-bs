@@ -35,7 +35,7 @@ export default class SamplesClient extends UserEntityClientBase {
     }
 
     static isValidSample(sample, shouldCheckFieldValues) {
-        if (!sample.id || !sample.fileName) {
+        if (!sample.id || !sample.fileName) { // TODO 757: removeisValidSample if did not used
             return false;
         }
         if (!_.includes([entityType.DEFAULT, entityType.STANDARD, entityType.ADVANCED, entityType.USER], sample.type)) {
