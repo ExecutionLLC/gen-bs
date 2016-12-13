@@ -145,7 +145,7 @@ export default class VariantsTableRow extends ComponentBase {
         const replacementValue = encodeURIComponent(value);
         const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
         return (
-            <a href={valueUrl}>{value}</a>
+            <a href={valueUrl} target='_blank'>{value}</a>
         );
     }
 
