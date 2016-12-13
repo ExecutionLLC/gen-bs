@@ -301,19 +301,19 @@ export default class FileUploadSampleList extends React.Component {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
                 }),
-                message: 'Loading..'
+                renderMessage: 'Loading..'
             },
             'task_running': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                message: 'Saving..'
+                renderMessage: <span className='text-primary'>Saving...</span>
             },
             'in_progress': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                message: 'Saving..'
+                renderMessage: <span className='text-primary'>Saving...</span>
             }
         };
         const currentStage = STAGES[progressStatus] || STAGES['ajax'];
@@ -331,7 +331,7 @@ export default class FileUploadSampleList extends React.Component {
                     </div>
                 </div>
                 <span className='link-desc'>
-                    <span className='text-primary'>Saving..</span>
+                    {currentStage.renderMessage}
                 </span>
             </div>
         );
