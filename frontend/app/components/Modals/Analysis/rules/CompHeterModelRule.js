@@ -12,7 +12,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
     }
 
     isRuleAvailable() {
-        const {historyItem:{modelId}, modelsList} = this.props;
+        const {historyItem: {modelId}, modelsList} = this.props;
         const model = modelsList.hashedArray.hash[modelId] || null;
         if (!model) {
             return false;
@@ -21,7 +21,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
     }
 
     isValid() {
-        const {historyItem:{samples}, fields, samplesList} = this.props;
+        const {historyItem: {samples}, fields, samplesList} = this.props;
         const analysesSamples = _.map(samples, sample => samplesList.hashedArray.hash[sample.id]);
         const invalidGenotypeSample = _.find(analysesSamples, sample => _.isNull(sample.genotypeName));
         if (invalidGenotypeSample) {
