@@ -339,7 +339,7 @@ export default class FileUploadSampleList extends React.Component {
 
     renderProgressUpload(upload, sample) {
         const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
-        const key = sample ? sample.id : upload.operationId;
+        const key = sample ? sample.id : (upload.operationId || upload.id);
         const isActive = sample ? sample.id === currentSampleId : upload.id === currentUploadId;
         const name = sample ? this._createSampleLabel(sample) : upload.file.name;
         return (

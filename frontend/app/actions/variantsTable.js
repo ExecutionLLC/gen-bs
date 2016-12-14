@@ -248,10 +248,11 @@ function requestSearchedResults(flags) {
     };
 }
 
-export function receiveSearchedResults() {
+export function receiveSearchedResults(isReceivedAll) {
     return {
         type: RECEIVE_SEARCHED_RESULTS,
-        receivedAt: Date.now()
+        receivedAt: Date.now(),
+        isReceivedAll
     };
 }
 

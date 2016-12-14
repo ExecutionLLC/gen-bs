@@ -1,8 +1,13 @@
 import React from 'react';
+import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
 
 import DialogBase from './DialogBase';
-import {closeOtherSocketsAsync, showAnotherPageOpenedModal} from '../../actions/auth';
+import {
+    closeOtherSocketsAsync,
+    showAnotherPageOpenedModal,
+    setWaitStateForModal
+} from '../../actions/auth';
 
 class AnotherPageOpenedErrorModal extends DialogBase {
     constructor(props) {
@@ -25,18 +30,35 @@ class AnotherPageOpenedErrorModal extends DialogBase {
 
     renderFooterContents() {
         return (
-            <button
-                type='button'
-                onClick={() => this.closeOtherSockets()}
-                className='btn btn-default'
-            >
-                <span>Use Here</span>
-            </button>
+            <div>
+                { this.props.isWaitingForClose &&
+                <span className="form-padding">Please, wait a moment...</span>
+                }
+                <button
+                    type='button'
+                    onClick={() => this.closeOtherSockets()}
+                    className='btn btn-default'
+                    disabled={this.props.isWaitingForClose}
+                >
+                    Use Here
+                </button>
+            </div>
+        );
+    }
+
+    renderHeader() {
+        return (
+            <Modal.Header>
+                <Modal.Title>
+                    {this.renderTitleContents()}
+                </Modal.Title>
+            </Modal.Header>
         );
     }
 
     closeOtherSockets() {
         const {dispatch} = this.props;
+        dispatch(setWaitStateForModal());
         dispatch(closeOtherSocketsAsync())
             .then(() => dispatch(showAnotherPageOpenedModal(false)));
     }
