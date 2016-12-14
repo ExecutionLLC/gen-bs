@@ -110,7 +110,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     static makeFieldIdToValuesHash(sample) {
-        return _(sample.editableFields.fields)
+        return _(sample.editableFields)
             .keyBy((value) => value.fieldId)
             .mapValues((values) => values.value)
             .value();
@@ -119,7 +119,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderCurrentValues(sample) {
         const {fields} = this.props;
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
-        if (_.some(sample.editableFields.fields, option => option.value)) {
+        if (_.some(sample.editableFields, option => option.value)) {
             const fieldsRenders = fields
                 .filter(field => !field.isInvisible)
                 .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
@@ -244,7 +244,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, samplesList: {editingSample: {editableFields: {description}, id, type}}} = this.props;
+        const {auth: {isDemo}, samplesList: {editingSample: {description, id, type}}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -273,7 +273,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, samplesList: {editingSample: {editableFields: {name}, id, type}}} = this.props;
+        const {auth: {isDemo}, samplesList: {editingSample: {name, id, type}}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -292,7 +292,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList: {editingSample: {editableFields: {name, description}}}} = this.props;
+        const {dispatch, samplesList: {editingSample: {name, description}}} = this.props;
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
         dispatch(updateSampleText(sampleId, newName, newDescription));

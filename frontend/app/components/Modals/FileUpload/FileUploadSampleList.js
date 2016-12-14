@@ -54,7 +54,7 @@ export default class FileUploadSampleList extends React.Component {
             return upload.progressStatus !== fileUploadStatus.READY;
         });
         const currentUploadsData = _.map(currentUploads, upload => {
-            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.originalId === upload.sampleId);
+            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.id);
             return {
                 upload,
                 samples: uploadSamples,
@@ -64,7 +64,11 @@ export default class FileUploadSampleList extends React.Component {
         return (
             currentUploadsData.map((data) =>
                 data.isError ?
-                    this._renderUploadedData({label: data.upload.file.name, upload: data.upload, date: data.upload.created}) :
+                    this._renderUploadedData({
+                        label: data.upload.file.name,
+                        upload: data.upload,
+                        date: data.upload.created
+                    }) :
                     this.renderProgressUploadSample(data)
             )
         );
@@ -72,17 +76,17 @@ export default class FileUploadSampleList extends React.Component {
 
     renderUploadedData() {
         const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
-        const uploadHash = _.keyBy(filesProcesses, 'sampleId');
+        const uploadHash = _.keyBy(filesProcesses, 'id');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
             const {originalId} = sample;
-            const sampleName = sample.editableFields.name;
+            const sampleName = sample.name;
             const currentUpload = uploadHash[originalId];
             return {
                 label: sampleName,
                 upload: currentUpload,
                 sample: sample,
-                date: currentUpload ? currentUpload.created : sample.timestamp
+                date: currentUpload ? currentUpload.created : sample.created
             };
         });
         const filteredUploadedSamples = _.filter(samplesData, finishedUpload => {
@@ -106,7 +110,7 @@ export default class FileUploadSampleList extends React.Component {
 
     _createSampleLabel(sample) {
         const {type} = sample;
-        const sampleName = sample.editableFields.name;
+        const sampleName = sample.name;
         return getItemLabelByNameAndType(sampleName, type);
     }
 
@@ -125,8 +129,8 @@ export default class FileUploadSampleList extends React.Component {
                         (id) => this.onSampleItemSelectForAnalysis(id),
                         (id) => this.onSampleItemDelete(id),
                         label,
-                        sample.editableFields.description,
-                        sample.timestamp
+                        sample.description,
+                        sample.created
                     );
                 }
                 return null;
@@ -140,8 +144,8 @@ export default class FileUploadSampleList extends React.Component {
                         (id) => this.onSampleItemSelectForAnalysis(id),
                         (id) => this.onSampleItemDelete(id),
                         label,
-                        sample.editableFields.description,
-                        sample.timestamp
+                        sample.description,
+                        sample.created
                     );
                 } else {
                     return this.renderListItem(
@@ -152,8 +156,8 @@ export default class FileUploadSampleList extends React.Component {
                         (id) => this.onSampleItemSelectForAnalysis(id),
                         null,
                         label,
-                        sample.editableFields.description,
-                        sample.timestamp
+                        sample.description,
+                        sample.created
                     );
                 }
             }
