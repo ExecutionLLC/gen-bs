@@ -89,19 +89,21 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     onCurrentSampleIdChange(id) {
-        const {changeShowValues, dispatch} = this.props;
+        const {changeShowValues, dispatch, onSelectUpload} = this.props;
         changeShowValues(false);
         dispatch(setCurrentUploadId(null));
         dispatch(setCurrentSampleId(id));
         dispatch(setEditingSampleId(id));
+        onSelectUpload();
     }
 
     onCurrentUploadIdChange(id) {
-        const {changeShowValues, dispatch} = this.props;
+        const {changeShowValues, dispatch, onSelectUpload} = this.props;
         changeShowValues(false);
         dispatch(setCurrentUploadId(id));
         dispatch(setCurrentSampleId(null));
         dispatch(setEditingSampleId(null));
+        onSelectUpload();
     }
 }
 

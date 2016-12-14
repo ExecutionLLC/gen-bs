@@ -41,8 +41,9 @@ export default class FileUploadSampleList extends React.Component {
                 <ul id='samplesTabs'
                     className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
+                    {this.renderUploadedData(true)}
                     {this.renderCurrentUploadData()}
-                    {this.renderUploadedData()}
+                    {this.renderUploadedData(false)}
                 </ul>
             </div>
         );
@@ -70,7 +71,7 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderUploadedData() {
+    renderUploadedData(showNew) {
         const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'sampleId');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
@@ -100,7 +101,7 @@ export default class FileUploadSampleList extends React.Component {
         });
         const sortedFilteredUploads = _.sortBy(filteredUploadedSamples, ['date']).reverse();
         return (
-            sortedFilteredUploads.map((item) => this._renderUploadedData(item))
+            sortedFilteredUploads.map((item) => this._renderUploadedData(item, showNew))
         );
     }
 
@@ -111,12 +112,15 @@ export default class FileUploadSampleList extends React.Component {
     }
 
 
-    _renderUploadedData(uploadData) {
+    _renderUploadedData(uploadData, showNew) {
         const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
         if (sample) {
             if (upload) {
                 if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
+                    if (!showNew) {
+                        return null;
+                    }
                     return this.renderListItem(
                         sample.id,
                         sample.id === currentSampleId,
@@ -131,6 +135,9 @@ export default class FileUploadSampleList extends React.Component {
                 }
                 return null;
             } else {
+                if (showNew) {
+                    return null;
+                }
                 if (samplesHash[sample.id].type === entityType.USER) {
                     return this.renderListItem(
                         sample.id,
@@ -158,6 +165,9 @@ export default class FileUploadSampleList extends React.Component {
                 }
             }
         } else {
+            if (showNew) {
+                return null;
+            }
             if (typeof upload.id === 'string') {
                 return this.renderListItem(
                     upload.id,
@@ -290,17 +300,20 @@ export default class FileUploadSampleList extends React.Component {
             'ajax': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
-                }), message: 'Loading..'
+                }),
+                renderMessage: 'Loading..'
             },
             'task_running': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
-                }), message: 'Saving..'
+                }),
+                renderMessage: <span className='text-primary'>Saving...</span>
             },
             'in_progress': {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
-                }), message: 'Saving..'
+                }),
+                renderMessage: <span className='text-primary'>Saving...</span>
             }
         };
         const currentStage = STAGES[progressStatus] || STAGES['ajax'];
@@ -310,14 +323,16 @@ export default class FileUploadSampleList extends React.Component {
         return (
             <div>
                 <div className='progress'>
-                    <div className={currentStage.classNames}
-                         role='progressbar'
-                         style={{width: `${progressValue}%`}}>
+                    <div
+                        className={currentStage.classNames}
+                        role='progressbar'
+                        style={{width: `${progressValue}%`}}
+                    >
                     </div>
                 </div>
                 <span className='link-desc'>
-            <span className='text-primary'>Saving..</span>
-            </span>
+                    {currentStage.renderMessage}
+                </span>
             </div>
         );
     }

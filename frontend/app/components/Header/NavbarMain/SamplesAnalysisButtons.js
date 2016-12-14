@@ -53,7 +53,7 @@ export class AnalysisButton extends Component {
                         data-target='#analysis'
                         data-toggle='modal'
                         onClick={() => this.props.openAnalysisModal()}
-                    ><span className='hidden-xs' data-localize='query.title'>Analysis</span>
+                    ><span className='hidden-xs' data-localize='query.title'>Analyses</span>
                         <span className='visible-xs'><i className='ag22 ag-flask'></i></span>
                     </a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
