@@ -27,7 +27,7 @@ class NavbarSearch extends Component {
                     onClick={() => this.onSearchPopupToggle(true)}
                 ><i className='md-i'>search</i></a>
                 <div className='navbar-search-field'>
-                    <input
+                    <input // TODO 616
                      type='text'
                      data-localize='results.search'
                      className='form-control placeholder-inverse'
