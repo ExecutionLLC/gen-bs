@@ -142,14 +142,18 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     renderHyperLinks(hyperlinkTemplate, value) {
-        return _.map(value.split(','), (item) => {
-            const replacementValue = encodeURIComponent(item);
-            const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
-            return (
-                <div key={item}>
-                    <a href={valueUrl} target='_blank'>{item}</a>
-                </div>
-            );
+        return _.map(value.split(','), (item, index) => {
+            if (item !== '.') {
+                const replacementValue = encodeURIComponent(item);
+                const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+                return (
+                    <div key={index}>
+                        <a href={valueUrl} target='_blank'>{item}</a>
+                    </div>
+                );
+            } else {
+                return item;
+            }
         });
     }
 
