@@ -471,7 +471,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
      * */
     _getAppServerSampleId(sample) {
         return _.includes(ENTITY_TYPES.defaultTypes, sample.type) ?
-            sample.fileName : sample.originalId;
+            sample.fileName : sample.vcfFileId;
     }
 
     _getPrefixedFieldName(fieldMetadata) {
