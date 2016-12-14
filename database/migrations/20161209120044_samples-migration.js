@@ -58,12 +58,26 @@ exports.up = function (knex) {
         .then(() => removeAnalysesSampleGenotypeVersionRef(knex))
         .then(() => dropGenotypeTables(knex))
         .then(() => dropDefaultVcfTable(knex))
-        .then(() => dropVcfFileOldTable(knex));
+        .then(() => dropVcfFileOldTable(knex))
+        .then(() => updateDeletedSampleGenotypes(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function updateDeletedSampleGenotypes(knex) {
+    return findVcfFileSample(knex)
+        .then((vcfFiles) => {
+            const deletedVcfFiles = _.filter(vcfFiles, vcfFile => vcfFile.isDeleted);
+            const deletedVcfFileIds = _.map(deletedVcfFiles, vcfFile => vcfFile.id);
+            return knex(tables.Sample)
+                .whereIn('vcf_file_id', deletedVcfFileIds)
+                .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                    isDeleted: true
+                }));
+        })
+}
 
 function appendAnalysesSampleId(knex) {
     return knex.schema.table(tables.AnalysisSample, (table) => {
