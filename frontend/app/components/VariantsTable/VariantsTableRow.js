@@ -91,7 +91,7 @@ export default class VariantsTableRow extends ComponentBase {
 
         const popover = (
             <Popover id={`${index}-${field.fieldId}`}>
-                {isValuedHyperlink ? this.renderHyperLink(field.hyperlinkTemplate, value) :
+                {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
                     isChromosome ? this.renderChromosome(value) : value}
             </Popover>
         );
@@ -141,12 +141,16 @@ export default class VariantsTableRow extends ComponentBase {
         return chromosomeValue ? `${chromosomeValue}(${value || ''})` : value || '';
     }
 
-    renderHyperLink(hyperlinkTemplate, value){
-        const replacementValue = encodeURIComponent(value);
-        const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
-        return (
-            <a href={valueUrl} target='_blank'>{value}</a>
-        );
+    renderHyperLinks(hyperlinkTemplate, value) {
+        return _.map(value.split(','), (item) => {
+            const replacementValue = encodeURIComponent(item);
+            const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+            return (
+                <div key={item}>
+                    <a href={valueUrl} target='_blank'>{item}</a>
+                </div>
+            );
+        });
     }
 
     isHyperlink(field, value) {
