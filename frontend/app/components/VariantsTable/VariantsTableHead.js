@@ -26,7 +26,6 @@ export default class VariantsTableHead extends Component {
                 ({id: sampleInfo.id, type: SamplesUtils.typeLabels[sampleInfo.type]}) :
                 ({id: sampleInfo.id, type: ''})
         ).keyBy(sampleInfo => sampleInfo.id).value();
-        // TODO 616
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
