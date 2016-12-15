@@ -55,7 +55,7 @@ export default class FileUploadSampleList extends React.Component {
             return upload.progressStatus !== fileUploadStatus.READY;
         });
         const currentUploadsData = _.map(currentUploads, upload => {
-            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.id);
+            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
             return {
                 upload,
                 samples: uploadSamples,
@@ -77,12 +77,12 @@ export default class FileUploadSampleList extends React.Component {
 
     renderUploadedData(showNew) {
         const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
-        const uploadHash = _.keyBy(filesProcesses, 'id');
+        const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
-            const {originalId} = sample;
+            const {vcfFileId} = sample;
             const sampleName = sample.name;
-            const currentUpload = uploadHash[originalId];
+            const currentUpload = uploadHash[vcfFileId];
             return {
                 label: sampleName,
                 upload: currentUpload,
