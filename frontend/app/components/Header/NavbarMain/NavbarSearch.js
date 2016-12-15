@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
+import config from '../../../../config';
+
+
 class NavbarSearch extends Component {
     constructor(props) {
         super(props);
@@ -37,6 +40,7 @@ class NavbarSearch extends Component {
                      onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
                      value={this.state.search}
+                     maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
                     />
                     <a
                         type='button'

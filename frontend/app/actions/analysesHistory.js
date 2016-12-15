@@ -143,7 +143,9 @@ export function requestAppendAnalysesHistoryAsync(search = '', limit = DEFAULT_L
         ).then((response) => {
             const result = response.body.result;
             dispatch(appendAnalysesHistory(search, offset, result, limit > result.length));
-        });
+        }).catch(
+            dispatch(appendAnalysesHistory(search, offset, [], true))
+        );
     };
 }
 
