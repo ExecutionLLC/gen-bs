@@ -287,15 +287,14 @@ function findUploadHistories(knex) {
 }
 
 function updateVcfFile(history, knex) {
-    const {sampleId, status, progress, error, isDeleted, created} = history;
+    const {sampleId, status, progress, error, isDeleted} = history;
     return knex(tables.VcfFile)
         .where('id', sampleId)
         .update(ChangeCaseUtil.convertKeysToSnakeCase({
             status,
             progress,
             error,
-            isDeleted,
-            created
+            isDeleted
         }));
 }
 
