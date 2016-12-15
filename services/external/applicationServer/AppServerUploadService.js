@@ -76,7 +76,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     async.waterfall([
                         (callback) => this.services.sessions.findById(nextOperation.getSessionId(), callback),
                         (session, callback) => this.requestSampleProcessing(
-                            session, nextOperation.getId(), nextOperation.getSampleId(), null, (error) => callback(error)
+                            session, nextOperation.getId(), null, (error) => callback(error)
                         )
                     ], callback)
                 } else {
@@ -163,7 +163,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             }, (error) => callback(error)),
             (callback) => {
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const sampleId = operation.getSampleId();
+                const sampleId = operation.getId();
                 this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
                     (error, result) => callback(error)
                 );
@@ -252,7 +252,6 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
             async.waterfall([
-                (callback) => this.toggleNextOperation(operation.getId(), callback),
                 (callback) => {
                     if (error) {
                         this.logger.error(`Error inserting new sample into database: ${error}`);
@@ -261,20 +260,23 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     } else {
                         // The upload operation is already completed on the app server.
                         operation.setSendCloseToAppServer(false);
-                        this._createOperationResult(session,
-                            operation,
-                            null,
-                            operation.getUserId(),
-                            EVENTS.onOperationResultReceived,
-                            true,
-                            {
-                                status: SESSION_STATUS.READY,
-                                progress: 100,
-                                metadata: samplesMetadata
-                            },
-                            null,
-                            callback
-                        );
+                        async.waterfall([
+                            (callback) => this.toggleNextOperation(operation.getId(), callback),
+                            (callback) => this._createOperationResult(session,
+                                operation,
+                                null,
+                                operation.getUserId(),
+                                EVENTS.onOperationResultReceived,
+                                true,
+                                {
+                                    status: SESSION_STATUS.READY,
+                                    progress: 100,
+                                    metadata: samplesMetadata
+                                },
+                                null,
+                                callback
+                            )
+                        ],callback);
                     }
                 }
             ], callback);
