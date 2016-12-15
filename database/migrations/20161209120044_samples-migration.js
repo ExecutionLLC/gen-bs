@@ -299,12 +299,13 @@ function updateVcfFile(history, knex) {
 }
 
 function updateVcfFileSample(vcfFileSample, knex) {
-    const {id, isAnalyzed, analyzedTimestamp, type} = vcfFileSample;
+    const {id, isAnalyzed, analyzedTimestamp, type, created} = vcfFileSample;
     return knex(tables.Sample)
         .where('vcf_file_id', id)
         .update(ChangeCaseUtil.convertKeysToSnakeCase({
             isAnalyzed,
             analyzedTimestamp,
-            type
+            type,
+            created
         }));
 }
