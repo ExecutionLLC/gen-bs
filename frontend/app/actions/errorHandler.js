@@ -37,6 +37,8 @@ export function handleApiResponseErrorAsync(errorMessage, apiCallError, response
             let error = null;
             if (apiCallError) {
                 error = new NetworkError(apiCallError.message);
+            } else if (!response.body) {
+                error = new WebServerError(response.text);
             } else if (response.status !== HttpStatus.OK) {
                 error = new WebServerError(response.body.message);
             }

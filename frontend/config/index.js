@@ -44,7 +44,9 @@ const config = {
     },
     ANALYSIS: {
         MAX_COMMENT_LENGTH: 1024,
-        MAX_FILTER_LENGTH: 50
+        MAX_FILTER_LENGTH: 50,
+        MAX_NAME_LENGTH: 50,
+        MAX_DESCRIPTION_LENGTH: 512
     },
     UPLOADS: {
         MAX_NAME_LENGTH: 50,
