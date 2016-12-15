@@ -69,8 +69,10 @@ exports.down = function () {
 function updateDeletedSampleGenotypes(knex) {
     return findVcfFileSample(knex)
         .then((vcfFiles) => {
-            const deletedVcfFiles = _.filter(vcfFiles, vcfFile => vcfFile.isDeleted);
-            const deletedVcfFileIds = _.map(deletedVcfFiles, vcfFile => vcfFile.id);
+            const deletedVcfFileIds = _.chain(vcfFiles)
+                .filter(vcfFile => vcfFile.isDeleted)
+                .map(vcfFile => vcfFile.id)
+                .value();
             return knex(tables.Sample)
                 .whereIn('vcf_file_id', deletedVcfFileIds)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase({
