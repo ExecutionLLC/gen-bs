@@ -26,7 +26,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
         if (invalidGenotypeSample) {
             return {
                 isValid: false,
-                errorMessage: `Sample '${invalidGenotypeSample.fileName}' doesn't have any genotype.` // TODO 757 remove fileName
+                errorMessage: `Sample '${invalidGenotypeSample.name}' doesn't have any genotype.`
             };
         }
         const invalidGtFieldSample = _.find(analysesSamples, sample => {
