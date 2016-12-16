@@ -282,7 +282,6 @@ function findUploadHistories(knex) {
 
 function updateVcfFile(history, knex) {
     const {id, sampleId, fileName, status, progress, error, isDeleted, userId, created} = history;
-    console.log(history);
     return findVcfFileById(sampleId, knex)
         .then((vcfFile) => {
             if (_.isNull(vcfFile)) {
@@ -291,6 +290,7 @@ function updateVcfFile(history, knex) {
                     fileName,
                     isDeleted,
                     creator: userId,
+                    type:ENTITY_TYPES.USER,
                     created,
                     status,
                     progress,
