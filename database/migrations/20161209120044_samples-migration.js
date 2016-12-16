@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
+const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
@@ -280,15 +281,49 @@ function findUploadHistories(knex) {
 }
 
 function updateVcfFile(history, knex) {
-    const {sampleId, status, progress, error, isDeleted} = history;
+    const {id, sampleId, fileName, status, progress, error, isDeleted, userId, created} = history;
+    console.log(history);
+    return findVcfFileById(sampleId, knex)
+        .then((vcfFile) => {
+            if (_.isNull(vcfFile)) {
+                return addVcfFile({
+                    id: Uuid.v4(),
+                    fileName,
+                    isDeleted,
+                    creator: userId,
+                    created,
+                    status,
+                    progress,
+                    error
+                }, knex);
+            } else {
+                return knex(tables.VcfFile)
+                    .where('id', sampleId)
+                    .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                        status,
+                        progress,
+                        error,
+                        isDeleted
+                    }));
+            }
+        });
+}
+
+function findVcfFileById(id, knex) {
     return knex(tables.VcfFile)
-        .where('id', sampleId)
-        .update(ChangeCaseUtil.convertKeysToSnakeCase({
-            status,
-            progress,
-            error,
-            isDeleted
-        }));
+        .where('id', id)
+        .then((results) => {
+            if (results.length > 1) {
+                throw new Error(`Too many vcf file with Id: ${id}`);
+            } else {
+                return results.length == 0 ? null : ChangeCaseUtil.convertKeysToCamelCase(results[0])
+            }
+        });
+}
+
+function addVcfFile(vcfFile, knex) {
+    return knex(tables.VcfFile)
+        .insert(ChangeCaseUtil.convertKeysToSnakeCase(vcfFile));
 }
 
 function updateVcfFileSample(vcfFileSample, knex) {
