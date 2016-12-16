@@ -27,7 +27,6 @@ export function makeHistoryItem(historyItem) {
 }
 
 export function makeNewHistoryItem(sample, filter, view) {
-    // TODO 757 fileName and make line shorter
     const name = trimName(
         `${new Date()}_${sample ? sample.fileName : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
     );
