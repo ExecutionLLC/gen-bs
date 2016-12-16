@@ -290,7 +290,7 @@ function updateVcfFile(history, knex) {
                     fileName,
                     isDeleted,
                     creator: userId,
-                    type:ENTITY_TYPES.USER,
+                    type: ENTITY_TYPES.USER,
                     created,
                     status,
                     progress,
