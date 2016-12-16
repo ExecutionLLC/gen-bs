@@ -168,7 +168,7 @@ function changeType(historyItem, samplesList, modelsList, isDemo, targetType) {
 }
 
 export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, change) {
-    var editingHistoryItem = historyItem;
+    let editingHistoryItem = historyItem;
     if (change.name != null) {
         editingHistoryItem = {...editingHistoryItem, name: change.name};
     }
