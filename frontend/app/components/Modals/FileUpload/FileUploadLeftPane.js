@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import FileUploadSampleSearch from './FileUploadSampleSearch';
 import FileUploadSampleList from './FileUploadSampleList';
 
@@ -43,7 +44,7 @@ export default class FileUploadLeftPane extends React.Component {
         }
 
         const sampleSearchArray = _.map(samplesArray, sample => {
-            const editableFieldHash = _.keyBy(sample.editableFields.fields, 'fieldId');
+            const editableFieldHash = _.keyBy(sample.editableFields, 'fieldId');
             const sampleSearchValues = _.map(editableFields, editableField => {
                 const sampleEditableField = editableFieldHash[editableField.fieldId];
                 return getSearchValue(editableField, sampleEditableField)
@@ -89,19 +90,21 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     onCurrentSampleIdChange(id) {
-        const {changeShowValues, dispatch} = this.props;
+        const {changeShowValues, dispatch, onSelectUpload} = this.props;
         changeShowValues(false);
         dispatch(setCurrentUploadId(null));
         dispatch(setCurrentSampleId(id));
         dispatch(setEditingSampleId(id));
+        onSelectUpload();
     }
 
     onCurrentUploadIdChange(id) {
-        const {changeShowValues, dispatch} = this.props;
+        const {changeShowValues, dispatch, onSelectUpload} = this.props;
         changeShowValues(false);
         dispatch(setCurrentUploadId(id));
         dispatch(setCurrentSampleId(null));
         dispatch(setEditingSampleId(null));
+        onSelectUpload();
     }
 }
 

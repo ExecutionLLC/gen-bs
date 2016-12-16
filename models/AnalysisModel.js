@@ -193,7 +193,7 @@ class AnalysisModel extends SecureModelBase {
         const {id, type} = sample;
         const analysisSampleDataToInsert = {
             analysisId,
-            genotypeVersionId: id,
+            sampleId: id,
             sampleType: type,
             order
         };
@@ -300,7 +300,7 @@ class AnalysisModel extends SecureModelBase {
             sortedAnalyses,
             (sortedAnalysis) => {
                 return {
-                    id: sortedAnalysis.genotypeVersionId,
+                    id: sortedAnalysis.sampleId,
                     type: sortedAnalysis.sampleType
                 }
             }

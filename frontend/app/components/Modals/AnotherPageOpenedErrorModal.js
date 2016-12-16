@@ -32,7 +32,7 @@ class AnotherPageOpenedErrorModal extends DialogBase {
         return (
             <div>
                 { this.props.isWaitingForClose &&
-                <span className="form-padding">Please, wait a moment...</span>
+                <span className='form-padding'>Please, wait a moment...</span>
                 }
                 <button
                     type='button'

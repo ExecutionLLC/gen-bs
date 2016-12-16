@@ -27,6 +27,7 @@ export default class FileUploadBody extends React.Component {
                         editableFields={editableFieldsList}
                         currentHistorySamplesIds={currentHistorySamplesIds}
                         closeModal={closeModal}
+                        onSelectUpload={() => this.onSelectUpload()}
                     />
                     <FileUploadSampleRightPane
                         dispatch={dispatch}
@@ -38,6 +39,7 @@ export default class FileUploadBody extends React.Component {
                         fileUpload={fileUpload}
                         edited={this.state.showValues}
                         changeShowValues={(e) => this.setShowValuesState(e)}
+                        isBringToFront={this.props.isUploadBringToFront}
                     />
                 </div>
             </Modal.Body>
@@ -48,5 +50,10 @@ export default class FileUploadBody extends React.Component {
         this.setState({
             showValues
         });
+    }
+
+    onSelectUpload() {
+        const {onUploadShow} = this.props;
+        onUploadShow();
     }
 }

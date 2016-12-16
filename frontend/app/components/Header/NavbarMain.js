@@ -35,11 +35,11 @@ class NavbarMain extends Component {
         };
 
         // count the same way as they displaying in FileUploadLeftPane
-        const uploadHash = _.keyBy(filesProcesses, 'sampleId');
+        const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(samplesList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
-            const {originalId} = sample;
-            const currentUpload = uploadHash[originalId];
+            const {vcfFileId} = sample;
+            const currentUpload = uploadHash[vcfFileId];
             return {
                 upload: currentUpload,
                 sample: sample
@@ -65,10 +65,10 @@ class NavbarMain extends Component {
 
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
-                     <div className='text-center'>
-                        <span className='navbar-text brand'>AGx</span>
-                     </div>
-
+                    <div className='dropdown'>
+                        <a role='button' className='btn navbar-btn brand dropdown-toggle'>
+                            AGx </a>
+                    </div>
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
                         badge={newSamplesCount || null}

@@ -6,6 +6,11 @@ import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
 
 class FileUploadModal extends Component {
+    constructor(state) {
+        super(state);
+        this.state = {isUploadBringToFront: false};
+    }
+
     render() {
         const {showModal} = this.props;
         return (
@@ -17,7 +22,10 @@ class FileUploadModal extends Component {
                 onHide={ () => this.onClose()}
                 backdrop='static'
             >
-                <FileUploadHeader />
+                <FileUploadHeader
+                    showUploadHide={this.state.isUploadBringToFront}
+                    onUploadHide={() => this.onUploadHide()}
+                />
                 <FileUploadBody
                     dispatch={this.props.dispatch}
                     fileUpload={this.props.fileUpload}
@@ -29,6 +37,8 @@ class FileUploadModal extends Component {
                     editingSample={this.props.editingSample}
                     currentHistorySamplesIds={this.props.currentHistorySamplesIds}
                     closeModal={ () => this.onClose() }
+                    isUploadBringToFront={this.state.isUploadBringToFront}
+                    onUploadShow={() => this.onUploadShow()}
                 />
             </Modal>
         );
@@ -36,6 +46,14 @@ class FileUploadModal extends Component {
 
     onClose() {
         this.props.closeModal('upload');
+    }
+
+    onUploadShow() {
+        this.setState({isUploadBringToFront: true});
+    }
+
+    onUploadHide() {
+        this.setState({isUploadBringToFront: false});
     }
 }
 
