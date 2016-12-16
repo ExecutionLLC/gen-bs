@@ -7,10 +7,19 @@ import {analysisType} from './analyseUtils';
 import config from '../../config';
 
 
+function trimName(name) {
+    return name.slice(0, config.ANALYSIS.MAX_NAME_LENGTH);
+}
+
+function trimDescription(description) {
+    return description.slice(0, config.ANALYSIS.MAX_DESCRIPTION_LENGTH);
+}
+
+
 export function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
-        name: `Copy of ${historyItem.name}`.slice(0, config.ANALYSIS.MAX_NAME_LENGTH),
+        name: trimName(`Copy of ${historyItem.name}`),
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
         id: null
@@ -19,13 +28,13 @@ export function makeHistoryItem(historyItem) {
 
 export function makeNewHistoryItem(sample, filter, view) {
     // TODO 757 fileName and make line shorter
-    const name =
+    const name = trimName(
         `${new Date()}_${sample ? sample.fileName : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
-            .slice(0, config.ANALYSIS.MAX_NAME_LENGTH);
+    );
     return {
         id: null,
         name: name,
-        description: 'Description of ' + name,
+        description: trimDescription(`Description of ${name}`),
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
         filterId: filter ?
