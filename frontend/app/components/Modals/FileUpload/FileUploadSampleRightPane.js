@@ -174,9 +174,12 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderFooter(selectedSample) {
         const {auth: {isDemo}, samplesList: {onSaveAction}} = this.props;
         return (
-            <div className='btn-toolbar btn-toolbar-form-actions'>
-                {onSaveAction && this.renderSelectButton(isDemo, selectedSample)}
-                {this.renderEditButton(selectedSample.type)}
+            <div>
+                <hr/>
+                <div className='btn-toolbar btn-toolbar-form-actions'>
+                    {this.renderEditButton(selectedSample.type)}
+                    {onSaveAction && this.renderSelectButton(isDemo, selectedSample)}
+                </div>
             </div>
         );
     }
