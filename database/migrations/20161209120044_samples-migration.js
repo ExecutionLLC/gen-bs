@@ -221,12 +221,7 @@ function updateSampleGenotypeTable(knex) {
             table.boolean('is_analyzed')
                 .defaultTo(false);
             table.timestamp('analyzed_timestamp');
-            table.enu('type', [
-                ENTITY_TYPES.USER,
-                ENTITY_TYPES.ADVANCED,
-                ENTITY_TYPES.DEFAULT,
-                ENTITY_TYPES.STANDARD
-            ]);
+            table.enu('type', ENTITY_TYPES.allValues);
             table.timestamp('created')
                 .defaultTo(knex.fn.now());
         });
@@ -243,11 +238,7 @@ function updateVcfTable(knex) {
     return knex.schema.renameTable(oldTables.VcfFileSample, tables.VcfFile)
         .table(tables.VcfFile, table => {
             table.renameColumn('timestamp', 'created');
-            table.enu('status', [
-                SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
-                SAMPLE_UPLOAD_STATUS.READY,
-                SAMPLE_UPLOAD_STATUS.ERROR
-            ])
+            table.enu('status', SAMPLE_UPLOAD_STATUS.allValues)
                 .notNullable()
                 .defaultTo(SAMPLE_UPLOAD_STATUS.READY);
             table.integer('progress')
