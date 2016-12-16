@@ -4,12 +4,13 @@ import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
 import {sampleType, sampleTypesForAnalysisType} from './samplesUtils';
 import {analysisType} from './analyseUtils';
+import config from '../../config';
 
 
 export function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
-        name: `Copy of ${historyItem.name}`.slice(0, 50),
+        name: `Copy of ${historyItem.name}`.slice(0, config.ANALYSIS.MAX_NAME_LENGTH),
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
         id: null
@@ -18,7 +19,9 @@ export function makeHistoryItem(historyItem) {
 
 export function makeNewHistoryItem(sample, filter, view) {
     // TODO 757 fileName and make line shorter
-    const name = `${new Date()}_${sample ? sample.fileName : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`.slice(0, 50);
+    const name =
+        `${new Date()}_${sample ? sample.fileName : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
+            .slice(0, config.ANALYSIS.MAX_NAME_LENGTH);
     return {
         id: null,
         name: name,
