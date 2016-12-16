@@ -28,7 +28,7 @@ export function makeHistoryItem(historyItem) {
 
 export function makeNewHistoryItem(sample, filter, view) {
     const name = trimName(
-        `${new Date()}_${sample ? sample.fileName : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
+        `${new Date()}_${sample ? sample.name : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
     );
     return {
         id: null,
