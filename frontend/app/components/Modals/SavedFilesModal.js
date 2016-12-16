@@ -78,11 +78,13 @@ class SavedFilesModal extends DialogBase {
 
     renderSavedFileRow(savedFile) {
         const {filter, view, model, samples, timestamp} = savedFile;
-        // TODO 757: do not use fileName below
+        const {samplesList: {hashedArray: {hash: samplesHashedArray}}} = this.props;
+        const savedFileSamples = _.map(samples, sample => samplesHashedArray[sample.id]);
+        const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? sample.name : '???');
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
-                <td>{_.map(samples, (sample) => sample.fileName).join(', ')}</td>
+                <td>{savedFileSamplesNames.join(', ')}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
                 <td>{model ? model.name : ''}</td>
@@ -116,11 +118,12 @@ SavedFilesModal.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { savedFiles: {list}, auth: {isDemo} } = state;
+    const { savedFiles: {list}, auth: {isDemo}, samplesList } = state;
 
     return {
         savedFiles: list,
-        isDemo
+        isDemo,
+        samplesList
     };
 }
 
