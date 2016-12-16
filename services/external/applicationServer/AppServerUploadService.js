@@ -22,11 +22,10 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         super(services, models);
     }
 
-    uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
+    uploadSample(session, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
             (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
             (operation, callback) => {
-                operation.setSampleId(sampleId);
                 operation.setSampleFileName(sampleFileName);
                 operation.setUserId(user.id);
                 callback(null, operation);
@@ -34,7 +33,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const fileStream = fs.createReadStream(sampleLocalPath);
-                this.services.objectStorage.uploadObject(newSamplesBucket, sampleId, fileStream,
+                this.services.objectStorage.uploadObject(newSamplesBucket, operation.getId(), fileStream,
                     (error) => callback(null, error, operation)
                 );
             },
@@ -77,7 +76,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     async.waterfall([
                         (callback) => this.services.sessions.findById(nextOperation.getSessionId(), callback),
                         (session, callback) => this.requestSampleProcessing(
-                            session, nextOperation.getId(), nextOperation.getSampleId(), null, (error) => callback(error)
+                            session, nextOperation.getId(), null, (error) => callback(error)
                         )
                     ], callback)
                 } else {
@@ -87,7 +86,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestSampleProcessing(session, operationId, sampleId, priority, callback) {
+    requestSampleProcessing(session, operationId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
@@ -96,7 +95,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 const method = METHODS.processSample;
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const params = {
-                    sample: sampleId,
+                    sample: operationId,
                     bucket: newSamplesBucket
                 };
                 this._rpcSend(session, operation, method, params, priority, callback);
@@ -104,7 +103,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestUploadProcessing(session, operationId, sampleId, priority, callback) {
+    requestUploadProcessing(session, operationId, priority, callback) {
         const {userId} = session;
         async.waterfall([
             // Upload operations lay in the system session.
@@ -123,7 +122,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 });
                 if (activeUserOperation.length === 0) {
                     currentOperation.isActive = true;
-                    this.requestSampleProcessing(session, operationId, sampleId, priority, callback);
+                    this.requestSampleProcessing(session, operationId, priority, callback);
                 } else {
                     callback(null, operationId);
                 }
@@ -164,7 +163,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             }, (error) => callback(error)),
             (callback) => {
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const sampleId = operation.getSampleId();
+                const sampleId = operation.getId();
                 this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
                     (error, result) => callback(error)
                 );
@@ -204,13 +203,13 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const {result: {status, progress, genotypes}} = message;
         if (genotypes) {
             const sampleGenotypes = _.isEmpty(genotypes) ? [null] : genotypes;
-            const sampleId = operation.getSampleId();
-            const sampleFileName = operation.getSampleFileName();
+            const vcfFileId = operation.getId();
+            const vcfFileName = operation.getSampleFileName();
             async.waterfall([
                 (callback) => this.services.samples.initMetadataForUploadedSample(
-                    user, sampleId, sampleFileName, sampleGenotypes, callback
+                    user, vcfFileId, vcfFileName, sampleGenotypes, callback
                 ),
-                (sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback),
+                (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
                 (samples, callback) => {
                     callback(null, {
                         status,
@@ -235,18 +234,16 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         // 3. Mark upload as completed in the database.
         const result = message.result;
         /**@type {string}*/
-        const sampleId = operation.getSampleId();
+        const vcfFileId = operation.getId();
         const sampleMetadata = result.metadata;
         // Usual fields metadata. Values of these fields are the same for all genotypes.
         const commonFieldsMetadata = sampleMetadata.columns;
-        // Array of names of the genotypes found in the file.
-        const genotypes = sampleMetadata.genotypes || [null];
 
         async.waterfall([
-            (callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId, commonFieldsMetadata, genotypes,
+            (callback) => this.services.samples.createMetadataForUploadedSample(user, vcfFileId, commonFieldsMetadata,
                 (error, sampleVersionIds) => callback(error, sampleVersionIds)
             ),
-            (sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback),
+            (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
             (samplesMetadata, callback) => this.services.sampleUploadHistory.update(user, {
                 id: operation.getId(),
                 status: SAMPLE_UPLOAD_STATUS.READY,
@@ -255,7 +252,6 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
             async.waterfall([
-                (callback) => this.toggleNextOperation(operation.getId(), callback),
                 (callback) => {
                     if (error) {
                         this.logger.error(`Error inserting new sample into database: ${error}`);
@@ -264,20 +260,23 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     } else {
                         // The upload operation is already completed on the app server.
                         operation.setSendCloseToAppServer(false);
-                        this._createOperationResult(session,
-                            operation,
-                            null,
-                            operation.getUserId(),
-                            EVENTS.onOperationResultReceived,
-                            true,
-                            {
-                                status: SESSION_STATUS.READY,
-                                progress: 100,
-                                metadata: samplesMetadata
-                            },
-                            null,
-                            callback
-                        );
+                        async.waterfall([
+                            (callback) => this.toggleNextOperation(operation.getId(), callback),
+                            (callback) => this._createOperationResult(session,
+                                operation,
+                                null,
+                                operation.getUserId(),
+                                EVENTS.onOperationResultReceived,
+                                true,
+                                {
+                                    status: SESSION_STATUS.READY,
+                                    progress: 100,
+                                    metadata: samplesMetadata
+                                },
+                                null,
+                                callback
+                            )
+                        ],callback);
                     }
                 }
             ], callback);
