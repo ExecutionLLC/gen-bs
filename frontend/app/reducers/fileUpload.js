@@ -4,7 +4,8 @@ import _ from 'lodash';
 
 const initialState = {
     filesProcesses: [],
-    currentUploadId: null
+    currentUploadId: null,
+    isDragoverState: false
 };
 
 /**
@@ -217,6 +218,13 @@ function reduceUploadsListRemoveUpload(state, action) {
     };
 }
 
+function reduceSetDragoverState(state, action) {
+    return {
+        ...state,
+        isDragoverState: action.isDragoverState
+    }
+}
+
 export default function fileUpload(state = initialState, action) {
 
     switch (action.type) {
@@ -259,6 +267,9 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.UPLOADS_LIST_REMOVE_UPLOAD:
             return reduceUploadsListRemoveUpload(state, action);
+
+        case ActionTypes.SET_DRAGOVER_STATE:
+            return reduceSetDragoverState(state, action);
 
         default:
             return state;

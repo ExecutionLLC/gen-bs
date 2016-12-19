@@ -6,7 +6,10 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
-import {uploadFiles} from '../../../actions/fileUpload';
+import {
+    uploadFiles,
+    setDragOverState
+} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {
     updateSampleText,
@@ -94,18 +97,51 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderUpload(isDemo) {
+        const { fileUpload: {isDragoverState}} = this.props;
+        const borderStyle = isDragoverState ? 'dashed' : 'none';
+
         return (
             <div className='split-scroll'>
                 <div className='form-horizontal form-padding'>
-                    <div className='empty'>
+                    <div className='empty empty-upload'>
                         <div className='btn-group btn-group-xlg'>
                             {!isDemo && <button className='btn btn-link-default'
+                                                style={{
+                                                    boxShadow: 'none',
+                                                    borderColor: 'lightgrey', // TODO: use darken(@text-muted, 15%);
+                                                    borderWidth: 'thick',
+                                                    borderStyle: borderStyle, // 'dashed',
+                                                    width: '90%',
+                                                    height: '100%'
+                                                }}
                                                 onClick={this.onUploadClick.bind(this)}
-                                                onDragEnter={cancelDOMEvent}
-                                                onDragOver={cancelDOMEvent}
+
+                                                onDrag={cancelDOMEvent} // TODO: ??
+                                                onDragStart={(e) => {
+                                                    cancelDOMEvent(e);
+                                                    this.setDndState(true);
+                                                }}
+                                                onDragEnd={(e) => {
+                                                    cancelDOMEvent(e);
+                                                    this.setDndState(false);
+                                                }}
+                                                onDragOver={(e) => {
+                                                    cancelDOMEvent(e);
+                                                    this.setDndState(true);
+                                                }}
+                                                onDragEnter={(e) => {
+                                                    cancelDOMEvent(e);
+                                                    this.setDndState(true);
+                                                }}
+                                                onDragLeave={(e) => {
+                                                    cancelDOMEvent(e);
+                                                    this.setDndState(false);
+                                                }}
+                                                // onDragExit={} TODO??
                                                 onDrop={(e) => {
                                                     cancelDOMEvent(e);
                                                     this.onFilesDrop(e.dataTransfer.files);
+                                                    this.setDndState(false);
                                                 }}
                             >
                                 <input
@@ -140,6 +176,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     onUploadChanged(files) {
         const {dispatch} = this.props;
         dispatch(uploadFiles(files));
+    }
+
+    setDndState(state) {
+        const {dispatch} = this.props;
+        dispatch(setDragOverState(state));
     }
 
     onFilesDrop(files) {
