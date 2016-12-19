@@ -101,19 +101,17 @@ export default class VariantsTableRow extends ComponentBase {
                 className={sortedActiveClass}
                 key={fieldId + '-' + sampleId}
             >
-                <div>
-                    <OverlayTrigger
-                        trigger='click'
-                        rootClose={true}
-                        placement='left'
-                        overlay={popover}
-                    >
-                        <div>
-                            <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {isChromosome ? this.renderChromosome(value) : value}</a>
-                        </div>
-                    </OverlayTrigger>
-                </div>
+                <OverlayTrigger
+                    trigger='click'
+                    rootClose={true}
+                    placement='left'
+                    overlay={popover}
+                >
+                    <div>
+                        <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
+                            {isChromosome ? this.renderChromosome(value) : value}</a>
+                    </div>
+                </OverlayTrigger>
             </td>
         );
     }
