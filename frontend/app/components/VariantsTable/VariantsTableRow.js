@@ -106,6 +106,7 @@ export default class VariantsTableRow extends ComponentBase {
                     rootClose={true}
                     placement='left'
                     overlay={popover}
+                    container={this.props.tableElement}
                 >
                     <div>
                         <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
@@ -177,5 +178,6 @@ VariantsTableRow.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isSelected: React.PropTypes.bool.isRequired,
     // callback(rowIndex, isSelected)
-    onSelected: React.PropTypes.func.isRequired
+    onSelected: React.PropTypes.func.isRequired,
+    tableElement: React.PropTypes.instanceOf(React.Component).isRequired
 };
