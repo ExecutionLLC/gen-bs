@@ -20,33 +20,31 @@
       margin-bottom: -32px;
     }
   }
-  @media (min-width: @screen-sm){
-    &.table-variants {
-      .variants-table-search-field {
-        margin-bottom: 0;
-      }
-
-      tbody {
-        display: block;
-        max-width: 100%;
-        overflow: auto;
-        position: fixed;
-        width: 100%;
-      }
-
-
+  &.table-variants {
+    .variants-table-search-field {
+      margin-bottom: 0;
     }
-    &.table-variants:after {
-      background: @body-bg ;
-      content: "";
+
+    tbody {
       display: block;
-      height: 34px;
-      left: 0;
-      position: absolute;
-      right: 0;
-      z-index: 1;
-      top: 126px;
+      max-width: 100%;
+      overflow: auto;
+      position: fixed;
+      width: 100%;
     }
+
+
+  }
+  &.table-variants:after {
+    background: @body-bg ;
+    content: "";
+    display: block;
+    height: 34px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    top: 126px;
   }
 }
 
