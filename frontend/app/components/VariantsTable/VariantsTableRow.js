@@ -76,7 +76,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     renderFieldValue(index, fieldId, sampleId, value, sortState) {
-        const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
+        const {fields: {totalFieldsHashedArray: {hash}}} = this.props;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
         const sortedActiveClass = classNames({
             'active': columnSortParams
@@ -97,8 +97,10 @@ export default class VariantsTableRow extends ComponentBase {
         );
 
         return (
-            <td className={sortedActiveClass}
-                key={fieldId + '-' + sampleId}>
+            <td
+                className={sortedActiveClass}
+                key={fieldId + '-' + sampleId}
+            >
                 <div>
                     <OverlayTrigger
                         trigger='click'
