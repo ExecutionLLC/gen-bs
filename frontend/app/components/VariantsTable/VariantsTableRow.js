@@ -89,6 +89,7 @@ export default class VariantsTableRow extends ComponentBase {
             return this.renderEmptyFieldValue(sortedActiveClass, fieldId, sampleId);
         }
 
+        const key = `${fieldId}-${sampleId}`;
         const popover = (
             <Popover>
                 {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
@@ -99,7 +100,7 @@ export default class VariantsTableRow extends ComponentBase {
         return (
             <td
                 className={sortedActiveClass}
-                key={fieldId + '-' + sampleId}
+                key={key}
             >
                 <OverlayTrigger
                     trigger='click'
