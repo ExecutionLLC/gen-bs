@@ -51,20 +51,19 @@
   display: block;
   align-items: center;
   position: absolute;
-  padding: 0;
+  padding: 30px 30px 46px;
   margin: 0;
-  .btn-group-xlg {
-    height: 90%;
-  }
   box-sizing: border-box;
-  &:before {
-    display: block;
-    content: "";
-    height: 5%;
+
+  .btn-group-xlg {
+    height: 100%;
+    .btn {
+      box-shadow: none;
+      height: 100%;
+    }
   }
-  &:after {
-    display: block;
-    content: "";
-    height: 5%;
-  }
+}
+
+.drop-zone {
+  border: thick dashed lighten(@text-muted, 15%);
 }

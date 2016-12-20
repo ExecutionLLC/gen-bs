@@ -222,7 +222,7 @@ function reduceSetDragoverState(state, action) {
     return {
         ...state,
         isDragoverState: action.isDragoverState
-    }
+    };
 }
 
 export default function fileUpload(state = initialState, action) {

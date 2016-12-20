@@ -98,51 +98,46 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     renderUpload(isDemo) {
         const { fileUpload: {isDragoverState}} = this.props;
-        const borderStyle = isDragoverState ? 'dashed' : 'none';
 
         return (
             <div className='split-scroll'>
                 <div className='form-horizontal form-padding'>
-                    <div className='empty empty-upload'>
+                    <div className={'empty' + (isDemo ? '' : ' empty-upload')}>
                         <div className='btn-group btn-group-xlg'>
-                            {!isDemo && <button className='btn btn-link-default'
-                                                style={{
-                                                    boxShadow: 'none',
-                                                    borderColor: 'lightgrey', // TODO: use darken(@text-muted, 15%);
-                                                    borderWidth: 'thick',
-                                                    borderStyle: borderStyle, // 'dashed',
-                                                    width: '90%',
-                                                    height: '100%'
-                                                }}
-                                                onClick={this.onUploadClick.bind(this)}
-
-                                                onDrag={cancelDOMEvent} // TODO: ??
-                                                onDragStart={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.setDndState(true);
-                                                }}
-                                                onDragEnd={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.setDndState(false);
-                                                }}
-                                                onDragOver={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.setDndState(true);
-                                                }}
-                                                onDragEnter={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.setDndState(true);
-                                                }}
-                                                onDragLeave={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.setDndState(false);
-                                                }}
-                                                // onDragExit={} TODO??
-                                                onDrop={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.onFilesDrop(e.dataTransfer.files);
-                                                    this.setDndState(false);
-                                                }}
+                            {!isDemo &&
+                            <button className={'btn btn-link-default' + (isDragoverState ? ' drop-zone' : '')}
+                                    onClick={this.onUploadClick.bind(this)}
+                                    onDragOver={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (!isDragoverState) {
+                                            this.setDndState(true);
+                                        }
+                                    }}
+                                    onDragEnter={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (!isDragoverState) {
+                                            this.setDndState(true);
+                                        }
+                                    }}
+                                    onDragLeave={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (isDragoverState) {
+                                            this.setDndState(false);
+                                        }
+                                    }}
+                                    onDragExit={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (isDragoverState) {
+                                            this.setDndState(false);
+                                        }
+                                    }}
+                                    onDrop={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (isDragoverState) {
+                                            this.setDndState(false);
+                                        }
+                                        this.onFilesDrop(e.dataTransfer.files);
+                                    }}
                             >
                                 <input
                                     onChange={ (e) => {
