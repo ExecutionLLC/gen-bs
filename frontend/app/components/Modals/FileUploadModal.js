@@ -39,6 +39,7 @@ class FileUploadModal extends Component {
                     closeModal={ () => this.onClose() }
                     isUploadBringToFront={this.state.isUploadBringToFront}
                     onUploadShow={() => this.onUploadShow()}
+                    onUploadHide={() => this.onUploadHide()}
                 />
             </Modal>
         );

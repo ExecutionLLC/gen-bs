@@ -13,7 +13,8 @@ export default class FileUploadBody extends React.Component {
     render() {
         const {
             dispatch, fileUpload, editableFieldsList, samplesList,
-            currentSampleId, auth, closeModal, currentHistorySamplesIds
+            currentSampleId, auth, closeModal, currentHistorySamplesIds,
+            onUploadHide
         } = this.props;
         return (
             <Modal.Body>
@@ -40,6 +41,7 @@ export default class FileUploadBody extends React.Component {
                         edited={this.state.showValues}
                         changeShowValues={(e) => this.setShowValuesState(e)}
                         isBringToFront={this.props.isUploadBringToFront}
+                        onUploadHide={onUploadHide}
                     />
                 </div>
             </Modal.Body>
