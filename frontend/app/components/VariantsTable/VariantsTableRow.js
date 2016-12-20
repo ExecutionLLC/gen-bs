@@ -90,8 +90,12 @@ export default class VariantsTableRow extends ComponentBase {
         }
 
         const key = `${fieldId}-${sampleId}`;
+        const ref = `overlayTrigger-${key}`;
+
         const popover = (
-            <Popover>
+            <Popover
+                onClick={() => this.refs[ref].hide()}
+            >
                 {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
                     isChromosome ? this.renderChromosome(value) : value}
             </Popover>
@@ -108,6 +112,7 @@ export default class VariantsTableRow extends ComponentBase {
                     placement='left'
                     overlay={popover}
                     container={this.props.tableElement}
+                    ref={ref}
                 >
                     <div>
                         <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
