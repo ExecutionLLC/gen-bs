@@ -152,8 +152,8 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     static makeFieldIdToValuesHash(sample) {
-        return _(sample.editableFields)
-            .keyBy((value) => value.fieldId)
+        return _(sample.sampleMetadata)
+            .keyBy((value) => value.metadataId)
             .mapValues((values) => values.value)
             .value();
     }
