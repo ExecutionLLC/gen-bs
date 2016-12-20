@@ -24,7 +24,7 @@ const SampleTableNames = {
     Sample: 'sample',
     SampleText: 'sample_text',
     SampleField: 'sample_field',
-    SampleEditableField: 'sample_editable_field',
+    SampleMetadata: 'sample_metadata',
     VcfFile: 'vcf_file'
 };
 
@@ -42,7 +42,7 @@ class SamplesModel extends SecureModelBase {
     _find(trx, sampleId, userId, callback) {
         async.waterfall([
             (callback) => this._findSamples(trx, [sampleId], null, userId, false, callback),
-            (filters, callback) => callback(null, _.first(filters))
+            (samples, callback) => callback(null, _.first(samples))
         ], (error, filter) => {
             callback(error, filter);
         });
@@ -130,7 +130,7 @@ class SamplesModel extends SecureModelBase {
                     name,
                     description
                 }, (error) => callback(error)),
-                (callback) => this._updateSampleEditableFields(trx, sampleId, sampleToUpdate.editableFields, (error) => callback(error)),
+                (callback) => this._updateSampleMetadataValues(trx, sampleId, sampleToUpdate.sampleMetadata, (error) => callback(error)),
                 (callback) => this._find(trx, sampleId, userId, callback)
             ], callback);
         }, callback);
@@ -143,17 +143,17 @@ class SamplesModel extends SecureModelBase {
             .asCallback(callback);
     }
 
-    _updateSampleEditableFields(trx, sampleId, editableFields, callback) {
-        async.map(editableFields, (editableField, callback) => {
-            this._updateSampleEditableField(trx, sampleId, editableField, callback);
+    _updateSampleMetadataValues(trx, sampleId, sampleMetadataValues, callback) {
+        async.map(sampleMetadataValues, (metadata, callback) => {
+            this._updateSampleMetadata(trx, sampleId, metadata, callback);
         }, callback);
     }
 
-    _updateSampleEditableField(trx, sampleId, editableField, callback) {
-        const {fieldId, value} = editableField;
-        trx(SampleTableNames.SampleEditableField)
+    _updateSampleMetadata(trx, sampleId, metadata, callback) {
+        const {metadataId, value} = metadata;
+        trx(SampleTableNames.SampleMetadata)
             .where('sample_id', sampleId)
-            .andWhere('field_id', fieldId)
+            .andWhere('metadata_id', metadataId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase({value}))
             .asCallback(callback);
     }
@@ -176,9 +176,9 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    findSamplesByVcfFileIds(vcfFileIds, shouldExcludeDeletedEntries, callback) {
+    findSamplesByVcfFileIds(userId, vcfFileIds, shouldExcludeDeletedEntries, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findSamples(trx, null, vcfFileIds, null, shouldExcludeDeletedEntries, callback);
+            this._findSamples(trx, null, vcfFileIds, userId, shouldExcludeDeletedEntries, callback);
         }, callback);
     }
 
@@ -207,12 +207,12 @@ class SamplesModel extends SecureModelBase {
                 this._addSampleText(trx, genotypeText, (error) => callback(error, sampleId))
             },
             (sampleId, callback) => {
-                const sampleEditableFields = _.map(sample.editableFields, field => {
+                const sampleMetadata = _.map(sample.sampleMetadata, field => {
                     return Object.assign({}, field, {
                         sampleId
                     });
                 });
-                this._addSampleEditableFields(trx, sampleEditableFields, (error) => callback(error, sampleId));
+                this._addSampleMetadata(trx, sampleMetadata, (error) => callback(error, sampleId));
             },
             (sampleId, callback) => {
                 const sampleFields = _.map(sample.sampleFields, field => {
@@ -233,9 +233,9 @@ class SamplesModel extends SecureModelBase {
             .asCallback(callback);
     }
 
-    _addSampleEditableFields(trx, editableFields, callback) {
+    _addSampleMetadata(trx, editableFields, callback) {
         async.map(editableFields, (editableField, callback) => {
-            this._unsafeInsert(SampleTableNames.SampleEditableField, editableField, trx, callback);
+            this._unsafeInsert(SampleTableNames.SampleMetadata, editableField, trx, callback);
         }, callback);
     }
 
@@ -260,20 +260,20 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
-                    this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
-                        const editableFields = _.map(fieldsMetadata || [], fieldMetadata => ({
-                            id: fieldMetadata.id,
-                            fieldMetadata
+                    this.models.metadata.findEditableMetadata((error, metadatas) => {
+                        const editableMetadata = _.map(metadatas || [], metadata => ({
+                            id: metadata.id,
+                            metadata
                         }));
-                        callback(error, editableFields);
+                        callback(error, editableMetadata);
                     });
                 },
-                (editableFields, callback) => {
+                (editableMetadata, callback) => {
                     const samplesWithValues = _.map(samples, sample => {
                         return Object.assign({}, sample, {
                             sampleFields: [],
-                            editableFields: _.map(editableFields, fieldWithId => ({
-                                fieldId: fieldWithId.id,
+                            sampleMetadata: _.map(editableMetadata, fieldWithId => ({
+                                metadataId: fieldWithId.id,
                                 value: null
                             }))
                         });
@@ -288,7 +288,7 @@ class SamplesModel extends SecureModelBase {
         async.waterfall([
             (callback) => this._findSamplesMetadata(trx, sampleIdsOrNull, vcfFileIdsOrNull, userIdOrNull, excludeDeleted, callback),
             (samples, callback) => this._attachSampleFields(trx, samples, callback),
-            (samples, callback) => this._attachSampleEditableFields(trx, samples, callback),
+            (samples, callback) => this._attachSampleMetadata(trx, samples, callback),
             (samples, callback) => this._attachSampleText(trx, samples, callback)
         ], (error, views) => {
             callback(error, views);
@@ -311,15 +311,15 @@ class SamplesModel extends SecureModelBase {
         ], callback)
     }
 
-    _attachSampleEditableFields(trx, samples, callback) {
+    _attachSampleMetadata(trx, samples, callback) {
         const sampleIds = _.map(samples, sample => sample.id);
         async.waterfall([
-            (callback) => this._findSampleEditableFieldsByIds(trx, sampleIds, callback),
+            (callback) => this._findSampleMetadataByIds(trx, sampleIds, callback),
             (sampleFields, callback) => {
-                const sampleEditableFieldsBySampleId = _.groupBy(sampleFields, field => field.sampleId);
+                const sampleMetadataBySampleId = _.groupBy(sampleFields, field => field.sampleId);
                 const sampleWithEditableFields = _.map(samples, sample => {
                     return Object.assign({}, sample, {
-                        editableFields: sampleEditableFieldsBySampleId[sample.id]
+                        sampleMetadata: sampleMetadataBySampleId[sample.id]
                     });
                 });
                 callback(null, sampleWithEditableFields);
@@ -404,10 +404,10 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _findSampleEditableFieldsByIds(trx, sampleIds, callback) {
+    _findSampleMetadataByIds(trx, sampleIds, callback) {
         async.waterfall([
             (callback) => trx.select()
-                .from(SampleTableNames.SampleEditableField)
+                .from(SampleTableNames.SampleMetadata)
                 .whereIn('sample_id', sampleIds)
                 .asCallback(callback),
             (rows, callback) => this._toCamelCase(rows, callback)

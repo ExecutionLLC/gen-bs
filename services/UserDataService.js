@@ -40,7 +40,7 @@ class UserDataService extends ServiceBase {
                 // If session is demo session, then we should pick first standard sample.
                 const firstNotAdvancedSample = _.find(allSamples, (sample) => sample.type === ENTITY_TYPES.STANDARD);
                 let sampleId = firstNotAdvancedSample ? firstNotAdvancedSample.id : null;
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId,
+                this.services.fields.findByUserAndSampleId(user, sampleId,
                     (error, sampleFields) => callback(error, sampleId, sampleFields));
             }
         ], callback);
@@ -74,7 +74,10 @@ class UserDataService extends ServiceBase {
                         this.services.savedFiles.findAll(user, callback);
                     },
                     totalFields: (callback) => {
-                        this.services.fieldsMetadata.findTotalMetadata(callback);
+                        this.services.fields.findAll(callback);
+                    },
+                    metadata: (callback) => {
+                        this.services.metadata.findAll(callback);
                     },
                     activeUploads: (callback) => {
                         this.services.sampleUploadHistory.findActive(user, callback);

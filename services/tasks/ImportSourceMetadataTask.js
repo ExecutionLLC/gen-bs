@@ -4,7 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const SchedulerTaskBase = require('./SchedulerTaskBase');
-const FieldsMetadataService = require('../FieldsMetadataService.js');
+const FieldsMetadataService = require('../FieldsService.js');
 
 const TASK_NAME = 'importSourceMetadata';
 
@@ -78,7 +78,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 }
             },
             (callback) => {
-                this.services.fieldsMetadata.addMissingSourceReferences(reply.result, callback);
+                this.services.fields.addMissingSourceReferences(reply.result, callback);
             },
             (availableSources, callback) => {
                 const availableSourceNames = _.map(availableSources, 'sourceName');
@@ -121,7 +121,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                     const sourceName = this.requestedSources[index];
                     return {
                         sourceName,
-                        fieldsMetadata:sourceMetadata.fieldsMetadata,
+                        fields:sourceMetadata.fields,
                         reference: sourceMetadata.reference
                     };
                 });
@@ -130,7 +130,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
             (mappedSourcesMetadata, callback) => {
                 async.map(mappedSourcesMetadata, (sourceMetadata, callback) => {
                     const sourceName = sourceMetadata.sourceName;
-                    this._processSourceMetadata(sourceName, sourceMetadata.fieldsMetadata, (error, result) => {
+                    this._processSourceMetadata(sourceName, sourceMetadata.fields, (error, result) => {
                         if (error) {
                             this.logger.error('Error import source ' + sourceName + ': ' + error);
                         } else {
@@ -163,7 +163,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 appServerFieldMetadata
             )
         );
-        this.services.fieldsMetadata.addSourceFields(this.config.defaultLanguId, fieldsMetadata, callback);
+        this.services.fields.addSourceFields(this.config.defaultLanguId, fieldsMetadata, callback);
     }
 }
 
