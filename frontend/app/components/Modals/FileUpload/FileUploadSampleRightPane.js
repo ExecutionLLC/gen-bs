@@ -57,7 +57,10 @@ export default class FileUploadSampleRightPane extends React.Component {
         if (currentUploadId == null) {
             return this.renderUpload(isDemo);
         }
-        const fileProcess = _.find(filesProcesses, fp => fp.operationId === currentUploadId);
+        const fileProcess = _.find(
+            filesProcesses,
+            fp => fp.id === currentUploadId || fp.operationId === currentUploadId
+        );
         if (fileProcess && fileProcess.error) {
             return this.renderLoadError();
         } else {
