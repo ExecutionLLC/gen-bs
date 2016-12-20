@@ -14,7 +14,7 @@ const logger = new Logger(config.logger);
 const models = new ModelsFacade(config, logger);
 
 function findTotalFieldsHashAsync() {
-    return Promise.fromCallback(done => models.fields.findTotalMetadata(done))
+    return Promise.fromCallback(done => models.fields.findAll(done))
         .then((totalFields) => _.keyBy(totalFields, 'id'));
 }
 

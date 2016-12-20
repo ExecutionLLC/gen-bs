@@ -7,8 +7,6 @@ const Uuid = require('node-uuid');
 const FsUtils = require('../../utils/FileSystemUtils');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../../services/FieldsMetadataService'); // Here lays the mapping function.
-const FieldsMetadataModel = require('../../models/FieldsMetadataModel'); // Here is the metadata equality check.
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 
@@ -176,13 +174,13 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
         // Convert metadata into WS format.
         const wsMappedFields = _.map(
             sampleTemplate.fields,
-            sampleField => FieldsMetadataService.createFieldMetadata(sourceName, isSample, sampleField)
+            sampleField => this.createFieldMetadata(sourceName, isSample, sampleField)
         );
 
         // Now build sample to fields connection and list of unique fields.
         const sampleFieldIds = [];
         _.each(wsMappedFields, fieldMetadata => {
-            const existingField = FieldsMetadataModel.getExistingFieldOrNull(fieldMetadata, fieldsMetadata, !isSample);
+            const existingField = this.getExistingFieldOrNull(fieldMetadata, fieldsMetadata, !isSample);
             if (existingField) {
                 sampleFieldIds.push(existingField.id);
             } else {
@@ -207,6 +205,37 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
     _getObjectStringToSave(obj) {
         const convertedObj = ChangeCaseUtil.convertKeysToSnakeCase(obj);
         return JSON.stringify(convertedObj, null, 2);
+    }
+
+    getExistingFieldOrNull(fieldMetadata, existingFields, isSourceField) {
+        const existingField = _.find(existingFields,
+            field => field.name === fieldMetadata.name
+            && field.valueType === fieldMetadata.valueType
+            && field.dimension === fieldMetadata.dimension
+        );
+        const shouldAddField =
+            (isSourceField && (!fieldMetadata.isMandatory || !existingField)) // Should add copies of all non-mandatory source fields
+            || (!isSourceField && !existingField); // Should only add sample fields if there is no existing field.
+
+        if (shouldAddField) {
+            return null;
+        } else {
+            return existingField;
+        }
+    }
+
+    createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
+        return {
+            id: Uuid.v4(),
+            name: appServerFieldMetadata.name,
+            label: appServerFieldMetadata.name, // Set label to name by default.
+            sourceName: isSample ? 'sample' : sourceName,
+            isMandatory: appServerFieldMetadata.isMandatory,
+            isEditable: false,
+            valueType: appServerFieldMetadata.type,
+            description: appServerFieldMetadata.desc,
+            dimension: appServerFieldMetadata.num
+        };
     }
 }
 
