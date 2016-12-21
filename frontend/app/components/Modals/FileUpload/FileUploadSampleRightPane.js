@@ -8,7 +8,8 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {
     uploadFiles,
-    setDragOverState
+    setDragOverState,
+    fileUploadStatus
 } from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {
@@ -303,12 +304,16 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleHeader() {
-        const {samplesList: {editingSample}} = this.props;
+        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
+        const uploadedDate = _.some(filesProcesses, (fileProcess) =>
+            fileProcess.sampleId === editingSample.originalId && fileProcess.progressStatus !== fileUploadStatus.READY)
+            ? undefined
+            : editingSample.timestamp;
         return (
             <div className='form-horizontal form-padding'>
                 {this.renderDeleteSampleButton()}
                 {this.renderSampleFileName()}
-                {this.renderSampleDates(editingSample.timestamp)}
+                {this.renderSampleDates(uploadedDate)}
                 {this.renderSampleDescription()}
             </div>
         );
@@ -336,9 +341,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderSampleDates(createdDate) {
         return (
             <div className='label-group-date'>
-                <label>
-                    Uploaded: {formatDate(createdDate)}
-                </label>
+                {createdDate ? (
+                    <label>Uploaded: {formatDate(createdDate)}</label>
+                ) : (
+                    <label><span className='text-primary'><i className='md-i'>schedule</i>Wait. Saving</span></label>
+                )}
             </div>
         );
     }
