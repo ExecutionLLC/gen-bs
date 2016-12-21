@@ -8,7 +8,7 @@ const ModelBase = require('./ModelBase');
 
 class SampleUploadHistoryModel extends ModelBase {
     constructor(models) {
-        super(models, 'sample_upload_history', null);
+        super(models, 'vcf_file', null);
     }
 
     add(user, languId, historyEntry, callback) {
@@ -59,7 +59,7 @@ class SampleUploadHistoryModel extends ModelBase {
             trx.count('id')
                 .from(this.baseTableName)
                 .where(ChangeCaseUtil.convertKeysToSnakeCase({
-                    userId,
+                    creator: userId,
                     status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS
                 }))
                 // In Postgres count returns BigInt which becomes string in JS.
@@ -112,7 +112,7 @@ class SampleUploadHistoryModel extends ModelBase {
         }
 
         if (userIdOrNull) {
-            query = query.andWhere('user_id', userIdOrNull);
+            query = query.andWhere('creator', userIdOrNull);
         }
 
         if (samplesOrNull) {

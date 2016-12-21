@@ -33,15 +33,13 @@ class SamplesService extends UserEntityServiceBase {
      * */
     upload(session, user, localFileInfo, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
-        const sampleId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
+            (callback) => this.services.applicationServer.uploadSample(session, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
             (operationId, callback) => this._createHistoryEntry(
                 user,
                 operationId,
-                sampleId,
                 localFileInfo.originalFileName,
                 (error) => callback(error, operationId)
             ),
@@ -50,7 +48,7 @@ class SamplesService extends UserEntityServiceBase {
                 (error, priority) => callback(error, operationId, priority)
             ),
             (operationId, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
-                operationId, sampleId, priority, (error) => callback(error, operationId))
+                operationId, priority, (error) => callback(error, operationId))
         ], callback);
     }
 
@@ -61,37 +59,40 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.find(user, itemId, callback),
             (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item)),
             (item, callback) => {
-                this.theModel.findGenotypeIdsForSampleIds([item.originalId], true, (error, genotypeIds) => callback(error, genotypeIds, item));
+                this.theModel.findSamplesByVcfFileIds([item.originalId], true, (error, genotypeIds) => callback(error, genotypeIds, item));
             },
-            (genotypeIds, item, callback) => {
-                if(genotypeIds.length == 0){
+            (samples, item, callback) => {
+                if (samples.length == 0) {
                     async.waterfall([
-                        (callback) => this.services.sampleUploadHistory.findBySampleId(user.id, item.originalId,callback),
+                        (callback) => this.services.sampleUploadHistory.find(user.id, item.vcfFileId, callback),
                         (history, callback) => {
-                            this.services.sampleUploadHistory.remove(user, history.id,callback);
+                            this.services.sampleUploadHistory.remove(user, history.id, callback);
                         }
-                    ],(error) => callback(error,item));
-                }else {
+                    ], (error) => callback(error, item));
+                } else {
                     callback(null, item);
                 }
             },
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId, appServerSampleFields, genotypes, callback) {
+    createMetadataForUploadedSample(user, vcfFileSampleId, appServerSampleFields, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
             asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
-        this.theModel.attachSampleFields(user.id, user.language, sampleId, sampleFields, genotypes, callback);
+        this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
     }
 
-    initMetadataForUploadedSample(user, sampleId, sampleFileName, genotypes, callback) {
-        const sample = {
-            id: sampleId,
-            fileName: sampleFileName,
-            hash: null
-        };
-        this.theModel.addSamplesWithFields(user.id, user.language, sample, [], genotypes, callback);
+    initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, callback) {
+        const samples = _.map(genotypes, genotype => {
+            return {
+                id: Uuid.v4(),
+                fileName: vcfFileName,
+                vcfFileId,
+                genotypeName: genotype
+            }
+        });
+        this.theModel.addSamples(user.id, user.language, samples, callback);
     }
 
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
@@ -117,12 +118,11 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    _createHistoryEntry(user, operationId, sampleId, fileName, callback) {
+    _createHistoryEntry(user, operationId, fileName, callback) {
         this.services.sampleUploadHistory.add(user, user.language, {
             id: operationId,
-            sampleId,
             fileName,
-            userId: user.id,
+            creator: user.id,
             status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
             progress: 0
         }, callback);

@@ -68,8 +68,8 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      * @param sampleFileName Original name of the sample file.
      * @param callback (error, operationId)
      * */
-    uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
-        this.services.applicationServerUpload.uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback);
+    uploadSample(session, user, sampleLocalPath, sampleFileName, callback) {
+        this.services.applicationServerUpload.uploadSample(session, user, sampleLocalPath, sampleFileName, callback);
     }
 
     /**
@@ -81,9 +81,9 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      * @param priority Priority of the request (larger number corresponds to a higher priority).
      * @param callback (error, operationId)
      * */
-    requestUploadProcessing(session, operationId, sampleId, priority, callback) {
+    requestUploadProcessing(session, operationId, priority, callback) {
         this.services.applicationServerUpload.requestUploadProcessing(session, operationId,
-            sampleId, priority, callback);
+            priority, callback);
     }
 
     /**

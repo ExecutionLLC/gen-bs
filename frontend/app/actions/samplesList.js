@@ -184,15 +184,12 @@ export function requestUpdateSampleTextAsync(sampleId) {
         }
         dispatch(disableSampleEdit(sampleId, true));
         const {
-            editableFields: {name: editingSampleName, description: editingSampleDescription}
+            name: editingSampleName, description: editingSampleDescription
         } = editingSample;
         const newEditingSample = {
             ...currentEditedSample,
-            editableFields: {
-                ...currentEditedSample.editableFields,
-                name: editingSampleName,
-                description: editingSampleDescription
-            }
+            name: editingSampleName,
+            description: editingSampleDescription
         };
         return new Promise((resolve) => samplesClient.update(
             newEditingSample,
