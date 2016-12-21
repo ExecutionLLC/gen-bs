@@ -103,7 +103,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         return (
             <div className='split-scroll'>
                 <div className='form-horizontal form-padding'>
-                    <div className={'empty' + (isDemo ? '' : ' empty-upload')}>
+                    <div className={classNames('empty', {'empty-upload': !isDemo})}>
                         <div className='btn-group btn-group-xlg'>
                             {!isDemo &&
                             <button className={'btn btn-link-default' + (isDragoverState ? ' drop-zone' : '')}

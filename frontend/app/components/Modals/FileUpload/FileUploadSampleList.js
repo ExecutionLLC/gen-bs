@@ -339,7 +339,8 @@ export default class FileUploadSampleList extends React.Component {
 
     static renderRefreshIcon(uploadItem) {
         const {progressStatus} = uploadItem;
-        return <i className={'icon-state md-i md-spin ' + (progressStatus === 'ajax' ? 'text-normal' : 'text-primary')}>refresh</i>;
+        return <i className={classNames('icon-state md-i md-spin',
+            progressStatus === 'ajax' ? {'text-normal': true} : {'text-primary': true})}>refresh</i>;
     }
 
     renderProgressUploadSample(uploadData) {

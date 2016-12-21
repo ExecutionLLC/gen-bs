@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import config from '../../../../config';
 
@@ -28,7 +29,7 @@ class NavbarSearch extends Component {
                     type='button'
                     onClick={() => this.onSearchPopupToggle(true)}
                 ><i className='md-i'>search</i></a>
-                <div className={'navbar-search-field navbar-search-xs' + (this.state.showPopup ? '' : ' hidden-xs')}>
+                <div className={classNames('navbar-search-field navbar-search-xs', {'hidden-xs': !this.state.showPopup})}>
                     <input
                      type='text'
                      data-localize='results.search'
