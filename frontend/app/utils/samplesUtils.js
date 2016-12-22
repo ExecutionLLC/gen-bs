@@ -28,13 +28,3 @@ export const typeLabels = {
 export function isMainSample(type) {
     return type === sampleType.TUMOR || type === sampleType.PROBAND;
 }
-
-export function makeSampleLabelAsFileGenotype(sample) {
-    const {genotypeName, fileName} = sample;
-    return `${fileName}:${genotypeName}`;
-}
-
-export function makeSampleLabel(sample) {
-    const {genotypeName, fileName} = sample;
-    return genotypeName ? makeSampleLabelAsFileGenotype(sample) : fileName;
-}

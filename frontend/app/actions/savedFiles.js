@@ -149,7 +149,7 @@ export function exportToFile(exportType) {
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
         const fileName = `${
             _.map(variantsSamples, (variantsSample) =>
-                variantsSample.fileName
+                variantsSample.name
             ).join('-')}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
