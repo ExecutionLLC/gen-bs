@@ -109,7 +109,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <div className={classNames('empty', {'empty-upload': !isDemo})}>
                         <div className='btn-group btn-group-xlg'>
                             {!isDemo &&
-                            <button className={'btn btn-link-default' + (isDragoverState ? ' drop-zone' : '')}
+                            <button className={classNames('btn btn-link-default', {'drop-zone': isDragoverState})}
                                     onClick={this.onUploadClick.bind(this)}
                                     onDragOver={(e) => {
                                         cancelDOMEvent(e);
@@ -309,7 +309,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
         const uploadedDate = _.some(filesProcesses, (fileProcess) =>
             fileProcess.sampleId === editingSample.originalId && fileProcess.progressStatus !== fileUploadStatus.READY)
-            ? undefined
+            ? null
             : editingSample.timestamp;
         return (
             <div className='form-horizontal form-padding'>
