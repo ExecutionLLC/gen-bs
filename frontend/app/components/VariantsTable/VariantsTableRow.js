@@ -90,7 +90,7 @@ export default class VariantsTableRow extends ComponentBase {
         }
 
         const key = `${fieldId}-${sampleId}`;
-        const ref = `overlayTrigger-${key}`;
+        const ref = `overlayTrigger-${index}-${key}`;
 
         const popover = (
             <Popover
