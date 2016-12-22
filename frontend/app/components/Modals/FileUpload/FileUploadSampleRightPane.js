@@ -313,9 +313,9 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderSampleHeader() {
         const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
         const uploadedDate = _.some(filesProcesses, (fileProcess) =>
-            fileProcess.sampleId === editingSample.originalId && fileProcess.progressStatus !== fileUploadStatus.READY)
+            fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY)
             ? null
-            : editingSample.timestamp;
+            : editingSample.created;
         return (
             <div className='form-horizontal form-padding'>
                 {this.renderDeleteSampleButton()}
