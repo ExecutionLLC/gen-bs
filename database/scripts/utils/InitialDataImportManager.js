@@ -7,7 +7,6 @@ const async = require('async');
 const FsUtils = require('../../../utils/FileSystemUtils');
 const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../../../services/FieldsMetadataService');
 const ImportDatabaseModel = require('./ImportDatabaseModel');
 /**
  * Imports initial data on the service start.

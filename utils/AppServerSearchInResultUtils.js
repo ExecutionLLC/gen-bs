@@ -44,14 +44,14 @@ class AppServerSearchInResultUtils {
         })
     }
 
-    static createAppSortOrder(sortParams, samples, fieldsMetadata) {
+    static createAppSortOrder(sortParams, samples, fields) {
         const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
         return _.map(sortedParams, ({fieldId, direction, sampleId}) => {
             const sample = _.find(samples, sample => sample.id === sampleId);
-            const fieldMetadata = _.find(fieldsMetadata, fieldMetadata => fieldMetadata.id === fieldId);
+            const field = _.find(fields, field => field.id === fieldId);
             return {
-                columnName: sample ? AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName): fieldMetadata.name,
-                sourceName: sample ? AppServerUtils.createSampleName(sample) : fieldMetadata.sourceName,
+                columnName: sample ? AppServerUtils.createColumnName(field.name, sample.genotypeName): field.name,
+                sourceName: sample ? AppServerUtils.createSampleName(sample) : field.sourceName,
                 isAscendingOrder: direction === 'asc'
             }
         })

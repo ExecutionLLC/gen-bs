@@ -3,6 +3,9 @@ import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {
     receiveTotalFields
 } from './fields';
+import {
+    receiveMetadata
+} from './metadata';
 import {receiveSavedFilesList} from './savedFiles';
 import {
     receiveInitialAnalysesHistory,
@@ -69,6 +72,7 @@ export function fetchUserDataAsync() {
                 filters,
                 views,
                 models,
+                metadata,
                 totalFields,
                 savedFiles,
                 analyses,
@@ -82,6 +86,7 @@ export function fetchUserDataAsync() {
 
             dispatch(receiveSavedFilesList(savedFiles));
             dispatch(receiveTotalFields(totalFields));
+            dispatch(receiveMetadata(metadata));
             dispatch(receiveSamplesList(samples));
             dispatch(receiveInitialAnalysesHistory(analyses));
             dispatch(uploadsListReceive(uploads));

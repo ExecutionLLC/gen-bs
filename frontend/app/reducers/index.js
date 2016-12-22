@@ -17,6 +17,7 @@ import analysesHistory from './analysesHistory';
 import filtersList from './filtersList';
 import viewsList from './viewsList';
 import modelsList from './modelsList';
+import metadata from './metadata';
 
 const genApp = combineReducers({
     auth,
@@ -35,7 +36,8 @@ const genApp = combineReducers({
     websocket,
     fileUpload,
     errorHandler,
-    analysesHistory
+    analysesHistory,
+    metadata
 });
 
 export default genApp;

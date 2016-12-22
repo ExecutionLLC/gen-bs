@@ -5,7 +5,7 @@ const Uuid = require('node-uuid');
 const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
-const FieldsMetadataService = require('./FieldsMetadataService.js');
+const FieldsService = require('./FieldsService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
 const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
@@ -59,7 +59,11 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.find(user, itemId, callback),
             (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item)),
             (item, callback) => {
-                this.theModel.findSamplesByVcfFileIds([item.originalId], true, (error, genotypeIds) => callback(error, genotypeIds, item));
+                this.theModel.findSamplesByVcfFileIds(
+                    user.id,
+                    [item.vcfFileId],
+                    true,
+                    (error, samples) => callback(error, samples, item));
             },
             (samples, item, callback) => {
                 if (samples.length == 0) {
@@ -79,7 +83,7 @@ class SamplesService extends UserEntityServiceBase {
     createMetadataForUploadedSample(user, vcfFileSampleId, appServerSampleFields, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
-            asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
+            asField => FieldsService.createFieldMetadata(null, true, asField));
         this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
     }
 
