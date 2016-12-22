@@ -190,7 +190,7 @@ function reduceReceiveFileOperation(state, action) {
             progressValue: progress,
             progressStatus: status
         }),
-        currentUploadId: index == null ? currentUploadId : id
+        currentUploadId: index < 0 ? currentUploadId : id
     };
 }
 
@@ -209,6 +209,26 @@ function setUploadId(state, action) {
         ...state,
         currentUploadId: action.uploadId
     };
+}
+
+function reduceInvalidateCurrentUploadId(state, action) {
+    const {metadata: samples} = action;
+    const {filesProcesses, currentUploadId} = state;
+    const newCurrentSample = _.find(samples, (sample) => {
+        const {vcfFileId} = sample;
+        const f = _.find(filesProcesses, fp => fp.operationId === vcfFileId);
+        if (f && f.id === currentUploadId) {
+            return true;
+        }
+    });
+    if (newCurrentSample) {
+        return {
+            ...state,
+            currentUploadId: null
+        };
+    } else {
+        return state;
+    }
 }
 
 function reduceUploadsListRemoveUpload(state, action) {
@@ -259,6 +279,9 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.SET_CURRENT_UPLOAD_ID:
             return setUploadId(state, action);
+
+        case ActionTypes.INVALIDATE_CURRENT_UPLOAD_ID:
+            return reduceInvalidateCurrentUploadId(state, action);
 
         case ActionTypes.UPLOADS_LIST_REMOVE_UPLOAD:
             return reduceUploadsListRemoveUpload(state, action);

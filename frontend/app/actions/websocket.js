@@ -2,7 +2,7 @@ import {showAnotherPageOpenedModal} from './auth';
 import {receiveSearchedResults} from './variantsTable';
 import {
     changeFileUploadProgressForOperationId,
-    fileUploadErrorForOperationId
+    fileUploadErrorForOperationId, invalidateCurrentUploadId
 } from './fileUpload';
 import config from '../../config';
 import {samplesListAddSamples} from './samplesList';
@@ -154,6 +154,7 @@ function receiveUploadMessage(wsData) {
         const {operationId, result: {progress, status, metadata}} = wsData;
         if (metadata && status !== WS_PROGRESS_STATUSES.READY) {
             dispatch(samplesListAddSamples(metadata));
+            dispatch(invalidateCurrentUploadId(metadata));
         }
         if (metadata && status === WS_PROGRESS_STATUSES.READY) {
             dispatch(samplesListUpdateSamplesFields(metadata));
