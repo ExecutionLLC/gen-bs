@@ -215,7 +215,7 @@ function setUploadId(state, action) {
  * Reset current upload id if at least one of received samples is for selected uploading.
  */
 function reduceInvalidateCurrentUploadId(state, action) {
-    const {metadata: samples} = action;
+    const {samples} = action;
     const {filesProcesses, currentUploadId} = state;
     const currentUploadProcess = _.find(filesProcesses, fp => fp.id === currentUploadId);
     if (!currentUploadProcess) {

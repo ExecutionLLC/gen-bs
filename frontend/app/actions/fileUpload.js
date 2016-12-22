@@ -59,10 +59,10 @@ export function setCurrentUploadId(uploadId) {
     };
 }
 
-export function invalidateCurrentUploadId(metadata) {
+export function invalidateCurrentUploadId(samples) {
     return {
         type: INVALIDATE_CURRENT_UPLOAD_ID,
-        metadata
+        samples
     };
 }
 

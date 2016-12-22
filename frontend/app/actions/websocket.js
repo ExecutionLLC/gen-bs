@@ -151,13 +151,13 @@ function receiveSearchMessage(wsData) {
 
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
-        const {operationId, result: {progress, status, metadata}} = wsData;
-        if (metadata && status !== WS_PROGRESS_STATUSES.READY) {
-            dispatch(samplesListAddSamples(metadata));
-            dispatch(invalidateCurrentUploadId(metadata));
+        const {operationId, result: {progress, status, metadata: samples}} = wsData;
+        if (samples && status !== WS_PROGRESS_STATUSES.READY) {
+            dispatch(samplesListAddSamples(samples));
+            dispatch(invalidateCurrentUploadId(samples));
         }
-        if (metadata && status === WS_PROGRESS_STATUSES.READY) {
-            dispatch(samplesListUpdateSamplesFields(metadata));
+        if (samples && status === WS_PROGRESS_STATUSES.READY) {
+            dispatch(samplesListUpdateSamplesFields(samples));
         }
         dispatch(changeFileUploadProgressForOperationId(progress, status, operationId));
     };
