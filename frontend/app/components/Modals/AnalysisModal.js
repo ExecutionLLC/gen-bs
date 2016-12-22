@@ -6,8 +6,8 @@ import AnalysisBody from './Analysis/AnalysisBody';
 
 
 class AnalysisModal extends React.Component {
-    constructor(state) {
-        super(state);
+    constructor(props) {
+        super(props);
         this.state = {isAnalysisBringToFront: false};
     }
 

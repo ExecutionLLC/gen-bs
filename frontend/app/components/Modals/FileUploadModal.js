@@ -6,8 +6,8 @@ import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
 
 class FileUploadModal extends Component {
-    constructor(state) {
-        super(state);
+    constructor(props) {
+        super(props);
         this.state = {isUploadBringToFront: false};
     }
 

@@ -6,7 +6,10 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
-import {uploadFiles} from '../../../actions/fileUpload';
+import {
+    uploadFiles,
+    fileUploadStatus
+} from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {
     updateSampleText,
@@ -24,6 +27,11 @@ function cancelDOMEvent(e) {
 }
 
 export default class FileUploadSampleRightPane extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {isDragoverState: false};
+    }
 
     render() {
         const {samplesList: {editingSample}, isBringToFront} = this.props;
@@ -97,19 +105,46 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderUpload(isDemo) {
+        const {isDragoverState} = this.state;
         return (
             <div className='split-scroll'>
                 <div className='form-horizontal form-padding'>
-                    <div className='empty'>
+                    <div className={classNames('empty', {'empty-upload': !isDemo})}>
                         <div className='btn-group btn-group-xlg'>
-                            {!isDemo && <button className='btn btn-link-default'
-                                                onClick={this.onUploadClick.bind(this)}
-                                                onDragEnter={cancelDOMEvent}
-                                                onDragOver={cancelDOMEvent}
-                                                onDrop={(e) => {
-                                                    cancelDOMEvent(e);
-                                                    this.onFilesDrop(e.dataTransfer.files);
-                                                }}
+                            {!isDemo &&
+                            <button className={classNames('btn btn-link-default', {'drop-zone': isDragoverState})}
+                                    onClick={this.onUploadClick.bind(this)}
+                                    onDragOver={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (!isDragoverState) {
+                                            this.setDndState(true);
+                                        }
+                                    }}
+                                    onDragEnter={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (!isDragoverState) {
+                                            this.setDndState(true);
+                                        }
+                                    }}
+                                    onDragLeave={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (isDragoverState) {
+                                            this.setDndState(false);
+                                        }
+                                    }}
+                                    onDragExit={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (isDragoverState) {
+                                            this.setDndState(false);
+                                        }
+                                    }}
+                                    onDrop={(e) => {
+                                        cancelDOMEvent(e);
+                                        if (isDragoverState) {
+                                            this.setDndState(false);
+                                        }
+                                        this.onFilesDrop(e.dataTransfer.files);
+                                    }}
                             >
                                 <input
                                     onChange={ (e) => {
@@ -146,6 +181,10 @@ export default class FileUploadSampleRightPane extends React.Component {
         onUploadHide();
     }
 
+    setDndState(state) {
+        this.setState({isDragoverState: state});
+    }
+
     onFilesDrop(files) {
         const {dispatch, onUploadHide} = this.props;
         dispatch(uploadFiles(files));
@@ -179,9 +218,12 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderFooter(selectedSample) {
         const {auth: {isDemo}, samplesList: {onSaveAction}} = this.props;
         return (
-            <div className='btn-toolbar btn-toolbar-form-actions'>
-                {onSaveAction && this.renderSelectButton(isDemo, selectedSample)}
-                {this.renderEditButton(selectedSample.type)}
+            <div>
+                <hr/>
+                <div className='btn-toolbar btn-toolbar-form-actions'>
+                    {this.renderEditButton(selectedSample.type)}
+                    {onSaveAction && this.renderSelectButton(isDemo, selectedSample)}
+                </div>
             </div>
         );
     }
@@ -269,12 +311,16 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSampleHeader() {
-        const {samplesList: {editingSample}} = this.props;
+        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
+        const uploadedDate = _.some(filesProcesses, (fileProcess) =>
+            fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY)
+            ? null
+            : editingSample.created;
         return (
             <div className='form-horizontal form-padding'>
                 {this.renderDeleteSampleButton()}
                 {this.renderSampleFileName()}
-                {this.renderSampleDates(editingSample.timestamp)}
+                {this.renderSampleDates(uploadedDate)}
                 {this.renderSampleDescription()}
             </div>
         );
@@ -302,9 +348,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderSampleDates(createdDate) {
         return (
             <div className='label-group-date'>
-                <label>
-                    Uploaded: {formatDate(createdDate)}
-                </label>
+                {createdDate ? (
+                    <label>Uploaded: {formatDate(createdDate)}</label>
+                ) : (
+                    <label><span className='text-primary'><i className='md-i'>schedule</i>Wait. Saving</span></label>
+                )}
             </div>
         );
     }

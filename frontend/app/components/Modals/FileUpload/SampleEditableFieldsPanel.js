@@ -67,23 +67,25 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     renderRowButtons() {
         const {sampleId} = this.props;
         return (
-            <div className='btn-toolbar btn-toolbar-form-actions'>
-                <button
-                    onClick={ (e) => this.onSaveEditedSampleClick(e, sampleId) }
-                    type='button'
-                    className='btn btn-link btn-uppercase'
-                >
-                    <span data-localize='actions.save_select.title'>Save</span>
-                </button>
+            <div>
+                <hr/>
+                <div className='btn-toolbar btn-toolbar-form-actions'>
+                    <button
+                        onClick={ (e) => this.onSaveEditedSampleClick(e, sampleId) }
+                        type='button'
+                        className='btn btn-link btn-uppercase'
+                    >
+                        <span data-localize='actions.save_select.title'>Save</span>
+                    </button>
 
-                <button
-                    onClick={ (e) => this.onCancelSampleClick(e, sampleId) }
-                    type='button'
-                    className='btn btn-link-default btn-uppercase'
-                >
-                    <span>Cancel</span>
-                </button>
-
+                    <button
+                        onClick={ (e) => this.onCancelSampleClick(e, sampleId) }
+                        type='button'
+                        className='btn btn-link-default btn-uppercase'
+                    >
+                        <span>Cancel</span>
+                    </button>
+                </div>
             </div>
         );
     }
