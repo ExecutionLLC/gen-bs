@@ -28,8 +28,8 @@ function cancelDOMEvent(e) {
 
 export default class FileUploadSampleRightPane extends React.Component {
 
-    constructor(state) {
-        super(state);
+    constructor(props) {
+        super(props);
         this.state = {isDragoverState: false};
     }
 
