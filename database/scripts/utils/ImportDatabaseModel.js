@@ -7,7 +7,6 @@ const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../../../services/FieldsMetadataService');
 const KnexWrapper = require('../../../utils/KnexWrapper');
 
 const TableNames = {

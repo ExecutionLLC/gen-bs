@@ -17,16 +17,14 @@ function reduceUpdateSampleValue(state, action) {
         return state;
     }
 
-    const newValue = {fieldId: valueFieldId, value: value};
-    const sampleValues = editingSample.editableFields.fields;
-    const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
+    const newValue = {metadataId: valueFieldId, value: value};
+    const sampleValues = editingSample.sampleMetadata;
+    const valueIndex = _.findIndex(sampleValues, {metadataId: valueFieldId});
 
     const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
-    const newEditingSample = {...editingSample,
-        editableFields: {
-            ...editingSample.editableFields,
-            fields: newSampleValues
-        }
+    const newEditingSample = {
+        ...editingSample,
+        sampleMetadata: newSampleValues
     };
 
     return {
@@ -45,12 +43,10 @@ function reduceUpdateSampleText(state, action) {
 
     const newName = name || editingSample.name;
     const newDescription = description || editingSample.description;
-    const newEditingSample = {...editingSample,
-        editableFields: {
-            ...editingSample.editableFields,
-            name: newName,
-            description:newDescription
-        }
+    const newEditingSample = {
+        ...editingSample,
+        name: newName,
+        description: newDescription
     };
 
     return {
@@ -68,10 +64,7 @@ function reduceReceiveUpdatedSample(state, action) {
     const newEditingSample = editingSample && editingSample.id === updatedSampleId ?
         ({ // brackets to calm down the linter
             ...updatedSample,
-            editableFields: {
-                ...updatedSample.editableFields,
-                fields: editingSample.editableFields.fields
-            }
+            sampleMetadata: editingSample.sampleMetadata
         }) :
         editingSample;
 
@@ -102,8 +95,8 @@ function reduceResetSampleInList(state, action) {
     }
 
     const sample = hashedArray.hash[sampleId];
-    const sampleValues = sample.editableFields;
-    const newEditingSample = {...editingSample, editableFields: sampleValues};
+    const sampleValues = sample.sampleMetadata;
+    const newEditingSample = {...editingSample, sampleMetadata: sampleValues};
 
     return {
         ...state,

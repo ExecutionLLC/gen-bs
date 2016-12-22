@@ -13,11 +13,11 @@ services.applicationServerReply.on(appServerReplyEvents.onSourceMetadataReceived
         const sourceName = sourcesList[index].sourceName;
         return {
             sourceName,
-            fieldsMetadata:sourceMetadata.fieldsMetadata,
+            fields:sourceMetadata.fields,
             reference: sourceMetadata.reference
         };
-    }).forEach(({sourceName, fieldsMetadata, reference}) => fs.writeFileSync(`./${sourceName}.json`, JSON.stringify({
+    }).forEach(({sourceName, fields, reference}) => fs.writeFileSync(`./${sourceName}.json`, JSON.stringify({
         reference,
-        fieldsMetadata
+        fields
     }, null, 2)));
 });

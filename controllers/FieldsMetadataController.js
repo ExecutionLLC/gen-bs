@@ -17,26 +17,26 @@ class FieldsMetadataController extends ControllerBase {
                 const user = request.user;
                 const sampleId = request.params.sampleId;
 
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                this.services.fields.findByUserAndSampleId(user, sampleId, callback);
             }
         ], (error, fieldsMetadata) => {
             this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }
 
-    getSourcesMetadata(request, response) {
+    getSourcesFields(request, response) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
+            (callback) => this.services.fields.findSourcesFields(callback)
         ], (error, fieldsMetadata) => {
             this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }
 
-    getTotalMetadata(request, response) {
+    getAll(request, response) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => this.services.fieldsMetadata.findTotalMetadata(callback)
+            (callback) => this.services.fields.findAll(callback)
         ], (error, fieldsMetadata) => {
             this.sendErrorOrJson(response, error, fieldsMetadata);
         });
@@ -45,9 +45,9 @@ class FieldsMetadataController extends ControllerBase {
     createRouter() {
         const router = new Express();
 
-        router.get('/sources', this.getSourcesMetadata.bind(this));
+        router.get('/sources', this.getSourcesFields.bind(this));
         router.get('/:sampleId', this.getSampleMetadata.bind(this));
-        router.get('/', this.getTotalMetadata.bind(this));
+        router.get('/', this.getAll.bind(this));
 
         return router;
     }

@@ -7,7 +7,7 @@ const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 
-class FieldsMetadataService extends ServiceBase {
+class FieldsService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
         this.availableSources = [];
@@ -33,12 +33,12 @@ class FieldsMetadataService extends ServiceBase {
         this.models.fields.find(fieldId, callback);
     }
 
-    findSourcesMetadata(callback) {
-        this.models.fields.findSourcesMetadata(callback);
+    findSourcesFields(callback) {
+        this.models.fields.findSourcesFields(callback);
     }
 
-    findTotalMetadata(callback) {
-        this.models.fields.findTotalMetadata(callback);
+    findAll(callback) {
+        this.models.fields.findAll(callback);
     }
 
     getExistingSourceNames(callback) {
@@ -77,7 +77,6 @@ class FieldsMetadataService extends ServiceBase {
             label: appServerFieldMetadata.name, // Set label to name by default.
             sourceName: isSample ? 'sample' : sourceName,
             isMandatory: appServerFieldMetadata.isMandatory,
-            isEditable: false,
             valueType: appServerFieldMetadata.type,
             description: appServerFieldMetadata.desc,
             dimension: appServerFieldMetadata.num
@@ -85,4 +84,4 @@ class FieldsMetadataService extends ServiceBase {
     }
 }
 
-module.exports = FieldsMetadataService;
+module.exports = FieldsService;

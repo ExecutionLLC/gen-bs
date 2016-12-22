@@ -35,11 +35,11 @@ class NavbarMain extends Component {
         };
 
         // count the same way as they displaying in FileUploadLeftPane
-        const uploadHash = _.keyBy(filesProcesses, 'sampleId');
+        const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(samplesList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
         const samplesData = _.map(uploadedSamples, sample => {
-            const {originalId} = sample;
-            const currentUpload = uploadHash[originalId];
+            const {vcfFileId} = sample;
+            const currentUpload = uploadHash[vcfFileId];
             return {
                 upload: currentUpload,
                 sample: sample

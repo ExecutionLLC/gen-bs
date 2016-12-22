@@ -73,8 +73,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     requestOpenSearchSession(session, params, callback) {
-        const {fieldsMetadata, userId, view, samples, filter, model, limit, offset} = params;
-        const fieldIdToFieldMetadata = CollectionUtils.createHash(fieldsMetadata, fieldMetadata => fieldMetadata.id);
+        const {fields, userId, view, samples, filter, model, limit, offset} = params;
+        const fieldIdToFieldMetadata = CollectionUtils.createHash(fields, fieldMetadata => fieldMetadata.id);
         const sample = samples[0];
         const method = METHODS.openSearchSession;
         const sampleIds = _.map(samples, sample => sample.id);
@@ -133,7 +133,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 const {
                     samples,
-                    fieldsMetadata,
+                    fields,
                     globalSearchValue: {
                         filter
                     },
@@ -143,7 +143,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     limit
                 } = params;
                 const setFilterRequest = this._createSearchInResultsParams(
-                    samples, fieldsMetadata, filter, fieldSearchValues, sortValues, offset, limit
+                    samples, fields, filter, fieldSearchValues, sortValues, offset, limit
                 );
                 this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, null,
                     (error) => callback(error, operation)
@@ -194,11 +194,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                                     callback(error, resultSamples)
                                 }
                             ),
-                            viewFields: (callback) => this.services.fieldsMetadata.findMany(
+                            viewFields: (callback) => this.services.fields.findMany(
                                 _.map(view.viewListItems, item => item.fieldId),
                                 callback
                             ),
-                            samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
+                            samplesFields: (callback) => this.services.fields.findByUserAndSampleIds(user, sampleIds, callback),
                         },
                         (error, {samples, viewFields, samplesFields}) => callback(error, {
                             rowData,
@@ -423,10 +423,10 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, null, callback);
     }
 
-    _createSearchInResultsParams(samples, fieldsMetadata, globalSearchValue, fieldSearchValues, sortParams, offset, limit) {
-        const globalFilter = AppSearchInResultUtils.createAppGlobalFilter(globalSearchValue, samples, fieldsMetadata);
-        const columnFilters = AppSearchInResultUtils.createAppColumnFilter(fieldSearchValues, samples, fieldsMetadata);
-        const sortOrder = AppSearchInResultUtils.createAppSortOrder(sortParams, samples, fieldsMetadata);
+    _createSearchInResultsParams(samples, fields, globalSearchValue, fieldSearchValues, sortParams, offset, limit) {
+        const globalFilter = AppSearchInResultUtils.createAppGlobalFilter(globalSearchValue, samples, fields);
+        const columnFilters = AppSearchInResultUtils.createAppColumnFilter(fieldSearchValues, samples, fields);
+        const sortOrder = AppSearchInResultUtils.createAppSortOrder(sortParams, samples, fields);
         return {
             globalFilter,
             columnFilters,
@@ -471,7 +471,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
      * */
     _getAppServerSampleId(sample) {
         return _.includes(ENTITY_TYPES.defaultTypes, sample.type) ?
-            sample.fileName : sample.originalId;
+            sample.fileName : sample.vcfFileId;
     }
 
     _getPrefixedFieldName(fieldMetadata) {

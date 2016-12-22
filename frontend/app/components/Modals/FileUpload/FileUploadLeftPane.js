@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import FileUploadSampleSearch from './FileUploadSampleSearch';
 import FileUploadSampleList from './FileUploadSampleList';
 
@@ -43,9 +44,9 @@ export default class FileUploadLeftPane extends React.Component {
         }
 
         const sampleSearchArray = _.map(samplesArray, sample => {
-            const editableFieldHash = _.keyBy(sample.editableFields.fields, 'fieldId');
+            const metadataHash = _.keyBy(sample.sampleMetadata, 'metadataId');
             const sampleSearchValues = _.map(editableFields, editableField => {
-                const sampleEditableField = editableFieldHash[editableField.fieldId];
+                const sampleEditableField = metadataHash[editableField.id];
                 return getSearchValue(editableField, sampleEditableField)
                     .toLocaleLowerCase();
             });

@@ -39,6 +39,7 @@ class FileUploadModal extends Component {
                     closeModal={ () => this.onClose() }
                     isUploadBringToFront={this.state.isUploadBringToFront}
                     onUploadShow={() => this.onUploadShow()}
+                    onUploadHide={() => this.onUploadHide()}
                 />
             </Modal>
         );
@@ -58,7 +59,7 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, ui, fileUpload, analysesHistory: {newHistoryItem}, samplesList, fields: {editableFields}} = state;
+    const {auth, ui, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}} = state;
     const currentHistorySamplesIds = newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : [];
     return {
         auth,

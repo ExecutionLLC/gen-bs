@@ -230,10 +230,10 @@ class SearchService extends ServiceBase {
     _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, viewId, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
         async.parallel({
-            fieldsMetadata: (callback) => async.waterfall(
+            fields: (callback) => async.waterfall(
                 [
                     (callback) => this.services.views.find(user, viewId, callback),
-                    (view, callback) => this.services.fieldsMetadata.findMany(
+                    (view, callback) => this.services.fields.findMany(
                         _.map(view.viewListItems,item => item.fieldId),
                         callback
                     ),
@@ -242,12 +242,12 @@ class SearchService extends ServiceBase {
             samples: (callback) => {
                 this.services.samples.findMany(user, sampleIds, callback);
             }
-        }, (error, {fieldsMetadata, samples}) => {
+        }, (error, {fields, samples}) => {
             callback(error, {
                 sessionId,
                 operationId,
                 samples,
-                fieldsMetadata,
+                fields,
                 globalSearchValue,
                 fieldSearchValues,
                 sortValues,
@@ -295,15 +295,15 @@ class SearchService extends ServiceBase {
             filter: (callback) => {
                 this.services.filters.find(user, filterId, callback);
             },
-            fieldsMetadata: (callback) => {
+            fields: (callback) => {
                 async.waterfall([
                     (callback) => {
                         // Load sample metadata
-                        this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback);
+                        this.services.fields.findByUserAndSampleIds(user, sampleIds, callback);
                     },
                     (sampleMetadata, callback) => {
                         // Load sources metadata
-                        this.services.fieldsMetadata.findSourcesMetadata((error, sourcesMetadata) => {
+                        this.services.fields.findSourcesFields((error, sourcesMetadata) => {
                             callback(error, {
                                 sampleMetadata,
                                 sourcesMetadata
@@ -327,7 +327,7 @@ class SearchService extends ServiceBase {
                     this.services.models.find(user, modelId, callback);
                 }
             }
-        }, (error, {langu, view, filter, model, samples, fieldsMetadata}) => {
+        }, (error, {langu, view, filter, model, samples, fields}) => {
             if (error) {
                 callback(error);
             } else {
@@ -338,7 +338,7 @@ class SearchService extends ServiceBase {
                     view,
                     filter,
                     samples,
-                    fieldsMetadata,
+                    fields,
                     model,
                     limit,
                     offset

@@ -76,7 +76,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     renderFieldValue(index, fieldId, sampleId, value, sortState) {
-        const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
+        const {fields: {totalFieldsHashedArray: {hash}}} = this.props;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
         const sortedActiveClass = classNames({
             'active': columnSortParams
@@ -89,30 +89,36 @@ export default class VariantsTableRow extends ComponentBase {
             return this.renderEmptyFieldValue(sortedActiveClass, fieldId, sampleId);
         }
 
+        const key = `${fieldId}-${sampleId}`;
+        const ref = `overlayTrigger-${index}-${key}`;
+
         const popover = (
-            <Popover id={`${index}-${field.fieldId}`}>
+            <Popover
+                onClick={() => this.refs[ref].hide()}
+            >
                 {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
                     isChromosome ? this.renderChromosome(value) : value}
             </Popover>
         );
 
         return (
-            <td className={sortedActiveClass}
-                key={fieldId + '-' + sampleId}>
-                <div>
-                    <OverlayTrigger
-                        trigger='click'
-                        ref='overlay'
-                        rootClose={true}
-                        placement='left'
-                        overlay={popover}
-                    >
-                        <div>
-                            <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {isChromosome ? this.renderChromosome(value) : value}</a>
-                        </div>
-                    </OverlayTrigger>
-                </div>
+            <td
+                className={sortedActiveClass}
+                key={key}
+            >
+                <OverlayTrigger
+                    trigger='click'
+                    rootClose={true}
+                    placement='left'
+                    overlay={popover}
+                    container={this.props.tableElement}
+                    ref={ref}
+                >
+                    <div>
+                        <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
+                            {isChromosome ? this.renderChromosome(value) : value}</a>
+                    </div>
+                </OverlayTrigger>
             </td>
         );
     }
@@ -178,5 +184,6 @@ VariantsTableRow.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isSelected: React.PropTypes.bool.isRequired,
     // callback(rowIndex, isSelected)
-    onSelected: React.PropTypes.func.isRequired
+    onSelected: React.PropTypes.func.isRequired,
+    tableElement: React.PropTypes.instanceOf(React.Component).isRequired
 };
