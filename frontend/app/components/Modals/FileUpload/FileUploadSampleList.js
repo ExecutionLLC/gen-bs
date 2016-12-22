@@ -35,7 +35,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     render() {
-        const {currentSampleId, fileUpload:{currentUploadId}} = this.props;
+        const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
