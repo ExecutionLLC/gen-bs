@@ -194,10 +194,9 @@ class FieldsModel extends ModelBase {
                 const fieldIdsToKeywords = _.groupBy(keywords, keyword => keyword.fieldId);
                 const fieldsWithKeywords = _.map(fieldValues,
                     (field) => {
-                        return {
-                            ...field,
+                        return Object.assign({}, field,{
                             keywords: fieldIdsToKeywords[field.id] || []
-                        }
+                        });
                     });
                 callback(null, fieldsWithKeywords);
             }

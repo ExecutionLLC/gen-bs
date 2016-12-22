@@ -59,10 +59,9 @@ class MetadataModel extends ModelBase {
                 const fieldsWithAvailableValues = _.map(
                     metadataValues,
                     (metadata) => {
-                        return {
-                            ...metadata,
+                        return Object.assign({}, metadata,{
                             availableValues: metadataIdsToAvailableValues[metadata.id] || []
-                        };
+                        });
                     }
                 );
                 callback(null, fieldsWithAvailableValues)
