@@ -23,7 +23,6 @@ export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
 export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
 export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
 export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
-export const SET_DRAGOVER_STATE = 'SET_DRAGOVER_STATE';
 
 export const fileUploadStatus = {
     ERROR: 'error',
@@ -304,12 +303,5 @@ function fileUploadError(id, error) {
         type: FILE_UPLOAD_ERROR,
         error,
         id
-    };
-}
-
-export function setDragOverState(isDragoverState) {
-    return {
-        type: SET_DRAGOVER_STATE,
-        isDragoverState
     };
 }

@@ -8,7 +8,6 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {
     uploadFiles,
-    setDragOverState,
     fileUploadStatus
 } from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
@@ -28,6 +27,11 @@ function cancelDOMEvent(e) {
 }
 
 export default class FileUploadSampleRightPane extends React.Component {
+
+    constructor(state) {
+        super(state);
+        this.state = {isDragoverState: false};
+    }
 
     render() {
         const {samplesList: {editingSample}, isBringToFront} = this.props;
@@ -98,8 +102,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderUpload(isDemo) {
-        const { fileUpload: {isDragoverState}} = this.props;
-
+        const {isDragoverState} = this.state;
         return (
             <div className='split-scroll'>
                 <div className='form-horizontal form-padding'>
@@ -175,8 +178,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     setDndState(state) {
-        const {dispatch} = this.props;
-        dispatch(setDragOverState(state));
+        this.setState({isDragoverState: state});
     }
 
     onFilesDrop(files) {
