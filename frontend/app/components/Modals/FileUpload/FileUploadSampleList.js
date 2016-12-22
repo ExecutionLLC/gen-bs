@@ -341,6 +341,12 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    static renderRefreshIcon(uploadItem) {
+        const {progressStatus} = uploadItem;
+        return <i className={classNames('icon-state md-i md-spin',
+            progressStatus === 'ajax' ? 'text-normal' : 'text-primary')}>refresh</i>;
+    }
+
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
         if (!samples.length) {
@@ -370,7 +376,7 @@ export default class FileUploadSampleList extends React.Component {
                         <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
-                    <i className='icon-state md-i md-spin text-primary'>refresh</i>
+                    {FileUploadSampleList.renderRefreshIcon(upload)}
                     <span className='link-label'>
                         {name}
                     </span>

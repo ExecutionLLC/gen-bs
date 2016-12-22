@@ -45,5 +45,14 @@
       border-bottom-color: @progress-bar-danger-bg;
     }
   }
-
+  &.progress-bar-default {
+    background-color: @progress-bar-default-bg;
+    position: relative;
+    > span {
+      background-color: @progress-bar-default-bg;
+    }
+    > span:before {
+      border-top-color: @progress-bar-default-bg;
+    }
+  }
 }

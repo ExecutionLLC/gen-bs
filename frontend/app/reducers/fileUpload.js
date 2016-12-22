@@ -177,14 +177,13 @@ function reduceReceiveFileUpload(state, action) {
 }
 
 function reduceReceiveFileOperation(state, action) {
-    const {id: uploadId, upload: {created, error, id, progress, sampleId, status}} = action;
+    const {id: uploadId, upload: {created, error, id, progress, status}} = action;
     const {filesProcesses, currentUploadId} = state;
     const index = findFileProcessIndex(filesProcesses, id);
     return {
         ...state,
         filesProcesses: assignFileProcess(filesProcesses, uploadId, {
             operationId: id,
-            sampleId,
             created,
             error,
             progressValue: progress,

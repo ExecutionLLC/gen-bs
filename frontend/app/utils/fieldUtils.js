@@ -179,7 +179,7 @@ export default class FieldUtils {
         const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
         return [
-            ..._.filter(sortedLabelledFields, ['isEditable', false]),
+            ...sortedLabelledFields,
             ...sourceFieldsList
         ];
     }
@@ -205,6 +205,6 @@ export default class FieldUtils {
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
-        return _.filter(sortedLabelledFields, (field) => !field.isEditable && !field.isInvisible);
+        return _.filter(sortedLabelledFields, (field) => !field.isInvisible);
     }
 }

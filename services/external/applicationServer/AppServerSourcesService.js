@@ -91,7 +91,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
             const messageResult = message.result;
             const convertedSourcesMetadata = _.map(messageResult, sourceMetadata => {
                 return {
-                    fieldsMetadata: sourceMetadata.columns,
+                    fields: sourceMetadata.columns,
                     reference: sourceMetadata.reference
                 };
             });

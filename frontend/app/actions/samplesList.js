@@ -277,10 +277,10 @@ export function samplesListServerRemoveSample(sampleId) {
         }).then(() => {
             const deletingSample = getState().samplesList.hashedArray.hash[sampleId];
             if (deletingSample) {
-                const fileSampleId = deletingSample.originalId;
-                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.originalId === fileSampleId && s.id !== sampleId);
+                const fileSampleId = deletingSample.vcfFileId;
+                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
                 if (isLastSample) {
-                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {sampleId: fileSampleId});
+                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {operationId: fileSampleId});
                     if (fileProcess) {
                         dispatch(changeFileUploadProgressState(100, 'ready', fileProcess.id));
                     }
