@@ -177,16 +177,19 @@ function reduceReceiveFileUpload(state, action) {
 }
 
 function reduceReceiveFileOperation(state, action) {
-    const {created, error, id, progress, status} = action.upload;
+    const {id: uploadId, upload: {created, error, id, progress, status}} = action;
+    const {filesProcesses, currentUploadId} = state;
+    const index = findFileProcessIndex(filesProcesses, id);
     return {
         ...state,
-        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+        filesProcesses: assignFileProcess(filesProcesses, uploadId, {
             operationId: id,
             created,
             error,
             progressValue: progress,
             progressStatus: status
-        })
+        }),
+        currentUploadId: index < 0 ? currentUploadId : id
     };
 }
 
@@ -205,6 +208,27 @@ function setUploadId(state, action) {
         ...state,
         currentUploadId: action.uploadId
     };
+}
+
+/**
+ * Reset current upload id if at least one of received samples is for selected uploading.
+ */
+function reduceInvalidateCurrentUploadId(state, action) {
+    const {samples} = action;
+    const {filesProcesses, currentUploadId} = state;
+    const currentUploadProcess = _.find(filesProcesses, fp => fp.id === currentUploadId);
+    if (!currentUploadProcess) {
+        return state;
+    }
+    const newCurrentSample = _.find(samples, sample => sample.vcfFileId === currentUploadProcess.operationId);
+    if (newCurrentSample) {
+        return {
+            ...state,
+            currentUploadId: null
+        };
+    } else {
+        return state;
+    }
 }
 
 function reduceUploadsListRemoveUpload(state, action) {
@@ -255,6 +279,9 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.SET_CURRENT_UPLOAD_ID:
             return setUploadId(state, action);
+
+        case ActionTypes.INVALIDATE_CURRENT_UPLOAD_ID:
+            return reduceInvalidateCurrentUploadId(state, action);
 
         case ActionTypes.UPLOADS_LIST_REMOVE_UPLOAD:
             return reduceUploadsListRemoveUpload(state, action);
