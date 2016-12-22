@@ -211,16 +211,17 @@ function setUploadId(state, action) {
     };
 }
 
+/**
+ * Reset current upload id if at least one of received samples is for selected uploading.
+ */
 function reduceInvalidateCurrentUploadId(state, action) {
     const {metadata: samples} = action;
     const {filesProcesses, currentUploadId} = state;
-    const newCurrentSample = _.find(samples, (sample) => {
-        const {vcfFileId} = sample;
-        const f = _.find(filesProcesses, fp => fp.operationId === vcfFileId);
-        if (f && f.id === currentUploadId) {
-            return true;
-        }
-    });
+    const currentUploadProcess = _.find(filesProcesses, fp => fp.id === currentUploadId);
+    if (!currentUploadProcess) {
+        return state;
+    }
+    const newCurrentSample = _.find(samples, sample => sample.vcfFileId === currentUploadProcess.operationId);
     if (newCurrentSample) {
         return {
             ...state,
