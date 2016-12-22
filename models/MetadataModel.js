@@ -16,7 +16,7 @@ const TableNames = {
 
 class MetadataModel extends ModelBase {
     constructor(models) {
-        super(models, 'field');
+        super(models, TableNames.Metadata);
     }
 
     findAll(callback) {
@@ -42,7 +42,7 @@ class MetadataModel extends ModelBase {
     _findMetadata(metadataIds, languageIdOrNull, isEditableOrNull, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findMetadataValues(trx, metadataIds, languageIdOrNull,isEditableOrNull, callback),
+                (callback) => this._findMetadataValues(trx, metadataIds, languageIdOrNull, isEditableOrNull, callback),
                 (metadataValues, callback) => this._attachAvailableValues(metadataValues, languageIdOrNull, callback)
             ], callback);
         }, callback);
@@ -58,9 +58,12 @@ class MetadataModel extends ModelBase {
                 );
                 const fieldsWithAvailableValues = _.map(
                     metadataValues,
-                    (metadata) => Object.assign({}, metadata, {
-                        availableValues: metadataIdsToAvailableValues[metadata.id] || []
-                    })
+                    (metadata) => {
+                        return {
+                            ...metadata,
+                            availableValues: metadataIdsToAvailableValues[metadata.id] || []
+                        };
+                    }
                 );
                 callback(null, fieldsWithAvailableValues)
             }
@@ -103,11 +106,7 @@ class MetadataModel extends ModelBase {
         if (metadataIds) {
             query = query.andWhere(`${TableNames.Metadata}.id`, 'in', metadataIds);
         }
-        if (languageIdOrNull) {
-            query = query.andWhere(`${TableNames.MetadataText}.language_id`, languageIdOrNull);
-        } else {
-            query = query.andWhere(`${TableNames.MetadataText}.language_id`, this.models.config.defaultLanguId);
-        }
+        query = query.andWhere(`${TableNames.MetadataText}.language_id`, languageIdOrNull || this.models.config.defaultLanguId);
 
         if (isEditableOrNull) {
             query = query.andWhere(`${TableNames.Metadata}.is_editable`, isEditableOrNull);

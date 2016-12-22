@@ -121,7 +121,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                     const sourceName = this.requestedSources[index];
                     return {
                         sourceName,
-                        fields:sourceMetadata.fields,
+                        fields: sourceMetadata.fields,
                         reference: sourceMetadata.reference
                     };
                 });

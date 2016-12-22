@@ -9,7 +9,7 @@ const initialState = {
     allMetadata: []
 };
 
-function reduceReceiveTotalFields(action, state) {
+function reduceReceiveMetadata(action, state) {
     const allMetadata = FieldUtils.sortAndAddLabels(action.fields);
     const editableMetadata = _.filter(allMetadata, ['isEditable', true]);
     return Object.assign({}, state, {
@@ -23,7 +23,7 @@ export default function fields(state = initialState, action) {
     switch (action.type) {
 
         case ActionTypes.RECEIVE_METADATA:
-            return reduceReceiveTotalFields(action, state);
+            return reduceReceiveMetadata(action, state);
 
         default:
             return state;

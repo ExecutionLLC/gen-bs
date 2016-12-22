@@ -22,7 +22,6 @@ function reduceUpdateSampleValue(state, action) {
     const valueIndex = _.findIndex(sampleValues, {metadataId: valueFieldId});
 
     const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
-    debugger;
     const newEditingSample = {
         ...editingSample,
         sampleMetadata: newSampleValues

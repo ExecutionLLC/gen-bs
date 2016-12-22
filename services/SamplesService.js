@@ -59,7 +59,11 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.find(user, itemId, callback),
             (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item)),
             (item, callback) => {
-                this.theModel.findSamplesByVcfFileIds(user.id,[item.vcfFileId], true, (error, samples) => callback(error, samples, item));
+                this.theModel.findSamplesByVcfFileIds(
+                    user.id,
+                    [item.vcfFileId],
+                    true,
+                    (error, samples) => callback(error, samples, item));
             },
             (samples, item, callback) => {
                 if (samples.length == 0) {

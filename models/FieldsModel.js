@@ -14,7 +14,7 @@ const TableNames = {
 
 class FieldsModel extends ModelBase {
     constructor(models) {
-        super(models, 'field');
+        super(models, TableNames.Field);
     }
 
     findAll(callback) {
@@ -51,7 +51,7 @@ class FieldsModel extends ModelBase {
         async.waterfall([
             (callback) => {
                 const dataToInsert = {
-                    id: (shouldGenerateId ? this._generateId() : metadata.id),
+                    id: shouldGenerateId ? this._generateId() : metadata.id,
                     name: metadata.name,
                     sourceName: metadata.sourceName,
                     valueType: metadata.valueType,
@@ -97,7 +97,7 @@ class FieldsModel extends ModelBase {
                 async.mapSeries(fieldsWithIds, (fieldWithId, callback) => {
                     if (!fieldWithId.id) {
                         this._addInTransaction(trx, languId, fieldWithId.fieldMetadata, true, (error, insertedFieldId) => {
-                            fieldWithId.id = (insertedFieldId) ? insertedFieldId : null;
+                            fieldWithId.id = insertedFieldId ? insertedFieldId : null;
                             callback(error, fieldWithId);
                         });
                     } else {
@@ -141,7 +141,7 @@ class FieldsModel extends ModelBase {
         async.waterfall([
             (callback) => this.models.samples.findMany(userId, sampleIds, callback),
             (samples, callback) => {
-                const fieldIds =_.uniq([].concat.apply([],_.map(samples, sample => _.map(sample.sampleFields,'fieldId'))));
+                const fieldIds = _.uniq([].concat.apply([], _.map(samples, sample => _.map(sample.sampleFields, 'fieldId'))));
                 this.findMany(fieldIds, callback);
             }
         ], callback);
@@ -161,9 +161,27 @@ class FieldsModel extends ModelBase {
         ], callback)
     }
 
-    _findFields(trx, fieldIdsOrNull, isMandatoryOrNull, isSourceOrNull, languageIdOrNull, nameOrNull, valueTypeOrNull, dimensionOrNull, callback) {
+    _findFields(trx,
+                fieldIdsOrNull,
+                isMandatoryOrNull,
+                isSourceOrNull,
+                languageIdOrNull,
+                nameOrNull,
+                valueTypeOrNull,
+                dimensionOrNull,
+                callback) {
         async.waterfall([
-            (callback) => this._findFieldsValues(trx, fieldIdsOrNull, isMandatoryOrNull, isSourceOrNull, languageIdOrNull, nameOrNull, valueTypeOrNull, dimensionOrNull, callback),
+            (callback) => this._findFieldsValues(
+                trx,
+                fieldIdsOrNull,
+                isMandatoryOrNull,
+                isSourceOrNull,
+                languageIdOrNull,
+                nameOrNull,
+                valueTypeOrNull,
+                dimensionOrNull,
+                callback
+            ),
             (fieldValues, callback) => this._attachKeywords(fieldValues, callback)
         ], callback);
     }
@@ -175,15 +193,26 @@ class FieldsModel extends ModelBase {
             (keywords, callback) => {
                 const fieldIdsToKeywords = _.groupBy(keywords, keyword => keyword.fieldId);
                 const fieldsWithKeywords = _.map(fieldValues,
-                    (field) => Object.assign({}, field, {
-                        keywords: fieldIdsToKeywords[field.id] || []
-                    }));
+                    (field) => {
+                        return {
+                            ...field,
+                            keywords: fieldIdsToKeywords[field.id] || []
+                        }
+                    });
                 callback(null, fieldsWithKeywords);
             }
         ], callback);
     }
 
-    _findFieldsValues(trx, fieldIdsOrNull, isMandatoryOrNull, isSourceOrNull, languageIdOrNull, nameOrNull, valueTypeOrNull, dimensionOrNull, callback) {
+    _findFieldsValues(trx,
+                      fieldIdsOrNull,
+                      isMandatoryOrNull,
+                      isSourceOrNull,
+                      languageIdOrNull,
+                      nameOrNull,
+                      valueTypeOrNull,
+                      dimensionOrNull,
+                      callback) {
         let query = trx.select([
             `${TableNames.Field}.id`,
             `${TableNames.Field}.name`,
@@ -209,11 +238,8 @@ class FieldsModel extends ModelBase {
         if (isSourceOrNull) {
             query = query.andWhereNot(`${TableNames.Field}.source_name`, 'sample');
         }
-        if (languageIdOrNull) {
-            query = query.andWhere(`${TableNames.FieldText}.langu_id`, languageIdOrNull);
-        } else {
-            query = query.andWhere(`${TableNames.FieldText}.langu_id`, this.models.config.defaultLanguId);
-        }
+        query = query.andWhere(`${TableNames.FieldText}.langu_id`, languageIdOrNull || this.models.config.defaultLanguId);
+
         if (nameOrNull) {
             query = query.andWhere(`${TableNames.Field}.name`, nameOrNull);
         }
