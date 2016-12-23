@@ -28,6 +28,7 @@ import {analysisType} from '../../../utils/analyseUtils';
 import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
+import config from '../../../../config';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -500,7 +501,7 @@ export default class AnalysisRightPane extends React.Component {
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
-                        maxLength={50}
+                        maxLength={config.ANALYSIS.MAX_NAME_LENGTH}
                         onChange={(str) => this.onAnalysisNameChange(str)}
                     />
                 </div>
