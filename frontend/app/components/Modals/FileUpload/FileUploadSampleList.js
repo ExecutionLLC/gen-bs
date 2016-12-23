@@ -263,7 +263,7 @@ export default class FileUploadSampleList extends React.Component {
                 {isRenderDropDown && <button
                     className='btn btn-link-light-default dropdown-toggle popup-show-button'
                     type='button'
-                    onClick={() => this.onShowPopup(id)}
+                    onClick={() => this.onTogglePopup(id)}
                 >
                     <i className='md-i'>more_horiz</i>
                     <span className='caret'></span>
@@ -493,9 +493,9 @@ export default class FileUploadSampleList extends React.Component {
         dispatch(abortRequest(id));
     }
 
-    onShowPopup(id) {
+    onTogglePopup(id) {
         this.setState({
-            showPopup: id
+            showPopup: this.state.showPopup === id ? null : id
         });
     }
 
