@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
-const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
@@ -33,12 +32,13 @@ exports.down = function () {
     throw new Error('Not implemented');
 };
 
-var _findEditableFields = function (knex) {
+function _findEditableFields(knex) {
     return knex.select()
         .from(oldTables.FieldMetadata)
         .where('is_editable', true)
         .then((results) => _.map(results, result => ChangeCaseUtil.convertKeysToCamelCase(result)));
-};
+}
+
 function updateFieldMetadataTable(knex) {
     return _findEditableFields(knex)
         .then((fields) => {
@@ -120,10 +120,9 @@ function migrateEditableField(field, knex) {
         })
         .then(() => {
             return Promise.mapSeries(fieldAvailableValues, fieldAvailableValue => {
-                const {fieldAvailableValueTexts} = fieldAvailableValue;
-                const metadataAvailableValueId = Uuid.v4();
+                const {id: fieldAvailableValueId, fieldAvailableValueTexts} = fieldAvailableValue;
                 const metadataAvailableValue = {
-                    id: metadataAvailableValueId,
+                    id: fieldAvailableValueId,
                     metadata_id: id
                 };
                 return knex(tables.MetadataAvailableValue)
@@ -132,7 +131,7 @@ function migrateEditableField(field, knex) {
                         return Promise.mapSeries(fieldAvailableValueTexts, fieldAvailableValueText => {
                             const {languId, value} = fieldAvailableValueText;
                             const metadataAvailableValueText = {
-                                metadataAvailableValueId: metadataAvailableValueId,
+                                metadataAvailableValueId: fieldAvailableValueId,
                                 languageId: languId,
                                 value
                             };
