@@ -5,6 +5,7 @@ import {entityTypeIsDemoDisabled} from './entityTypes';
 import {sampleType, sampleTypesForAnalysisType} from './samplesUtils';
 import {analysisType} from './analyseUtils';
 import config from '../../config';
+import {formatDate} from './dateUtil';
 
 
 function trimName(name) {
@@ -28,14 +29,14 @@ export function makeHistoryItem(historyItem) {
 
 export function makeNewHistoryItem(sample, filter, view) {
     const name = trimName(
-        `${new Date()}_${sample ? sample.name : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
+        `${formatDate(new Date())}_${sample ? sample.name : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
     );
     return {
         id: null,
         name: name,
         description: trimDescription(`Description of ${name}`),
-        createdDate: '' + new Date(),
-        lastQueryDate: '' + new Date(),
+        createdDate: new Date(),
+        lastQueryDate: new Date(),
         filterId: filter ?
             filter.id :
             null,
