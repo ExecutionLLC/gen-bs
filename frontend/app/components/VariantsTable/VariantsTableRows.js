@@ -71,6 +71,11 @@ export default class VariantsTableRows extends Component {
             }, 10);
         }
 
+        const el = e.target;
+        if (this.props.xScrollListener) {
+            this.props.xScrollListener(el.scrollLeft);
+        }
+
         if (!this.canLoadMore() || isNextDataLoading || isFetching) {
             return;
         } else {
@@ -80,11 +85,6 @@ export default class VariantsTableRows extends Component {
             if (loadingElement && loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
                 dispatch(getNextPartOfData());
             }
-        }
-
-        const el = e.target;
-        if (this.props.xScrollListener) {
-            this.props.xScrollListener(el.scrollLeft);
         }
     }
 
