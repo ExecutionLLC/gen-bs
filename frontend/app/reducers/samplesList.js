@@ -178,9 +178,9 @@ function reduceSetEditingSampleId(state, action) {
 function updateSampleFields(state, action) {
     const {samples} = action;
     const {hashedArray: {array: currentSamples}} = state;
-    const updatedSampleHash = _.keyBy(samples, 'genotypeId');
+    const updatedSampleHash = _.keyBy(samples, 'id');
     const newSampleList = _.map(currentSamples, sample => {
-        const updatedSample = updatedSampleHash[sample.genotypeId];
+        const updatedSample = updatedSampleHash[sample.id];
         if (updatedSample) {
             return {
                 ...sample,
