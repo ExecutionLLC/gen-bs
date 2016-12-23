@@ -76,9 +76,7 @@ export default class VariantsTableRows extends Component {
             this.props.xScrollListener(el.scrollLeft);
         }
 
-        if (!this.canLoadMore() || isNextDataLoading || isFetching) {
-            return;
-        } else {
+        if (this.canLoadMore() && !isNextDataLoading && !isFetching) {
             const containerElement = this.refs[REFS.CONTAINER];
             const loadingElement = this.refs[REFS.LOADING];
             // check visibility of the 'loading' element
