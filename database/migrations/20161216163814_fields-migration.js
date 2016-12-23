@@ -120,7 +120,7 @@ function migrateEditableField(field, knex) {
         })
         .then(() => {
             return Promise.mapSeries(fieldAvailableValues, fieldAvailableValue => {
-                const {id:fieldAvailableValueId, fieldAvailableValueTexts} = fieldAvailableValue;
+                const {id: fieldAvailableValueId, fieldAvailableValueTexts} = fieldAvailableValue;
                 const metadataAvailableValue = {
                     id: fieldAvailableValueId,
                     metadata_id: id
