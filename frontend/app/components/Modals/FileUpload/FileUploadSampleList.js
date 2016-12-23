@@ -78,7 +78,7 @@ export default class FileUploadSampleList extends React.Component {
     renderUploadedData(showNew) {
         const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
-        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
+        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields) && sample.type !== entityType.HISTORY);
         const samplesData = _.map(uploadedSamples, sample => {
             const {vcfFileId} = sample;
             const sampleName = sample.name;
