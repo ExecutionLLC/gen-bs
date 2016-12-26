@@ -4,6 +4,7 @@ import React from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {formatDate} from './../../../utils/dateUtil';
 import {
     duplicateAnalysesHistoryItem,
     createNewHistoryItem,
@@ -64,7 +65,7 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='form-horizontal form-padding'>
                     {historyItem.id && this.renderDeleteAnalysisButton()}
                     {this.renderAnalysisName(historyItem.name, isDemo)}
-                    {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
+                    {this.renderAnalysisDates(historyItem.createdDate)}
                     {this.renderAnalysisDescription(historyItem.description, isDemo)}
                 </div>
                 {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
@@ -559,14 +560,11 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderAnalysisDates(createdDate, lastQueryDate) {
+    renderAnalysisDates(createdDate) {
         return (
             <div className='label-group-date'>
                 <label>
-                    <span data-localize='general.created_date'>Created date</span>: <span>{createdDate}</span>
-                </label>
-                <label>
-                    <span data-localize='query.last_query_date'>Updated</span>: <span>{lastQueryDate}</span>
+                    <span data-localize='general.created_date'>Created</span>: <span>{formatDate(createdDate)}</span>
                 </label>
             </div>
         );

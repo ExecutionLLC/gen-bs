@@ -80,7 +80,7 @@ export default class FileUploadSampleList extends React.Component {
     renderUploadedData(showNew) {
         const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
-        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields));
+        const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields) && sample.type !== entityType.HISTORY);
         const samplesData = _.map(uploadedSamples, sample => {
             const {vcfFileId} = sample;
             const sampleName = sample.name;
@@ -265,7 +265,7 @@ export default class FileUploadSampleList extends React.Component {
                 {isRenderDropDown && <button
                     className='btn btn-link-light-default dropdown-toggle popup-show-button'
                     type='button'
-                    onClick={() => this.onShowPopup(id)}
+                    onClick={() => this.onTogglePopup(id)}
                 >
                     <i className='md-i'>more_horiz</i>
                     <span className='caret'></span>
@@ -495,9 +495,9 @@ export default class FileUploadSampleList extends React.Component {
         dispatch(abortRequest(id));
     }
 
-    onShowPopup(id) {
+    onTogglePopup(id) {
         this.setState({
-            showPopup: id
+            showPopup: this.state.showPopup === id ? null : id
         });
     }
 
