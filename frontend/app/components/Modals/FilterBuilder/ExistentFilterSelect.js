@@ -13,6 +13,7 @@ import {
     fireOnSaveAction
 } from '../../../actions/filterBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
+import {isFilterComplexModel} from '../../../utils/filterUtils';
 
 
 export default class ExistentFilterSelect extends Component {
@@ -23,7 +24,7 @@ export default class ExistentFilterSelect extends Component {
         const filters = filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
-        const isFilterDuplicable = selectedFilter.modelType !== 'complex';
+        const isFilterDuplicable = !isFilterComplexModel(selectedFilter);
         return (
             <div className='form-rows'>
                 <div className='form-group'>

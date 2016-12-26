@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/filterBuilder';
-import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
+import {filterUtils, genomicsParsedRulesValidate, opsUtils, isFilterComplexModel} from '../utils/filterUtils';
 import FieldUtils from '../utils/fieldUtils';
 import {entityType} from '../utils/entityTypes';
 import {ImmutableHashedArray} from '../utils/immutable';
@@ -20,7 +20,9 @@ function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allo
     const fieldDefault = _.find(allowedFields, {id: fieldDefaultId});
     const sampleDefaultType = fieldDefault.sampleType;
     /** @type {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
-    const parsedRawRules = filterToEdit.modelType === 'complex' ? null: filterUtils.getRulesFromGenomics(filterToEdit.rules);
+    const parsedRawRules = isFilterComplexModel(filterToEdit) ?
+        null :
+        filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = parsedRawRules && genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
     if (validateRulesResult && !_.isEmpty(validateRulesResult.report)) {
