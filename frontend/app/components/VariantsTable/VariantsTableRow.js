@@ -100,22 +100,18 @@ export default class VariantsTableRow extends ComponentBase {
 
     renderHyperLinkValue(key, value, field, sortedActiveClass) {
         const {hyperlinkTemplate} = field;
-        if (value !== '.') {
-            const replacementValue = encodeURIComponent(value);
-            const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
-            return (
-                <td
-                    className={sortedActiveClass}
-                    key={key}
-                >
-                    <div>
-                        <a href={valueUrl} target='_blank'>{value}</a>
-                    </div>
-                </td>
-            );
-        } else {
-            return value;
-        }
+        const replacementValue = encodeURIComponent(value);
+        const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+        return (
+            <td
+                className={sortedActiveClass}
+                key={key}
+            >
+                <div>
+                    <a href={valueUrl} target='_blank'>{value}</a>
+                </div>
+            </td>
+        );
     }
 
     renderPopupValue(ref, key, value, field, isValuedHyperlink, isChromosome, sortedActiveClass) {
@@ -142,14 +138,15 @@ export default class VariantsTableRow extends ComponentBase {
                     ref={ref}
                 >
                     <div>
-                        {!isValuedHyperlink &&
-                        <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                            {isChromosome ? this.renderChromosome(value) : value}
-                        </a>}
-                        {isValuedHyperlink &&
-                        <div>
-                            <a href='#'>{value}</a>
-                        </div>}
+                        {isValuedHyperlink ? (
+                                <div>
+                                    <a href='#'>{value}</a>
+                                </div>
+                            ) : (
+                                <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
+                                    {isChromosome ? this.renderChromosome(value) : value}
+                                </a>
+                            )}
                     </div>
                 </OverlayTrigger>
             </td>
