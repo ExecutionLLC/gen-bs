@@ -14,7 +14,7 @@ import {
     deleteServerAnalysesHistoryItemAsync
 } from '../../../actions/analysesHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
-import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
+import {filterBuilderStartEdit, filterBuilderOnSave, filterBuilderStrategyName} from '../../../actions/filterBuilder';
 import {
     openModal,
     closeModal,
@@ -824,7 +824,7 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
         const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
-        const filterFiltersStrategy = {name: 'filter'};
+        const filterFiltersStrategy = {name: filterBuilderStrategyName.FILTER};
         dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
@@ -848,7 +848,7 @@ export default class AnalysisRightPane extends React.Component {
             {}
         );
         const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
-        const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
+        const modelFiltersStrategy = {name: filterBuilderStrategyName.MODEL, analysisType: historyItem.type};
         const analysisTypeModelsList = {
             ...modelsList,
             hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === historyItem.type))

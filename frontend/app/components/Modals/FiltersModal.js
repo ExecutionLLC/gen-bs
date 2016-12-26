@@ -7,7 +7,7 @@ import config from '../../../config';
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter';
 import FilterBuilder from './FilterBuilder/FilterBuilder';
-import {filterBuilderEndEdit} from '../../actions/filterBuilder';
+import {filterBuilderEndEdit, filterBuilderStrategyName} from '../../actions/filterBuilder';
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
@@ -16,7 +16,7 @@ import {modalName} from '../../actions/modalWindows';
 
 // Texts that differs filter builder from model builder
 export const filterBuilderTexts = {
-    'filter': {
+    [filterBuilderStrategyName.FILTER]: {
         filter: 'filter',
         filters: 'filters',
         Filter: 'Filter',
@@ -25,7 +25,7 @@ export const filterBuilderTexts = {
             return '';
         }
     },
-    'model': {
+    [filterBuilderStrategyName.MODEL]: {
         filter: 'model',
         filters: 'models',
         Filter: 'Model',
