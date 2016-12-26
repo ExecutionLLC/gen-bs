@@ -21,8 +21,8 @@ export function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
         name: trimName(`Copy of ${historyItem.name}`),
-        createdDate: '' + new Date(),
-        lastQueryDate: '' + new Date(),
+        createdDate: new Date(),
+        lastQueryDate: new Date(),
         id: null
     };
 }

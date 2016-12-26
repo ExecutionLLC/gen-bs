@@ -562,7 +562,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='label-group-date'>
                 <label>
-                    <span data-localize='general.created_date'>Created date</span>: <span>{formatDate(createdDate)}</span>
+                    <span data-localize='general.created_date'>Created</span>: <span>{formatDate(createdDate)}</span>
                 </label>
             </div>
         );
