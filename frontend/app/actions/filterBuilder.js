@@ -1,4 +1,4 @@
-import {closeModal} from './modalWindows';
+import {closeModal, modalName} from './modalWindows';
 import {
     filtersListServerCreateFilterAsync,
     filtersListServerUpdateFilterAsync,
@@ -13,11 +13,16 @@ import {entityTypeIsEditable} from '../utils/entityTypes';
 import {immutableSetPathProperty} from '../utils/immutable';
 
 
+export const filterBuilderStrategyName = {
+    FILTER: 'filter',
+    MODEL: 'model'
+};
+
 // Model builder and filter builder slightly differs.
 // We cannot pass callback through the store,
 // so we pass strategy name ('filter' or 'model') and get actions from this object.
 export const filterBuilderStrategyActions = {
-    'filter': {
+    [filterBuilderStrategyName.FILTER]: {
         getList(state) {
             return state.filtersList;
         },
@@ -25,7 +30,7 @@ export const filterBuilderStrategyActions = {
         serverUpdate: filtersListServerUpdateFilterAsync,
         serverDelete: filtersListServerDeleteFilterAsync
     },
-    'model': {
+    [filterBuilderStrategyName.MODEL]: {
         getList(state) {
             return state.modelsList;
         },
@@ -111,7 +116,7 @@ function filterBuilderCreateFilter() {
         dispatch(filterBuilderStrategyActions[filtersStrategy.name].serverCreate(editingFilter, languageId))
             .then( (filter) => {
                 dispatch(fireOnSaveAction(filter));
-                dispatch(closeModal('filters'));
+                dispatch(closeModal(modalName.FILTERS));
                 dispatch(filterBuilderEndEdit());
             });
     };
@@ -126,14 +131,14 @@ function filterBuilderUpdateFilter() {
 
         if (isNotEdited) {
             dispatch(fireOnSaveAction(editingFilter.filter));
-            dispatch(closeModal('filters'));
+            dispatch(closeModal(modalName.FILTERS));
             dispatch(filterBuilderEndEdit());
         } else {
             const resultEditingFilter = editingFilter.filter;
             dispatch(filterBuilderStrategyActions[filtersStrategy.name].serverUpdate(resultEditingFilter))
                 .then( (filter) => {
                     dispatch(fireOnSaveAction(filter));
-                    dispatch(closeModal('filters'));
+                    dispatch(closeModal(modalName.FILTERS));
                     dispatch(filterBuilderEndEdit());
                 });
         }

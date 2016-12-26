@@ -4,6 +4,7 @@ import {Modal} from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
+import {modalName} from '../../actions/modalWindows';
 
 class FileUploadModal extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class FileUploadModal extends Component {
     }
 
     onClose() {
-        this.props.closeModal('upload');
+        this.props.closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
     }
 
     onUploadShow() {

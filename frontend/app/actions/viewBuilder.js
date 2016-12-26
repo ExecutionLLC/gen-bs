@@ -1,4 +1,4 @@
-import {closeModal} from './modalWindows';
+import {closeModal, modalName} from './modalWindows';
 import {
     viewsListServerCreateView,
     viewsListServerDeleteView,
@@ -123,7 +123,7 @@ function viewBuilderCreateView() {
         dispatch(viewsListServerCreateView(editingView, languageId))
             .then((view) => {
                 dispatch(fireOnSaveAction(view));
-                dispatch(closeModal('views'));
+                dispatch(closeModal(modalName.VIEWS));
                 dispatch(viewBuilderEndEdit());
             });
     };
@@ -138,13 +138,13 @@ function viewBuilderUpdateView() {
 
         if (isNotEdited) {
             dispatch(fireOnSaveAction(editingView));
-            dispatch(closeModal('views'));
+            dispatch(closeModal(modalName.VIEWS));
             dispatch(viewBuilderEndEdit());
         } else {
             dispatch(viewsListServerUpdateView(editingView))
                 .then((view) => {
                     dispatch(fireOnSaveAction(view));
-                    dispatch(closeModal('views'));
+                    dispatch(closeModal(modalName.VIEWS));
                     dispatch(viewBuilderEndEdit());
                 });
         }

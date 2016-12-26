@@ -15,10 +15,11 @@ import {
     deleteServerAnalysesHistoryItemAsync
 } from '../../../actions/analysesHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
-import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
+import {filterBuilderStartEdit, filterBuilderOnSave, filterBuilderStrategyName} from '../../../actions/filterBuilder';
 import {
     openModal,
-    closeModal
+    closeModal,
+    modalName
 } from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
@@ -29,6 +30,7 @@ import {analysisType} from '../../../utils/analyseUtils';
 import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
+import config from '../../../../config';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -501,7 +503,7 @@ export default class AnalysisRightPane extends React.Component {
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
-                        maxLength={50}
+                        maxLength={config.ANALYSIS.MAX_NAME_LENGTH}
                         onChange={(str) => this.onAnalysisNameChange(str)}
                     />
                 </div>
@@ -798,7 +800,7 @@ export default class AnalysisRightPane extends React.Component {
                 dispatch(editExistentAnalysesHistoryItem(analysis));
             }
         });
-        dispatch(closeModal('analysis'));
+        dispatch(closeModal(modalName.ANALYSIS));
     }
 
     onViewsClick() {
@@ -808,7 +810,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
         const action = this.actionEdit({viewId: null});
         dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
-        dispatch(openModal('views'));
+        dispatch(openModal(modalName.VIEWS));
     }
 
     onViewSelect(viewId) {
@@ -820,11 +822,11 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
         const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
-        const filterFiltersStrategy = {name: 'filter'};
+        const filterFiltersStrategy = {name: filterBuilderStrategyName.FILTER};
         dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
-        dispatch(openModal('filters'));
+        dispatch(openModal(modalName.FILTERS));
     }
 
     onFilterSelect(filterId) {
@@ -844,7 +846,7 @@ export default class AnalysisRightPane extends React.Component {
             {}
         );
         const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
-        const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
+        const modelFiltersStrategy = {name: filterBuilderStrategyName.MODEL, analysisType: historyItem.type};
         const analysisTypeModelsList = {
             ...modelsList,
             hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === historyItem.type))
@@ -852,7 +854,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
-        dispatch(openModal('filters'));
+        dispatch(openModal(modalName.FILTERS));
     }
 
     onModelSelect(modelId) {
@@ -865,7 +867,7 @@ export default class AnalysisRightPane extends React.Component {
         const selectedSamplesIds = _.map(historyItem.samples, (sample) => sample.id);
         const action = this.actionEdit({sample: {index: sampleIndex, id: selectedSamplesIds[sampleIndex]}});
         dispatch(samplesOnSave(selectedSamplesIds, action, 'changeItem.sample.index', 'changeItem.sample.id'));
-        dispatch(openModal('upload'));
+        dispatch(openModal(modalName.UPLOAD));
     }
     
     onSampleSelect(sampleIndex, sampleId) {

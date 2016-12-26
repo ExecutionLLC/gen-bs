@@ -5,6 +5,7 @@ import Promise from 'bluebird';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
+import {uploadState} from '../utils/uploadUtils';
 
 /*
  * action types
@@ -206,7 +207,7 @@ export function uploadFile(fileUploadId) {
             return;
         }
         dispatch(requestFileUpload(fp.id));
-        dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
+        dispatch(changeFileUploadProgress(0, uploadState.AJAX, fp.id));
         const abortRequest = sendFile(
             fp.file,
             (operationId) => {
@@ -215,7 +216,7 @@ export function uploadFile(fileUploadId) {
             },
             (percentage) => {
                 console.log('progress', percentage);
-                dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
+                dispatch(changeFileUploadProgress(percentage, uploadState.AJAX, fp.id));
             },
             (err) => {
                 console.error('Upload FAILED: ', err.responseText);
