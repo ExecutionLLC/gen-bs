@@ -13,7 +13,8 @@ import {
 import {
     filterUtils,
     opsUtils,
-    genomicsParsedRulesValidate
+    genomicsParsedRulesValidate,
+    isFilterComplexModel
 } from '../../../utils/filterUtils';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import config from '../../../../config';
@@ -488,7 +489,7 @@ export default class FilterBuilder extends React.Component {
         const allowedFields = filterBuilder.allowedFields;
         return (
             <div className='builder-wrapper'>
-                {filter.modelType !== 'complex' ?
+                {!isFilterComplexModel(filter) ?
                     <FilterQueryBuilder
                         allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                         totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
