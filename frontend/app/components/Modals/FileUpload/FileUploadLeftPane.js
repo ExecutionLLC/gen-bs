@@ -8,6 +8,7 @@ import {
     setEditingSampleId
 } from '../../../actions/samplesList';
 import {setCurrentUploadId} from '../../../actions/fileUpload';
+import {entityType} from '../../../utils/entityTypes';
 
 export default class FileUploadLeftPane extends React.Component {
 
@@ -43,16 +44,15 @@ export default class FileUploadLeftPane extends React.Component {
             return _.find(editableField.availableValues, {'id': sampleEditableFieldValue.value}).value;
         }
 
-        const sampleSearchArray = _.map(samplesArray, sample => {
+        const nonHistorySamples = _.filter(samplesArray, sample => sample.type !== entityType.HISTORY);
+        const sampleSearchArray = _.map(nonHistorySamples, sample => {
             const metadataHash = _.keyBy(sample.sampleMetadata, 'metadataId');
             const sampleSearchValues = _.map(editableFields, editableField => {
                 const sampleEditableField = metadataHash[editableField.id];
                 return getSearchValue(editableField, sampleEditableField)
                     .toLocaleLowerCase();
             });
-            if (sample.name) {
-                sampleSearchValues.push(sample.name.toLocaleLowerCase());
-            }
+            sampleSearchValues.push(sample.name.toLocaleLowerCase());
             return {
                 sampleId: sample.id,
                 searchValues: sampleSearchValues
