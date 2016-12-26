@@ -1,4 +1,4 @@
-import {closeModal} from './modalWindows';
+import {closeModal, modalName} from './modalWindows';
 import {
     filtersListServerCreateFilterAsync,
     filtersListServerUpdateFilterAsync,
@@ -111,7 +111,7 @@ function filterBuilderCreateFilter() {
         dispatch(filterBuilderStrategyActions[filtersStrategy.name].serverCreate(editingFilter, languageId))
             .then( (filter) => {
                 dispatch(fireOnSaveAction(filter));
-                dispatch(closeModal('filters'));
+                dispatch(closeModal(modalName.FILTERS));
                 dispatch(filterBuilderEndEdit());
             });
     };
@@ -126,14 +126,14 @@ function filterBuilderUpdateFilter() {
 
         if (isNotEdited) {
             dispatch(fireOnSaveAction(editingFilter.filter));
-            dispatch(closeModal('filters'));
+            dispatch(closeModal(modalName.FILTERS));
             dispatch(filterBuilderEndEdit());
         } else {
             const resultEditingFilter = editingFilter.filter;
             dispatch(filterBuilderStrategyActions[filtersStrategy.name].serverUpdate(resultEditingFilter))
                 .then( (filter) => {
                     dispatch(fireOnSaveAction(filter));
-                    dispatch(closeModal('filters'));
+                    dispatch(closeModal(modalName.FILTERS));
                     dispatch(filterBuilderEndEdit());
                 });
         }

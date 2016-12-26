@@ -11,6 +11,7 @@ import {filterBuilderEndEdit} from '../../actions/filterBuilder';
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
+import {modalName} from '../../actions/modalWindows';
 
 
 // Texts that differs filter builder from model builder
@@ -42,7 +43,7 @@ class FiltersModal extends Component {
 
     onClose() {
         const {dispatch, closeModal} = this.props;
-        closeModal('filters');
+        closeModal(modalName.FILTERS); // TODO: closeModal must have no params (it's obvious that we close upload)
         dispatch(filterBuilderEndEdit());
     }
 

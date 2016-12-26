@@ -12,6 +12,7 @@ import {
 } from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 import {uploadState} from '../../../utils/uploadUtils';
+import {modalName} from '../../../actions/modalWindows';
 
 function fileUploadStatusErrorOrReady(status) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
@@ -476,7 +477,7 @@ export default class FileUploadSampleList extends React.Component {
     onSampleItemSelectForAnalysis(id) {
         const {dispatch, closeModal} = this.props;
         dispatch(sampleSaveCurrent(id));
-        closeModal('upload');
+        closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
     }
 
     onSampleItemDelete(id) {

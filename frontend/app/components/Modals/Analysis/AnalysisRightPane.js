@@ -17,7 +17,8 @@ import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuil
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
 import {
     openModal,
-    closeModal
+    closeModal,
+    modalName
 } from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
@@ -801,7 +802,7 @@ export default class AnalysisRightPane extends React.Component {
                 dispatch(editExistentAnalysesHistoryItem(analysis));
             }
         });
-        dispatch(closeModal('analysis'));
+        dispatch(closeModal(modalName.ANALYSIS));
     }
 
     onViewsClick() {
@@ -811,7 +812,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
         const action = this.actionEdit({viewId: null});
         dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
-        dispatch(openModal('views'));
+        dispatch(openModal(modalName.VIEWS));
     }
 
     onViewSelect(viewId) {
@@ -827,7 +828,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
-        dispatch(openModal('filters'));
+        dispatch(openModal(modalName.FILTERS));
     }
 
     onFilterSelect(filterId) {
@@ -855,7 +856,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
-        dispatch(openModal('filters'));
+        dispatch(openModal(modalName.FILTERS));
     }
 
     onModelSelect(modelId) {
@@ -868,7 +869,7 @@ export default class AnalysisRightPane extends React.Component {
         const selectedSamplesIds = _.map(historyItem.samples, (sample) => sample.id);
         const action = this.actionEdit({sample: {index: sampleIndex, id: selectedSamplesIds[sampleIndex]}});
         dispatch(samplesOnSave(selectedSamplesIds, action, 'changeItem.sample.index', 'changeItem.sample.id'));
-        dispatch(openModal('upload'));
+        dispatch(openModal(modalName.UPLOAD));
     }
     
     onSampleSelect(sampleIndex, sampleId) {
