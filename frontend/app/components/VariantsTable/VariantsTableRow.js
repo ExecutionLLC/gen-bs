@@ -84,7 +84,7 @@ export default class VariantsTableRow extends ComponentBase {
 
         const field = hash[fieldId];
         const isChromosome = this.isChromosome(field);
-        const isValuedHyperlink = this.isHyperlink(field, value);
+        const isValueHyperlink = this.isHyperlink(field, value);
         if (!value) {
             return this.renderEmptyFieldValue(sortedActiveClass, fieldId, sampleId);
         }
@@ -92,6 +92,33 @@ export default class VariantsTableRow extends ComponentBase {
         const key = `${fieldId}-${sampleId}`;
         const ref = `overlayTrigger-${index}-${key}`;
 
+        return isValueHyperlink && !this.hasMultipleValues(value)?
+            this.renderHyperLinkValue(key, value, field, sortedActiveClass):
+                this.renderPopupValue(ref,key, value, field, isValueHyperlink, isChromosome, sortedActiveClass);
+    }
+
+
+    renderHyperLinkValue(key, value, field, sortedActiveClass) {
+        const {hyperlinkTemplate} = field;
+        if (value !== '.') {
+            const replacementValue = encodeURIComponent(value);
+            const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+            return (
+                <td
+                    className={sortedActiveClass}
+                    key={key}
+                >
+                    <div>
+                        <a href={valueUrl} target='_blank'>{value}</a>
+                    </div>
+                </td>
+            );
+        } else {
+            return value;
+        }
+    }
+
+    renderPopupValue(ref, key, value, field, isValuedHyperlink, isChromosome, sortedActiveClass) {
         const popover = (
             <Popover
                 onClick={() => this.refs[ref].hide()}
@@ -115,8 +142,14 @@ export default class VariantsTableRow extends ComponentBase {
                     ref={ref}
                 >
                     <div>
+                        {!isValuedHyperlink &&
                         <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                            {isChromosome ? this.renderChromosome(value) : value}</a>
+                            {isChromosome ? this.renderChromosome(value) : value}
+                        </a>}
+                        {isValuedHyperlink &&
+                        <div>
+                            <a href='#'>{value}</a>
+                        </div>}
                     </div>
                 </OverlayTrigger>
             </td>
@@ -145,6 +178,10 @@ export default class VariantsTableRow extends ComponentBase {
         };
         const chromosomeValue = chromosomeHash[value];
         return chromosomeValue ? `${chromosomeValue}(${value || ''})` : value || '';
+    }
+
+    hasMultipleValues(value) {
+        return value.split(',').length > 1;
     }
 
     renderHyperLinks(hyperlinkTemplate, value) {
