@@ -75,11 +75,6 @@ export default class AnalysisHistoryList extends React.Component {
                     <span className='link-desc'>
                         {historyItem.description}
                     </span>
-                    <span className='small link-desc'>
-                        <span data-localize='query.last_query_date'>
-                            Updated
-                        </span>: {historyItem.lastQueryDate}
-                    </span>
                 </a>
             </li>
         );
