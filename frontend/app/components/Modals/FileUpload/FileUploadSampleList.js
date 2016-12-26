@@ -11,6 +11,7 @@ import {
     abortRequest
 } from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
+import {uploadState} from '../../../utils/uploadUtils';
 
 function fileUploadStatusErrorOrReady(status) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
@@ -301,26 +302,26 @@ export default class FileUploadSampleList extends React.Component {
     static renderProgressBar(uploadItem) {
         const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
-            'ajax': {
+            [uploadState.AJAX]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
                 }),
                 renderMessage: 'Loading..'
             },
-            'task_running': {
+            [uploadState.TASK_RUNNING]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
                 renderMessage: <span className='text-primary'>Saving...</span>
             },
-            'in_progress': {
+            [uploadState.IN_PROGRESS]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
                 renderMessage: <span className='text-primary'>Saving...</span>
             }
         };
-        const currentStage = STAGES[progressStatus] || STAGES['ajax'];
+        const currentStage = STAGES[progressStatus] || STAGES[uploadState.AJAX];
         if (!currentStage) {
             return null;
         }
@@ -344,7 +345,7 @@ export default class FileUploadSampleList extends React.Component {
     static renderRefreshIcon(uploadItem) {
         const {progressStatus} = uploadItem;
         return <i className={classNames('icon-state md-i md-spin',
-            progressStatus === 'ajax' ? 'text-normal' : 'text-primary')}>refresh</i>;
+            progressStatus === uploadState.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
     }
 
     renderProgressUploadSample(uploadData) {

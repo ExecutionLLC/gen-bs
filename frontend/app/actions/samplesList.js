@@ -7,7 +7,7 @@ import {
     immutableGetPathProperty
 } from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
-import {changeFileUploadProgressState} from './fileUpload';
+import {changeFileUploadProgressState, fileUploadStatus} from './fileUpload';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -282,7 +282,7 @@ export function samplesListServerRemoveSample(sampleId) {
                 if (isLastSample) {
                     const fileProcess = _.find(getState().fileUpload.filesProcesses, {operationId: fileSampleId});
                     if (fileProcess) {
-                        dispatch(changeFileUploadProgressState(100, 'ready', fileProcess.id));
+                        dispatch(changeFileUploadProgressState(100, fileUploadStatus.READY, fileProcess.id));
                     }
                 }
             }
