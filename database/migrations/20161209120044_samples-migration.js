@@ -131,8 +131,8 @@ function updateSampleTablesData(knex) {
                         }));
                 }))
                 .then(() => Promise.mapSeries(genotypeVersions, version => {
-                    const {id, sampleGenotypeId} = version;
-                    return updateAnalyses(sampleGenotypeId, id, knex);
+                    const {sampleGenotypeId, genotypeVersionIds} = version;
+                    return Promise.mapSeries(genotypeVersionIds, genotypeVersionId => updateAnalyses(sampleGenotypeId, genotypeVersionId, knex));
                 }));
         })
 }
@@ -174,6 +174,10 @@ function findGenotypeLastVersions(knex) {
             const sampleVersionGroups = _.groupBy(results, 'sampleGenotypeId');
             return _.map(sampleVersionGroups, versions => {
                 const orderedVersions = _.orderBy(versions, ['timestamp'], ['desc']);
+                const genotypeVersionIds = _.map(versions, version => version.id);
+                return Object.assign({},_.head(orderedVersions),{
+                    genotypeVersionIds
+                });
                 return _.head(orderedVersions);
             });
         });
