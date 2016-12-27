@@ -8,6 +8,7 @@ import {
 } from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 import {changeFileUploadProgressState, fileUploadStatus} from './fileUpload';
+import {entityType} from '../utils/entityTypes';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -283,6 +284,21 @@ export function samplesListServerRemoveSample(sampleId) {
                     const fileProcess = _.find(getState().fileUpload.filesProcesses, {operationId: fileSampleId});
                     if (fileProcess) {
                         dispatch(changeFileUploadProgressState(100, fileUploadStatus.READY, fileProcess.id));
+                    }
+                }
+            }
+            const {onSaveAction, onSaveActionPropertyId, onSaveActionPropertyIndex, onSaveActionSelectedSamplesIds} = getState().samplesList;
+            if (onSaveAction) {
+                const deletedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, analysisSampleId => analysisSampleId === sampleId);
+                if (deletedSampleIndex >= 0) {
+                    const samplesArray = getState().samplesList.hashedArray.array;
+                    const newSample = _.find(samplesArray, availableSample => availableSample.type !== entityType.HISTORY && !_.includes(onSaveActionSelectedSamplesIds, availableSample.id));
+                    if (newSample) {
+                        dispatch(immutableSetPathProperty(
+                            immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSample.id),
+                            onSaveActionPropertyIndex,
+                            deletedSampleIndex)
+                        );
                     }
                 }
             }
