@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout } from 'redux-timeout';
+import FontFaceObserver from 'fontfaceobserver';
 
 import config from '../../config';
 
