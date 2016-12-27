@@ -83,7 +83,8 @@ function makeCommentInvisible(knex) {
 }
 
 function createGenotypeName(fileName, genotype) {
-    return genotype ? `${fileName}:${genotype}` : fileName;
+    const name = genotype ? `${fileName}:${genotype}` : fileName;
+    return name.substr(-50, 50)
 }
 
 function addGenotypeVersionText(knex, genotypeText) {
