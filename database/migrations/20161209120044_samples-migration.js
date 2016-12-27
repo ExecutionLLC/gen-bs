@@ -175,10 +175,9 @@ function findGenotypeLastVersions(knex) {
             return _.map(sampleVersionGroups, versions => {
                 const orderedVersions = _.orderBy(versions, ['timestamp'], ['desc']);
                 const genotypeVersionIds = _.map(versions, version => version.id);
-                return Object.assign({},_.head(orderedVersions),{
+                return Object.assign({}, _.head(orderedVersions), {
                     genotypeVersionIds
                 });
-                return _.head(orderedVersions);
             });
         });
 }
