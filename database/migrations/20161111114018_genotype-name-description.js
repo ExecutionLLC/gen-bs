@@ -82,9 +82,11 @@ function makeCommentInvisible(knex) {
         .update({'is_invisible': true});
 }
 
+const GENOTYPE_NAME_MAX_LENGTH = 50;
+
 function createGenotypeName(fileName, genotype) {
     const name = genotype ? `${fileName}:${genotype}` : fileName;
-    return name.substr(-50, 50)
+    return name.substr(-GENOTYPE_NAME_MAX_LENGTH, GENOTYPE_NAME_MAX_LENGTH); // get last GENOTYPE_NAME_MAX_LENGTH chars
 }
 
 function addGenotypeVersionText(knex, genotypeText) {
