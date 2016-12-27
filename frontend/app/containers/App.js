@@ -26,6 +26,12 @@ import UserActions from '../actions/userActions';
 
 class App extends Component {
 
+    componentWillMount() {
+        // preload the font, wait for 30 seconds.
+        const observer = new FontFaceObserver('Roboto-Medium');
+        observer.load(null, 30);
+    }
+
     componentDidMount() {
         const {dispatch} = this.props;
         const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
