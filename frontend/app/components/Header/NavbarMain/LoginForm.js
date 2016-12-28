@@ -14,7 +14,13 @@ class LoginForm extends Component {
         const {login, password} = this.state;
         const isDisabled = !(login && password);
         return (
-            <form className='form-inline'>
+            <form
+                className='form-inline'
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    this.onLoginClick();
+                }}
+            >
                 <input className='form-control material-input-sm'
                        value={login}
                        type='text'
@@ -31,7 +37,6 @@ class LoginForm extends Component {
                        onChange={(e) => this.onPasswordChanged(e)}/>
                 <button className='btn btn-primary  btn-uppercase login-button'
                         type='submit'
-                        onClick={(e) => this.onLoginClick(e)}
                         disabled={isDisabled}
                 >Login
                 </button>
