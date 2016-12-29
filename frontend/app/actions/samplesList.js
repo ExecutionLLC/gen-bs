@@ -240,13 +240,14 @@ function makeReplaceSampleInSaveAction(samplesList, index, sampleId) {
 
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
-        const {onSaveAction, onSaveActionSelectedSamplesIds} = getState().samplesList;
+        const {samplesList} = getState();
+        const {onSaveAction, onSaveActionSelectedSamplesIds} = samplesList;
         if (!onSaveAction) {
             return;
         }
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
-            dispatch(makeReplaceSampleInSaveAction(getState().samplesList, selectedSampleIndex, newSampleId));
+            dispatch(makeReplaceSampleInSaveAction(samplesList, selectedSampleIndex, newSampleId));
         }
     };
 }
@@ -279,25 +280,26 @@ export function samplesListServerRemoveSample(sampleId) {
         }).then(({error, response}) => {
             dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response));
         }).then(() => {
-            const deletingSample = getState().samplesList.hashedArray.hash[sampleId];
+            const {samplesList, fileUpload: {filesProcesses}} = getState();
+            const {hash: samplesHash, array: samplesArray} = samplesList.hashedArray;
+            const deletingSample = samplesHash[sampleId];
             if (deletingSample) {
                 const fileSampleId = deletingSample.vcfFileId;
-                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
+                const isLastSample = !_.some(samplesArray, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
                 if (isLastSample) {
-                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {operationId: fileSampleId});
+                    const fileProcess = _.find(filesProcesses, {operationId: fileSampleId});
                     if (fileProcess) {
                         dispatch(changeFileUploadProgressState(100, fileUploadStatus.READY, fileProcess.id));
                     }
                 }
             }
-            const {onSaveAction, onSaveActionSelectedSamplesIds} = getState().samplesList;
+            const {onSaveAction, onSaveActionSelectedSamplesIds} = samplesList;
             if (onSaveAction) {
                 const deletedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, analysisSampleId => analysisSampleId === sampleId);
                 if (deletedSampleIndex >= 0) {
-                    const samplesArray = getState().samplesList.hashedArray.array;
                     const newSample = _.find(samplesArray, availableSample => availableSample.type !== entityType.HISTORY && !_.includes(onSaveActionSelectedSamplesIds, availableSample.id));
                     if (newSample) {
-                        dispatch(makeReplaceSampleInSaveAction(getState().samplesList, deletedSampleIndex, newSample.id));
+                        dispatch(makeReplaceSampleInSaveAction(samplesList, deletedSampleIndex, newSample.id));
                     }
                 }
             }
