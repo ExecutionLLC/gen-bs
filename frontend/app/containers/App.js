@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout } from 'redux-timeout';
+import FontFaceObserver from 'fontfaceobserver';
 
 import config from '../../config';
 
@@ -25,6 +26,12 @@ import UserActions from '../actions/userActions';
 
 
 class App extends Component {
+
+    componentWillMount() {
+        // preload the font, wait for 30 seconds.
+        const observer = new FontFaceObserver('Roboto-Medium');
+        observer.load(null, 30);
+    }
 
     componentDidMount() {
         const {dispatch} = this.props;
