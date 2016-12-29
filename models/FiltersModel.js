@@ -23,7 +23,7 @@ const mappedColumns = [
     'isDeleted',
     'isCopyDisabled',
     'languId',
-    'description'
+    'languageId'
 ];
 
 class FiltersModel extends SecureModelBase {
@@ -56,7 +56,7 @@ class FiltersModel extends SecureModelBase {
         }, callback);
     }
 
-    _add(userId, languId, filter, shouldGenerateId, callback) {
+    _add(userId, languageId, filter, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._ensureNameIsValid(filter.name, callback),
@@ -71,7 +71,7 @@ class FiltersModel extends SecureModelBase {
                 (filterId, callback) => {
                     const dataToInsert = {
                         filterId: filterId,
-                        languId: languId,
+                        languageId,
                         name: filter.name.trim(),
                         description: filter.description
                     };

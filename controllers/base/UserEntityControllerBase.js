@@ -62,9 +62,9 @@ class UserEntityControllerBase extends ControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (item, callback) => {
-                const languId = request.languId;
+                const languageId = request.languId;
                 const user = request.user;
-                this.theService.add(user, languId, item, callback);
+                this.theService.add(user, languageId, item, callback);
             }
         ], (error, insertedItem) => {
             this.sendErrorOrJson(response, error, insertedItem);

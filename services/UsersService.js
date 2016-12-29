@@ -45,8 +45,8 @@ class UserService extends ServiceBase {
             .then((user) => this.models.users.add(user, defaultLanguId, callback));
     }
 
-    update(userId, languId, user, callback) {
-        this.models.users.update(userId, languId, user, callback);
+    update(userId, languageId, user, callback) {
+        this.models.users.update(userId, languageId, user, callback);
     }
 
     findIdByEmailPassword(email, password, callback) {

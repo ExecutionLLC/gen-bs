@@ -8,29 +8,29 @@ const mappedColumns = ['id', 'description'];
 
 class LanguageModel extends ModelBase {
     constructor(models) {
-        super(models, 'langu', mappedColumns);
+        super(models, 'language', mappedColumns);
     }
 
-    add(langu, callback) {
+    add(language, callback) {
         this.db.transactionally((trx, callback) => {
-            this._insert(langu, trx, callback);
+            this._insert(language, trx, callback);
         }, (error) => {
             if (error) {
                 callback(error);
             } else {
-                callback(null, langu);
+                callback(null, language);
             }
         });
     }
 
-    update(languId, langu, callback) {
+    update(languageId, language, callback) {
         this.db.transactionally((trx, callback) => {
-            this._unsafeUpdate(languId, langu, trx, callback);
+            this._unsafeUpdate(languageId, language, trx, callback);
         }, (error) => {
             if (error) {
                 callback(error);
             } else {
-                callback(null, langu);
+                callback(null, language);
             }
         });
     }

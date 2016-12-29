@@ -12,7 +12,7 @@ class ModelsService extends UserEntityServiceBase {
         super(services, models, models.models);
     }
 
-    add(user, languId, model, callback) {
+    add(user, languageId, model, callback) {
         async.waterfall([
             (callback) => {
                 this._checkModelRules(model, callback);
@@ -21,7 +21,7 @@ class ModelsService extends UserEntityServiceBase {
             (models, callback) => {
                 this._checkModelNameExists(model, models, callback)
             },
-            (callback) => super.add(user, languId, model, callback)
+            (callback) => super.add(user, languageId, model, callback)
         ], callback);
     }
 

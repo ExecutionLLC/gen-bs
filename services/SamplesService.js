@@ -18,7 +18,7 @@ class SamplesService extends UserEntityServiceBase {
         this.editableFields = CollectionUtils.createHashByKey(EditableFields, 'id');
     }
 
-    add(user, languId, sample, callback) {
+    add(user, languageId, sample, callback) {
         callback(new Error('The method is not supported.'));
     }
 

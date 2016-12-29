@@ -11,7 +11,7 @@ class SampleUploadHistoryModel extends ModelBase {
         super(models, 'vcf_file', null);
     }
 
-    add(user, languId, historyEntry, callback) {
+    add(user, languageId, historyEntry, callback) {
         this.db.transactionally((trx, callback) => {
             trx(this.baseTableName)
                 .insert(ChangeCaseUtil.convertKeysToSnakeCase(historyEntry))

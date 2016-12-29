@@ -46,7 +46,7 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    update(userId, languId, user, callback) {
+    update(userId, languageId, user, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._checkFieldsUnique(user, trx, callback),
@@ -54,7 +54,7 @@ class UserModel extends RemovableModelBase {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
-                        defaultLanguId: languId,
+                        defaultLanguageId: languageId,
                         isDeleted: false,
                         gender: user.gender,
                         phone: user.phone,
@@ -66,7 +66,7 @@ class UserModel extends RemovableModelBase {
                 (id, callback) => {
                     const dataToUpdate = {
                         userId: id,
-                        languId: languId,
+                        languageId,
                         firstName: user.firstName,
                         lastName: user.lastName,
                         speciality: user.speciality,
@@ -118,12 +118,12 @@ class UserModel extends RemovableModelBase {
         ], callback);
     }
 
-    _add(user, languId, shouldGenerateId, callback) {
-        this._addAsync(user, languId, shouldGenerateId)
+    _add(user, languageId, shouldGenerateId, callback) {
+        this._addAsync(user, languageId, shouldGenerateId)
             .asCallback(callback);
     }
 
-    _addAsync(user, languId, shouldGenerateId) {
+    _addAsync(user, languageId, shouldGenerateId) {
         const idToInsert = shouldGenerateId ? this._generateId() : user.id;
         return this.db.transactionallyAsync((trx) => {
             return Promise.resolve()
@@ -133,7 +133,7 @@ class UserModel extends RemovableModelBase {
                         id: idToInsert,
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
-                        defaultLanguId: languId,
+                        defaultLanguageId: languageId,
                         isDeleted: false,
                         gender: user.gender,
                         phone: user.phone,
@@ -144,7 +144,7 @@ class UserModel extends RemovableModelBase {
                         .then((userId) => {
                             const dataToInsert = {
                                 userId: userId,
-                                languId: languId,
+                                languageId,
                                 firstName: user.firstName,
                                 lastName: user.lastName,
                                 speciality: user.speciality,
@@ -189,8 +189,8 @@ class UserModel extends RemovableModelBase {
                     callback(error || new Error('Item not found: ' + userId));
                 } else {
                     let data = ChangeCaseUtil.convertKeysToCamelCase(userData[0]);
-                    data.language = data.defaultLanguId;
-                    delete data.languId;
+                    data.language = data.defaultLanguageId;
+                    delete data.languageId;
                     delete data.userId;
                     callback(null, data);
                 }
@@ -229,7 +229,7 @@ class UserModel extends RemovableModelBase {
             .then((users) => users[0])
             .then((user) => ChangeCaseUtil.convertKeysToCamelCase(user))
             .then((user) => {
-                user.language = user.defaultLanguId;
+                user.language = user.defaultLanguageId;
                 return this._mapColumns(user);
             });
     }

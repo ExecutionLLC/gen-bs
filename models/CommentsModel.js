@@ -14,7 +14,7 @@ const mappedColumns = [
     'alt',
     'searchKey',
     'isDeleted',
-    'languId',
+    'languageId',
     'comment'
 ];
 
@@ -23,9 +23,9 @@ class CommentsModel extends SecureModelBase {
         super(models, 'comment', mappedColumns);
     }
 
-    findAllBySearchKeys(userId, languId, searchKeys, callback) {
+    findAllBySearchKeys(userId, languageId, searchKeys, callback) {
         this.db.asCallback((knex, callback) => {
-            this._prepareCommentsBaseSelectQuery(knex, userId, languId)
+            this._prepareCommentsBaseSelectQuery(knex, userId, languageId)
                 .whereIn('search_key', searchKeys)
                 .asCallback((error, commentsData) => {
                     if (error) {
@@ -59,7 +59,7 @@ class CommentsModel extends SecureModelBase {
         ], callback);
     }
 
-    _add(userId, languId, comment, shouldGenerateId, callback) {
+    _add(userId, languageId, comment, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
@@ -76,8 +76,8 @@ class CommentsModel extends SecureModelBase {
                 },
                 (commentId, callback) => {
                     const dataToInsert = {
-                        commentId: commentId,
-                        languId: languId,
+                        commentId,
+                        languageId,
                         comment: comment.comment
                     };
                     this._unsafeInsert('comment_text', dataToInsert, trx, (error) => {
@@ -103,7 +103,7 @@ class CommentsModel extends SecureModelBase {
                 },
                 (commentId, callback) => {
                     const dataToUpdate = {
-                        languId: comment.languId,
+                        languageId: comment.languageId,
                         comment: commentToUpdate.comment
                     };
                     this._updateCommentText(commentId, dataToUpdate, trx, callback);
@@ -172,9 +172,9 @@ class CommentsModel extends SecureModelBase {
     }
 
     /**
-     * Creates query for `comment` table joined with `comment_text` table, with optional user id and langu id params.
+     * Creates query for `comment` table joined with `comment_text` table, with optional user id and language id params.
      * */
-    _prepareCommentsBaseSelectQuery(knex, userId, languId) {
+    _prepareCommentsBaseSelectQuery(knex, userId, languageId) {
         let query = knex
             .select()
             .from(this.baseTableName)
@@ -184,9 +184,9 @@ class CommentsModel extends SecureModelBase {
             query = query
                 .andWhere('creator', userId);
         }
-        if (languId) {
+        if (languageId) {
             query = query
-                .andWhere('comment_text.langu_id', languId);
+                .andWhere('comment_text.language_id', languageId);
         }
         return query;
     }

@@ -39,15 +39,15 @@ class FieldsModel extends ModelBase {
         }, callback);
     }
 
-    addMany(languId, fieldsMetadata, callback) {
+    addMany(languageId, fieldsMetadata, callback) {
         this.db.transactionally((trx, callback) => {
             async.map(fieldsMetadata, (fieldMetadata, callback) => {
-                this.addInTransaction(trx, languId, fieldMetadata, false, callback);
+                this.addInTransaction(trx, languageId, fieldMetadata, false, callback);
             }, callback);
         }, callback);
     }
 
-    _addInTransaction(trx, languId, metadata, shouldGenerateId, callback) {
+    _addInTransaction(trx, languageId, metadata, shouldGenerateId, callback) {
         async.waterfall([
             (callback) => {
                 const dataToInsert = {
@@ -66,7 +66,7 @@ class FieldsModel extends ModelBase {
             (metadataId, callback) => {
                 const dataToInsert = {
                     fieldId: metadataId,
-                    languId: languId,
+                    languageId,
                     description: metadata.description,
                     label: metadata.label
                 };
@@ -77,7 +77,7 @@ class FieldsModel extends ModelBase {
         ], callback);
     }
 
-    addMissingFields(languId, fields, trx, callback) {
+    addMissingFields(languageId, fields, trx, callback) {
         // Ensure the coming fields are unique in terms of the same rule as below.
         const uniqueFields = _.uniqBy(fields, (field) => `${field.name}#${field.valueType}#${field.dimension}`);
         async.waterfall([
@@ -96,7 +96,7 @@ class FieldsModel extends ModelBase {
                 // Second, insert each of the missing fields and update their ids.
                 async.mapSeries(fieldsWithIds, (fieldWithId, callback) => {
                     if (!fieldWithId.id) {
-                        this._addInTransaction(trx, languId, fieldWithId.fieldMetadata, true, (error, insertedFieldId) => {
+                        this._addInTransaction(trx, languageId, fieldWithId.fieldMetadata, true, (error, insertedFieldId) => {
                             fieldWithId.id = insertedFieldId ? insertedFieldId : null;
                             callback(error, fieldWithId);
                         });
@@ -237,7 +237,7 @@ class FieldsModel extends ModelBase {
         if (isSourceOrNull) {
             query = query.andWhereNot(`${TableNames.Field}.source_name`, 'sample');
         }
-        query = query.andWhere(`${TableNames.FieldText}.langu_id`, languageIdOrNull || this.models.config.defaultLanguId);
+        query = query.andWhere(`${TableNames.FieldText}.language_id`, languageIdOrNull || this.models.config.defaultLanguId);
 
         if (nameOrNull) {
             query = query.andWhere(`${TableNames.Field}.name`, nameOrNull);

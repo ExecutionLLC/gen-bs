@@ -4,7 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
-const LanguService = require('./LanguService');
+const LanguageService = require('./LanguageService');
 const KeywordsService = require('./KeywordsService');
 const UsersService = require('./UsersService');
 const ViewsService = require('./ViewsService');
@@ -40,7 +40,7 @@ class ServiceFacade {
         this.config = config;
         this.logger = logger;
 
-        this.langu = new LanguService(this, models);
+        this.language = new LanguageService(this, models);
         this.keywords = new KeywordsService(this, models);
         this.views = new ViewsService(this, models);
         this.filters = new FiltersService(this, models);

@@ -2,7 +2,7 @@
 
 const ServiceBase = require('./ServiceBase');
 
-class LanguService extends ServiceBase {
+class LanguageService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
     }
@@ -12,17 +12,17 @@ class LanguService extends ServiceBase {
         this.find(defaultLanguId, callback);
     }
 
-    find(languId, callback) {
-        this.models.langu.find(languId, callback);
+    find(languageId, callback) {
+        this.models.language.find(languageId, callback);
     }
 
     findAll(callback) {
-        this.models.langu.findAll(callback);
+        this.models.language.findAll(callback);
     }
 
-    exists(languId, callback) {
-        this.models.langu.exists(languId, callback);
+    exists(languageId, callback) {
+        this.models.language.exists(languageId, callback);
     }
 }
 
-module.exports = LanguService;
+module.exports = LanguageService;

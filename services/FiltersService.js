@@ -12,14 +12,14 @@ class FiltersService extends UserEntityServiceBase {
         super(services, models, models.filters);
     }
 
-    add(user, languId, filter, callback) {
+    add(user, languageId, filter, callback) {
         async.waterfall([
             (callback) => this._checkFilterRules(filter, callback),
             (callback) => super.findAll(user, callback),
             (filters, callback) => {
                 this._checkFilterNameExists(filter, filters, callback)
             },
-            (callback) => super.add(user, languId, filter, callback)
+            (callback) => super.add(user, languageId, filter, callback)
         ], callback);
     }
 
