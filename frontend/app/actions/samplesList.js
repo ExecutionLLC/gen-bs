@@ -229,21 +229,24 @@ export function sampleSaveCurrent(sampleId) {
     };
 }
 
+function makeReplaceSampleInSaveAction(samplesList, index, sampleId) {
+    const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId} = samplesList;
+    return immutableSetPathProperty(
+        immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sampleId),
+        onSaveActionPropertyIndex,
+        index
+    )
+}
+
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
-        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
+        const {onSaveAction, onSaveActionSelectedSamplesIds} = getState().samplesList;
         if (!onSaveAction) {
             return;
         }
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
-            dispatch(
-                immutableSetPathProperty(
-                    immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSampleId),
-                    onSaveActionPropertyIndex,
-                    selectedSampleIndex
-                )
-            );
+            dispatch(makeReplaceSampleInSaveAction(getState().samplesList, selectedSampleIndex, newSampleId));
         }
     };
 }
@@ -287,18 +290,14 @@ export function samplesListServerRemoveSample(sampleId) {
                     }
                 }
             }
-            const {onSaveAction, onSaveActionPropertyId, onSaveActionPropertyIndex, onSaveActionSelectedSamplesIds} = getState().samplesList;
+            const {onSaveAction, onSaveActionSelectedSamplesIds} = getState().samplesList;
             if (onSaveAction) {
                 const deletedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, analysisSampleId => analysisSampleId === sampleId);
                 if (deletedSampleIndex >= 0) {
                     const samplesArray = getState().samplesList.hashedArray.array;
                     const newSample = _.find(samplesArray, availableSample => availableSample.type !== entityType.HISTORY && !_.includes(onSaveActionSelectedSamplesIds, availableSample.id));
                     if (newSample) {
-                        dispatch(immutableSetPathProperty(
-                            immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSample.id),
-                            onSaveActionPropertyIndex,
-                            deletedSampleIndex)
-                        );
+                        dispatch(makeReplaceSampleInSaveAction(getState().samplesList, deletedSampleIndex, newSample.id));
                     }
                 }
             }
