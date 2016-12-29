@@ -16,7 +16,7 @@ class KeywordService extends ServiceBase {
     }
 
     findMany(keywordIds, callback) {
-        this.models.findMany(keywordIds, callback);
+        this.models.keywords.findMany(keywordIds, callback);
     }
 }
 
