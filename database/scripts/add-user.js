@@ -44,6 +44,16 @@ const args = require('optimist')
         default: 'Test',
     })
     .demand(['loginType', 'email'])
+    .describe('firstName', 'User First Name')
+    .describe('lastName', 'User Last Name')
+    .describe('email', 'User e-mail')
+    .describe('gender', 'User gender type')
+    .describe('speciality', 'User speciality')
+    .describe('numberPaidSamples', 'User number of paid samples')
+    .describe('defaultLanguage', 'User default language')
+    .describe('phone', 'User phone')
+    .describe('company', 'User company')
+    .describe('password', 'User password')
     .argv;
 
 const {
