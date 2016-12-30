@@ -12,6 +12,13 @@ import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
 export default class VariantsTableRow extends ComponentBase {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isHighlighted: false
+        };
+    }
+
     render() {
         const {
             dispatch,
@@ -33,7 +40,7 @@ export default class VariantsTableRow extends ComponentBase {
         const searchKey = row.searchKey;
 
         return (
-            <tr>
+            <tr className={classNames({'highlighted': this.state.isHighlighted})}>
                 <td className='btntd row_checkbox'>
                     <div>{rowIndex + 1}</div>
                 </td>
@@ -62,12 +69,20 @@ export default class VariantsTableRow extends ComponentBase {
                                       dispatch={dispatch}
                                       auth={auth}
                                       comments={comments}
+                                      tableElement={this.props.tableElement}
+                                      onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
                 />
                 {_.map(rowFields, (value, index) =>
                     this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
                 )}
             </tr>
         );
+    }
+
+    setHighlighted(isHighlighted) {
+        this.setState({
+            isHighlighted
+        });
     }
 
     onRowSelectionChanged() {
@@ -189,9 +204,10 @@ export default class VariantsTableRow extends ComponentBase {
             && value !== '.';
     }
 
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate(nextProps, nextState) {
         return this.props.row !== nextProps.row
-            || this.props.isSelected !== nextProps.isSelected;
+            || this.props.isSelected !== nextProps.isSelected
+            || this.state !== nextState;
     }
 }
 
