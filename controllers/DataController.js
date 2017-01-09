@@ -18,8 +18,7 @@ class DataController extends ControllerBase {
         const {user} = request;
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => this.services.userData.getUserData(user, callback),
-            (userData, callback) => this._convertMessagesToClientFormat(userData, callback)
+            (callback) => this.services.userData.getUserData(user, callback)
         ], (error, userData) => {
             this.sendErrorOrJson(response, error, userData);
         });
@@ -29,14 +28,6 @@ class DataController extends ControllerBase {
         const router = new Express();
         router.get('/', this.getData);
         return router;
-    }
-
-    _convertMessagesToClientFormat(userData, callback) {
-        const activeOperations = userData.activeOperations.map(operation => Object.assign({}, operation, {
-            lastMessage: WSController.createClientOperationResult(operation.lastMessage)
-        }));
-        const convertedUserData = Object.assign({}, userData, {activeOperations});
-        callback(null, convertedUserData);
     }
 }
 

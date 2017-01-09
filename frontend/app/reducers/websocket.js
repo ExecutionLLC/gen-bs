@@ -6,59 +6,60 @@ import * as ActionTypes from '../actions/websocket';
 
 function reduceDeleteComment(action, state) {
     const {variants} = state;
-    const variantIndex = _.findIndex(
-        variants, variant => variant.searchKey === action.searchKey
-    );
-    const comments = variants[variantIndex].comments;
+    const {searchKey} = action;
+    const newVariants = _.map(variants, variant => {
+        return variant.searchKey === searchKey ? {
+            ...variant,
+            comments: variant.comments.slice(1)
+        } : variant;
+    });
     return assign(state, {
-        variants: immutableArray.assign(variants, variantIndex, {
-            comments: comments.slice(1)
-        })
+        variants: newVariants
     });
 }
 
 function reduceUpdateComment(action, state) {
     const {variants} = state;
-    const {commentData} = action;
-    const variantIndex = _.findIndex(
-        variants, variant => variant.searchKey === commentData.searchKey
-    );
-    const comments = variants[variantIndex].comments;
-    return assign(state, {
-        variants: immutableArray.assign(variants, variantIndex, {
-            comments: immutableArray.assign(comments, 0, {
-                comment: commentData.comment
+    const {commentData:{searchKey, comment}} = action;
+
+    const newVariants = _.map(variants, variant => {
+        return variant.searchKey === searchKey ? {
+            ...variant,
+            comments: immutableArray.assign(variant.comments, 0, {
+                comment
             })
-        })
+        } : variant;
+    });
+    return assign(state, {
+        variants: newVariants
     });
 }
 
 function reduceAddComment(action, state) {
     const {variants} = state;
-    const {commentData} = action;
-    const variantIndex = _.findIndex(
-        variants, variant => variant.searchKey === commentData.searchKey
-    );
-    const comments = variants[variantIndex].comments;
-    return assign(state, {
-        variants: immutableArray.assign(variants, variantIndex, {
-            comments: immutableArray.append(comments, {
-                id: commentData.id,
-                comment: commentData.comment
+    const {commentData:{searchKey, comment, id}} = action;
+    const newVariants = _.map(variants, variant => {
+        return variant.searchKey === searchKey ? {
+            ...variant,
+            comments: immutableArray.append(variant.comments, {
+                id,
+                comment
             })
-        })
+        } : variant;
+    });
+    return assign(state, {
+        variants: newVariants
     });
 }
 
 function reduceTableMessage(action, state) {
     const resultData = action.wsData.result.data;
+    const newVariants = state.variants === null ? resultData : [...state.variants, ...(resultData || [])];
     return Object.assign({}, state, {
-        variants: state.variants === null ?
-            resultData :
-            [...state.variants, ...(resultData || [])],
+        variants: newVariants,
         variantsHeader: action.wsData.result.header,
         currentVariants: resultData,
-        isVariantsEmpty: (resultData && resultData.length === 0),
+        isVariantsEmpty: (newVariants && newVariants.length === 0),
         isVariantsLoading: false,
         isVariantsValid: true,
         variantsError: null
@@ -134,7 +135,7 @@ export default function websocket(state = {
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
                 variantsView: action.view, // unused
-                variantsSamples: action.samples, // used variantsSample.fileName at exportToFile and at renderFieldHeader
+                variantsSamples: action.samples, // used variantsSample.name at exportToFile
                 variantsFilter: action.filter, // unused
                 variantsModel: action.model, // unused
                 variantsAnalysis: action.analysis // used variantsAnalysis.id and .samples at saveExportedFileToServer, used !!variantsAnalysis and .samples in variants table

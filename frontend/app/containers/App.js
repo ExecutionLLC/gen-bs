@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout } from 'redux-timeout';
+import FontFaceObserver from 'fontfaceobserver';
 
 import config from '../../config';
 
@@ -18,13 +19,19 @@ import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessions
 import AnotherPageOpenedErrorModal from '../components/Modals/AnotherPageOpenedErrorModal';
 
 import { KeepAliveTask, loginWithGoogle, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
-import { openModal, closeModal } from '../actions/modalWindows';
+import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 
 
 class App extends Component {
+
+    componentWillMount() {
+        // preload the font, wait for 30 seconds.
+        const observer = new FontFaceObserver('Roboto-Medium');
+        observer.load(null, 30);
+    }
 
     componentDidMount() {
         const {dispatch} = this.props;
@@ -50,10 +57,10 @@ class App extends Component {
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain
-                        openAnalysisModal={() => dispatch(openModal('analysis'))}
+                        openAnalysisModal={() => dispatch(openModal(modalName.ANALYSIS))}
                         openSamplesModal={() => {
                             dispatch(samplesOnSave(null, null, null, null));
-                            dispatch(openModal('upload'));
+                            dispatch(openModal(modalName.UPLOAD));
                         }}
                     />
                      <div className='collapse-subnav hidden' id='subnav'>
@@ -66,7 +73,7 @@ class App extends Component {
                 }
                 <AnalysisModal
                     showModal={modalWindows.analysis.showModal}
-                    closeModal={ () => { dispatch(closeModal('analysis')); } }
+                    closeModal={ () => { dispatch(closeModal(modalName.ANALYSIS)); } }
                     dispatch={dispatch}
                 />
                 <ErrorModal
@@ -99,6 +106,7 @@ class App extends Component {
                 />
                 <AnotherPageOpenedErrorModal
                     showModal={auth.showAnotherPageOpenedModal}
+                    isWaitingForClose={auth.isWaitingForCloseAnotherPageOpenedModal}
                 />
             </div>
         );

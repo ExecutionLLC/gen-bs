@@ -89,6 +89,7 @@ class ApiController extends ControllerBase {
         const savedFilesRouter = controllersFacade.savedFilesController.createRouter();
         const modelRouter = controllersFacade.modelsController.createRouter();
         const analysisController = controllersFacade.analysisController.createRouter();
+        const sampleUploadHistoryRouter = controllersFacade.sampleUploadHistoryController.createRouter();
 
         const searchRouter = controllersFacade.searchController.createRouter();
         const sessionsRouter = controllersFacade.sessionsController.createRouter(controllerRelativePath + sessionsControllerPath);
@@ -114,6 +115,7 @@ class ApiController extends ControllerBase {
         router.use('/models', modelRouter);
         router.use('/files', savedFilesRouter);
         router.use('/analysis', analysisController);
+        router.use('/uploads', sampleUploadHistoryRouter);
 
         return router;
     }

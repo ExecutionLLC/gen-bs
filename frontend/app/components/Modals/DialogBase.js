@@ -76,7 +76,8 @@ export default class DialogBase extends ComponentBase {
             <Modal dialogClassName={classnames(['modal-dialog-primary', ...this.getModalClassNames()])}
                    bsSize='lg'
                    show={this.props.showModal}
-                   onHide={ () => {this.onCloseModal();} }
+                   onHide={() => {this.onCloseModal();}}
+                   backdrop='static'
             >
                 {this.renderHeader()}
                 {this.renderBody()}

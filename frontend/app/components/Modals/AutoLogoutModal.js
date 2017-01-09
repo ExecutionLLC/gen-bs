@@ -44,6 +44,7 @@ class AutoLogoutModal extends Component {
                 bsSize='lg'
                 show={this.props.showModal}
                 onHide={ () => this.props.closeModal() }
+                backdrop='static'
             >
                 { this.renderHeader() }
                 { this.renderBody() }

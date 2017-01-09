@@ -59,14 +59,18 @@ const SETTINGS = {
         port: makeDefault(ENV.GEN_REG_WS_PORT, 80),
         ADD_USER_KEY: makeDefault(ENV.GEN_REG_WS_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
     },
+    reCaptcha: {
+        SECRET: '6LeJIAkUAAAAAGj8peLFmyG1Olmv9E6aOajh43Nx'
+    },
     registrationFrontend: {
         site: makeDefault(ENV.GEN_REG_FRONTEND_SITE, 'http://alapy.com'),
-        regcodeIdPath: makeDefault(ENV.GEN_REG_FRONTEND_REGCODE_ID_PATH, '/test-register/')
+        regcodeIdPath: makeDefault(ENV.GEN_REG_FRONTEND_REGCODE_ID_PATH, '/register/'),
+        emailConfirmedPath: makeDefault(ENV.GEN_REG_FRONTEND_EMAIL_CONFIRMED, '/email-confirmed'),
     },
     mailChimp: {
         key: makeDefault(ENV.GEN_WS_MAIL_KEY, 'placeholder'),
         adminEmail: makeDefault(ENV.GEN_WS_MAIL_ADMIN_MAIL, 'petr.ponomarenko@alapy.com'),
-        fromMail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'info@alapy.com'),
+        fromEmail: makeDefault(ENV.GEN_WS_MAIL_FROM_MAIL, 'info@alapy.com'),
         fromName: makeDefault(ENV.GEN_WS_MAIL_FROM_NAME, 'ALAPY'),
         userRegisterTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_TEMPLATE, 'TestGenomicsTemplate'),
         userRegisterCodeTemplate: makeDefault(ENV.GEN_WS_MAIL_USER_REGISTER_CODE_TEMPLATE, 'V-objem: Successful user register'),

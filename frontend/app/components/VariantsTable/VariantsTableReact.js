@@ -39,7 +39,7 @@ class VariantsTableReact extends Component {
                 }
                 { !isVariantsLoading && isVariantsValid &&
                 <div className='table-variants-container'>
-                    <table className='table table-striped table-variants header-fixed' id='variants_table'
+                    <table className='table table-striped table-variants table-select-mode' id='variants_table'
                            ref='variantsTable'>
                         <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }

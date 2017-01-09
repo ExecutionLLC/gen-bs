@@ -15,6 +15,7 @@ const RegistrationCodesModel = require('./models/RegistrationCodesModel');
 const UserRequestService = require('./services/UserRequestService');
 const UserRequestModel = require('./models/UserRequestModel');
 const UsersClient = require('./api/UsersClient');
+const ReCaptchaClient = require('./api/ReCaptchaClient');
 const MailChimpMailService = require('./services/external/MailChimpMailService');
 const PasswordUtils = require('./utils/PasswordUtils');
 
@@ -22,6 +23,7 @@ const dbModel = new KnexWrapper(Config, logger);
 const registrationCodesModel = new RegistrationCodesModel(dbModel, logger);
 const userRequestModel = new UserRequestModel(dbModel, logger);
 const usersClient = new UsersClient(Config);
+const reCaptchaClient =  new ReCaptchaClient(Config);
 
 const registrationCodes = new RegistrationCodesService(dbModel, registrationCodesModel, usersClient);
 const userRequests = new UserRequestService(dbModel, userRequestModel, usersClient);
@@ -44,16 +46,28 @@ app.use(helmet({
 
 
 app.post('/register', (request, response) => {
-    console.log('register');
-    const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
+    logger.info('register');
+    if (!request.body.user) {
+        response.status(400).send('No request user');
+        return;
+    }
+    const {reCaptchaResponse, user: {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password}} = request.body;
     const user = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
-    console.log(user);
-    registrationCodes.activateAsync(user)
-        .then(() => mailService.sendRegisterCodeMailAsync(user.email, user))
-        .then(() => response.send({}))
-        .catch((error) =>
-            response.status(400).send(error.message)
-        );
+    logger.info(reCaptchaResponse, user);
+    reCaptchaClient.checkAsync(reCaptchaResponse)
+        .then((res) => {
+            logger.info('/register recaptcha result', res);
+            registrationCodes.activateAsync(user)
+                .then(() => mailService.sendRegisterCodeMailAsync(user.email, user))
+                .then(() => response.send({}))
+                .catch((error) =>
+                    response.status(400).send(error.message)
+                );
+        })
+        .catch((err) => {
+            logger.info('/register recaptcha error', err);
+            return response.status(400).send(err);
+        });
 });
 
 function filterUser(user) {
@@ -64,9 +78,9 @@ function filterUser(user) {
 app.get(
     '/user',
     (request, response) => {
-        console.log('/user', request.query);
+        logger.info('/user', request.query);
         const {regcode, regcodeId} = request.query;
-        console.log(regcode, regcodeId);
+        logger.info(regcode, regcodeId);
         const findAsync = regcodeId ?
             registrationCodes.findRegcodeIdAsync(regcodeId) :
             registrationCodes.findRegcodeAsync(regcode);
@@ -81,10 +95,10 @@ app.get(
 );
 
 app.put('/user', (request, response) => {
-    console.log('update user');
+    logger.info('update user');
     const {id, firstName, lastName, company, email, gender, speciality, telephone} = request.body;
     const regcodeInfo = {id, firstName, lastName, company, email, gender, speciality, telephone};
-    console.log(regcodeInfo);
+    logger.info(regcodeInfo);
     registrationCodes.update(regcodeInfo.id, regcodeInfo)
         .then(() => {
             registrationCodes.updateLastDate(regcodeInfo.id, regcodeInfo);
@@ -94,27 +108,40 @@ app.put('/user', (request, response) => {
 });
 
 app.post('/user_request', (request, response) => {
-    console.log('user request');
-    const {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password} = request.body;
+    logger.info('user request');
+    if (!request.body.user) {
+        response.status(400).send('No request user');
+        return;
+    }
+    const {reCaptchaResponse, user: {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password}} = request.body;
     const userInfo = {id, firstName, lastName, company, email, gender, speciality, telephone, loginType, password: password && PasswordUtils.hash(password)};
-    console.log(userInfo);
-    userRequests.createAsync(userInfo)
-        .then((insertedUser) =>
-            mailService.sendRegisterMailAsync(userInfo.email, userInfo)
-                .then(() => mailService.sendAdminRegisterMailAsync(
-                    Object.assign({}, userInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${insertedUser.id}`}))))
-        .then(() => response.send(userInfo))
-        .catch((err) => response.status(400).send(err.message));
-});
+    logger.info(reCaptchaResponse, userInfo);
 
-app.get('/register', (request, response) => {
-    response.send('Got hello!');
+    reCaptchaClient.checkAsync(reCaptchaResponse)
+        .then((res) => {
+            logger.info('/user_request recaptcha result');
+            logger.info(JSON.stringify(res));
+            if (!res || !res.success) {
+                throw new Error('reCaptcha check fails')
+            }
+            return userRequests.createAsync(userInfo)
+                .then((insertedUser) =>
+                    mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
+                        .then(() => userRequests.emailConfirmSentAsync(insertedUser.id)))
+                .then(() => response.send(userInfo))
+                .catch((err) => response.status(400).send(err.message));
+        })
+        .catch((err) => {
+            logger.info('/user_request recaptcha error');
+            logger.info(JSON.stringify(err.message));
+            return response.status(400).send(err.message);
+        });
 });
 
 app.get('/approve', (request, response) => {
-    console.log('approve');
+    logger.info('approve');
     const {id} = request.query;
-    console.log(id);
+    logger.info(id);
     userRequests.activateAsync(id)
         .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)
             .then(() => mailService.sendAdminRegisterApproveMailAsync(user)))
@@ -122,6 +149,20 @@ app.get('/approve', (request, response) => {
         .catch((error) =>
             response.status(400).send(error.message)
         );
+});
+
+app.get('/confirm', (request, response) => {
+    logger.info('confirm');
+    const {id: confirmUUID} = request.query;
+    logger.info(confirmUUID);
+    userRequests.emailConfirmReceivedAsync(confirmUUID)
+        .then((requestInfo) =>
+            mailService.sendAdminRegisterMailAsync(
+                Object.assign({}, requestInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${requestInfo.id}`})
+            )
+        ).then(() =>
+        response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
+    );
 });
 
 app.get('/requests', (request, response) => {
@@ -147,5 +188,5 @@ app.get('/regcodes', (request, response) => {
 });
 
 app.listen(Config.port, () => {
-    console.log('Server is started!');
+    logger.info('Server is started!');
 });

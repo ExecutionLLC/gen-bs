@@ -3,8 +3,13 @@
 const OperationBase = require('./OperationBase');
 
 class SystemOperation extends OperationBase {
-    constructor(sessionId, method) {
-        super(sessionId, method);
+    /**
+     * @param {string}sessionId
+     * @param {string}method
+     * @param {string=}id
+     */
+    constructor(sessionId, method, id) {
+        super(sessionId, method, id);
         this.setSendCloseToAppServer(false);
     }
 }

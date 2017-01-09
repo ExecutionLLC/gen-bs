@@ -13,11 +13,10 @@ class UserEntityServiceBase extends ServiceBase {
     }
 
     add(user, languId, item, callback) {
-        const actualLanguId = languId || user.languId;
         async.waterfall([
             (callback) => this._checkUserIsSet(user, callback),
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.theModel.add(user.id, actualLanguId, item, callback)
+            (callback) => this.theModel.add(user.id, languId, item, callback)
         ], callback);
     }
 

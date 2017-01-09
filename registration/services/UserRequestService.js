@@ -28,9 +28,23 @@ class UserRequestService {
     }
 
     createAsync(userInfo) {
-        const {db, userRequestModel} = this;
+        const {db, /**@type {UserRequestModel}*/userRequestModel} = this;
         return db.transactionallyAsync((trx) =>
             userRequestModel.createAsync(userInfo, trx));
+    }
+
+    emailConfirmSentAsync(id) {
+        const {db, /**@type {UserRequestModel}*/userRequestModel} = this;
+        return db.transactionallyAsync((trx) =>
+            userRequestModel.emailConfirmSentAsync(id, trx)
+        );
+    }
+
+    emailConfirmReceivedAsync(confirmUUID) {
+        const {db, /**@type {UserRequestModel}*/userRequestModel} = this;
+        return db.transactionallyAsync((trx) =>
+            userRequestModel.emailConfirmReceivedAsync(confirmUUID, trx)
+        );
     }
 
     getAllRequestsAsync() {

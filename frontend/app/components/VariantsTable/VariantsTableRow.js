@@ -8,6 +8,8 @@ import VariantsTableComment from './VariantsTableComment';
 
 import FieldUtils from '../../utils/fieldUtils.js';
 
+import {Popover, OverlayTrigger} from 'react-bootstrap';
+
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
@@ -62,7 +64,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       comments={comments}
                 />
                 {_.map(rowFields, (value, index) =>
-                    this.renderFieldValue(variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
+                    this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
                 )}
             </tr>
         );
@@ -73,9 +75,8 @@ export default class VariantsTableRow extends ComponentBase {
         onSelected(rowIndex, !isSelected);
     }
 
-    renderFieldValue(fieldId, sampleId, value, sortState) {
-        const {fields:{totalFieldsHashedArray:{hash}}} = this.props;
-        const resultFieldValue = value;
+    renderFieldValue(index, fieldId, sampleId, value, sortState) {
+        const {fields: {totalFieldsHashedArray: {hash}}} = this.props;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
         const sortedActiveClass = classNames({
             'active': columnSortParams
@@ -83,15 +84,68 @@ export default class VariantsTableRow extends ComponentBase {
 
         const field = hash[fieldId];
         const isChromosome = this.isChromosome(field);
-        const isValuedHyperlink = this.isHyperlink(field, resultFieldValue);
+        const isValueHyperlink = this.isHyperlink(field, value);
+        const key = `${fieldId}-${sampleId}`;
+        const ref = `overlayTrigger-${index}-${key}`;
+
         return (
-            <td className={sortedActiveClass}
-                key={fieldId + '-' + sampleId}>
-                <div>
-                    {isValuedHyperlink ? (this.renderHyperLink(field.hyperlinkTemplate, value)) :
-                        isChromosome ? (this.renderChromosome(resultFieldValue)) : (resultFieldValue || '')}
-                </div>
+            <td
+                className={sortedActiveClass}
+                key={key}
+            >
+                {value ?
+                    (isValueHyperlink && !this.hasMultipleValues(value) ?
+                        this.renderHyperLinkValue(value, field) :
+                        this.renderPopupValue(ref, value, field, isValueHyperlink, isChromosome)) :
+                    <div></div>
+                }
             </td>
+        );
+    }
+
+
+    renderHyperLinkValue(value, field) {
+        const {hyperlinkTemplate} = field;
+        const replacementValue = encodeURIComponent(value);
+        const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+        return (
+            <div>
+                <a href={valueUrl} target='_blank'>{value}</a>
+            </div>
+        );
+    }
+
+    renderPopupValue(ref, value, field, isValuedHyperlink, isChromosome) {
+        const popover = (
+            <Popover
+                onClick={() => this.refs[ref].hide()}
+            >
+                {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
+                    isChromosome ? this.renderChromosome(value) : value}
+            </Popover>
+        );
+
+        return (
+            <OverlayTrigger
+                trigger='click'
+                rootClose={true}
+                placement='left'
+                overlay={popover}
+                container={this.props.tableElement}
+                ref={ref}
+            >
+                <div>
+                    {isValuedHyperlink ? (
+                        <div>
+                            <a href='#'>{value}</a>
+                        </div>
+                    ) : (
+                        <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
+                            {isChromosome ? this.renderChromosome(value) : value}
+                        </a>
+                    )}
+                </div>
+            </OverlayTrigger>
         );
     }
 
@@ -108,12 +162,24 @@ export default class VariantsTableRow extends ComponentBase {
         return chromosomeValue ? `${chromosomeValue}(${value || ''})` : value || '';
     }
 
-    renderHyperLink(hyperlinkTemplate, value){
-        const replacementValue = encodeURIComponent(value);
-        const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
-        return (
-            <a href={valueUrl}>{value}</a>
-        );
+    hasMultipleValues(value) {
+        return value.split(',').length > 1;
+    }
+
+    renderHyperLinks(hyperlinkTemplate, value) {
+        return _.map(value.split(','), (item, index) => {
+            if (item !== '.') {
+                const replacementValue = encodeURIComponent(item);
+                const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
+                return (
+                    <div key={index}>
+                        <a href={valueUrl} target='_blank'>{item}</a>
+                    </div>
+                );
+            } else {
+                return item;
+            }
+        });
     }
 
     isHyperlink(field, value) {
@@ -137,5 +203,6 @@ VariantsTableRow.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     isSelected: React.PropTypes.bool.isRequired,
     // callback(rowIndex, isSelected)
-    onSelected: React.PropTypes.func.isRequired
+    onSelected: React.PropTypes.func.isRequired,
+    tableElement: React.PropTypes.instanceOf(React.Component).isRequired
 };

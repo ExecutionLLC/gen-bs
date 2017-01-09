@@ -24,7 +24,7 @@ export default class FieldHeaderControls extends Component {
         const currentDirection = columnSortParams ? columnSortParams.direction : null;
         const order = columnSortParams ? columnSortParams.order : null;
         const ascSortBtnClasses = classNames(
-            'btn',
+            'btn-link',
             'btn-sort',
             'asc',
             {
@@ -32,7 +32,7 @@ export default class FieldHeaderControls extends Component {
             }
         );
         const descSortBtnClasses = classNames(
-            'btn',
+            'btn-link',
             'btn-sort',
             'desc',
             {

@@ -743,3 +743,9 @@ export const genomicsParsedRulesValidate = {
 
     }
 };
+
+const COMPLEX_MODEL_TYPE = 'complex';
+
+export function isFilterComplexModel(filterOrModel) {
+    return filterOrModel.modelType === COMPLEX_MODEL_TYPE;
+}

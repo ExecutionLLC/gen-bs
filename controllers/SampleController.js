@@ -16,7 +16,11 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response) {
-        const {body, file} = request;
+        const {body, file ,user, session} = request;
+        let isCancelled = false;
+        request.on('close', function () {
+            isCancelled = true;
+        });
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
@@ -38,15 +42,24 @@ class SampleController extends UserEntityControllerBase {
                     fileSize: sampleFile.size,
                     originalFileName: fileName
                 };
-                const {user, session} = request;
                 this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
                     callback(error, operationId);
                 });
+            }, (operationId, callback) => {
+                this.services.sampleUploadHistory.find(user, operationId, (error, upload) => {
+                    callback(error, operationId, upload)
+                });
             }
-        ], (error, operationId) => {
-            this.sendErrorOrJson(response, error, {operationId});
+        ], (error, operationId, upload) => {
+            if (isCancelled) {
+                this.services.sampleUploadHistory.remove(user, operationId, () => {
+                    this.sendInternalError(response, new Error('Upload cancelled'));
+                });
+            } else {
+                this.sendErrorOrJson(response, error, {operationId, upload});
+            }
         });
     }
 
@@ -71,7 +84,6 @@ class SampleController extends UserEntityControllerBase {
         // Cannot upload many samples here simultaneously, as the client
         // will be unable to distinguish upload operation ids.
         router.post('/upload', Upload.single('sample'), this.upload.bind(this));
-
         return router;
     }
 }

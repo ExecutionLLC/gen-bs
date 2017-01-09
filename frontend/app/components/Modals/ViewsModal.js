@@ -10,6 +10,7 @@ import {viewBuilderEndEdit} from '../../actions/viewBuilder';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
+import {modalName} from '../../actions/modalWindows';
 
 class ViewsModal extends React.Component {
 
@@ -43,6 +44,7 @@ class ViewsModal extends React.Component {
                 bsSize='lg'
                 show={showModal}
                 onHide={() => this.onClose()}
+                backdrop='static'
             >
                 { !editingView &&
                 <div>&nbsp;</div>
@@ -91,7 +93,7 @@ class ViewsModal extends React.Component {
 
     onClose() {
         const {dispatch, closeModal} = this.props;
-        closeModal('views');
+        closeModal(modalName.VIEWS); // TODO: closeModal must have no params (it's obvious that we close views)
         dispatch(viewBuilderEndEdit());
     }
 

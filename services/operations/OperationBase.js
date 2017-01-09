@@ -3,9 +3,14 @@
 const Uuid = require('node-uuid');
 
 class OperationBase {
-    constructor(sessionId, method) {
+    /**
+     * @param {string}sessionId
+     * @param {string}method
+     * @param {string=}id
+     */
+    constructor(sessionId, method, id) {
         Object.assign(this, {
-            id: Uuid.v4(),
+            id: id || Uuid.v4(),
             method,
             sessionId,
             timestamp: new Date(Date.now()),

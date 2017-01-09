@@ -5,6 +5,19 @@
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
 
+
+/**
+ * modals
+ */
+
+export const modalName = {
+    FILTERS: 'filters',
+    VIEWS: 'views',
+    UPLOAD: 'upload',
+    ANALYSIS: 'analysis'
+};
+
+
 /*
  * Action creators
  */

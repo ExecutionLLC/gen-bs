@@ -7,7 +7,8 @@ export default function auth(state = {
     secondsToAutoLogout: null,
     errorMessage: null,
     showCloseAllUserSessionsDialog: false,
-    showAnotherPageOpenedModal: false
+    showAnotherPageOpenedModal: false,
+    isWaitingForCloseAnotherPageOpenedModal: false
 }, action) {
 
     switch (action.type) {
@@ -44,9 +45,17 @@ export default function auth(state = {
             });
 
         case ActionTypes.SHOW_ANOTHER_PAGE_OPENED_MODAL:
-            return Object.assign({}, state, {
-                showAnotherPageOpenedModal: action.shouldShow
-            });
+            return {
+                ...state,
+                showAnotherPageOpenedModal: action.shouldShow,
+                isWaitingForCloseAnotherPageOpenedModal: !action.shouldShow
+            };
+
+        case ActionTypes.SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL:
+            return {
+                ...state,
+                isWaitingForCloseAnotherPageOpenedModal: true
+            };
 
         default:
             return state;

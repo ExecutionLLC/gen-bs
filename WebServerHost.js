@@ -53,13 +53,13 @@ class WebServerHost {
 
         // Initialize error handling.
         app.use(this._handleErrors);
-
-        callback(null);
+        
+        this.services.start(callback);
     }
 
     stop(callback) {
         this.httpServer.close();
-        callback(null);
+        this.services.stop(callback);
     }
 
     _addMiddleware(app) {

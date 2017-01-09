@@ -10,7 +10,8 @@ const SecureModelBase = require('./SecureModelBase');
 
 const TableNames = {
     Filters: 'filter',
-    FilterTexts: 'filter_text'
+    FilterTexts: 'filter_text',
+    FiltersVersions: 'filter_version'
 };
 
 const mappedColumns = [
@@ -61,9 +62,8 @@ class FiltersModel extends SecureModelBase {
                 (callback) => this._ensureNameIsValid(filter.name, callback),
                 (callback) => {
                     const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : filter.id,
+                        id: this._generateId(),
                         creator: userId,
-                        rules: filter.rules,
                         type: filter.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
@@ -72,12 +72,20 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         filterId: filterId,
                         languId: languId,
-                        name: filter.name,
+                        name: filter.name.trim(),
                         description: filter.description
                     };
                     this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
                         callback(error, filterId);
                     });
+                },
+                (filterId, callback) => {
+                    const dataToInsert = {
+                        id: shouldGenerateId ? this._generateId() : filter.id,
+                        filterId: filterId,
+                        rules: filter.rules
+                    };
+                    this._unsafeInsert(TableNames.FiltersVersions, dataToInsert, trx, callback);
                 }
             ], callback);
         }, callback);
@@ -86,52 +94,27 @@ class FiltersModel extends SecureModelBase {
     // It creates a new version of an existing filter
     _update(userId, filter, filterToUpdate, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        creator: userId,
-                        rules: filterToUpdate.rules,
-                        type: filter.type,
-                        originalFilterId: filter.originalFilterId || filter.id
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (filterId, callback) => {
-                    const dataToInsert = {
-                        filterId: filterId,
-                        languId: filter.languId,
-                        name: filterToUpdate.name,
-                        description: filterToUpdate.description
-                    };
-                    this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
-                        callback(error, filterId);
-                    });
-                }
-            ], callback);
+            const dataToInsert = {
+                id: this._generateId(),
+                filterId: filterToUpdate.filterId,
+                rules: filterToUpdate.rules
+            };
+            this._unsafeInsert(TableNames.FiltersVersions, dataToInsert, trx, callback);
         }, callback);
     }
 
     _fetch(userId, filterId, callback) {
-        async.waterfall([
-            (callback) => this._fetchFilter(filterId, callback),
-            (filter, callback) => this._checkUserIsCorrect(userId, filter, callback)
-        ], callback);
-    }
-
-    _fetchFilter(filterId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
-                .where('id', filterId)
-                .asCallback((error, filterData) => {
-                    if (error || !filterData.length) {
-                        callback(error || new Error('Item not found: ' + filterId));
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findFilters(trx, [filterId], userId, false, false, callback),
+                (filters) => {
+                    if (!filters.length) {
+                        callback(new Error('Item not found: ' + filterId));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filterData[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filters[0]));
                     }
-            });
+                }
+            ],callback);
         }, callback);
     }
 
@@ -140,7 +123,7 @@ class FiltersModel extends SecureModelBase {
             (callback) => this._findFiltersMetadata(trx, filterIdsOrNull, userIdOrNull, includeLastVersionsOnly,
                 excludeDeleted, callback),
             (filtersMetadata, callback) => {
-                const filterIds = _.map(filtersMetadata, filter => filter.id);
+                const filterIds = _.map(filtersMetadata, filter => filter.filterId);
                 callback(null, filtersMetadata, filterIds);
             },
             (filters, filterIds, callback) => {
@@ -164,8 +147,8 @@ class FiltersModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(filterTexts, 'filterId');
                 const filtersWithDescription = _.map(filters, filter => {
                     return Object.assign({}, filter, {
-                        description: textsHash[filter.id].description,
-                        name: textsHash[filter.id].name
+                        description: textsHash[filter.filterId].description,
+                        name: textsHash[filter.filterId].name
                     });
                 });
                 callback(null, filtersWithDescription);
@@ -174,22 +157,18 @@ class FiltersModel extends SecureModelBase {
     }
 
     _findFiltersMetadata(trx, filterIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
-        let query = trx.select()
-            .from(TableNames.Filters)
+        let query = trx.select([
+            `${TableNames.FiltersVersions}.id`,
+            `${TableNames.FiltersVersions}.rules`,
+            `${TableNames.FiltersVersions}.created`,
+            `${TableNames.FiltersVersions}.filter_id`,
+            `${TableNames.Filters}.type`,
+            `${TableNames.Filters}.is_deleted`,
+            `${TableNames.Filters}.creator`
+        ])
+            .from(TableNames.FiltersVersions)
+            .leftJoin(TableNames.Filters,`${TableNames.FiltersVersions}.filter_id`,`${TableNames.Filters}.id`)
             .whereRaw('1 = 1');
-        if (includeLastVersionsOnly) {
-            const selectLastFilterIds = 'SELECT' +
-                '  T.id' +
-                ' FROM (' +
-                '  SELECT ROW_NUMBER() OVER (' +
-                '    PARTITION BY CASE WHEN original_filter_id isnull THEN id ELSE original_filter_id END ORDER BY timestamp DESC' +
-                '  ) AS RN,' +
-                '  id' +
-                '  FROM filter' +
-                ' ) AS T' +
-                ' WHERE T.RN = 1';
-            query = query.andWhereRaw('filter.id IN (' + selectLastFilterIds + ')');
-        }
 
         if (userIdOrNull) {
             query = query.andWhere(function () {
@@ -205,12 +184,19 @@ class FiltersModel extends SecureModelBase {
         }
 
         if (filterIdsOrNull) {
-            query = query.andWhere('id', 'in', filterIdsOrNull);
+            query = query.andWhere(`${TableNames.FiltersVersions}.id`, 'in', filterIdsOrNull);
         }
 
         async.waterfall([
             callback => query.asCallback(callback),
             (filters, callback) => this._toCamelCase(filters, callback),
+            (filters, callback) => {
+                if (includeLastVersionsOnly) {
+                    this._getLastFilterVersions(filters, callback);
+                } else {
+                    callback(null, filters)
+                }
+            },
             (filters, callback) => {
                 if (filterIdsOrNull) {
                     this._ensureAllItemsFound(filters, filterIdsOrNull, callback);
@@ -219,6 +205,33 @@ class FiltersModel extends SecureModelBase {
                 }
             }
         ], callback);
+    }
+
+    _getLastFilterVersions(filters, callback) {
+        const filterVersionGroup = _.groupBy(filters, 'filterId');
+        const lastVersions = _.map(filterVersionGroup, filterGroup => {
+            const orderedFilters = _.orderBy(filterGroup, ['created'], ['desc']);
+            return _.head(orderedFilters);
+        });
+        callback(null, lastVersions)
+    }
+
+    remove(userId, itemId, callback) {
+        async.waterfall([
+            (callback) => this._fetch(userId, itemId, callback),
+            (itemData, callback) => this._remove(itemData.filterId, callback)
+        ], callback);
+    }
+
+    _remove(itemId, callback) {
+        this.db.transactionally((trx, callback) => {
+            trx(TableNames.Filters)
+                .where('id', itemId)
+                .update(ChangeCaseUtil.convertKeysToSnakeCase({isDeleted: true}))
+                .asCallback((error) => {
+                    callback(error, itemId);
+                });
+        }, callback);
     }
 }
 

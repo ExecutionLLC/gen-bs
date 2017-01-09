@@ -2,8 +2,6 @@
 
 const Request = require('superagent');
 
-const ADD_USER_KEY = 'b5b7a458-693c-4a8d-845b-7b9a1295a15b';
-
 class UsersClient {
     constructor(config) {
         this.urlAdd = `${config.usersClient.httpScheme}://${config.usersClient.host}:${config.usersClient.port}/api${'/users'}`;

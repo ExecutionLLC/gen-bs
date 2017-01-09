@@ -1,8 +1,11 @@
-import config from '../../config';
-import {closeModal} from './modalWindows';
-import {fetchSamplesAsync} from './samplesList';
+import _ from 'lodash';
 import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
+import Promise from 'bluebird';
+
+import apiFacade from '../api/ApiFacade';
+import {handleApiResponseErrorAsync} from './errorHandler';
+import {uploadState} from '../utils/uploadUtils';
 
 /*
  * action types
@@ -17,8 +20,70 @@ export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
 export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
+export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
+export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
+export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
+export const INVALIDATE_CURRENT_UPLOAD_ID = 'INVALIDATE_CURRENT_UPLOAD_ID';
+export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
+
+export const fileUploadStatus = {
+    ERROR: 'error',
+    READY: 'ready'
+};
+
+const {sampleUploadsClient} = apiFacade;
+
+const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting upload.' +
+    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
+const requestAbortFunctions = {};
+
+export function uploadsListReceive(uploads) {
+    return {
+        type: UPLOADS_LIST_RECEIVE,
+        uploads
+    };
+}
+
+export function filtersListAddFilter(upload) {
+    return {
+        type: UPLOADS_LIST_ADD_UPLOAD,
+        upload
+    };
+}
+
+export function setCurrentUploadId(uploadId) {
+    return {
+        type: SET_CURRENT_UPLOAD_ID,
+        uploadId
+    };
+}
+
+export function invalidateCurrentUploadId(samples) {
+    return {
+        type: INVALIDATE_CURRENT_UPLOAD_ID,
+        samples
+    };
+}
+
+export function uploadsListRemoveUpload(uploadId) {
+    return {
+        type: UPLOADS_LIST_REMOVE_UPLOAD,
+        uploadId
+    };
+}
+
+export function uploadsListServerRemoveUpload(uploadId) {
+    return (dispatch) => {
+        return new Promise((resolve) => {
+            sampleUploadsClient.remove(uploadId, (error, response) => resolve({error, response}));
+        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_UPLOAD_ERROR_MESSAGE, error, response))
+        ).then(() => {
+            dispatch(uploadsListRemoveUpload(uploadId));
+        });
+    };
+}
 
 /*
  * action creators
@@ -64,7 +129,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
         gzip(file).then(gzippedFile => onGzipped(gzippedFile));
     } else {
         onError('Unsupported file type: must be Variant Call Format'
-            +' (VCF) 4.1 or higher or VCF compressed with gzip');
+            + ' (VCF) 4.1 or higher or VCF compressed with gzip');
     }
 }
 
@@ -90,47 +155,29 @@ function receiveFileUpload(id) {
     };
 }
 
-function receiveFileOperation(operationId, id) {
+function receiveFileOperation(upload, id) {
     return {
         type: RECEIVE_FILE_OPERATION,
-        operationId,
+        upload,
         id
     };
 }
 
 function sendFile(file, onOperationId, onProgress, onError) {
-    const formData = new FormData();
-    formData.append('sample', file);
-    formData.append('fileName', file.name);
-    $.ajax(config.URLS.FILE_UPLOAD, {
-        'type': 'POST',
-        'data': formData,
-        'contentType': false,
-        'processData': false,
-        'xhrFields': {
-            // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
-            'onprogress': function (progress) {
-                // calculate upload progress
-                var percentage = Math.floor((progress.total / progress.total) * 100);
-                // log upload progress to console
-                console.log('sendFile progress', progress, percentage);
-                onProgress(percentage);
-                if (percentage === 100) {
-                    console.log('sendFile DONE!');
-                }
+    return sampleUploadsClient.upload(
+        file,
+        onProgress,
+        (err, res) => {
+            if (err) {
+                onError(err);
+            } else {
+                onOperationId(res);
             }
         }
-    })
-        .done(json => {
-            onOperationId(json.operationId);
-        })
-        .fail(err => {
-            onError(err);
-        });
-
+    );
 }
 
-function changeFileUploadProgressState(progressValue, progressStatus, id) {
+export function changeFileUploadProgressState(progressValue, progressStatus, id) {
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValue,
@@ -143,44 +190,63 @@ function findFileProcessForOperationId(state, operationId) {
     return state.fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
 }
 
-
-export function uploadFile() {
-    return (dispatch, getState) => {
-        getState().fileUpload.filesProcesses.forEach((fp) => {
-            if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving) {
-                return;
-            }
-            dispatch(requestFileUpload(fp.id));
-            dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
-            sendFile(
-                fp.file,
-                (operationId) => {
-                    dispatch(receiveFileOperation(operationId, fp.id));
-                },
-                (percentage) => {
-                    console.log('progress', percentage);
-                    dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
-                },
-                (err) => {
-                    console.error('Upload FAILED: ', err.responseText);
-                    dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
-                }
-            );
+export function uploadFiles(files) {
+    return (dispatch) => {
+        return Promise.mapSeries(files, (file) => {
+            return dispatch(addFileForUpload(file))
+                .then((id) => dispatch(uploadFile(id)));
         });
-        
     };
-
 }
 
+
+export function uploadFile(fileUploadId) {
+    return (dispatch, getState) => {
+        const fp = _.find(getState().fileUpload.filesProcesses, {id: fileUploadId});
+        if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving || fp.operationId) {
+            return;
+        }
+        dispatch(requestFileUpload(fp.id));
+        dispatch(changeFileUploadProgress(0, uploadState.AJAX, fp.id));
+        const abortRequest = sendFile(
+            fp.file,
+            (operationId) => {
+                delete requestAbortFunctions[fp.id];
+                dispatch(receiveFileOperation(operationId, fp.id));
+            },
+            (percentage) => {
+                console.log('progress', percentage);
+                dispatch(changeFileUploadProgress(percentage, uploadState.AJAX, fp.id));
+            },
+            (err) => {
+                console.error('Upload FAILED: ', err.responseText);
+                delete requestAbortFunctions[fp.id];
+                dispatch(fileUploadError(fp.id, {
+                    code: null,
+                    message: err.responseText
+                }));
+            }
+        );
+        requestAbortFunctions[fp.id] = abortRequest;
+    };
+}
+
+export function abortRequest(id) {
+    return (dispatch) => {
+        if (requestAbortFunctions[id]) {
+            requestAbortFunctions[id]();
+            delete requestAbortFunctions[id];
+        }
+        dispatch(uploadsListRemoveUpload(id));
+    };
+}
 
 export function changeFileUploadProgress(progressValue, progressStatus, id) {
     return (dispatch) => {
         dispatch(changeFileUploadProgressState(progressValue, progressStatus, id));
-        if (progressStatus === 'ready') {
+        if (progressStatus === fileUploadStatus.READY) {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
-            dispatch(closeModal('upload'));
-            dispatch(fetchSamplesAsync());
         }
     };
 }
@@ -203,12 +269,12 @@ export function fileUploadErrorForOperationId(error, operationId) {
     };
 }
 
-export function addFilesForUpload(files) {
+
+function addFileForUpload(file) {
     return (dispatch) => {
-        dispatch(clearUploadState());
-        const filesWithIds = files.map((file) => ({id: idCounter++, file}));
-        dispatch(addNoGZippedForUpload(filesWithIds));
-        filesWithIds.forEach((fileWithId) => {
+        return new Promise((resolve) => {
+            const fileWithId = {id: idCounter++, file};
+            dispatch(addNoGZippedForUpload([fileWithId]));
             ensureGzippedFile(
                 fileWithId.file,
                 () => {
@@ -219,15 +285,21 @@ export function addFilesForUpload(files) {
                     if (gzippedFile !== fileWithId.file) {
                         dispatch(receiveGzip(fileWithId.id));
                     }
+                    return resolve(fileWithId.id);
                 },
                 (message) => {
                     console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
-                    dispatch(fileUploadError(fileWithId.id, {code: null, message}));
+                    dispatch(fileUploadError(fileWithId.id, {
+                        code: null,
+                        message
+                    }));
+                    return resolve(fileWithId.id);
                 }
             );
         });
     };
 }
+
 
 export function clearUploadState() {
     return {
@@ -235,7 +307,7 @@ export function clearUploadState() {
     };
 }
 
-export function fileUploadError(id, error) {
+function fileUploadError(id, error) {
     return {
         type: FILE_UPLOAD_ERROR,
         error,

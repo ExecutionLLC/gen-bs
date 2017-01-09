@@ -9,7 +9,7 @@ import {getUrlParameterByName} from '../utils/stringUtils';
 
 import {fetchUserDataAsync} from './userData';
 import {initWSConnectionAsync, send} from './websocket';
-import {handleError, handleApiResponseErrorAsync} from './errorHandler';
+import {handleError, handleApiResponseErrorAsync, handleApiBodylessResponseErrorAsync} from './errorHandler';
 import {clearAnalysesHistory} from './analysesHistory';
 
 import apiFacade from '../api/ApiFacade';
@@ -24,6 +24,7 @@ export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
 export const SHOW_ANOTHER_PAGE_OPENED_MODAL = 'SHOW_ANOTHER_PAGE_OPENED_MODAL';
+export const SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL = 'SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
@@ -165,7 +166,7 @@ export function openUserSession(login, password) {
         (resolve) => sessionsClient.openUserSession(
             login, password, (error, response) => resolve({error, response})
         ))
-    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
+    ).then(({error, response}) => dispatch(handleApiBodylessResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
     ).then(() => location.replace(location.origin));
 }
 
@@ -282,7 +283,7 @@ export function closeAllUserSessionsAsync() {
         return new Promise(
             (resolve) => sessionsClient.closeAllUserSessions((error, response) => resolve({error, response}))
         ).then(({error, response}) => dispatch(
-            handleApiResponseErrorAsync(CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE, error, response)
+            handleApiBodylessResponseErrorAsync(CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE, error, response)
         ));
     };
 }
@@ -294,12 +295,18 @@ export function showAnotherPageOpenedModal(shouldShow) {
     };
 }
 
+export function setWaitStateForModal() {
+    return {
+        type: SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL
+    };
+}
+
 export function closeOtherSocketsAsync() {
     return (dispatch) => {
         return new Promise((resolve) => sessionsClient.closeOtherSockets(
             (error, response) => resolve({error, response}))
         ).then(({error, response}) => dispatch(
-            handleApiResponseErrorAsync(CLOSE_OTHER_SOCKETS_ERROR_MESSAGE, error, response))
+            handleApiBodylessResponseErrorAsync(CLOSE_OTHER_SOCKETS_ERROR_MESSAGE, error, response))
         ).then(() => dispatch(loginWithGoogle()));
     };
 }

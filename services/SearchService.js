@@ -151,14 +151,14 @@ class SearchService extends ServiceBase {
                 const rows = _.map(data, rowData => {
                     const {viewData, mandatoryFields} = rowData;
                     const fieldValueHash = CollectionUtils.createHash(viewData,
-                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId||'source'}`
+                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId || 'source'}`
                     );
                     const searchKeyObject = _.find(viewData, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
                     
                     const fieldValueObjects = _.map(header, headerObject => {
-                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId||'source'}`];
+                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId || 'source'}`];
                         return fieldWithId ? fieldWithId.fieldValue: null
                     });
                     const searchKey = searchKeyObject.fieldValue;
@@ -230,10 +230,10 @@ class SearchService extends ServiceBase {
     _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, viewId, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
         async.parallel({
-            fieldsMetadata: (callback) => async.waterfall(
+            fields: (callback) => async.waterfall(
                 [
                     (callback) => this.services.views.find(user, viewId, callback),
-                    (view, callback) => this.services.fieldsMetadata.findMany(
+                    (view, callback) => this.services.fields.findMany(
                         _.map(view.viewListItems,item => item.fieldId),
                         callback
                     ),
@@ -242,12 +242,12 @@ class SearchService extends ServiceBase {
             samples: (callback) => {
                 this.services.samples.findMany(user, sampleIds, callback);
             }
-        }, (error, {fieldsMetadata, samples}) => {
+        }, (error, {fields, samples}) => {
             callback(error, {
                 sessionId,
                 operationId,
                 samples,
-                fieldsMetadata,
+                fields,
                 globalSearchValue,
                 fieldSearchValues,
                 sortValues,
@@ -255,6 +255,19 @@ class SearchService extends ServiceBase {
                 offset
             });
         });
+    }
+
+    _transformCommasInRules(ruleObj) {
+        if (ruleObj.rules && ruleObj.rules.length) {
+            ruleObj.rules.forEach((part, index, theArray) => {
+                this._transformCommasInRules(theArray[index]);
+            });
+        } else {
+            const strOld = ruleObj.value;
+            if (typeof strOld === 'string' && strOld) {
+                ruleObj.value = strOld.replace(/,/g, '\\x2c');
+            }
+        }
     }
 
     _createAppServerSearchParams(user, languId, samples, viewId, filterId, modelId, limit, offset, callback) {
@@ -282,15 +295,15 @@ class SearchService extends ServiceBase {
             filter: (callback) => {
                 this.services.filters.find(user, filterId, callback);
             },
-            fieldsMetadata: (callback) => {
+            fields: (callback) => {
                 async.waterfall([
                     (callback) => {
                         // Load sample metadata
-                        this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback);
+                        this.services.fields.findByUserAndSampleIds(user, sampleIds, callback);
                     },
                     (sampleMetadata, callback) => {
                         // Load sources metadata
-                        this.services.fieldsMetadata.findSourcesMetadata((error, sourcesMetadata) => {
+                        this.services.fields.findSourcesFields((error, sourcesMetadata) => {
                             callback(error, {
                                 sampleMetadata,
                                 sourcesMetadata
@@ -314,17 +327,18 @@ class SearchService extends ServiceBase {
                     this.services.models.find(user, modelId, callback);
                 }
             }
-        }, (error, {langu, view, filter, model, samples, fieldsMetadata}) => {
+        }, (error, {langu, view, filter, model, samples, fields}) => {
             if (error) {
                 callback(error);
             } else {
+                this._transformCommasInRules(filter.rules);
                 const appServerSearchParams = {
                     langu,
                     userId: user.id,
                     view,
                     filter,
                     samples,
-                    fieldsMetadata,
+                    fields,
                     model,
                     limit,
                     offset

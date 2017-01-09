@@ -22,7 +22,7 @@ export default class AnalysisHistoryList extends React.Component {
         const {currentItemId, historyList, newHistoryItem, isHistoryReceivedAll} = this.props;
         return (
             <div className='split-scroll' ref={REFS.CONTAINER}>
-                <ul id='analysisTabs' className='nav nav-componentes nav-controls nav-radios nav-with-right-menu'>
+                <ul id='analysisTabs' className='nav nav-componentes nav-with-right-menu'>
                     {newHistoryItem && this.renderListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
                     {!isHistoryReceivedAll && this.renderLoadingListItem()}
@@ -74,11 +74,6 @@ export default class AnalysisHistoryList extends React.Component {
                     </span>
                     <span className='link-desc'>
                         {historyItem.description}
-                    </span>
-                    <span className='small link-desc'>
-                        <span data-localize='query.last_query_date'>
-                            Updated
-                        </span>: {historyItem.lastQueryDate}
                     </span>
                 </a>
             </li>

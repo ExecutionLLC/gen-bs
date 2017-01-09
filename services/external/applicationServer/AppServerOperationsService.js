@@ -27,7 +27,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             (callback) => this.services.operations.addKeepAliveOperation(session, searchOperation,
                 (error, operation) => callback(error, operation)),
             (operation, callback) => this._rpcSend(session, operation, method,
-                {sessionId: this.createAppServerSessionId(searchOperation)}, callback)
+                {sessionId: this.createAppServerSessionId(searchOperation)}, null, callback)
         ], callback);
     }
 
@@ -44,7 +44,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 this.logger.debug('Requesting close for ' + operation);
                 const method = METHODS.closeSession;
-                this._rpcSend(session, operation, method, null, callback);
+                this._rpcSend(session, operation, method, null, null, callback);
             }
         ], callback);
     }
@@ -52,7 +52,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
     requestOperationState(session, operationId, callback) {
         async.waterfall([
             (callback) => this.services.operations.findInAllSessions(operationId, callback),
-            (operation, callback) => this._rpcSend(session, operation, METHODS.checkSession, null, callback)
+            (operation, callback) => this._rpcSend(session, operation, METHODS.checkSession, null, null, callback)
         ], callback);
     }
 

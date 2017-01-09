@@ -1,0 +1,35 @@
+// Overwritten bootstrap styles for well
+
+.well {
+  background: rgba(255,255,255, .35);
+}
+
+
+//New colors
+.well-primary {
+  .well-variant(@brand-primary);
+}
+
+.well-danger {
+  .well-variant(@brand-danger);
+}
+
+.well-success {
+  .well-variant(@brand-success);
+}
+
+.well-warning {
+  .well-variant(@brand-warning);
+}
+
+.well-variant(@border-color) {
+  border-left: solid 3px @border-color;
+}
+
+
+.well-case,
+.well-control {
+  .btn-link {
+    white-space: normal;
+  }
+}

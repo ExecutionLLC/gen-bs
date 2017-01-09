@@ -1,0 +1,92 @@
+// Additional style for alert
+
+.alert {
+  border:none;
+  position: relative;
+}
+
+// Alternate styles
+//
+// Generate contextual modifier classes for colorizing the alert. Different from bootstrap - alert state-icon 
+
+.alert-primary {
+  .alert-variant(@alert-primary-bg; @alert-primary-border; @alert-primary-text; @alert-primary-state-icon);
+}
+
+.alert-success {
+  .alert-variant(@alert-success-bg; @alert-success-border; @alert-success-text; @alert-success-state-icon);
+}
+
+.alert-info {
+  .alert-variant(@alert-info-bg; @alert-info-border; @alert-info-text; @alert-info-state-icon);
+}
+
+.alert-warning {
+  .alert-variant(@alert-warning-bg; @alert-warning-border; @alert-warning-text; @alert-warning-state-icon);
+}
+
+.alert-danger {
+  .alert-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text; @alert-danger-state-icon);
+}
+.alert-inverse {
+  .alert-variant(@alert-inverse-bg; @alert-inverse-border; @alert-inverse-text; @alert-inverse-state-icon);
+  margin: 0;
+  padding: 15px 15px 15px 30px;
+  &:before {
+    top:16px;
+    left:10px;
+  }
+  .close {
+    color: @alert-inverse-text;
+    .opacity(.6);
+    &:hover,
+    &:focus  {
+      .opacity(.9);
+    }
+  }
+  .text-success {
+    color: @brand-success;
+  }
+  .text-warning {
+    color: @brand-warning;
+  }
+  .text-danger {
+    color: lighten(saturate(@brand-danger, 10%), 10%);
+  }
+
+}
+.alert-help {
+  .alert-variant(@alert-help-bg; @alert-help-border; @alert-help-text; @alert-help-state-icon);
+  padding:  0 0 0 20px;
+  &:before {
+    top:0;
+  }
+  p + p {
+    margin-top: 0;
+  }
+}
+.alert-fixed {
+  position: fixed;
+  z-index: @zindex-alert-fixed;
+  bottom: 30px;
+  right: 30px;
+  max-width: 260px;
+  min-width: 140px;
+}
+
+.alert + .form-group {
+  margin-top: -10px;
+}
+.alert {
+  .btn-group.pull-right {
+    margin: 0 5px 0 0;
+  }
+  @media (min-width: @screen-sm) {
+    .btn-group {
+      margin: -10px 0px 0 0;
+      &.pull-right {
+        margin-left: 5px;
+      }
+    }
+  }
+}

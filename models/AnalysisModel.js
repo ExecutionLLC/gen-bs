@@ -153,9 +153,9 @@ class AnalysisModel extends SecureModelBase {
                 const analysisDataToInsert = {
                     id: shouldGenerateId ? this._generateId() : id,
                     creator: userId,
-                    viewId,
-                    filterId,
-                    modelId,
+                    viewVersionId: viewId,
+                    filterVersionId: filterId,
+                    modelVersionId: modelId,
                     type,
                     lastQueryDate: new Date()
                 };
@@ -193,7 +193,7 @@ class AnalysisModel extends SecureModelBase {
         const {id, type} = sample;
         const analysisSampleDataToInsert = {
             analysisId,
-            genotypeVersionId: id,
+            sampleId: id,
             sampleType: type,
             order
         };
@@ -286,9 +286,9 @@ class AnalysisModel extends SecureModelBase {
             id,
             name,
             description,
-            filterId,
-            viewId,
-            modelId,
+            filterVersionId,
+            viewVersionId,
+            modelVersionId,
             timestamp,
             lastQueryDate,
             type,
@@ -300,7 +300,7 @@ class AnalysisModel extends SecureModelBase {
             sortedAnalyses,
             (sortedAnalysis) => {
                 return {
-                    id: sortedAnalysis.genotypeVersionId,
+                    id: sortedAnalysis.sampleId,
                     type: sortedAnalysis.sampleType
                 }
             }
@@ -310,9 +310,9 @@ class AnalysisModel extends SecureModelBase {
             id,
             name,
             description,
-            filterId,
-            viewId,
-            modelId,
+            filterId: filterVersionId,
+            viewId: viewVersionId,
+            modelId: modelVersionId,
             createdDate: timestamp,
             lastQueryDate,
             type,

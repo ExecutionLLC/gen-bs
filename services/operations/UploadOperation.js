@@ -1,11 +1,13 @@
 'use strict';
 
 const SystemOperation = require('./SystemOperation');
+const AppServerMethods = require('../external/applicationServer/AppServerMethods');
 
 class UploadOperation extends SystemOperation {
-    constructor(sessionId, method) {
-        super(sessionId, method);
+    constructor(sessionId, method, id) {
+        super(sessionId, method, id);
         this.setSendCloseToAppServer(true);
+        this._isActive = false;
     }
 
     /**
@@ -35,6 +37,22 @@ class UploadOperation extends SystemOperation {
 
     setSampleFileName(sampleFileName) {
         this.sampleFileName = sampleFileName;
+    }
+
+    get isActive(){
+        return this._isActive;
+    }
+
+    set isActive(isActive) {
+        this._isActive = isActive;
+    }
+
+    static recreate(id, systemSessionId, userId, sampleId, sampleFileName) {
+        const operation = new UploadOperation(systemSessionId, AppServerMethods.uploadSample, id);
+        operation.setUserId(userId);
+        operation.setSampleId(sampleId);
+        operation.setSampleFileName(sampleFileName);
+        return operation;
     }
 }
 

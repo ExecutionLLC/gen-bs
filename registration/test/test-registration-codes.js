@@ -16,6 +16,10 @@ function generateRegcode() {
     return '' + (10000000 + Math.floor(Math.random() * 89999999));
 }
 
+function generateNextRegcode(regcode) {
+    return '' + (+regcode + 1);
+}
+
 describe('Registration Codes', () => {
     const {registrationCodes, usersClient, userRequests} = global.regServer;
 
@@ -23,9 +27,9 @@ describe('Registration Codes', () => {
         return `a${Uuid.v4()}@example.com`;
     }
 
-    function generateCodeIdAsync() {
+    function generateCodeAsync() {
         return registrationCodes.createManyRegcodeAsync(1, null, 'en', 'speciality', 'description', 10)
-            .then((ids) => ids[0].id)
+            .then((ids) => ids[0])
     }
 
     describe('Positive tests', () => {
@@ -37,54 +41,77 @@ describe('Registration Codes', () => {
                     return regcodeUsers;
                 })
                 .then((regcodeUsers) =>
-                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser.id)))
+                    Promise.all(regcodeUsers.map((regcodeUser) => registrationCodes.activateAsync(regcodeUser)))
                 )
                 .catch((error) => assert.fail(`Failed to activate one or more codes: ${error}`))
         );
 
         it('activates successfully', () => {
-            return generateCodeIdAsync()
-                .then((id) => registrationCodes.activateAsync(id))
+            return generateCodeAsync()
+                .then((user) => registrationCodes.activateAsync(user))
                 .catch((error) => {
                     assert.fail(`Activation failed: ${error}`);
                 });
         });
 
+        function createRegcodeData(regcode) {
+            const r = Math.random();
+            return {
+                regcode,
+                speciality: 'createUserToRegcode-speciality-' + r,
+                language: ('' + r).slice(-2),
+                description: 'createUserToRegcode-description-' + r,
+                numberOfPaidSamples: Math.floor(r * 10) + 1
+            };
+        }
+
         it('must add user with desired regcode and next user with next regcode', () => {
-            const regcode = '' + (10000000 + Math.floor(Math.random() * 89999999));
-            const nextRegcode = '' + (+regcode + 1);
-            return registrationCodes.createRegcodeAsync(regcode, 'en', 'speciality', 'description', 4)
-                .then((createdUser) => {
-                    assert.equal(createdUser.regcode, regcode);
+            const regcode = generateRegcode();
+            const nextRegcode = generateNextRegcode(regcode);
+            const newRegcodeData1 = createRegcodeData(regcode);
+            const newRegcodeData2 = createRegcodeData(nextRegcode);
+            return registrationCodes.createRegcodeAsync(newRegcodeData1.regcode, newRegcodeData1.language, newRegcodeData1.speciality, newRegcodeData1.description, newRegcodeData1.numberOfPaidSamples)
+                .then((createdRegcodeData1) => {
+                    assert.deepStrictEqual(createdRegcodeData1, Object.assign({}, newRegcodeData1, {id: createdRegcodeData1.id, isActivated: false}));
                 })
                 .then(() =>
-                    registrationCodes.createRegcodeAsync(regcode, 'en', 'speciality', 'description', 4)
+                    registrationCodes.createRegcodeAsync(regcode, newRegcodeData2.language, newRegcodeData2.speciality, newRegcodeData2.description, newRegcodeData2.numberOfPaidSamples)
                 )
-                .then((createdUser) => {
-                    assert.equal(createdUser.regcode, nextRegcode);
+                .then((createdRegcodeData2) => {
+                    assert.deepStrictEqual(createdRegcodeData2, Object.assign({}, newRegcodeData2, {id: createdRegcodeData2.id, isActivated: false}));
                 });
         });
 
         it('should add regcode and find it', () => {
-            const userRegcode = generateRegcode();
-            return registrationCodes.createRegcodeAsync(userRegcode, 'en', 'speciality', 'description', 4)
+            const newRegcodeData = createRegcodeData(generateRegcode());
+            return registrationCodes.createRegcodeAsync(newRegcodeData.regcode, newRegcodeData.language, newRegcodeData.speciality, newRegcodeData.description, newRegcodeData.numberOfPaidSamples)
                 .then((createdRegcode) => {
-                    assert.ok(createdRegcode, 'Not created user');
+                    assert.ok(createdRegcode, 'Not created regcode');
                     return {regcodeId: createdRegcode.id, regcode: createdRegcode.regcode};
                 })
                 .then(({regcodeId, regcode}) =>
                     registrationCodes.findRegcodeAsync(regcode)
                         .then((foundRegcode) => {
-                            assert.equal(foundRegcode.id, regcodeId);
-                            assert.equal(foundRegcode.regcode, regcode);
+                            assert.deepStrictEqual(
+                                Object.assign({}, newRegcodeData, {id: regcodeId, isActivated: false}),
+                                {
+                                    id: foundRegcode.id,
+                                    regcode: foundRegcode.regcode,
+                                    isActivated: foundRegcode.isActivated,
+                                    description: foundRegcode.description,
+                                    language: foundRegcode.language,
+                                    numberOfPaidSamples: foundRegcode.numberOfPaidSamples,
+                                    speciality: foundRegcode.speciality
+                                }
+                            );
+                            return foundRegcode;
                         })
-                        .then(() => ({regcodeId, regcode}))
+                        .then((foundRegcode) => ({regcodeId, regcode, foundByRegcode: foundRegcode}))
                 )
-                .then(({regcodeId, regcode}) =>
+                .then(({regcodeId, regcode, foundByRegcode}) =>
                     registrationCodes.findRegcodeIdAsync(regcodeId)
                         .then((foundRegcode) => {
-                            assert.equal(foundRegcode.id, regcodeId);
-                            assert.equal(foundRegcode.regcode, regcode);
+                            assert.deepStrictEqual(foundRegcode, foundByRegcode);
                         })
                 )
         });
@@ -123,11 +150,11 @@ describe('Registration Codes', () => {
 
     describe('Negative tests', () => {
         it('activates only once', () => {
-            return generateCodeIdAsync()
-                .then((id) =>
-                    registrationCodes.activateAsync(id)
+            return generateCodeAsync()
+                .then((user) =>
+                    registrationCodes.activateAsync(user)
                         .then(() => mustThrowPromise(
-                            registrationCodes.activateAsync(id),
+                            registrationCodes.activateAsync(user),
                             'Activated the same code twice for different emails'
                         ))
                 );

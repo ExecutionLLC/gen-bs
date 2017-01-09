@@ -31,14 +31,18 @@ export function lastErrorResolved() {
     };
 }
 
-export function handleApiResponseErrorAsync(errorMessage, apiCallError, response) {
+function handleApiResponseCheckBodyErrorAsync(errorMessage, apiCallError, response, mustHaveBody) {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             let error = null;
             if (apiCallError) {
                 error = new NetworkError(apiCallError.message);
+            } else if (mustHaveBody && !response.body) {
+                error = new WebServerError(response.text);
             } else if (response.status !== HttpStatus.OK) {
-                error = new WebServerError(response.body.message);
+                error = response.body ?
+                    new WebServerError(response.body.message) :
+                    new WebServerError(response.text);
             }
             if (error) {
                 dispatch(handleError(null, errorMessage));
@@ -48,4 +52,12 @@ export function handleApiResponseErrorAsync(errorMessage, apiCallError, response
             }
         });
     };
+}
+
+export function handleApiResponseErrorAsync(errorMessage, apiCallError, response) {
+    return handleApiResponseCheckBodyErrorAsync(errorMessage, apiCallError, response, true);
+}
+
+export function handleApiBodylessResponseErrorAsync(errorMessage, apiCallError, response) {
+    return handleApiResponseCheckBodyErrorAsync(errorMessage, apiCallError, response, false);
 }

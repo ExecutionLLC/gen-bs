@@ -1,0 +1,247 @@
+// Materail design like checkboxes and radios , full owerwriting for bootstrap styles .checkbox and .radio
+
+.radio,
+.checkbox {
+  position: relative;
+  display: block;
+  margin: 0;
+  label {
+    min-height: @line-height-computed; // Ensure the input doesn't jump when there is no text
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+  }
+}
+.checkbox {
+  .checkbox-variant(@brand-primary);
+  .checkbox-size(@checkbox-font-base, @checkbox-size-base);
+
+}
+.radio {
+  .radio-variant(@brand-primary);
+  .radio-size(@radio-font-base, @radio-size-base);
+}
+
+.checkbox-variant(@color){
+  label {
+    color: @color;
+  }
+  input[type="checkbox"] {
+    &:checked {
+      + i {
+        border-color: @color;
+        background: @color;
+      }
+    }
+  }
+}
+
+.checkbox-size(@font-size, @checkbox-size){
+  label {
+    font-size: @font-size + .2;
+    padding-left: @checkbox-size + 2;
+  }
+
+  input[type="checkbox"] {
+    margin-left: -(@checkbox-size + 2);
+    + i {
+      width: @checkbox-size;
+      height: @checkbox-size;
+      &:before{
+        font-size: @font-size!important;
+      }
+    }
+  }
+}
+
+.radio-variant(@color){
+  label {
+    color: @color;
+  }
+  input[type="radio"] {
+    &:checked {
+      + i {
+        border-color: @color;
+        &:before{
+          background: @color;
+        }
+      }
+    }
+  }
+}
+
+.radio-size(@font-size, @radio-size){
+  label {
+    font-size: @font-size;
+  }
+  input[type="radio"] {
+    + i {
+      width: @radio-size;
+      height: @radio-size;
+      &:before{
+        width:@radio-size - 6;
+        height:@radio-size - 6;
+      }
+    }
+  }
+}
+
+.radio input[type="radio"],
+.checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  z-index: 1;
+
+  + i {
+    display: initial;
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #e7ebec;
+    display: inline-block;
+    transition: border 0.15s ease-in-out 0s, color 0.15s ease-in-out 0s;
+    vertical-align: middle;
+  }
+}
+
+.checkbox input[type="checkbox"]{
+  + i {
+    border-radius: 3px;
+
+  }
+  &:checked {
+    + i {
+      color: #fff;
+
+      &:before {
+        &:extend(.md-i);
+        font-style: normal;
+        left: -0.05em;
+        position: relative;
+        top: -0.15em;
+        content: "check";
+      }
+    }
+  }
+}
+
+.radio input[type="radio"]{
+
+  + i {
+    border-radius: 50%;
+    margin-right: 3px;
+    vertical-align: bottom;
+    &:before {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      border-radius: 50%;
+      display: none;
+      content: '';
+    }
+  }
+  &:checked {
+    + i {
+      &:before {
+        display: block;
+      }
+    }
+  }
+}
+
+.checkbox-primary {
+  .checkbox-variant(@brand-primary);
+}
+.checkbox-success {
+  .checkbox-variant(@brand-success);
+}
+.checkbox-warning  {
+  .checkbox-variant(@brand-warning);
+}
+.checkbox-info {
+  .checkbox-variant(@brand-info);
+}
+.checkbox-muted {
+  .checkbox-variant(@text-muted);
+}
+
+
+.radio-primary {
+  .radio-variant(@brand-primary);
+}
+.radio-success {
+  .radio-variant(@brand-success);
+}
+.radio-warning  {
+  .radio-variant(@brand-warning);
+}
+.radio-info {
+  .radio-variant(@brand-info);
+}
+.radio-muted {
+  .radio-variant(@text-muted);
+}
+
+.checkbox-sm,
+.radio-sm {
+  .checkbox-size(@checkbox-font-small, @checkbox-size-small);
+  label {
+    font-weight: bold;
+  }
+}
+.checkbox-lg,
+.radio-lg {
+  .checkbox-size(@checkbox-font-large, @checkbox-size-large);
+}
+.radio + .radio,
+.checkbox + .checkbox {
+  margin-top: -5px; // Move up sibling radios or checkboxes for tighter spacing
+}
+
+// Radios and checkboxes on same line
+.radio-inline,
+.checkbox-inline {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  margin-bottom: 0;
+  vertical-align: middle;
+  font-weight: normal;
+  cursor: pointer;
+}
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 10px; // space out consecutive inline controls
+}
+
+// Apply same disabled cursor tweak as for inputs
+// Some special care is needed because <label>s don't inherit their parent's `cursor`.
+//
+// Note: Neither radios nor checkboxes can be readonly.
+input[type="radio"],
+input[type="checkbox"] {
+  &[disabled],
+  &.disabled,
+  fieldset[disabled] & {
+    cursor: @cursor-disabled;
+  }
+}
+// These classes are used directly on <label>s
+.radio-inline,
+.checkbox-inline {
+  &.disabled,
+  fieldset[disabled] & {
+    cursor: @cursor-disabled;
+  }
+}
+// These classes are used on elements with <label> descendants
+.radio,
+.checkbox {
+  &.disabled,
+  fieldset[disabled] & {
+    label {
+      cursor: @cursor-disabled;
+    }
+  }
+}
+

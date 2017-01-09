@@ -1,0 +1,203 @@
+//==Colors, in less/agx-variables/* use var name, in variables.less and config.json use their hex values
+
+//base not gray colors
+@brand-primary:         #42A5F5;
+@brand-success:         #66BB6A;
+@brand-info:            #EC407A;
+@brand-warning:         #FFC107;
+@brand-danger:          #EF5350;
+
+//additional colors
+@base-text:              #181b1f;
+@default-max-light:      #f6f7f9;
+@default-max-lighter:    #fafbfc;
+@highlight: spin(lighten(@brand-warning, 40%), 10);
+@light-primary-color1:   #ebeff2;
+@light-primary-color2:   #dce3e8;
+
+
+
+//background color for `<body>`.
+@body-bg:       @default-max-light;
+
+
+//== Additional font size
+@font-size-x-small:       ceil((@font-size-base * 0.78));
+
+//== Additional btn types
+
+@btn-dark-default-color:              @text-color;
+@btn-dark-default-bg:                 @default-max-light;
+@btn-dark-default-border:             @default-max-light;
+
+
+@btn-dark-primary-color:              #fff;
+@btn-dark-primary-bg:                 darken(@brand-primary, 3%);
+@btn-dark-primary-border:             @btn-dark-primary-bg;
+
+@btn-inverse-color:                   @brand-primary;
+@btn-inverse-bg:                      #fff;
+@btn-inverse-border:                  #fff;
+
+
+//== Different shadow types for buttons
+@btn-default-shadow:             0 1px 1px fade(@gray, 15%);
+@btn-color-shadow:               0 1px 1px fade(@gray, 25%);
+
+
+//==Additional vars for table
+@table-th-bg:                  #fff;
+@table-primary-border-color:   @brand-primary;
+@table-primary-th-bg:      darken(@brand-primary, 5%);
+@table-primary-th-color: #fff;
+@tr-active-bg:     lighten(@brand-primary, 33%);
+@tr-active-color:  darken(@brand-primary, 25%);
+
+
+
+//== Dropdown shadow type
+@dropdown-shadow:     @shadow-paper-1;
+
+
+//== Placeholder for transparent input 
+@placeholder-inverse:            fade(#fff, 56%);
+
+
+//== Additional grid range
+@screen-xxs-max:             (@screen-xs-min - 1);
+
+
+//== Material design input
+@material-input-border-radius: 0;
+@material-input-padding-horizontal: 0;
+@material-input-font-size: 16px;
+@material-input-height: 48px;
+@material-input-line-height: 24px;
+@material-input-padding: 16px 0 8px;
+@material-input-bottom-indent: @padding-base-vertical;
+@material-input-sm-font-size: 13px;
+@material-input-sm-height: 40px;
+@material-input-sm-line-height: 20px;
+@material-input-sm-padding: 16px 0 4px;
+@material-input-sm-bottom-indent: @padding-small-vertical;
+@material-input-group-height: 72px;
+@material-input-group-sm-height: 60px;
+
+//== Material design checkboxes
+@checkbox-font-small: 17px;
+@checkbox-font-base: 18px;
+@checkbox-font-large: 24px;
+
+@checkbox-size-small: 14px;
+@checkbox-size-base: 16px;
+@checkbox-size-large: 22px;
+
+//== Material design radiobuttns
+@radio-font-base: @font-size-base;
+@radio-font-small: @font-size-small;
+@radio-font-large: @font-size-large;
+
+@radio-size-small: 14px;
+@radio-size-base: 16px;
+@radio-size-large: 22px;
+
+
+
+//==Shadow master list 
+@shadow-paper-0:  0 0px 1px  fade(@gray-base, 5%);
+@shadow-paper-1:  0 1px 2px fade(@gray-base, 15%);
+@shadow-paper-2:  0 1px 2px fade(@gray-base, 25%);
+@shadow-paper-3:  0 1px 4px fade(@gray-base, 25%);
+
+
+//==Additional zindex
+@zindex-alert-fixed:       1060;
+//
+
+//== Additional navbar size
+@navbar-sm-height:                 32px;
+
+//== Additional default color for navbar
+@navbar-inverse-default-badge:     lighten(@brand-primary, 10%);
+
+
+@nav-tabs-bg-color:                         @body-bg;
+
+//== Additional tooltip vars
+@tooltip-warning-bg:          @state-warning-bg;
+@tooltip-warning-color:       @state-warning-text;
+@tooltip-primary-bg:          @brand-primary;
+@tooltip-primary-color:       #fff;
+
+@tooltip-inverse-bg:          @light-primary-color1;
+@tooltip-inverse-color:       @brand-primary;
+//
+//== Additional popover vars
+@popover-shadow:        @shadow-paper-0;
+
+
+//== Additional label types
+@label-dark-default-bg:       @gray;
+@label-default-bg:            darken(@body-bg, 5%);
+
+@label-inverse-bg:       fade(#fff, 94%);
+@label-inverse-color:   @gray-dark;
+
+//== Special sizes for modal-footer by default
+@modal-footer-padding: 8px 16px;
+@modal-footer-height: 54px;
+
+//== For delete modal header bg
+@modal-header-bg:              transparent;
+@modal-title-color:            @text-color;
+
+//== Additional states
+@state-primary-text:    @brand-primary;
+@state-primary-bg:      @brand-primary;
+@state-primary-border:  @state-primary-bg;
+
+
+
+
+//== Add icon for all alert by default 
+@alert-icon-font-family:     "Material Icons";  
+
+
+//== Additional alert types
+
+@alert-primary-bg:            transparent;
+@alert-primary-text:          @state-primary-text;
+@alert-primary-border:        @brand-primary;
+@alert-primary-state-icon:    "schedule"; 
+
+@alert-help-bg:               transparent;
+@alert-help-border:           transparent;
+@alert-help-text:             @text-muted;
+@alert-help-state-icon:       "info_outline";
+
+@alert-inverse-bg:           fade(@gray-base, 70%);
+@alert-inverse-border:       fade(@gray-base, 70%);
+@alert-inverse-text:         @gray-lighter;
+@alert-inverse-state-icon:   "info_outline";
+
+@alert-success-state-icon:    "done"; 
+@alert-info-state-icon:       "info_outline"; 
+@alert-warning-state-icon:    "warning"; 
+@alert-danger-state-icon:     "error_outline";
+
+
+//== Special height and background for progress-bar by default
+@progress-bar-height:        6px;
+@progress-bar-default-bg:  @gray-lighter;
+
+
+//== Additional panel vars
+@panel-shadow:        @shadow-paper-1;
+@panel-hover-shadow:  @shadow-paper-3;
+@panel-body-shadow: 0;
+
+//Dl-group vars
+@dl-flex-horizontal-breakpoint: @component-offset-horizontal;
+@dl-flex-horizontal-offset: 35%;
+
+

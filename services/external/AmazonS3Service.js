@@ -28,10 +28,19 @@ class AmazonS3Service extends ServiceBase {
                 partSize: 6 * 1024 * 1024,
                 queueSize: 1
             })
-            .on('httpUploadProgress', function (evt) {
-                this.logger.debug('Progress:', evt.loaded, '/', evt.total);
+            .on('httpUploadProgress', (evt) => {
+                this.logger.debug(`Progress upload file with id ${keyName}: ${evt.loaded} / ${evt.total}`);
             })
             .send((error) => callback(error));
+    }
+
+    deleteObject(bucketName, keyName, callback) {
+        this.s3.deleteObject(
+            {
+                Bucket: bucketName,
+                Key: keyName
+            }, callback
+        );
     }
 
     /**

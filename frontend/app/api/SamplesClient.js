@@ -1,10 +1,7 @@
 'use strict';
 
-import _ from 'lodash';
-
 import RequestWrapper from './RequestWrapper';
 import UserEntityClientBase from './UserEntityClientBase';
-import {entityType} from '../utils/entityTypes';
 
 export default class SamplesClient extends UserEntityClientBase {
     constructor(urls) {
@@ -32,24 +29,5 @@ export default class SamplesClient extends UserEntityClientBase {
             {},
             callback
         );
-    }
-
-    static isValidSample(sample, shouldCheckFieldValues) {
-        if (!sample.id || !sample.fileName) {
-            return false;
-        }
-        if (!_.includes([entityType.DEFAULT, entityType.STANDARD, entityType.ADVANCED, entityType.USER], sample.type)) {
-            return false;
-        }
-        if (shouldCheckFieldValues) {
-            if (!sample.values || !sample.values.length) {
-                return false;
-            }
-            if (_.any(sample.values, sampleValue => !sampleValue.fieldId)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

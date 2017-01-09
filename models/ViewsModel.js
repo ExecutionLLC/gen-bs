@@ -13,6 +13,7 @@ const TableNames = {
     Views: 'view',
     ViewItems: 'view_item',
     ViewTexts: 'view_text',
+    ViewVersions: 'view_version',
     ViewItemKeywords: 'view_item_keyword'
 };
 
@@ -64,9 +65,9 @@ class ViewsModel extends SecureModelBase {
                 (callback) => this._ensureNameIsValid(view.name, callback),
                 (callback) => {
                     const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : view.id,
+                        id: this._generateId(),
                         creator: userId,
-                        name: view.name,
+                        name: view.name.trim(),
                         type: view.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
@@ -82,21 +83,28 @@ class ViewsModel extends SecureModelBase {
                     });
                 },
                 (viewId, callback) => {
-                    this._addViewItems(viewId, view.viewListItems, trx, (error) => {
-                        callback(error, viewId);
+                    const dataToInsert = {
+                        id: shouldGenerateId ? this._generateId() : view.id,
+                        viewId: viewId
+                    };
+                    this._unsafeInsert(TableNames.ViewVersions, dataToInsert, trx, callback);
+                },
+                (viewVersionId, callback) => {
+                    this._addViewItems(viewVersionId, view.viewListItems, trx, (error) => {
+                        callback(error, viewVersionId);
                     });
                 }
             ], callback);
         }, callback);
     }
 
-    _addViewItems(viewId, viewItems, trx, callback) {
+    _addViewItems(viewVersionId, viewItems, trx, callback) {
         async.map(viewItems, (viewItem, callback) => {
-            this._addViewItem(viewId, viewItem, trx, callback);
+            this._addViewItem(viewVersionId, viewItem, trx, callback);
         }, callback);
     }
 
-    _addViewItem(viewId, viewItem, trx, callback) {
+    _addViewItem(viewVersionId, viewItem, trx, callback) {
         async.waterfall([
             (callback) => {
                 if (!viewItem.fieldId){
@@ -104,7 +112,7 @@ class ViewsModel extends SecureModelBase {
                 } else {
                     const dataToInsert = {
                         id: this._generateId(),
-                        viewId: viewId,
+                        viewVersionId: viewVersionId,
                         fieldId: viewItem.fieldId,
                         order: viewItem.order,
                         sortOrder: viewItem.sortOrder,
@@ -143,26 +151,13 @@ class ViewsModel extends SecureModelBase {
                 (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
-                        creator: userId,
-                        name: viewToUpdate.name,
-                        type: view.type,
-                        originalViewId: view.originalViewId || view.id
+                        viewId: viewToUpdate.viewId
                     };
-                    this._insert(dataToInsert, trx, callback);
+                    this._unsafeInsert(TableNames.ViewVersions, dataToInsert,trx, callback);
                 },
-                (viewId, callback) => {
-                    const dataToInsert = {
-                        viewId: viewId,
-                        languId: view.languId,
-                        description: viewToUpdate.description
-                    };
-                    this._unsafeInsert(TableNames.ViewTexts, dataToInsert, trx, (error) => {
-                        callback(error, viewId);
-                    });
-                },
-                (viewId, callback) => {
-                    this._addViewItems(viewId, viewToUpdate.viewListItems, trx, (error) => {
-                        callback(error, viewId);
+                (viewVersionId, callback) => {
+                    this._addViewItems(viewVersionId, viewToUpdate.viewListItems, trx, (error) => {
+                        callback(error, viewVersionId);
                     });
                 }
             ], callback);
@@ -172,7 +167,7 @@ class ViewsModel extends SecureModelBase {
     _fetch(userId, viewId, callback) {
         async.waterfall([
             (callback) => {
-                this._fetchView(viewId, callback);
+                this._fetchView(userId, viewId, callback);
             },
             (view, callback) => {
                 this._checkUserIsCorrect(userId, view, callback);
@@ -180,19 +175,18 @@ class ViewsModel extends SecureModelBase {
         ], callback);
     }
 
-    _fetchView(viewId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-            .from(this.baseTableName)
-            .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
-            .where('id', viewId)
-            .asCallback((error, viewData) => {
-                if (error || !viewData.length) {
-                    callback(error || new Error('Item not found: ' + viewId));
-                } else {
-                    callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewData[0]));
+    _fetchView(userId, viewId, callback) {
+        this.db.asCallback((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findViews(trx, [viewId], userId, false, false, callback),
+                (views) => {
+                    if (!views.length) {
+                        callback(new Error('Item not found: ' + viewId));
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(views[0]));
+                    }
                 }
-            });
+            ], callback);
         }, callback);
     }
 
@@ -201,15 +195,13 @@ class ViewsModel extends SecureModelBase {
             (callback) => this._findViewsMetadata(trx, viewIdsOrNull, userIdOrNull, includeLastVersionsOnly,
                 excludeDeleted, callback),
             (viewsMetadata, callback) => {
-                const viewIds = _.map(viewsMetadata, view => view.id);
-                callback(null, viewsMetadata, viewIds);
-            },
-            (viewsMetadata, viewIds, callback) => {
-                this._attachListItems(trx, viewsMetadata, viewIds, (error, views) => {
-                    callback(error, views, viewIds);
+                const viewVersionIds = _.map(viewsMetadata, view => view.id);
+                this._attachListItems(trx, viewsMetadata, viewVersionIds, (error, views) => {
+                    callback(error, views);
                 });
             },
-            (views, viewIds, callback) => {
+            (views, callback) => {
+                const viewIds = _.map(views, view => view.viewId);
                 this._attachViewsDescriptions(trx, views, viewIds, callback);
             }
         ], (error, views) => {
@@ -218,22 +210,19 @@ class ViewsModel extends SecureModelBase {
     }
 
     _findViewsMetadata(trx, viewIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
-        let query = trx.select()
-            .from(TableNames.Views)
+        let query = trx.select([
+            `${TableNames.ViewVersions}.id`,
+            `${TableNames.ViewVersions}.created`,
+            `${TableNames.ViewVersions}.view_id`,
+            `${TableNames.Views}.type`,
+            `${TableNames.Views}.is_deleted`,
+            `${TableNames.Views}.is_copy_disabled`,
+            `${TableNames.Views}.name`,
+            `${TableNames.Views}.creator`
+        ])
+            .from(TableNames.ViewVersions)
+            .leftJoin(TableNames.Views,`${TableNames.ViewVersions}.view_id`,`${TableNames.Views}.id`)
             .whereRaw('1 = 1');
-        if (includeLastVersionsOnly) {
-            const selectLastViewIds = 'SELECT' +
-                '  T.id' +
-                ' FROM (' +
-                '  SELECT ROW_NUMBER() OVER (' +
-                '    PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC' +
-                '  ) AS RN,' +
-                '  id' +
-                '  FROM view' +
-                ' ) AS T' +
-                ' WHERE T.RN = 1';
-            query = query.andWhereRaw('view.id IN (' + selectLastViewIds + ')');
-        }
 
         if (userIdOrNull) {
             query = query.andWhere(function () {
@@ -249,12 +238,19 @@ class ViewsModel extends SecureModelBase {
         }
 
         if (viewIdsOrNull) {
-            query = query.andWhere('id', 'in', viewIdsOrNull);
+            query = query.andWhere(`${TableNames.ViewVersions}.id`, 'in', viewIdsOrNull);
         }
 
         async.waterfall([
             callback => query.asCallback(callback),
             (views, callback) => this._toCamelCase(views, callback),
+            (views, callback) => {
+                if (includeLastVersionsOnly) {
+                    this._getLastViewVersions(views, callback);
+                } else {
+                    callback(null, views)
+                }
+            },
             (views, callback) => {
                 if (viewIdsOrNull) {
                     this._ensureAllItemsFound(views, viewIdsOrNull, callback);
@@ -265,12 +261,21 @@ class ViewsModel extends SecureModelBase {
         ], callback);
     }
 
-    _attachListItems(trx, views, viewIds, callback) {
+    _getLastViewVersions(views, callback) {
+        const viewVersionGroup = _.groupBy(views, 'viewId');
+        const lastVersions = _.map(viewVersionGroup, viewGroup => {
+            const orderedViews = _.orderBy(viewGroup, ['created'], ['desc']);
+            return _.head(orderedViews);
+        });
+        callback(null, lastVersions)
+    }
+
+    _attachListItems(trx, views, viewVersionIds, callback) {
         async.waterfall([
             (callback) => {
                 trx.select()
                     .from(TableNames.ViewItems)
-                    .whereIn('view_id', viewIds)
+                    .whereIn('view_version_id', viewVersionIds)
                     .asCallback(callback);
             },
             (viewsItems, callback) => this._toCamelCase(viewsItems, callback),
@@ -278,7 +283,7 @@ class ViewsModel extends SecureModelBase {
             (viewsItems, callback) => this._attachKeywords(trx, viewsItems, callback),
             (viewsItems, callback) => {
                 // Group items by view.
-                const itemsByViewId = _.groupBy(viewsItems, viewItem => viewItem.viewId);
+                const itemsByViewId = _.groupBy(viewsItems, viewItem => viewItem.viewVersionId);
                 // Create a new views collection with view items attached.
                 const viewsWithItems = _.map(views, view => {
                     return Object.assign({}, view, {
@@ -303,7 +308,7 @@ class ViewsModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(viewsTexts, 'viewId');
                 const viewsWithDescription = _.map(views, view => {
                     return Object.assign({}, view, {
-                        description: textsHash[view.id].description
+                        description: textsHash[view.viewId].description
                     });
                 });
                 callback(null, viewsWithDescription);
@@ -337,6 +342,24 @@ class ViewsModel extends SecureModelBase {
                 callback(null, viewItemsWithKeywords);
             }
         ], callback);
+    }
+
+    remove(userId, itemId, callback) {
+        async.waterfall([
+            (callback) => this._fetch(userId, itemId, callback),
+            (itemData, callback) => this._remove(itemData.viewId, callback)
+        ], callback);
+    }
+
+    _remove(itemId, callback) {
+        this.db.transactionally((trx, callback) => {
+            trx(TableNames.Views)
+                .where('id', itemId)
+                .update(ChangeCaseUtil.convertKeysToSnakeCase({isDeleted: true}))
+                .asCallback((error) => {
+                    callback(error, itemId);
+                });
+        }, callback);
     }
 }
 

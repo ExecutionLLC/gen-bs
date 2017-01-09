@@ -1,0 +1,25 @@
+// Overwritten bootstrap styles for popover
+
+.popover {
+  max-width:none;
+  .box-shadow(@popover-shadow);
+
+  @media (max-width: @screen-xxs-max) {
+    left: 0 !important;
+    margin: 10px !important;
+    max-width: none;
+    right: 0 !important;
+    top: @navbar-height !important;
+    position: fixed;
+    .arrow {
+      display: none !important;
+    }
+    .popover-content {
+      background: #fff ;
+      position: relative;
+    }
+  }
+}
+
+
+

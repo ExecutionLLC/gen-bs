@@ -21,18 +21,16 @@ export default class ExistentViewSelect extends React.Component {
         const isEditableView = entityTypeIsEditable(selectedViewType);
 
         return (
-            <div className='form-rows-dynamic'>
+            <div className='form-rows'>
                 <div className='form-group'>
                     {this.renderTitle()}
                 </div>
-                <div className='row-head-selector'>                
-                    {this.renderWarning(isDemoSession, selectedViewType)}
-                    <div className='form-group'>
-                        <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select2'>
-                            {this.renderViewSelector(views)}
-                            {this.renderButtonGroup(isDemoSession, isEditableView)}
-                        </div>  
-                    </div>
+                {this.renderWarning(isDemoSession, selectedViewType)}
+                <div className='form-group row-head-selector'>
+                    <div className='col-sm-12 col-md-11 col-lg-9 btn-group-select-group'>
+                        {this.renderViewSelector(views)}
+                        {this.renderButtonGroup(isDemoSession, isEditableView)}
+                    </div>  
                 </div>
             </div>
         );
@@ -66,7 +64,7 @@ export default class ExistentViewSelect extends React.Component {
         }));
 
         return (
-            <div className='btn-group btn-group-select2-max'>
+            <div className='btn-group btn-group-select-group-max'>
                 <Select
                     options={selectorItems}
                     value={this.getEditingViewId()}

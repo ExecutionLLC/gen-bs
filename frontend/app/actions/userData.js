@@ -3,6 +3,9 @@ import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {
     receiveTotalFields
 } from './fields';
+import {
+    receiveMetadata
+} from './metadata';
 import {receiveSavedFilesList} from './savedFiles';
 import {
     receiveInitialAnalysesHistory,
@@ -21,6 +24,7 @@ import {
 } from './modelsList';
 import {getDefaultOrStandardItem} from '../utils/entityTypes';
 import {analyze} from './ui';
+import {uploadsListReceive} from './fileUpload';
 
 /*
  * action types
@@ -68,9 +72,11 @@ export function fetchUserDataAsync() {
                 filters,
                 views,
                 models,
+                metadata,
                 totalFields,
                 savedFiles,
-                analyses
+                analyses,
+                uploads
             } = userData;
 
             dispatch(receiveUserData(userData));
@@ -80,8 +86,10 @@ export function fetchUserDataAsync() {
 
             dispatch(receiveSavedFilesList(savedFiles));
             dispatch(receiveTotalFields(totalFields));
+            dispatch(receiveMetadata(metadata));
             dispatch(receiveSamplesList(samples));
             dispatch(receiveInitialAnalysesHistory(analyses));
+            dispatch(uploadsListReceive(uploads));
 
             const sample = getDefaultOrStandardItem(samples);
             const filter = getDefaultOrStandardItem(filters);

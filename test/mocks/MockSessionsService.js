@@ -32,6 +32,24 @@ class MockSessionsService extends SessionService {
             store: this.redisStore,
             unset: 'destroy'
         });
+
+        this.findUserSessions = (function(userId, callback) {
+            this.redisStore.all((err, all) => {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                let res = [];
+                let k;
+                for (k in all) {
+                    if (all[k].userId === userId) {
+                        res.push(all[k]);
+                    }
+                }
+                callback(null, res);
+            });
+        }).bind(this);
+
     }
 
     _createMockSessionStore() {

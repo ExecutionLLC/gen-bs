@@ -23,8 +23,11 @@ describe('Sessions', () => {
         it('should open correctly for existing user.', (done) => {
             sessionsClient.openSession(TestUser.userEmail, (error, response) => {
                 assert.ifError(error);
-                SessionsClient.getSessionFromResponse(response);
-                done();
+                const sessionId = SessionsClient.getSessionFromResponse(response);
+                sessionsClient.closeSession(sessionId, (error, response) => {
+                    ClientBase.readBodyWithCheck(error, response);
+                    done();
+                });
             });
         });
         it('should fail to open session for wrong user.', (done) => {
@@ -45,7 +48,10 @@ describe('Sessions', () => {
                     assert.ifError(error);
                     const anotherSessionId = SessionsClient.getSessionFromResponse(response);
                     assert.equal(sessionId, anotherSessionId, 'Check method has returned a different session.');
-                    done();
+                    sessionsClient.closeSession(sessionId, (error, response) => {
+                        ClientBase.readBodyWithCheck(error, response);
+                        done();
+                    });
                 });
             });
         });

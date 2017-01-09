@@ -108,8 +108,8 @@ export default class FieldUtils {
     static getFieldInputValidationRegex(field){
         const fieldType = field.type;
         const jsType = {
-            'char': '^((?!,).)*$',
-            'string': '^((?!,).)*$',
+            'char': null,
+            'string': null,
             'integer': null,
             'float': null,
             'double': null,
@@ -141,7 +141,7 @@ export default class FieldUtils {
      * @returns {Object.<string, TField>}
      */
     static getSampleFields(sample, totalFieldsHash) {
-        const sampleValues = sample.values;
+        const sampleValues = sample.sampleFields;
         const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
         return sampleFields;
     }
@@ -179,7 +179,7 @@ export default class FieldUtils {
         const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
         return [
-            ..._.filter(sortedLabelledFields, ['isEditable', false]),
+            ...sortedLabelledFields,
             ...sourceFieldsList
         ];
     }
@@ -205,6 +205,6 @@ export default class FieldUtils {
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
-        return _.filter(sortedLabelledFields, (field) => !field.isEditable && !field.isInvisible);
+        return _.filter(sortedLabelledFields, (field) => !field.isInvisible);
     }
 }

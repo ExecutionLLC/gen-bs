@@ -1,7 +1,12 @@
 import {showAnotherPageOpenedModal} from './auth';
 import {receiveSearchedResults} from './variantsTable';
-import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
+import {
+    changeFileUploadProgressForOperationId,
+    fileUploadErrorForOperationId, invalidateCurrentUploadId
+} from './fileUpload';
 import config from '../../config';
+import {samplesListAddSamples} from './samplesList';
+import {samplesListUpdateSamplesFields} from './samplesList';
 
 /*
  * action types
@@ -133,9 +138,10 @@ function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
         if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
             dispatch(tableMessage(wsData));
-            const {variantsTable} = getState();
+            const {variantsTable, variantsTable: {searchInResultsParams: {limit}}} = getState();
             if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
-                dispatch(receiveSearchedResults());
+                const isReceivedAll = wsData.result.data && wsData.result.data.length < limit;
+                dispatch(receiveSearchedResults(isReceivedAll));
             }
         } else {
             dispatch(progressMessage(wsData));
@@ -145,7 +151,15 @@ function receiveSearchMessage(wsData) {
 
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
-        dispatch(changeFileUploadProgressForOperationId(wsData.result.progress, wsData.result.status, wsData.operationId));
+        const {operationId, result: {progress, status, metadata: samples}} = wsData;
+        if (samples && status !== WS_PROGRESS_STATUSES.READY) {
+            dispatch(samplesListAddSamples(samples));
+            dispatch(invalidateCurrentUploadId(samples));
+        }
+        if (samples && status === WS_PROGRESS_STATUSES.READY) {
+            dispatch(samplesListUpdateSamplesFields(samples));
+        }
+        dispatch(changeFileUploadProgressForOperationId(progress, status, operationId));
     };
 }
 

@@ -40,7 +40,7 @@ class UserDataService extends ServiceBase {
                 // If session is demo session, then we should pick first standard sample.
                 const firstNotAdvancedSample = _.find(allSamples, (sample) => sample.type === ENTITY_TYPES.STANDARD);
                 let sampleId = firstNotAdvancedSample ? firstNotAdvancedSample.id : null;
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId,
+                this.services.fields.findByUserAndSampleId(user, sampleId,
                     (error, sampleFields) => callback(error, sampleId, sampleFields));
             }
         ], callback);
@@ -67,37 +67,29 @@ class UserDataService extends ServiceBase {
                     analyses: (callback) => {
                         this.services.analysis.findAll(user, this.defaultLimit, 0, undefined, undefined, callback);
                     },
-                    models: (callback)=> {
+                    models: (callback) => {
                         this.services.models.findAll(user, callback)
                     },
                     savedFiles: (callback) => {
                         this.services.savedFiles.findAll(user, callback);
                     },
                     totalFields: (callback) => {
-                        this.services.fieldsMetadata.findTotalMetadata(callback);
+                        this.services.fields.findAll(callback);
                     },
-                    activeOperations: (callback) => {
-                        this._findActiveSystemOperations(user, callback);
+                    metadata: (callback) => {
+                        this.services.metadata.findAll(callback);
+                    },
+                    activeUploads: (callback) => {
+                        this.services.sampleUploadHistory.findActive(user, callback);
+                    },
+                    uploads: (callback) => {
+                        this.services.sampleUploadHistory.findNotFinishedUploads(user, null, null, callback);
                     }
                 }, callback);
             }
         ], (error, results) => {
             callback(error, results);
         });
-    }
-
-    _findActiveSystemOperations(user, callback) {
-        async.waterfall([
-            (callback) => this.services.operations.findSystemOperationsForUser(user, callback),
-            (operations, callback) => {
-                const operationsWithLastMessage = _.map(operations, operation => ({
-                    id: operation.getId(),
-                    type: operation.getType(),
-                    lastMessage: operation.getLastAppServerMessage()
-                }));
-                callback(null, operationsWithLastMessage);
-            }
-        ], callback);
     }
 }
 

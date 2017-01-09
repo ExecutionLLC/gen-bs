@@ -6,8 +6,8 @@ import AnalysisBody from './Analysis/AnalysisBody';
 
 
 class AnalysisModal extends React.Component {
-    constructor(state) {
-        super(state);
+    constructor(props) {
+        super(props);
         this.state = {isAnalysisBringToFront: false};
     }
 
@@ -21,6 +21,7 @@ class AnalysisModal extends React.Component {
                 bsSize='lg'
                 show={showModal}
                 onHide={() => this.onClose()}
+                backdrop='static'
             >
                 <AnalysisHeader
                     showAnalysisHide={this.state.isAnalysisBringToFront}

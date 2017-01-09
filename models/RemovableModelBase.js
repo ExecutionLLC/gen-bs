@@ -4,8 +4,6 @@ const async = require('async');
 
 const ModelBase = require('./ModelBase');
 
-const ITEM_NOT_FOUND = 'Item not found.';
-
 class RemovableModelBase extends ModelBase {
     /**
      * @param models Reference to the models facade
@@ -26,14 +24,6 @@ class RemovableModelBase extends ModelBase {
         this.db.transactionally((trx, callback) => {
             super._unsafeUpdate(itemId, {isDeleted: true}, trx, callback);
         }, callback);
-    }
-
-    _ensureItemNotDeleted(item, callback) {
-        if (!item.isDeleted) {
-            callback(null, item);
-        } else {
-            callback(new Error(ITEM_NOT_FOUND));
-        }
     }
 }
 

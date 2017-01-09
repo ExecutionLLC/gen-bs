@@ -6,29 +6,34 @@ const async = require('async');
 const RabbitMqUtils = require('./rabbitMq/RabbitMqUtils');
 const ChangeCaseUtil = require('./ChangeCaseUtil');
 
+/**
+ * @typedef {Object}RpcProxyParams
+ * @property {string}host RabbitMQ host.
+ * @property {number}port
+ * @property {string}user
+ * @property {string}password
+ * @property {string}virtualHost
+ * @property {string}requestExchangeName Name of the task queue.
+ * @property {number}reconnectTimeout Timeout in milliseconds
+ * @property {object}logger
+ * @property {function(Object)}replyCallback
+ * */
+
+const MAX_PRIORITY = 255;
+
 class RPCProxy {
     /**
-     * @param {string}host RabbitMQ host.
-     * @param {number}port
-     * @param {string}user
-     * @param {string}password
-     * @param {string}virtualHost
-     * @param {string}requestExchangeName Name of the task queue.
-     * @param {number}reconnectTimeout Timeout in milliseconds
-     * @param {object}logger
-     * @param {function(object)}replyCallback
+     * @param {RpcProxyParams}params
      */
-    constructor(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback, returnCallback) {
-        Object.assign(this,
-            {host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback, returnCallback}, {
-                consumer: null,
-                publisher: null
-            }
-        );
+    constructor(params) {
+        Object.assign(this, params, {
+            consumer: null,
+            publisher: null
+        });
         _.bindAll(this, ['_onMessage', '_onMessageReturned', '_connect', 'send']);
         // Try to reconnect automatically if connection is closed
         this._connect();
-        setInterval(this._connect, reconnectTimeout);
+        setInterval(this._connect, params.reconnectTimeout);
     }
 
     isConnected() {
@@ -36,14 +41,26 @@ class RPCProxy {
             && this.consumer && this.consumer.isConnected();
     }
 
-    send(messageId, method, params, queryNameOrNull, callback) {
+    /**
+     * @param messageId
+     * @param method AS method name to call
+     * @param params AS method params
+     * @param queryNameOrNull If null, msg will be sent to the default exchange.
+     * @param priorityOrNull If null, msg will have max priority
+     * @param callback(Error)
+     * */
+    send(messageId, method, params, queryNameOrNull, priorityOrNull, callback) {
         if (!this.isConnected()) {
             callback(new Error('Connection to application server is lost.'));
         } else {
             const publisher = this.publisher;
             const replyQueue = this.consumer.getActualQueueName();
             const message = this._constructMessage(messageId, method, replyQueue, params);
-            const messageParams = {replyTo: replyQueue, correlationId: messageId};
+            const messageParams = {
+                replyTo: replyQueue,
+                correlationId: messageId,
+                priority: priorityOrNull !== null ? priorityOrNull : MAX_PRIORITY
+            };
             // Can send requests either to a particular AS instance, or to the tasks exchange.
             if (queryNameOrNull) {
                 publisher.publishToQueue(queryNameOrNull, message, messageParams, callback);
@@ -91,7 +108,7 @@ class RPCProxy {
                     publisher: (callback) => RabbitMqUtils.createPublisher(connection,
                         this.logger, this.requestExchangeName, callback),
                     consumer: (callback) => RabbitMqUtils.createConsumer(connection,
-                        this.logger, null, null, null, true, callback)
+                        this.logger, this.wsQueueName, null, null, true, callback)
                 }, (error, context) => callback(error, context))
             },
             (context, callback) => {

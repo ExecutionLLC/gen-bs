@@ -12,6 +12,7 @@ const ServicesFacade = require('../../services/ServicesFacade');
 const ControllersFacade = require('../../controllers/ControllersFacade');
 
 const MockUserModel = require('./MockUserModel');
+const MockUsersController = require('./MockUsersController');
 const MockSessionsService = require('./MockSessionsService');
 const MockSessionsController = require('./MockSessionsController');
 const MockWSController = require('./MockWSController');
@@ -25,7 +26,7 @@ class MockHost {
         this._setConfigMocks(Config);
 
         const models = new ModelsFacade(Config, logger);
-        this._setModelsMocks(models);
+        this._savedModels = this._setModelsMocks(models);
 
         const services = new ServicesFacade(Config, logger, models);
         this._setServicesMocks(services);
@@ -43,11 +44,36 @@ class MockHost {
     }
     
     _setModelsMocks(models) {
+        const savedModels = this._saveModelsMocks(models);
         models.users = new MockUserModel();
+        return savedModels;
+    }
+
+    _saveModelsMocks(models) {
+        const savedModels = {};
+        for (let k in models) {
+            if (models.hasOwnProperty(k)) {
+                savedModels[k] = models[k];
+            }
+        }
+        return savedModels;
+    }
+
+    setModelsMocks() {
+        this._savedModels = this._setModelsMocks(this.server.models);
+    }
+
+    restoreModelsMocks() {
+        for (let k in this._savedModels) {
+            if (this._savedModels.hasOwnProperty(k)) {
+                this.server.models[k] = this._savedModels[k];
+            }
+        }
     }
 
     _setControllersMocks(controllers, services) {
         controllers.sessionsController = new MockSessionsController(controllers.sessionsController);
+        controllers.usersController = new MockUsersController(controllers.usersController);
         controllers.wsController = new MockWSController(services);
     }
 

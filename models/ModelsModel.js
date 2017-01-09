@@ -10,7 +10,8 @@ const SecureModelBase = require('./SecureModelBase');
 
 const TableNames = {
     Model: 'model',
-    ModelText: 'model_text'
+    ModelText: 'model_text',
+    ModelVersion: 'model_version'
 };
 
 const mappedColumns = [
@@ -62,9 +63,8 @@ class ModelsModel extends SecureModelBase {
                 (callback) => this._ensureNameIsValid(model.name, callback),
                 (callback) => {
                     const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : model.id,
+                        id: this._generateId(),
                         creator: userId,
-                        rules: model.rules,
                         type: model.type || ENTITY_TYPES.USER,
                         analysisType: model.analysisType,
                         modelType: model.modelType
@@ -81,6 +81,14 @@ class ModelsModel extends SecureModelBase {
                     this._unsafeInsert(TableNames.ModelText, dataToInsert, trx, (error) => {
                         callback(error, modelId);
                     });
+                },
+                (modelId, callback) => {
+                    const dataToInsert = {
+                        id: shouldGenerateId ? this._generateId() : model.id,
+                        modelId: modelId,
+                        rules: model.rules
+                    };
+                    this._unsafeInsert(TableNames.ModelVersion, dataToInsert, trx, callback);
                 }
             ], callback);
         }, callback);
@@ -89,54 +97,34 @@ class ModelsModel extends SecureModelBase {
     // It creates a new version of an existing model
     _update(userId, model, modelToUpdate, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        creator: userId,
-                        rules: modelToUpdate.rules,
-                        type: model.type,
-                        analysisType: model.analysisType,
-                        modelType: model.modelType,
-                        originalModelId: model.originalModelId || model.id
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (modelId, callback) => {
-                    const dataToInsert = {
-                        modelId: modelId,
-                        languId: model.languId,
-                        name: modelToUpdate.name,
-                        description: modelToUpdate.description
-                    };
-                    this._unsafeInsert(TableNames.ModelText, dataToInsert, trx, (error) => {
-                        callback(error, modelId);
-                    });
-                }
-            ], callback);
+            const dataToInsert = {
+                id: this._generateId(),
+                modelId: modelToUpdate.modelId,
+                rules: modelToUpdate.rules
+            };
+            this._unsafeInsert(TableNames.ModelVersion, dataToInsert, trx, callback);
         }, callback);
     }
 
     _fetch(userId, modelId, callback) {
         async.waterfall([
-            (callback) => this._fetchModel(modelId, callback),
+            (callback) => this._fetchModel(userId, modelId, callback),
             (model, callback) => this._checkUserIsCorrect(userId, model, callback)
         ], callback);
     }
 
-    _fetchModel(modelId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin(TableNames.ModelText, `${TableNames.ModelText}.model_id`, `${this.baseTableName}.id`)
-                .where('id', modelId)
-                .asCallback((error, modelData) => {
-                    if (error || !modelData.length) {
-                        callback(error || new Error('Item not found: ' + modelId));
+    _fetchModel(userId, modelId, callback) {
+        this.db.asCallback((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findModels(trx, [modelId], userId, false, false, callback),
+                (models) => {
+                    if (!models.length) {
+                        callback(new Error('Item not found: ' + modelId));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(modelData[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(models[0]));
                     }
-                });
+                }
+            ], callback);
         }, callback);
     }
 
@@ -145,7 +133,7 @@ class ModelsModel extends SecureModelBase {
             (callback) => this._findModelsMetadata(trx, modelIdsOrNull, userIdOrNull, includeLastVersionsOnly,
                 excludeDeleted, callback),
             (modelsMetadata, callback) => {
-                const modelIds = _.map(modelsMetadata, model => model.id);
+                const modelIds = _.map(modelsMetadata, model => model.modelId);
                 callback(null, modelsMetadata, modelIds);
             },
             (models, modelIds, callback) => {
@@ -157,23 +145,20 @@ class ModelsModel extends SecureModelBase {
     }
 
     _findModelsMetadata(trx, modelIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
-        let query = trx.select()
-            .from(TableNames.Model)
+        let query = trx.select([
+            `${TableNames.ModelVersion}.id`,
+            `${TableNames.ModelVersion}.rules`,
+            `${TableNames.ModelVersion}.created`,
+            `${TableNames.ModelVersion}.model_id`,
+            `${TableNames.Model}.type`,
+            `${TableNames.Model}.analysis_type`,
+            `${TableNames.Model}.model_type`,
+            `${TableNames.Model}.is_deleted`,
+            `${TableNames.Model}.creator`
+        ])
+            .from(TableNames.ModelVersion)
+            .leftJoin(TableNames.Model, `${TableNames.ModelVersion}.model_id`, `${TableNames.Model}.id`)
             .whereRaw('1 = 1');
-        if (includeLastVersionsOnly) {
-            const selectLastModelIds = 'SELECT' +
-                '  T.id' +
-                ' FROM (' +
-                '  SELECT ROW_NUMBER() OVER (' +
-                '    PARTITION BY CASE WHEN original_model_id isnull THEN id' +
-                ' ELSE original_model_id END ORDER BY timestamp DESC' +
-                '  ) AS RN,' +
-                '  id' +
-                '  FROM model' +
-                ' ) AS T' +
-                ' WHERE T.RN = 1';
-            query = query.andWhereRaw('model.id IN (' + selectLastModelIds + ')');
-        }
 
         if (userIdOrNull) {
             query = query.andWhere(function () {
@@ -189,12 +174,19 @@ class ModelsModel extends SecureModelBase {
         }
 
         if (modelIdsOrNull) {
-            query = query.andWhere('id', 'in', modelIdsOrNull);
+            query = query.andWhere(`${TableNames.ModelVersion}.id`, 'in', modelIdsOrNull);
         }
 
         async.waterfall([
             callback => query.asCallback(callback),
             (models, callback) => this._toCamelCase(models, callback),
+            (models, callback) => {
+                if (includeLastVersionsOnly) {
+                    this._getLastModelVersions(models, callback);
+                } else {
+                    callback(null, models)
+                }
+            },
             (models, callback) => {
                 if (modelIdsOrNull) {
                     this._ensureAllItemsFound(models, modelIdsOrNull, callback);
@@ -218,13 +210,40 @@ class ModelsModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(modelTexts, 'modelId');
                 const modelsWithDescription = _.map(models, model => {
                     return Object.assign({}, model, {
-                        description: textsHash[model.id].description,
-                        name: textsHash[model.id].name
+                        description: textsHash[model.modelId].description,
+                        name: textsHash[model.modelId].name
                     });
                 });
                 callback(null, modelsWithDescription);
             }
         ], callback);
+    }
+
+    _getLastModelVersions(models, callback) {
+        const modelVersionGroup = _.groupBy(models, 'modelId');
+        const lastVersions = _.map(modelVersionGroup, modelGroup => {
+            const orderedModels = _.orderBy(modelGroup, ['created'], ['desc']);
+            return _.head(orderedModels);
+        });
+        callback(null, lastVersions)
+    }
+
+    remove(userId, itemId, callback) {
+        async.waterfall([
+            (callback) => this._fetch(userId, itemId, callback),
+            (itemData, callback) => this._remove(itemData.modelId, callback)
+        ], callback);
+    }
+
+    _remove(itemId, callback) {
+        this.db.transactionally((trx, callback) => {
+            trx(TableNames.Model)
+                .where('id', itemId)
+                .update(ChangeCaseUtil.convertKeysToSnakeCase({isDeleted: true}))
+                .asCallback((error) => {
+                    callback(error, itemId);
+                });
+        }, callback);
     }
 }
 

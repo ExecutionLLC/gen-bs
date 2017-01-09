@@ -23,6 +23,7 @@ const initialState = {
     needUpdate: false,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
+    isReceivedAll: false,
     selectedRowIndices: []
 };
 
@@ -39,7 +40,9 @@ export default function variantsTable(state = initialState, action) {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-                })
+                }),
+                isNextDataLoading: true,
+                isFetching: true
             });
         }
         case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
@@ -172,7 +175,8 @@ export default function variantsTable(state = initialState, action) {
                 isNextDataLoading: false,
                 isFilteringOrSorting: false,
                 isFetching: false,
-                lastUpdated: action.receivedAt
+                lastUpdated: action.receivedAt,
+                isReceivedAll: action.isReceivedAll
             });
         }
         case ActionTypes.SELECT_VARIANTS_ROW: {

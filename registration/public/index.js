@@ -38,7 +38,7 @@ function ajaxAsync(method, url, params, data) {
 }
 
 const API = {
-    getUserForRegcodeEmailAsync: function(regcode) {
+    getUserForRegcodeAsync: function(regcode) {
         return ajaxAsync('GET', REGSERVER_API_BASE_URL +'/user', {regcode: regcode, email: null});
     },
     getUserForRegcodeId: function(regcodeId) {
@@ -48,10 +48,10 @@ const API = {
         return ajaxAsync('PUT', REGSERVER_API_BASE_URL + '/user', null, user);
     },
     requestUser: function(user) {
-        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/user_request', null, user);
+        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/user_request', null, {user: user, reCaptchaResponse: reCaptchaResponse});
     },
     registerUser: function(user) {
-        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/register', null, user);
+        return ajaxAsync('POST', REGSERVER_API_BASE_URL + '/register', null, {user: user, reCaptchaResponse: reCaptchaResponse});
     }
 };
 
@@ -100,6 +100,12 @@ const USER_INFO_SCHEME = [
         containerId: 'reg-gender'
     }
 ];
+
+const VALIDATION_MESSAGES = {
+    REQUIRED: 'The field is required.',
+    EMAIL_MALFORMED_AT: 'Email must contain "@".',
+    EMAIL_MALFORMED_GMAIL: 'Email must end with "@gmail.com".',
+};
 
 const DOMUtils = {
     removeAllChildren: function(el) {
@@ -160,20 +166,16 @@ const MakeLayout = {
             }
         });
     },
-    toggleRequiredAlert: function(inputEl, showAlert) {
+    toggleRequiredAlert: function(inputEl, alertText) {
         const nextEl = inputEl.nextElementSibling;
         if (nextEl && nextEl.getAttribute('role') === 'alert') {
-            if (showAlert) {
-                return;
-            } else {
-                nextEl.parentNode.removeChild(nextEl);
-            }
+            nextEl.parentNode.removeChild(nextEl);
         }
-        if (showAlert) {
+        if (alertText) {
             const el = document.createElement('span');
             el.classList.add('wpcf7-not-valid-tip');
             el.setAttribute('role', 'alert');
-            DOMUtils.setElementText(el, 'The field is required.');
+            DOMUtils.setElementText(el, alertText);
             inputEl.parentNode.insertBefore(el, inputEl.nextElementSibling);
         }
     },
@@ -211,6 +213,7 @@ const FillData = {
     }
 };
 
+
 var loadedUserId = null;
 var currentUser = {
     regcode: '',
@@ -225,7 +228,7 @@ const checkingUser = {
         checkingUser.requested = {
             regcode: regcode
         };
-        return API.getUserForRegcodeEmailAsync(regcode, null)
+        return API.getUserForRegcodeAsync(regcode)
             .then(function(user) {
                 if (regcode !== checkingUser.requested.regcode) {
                     throw new Error('old request');
@@ -329,7 +332,16 @@ function onSignupLoginPassword() {
     if (loadedUserId) {
         updateServerData();
     }
-    if (!validateUser()) {
+    const validation = {
+        'email': function(email, inputEl) {
+            const isMalformed = !/@/.test(email);
+            if (isMalformed) {
+                MakeLayout.toggleRequiredAlert(inputEl, isMalformed && VALIDATION_MESSAGES.EMAIL_MALFORMED_AT);
+            }
+            return isMalformed;
+        }
+    };
+    if (!validateUser(validation)) {
         switchPageState({
             warningUserdata: true
         });
@@ -347,7 +359,7 @@ function onSignupLoginPassword() {
 
 (function(){
     'use strict';
-    
+
     var isObject = function (obj) {
 	return obj && typeof obj === 'object';
     };
@@ -421,7 +433,16 @@ function onSignupGoogle() {
     if (loadedUserId) {
         updateServerData();
     }
-    if (!validateUser()) {
+    const validation = {
+        'email': function(email, inputEl) {
+            const isMalformed = !/@gmail\.com$/.test(email);
+            if (isMalformed) {
+                MakeLayout.toggleRequiredAlert(inputEl, isMalformed && VALIDATION_MESSAGES.EMAIL_MALFORMED_GMAIL);
+            }
+            return isMalformed;
+        }
+    };
+    if (!validateUser(validation)) {
         switchPageState({
             warningUserdata: true
         });
@@ -430,7 +451,7 @@ function onSignupGoogle() {
     addUser({loginType: 'google'});
 }
 
-function validateUser() {
+function validateUser(rules) {
 
     const hasAbsent = USER_INFO_SCHEME.reduce(function(hasAbsent, scheme) {
         if (scheme.isOptional) {
@@ -439,9 +460,14 @@ function validateUser() {
         const inputEl = scheme.containerId ?
             document.getElementById(scheme.containerId) :
             document.getElementById(scheme.elementId);
-        const isAbsent = !currentUser.user[scheme.id];
-        if (inputEl) {
-            MakeLayout.toggleRequiredAlert(inputEl, isAbsent);
+        var isAbsent;
+        if (rules[scheme.id]) {
+            isAbsent = rules[scheme.id](currentUser.user[scheme.id], inputEl);
+        } else {
+            isAbsent = !currentUser.user[scheme.id];
+            if (inputEl) {
+                MakeLayout.toggleRequiredAlert(inputEl, isAbsent && VALIDATION_MESSAGES.REQUIRED);
+            }
         }
         return hasAbsent || isAbsent;
     }, false);
@@ -465,12 +491,6 @@ function onPassword(/*index, psw*/) {
     switchPageState({
         warningPassword: !getPassword()
     });
-}
-
-var acceptDisaclaimer = null; // will be defined later
-
-function onAcceptDisclaimer(checked) {
-    acceptDisaclaimer();
 }
 
 function toggleClass(el, cls, isSet) {
@@ -533,6 +553,44 @@ function switchPageState(ops) {
     }
 }
 
+
+function SubmitButtons(buttons) {
+    this._disclaimerAccepted = false;
+    this._reCaptchaSuccess = false;
+    this._buttons = buttons.slice();
+    this._onChanged();
+}
+
+SubmitButtons.prototype._onChanged = function() {
+
+    const enable = this._disclaimerAccepted && this._reCaptchaSuccess;
+
+    const toggleAttribute = enable ?
+        function(el) { el.removeAttribute('disabled'); } :
+        function(el) { el.setAttribute('disabled', 'disabled'); };
+
+    function setDisable(el) {
+        if (el) {
+            toggleAttribute(el);
+        }
+    }
+
+    this._buttons.forEach(function(el) { setDisable(el); });
+};
+
+SubmitButtons.prototype.onDisclaimerAcceptedChange = function(accept) {
+    this._disclaimerAccepted = accept;
+    this._onChanged();
+};
+
+SubmitButtons.prototype.onReCaptchaResultChange = function(success) {
+    this._reCaptchaSuccess = success;
+    this._onChanged();
+};
+
+
+var submitButtons = null;
+
 function onDocumentLoad() {
     document.body.classList.remove('loading');
     switchPageState({
@@ -575,31 +633,12 @@ function onDocumentLoad() {
         return passwordInputEl;
     });
 
-    function onAcceptDisclaimer(accept) {
-
-        const toggleAttribute = accept ?
-            function(el) { el.removeAttribute('disabled'); } :
-            function(el) { el.setAttribute('disabled', 'disabled'); };
-
-        function setDisable(el) {
-            if (el) {
-                toggleAttribute(el);
-            }
-        }
-
-        if (signupGoogle) {
-            setDisable(registerButtonEl);
-            setDisable(signupLoginPassword);
-            setDisable(signupGoogle);
-        }
-    }
+    submitButtons = new SubmitButtons([registerButtonEl, signupLoginPassword, signupGoogle].filter(function(el) { return !!el; }));
 
     const acceptDisclaimerEl = document.getElementById(ELEMENT_ID.acceptDisclaimer);
     if (acceptDisclaimerEl) {
-        DOMUtils.onClick(acceptDisclaimerEl, function() { onAcceptDisclaimer(acceptDisclaimerEl.checked); });
+        DOMUtils.onClick(acceptDisclaimerEl, function() { submitButtons.onDisclaimerAcceptedChange(acceptDisclaimerEl.checked); });
     }
-
-    onAcceptDisclaimer(false);
 
     getPassword = function() {
         return passwordInputEls.reduce(
@@ -648,4 +687,13 @@ function onDocumentLoad() {
             loading: false
         });
     }
+}
+
+
+var reCaptchaResponse = null;
+
+function reCaptchaCallback(response) {
+    reCaptchaResponse = response;
+    console.log('reCaptchaCallback', reCaptchaResponse);
+    submitButtons.onReCaptchaResultChange(true);
 }

@@ -4,26 +4,39 @@ import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
 import {sampleType, sampleTypesForAnalysisType} from './samplesUtils';
 import {analysisType} from './analyseUtils';
+import config from '../../config';
+import {formatDate} from './dateUtil';
+
+
+function trimName(name) {
+    return name.slice(0, config.ANALYSIS.MAX_NAME_LENGTH);
+}
+
+function trimDescription(description) {
+    return description.slice(0, config.ANALYSIS.MAX_DESCRIPTION_LENGTH);
+}
 
 
 export function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
-        name: `Copy of ${historyItem.name}`.slice(0, 50),
-        createdDate: '' + new Date(),
-        lastQueryDate: '' + new Date(),
+        name: trimName(`Copy of ${historyItem.name}`),
+        createdDate: new Date(),
+        lastQueryDate: new Date(),
         id: null
     };
 }
 
 export function makeNewHistoryItem(sample, filter, view) {
-    const name = (new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '')).slice(0, 50);
+    const name = trimName(
+        `${formatDate(new Date())}_${sample ? sample.name : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
+    );
     return {
         id: null,
         name: name,
-        description: 'Description of ' + name,
-        createdDate: '' + new Date(),
-        lastQueryDate: '' + new Date(),
+        description: trimDescription(`Description of ${name}`),
+        createdDate: new Date(),
+        lastQueryDate: new Date(),
         filterId: filter ?
             filter.id :
             null,
@@ -155,7 +168,7 @@ function changeType(historyItem, samplesList, modelsList, isDemo, targetType) {
 }
 
 export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, change) {
-    var editingHistoryItem = historyItem;
+    let editingHistoryItem = historyItem;
     if (change.name != null) {
         editingHistoryItem = {...editingHistoryItem, name: change.name};
     }

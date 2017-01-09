@@ -1,0 +1,108 @@
+// Button variants
+//
+// Easily pump out default styles, as well as :hover, :focus, :active,
+// and disabled options for all buttons
+
+.button-variant(@color; @background; @border) {
+  color: @color;
+  background-color: @background;
+  border-color: @border;
+  box-shadow: @btn-color-shadow;
+  &:focus,
+  &.focus {
+    color: @color;
+    background-color: @background;
+        border-color: @border;
+  }
+  &:hover {
+    color: @color;
+    background-color: lighten(@background, 5%);
+        border-color: lighten(@border, 5%);
+  }
+  &:active,
+  &.active,
+  .open > .dropdown-toggle& {
+    color: @color;
+    background-color: darken(@background, 5%);
+        border-color: darken(@border, 5%);
+
+    &:hover,
+    &:focus,
+    &.focus {
+      color: @color;
+      background-color: darken(@background,5%);
+          border-color: darken(@border, 5%);
+    }
+  }
+  &:active,
+  &.active,
+  .open > .dropdown-toggle& {
+    background-image: none;
+    box-shadow:none;
+    border-top-color:darken(@border, 5%); 
+  }
+  
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    background-color: desaturate(lighten(@background, 5%), 15%);
+          border-color: desaturate(lighten(@background, 5%), 15%);
+           color: fade(@color, 70%);
+    &:hover,
+    &:focus,
+    &.focus {
+      background-color:  desaturate(lighten(@background, 5%), 15%);
+          border-color:  desaturate(lighten(@background, 5%), 15%);
+          color: fade(@color, 70%);
+    }
+  }
+
+}
+//
+.btn-link-variant(@color)  {
+  color: @color;
+  font-weight: normal;
+  border-radius: 0;
+  text-decoration: none;
+ 
+  vertical-align: middle;
+  border: none;
+
+
+  &,
+  &:active,
+  &.active,
+  &[disabled],
+  fieldset[disabled] & {
+    background-color: transparent;
+    .box-shadow(none);
+  }
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: transparent;
+  }
+  &:hover,
+  &:focus {
+   color: darken(@color, 5%);
+    text-decoration:none ;
+    background-color: transparent;
+  }
+  &[disabled],
+  fieldset[disabled] & {
+    &:hover,
+    &:focus {
+     color: lighten(@color, 15%);
+      text-decoration: none;
+    }
+  }
+
+}
+// Button sizes
+.button-size(@padding-vertical; @padding-horizontal; @font-size; @line-height; @border-radius) {
+  padding: @padding-vertical @padding-horizontal;
+  font-size: @font-size;
+  line-height: @line-height;
+  border-radius: @border-radius;
+}

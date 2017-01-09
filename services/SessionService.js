@@ -10,6 +10,8 @@ const {EVENT_TYPES} = require('./../utils/Enums');
 const ServiceBase = require('./ServiceBase');
 const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
 
+const SYSTEM_SESSION_ID = 'eea1eefa-f8d6-4003-b2b7-c444dafcb092';
+
 const SESSION_TYPES = {
     USER: 'USER',
     DEMO: 'DEMO',
@@ -29,6 +31,7 @@ class SessionService extends ServiceBase {
     init() {
         const {host, port, password, databaseNumber} = this.config.redis;
         const {sessionTimeoutSec} = this.config.sessions;
+        const {serverId} = this.config;
         this.redisStore = new RedisStore({
             host,
             port,
@@ -45,10 +48,7 @@ class SessionService extends ServiceBase {
         // System session is currently stored in memory, as it contains system-wide
         // operations, and, if being put in Redis, there will be race conditions
         // between different web server instances.
-        this.systemSession = {
-            id: Uuid.v4(),
-            operations:{}
-        };
+        this.systemSessionId = serverId;
 
         const {sessionCookieName, sessionSecret} = this.config.sessions;
         this.sessionParser = session({
@@ -64,7 +64,27 @@ class SessionService extends ServiceBase {
             unset: 'destroy',
             store: this.services.sessions.getSessionStore()
         });
-        this.logger.info(`Created system session ${this.systemSession.id}`);
+    }
+
+
+    _start(callback) {
+        async.waterfall([
+            (callback) => this._findSystemRedisSession(callback),
+            (session, callback) => {
+                this.systemSession = Object.assign(session, {
+                    cookie: {
+                        expires: null,
+                        originalMaxAge: null
+                    }
+                });
+                callback(null);
+            }
+        ], callback);
+
+    }
+
+    _stop(callback) {
+        this._saveSession(this.systemSession, callback);
     }
 
     getSessionStore() {
@@ -80,6 +100,10 @@ class SessionService extends ServiceBase {
             && session.id
             && session.type
             && session.userId;
+    }
+
+    isSystemSessionId(sessionId) {
+        return sessionId === this.systemSession.id;
     }
 
     startForEmailPassword(session, email, password, callback) {
@@ -131,8 +155,20 @@ class SessionService extends ServiceBase {
         ], callback);
     }
 
+    _findSystemRedisSession(callback) {
+        async.waterfall([
+            (callback) => this.redisStore.get(this.systemSessionId, (error, result) => callback(error, result || null)),
+            (rawSession, callback) => {
+                const session = Object.assign({}, rawSession, {
+                    id: this.systemSessionId
+                });
+                callback(null, session)
+            }
+        ], callback);
+    }
+
     findById(sessionId, callback) {
-        if (sessionId !== this.systemSession.id) {
+        if (sessionId !== this.systemSessionId) {
             async.waterfall([
                 (callback) => this.redisStore.get(sessionId, (error, result) => callback(error, result || null)),
                 (rawSession, callback) => {
@@ -161,10 +197,14 @@ class SessionService extends ServiceBase {
 
     saveSession(session, callback) {
         if (this.systemSession.id !== session.id) {
-            this.redisStore.set(session.id, session, (error) => callback(error));
+            this._saveSession(session, callback);
         } else {
             callback(null);
         }
+    }
+
+    _saveSession(session, callback) {
+        this.redisStore.set(session.id, session, (error) => callback(error));
     }
 
     _initUserSession(session, userId, callback) {

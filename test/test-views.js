@@ -45,6 +45,13 @@ describe('Views', () => {
         });
     });
 
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            done();
+        });
+    });
+
     describe('positive tests', () => {
         it('should get all views', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {

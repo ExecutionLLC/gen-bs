@@ -1,0 +1,33 @@
+// Additional visibility utilities for windows width < 480
+.visible-xxs {
+  .responsive-invisibility();
+}
+
+.visible-xxs {
+  @media (max-width: @screen-xxs-max) {
+    .responsive-visibility();
+  }
+}
+
+.visible-xxs-block {
+  @media (max-width: @screen-xxs-max) {
+    display: block !important;
+  }
+}
+.visible-xxs-inline {
+  @media (max-width: @screen-xxs-max) {
+    display: inline !important;
+  }
+}
+.visible-xxs-inline-block {
+  @media (max-width: @screen-xxs-max) {
+    display: inline-block !important;
+  }
+}
+
+.hidden-xxs {
+  @media (max-width: @screen-xxs-max) {
+    .responsive-invisibility();
+  }
+}
+

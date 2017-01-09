@@ -1,0 +1,198 @@
+//New component
+.split-layout {
+  height: 100%;
+  position: relative;
+  display: flex;
+  .split-scroll {
+
+    &.rel {
+      position: relative;
+    }
+
+  }
+  .split-left {
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    display: flex;
+    align-content: stretch;
+    align-items: stretch;
+    flex-direction: column;
+    padding-bottom: 16px;
+    flex-shrink: 0;
+
+    .split-scroll  {
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow-x: hidden;
+      overflow-y: scroll; /* has to be scroll, not auto */
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+  .split-right {
+    width: 100%;
+    display: flex;
+    align-content: stretch;
+    align-items: stretch;
+    flex-direction: column;
+    padding-bottom: 16px;
+    background: @default-max-lighter;
+    border-left: 1px solid @gray-lighter;
+    position: relative;
+    flex-shrink: 0;
+    overflow-y: auto;
+
+    &.bring-to-front { //modificator for split-right
+      z-index: 1;
+      margin-left: -100%;
+    }
+    &.max-width { //modificator for split-right
+      width: 100%;
+    }
+    .navbar-inverse {
+      border-left: 1px solid fade(#000, 10%);
+    }
+    .navbar-fixed-top {
+      position: absolute;
+      padding: 0 @padding-large-vertical;
+      z-index: auto;
+      h3 {
+        margin: 0;
+      }
+    }
+  }
+
+
+  .split-wrap {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .split-top {
+    background: #fff;
+    box-shadow: 0 0 1px fade(@gray, 35%);
+    flex-basis:auto;
+    flex-shrink: 0;
+    z-index: 1;
+    .form-group {
+      margin-bottom:@padding-small-vertical ;
+    }
+    .nav-tabs {
+      margin:0  @padding-base-horizontal*1.5 ;
+    }
+    &.transparent {
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+
+  .navbar {
+
+    .btn-sm {
+      margin: 6px 0;
+      font-size: @font-size-base;
+    }
+  }
+  .btn.visible-xs {
+    display: inline-block;
+  }
+
+  &.sidebar-open {
+    .split-left {
+      box-shadow:2px 0 8px fade(@gray, 15%);
+    }
+  }
+  &.upload-open {
+    .split-right {
+      display: none;
+    }
+    .split-left {
+      right: 0;
+      #analysisTabs  {
+        > li.process {
+          display: block;
+        }
+      }
+    }
+  }
+
+
+  @media (min-width: @screen-sm){
+    overflow-y: auto;
+    .split-left {
+      width: 35%;
+      z-index: auto;
+      flex-shrink: 1;
+    }
+    .split-right {
+      width: 65%;
+      z-index: auto;
+      flex-shrink: 1;
+      overflow-y:hidden;
+      .split-scroll  {
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow-x: hidden;
+        overflow-y: scroll; /* has to be scroll, not auto */
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .navbar-fixed-top {
+        padding: 0 @padding-large-vertical * 2 ;
+        background: transparent;
+
+        .btn {
+          display: none;
+        }
+      }
+      .navbar-inverse .navbar-text {
+        color: @text-color;
+      }
+      &.bring-to-front {
+        z-index: auto;
+        margin-left: 0;
+      }
+
+    }
+    &.fixed-left {
+      .split-left {
+        width: 35%;
+      }
+      .split-right {
+        width: 65%;
+      }
+    }
+
+    .btn.visible-xs {
+      display: none;
+    }
+
+  }
+  @media (min-width: @screen-md){
+    &.fixed-left {
+      .split-left {
+        width: 25%;
+      }
+      .split-right {
+        width: 75%;
+      }
+    }
+
+  }
+  @media (min-width: @screen-lg){
+    &.fixed-left {
+      .split-left {
+        width: 20%;
+      }
+      .split-right {
+        width: 80%;
+      }
+    }
+
+  }
+
+}
+
+
+
+

@@ -1,8 +1,23 @@
-@import "bootstrap/less/bootstrap.less";
-@import "select2/less/core.less";
-@import "react-select/less/select.less";
-@import "guery-builder/less/guery-builder.less";
-@import "bootstrap3-editable/less/bootstrap-editable.less";
-@import "../fonts/agx/styles.css";
-@import "genomics.css";
+//== Customize Bootstrap build: http://getbootstrap.com/customize/?id=0a4b9cbf744b15d40e6b8ea847c79bd6, for update use bootstrap-custom/config.json
+@import "bootstrap-custom/bootstrap.min.css";
+
+//==Default css files, distributive by font vendors
+
+@import "fonts/materialIcons/material-icons.css";
+
+//==Jquery css files  distributive by plug-ings vendors 
+@import "../vendor/jQuery-QueryBuilder/css/query-builder.default.css";
+
+////== AGX overwrites, addons, modifications for Bootstrap (based on Bootsrap 3.3.5) and custom componentes dependent Bootstrap, compatible with Bootsrap 3.3.x
+@import "less/agx-bootstrap-components/agx.less";
+
+//==Jquery plug-ings styles adaptation
+@import "less/plugins/guery-builder/overwrithing.less";
+@import "less/plugins/bootstrap3-editable/overwritting.less";
+
+//==React plug-ings styles adaptation 
+@import "less/plugins/react-select/overwrithing.less";
+
+//==App styles
+@import "app.less";
 

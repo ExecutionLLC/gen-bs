@@ -46,7 +46,8 @@ const SETTINGS = {
     includeStackTraceToErrors: makeDefault(ENV.GEN_WS_INCLUDE_STACK_TRACE, false),
     samplesUpload: {
         path: makeDefault(ENV.GEN_WS_UPLOAD_PATH, __dirname + '/../uploads/'), // Temporary path for uploaded samples.
-        maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024) // Max size of the uploaded sample.
+        maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024), // Max size of the uploaded sample.
+        maxCountPerUser: makeDefault(ENV.GEN_WS_UPLOAD_MAX_COUNT, 15) // Maximum active uploads per user.
     },
     objectStorage: {
         // Object storage type to use. Supported values: 's3', 'oss'
@@ -137,7 +138,8 @@ const SETTINGS = {
         HOST: makeDefault(ENV.GEN_WS_REG_HOST, 'localhost'),
         PORT: makeDefault(ENV.GEN_WS_REG_PORT, 3000),
         ADD_USER_KEY: makeDefault(ENV.GEN_WS_REG_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
-    }
+    },
+    serverId: makeDefault(ENV.GEN_WS_SERVER_ID, '')
 };
 
 // Add computational fields

@@ -40,6 +40,12 @@ describe('Comments', () => {
             done();
         });
     });
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            done();
+        });
+    });
 
     it('should add and remove comments for user', (done) => {
         const commentToAdd = {

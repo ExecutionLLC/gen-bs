@@ -1,0 +1,60 @@
+//==Responsive position variants table on page
+
+//Wrap container
+.table-variants-wrapper {
+  bottom: 0;
+  top: @navbar-height;
+  left: 0;
+  right: 0;
+  position: absolute;
+  overflow: auto;
+
+  @media (min-width: @screen-sm){
+    overflow: hidden;
+  }
+}
+
+.table {
+  &.table-variants {
+    .variants-table-search-field {
+      margin-bottom: -32px;
+    }
+  }
+  &.table-variants {
+    .variants-table-search-field {
+      margin-bottom: 0;
+    }
+
+    tbody {
+      display: block;
+      max-width: 100%;
+      overflow: auto;
+      position: fixed;
+      width: 100%;
+    }
+
+
+  }
+  &.table-variants:after {
+    background: @body-bg ;
+    content: "";
+    display: block;
+    height: 34px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    top: 126px;
+  }
+}
+
+
+//Default position table-variants
+.table-variants-head {
+  top: 44px;
+}
+.table-variants-body,
+.table-variants-message {
+  top: 116px;
+  bottom: 0;
+}

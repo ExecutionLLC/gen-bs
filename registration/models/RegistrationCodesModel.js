@@ -93,9 +93,14 @@ class RegistrationCodesModel extends ModelBase {
     }
 
     _findValidRegcodeAsync(regcode, trx) {
+        // Find unused regcode starting with given
         return new Promise((resolve) => {
             this.findRegcodeAsync(regcode, trx)
-                .then(() => this._findValidRegcodeAsync(this._generateNextRegcode(regcode), trx).then((regcode) => resolve(regcode)))
+                // regcode found - we need to generate next one and repeat the search
+                .then(() =>
+                    this._findValidRegcodeAsync(this._generateNextRegcode(regcode), trx)
+                        .then((regcode) => resolve(regcode)))
+                // did not find regcode - let's return it to use
                 .catch((err) => resolve(regcode));
         });
     }
@@ -121,7 +126,7 @@ class RegistrationCodesModel extends ModelBase {
                     throw new Error('createRegcodeAsync fails: no valid regcode found');
                 }
                 const itemId = Uuid.v4();
-                return ChangeCaseUtil.convertKeysToSnakeCase({
+                return {
                     id: itemId,
                     regcode,
                     speciality,
@@ -129,15 +134,23 @@ class RegistrationCodesModel extends ModelBase {
                     description,
                     numberOfPaidSamples,
                     isActivated: false
-                });
+                };
             })
-            .then((item) => trx(this.baseTableName).insert(item).then(() => item))
+            .then((returnedItem) =>
+                trx(this.baseTableName)
+                    .insert(ChangeCaseUtil.convertKeysToSnakeCase(returnedItem))
+                    .then(() => returnedItem)
+            );
     }
 
     createManyRegcodeAsync(count, startingRegcode, language, speciality, description, numberOfPaidSamples, trx) {
+        // create empty array of desired size to map on it
         const items = new Array(count)
             .fill(null);
 
+        // we'll generate regcodes one by one
+        // because we need to check if next regcode is not createted before
+        // store in this variable next desired regcode
         let currentRegcode = startingRegcode;
 
         return Promise.map(
@@ -145,13 +158,13 @@ class RegistrationCodesModel extends ModelBase {
             () => {
                 return new Promise((resolve) => {
                     this.createRegcodeAsync(currentRegcode, language, speciality, description, numberOfPaidSamples, trx)
-                        .then((user) => {
-                            currentRegcode = currentRegcode && this._generateNextRegcode(user.regcode);
-                            resolve(user);
+                        .then((regcodeInfo) => {
+                            currentRegcode = currentRegcode && this._generateNextRegcode(regcodeInfo.regcode);
+                            resolve(regcodeInfo);
                         });
                 })
             },
-            {concurrency: 1}
+            {concurrency: 1} // only one promise at a time will executed
         );
     }
 

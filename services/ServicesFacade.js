@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const LanguService = require('./LanguService');
@@ -12,11 +13,13 @@ const CommentsService = require('./CommentsService');
 const SamplesService = require('./SamplesService');
 const SessionService = require('./SessionService');
 const OperationService = require('./operations/OperationsService');
-const FieldsMetadataService = require('./FieldsMetadataService');
+const FieldsService = require('./FieldsService');
+const MetadataService = require('./MetadataService');
 const SearchService = require('./SearchService');
 const SchedulerService = require('./tasks/SchedulerService');
 const SavedFilesService = require('./SavedFilesService');
 const AnalysisService = require('./AnalysisService');
+const SampleUploadHistoryService = require('./SampleUploadHistoryService');
 const UserDataService = require('./UserDataService');
 const ObjectStorageService = require('./ObjectStorageService');
 const ModelsService = require('./ModelsService');
@@ -44,9 +47,11 @@ class ServiceFacade {
         this.users = new UsersService(this, models);
         this.comments = new CommentsService(this, models);
         this.samples = new SamplesService(this, models);
-        this.fieldsMetadata = new FieldsMetadataService(this, models);
+        this.fields = new FieldsService(this, models);
+        this.metadata = new MetadataService(this, models);
         this.savedFiles = new SavedFilesService(this, models);
         this.analysis = new AnalysisService(this, models);
+        this.sampleUploadHistory = new SampleUploadHistoryService(this, models);
         this.userData = new UserDataService(this, models);
         this.search = new SearchService(this, models);
         this.models = new ModelsService(this, models);
@@ -72,6 +77,16 @@ class ServiceFacade {
         _.map(this)
             .filter(service => service instanceof ServiceBase)
             .forEach(service => service.init());
+    }
+
+    start(callback){
+        const serviceBaseInstances = _.map(this).filter(service => service instanceof ServiceBase);
+        async.forEach(serviceBaseInstances, (service, callback) => service.start(callback), callback);
+    }
+
+    stop(callback){
+        const serviceBaseInstances = _.map(this).filter(service => service instanceof ServiceBase);
+        async.forEach(serviceBaseInstances, (service, callback) => service.stop(callback), callback);
     }
 }
 

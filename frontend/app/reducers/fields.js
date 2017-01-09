@@ -9,14 +9,12 @@ const initialState = {
         samples: false,
         sources: false
     },
-    editableFields: [],
     sourceFieldsList: [],
     totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([])
 };
 
 function reduceReceiveTotalFields(action, state) {
     const totalFields = FieldUtils.sortAndAddLabels(action.fields);
-    const editableFields = _.filter(totalFields, ['isEditable', true]);
     const sourceFields = _.filter(totalFields, (field) => FieldUtils.isSourceField(field));
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
@@ -24,7 +22,6 @@ function reduceReceiveTotalFields(action, state) {
         }),
         totalFieldsHashedArray: ImmutableHashedArray.makeFromArray(totalFields),
         sourceFieldsList: sourceFields,
-        editableFields,
         lastUpdated: action.receivedAt
     });
 }

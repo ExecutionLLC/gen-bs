@@ -1,0 +1,69 @@
+.empty {
+  bottom: 0;
+  top:0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  background: @default-max-light;
+  text-align: center;
+  color: @gray-light;
+  h3 {
+    margin: 0 auto;
+    text-align: left;
+    text-align: center;
+    .subtext {
+      font-size: @font-size-base;
+      display: block;
+      line-height: 1.4;
+      margin: 0 @navbar-height;
+    }
+    .md-i {
+      font-size: 2em;
+      vertical-align: middle;
+      margin-left: @padding-small-horizontal;
+    }
+  }
+
+  .panel,
+  .alert {
+    margin: 0 auto;
+    max-width: 50%;
+    min-width: 300px;
+    text-align: left;
+  }
+  @media (max-width:@grid-float-breakpoint-max) {
+
+    h3 {
+      max-width: 90%;
+    }
+  }
+}
+
+.empty-upload {
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  align-items: center;
+  position: absolute;
+  padding: 30px 30px 46px;
+  margin: 0;
+  box-sizing: border-box;
+
+  .btn-group-xlg {
+    height: 100%;
+    .btn {
+      box-shadow: none;
+      height: 100%;
+    }
+  }
+}
+
+.drop-zone {
+  border: thick dashed lighten(@text-muted, 15%);
+}

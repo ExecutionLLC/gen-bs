@@ -1,7 +1,10 @@
 import * as ActionTypes from '../actions/fileUpload';
+import {fileUploadStatus} from '../actions/fileUpload';
+import _ from 'lodash';
 
 const initialState = {
-    filesProcesses: []
+    filesProcesses: [],
+    currentUploadId: null
 };
 
 /**
@@ -69,6 +72,8 @@ function createFileProcess(file, id) {
         operationId: null,
         isUploading: false,
         file: file,
+        sampleId: null,
+        created: new Date().getTime(),
         error: null,
         isArchived: false,
         isArchiving: false,
@@ -76,6 +81,26 @@ function createFileProcess(file, id) {
     };
 }
 
+function reduceFilterListReceive(state, action) {
+    return {
+        ...state,
+        filesProcesses: _.map(action.uploads, upload => {
+            const {created, error, fileName, id, progress, sampleId, status} = upload;
+            const fileProcess = createFileProcess({
+                name: fileName
+            }, id);
+            return {
+                ...fileProcess,
+                created,
+                operationId: id,
+                sampleId,
+                progressValue: progress,
+                progressStatus: status,
+                error
+            };
+        })
+    };
+}
 
 function reduceClearUploadState() {
     return {
@@ -106,7 +131,8 @@ function reduceFileUploadError(state, action) {
     return {
         ...state,
         filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-            error: action.error
+            error: action.error,
+            progressStatus: fileUploadStatus.ERROR
         })
     };
 }
@@ -151,11 +177,19 @@ function reduceReceiveFileUpload(state, action) {
 }
 
 function reduceReceiveFileOperation(state, action) {
+    const {id: uploadId, upload: {created, error, id, progress, status}} = action;
+    const {filesProcesses, currentUploadId} = state;
+    const index = findFileProcessIndex(filesProcesses, id);
     return {
         ...state,
-        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-            operationId: action.operationId
-        })
+        filesProcesses: assignFileProcess(filesProcesses, uploadId, {
+            operationId: id,
+            created,
+            error,
+            progressValue: progress,
+            progressStatus: status
+        }),
+        currentUploadId: index < 0 ? currentUploadId : id
     };
 }
 
@@ -166,6 +200,43 @@ function reduceFileUploadChangeProgress(state, action) {
             progressValue: action.progressValue,
             progressStatus: action.progressStatus
         })
+    };
+}
+
+function setUploadId(state, action) {
+    return {
+        ...state,
+        currentUploadId: action.uploadId
+    };
+}
+
+/**
+ * Reset current upload id if at least one of received samples is for selected uploading.
+ */
+function reduceInvalidateCurrentUploadId(state, action) {
+    const {samples} = action;
+    const {filesProcesses, currentUploadId} = state;
+    const currentUploadProcess = _.find(filesProcesses, fp => fp.id === currentUploadId);
+    if (!currentUploadProcess) {
+        return state;
+    }
+    const newCurrentSample = _.find(samples, sample => sample.vcfFileId === currentUploadProcess.operationId);
+    if (newCurrentSample) {
+        return {
+            ...state,
+            currentUploadId: null
+        };
+    } else {
+        return state;
+    }
+}
+
+function reduceUploadsListRemoveUpload(state, action) {
+    const {uploadId} = action;
+    const {filesProcesses, currentUploadId} = state;
+    return {
+        filesProcesses: _.filter(filesProcesses, (fp) => fp.operationId !== uploadId && fp.id !== uploadId),
+        currentUploadId: currentUploadId === uploadId ? null : currentUploadId
     };
 }
 
@@ -202,6 +273,18 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS:
             return reduceFileUploadChangeProgress(state, action);
+
+        case ActionTypes.UPLOADS_LIST_RECEIVE:
+            return reduceFilterListReceive(state, action);
+
+        case ActionTypes.SET_CURRENT_UPLOAD_ID:
+            return setUploadId(state, action);
+
+        case ActionTypes.INVALIDATE_CURRENT_UPLOAD_ID:
+            return reduceInvalidateCurrentUploadId(state, action);
+
+        case ActionTypes.UPLOADS_LIST_REMOVE_UPLOAD:
+            return reduceUploadsListRemoveUpload(state, action);
 
         default:
             return state;

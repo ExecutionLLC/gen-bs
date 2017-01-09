@@ -39,7 +39,10 @@ export default class AnalysisLeftPane extends React.Component {
     }
 
     onSearchChange(str) {
-        const {dispatch} = this.props;
+        const {dispatch, newHistoryItem, onSelectHistory} = this.props;
         dispatch(prepareAnalysesHistoryToSearch(str));
+        if (newHistoryItem) {
+            onSelectHistory(newHistoryItem.id);
+        }
     }
 }

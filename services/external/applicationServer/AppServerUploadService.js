@@ -2,28 +2,30 @@
 
 const fs = require('fs');
 const async = require('async');
+const _ = require('lodash');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const METHODS = require('./AppServerMethods');
+const {SAMPLE_UPLOAD_STATUS} = require('../../../utils/Enums');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
     CONVERTING: 'converting',
     UPLOADING: 'uploading',
     READY: 'ready'
 };
+const UploadOperation = require('../../operations/UploadOperation');
 
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
         super(services, models);
     }
-    
-    uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
+
+    uploadSample(session, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
             (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
             (operation, callback) => {
-                operation.setSampleId(sampleId);
                 operation.setSampleFileName(sampleFileName);
                 operation.setUserId(user.id);
                 callback(null, operation);
@@ -31,7 +33,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const fileStream = fs.createReadStream(sampleLocalPath);
-                this.services.objectStorage.uploadObject(newSamplesBucket, sampleId, fileStream,
+                this.services.objectStorage.uploadObject(newSamplesBucket, operation.getId(), fileStream,
                     (error) => callback(null, error, operation)
                 );
             },
@@ -52,7 +54,39 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestSampleProcessing(session, operationId, sampleId, callback) {
+    toggleNextOperation(currentOperationId, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => {
+                const uploadOperations = this.getUploadOperations(systemSession);
+                const currentOperation = _.find(uploadOperations, operation => {
+                            return operation.getId() === currentOperationId;
+                        }
+                    ) || null;
+                const currentUserId = !_.isNull(currentOperation) ? currentOperation.getUserId() : null;
+                const activeOperationUsersIds = _.filter(uploadOperations, operation => {
+                    return operation.isActive && operation.getUserId() !== currentUserId;
+                }).map(operation => operation.getUserId());
+                const orderedOperations = _.orderBy(uploadOperations, ['timestamp'], ['asc']);
+                const nextOperation = _.find(orderedOperations, operation => {
+                    return !_.includes(activeOperationUsersIds, operation.getUserId()) && !operation.isActive;
+                });
+                if (nextOperation) {
+                    nextOperation.isActive = true;
+                    async.waterfall([
+                        (callback) => this.services.sessions.findById(nextOperation.getSessionId(), callback),
+                        (session, callback) => this.requestSampleProcessing(
+                            session, nextOperation.getId(), null, (error) => callback(error)
+                        )
+                    ], callback)
+                } else {
+                    callback(null);
+                }
+            }
+        ], callback);
+    }
+
+    requestSampleProcessing(session, operationId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
@@ -61,10 +95,37 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 const method = METHODS.processSample;
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const params = {
-                    sample: sampleId,
+                    sample: operationId,
                     bucket: newSamplesBucket
                 };
-                this._rpcSend(session, operation, method, params, callback);
+                this._rpcSend(session, operation, method, params, priority, callback);
+            }
+        ], callback);
+    }
+
+    requestUploadProcessing(session, operationId, priority, callback) {
+        const {userId} = session;
+        async.waterfall([
+            // Upload operations lay in the system session.
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => {
+                const uploadOperations = this.getUploadOperations(systemSession);
+                const currentOperation = _.find(uploadOperations, operation => {
+                        return operation.getId() === operationId;
+                    }
+                );
+                const userOperations = _.filter(uploadOperations, operation => {
+                    return operation.getUserId() == userId;
+                });
+                const activeUserOperation = _.filter(userOperations, operation => {
+                    return operation.isActive;
+                });
+                if (activeUserOperation.length === 0) {
+                    currentOperation.isActive = true;
+                    this.requestSampleProcessing(session, operationId, priority, callback);
+                } else {
+                    callback(null, operationId);
+                }
             }
         ], callback);
     }
@@ -74,71 +135,157 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const result = message.result;
         /**@type {string}*/
         const status = (result || {}).status;
-        if (this._isAsErrorMessage(message)) {
-            this._createOperationResult(
+        async.waterfall([
+            (callback) => this.services.users.find(operation.getUserId(), callback),
+            (user, callback) => {
+                if (this._isAsErrorMessage(message)) {
+                    this._handleUploadError(user, session, operation, message, callback);
+                } else if (status !== SESSION_STATUS.READY) {
+                    this._handleUploadProgress(user, session, operation, message, callback);
+                } else {
+                    this._completeUpload(user, session, operation, message, callback);
+                }
+            }
+        ], callback);
+    }
+
+    _handleUploadError(user, session, operation, message, callback) {
+        const error = ErrorUtils.createAppServerInternalError(message);
+        this._handleError(user, operation, error, session, callback)
+    }
+
+    _handleError(user, operation, error, session, callback) {
+        async.waterfall([
+            (callback) => this.services.sampleUploadHistory.update(user, {
+                id: operation.getId(),
+                status: SAMPLE_UPLOAD_STATUS.ERROR,
+                error
+            }, (error) => callback(error)),
+            (callback) => {
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
+                const sampleId = operation.getId();
+                this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
+                    (error, result) => callback(error)
+                );
+            },
+            (callback) => this.toggleNextOperation(operation.getId(), callback),
+            (callback) => this._createOperationResult(
                 session,
                 operation,
                 null,
                 operation.getUserId(),
-                EVENTS.onOperationResultReceived, 
+                EVENTS.onOperationResultReceived,
                 true,
                 null,
-                ErrorUtils.createAppServerInternalError(message),
+                error,
                 callback
-            );
-        } else if (status !== SESSION_STATUS.READY) {
-            // If not ready, just send the progress up
-            const {result: {status, progress}} = message;
-            super._createOperationResult(session, operation, null, operation.getUserId(),
-                EVENTS.onOperationResultReceived, false, {status, progress}, null, callback);
+            )
+        ], callback);
+    }
+
+    _handleUploadProgress(user, session, operation, message, callback) {
+        const {result: {status, progress}} = message;
+        async.waterfall([
+            (callback) => this.services.sampleUploadHistory.update(user, {
+                id: operation.getId(),
+                status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
+                progress,
+                error: null
+            }, (error) => callback(error)),
+            (callback) => this._createUploadProgressResult(user, session, operation, message, callback),
+            (result, callback) => super._createOperationResult(
+                session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, false, result, null, callback
+            )
+        ], callback);
+    }
+
+    _createUploadProgressResult(user, session, operation, message, callback) {
+        const {result: {status, progress, genotypes}} = message;
+        if (genotypes) {
+            const sampleGenotypes = _.isEmpty(genotypes) ? [null] : genotypes;
+            const vcfFileId = operation.getId();
+            const vcfFileName = operation.getSampleFileName();
+            async.waterfall([
+                (callback) => this.services.samples.initMetadataForUploadedSample(
+                    user, vcfFileId, vcfFileName, sampleGenotypes, callback
+                ),
+                (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
+                (samples, callback) => {
+                    callback(null, {
+                        status,
+                        progress,
+                        metadata: samples
+                    });
+                }
+            ], callback);
         } else {
-            this._completeUpload(session, operation, message, callback);
+            callback(null, {
+                status,
+                progress
+            });
         }
     }
 
-    _completeUpload(session, operation, message, callback) {
+    _completeUpload(user, session, operation, message, callback) {
         // Sample is fully processed and the fields metadata is available.
         // Now we need to:
         // 1. Insert all the data into database.
         // 2. Close the operation.
-        // 3. Send a message to the other WS instances to indicate the processing is fully completed.
+        // 3. Mark upload as completed in the database.
         const result = message.result;
         /**@type {string}*/
-        const sampleId = operation.getSampleId();
+        const vcfFileId = operation.getId();
         const sampleMetadata = result.metadata;
         // Usual fields metadata. Values of these fields are the same for all genotypes.
         const commonFieldsMetadata = sampleMetadata.columns;
-        // Array of names of the genotypes found in the file.
-        const genotypes = sampleMetadata.genotypes;
-        // Fields whose values are specific for the genotypes.
-        const genotypesFieldsMetadata = sampleMetadata.genotypeColumns;
-        const sampleReference = sampleMetadata.reference;
-        const sampleFileName = operation.getSampleFileName();
-        const userId = operation.getUserId();
 
         async.waterfall([
-            (callback) => this.services.users.find(userId, callback),
-            (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata,
-                (error, sampleVersionIds) => callback(error, user, sampleVersionIds)
+            (callback) => this.services.samples.createMetadataForUploadedSample(user, vcfFileId, commonFieldsMetadata,
+                (error, sampleVersionIds) => callback(error, sampleVersionIds)
             ),
-            (user, sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback)
+            (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
+            (samplesMetadata, callback) => this.services.sampleUploadHistory.update(user, {
+                id: operation.getId(),
+                status: SAMPLE_UPLOAD_STATUS.READY,
+                progress: 100,
+                error: null
+            }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
-            if (error) {
-                this.logger.error(`Error inserting new sample into database: ${error}`);
-                this._createOperationResult(session, operation, null, operation.getUserId(),
-                    EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
+            async.waterfall([
+                (callback) => {
+                    if (error) {
+                        this.logger.error(`Error inserting new sample into database: ${error}`);
+                        const serverError = ErrorUtils.createInternalError(error.message);
+                        this._handleError(user, operation, serverError, session, callback);
+                    } else {
+                        // The upload operation is already completed on the app server.
+                        operation.setSendCloseToAppServer(false);
+                        async.waterfall([
+                            (callback) => this.toggleNextOperation(operation.getId(), callback),
+                            (callback) => this._createOperationResult(session,
+                                operation,
+                                null,
+                                operation.getUserId(),
+                                EVENTS.onOperationResultReceived,
+                                true,
+                                {
+                                    status: SESSION_STATUS.READY,
+                                    progress: 100,
+                                    metadata: samplesMetadata
+                                },
+                                null,
+                                callback
+                            )
+                        ],callback);
+                    }
+                }
+            ], callback);
 
-            } else {
-                // The upload operation is already completed on the app server.
-                operation.setSendCloseToAppServer(false);
-                this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
-                    status: SESSION_STATUS.READY,
-                    progress: 100,
-                    metadata: samplesMetadata
-                }, null, callback);
-            }
         });
+    }
+
+    getUploadOperations(sesssion) {
+        return _.filter(sesssion.operations, operation => operation instanceof UploadOperation);
     }
 }
 

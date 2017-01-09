@@ -20,12 +20,33 @@ class ApplicationServerServiceBase extends ServiceBase {
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
 
         this.logger = this.services.logger;
-        const {host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
+        const {
+            rabbitMq: {
+                host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName
+            },
+            serverId
+        } = this.services.config;
+        const wsQueueName = `ws_private_${serverId}`;
+        /**
+         * @type RpcProxyParams
+         * */
+        const proxyParams = {
+            host,
+            port,
+            user,
+            password,
+            virtualHost,
+            logger: this.logger,
+            reconnectTimeout,
+            requestExchangeName,
+            replyCallback: this._rpcReply,
+            returnCallback: this._rpcReturned,
+            wsQueueName
+        };
         /**
          * @type {RPCProxy}
          * */
-        this.rpcProxy = proxyProviderFunc(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout,
-            this.logger, this._rpcReply, this._rpcReturned);
+        this.rpcProxy = proxyProviderFunc(proxyParams);
     }
 
     _rpcReturned(rpcMessage) {
@@ -46,13 +67,18 @@ class ApplicationServerServiceBase extends ServiceBase {
      * @param {OperationBase}operation
      * @param {string}method
      * @param {Object}params
+     * @param {(number|null)}priority
      * @param {function(Error, string=)}callback
      * */
-    _rpcSend(session, operation, method, params, callback) {
+    _rpcSend(session, operation, method, params, priority, callback) {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
         const messageId = this.createAppServerSessionId(operation);
-        this.rpcProxy.send(messageId, method, params, queryNameOrNull, (error) => {
+        this._rpcProxySend(messageId, operationId, method, params, queryNameOrNull, priority, callback);
+    }
+
+    _rpcProxySend(messageId, operationId, method, params, queryNameOrNull, priority, callback) {
+        this.rpcProxy.send(messageId, method, params, queryNameOrNull, priority, (error) => {
             if (error) {
                 callback(error);
             } else {

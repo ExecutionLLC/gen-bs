@@ -1,12 +1,15 @@
 'use strict';
 
 const _ = require('lodash');
+const Promise = require('bluebird');
 const async = require('async');
 
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const CollectionUtils = require('../utils/CollectionUtils');
+
+const ITEM_NOT_FOUND = 'Item not found.';
 
 class ModelBase {
     /**
@@ -78,11 +81,27 @@ class ModelBase {
         );
     }
 
+    _ensureItemNotDeleted(item, callback) {
+        if (!item.isDeleted) {
+            callback(null, item);
+        } else {
+            callback(new Error(ITEM_NOT_FOUND));
+        }
+    }
+
     /**
      * @protected
      * */
     _toCamelCase(itemOrItems, callback) {
-        callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
+        this._toCamelCaseAsync(itemOrItems)
+            .asCallback(callback);
+    }
+
+    /**
+     * @protected
+     * */
+    _toCamelCaseAsync(itemOrItems) {
+        return Promise.resolve(ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
     }
 
     /**
@@ -99,11 +118,15 @@ class ModelBase {
     }
 
     _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {
+        return this._ensureAllItemsFoundAsync(itemsFound, itemIdsToFind)
+            .asCallback(callback);
+    }
+
+    _ensureAllItemsFoundAsync(itemsFound, itemIdsToFind) {
         if (itemsFound && itemsFound.length === itemIdsToFind.length) {
-            callback(null, itemsFound);
-        } else {
-            callback('Part of the items is not found: ' + itemIdsToFind);
+            return Promise.resolve(itemsFound);
         }
+        return Promise.reject(new Error(`Part of the items is not found: ${itemIdsToFind}, found: ${itemsFound}`));
     }
 
     _mapItems(items, callback) {
