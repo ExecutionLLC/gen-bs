@@ -27,6 +27,118 @@ function cancelDOMEvent(e) {
     e.preventDefault();
 }
 
+class SampleHeader extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.samplesList.editingSample !== nextProps.samplesList.editingSample;
+    }
+
+    render() {
+        const {samplesList: {editingSample}} = this.props;
+        return (
+            <div className='split-top'>
+                {editingSample && this.renderSampleHeader()}
+            </div>
+        );
+    }
+
+    renderSampleHeader() {
+        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
+        const uploadedDate = _.some(filesProcesses, (fileProcess) =>
+        fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY)
+            ? null
+            : editingSample.created;
+        return (
+            <div className='form-horizontal form-padding'>
+                {this.renderDeleteSampleButton()}
+                {this.renderSampleFileName()}
+                {this.renderSampleDates(uploadedDate)}
+                {this.renderSampleDescription()}
+            </div>
+        );
+    }
+
+    renderSampleDescription() {
+        const {auth: {isDemo}, samplesList: {editingSample: {description, id, type}}} = this.props;
+        return (
+            <div className='form-group'>
+                <div className='col-md-12 col-xs-12'>
+                    <Input
+                        value={description || ''}
+                        placeholder='Sample description (optional)'
+                        className='form-control material-input-sm'
+                        data-localize='query.settings.description'
+                        maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
+                        onChange={(e) => this.onSampleTextChange(id, null, e)}
+                        disabled={!entityTypeIsEditable(type) || isDemo}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    renderSampleDates(createdDate) {
+        return (
+            <div className='label-group-date'>
+                {createdDate ? (
+                        <label>Uploaded: {formatDate(createdDate)}</label>
+                    ) : (
+                        <label><span className='text-primary'><i className='md-i'>schedule</i>Wait. Saving</span></label>
+                    )}
+            </div>
+        );
+    }
+
+    renderSampleFileName() {
+        const {auth: {isDemo}, samplesList: {editingSample: {name, id, type}}} = this.props;
+        return (
+            <div className='form-group'>
+                <div className='col-md-12 col-xs-12'>
+                    <Input
+                        value={name}
+                        className='form-control material-input-sm material-input-heading text-primary'
+                        placeholder="Sample name (it can't be empty)"
+                        data-localize='query.settings.name'
+                        maxLength={config.UPLOADS.MAX_NAME_LENGTH}
+                        onChange={(e) => this.onSampleTextChange(id, e, null)}
+                        disabled={!entityTypeIsEditable(type) || isDemo}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    onSampleTextChange(sampleId, sampleName, sampleDescription) {
+        const {dispatch, samplesList: {editingSample: {name, description}}} = this.props;
+        const newName = sampleName || name;
+        const newDescription = sampleDescription || description;
+        dispatch(updateSampleText(sampleId, newName, newDescription));
+        dispatch(requestUpdateSampleTextAsync(sampleId))
+            .then((newSample) => {
+                dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
+                dispatch(setCurrentSampleId(newSample.id));
+            });
+    }
+
+    renderDeleteSampleButton() {
+        const {samplesList: {editingSample}} = this.props;
+        if (entityTypeIsEditable(editingSample.type)) {
+            return (
+                <button
+                    className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
+                    onClick={() => this.onSampleItemDelete(editingSample.id)}
+                >
+                    <span data-localize='query.delete_sample'>Delete sample</span>
+                </button>
+            );
+        }
+    }
+}
+
 export default class FileUploadSampleRightPane extends React.Component {
 
     constructor(props) {
@@ -35,12 +147,14 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     render() {
-        const {samplesList: {editingSample}, isBringToFront} = this.props;
+        const {samplesList, auth, dispatch, fileUpload, isBringToFront} = this.props;
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
-                <div className='split-top'>
-                    {editingSample && this.renderSampleHeader()}
-                </div>
+                <SampleHeader samplesList={samplesList}
+                              auth={auth}
+                              fileUpload={fileUpload}
+                              dispatch={dispatch}
+                />
                 {this.renderSample()}
             </div>
         );
@@ -309,98 +423,6 @@ export default class FileUploadSampleRightPane extends React.Component {
                                        disabled={editingSampleDisabled}
             />
         );
-    }
-
-    renderSampleHeader() {
-        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
-        const uploadedDate = _.some(filesProcesses, (fileProcess) =>
-            fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY)
-            ? null
-            : editingSample.created;
-        return (
-            <div className='form-horizontal form-padding'>
-                {this.renderDeleteSampleButton()}
-                {this.renderSampleFileName()}
-                {this.renderSampleDates(uploadedDate)}
-                {this.renderSampleDescription()}
-            </div>
-        );
-    }
-
-    renderSampleDescription() {
-        const {auth: {isDemo}, samplesList: {editingSample: {description, id, type}}} = this.props;
-        return (
-            <div className='form-group'>
-                <div className='col-md-12 col-xs-12'>
-                    <Input
-                        value={description || ''}
-                        placeholder='Sample description (optional)'
-                        className='form-control material-input-sm'
-                        data-localize='query.settings.description'
-                        maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
-                        onChange={(e) => this.onSampleTextChange(id, null, e)}
-                        disabled={!entityTypeIsEditable(type) || isDemo}
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    renderSampleDates(createdDate) {
-        return (
-            <div className='label-group-date'>
-                {createdDate ? (
-                    <label>Uploaded: {formatDate(createdDate)}</label>
-                ) : (
-                    <label><span className='text-primary'><i className='md-i'>schedule</i>Wait. Saving</span></label>
-                )}
-            </div>
-        );
-    }
-
-    renderSampleFileName() {
-        const {auth: {isDemo}, samplesList: {editingSample: {name, id, type}}} = this.props;
-        return (
-            <div className='form-group'>
-                <div className='col-md-12 col-xs-12'>
-                    <Input
-                        value={name}
-                        className='form-control material-input-sm material-input-heading text-primary'
-                        placeholder="Sample name (it can't be empty)"
-                        data-localize='query.settings.name'
-                        maxLength={config.UPLOADS.MAX_NAME_LENGTH}
-                        onChange={(e) => this.onSampleTextChange(id, e, null)}
-                        disabled={!entityTypeIsEditable(type) || isDemo}
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList: {editingSample: {name, description}}} = this.props;
-        const newName = sampleName || name;
-        const newDescription = sampleDescription || description;
-        dispatch(updateSampleText(sampleId, newName, newDescription));
-        dispatch(requestUpdateSampleTextAsync(sampleId))
-            .then((newSample) => {
-                dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
-                dispatch(setCurrentSampleId(newSample.id));
-            });
-    }
-
-    renderDeleteSampleButton() {
-        const {samplesList: {editingSample}} = this.props;
-        if (entityTypeIsEditable(editingSample.type)) {
-            return (
-                <button
-                    className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
-                    onClick={() => this.onSampleItemDelete(editingSample.id)}
-                >
-                    <span data-localize='query.delete_sample'>Delete sample</span>
-                </button>
-            );
-        }
     }
 
     onSelectForAnalysisClick(e, sampleId) {
