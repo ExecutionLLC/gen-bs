@@ -27,6 +27,8 @@ function cancelDOMEvent(e) {
     e.preventDefault();
 }
 
+// SampleHeader contains current editing name and description in its Inputs states
+// and must re-render only if props are changed to prevent clearing the name and description.
 class SampleHeader extends React.Component {
 
     constructor(props) {
