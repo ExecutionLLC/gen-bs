@@ -75,12 +75,12 @@ const {
 
 if (!_.includes(LOGIN_TYPES.allValues, loginType)) {
     console.error(`Login type must be one of ( ${LOGIN_TYPES.allValues} )`);
-    process.exit(0);
+    process.exit(1);
 }
 if (loginType === LOGIN_TYPES.PASSWORD) {
-    if ((typeof args.password !== 'string' && typeof args.password !== 'number') || !password) {
+    if ((typeof args.password !== 'string' && typeof args.password !== 'number') || !args.password) {
         console.error(`Password must be a string`);
-        process.exit(0);
+        process.exit(1);
     }
 }
 services.users.add(
@@ -100,7 +100,7 @@ services.users.add(
     (error, user) => {
         if (error) {
             console.error(error);
-            process.exit(0);
+            process.exit(1);
         } else {
             console.log(`User with email ${user.email} was added with id: ${user.id}`);
             process.exit(0);
