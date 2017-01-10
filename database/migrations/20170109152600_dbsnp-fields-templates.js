@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
 
-    console.log('Adding url templates to field_metadata');
+    console.log('Adding url templates for dbsnp fields');
 
     const defaultLinkIdentity = '###DATA###';
     const url_templates = [
