@@ -15,47 +15,49 @@ const services = new ServicesFacade(Config, logger, models);
 const args = require('optimist')
     .options({
         'firstName': {
-            default: 'Test firstName'
+            default: 'Test firstName',
+            describe: 'User First Name'
         },
         'lastName': {
-            default: 'Test lastName'
+            default: 'Test lastName',
+            describe: 'User Last Name'
         },
         'email': {
-            demand: true
+            demand: true,
+            describe: 'User e-mail'
         },
-        'password': {},
+        'password': {
+            describe: 'User password'
+        },
         'gender': {
-            default: 'Test gender'
+            default: 'Test gender',
+            describe: 'User gender'
         },
         'speciality': {
-            default: 'Test speciality'
+            default: 'Test speciality',
+            describe: 'User speciality'
         },
         'numberPaidSamples': {
-            default: 11
+            default: 11,
+            describe: 'User number of paid samples'
         },
         'defaultLanguage': {
-            default: Config.defaultLanguId
+            default: Config.defaultLanguId,
+            describe: 'User default language'
         },
         'phone': {
-            default: 'Test Phone'
+            default: 'Test Phone',
+            describe: 'User phone'
         },
         'loginType': {
-            demand: true
+            demand: true,
+            describe: 'User login type (password|google)'
         },
         'company': {
-            default: 'Test'
+            default: 'Test',
+            describe: 'User company'
         }
     })
-    .describe('firstName', 'User First Name')
-    .describe('lastName', 'User Last Name')
-    .describe('email', 'User e-mail')
-    .describe('gender', 'User gender type')
-    .describe('speciality', 'User speciality')
-    .describe('numberPaidSamples', 'User number of paid samples')
-    .describe('defaultLanguage', 'User default language')
-    .describe('phone', 'User phone')
-    .describe('company', 'User company')
-    .describe('password', 'User password')
     .argv;
 
 const {
