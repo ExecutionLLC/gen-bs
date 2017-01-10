@@ -46,10 +46,11 @@ class SampleHeader extends React.Component {
 
     renderSampleHeader() {
         const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
-        const uploadedDate = _.some(filesProcesses, (fileProcess) =>
-        fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY)
-            ? null
-            : editingSample.created;
+        const isProcessing = _.some(
+            filesProcesses,
+            (fileProcess) => fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY
+        );
+        const uploadedDate = isProcessing ? null : editingSample.created;
         return (
             <div className='form-horizontal form-padding'>
                 {this.renderDeleteSampleButton()}
