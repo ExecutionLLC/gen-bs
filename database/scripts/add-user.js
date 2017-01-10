@@ -15,11 +15,11 @@ const services = new ServicesFacade(Config, logger, models);
 const args = require('optimist')
     .options({
         'firstName': {
-            default: 'Test firstName',
+            demand: true,
             describe: 'User First Name'
         },
         'lastName': {
-            default: 'Test lastName',
+            demand: true,
             describe: 'User Last Name'
         },
         'email': {
@@ -30,23 +30,22 @@ const args = require('optimist')
             describe: 'User password'
         },
         'gender': {
-            default: 'Test gender',
+            demand: true,
             describe: 'User gender'
         },
         'speciality': {
-            default: 'Test speciality',
+            demand: true,
             describe: 'User speciality'
         },
         'numberPaidSamples': {
-            default: 11,
+            demand: true,
             describe: 'User number of paid samples'
         },
         'defaultLanguage': {
-            default: Config.defaultLanguId,
+            demand: true,
             describe: 'User default language'
         },
         'phone': {
-            default: 'Test Phone',
             describe: 'User phone'
         },
         'loginType': {
@@ -54,7 +53,7 @@ const args = require('optimist')
             describe: 'User login type (password|google)'
         },
         'company': {
-            default: 'Test',
+            demand: true,
             describe: 'User company'
         }
     })
