@@ -235,7 +235,7 @@ function makeReplaceSampleInSaveAction(samplesList, index, sampleId) {
         immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sampleId),
         onSaveActionPropertyIndex,
         index
-    )
+    );
 }
 
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
