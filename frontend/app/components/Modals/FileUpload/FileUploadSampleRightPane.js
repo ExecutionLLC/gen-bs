@@ -31,10 +31,6 @@ function cancelDOMEvent(e) {
 // and must re-render only if props are changed to prevent clearing the name and description.
 class SampleHeader extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     shouldComponentUpdate(nextProps) {
         return this.props.samplesList.editingSample !== nextProps.samplesList.editingSample;
     }
