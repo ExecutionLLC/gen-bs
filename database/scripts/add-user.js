@@ -94,7 +94,7 @@ services.users.add(
         gender,
         phone,
         loginType,
-        password: PasswordUtils.hash(`${password}`),
+        password: loginType === LOGIN_TYPES.PASSWORD ? PasswordUtils.hash(`${password}`) : null,
         company
     },
     (error, user) => {
