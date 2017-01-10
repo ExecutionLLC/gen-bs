@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
     console.log('Adding url templates for dbsnp fields');
 
     const defaultLinkIdentity = '###DATA###';
-    const url_templates = [
+    const urlTemplates = [
         {
             fieldName: 'INFO_RS',
             valueType: 'string',
@@ -21,7 +21,7 @@ exports.up = function(knex, Promise) {
         }
     ];
 
-    return Promise.map(url_templates, (item) => {
+    return Promise.map(urlTemplates, (item) => {
         if (!item.fieldName || !item.url) {
             return;
         }
