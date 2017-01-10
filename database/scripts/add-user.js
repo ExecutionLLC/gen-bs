@@ -13,35 +13,34 @@ const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 
 const args = require('optimist')
-    .options('firstName', {
-        default: 'Test firstName',
-    })
-    .options('lastName', {
-        default: 'Test lastName',
-    })
-    .options('email', {
-    })
-    .options('password', {
-    })
-    .options('gender', {
-        default: 'Test gender',
-    })
-    .options('speciality', {
-        default: 'Test speciality',
-    })
-    .options('numberPaidSamples', {
-        default: 11,
-    })
-    .options('defaultLanguage', {
-        default: Config.defaultLanguId,
-    })
-    .options('phone', {
-        default: 'Test Phone',
-    })
-    .options('loginType', {
-    })
-    .options('company', {
-        default: 'Test',
+    .options({
+        'firstName': {
+            default: 'Test firstName'
+        },
+        'lastName': {
+            default: 'Test lastName'
+        },
+        'email': {},
+        'password': {},
+        'gender': {
+            default: 'Test gender'
+        },
+        'speciality': {
+            default: 'Test speciality'
+        },
+        'numberPaidSamples': {
+            default: 11
+        },
+        'defaultLanguage': {
+            default: Config.defaultLanguId
+        },
+        'phone': {
+            default: 'Test Phone'
+        },
+        'loginType': {},
+        'company': {
+            default: 'Test'
+        }
     })
     .demand(['loginType', 'email'])
     .describe('firstName', 'User First Name')
