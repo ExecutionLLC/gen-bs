@@ -9,14 +9,14 @@ exports.up = function(knex, Promise) {
             fieldName: 'INFO_RS',
             valueType: 'string',
             dimension: 1,
-            url: 'https://www.ncbi.nlm.nih.gov/projects//SNP/snp_ref.cgi?rs=',
+            url: 'https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',
             sourceName:'clinvar_20160705_v01'
         },
         {
             fieldName: 'INFO_RS',
             valueType: 'string',
             dimension: 1,
-            url: 'https://www.ncbi.nlm.nih.gov/projects//SNP/snp_ref.cgi?rs=',
+            url: 'https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',
             sourceName:'dbsnp_20160601_v01'
         }
     ];
