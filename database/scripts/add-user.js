@@ -20,7 +20,9 @@ const args = require('optimist')
         'lastName': {
             default: 'Test lastName'
         },
-        'email': {},
+        'email': {
+            demand: true
+        },
         'password': {},
         'gender': {
             default: 'Test gender'
@@ -37,12 +39,13 @@ const args = require('optimist')
         'phone': {
             default: 'Test Phone'
         },
-        'loginType': {},
+        'loginType': {
+            demand: true
+        },
         'company': {
             default: 'Test'
         }
     })
-    .demand(['loginType', 'email'])
     .describe('firstName', 'User First Name')
     .describe('lastName', 'User Last Name')
     .describe('email', 'User e-mail')
