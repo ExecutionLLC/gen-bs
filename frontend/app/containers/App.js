@@ -43,8 +43,8 @@ class App extends Component {
 
     render() {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
-            modalWindows, savedFiles, showErrorWindow, auth, analysesHistory} = this.props;
-
+            modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
+            samplesList, modelsList, auth: {isDemo}} = this.props;
         const currentHistoryId = analysesHistory.currentHistoryId;
         const historyList = analysesHistory.history;
         const newHistoryItem = analysesHistory.newHistoryItem;
@@ -52,11 +52,7 @@ class App extends Component {
             currentHistoryId ?
                 historyList.find((historyItem) => historyItem.id === currentHistoryId) :
                 newHistoryItem;
-
         const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
-
-        const {samplesList, modelsList, auth: {isDemo}} = this.props;
-
         const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}});
 
         return (
