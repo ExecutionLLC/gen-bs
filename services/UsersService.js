@@ -35,14 +35,14 @@ class UserService extends ServiceBase {
 
     /**
      * Adds a new user with specified params.
-     * @param {string} defaultLanguId User's default language.
+     * @param {string} defaultLanguageId User's default language.
      * @param {{firstName: string, lastName: string, gender: string, speciality: string, company: string, email: string, numberPaidSamples: number, phone: string, loginType: string, company: string, password: ?string=}} user
      * @param {function} callback (error, userId)
      * */
-    add(defaultLanguId, user, callback) {
+    add(defaultLanguageId, user, callback) {
         this._prepareUserAsync(user)
             .then((user) => this._validateNewUserAsync(user))
-            .then((user) => this.models.users.add(user, defaultLanguId, callback));
+            .then((user) => this.models.users.add(user, defaultLanguageId, callback));
     }
 
     update(userId, languageId, user, callback) {

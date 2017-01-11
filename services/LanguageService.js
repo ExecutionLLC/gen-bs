@@ -8,8 +8,8 @@ class LanguageService extends ServiceBase {
     }
 
     findDefaultLangu(callback) {
-        const defaultLanguId = this.models.config.defaultLanguId;
-        this.find(defaultLanguId, callback);
+        const defaultLanguageId = this.models.config.defaultLanguId;
+        this.find(defaultLanguageId, callback);
     }
 
     find(languageId, callback) {
