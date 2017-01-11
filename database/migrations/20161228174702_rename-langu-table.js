@@ -3,14 +3,14 @@ const newColumnName = 'language_id';
 
 exports.up = function (knex) {
     console.log('=> Update language schema...');
-    return editaLanguTable(knex);
+    return editLanguTable(knex);
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
 
-function editaLanguTable(knex) {
+function editLanguTable(knex) {
     return knex.schema
         .renameTable('langu', 'language')
         .table('comment_text', table => {

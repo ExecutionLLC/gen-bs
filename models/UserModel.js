@@ -12,7 +12,7 @@ const mappedColumns = [
     'id',
     'firstName',
     'lastName',
-    'defaultLanguId',
+    'defaultLanguageId',
     'isDeleted',
     'email',
     'gender',

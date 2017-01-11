@@ -22,8 +22,8 @@ const mappedColumns = [
     'type',
     'isDeleted',
     'isCopyDisabled',
-    'languId',
-    'languageId'
+    'languageId',
+    'description'
 ];
 
 class FiltersModel extends SecureModelBase {
