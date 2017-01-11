@@ -36,15 +36,6 @@ class SampleHeader extends React.Component {
     }
 
     render() {
-        const {samplesList: {editingSample}} = this.props;
-        return (
-            <div className='split-top'>
-                {editingSample && this.renderSampleHeader()}
-            </div>
-        );
-    }
-
-    renderSampleHeader() {
         const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
         const isProcessing = _.some(
             filesProcesses,
@@ -147,13 +138,16 @@ export default class FileUploadSampleRightPane extends React.Component {
 
     render() {
         const {samplesList, auth, dispatch, fileUpload, isBringToFront} = this.props;
+        const {editingSample} = samplesList;
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
-                <SampleHeader samplesList={samplesList}
-                              auth={auth}
-                              fileUpload={fileUpload}
-                              dispatch={dispatch}
-                />
+                <div className='split-top'>
+                    {editingSample && <SampleHeader samplesList={samplesList}
+                                                    auth={auth}
+                                                    fileUpload={fileUpload}
+                                                    dispatch={dispatch}
+                    />}
+                </div>
                 {this.renderSample()}
             </div>
         );
