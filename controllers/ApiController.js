@@ -40,8 +40,7 @@ class ApiController extends ControllerBase {
      * */
     _findAndSetLanguage(request, callback) {
         const {user} = request;
-        const languageHeaderName = this.services.config.headers.languageHeader;
-        const languageId = request.get(languageHeaderName);
+        const languageId = this.getLanguageId(request);
 
         async.waterfall([
             (callback) => {
