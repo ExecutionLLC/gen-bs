@@ -53,6 +53,10 @@ export default class FileUploadLeftPane extends React.Component {
                     .toLocaleLowerCase();
             });
             sampleSearchValues.push(sample.name.toLocaleLowerCase());
+            const sampleDescription = sample.description;
+            if (sampleDescription) {
+                sampleSearchValues.push(sampleDescription.toLocaleLowerCase());
+            }
             return {
                 sampleId: sample.id,
                 searchValues: sampleSearchValues

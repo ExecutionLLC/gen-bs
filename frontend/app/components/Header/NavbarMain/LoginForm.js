@@ -12,9 +12,15 @@ class LoginForm extends Component {
 
     render() {
         const {login, password} = this.state;
-        const isDisable = login && password ? false : true;
+        const isDisabled = !(login && password);
         return (
-            <div className='form-inline'>
+            <form
+                className='form-inline'
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    this.onLoginClick();
+                }}
+            >
                 <input className='form-control material-input-sm'
                        value={login}
                        type='text'
@@ -30,12 +36,11 @@ class LoginForm extends Component {
                        placeholder='Password'
                        onChange={(e) => this.onPasswordChanged(e)}/>
                 <button className='btn btn-primary  btn-uppercase login-button'
-                        type='button'
-                        onClick={(e) => this.onLoginClick(e)}
-                        disabled={isDisable}
+                        type='submit'
+                        disabled={isDisabled}
                 >Login
                 </button>
-            </div>
+            </form>
         );
     }
 

@@ -1,7 +1,6 @@
-'use strict';
+const _ = require('lodash');
 
-const args = require('optimist').argv;
-
+const {LOGIN_TYPES} = require('../../utils/Enums');
 const ModelsFacade = require('../../models/ModelsFacade');
 const ServicesFacade = require('../../services/ServicesFacade');
 
@@ -13,48 +12,98 @@ const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 
-if ((typeof args.password !== 'string' && typeof args.password !== 'number') || !args.password) {
-    throw new Error('Password must be a string');
-}
-
-if (
-    args.firstName &&
-    args.lastName &&
-    args.speciality &&
-    args.email &&
-    args.defaultLanguage &&
-    args.numberPaidSamples &&
-    args.gender &&
-    args.phone &&
-    args.loginType &&
-    args.company) {
-    services.users.add(
-        args.defaultLanguage,
-        {
-            firstName: args.firstName,
-            lastName: args.lastName,
-            email: args.email,
-            speciality: args.speciality,
-            numberPaidSamples: args.numberPaidSamples,
-            gender: args.gender,
-            phone: args.phone,
-            loginType: args.loginType,
-            password: PasswordUtils.hash('' + args.password),
-            company: args.company
+const args = require('optimist')
+    .options({
+        'firstName': {
+            demand: true,
+            describe: 'User First Name'
         },
-        (error, user) => {
-            if (error) {
-                console.error(error);
-                process.exit(1);
-            } else {
-                console.log('User ' + args.name + ' is added with id: ' + user.id);
-                process.exit(0);
-            }
-        });
-} else {
-    console.error('Usage: -- --firstName "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
-        + '--defaultLanguage "en" --numberPaidSamples N --email "email@gmail.com" --gender "Male|Female" '
-        + '--phone "phoneNumber" --company "companyName" --loginType "password|google" --password "password"');
-    console.error('Note the "--" before all params, it is required.');
+        'lastName': {
+            demand: true,
+            describe: 'User Last Name'
+        },
+        'email': {
+            demand: true,
+            describe: 'User e-mail'
+        },
+        'password': {
+            describe: 'User password'
+        },
+        'gender': {
+            demand: true,
+            describe: 'User gender'
+        },
+        'speciality': {
+            demand: true,
+            describe: 'User speciality'
+        },
+        'numberPaidSamples': {
+            demand: true,
+            describe: 'User number of paid samples'
+        },
+        'defaultLanguage': {
+            demand: true,
+            describe: 'User default language'
+        },
+        'phone': {
+            describe: 'User phone'
+        },
+        'loginType': {
+            demand: true,
+            describe: 'User login type (password|google)'
+        },
+        'company': {
+            demand: true,
+            describe: 'User company'
+        }
+    })
+    .argv;
+
+const {
+    firstName,
+    lastName,
+    speciality,
+    email,
+    defaultLanguage,
+    numberPaidSamples,
+    gender,
+    phone,
+    loginType,
+    company,
+    password
+} = args;
+
+if (!_.includes(LOGIN_TYPES.allValues, loginType)) {
+    console.error(`Login type must be one of ( ${LOGIN_TYPES.allValues} )`);
     process.exit(1);
 }
+if (loginType === LOGIN_TYPES.PASSWORD) {
+    if ((typeof args.password !== 'string' && typeof args.password !== 'number') || !args.password) {
+        console.error(`Password must be a string`);
+        process.exit(1);
+    }
+}
+services.users.add(
+    defaultLanguage,
+    {
+        firstName,
+        lastName,
+        email,
+        speciality,
+        numberPaidSamples,
+        gender,
+        phone,
+        loginType,
+        password: loginType === LOGIN_TYPES.PASSWORD ? PasswordUtils.hash(`${password}`) : null,
+        company
+    },
+    (error, user) => {
+        if (error) {
+            console.error(error);
+            process.exit(1);
+        } else {
+            console.log(`User with email ${user.email} was added with id: ${user.id}`);
+            process.exit(0);
+        }
+    }
+);
