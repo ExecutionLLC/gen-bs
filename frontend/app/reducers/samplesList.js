@@ -110,7 +110,8 @@ function reduceSampleOnSave(state, action) {
         onSaveActionSelectedSamplesIds: action.selectedSamplesIds,
         onSaveAction: action.onSaveAction,
         onSaveActionPropertyIndex: action.onSaveActionPropertyIndex,
-        onSaveActionPropertyId: action.onSaveActionPropertyId
+        onSaveActionPropertyId: action.onSaveActionPropertyId,
+        onSaveActionDelete: action.onSaveActionDelete
     };
 }
 

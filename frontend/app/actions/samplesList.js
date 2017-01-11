@@ -59,13 +59,14 @@ export function setCurrentSampleId(sampleId) {
     };
 }
 
-export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
+export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionDelete) {
     return {
         type: SAMPLE_ON_SAVE,
         selectedSamplesIds,
         onSaveAction,
         onSaveActionPropertyIndex,
-        onSaveActionPropertyId
+        onSaveActionPropertyId,
+        onSaveActionDelete
     };
 }
 
@@ -230,9 +231,9 @@ export function sampleSaveCurrent(sampleId) {
 }
 
 function makeReplaceSampleInSaveAction(samplesList, index, sampleId) {
-    const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId} = samplesList;
+    const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionDelete} = samplesList;
     return immutableSetPathProperty(
-        immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sampleId),
+        immutableSetPathProperty(onSaveAction || onSaveActionDelete, onSaveActionPropertyId, sampleId),
         onSaveActionPropertyIndex,
         index
     );
@@ -293,8 +294,8 @@ export function samplesListServerRemoveSample(sampleId) {
                     }
                 }
             }
-            const {onSaveAction, onSaveActionSelectedSamplesIds} = samplesList;
-            if (onSaveAction) {
+            const {onSaveActionDelete, onSaveActionSelectedSamplesIds} = samplesList;
+            if (onSaveActionDelete && onSaveActionSelectedSamplesIds) {
                 const deletedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, analysisSampleId => analysisSampleId === sampleId);
                 if (deletedSampleIndex >= 0) {
                     const newSample = _.find(samplesArray, availableSample => availableSample.type !== entityType.HISTORY && !_.includes(onSaveActionSelectedSamplesIds, availableSample.id));

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout } from 'redux-timeout';
+import _ from 'lodash';
 
 import config from '../../config';
 
@@ -22,6 +23,7 @@ import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
+import {editAnalysesHistoryItem} from '../actions/analysesHistory';
 
 
 class App extends Component {
@@ -41,7 +43,21 @@ class App extends Component {
 
     render() {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
-            modalWindows, savedFiles, showErrorWindow, auth} = this.props;
+            modalWindows, savedFiles, showErrorWindow, auth, analysesHistory} = this.props;
+
+        const currentHistoryId = analysesHistory.currentHistoryId;
+        const historyList = analysesHistory.history;
+        const newHistoryItem = analysesHistory.newHistoryItem;
+        const currentHistoryItem =
+            currentHistoryId ?
+                historyList.find((historyItem) => historyItem.id === currentHistoryId) :
+                newHistoryItem;
+
+        const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
+
+        const {samplesList, modelsList, auth: {isDemo}} = this.props;
+
+        const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}});
 
         return (
             <div className='main subnav-closed' id='main'>
@@ -52,7 +68,7 @@ class App extends Component {
                     <NavbarMain
                         openAnalysisModal={() => dispatch(openModal(modalName.ANALYSIS))}
                         openSamplesModal={() => {
-                            dispatch(samplesOnSave(null, null, null, null));
+                            dispatch(samplesOnSave(selectedSamplesIds, null, 'changeItem.sample.index', 'changeItem.sample.id', action));
                             dispatch(openModal(modalName.UPLOAD));
                         }}
                     />
@@ -117,6 +133,7 @@ function mapStateToProps(state) {
             filtersList,
             viewsList,
             modelsList,
+            analysesHistory,
             errorHandler: { showErrorWindow } } = state;
 
     return {
@@ -130,6 +147,7 @@ function mapStateToProps(state) {
         filtersList,
         viewsList,
         modelsList,
+        analysesHistory,
         showErrorWindow
     };
 }
