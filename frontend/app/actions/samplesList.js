@@ -8,6 +8,7 @@ import {
 } from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 import {changeFileUploadProgressState, fileUploadStatus} from './fileUpload';
+import {entityType} from '../utils/entityTypes';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -58,13 +59,14 @@ export function setCurrentSampleId(sampleId) {
     };
 }
 
-export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
+export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionDelete) {
     return {
         type: SAMPLE_ON_SAVE,
         selectedSamplesIds,
         onSaveAction,
         onSaveActionPropertyIndex,
-        onSaveActionPropertyId
+        onSaveActionPropertyId,
+        onSaveActionDelete
     };
 }
 
@@ -228,21 +230,25 @@ export function sampleSaveCurrent(sampleId) {
     };
 }
 
+function makeReplaceSampleInSaveAction(samplesList, index, sampleId) {
+    const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionDelete} = samplesList;
+    return immutableSetPathProperty(
+        immutableSetPathProperty(onSaveAction || onSaveActionDelete, onSaveActionPropertyId, sampleId),
+        onSaveActionPropertyIndex,
+        index
+    );
+}
+
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
-        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
+        const {samplesList} = getState();
+        const {onSaveAction, onSaveActionSelectedSamplesIds} = samplesList;
         if (!onSaveAction) {
             return;
         }
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
-            dispatch(
-                immutableSetPathProperty(
-                    immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSampleId),
-                    onSaveActionPropertyIndex,
-                    selectedSampleIndex
-                )
-            );
+            dispatch(makeReplaceSampleInSaveAction(samplesList, selectedSampleIndex, newSampleId));
         }
     };
 }
@@ -275,14 +281,26 @@ export function samplesListServerRemoveSample(sampleId) {
         }).then(({error, response}) => {
             dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response));
         }).then(() => {
-            const deletingSample = getState().samplesList.hashedArray.hash[sampleId];
+            const {samplesList, fileUpload: {filesProcesses}} = getState();
+            const {hash: samplesHash, array: samplesArray} = samplesList.hashedArray;
+            const deletingSample = samplesHash[sampleId];
             if (deletingSample) {
                 const fileSampleId = deletingSample.vcfFileId;
-                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
+                const isLastSample = !_.some(samplesArray, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
                 if (isLastSample) {
-                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {operationId: fileSampleId});
+                    const fileProcess = _.find(filesProcesses, {operationId: fileSampleId});
                     if (fileProcess) {
                         dispatch(changeFileUploadProgressState(100, fileUploadStatus.READY, fileProcess.id));
+                    }
+                }
+            }
+            const {onSaveActionDelete, onSaveActionSelectedSamplesIds} = samplesList;
+            if (onSaveActionDelete && onSaveActionSelectedSamplesIds) {
+                const deletedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, analysisSampleId => analysisSampleId === sampleId);
+                if (deletedSampleIndex >= 0) {
+                    const newSample = _.find(samplesArray, availableSample => availableSample.type !== entityType.HISTORY && !_.includes(onSaveActionSelectedSamplesIds, availableSample.id));
+                    if (newSample) {
+                        dispatch(makeReplaceSampleInSaveAction(samplesList, deletedSampleIndex, newSample.id));
                     }
                 }
             }
