@@ -186,7 +186,7 @@ function getCookieSessionTypeAsync() {
         ).then((response) => {
             const {status, body} = response;
 
-            if (status !== HttpStatus.OK) {
+            if (status !== HttpStatus.OK || !body) {
                 return SESSION_TYPE.INVALID;
             }
             switch (body.sessionType) {
