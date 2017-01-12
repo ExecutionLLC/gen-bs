@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
-import {handleApiResponseErrorAsync} from './errorHandler';
+import {handleApiBodylessResponseErrorAsync, handleApiResponseErrorAsync} from './errorHandler';
 import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
 
@@ -101,7 +101,7 @@ export function downloadSavedFileAsync(savedFile) {
             savedFile.id,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
+            ({error, response}) => dispatch(handleApiBodylessResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
         ).then((response) => dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name)));
     };
 }
