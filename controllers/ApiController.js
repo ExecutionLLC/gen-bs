@@ -61,7 +61,7 @@ class ApiController extends ControllerBase {
                 if (!result.isExistingLanguage) {
                     callback(new Error('Language is not found.'));
                 } else {
-                    request.languId = result.languageId;
+                    request.languageId = result.languageId;
                     callback(null);
                 }
             }
@@ -122,7 +122,7 @@ class ApiController extends ControllerBase {
     /**@typedef {Object}ExpressSession
      * @property {string}id
      * @property {string}userId
-     * @property {string}languId
+     * @property {string}languageId
      * @property {string}type Session type (USER or DEMO)
      * */
 }
