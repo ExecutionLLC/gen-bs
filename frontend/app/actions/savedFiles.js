@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
-import {handleApiBodylessResponseErrorAsync} from './errorHandler';
+import {handleApiBodylessResponseErrorAsync, handleApiResponseErrorAsync} from './errorHandler';
 import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
 
