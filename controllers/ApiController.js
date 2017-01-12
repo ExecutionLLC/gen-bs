@@ -40,29 +40,28 @@ class ApiController extends ControllerBase {
      * */
     _findAndSetLanguage(request, callback) {
         const {user} = request;
-        const languageHeaderName = this.services.config.headers.languageHeader;
-        const languId = request.get(languageHeaderName);
+        const languageId = this.getLanguageId(request);
 
         async.waterfall([
             (callback) => {
                 // Choose languages in preferable order.
-                if (languId) {
-                    callback(null, languId);
+                if (languageId) {
+                    callback(null, languageId);
                 } else if (user) {
                     callback(null, user.language);
                 } else {
                     callback(null, this.services.config.defaultLanguId);
                 }
             },
-            (languId, callback) => this.services.langu.exists(languId, (error, isExistingLanguage) => callback(error, {
-                languId,
+            (languageId, callback) => this.services.language.exists(languageId, (error, isExistingLanguage) => callback(error, {
+                languageId,
                 isExistingLanguage
             })),
             (result, callback) => {
                 if (!result.isExistingLanguage) {
                     callback(new Error('Language is not found.'));
                 } else {
-                    request.languId = result.languId;
+                    request.languageId = result.languageId;
                     callback(null);
                 }
             }
@@ -123,7 +122,7 @@ class ApiController extends ControllerBase {
     /**@typedef {Object}ExpressSession
      * @property {string}id
      * @property {string}userId
-     * @property {string}languId
+     * @property {string}languageId
      * @property {string}type Session type (USER or DEMO)
      * */
 }

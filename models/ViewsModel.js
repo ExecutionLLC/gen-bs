@@ -24,7 +24,7 @@ const mappedColumns = [
     'type',
     'isDeleted',
     'isCopyDisabled',
-    'languId',
+    'languageId',
     'description',
     'viewListItems'
 ];
@@ -59,7 +59,7 @@ class ViewsModel extends SecureModelBase {
         }, callback);
     }
 
-    _add(userId, languId, view, shouldGenerateId, callback) {
+    _add(userId, languageId, view, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._ensureNameIsValid(view.name, callback),
@@ -75,7 +75,7 @@ class ViewsModel extends SecureModelBase {
                 (viewId, callback) => {
                     const dataToInsert = {
                         viewId: viewId,
-                        languId: languId,
+                        languageId,
                         description: view.description
                     };
                     this._unsafeInsert('view_text', dataToInsert, trx, (error) => {

@@ -58,10 +58,10 @@ class FieldsService extends ServiceBase {
         callback(null, this.availableSources);
     }
 
-    addSourceFields(languId, sourceFieldsMetadata, callback) {
+    addSourceFields(languageId, sourceFieldsMetadata, callback) {
         // Add all non-mandatory source fields without trying to match them to existing fields.
         const fieldsMetadataToAdd = _.filter(sourceFieldsMetadata, fieldMetadata => !fieldMetadata.isMandatory);
-        this.models.fields.addMany(languId, fieldsMetadataToAdd, callback);
+        this.models.fields.addMany(languageId, fieldsMetadataToAdd, callback);
     }
 
     _findSource(sourceName) {

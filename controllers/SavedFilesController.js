@@ -17,9 +17,9 @@ class SavedFilesController extends UserEntityControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
                 const user = request.user;
-                const languId = request.languId;
+                const languageId = request.languageId;
                 const fileId = request.params.id;
-                this.services.savedFiles.download(user, languId, fileId, callback);
+                this.services.savedFiles.download(user, languageId, fileId, callback);
             }
         ], (error, readStream) => {
             if (error) {
@@ -48,8 +48,8 @@ class SavedFilesController extends UserEntityControllerBase {
             },
             (fileMetadata, fileStream, filePath, callback) => {
                 const user = request.user;
-                const languId = request.languId;
-                this.services.savedFiles.add(user, languId, fileMetadata, fileStream, (error, result) => {
+                const languageId = request.languageId;
+                this.services.savedFiles.add(user, languageId, fileMetadata, fileStream, (error, result) => {
                     this._removeFileAsync(filePath);
                     callback(error, result);
                 });

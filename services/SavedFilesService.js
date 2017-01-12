@@ -16,15 +16,15 @@ class SavedFilesService extends UserEntityServiceBase {
         assert.ok(this.bucketName);
     }
 
-    add(user, languId, fileMetadata, fileStream, callback) {
+    add(user, languageId, fileMetadata, fileStream, callback) {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this._createAndUploadFile(user, languId, fileMetadata, fileStream, callback),
+            (callback) => this._createAndUploadFile(user, languageId, fileMetadata, fileStream, callback),
             (fileId, callback) => this.find(user, fileId, callback)
         ], callback);
     }
 
-    download(user, languId, fileId, callback) {
+    download(user, languageId, fileId, callback) {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.models.savedFiles.find(user.id, fileId, (error) => callback(error)),
@@ -59,10 +59,10 @@ class SavedFilesService extends UserEntityServiceBase {
         throw new Error('Operation is not supported');
     }
 
-    _createAndUploadFile(user, languId, fileMetadata, fileStream, callback) {
+    _createAndUploadFile(user, languageId, fileMetadata, fileStream, callback) {
         let transactionState = null;
         async.waterfall([
-            (callback) => this.models.savedFiles.startAddition(user.id, languId, fileMetadata, callback),
+            (callback) => this.models.savedFiles.startAddition(user.id, languageId, fileMetadata, callback),
             (fileId, transaction, callback) => {
                 transactionState = transaction;
                 const keyName = this._generateBucketKeyForFile(fileId);

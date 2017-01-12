@@ -10,7 +10,7 @@ class ViewsService extends UserEntityServiceBase {
         super(services, models, models.views);
     }
 
-    add(user, languId, item, callback) {
+    add(user, languageId, item, callback) {
         async.waterfall([
             (callback) => {
                 this._viewItemsCheck(item, callback);
@@ -20,7 +20,7 @@ class ViewsService extends UserEntityServiceBase {
                 this._checkViewNameExists(item, views, callback);
             },
             (item, callback) => {
-                super.add(user, languId, item, callback);
+                super.add(user, languageId, item, callback);
             }
         ], callback);
     }

@@ -31,7 +31,7 @@ class KeywordsModel extends ModelBase {
         }, callback);
     }
 
-    addWithId(keyword, languId, callback) {
+    addWithId(keyword, languageId, callback) {
         this.db.transactionally((trx, callback) => {
             this._add(trx, keyword, false, callback);
         }, callback);
@@ -164,7 +164,7 @@ class KeywordsModel extends ModelBase {
         async.mapSeries(synonyms, (synonym, callback) => {
             const dataToInsert = {
                 id: shouldGenerateId ? Uuid.v4() : synonym.id,
-                languId: synonym.languId,
+                languageId: synonym.languageId,
                 keywordId,
                 value: synonym.value
             };

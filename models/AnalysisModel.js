@@ -22,7 +22,7 @@ const mappedColumns = [
     'lastQueryDate',
     'name',
     'description',
-    'languId',
+    'languageId',
     'sampleVersionId',
     'sampleType',
 ];
@@ -78,7 +78,7 @@ class AnalysisModel extends SecureModelBase {
     }
 
     _updateInTransaction(analysisId, analysisToUpdate, trx, callback) {
-        const {name, description, languId, lastQueryDate} = analysisToUpdate;
+        const {name, description, languageId, lastQueryDate} = analysisToUpdate;
         async.waterfall([
                 (callback) => {
                     const updateAnalysisData = {
@@ -100,7 +100,7 @@ class AnalysisModel extends SecureModelBase {
                     };
                     this._unsafeTextDataUpdate(
                         analysisId,
-                        languId,
+                        languageId,
                         updateAnalysisTextData,
                         trx,
                         (error) => {
@@ -116,16 +116,16 @@ class AnalysisModel extends SecureModelBase {
     _unsafeTextDataUpdate(analysisId, languageId, updateAnalysisTextData, trx, callback) {
         trx(TableNames.AnalysisText)
             .where('analysis_id', analysisId)
-            .andWhere('langu_id', languageId)
+            .andWhere('language_id', languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(updateAnalysisTextData))
             .asCallback(
                 (error) => callback(error, analysisId)
             );
     }
 
-    add(userId, languId, item, callback) {
+    add(userId, languageId, item, callback) {
         async.waterfall([
-            (callback) => this._add(userId, languId, item, true, callback),
+            (callback) => this._add(userId, languageId, item, true, callback),
             (itemId, callback) => this.find(userId, itemId, callback)
         ], callback);
     }
@@ -141,7 +141,7 @@ class AnalysisModel extends SecureModelBase {
         );
     }
 
-    _addInTransaction(userId, languId, analysis, shouldGenerateId, trx, callback) {
+    _addInTransaction(userId, languageId, analysis, shouldGenerateId, trx, callback) {
         const {
             name, description, samples
         } = analysis;
@@ -164,7 +164,7 @@ class AnalysisModel extends SecureModelBase {
             (analysisId, callback) => {
                 const analysisTextDataToInsert = {
                     analysisId: analysisId,
-                    languId,
+                    languageId,
                     name,
                     description
                 };
@@ -292,7 +292,7 @@ class AnalysisModel extends SecureModelBase {
             timestamp,
             lastQueryDate,
             type,
-            languId
+            languageId
         } = camelcaseAnalysis[0];
 
         const sortedAnalyses = _.orderBy(camelcaseAnalysis, ['order'], ['asc']);
@@ -317,7 +317,7 @@ class AnalysisModel extends SecureModelBase {
             lastQueryDate,
             type,
             samples,
-            languId
+            languageId
         };
     }
 }

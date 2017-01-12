@@ -45,7 +45,7 @@ class SearchService extends ServiceBase {
             });
             if (hasUndefOrNullParam) {
                 callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                        languId: languageId || 'undefined',
+                        languageId: languageId || 'undefined',
                         viewId: viewId || 'undefined',
                         filterId: filterId || 'undefined',
                         samples: samples || 'undefined',
@@ -200,11 +200,11 @@ class SearchService extends ServiceBase {
      * Loads comments for all rows into hash[searchKey] = commentsArray object.
      *
      * @param userId Id of the user results are for.
-     * @param languId Language id.
+     * @param languageId Language id.
      * @param redisRows Array of hash[fieldId] = fieldValue objects.
      * @param callback (error, hash[searchKey] = commentsArray)
      * */
-    _loadRowsComments(userId, languId, redisRows, callback) {
+    _loadRowsComments(userId, languageId, redisRows, callback) {
         // Extract search keys from all rows.
         const searchKeys = _.map(redisRows, row => {
             const searchField = _.find(row.viewData, field => {
@@ -215,7 +215,7 @@ class SearchService extends ServiceBase {
 
         async.waterfall([
             // Load comments for all search keys.
-            (callback) => this.models.comments.findAllBySearchKeys(userId, languId, searchKeys, callback),
+            (callback) => this.models.comments.findAllBySearchKeys(userId, languageId, searchKeys, callback),
 
             // Group comments by search key.
             (comments, callback) => {
@@ -270,11 +270,11 @@ class SearchService extends ServiceBase {
         }
     }
 
-    _createAppServerSearchParams(user, languId, samples, viewId, filterId, modelId, limit, offset, callback) {
+    _createAppServerSearchParams(user, languageId, samples, viewId, filterId, modelId, limit, offset, callback) {
         const sampleIds = _.map(samples, (sample) => sample.id);
         async.parallel({
-            langu: (callback) => {
-                this.services.langu.find(languId, callback);
+            language: (callback) => {
+                this.services.language.find(languageId, callback);
             },
             samples: (callback) => {
                 async.waterfall([
@@ -327,13 +327,13 @@ class SearchService extends ServiceBase {
                     this.services.models.find(user, modelId, callback);
                 }
             }
-        }, (error, {langu, view, filter, model, samples, fields}) => {
+        }, (error, {language, view, filter, model, samples, fields}) => {
             if (error) {
                 callback(error);
             } else {
                 this._transformCommasInRules(filter.rules);
                 const appServerSearchParams = {
-                    langu,
+                    language,
                     userId: user.id,
                     view,
                     filter,

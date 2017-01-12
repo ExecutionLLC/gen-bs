@@ -27,16 +27,16 @@ class ModelBase {
         this.db = models.db;
     }
 
-    add(item, languId, callback) {
+    add(item, languageId, callback) {
         async.waterfall([
-            (callback) => this._add(item, languId, true, callback),
+            (callback) => this._add(item, languageId, true, callback),
             (itemId, callback) => this.find(itemId, callback)
         ], callback);
     }
 
-    addWithId(item, languId, callback) {
+    addWithId(item, languageId, callback) {
         async.waterfall([
-            (callback) => this._add(item, languId, false, callback),
+            (callback) => this._add(item, languageId, false, callback),
             (itemId, callback) => this.find(itemId, callback)
         ], callback);
     }
@@ -65,7 +65,7 @@ class ModelBase {
         ], callback);
     }
 
-    _add(item, languId, shouldGenerateId, callback) {
+    _add(item, languageId, shouldGenerateId, callback) {
         throw new Error('Method is abstract.');
     }
 

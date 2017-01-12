@@ -14,7 +14,7 @@ const mappedColumns = [
     'url',
     'totalResults',
     'isDeleted',
-    'languId',
+    'languageId',
     'description'
 ];
 
@@ -61,14 +61,14 @@ class SavedFileModel extends SecureModelBase {
      * using completeAddition() method.
      *
      * @param userId Id of the user uploading file.
-     * @param languId Current language.
+     * @param languageId Current language.
      * @param fileMetadata Metadata of the exported file.
      * @param callback (error, fileId, transactionState)
      * */
-    startAddition(userId, languId, fileMetadata, callback) {
+    startAddition(userId, languageId, fileMetadata, callback) {
         async.waterfall([
             (callback) => this.db.beginTransaction(callback),
-            (transactionWrapper, knexTransaction, callback) => this._insertFileMetadata(userId, languId, fileMetadata, true,
+            (transactionWrapper, knexTransaction, callback) => this._insertFileMetadata(userId, languageId, fileMetadata, true,
                 knexTransaction, (error, fileId) => callback(error, transactionWrapper, fileId)),
             (transactionWrapper, fileId, callback) => {
                 const transactionState = {
@@ -84,7 +84,7 @@ class SavedFileModel extends SecureModelBase {
         this.db.endTransaction(trx, error, fileId, callback);
     }
 
-    _insertFileMetadata(userId, languId, fileMetadata, shouldGenerateId, trx, callback) {
+    _insertFileMetadata(userId, languageId, fileMetadata, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
                 if (!fileMetadata.analysisId) {
@@ -109,7 +109,7 @@ class SavedFileModel extends SecureModelBase {
                 // Insert translated description.
                 const dataToInsert = {
                     savedFileId: fileId,
-                    languId: languId,
+                    languageId,
                     description: fileMetadata.description
                 };
                 this._unsafeInsert(SavedFileTables.Texts, dataToInsert, trx, (error) => {
@@ -119,10 +119,10 @@ class SavedFileModel extends SecureModelBase {
         ], callback);
     }
 
-    _add(userId, languId, file, shouldGenerateId, callback) {
+    _add(userId, languageId, file, shouldGenerateId, callback) {
         this.db.transactionally(
             (trx, callback) =>
-                this._insertFileMetadata(userId, languId, file, shouldGenerateId, trx, callback),
+                this._insertFileMetadata(userId, languageId, file, shouldGenerateId, trx, callback),
             callback
         );
     }

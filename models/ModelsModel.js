@@ -22,7 +22,7 @@ const mappedColumns = [
     'modelType',
     'analysisType',
     'isDeleted',
-    'languId',
+    'languageId',
     'name',
     'description'
 ];
@@ -57,7 +57,7 @@ class ModelsModel extends SecureModelBase {
         }, callback);
     }
 
-    _add(userId, languId, model, shouldGenerateId, callback) {
+    _add(userId, languageId, model, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._ensureNameIsValid(model.name, callback),
@@ -74,7 +74,7 @@ class ModelsModel extends SecureModelBase {
                 (modelId, callback) => {
                     const dataToInsert = {
                         modelId: modelId,
-                        languId: languId,
+                        languageId,
                         name: model.name,
                         description: model.description
                     };

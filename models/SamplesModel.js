@@ -60,11 +60,11 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    attachSampleFields(userId, languId, vcfFileId, sampleFields, callback) {
+    attachSampleFields(userId, languageId, vcfFileId, sampleFields, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) =>
-                    this.models.fields.addMissingFields(languId, sampleFields, trx, (error, fieldsWithIds) => {
+                    this.models.fields.addMissingFields(languageId, sampleFields, trx, (error, fieldsWithIds) => {
                         const fieldIds = _.map(fieldsWithIds, fieldWithId => fieldWithId.id);
                         callback(error, fieldIds);
                     }),
@@ -170,9 +170,9 @@ class SamplesModel extends SecureModelBase {
             });
     }
 
-    _add(userId, languId, sample, shouldGenerateId, callback) {
+    _add(userId, languageId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._addInTransaction(userId, sample, languId, shouldGenerateId, trx, callback);
+            this._addInTransaction(userId, sample, languageId, shouldGenerateId, trx, callback);
         }, callback);
     }
 
