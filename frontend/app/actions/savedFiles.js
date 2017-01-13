@@ -31,7 +31,7 @@ function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
-                language
+                languageId
             },
             websocket: {
                 variantsAnalysis
@@ -43,7 +43,7 @@ function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
             totalResults
         };
         return new Promise((resolve) => savedFilesClient.add(
-            language,
+            languageId,
             fileMetadata,
             fileBlob,
             (error, response) => resolve({error, response}))
@@ -93,11 +93,11 @@ export function downloadSavedFileAsync(savedFile) {
     return (dispatch, getState) => {
         const {
             ui: {
-                language
+                languageId
             }
         } = getState();
         return new Promise((resolve) => savedFilesClient.download(
-            language,
+            languageId,
             savedFile.id,
             (error, response) => resolve({error, response})
         )).then(

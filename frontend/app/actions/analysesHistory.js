@@ -135,9 +135,9 @@ export function setEditedHistoryItem(newHistoryItem) {
 
 export function requestAppendAnalysesHistoryAsync(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
-        const {ui: {language}} = getState();
+        const {ui: {languageId}} = getState();
         dispatch(requestAnalysesHistory());
-        return new Promise((resolve) => analysesHistoryClient.getAnalysesHistory(language, search, limit, offset,
+        return new Promise((resolve) => analysesHistoryClient.getAnalysesHistory(languageId, search, limit, offset,
             (error, response) => resolve({error, response})
         )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
         ).then((response) => {
