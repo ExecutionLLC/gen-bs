@@ -98,7 +98,8 @@ function reduceUploadsListReceive(state, action) {
                 progressStatus: status,
                 error
             };
-        })
+        }),
+        currentUploadId: null
     };
 }
 
