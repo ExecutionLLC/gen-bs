@@ -81,7 +81,7 @@ function createFileProcess(file, id) {
     };
 }
 
-function reduceFilterListReceive(state, action) {
+function reduceUploadsListReceive(state, action) {
     return {
         ...state,
         filesProcesses: _.map(action.uploads, upload => {
@@ -265,7 +265,7 @@ export default function fileUpload(state = initialState, action) {
             return reduceFileUploadChangeProgress(state, action);
 
         case ActionTypes.UPLOADS_LIST_RECEIVE:
-            return reduceFilterListReceive(state, action);
+            return reduceUploadsListReceive(state, action);
 
         case ActionTypes.SET_CURRENT_UPLOAD_ID:
             return reduceSetCurrentUploadId(state, action);
