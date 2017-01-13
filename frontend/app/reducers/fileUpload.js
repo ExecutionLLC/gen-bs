@@ -196,7 +196,7 @@ function reduceFileUploadChangeProgress(state, action) {
     };
 }
 
-function setUploadId(state, action) {
+function reduceSetCurrentUploadId(state, action) {
     return {
         ...state,
         currentUploadId: action.uploadId
@@ -268,7 +268,7 @@ export default function fileUpload(state = initialState, action) {
             return reduceFilterListReceive(state, action);
 
         case ActionTypes.SET_CURRENT_UPLOAD_ID:
-            return setUploadId(state, action);
+            return reduceSetCurrentUploadId(state, action);
 
         case ActionTypes.INVALIDATE_CURRENT_UPLOAD_ID:
             return reduceInvalidateCurrentUploadId(state, action);
