@@ -102,13 +102,6 @@ function reduceFilterListReceive(state, action) {
     };
 }
 
-function reduceClearUploadState() {
-    return {
-        ...initialState,
-        filesProcesses: []
-    };
-}
-
 function reduceRequestGZIP(state, action) {
     return {
         ...state,
@@ -243,9 +236,6 @@ function reduceUploadsListRemoveUpload(state, action) {
 export default function fileUpload(state = initialState, action) {
 
     switch (action.type) {
-
-        case ActionTypes.CLEAR_UPLOAD_STATE:
-            return reduceClearUploadState();
 
         case ActionTypes.REQUEST_GZIP:
             return reduceRequestGZIP(state, action);

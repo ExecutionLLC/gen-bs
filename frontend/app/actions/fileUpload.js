@@ -17,7 +17,6 @@ export const RECEIVE_FILE_UPLOAD = 'RECEIVE_FILE_UPLOAD';
 export const RECEIVE_FILE_OPERATION = 'RECEIVE_FILE_OPERATION';
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS';
 export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
-export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
@@ -300,12 +299,6 @@ function addFileForUpload(file) {
     };
 }
 
-
-export function clearUploadState() {
-    return {
-        type: CLEAR_UPLOAD_STATE
-    };
-}
 
 function fileUploadError(id, error) {
     return {
