@@ -21,7 +21,7 @@ class Auth extends Component {
     }
 
     render() {
-        const {auth:{isDemo}} = this.props;
+        const {auth: {isDemo}} = this.props;
         // TODO: Close form on Esc
         const dropdownClasses = classNames({
             dropdown: true,
@@ -75,7 +75,7 @@ class Auth extends Component {
     }
 
     _renderForDemoUser(dropdownClasses) {
-        const {dispatch, auth:{isDemo, errorMessage}} = this.props;
+        const {dispatch, auth: {isDemo, errorMessage}} = this.props;
         return (
             <div>
 
