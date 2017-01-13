@@ -15,10 +15,6 @@ import {entityType} from '../../utils/entityTypes';
 
 class NavbarMain extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {
             dispatch,
