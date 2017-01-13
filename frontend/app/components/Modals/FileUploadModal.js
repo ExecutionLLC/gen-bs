@@ -60,11 +60,10 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, ui, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}} = state;
+    const {auth, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}} = state;
     const currentHistorySamplesIds = newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : [];
     return {
         auth,
-        ui,
         fileUpload,
         samplesList,
         currentHistorySamplesIds,
