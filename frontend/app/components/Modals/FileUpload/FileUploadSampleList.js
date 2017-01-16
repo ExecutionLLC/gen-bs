@@ -404,8 +404,14 @@ export default class FileUploadSampleList extends React.Component {
             name,
             upload,
             isActive,
-            () => this.onProgressUploadClick(upload, null),
-            () => this.onProgressUploadDelete(upload, null)
+            () => this.onUploadItemClick(upload.id),
+            () => {
+                if (upload.operationId) {
+                    this.onUploadItemDelete(upload.operationId);
+                } else {
+                    this.onUploadAbort(upload.id);
+                }
+            }
         );
     }
 
@@ -419,8 +425,8 @@ export default class FileUploadSampleList extends React.Component {
             name,
             upload,
             isActive,
-            () => this.onProgressUploadClick(null, sample),
-            () => this.onProgressUploadDelete(null, sample)
+            () => this.onSampleItemClick(sample.id),
+            () => this.onSampleItemDelete(sample.id)
         );
     }
 
@@ -444,26 +450,6 @@ export default class FileUploadSampleList extends React.Component {
                 </a>
             </li>
         );
-    }
-
-    onProgressUploadClick(upload, sample) {
-        if (sample) {
-            this.onSampleItemClick(sample.id);
-        } else {
-            this.onUploadItemClick(upload.id);
-        }
-    }
-
-    onProgressUploadDelete(upload, sample) {
-        if (sample) {
-            this.onSampleItemDelete(sample.id);
-        } else {
-            if (upload.operationId) {
-                this.onUploadItemDelete(upload.operationId);
-            } else {
-                this.onUploadAbort(upload.id);
-            }
-        }
     }
 
     onNotUploadedErrorItemClick(id) {
