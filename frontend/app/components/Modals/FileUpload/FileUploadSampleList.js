@@ -222,8 +222,10 @@ export default class FileUploadSampleList extends React.Component {
                 className={classNames({
                     'active': isActive
                 })}>
-                <a type='button'
-                   onClick={() => onClick(id)}>
+                <a
+                    type='button'
+                    onClick={() => onClick(id)}
+                >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
