@@ -385,26 +385,42 @@ export default class FileUploadSampleList extends React.Component {
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
         if (!samples.length) {
-            return this.renderProgressUpload(upload, null);
+            return this.renderProgressUploadSampleAjax(upload);
         } else {
             return (
-                samples.map((sample) => this.renderProgressUpload(upload, sample))
+                samples.map((sample) => this.renderProgressUploadSampleSample(upload, sample))
             );
         }
     }
 
-    renderProgressUpload(upload, sample) {
-        const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
-        const key = sample ? sample.id : (upload.operationId || upload.id);
-        const isActive = sample ? sample.id === currentSampleId : upload.id === currentUploadId;
-        const name = sample ? this._createSampleLabel(sample) : upload.file.name;
+    renderProgressUploadSampleAjax(upload) {
+        const {fileUpload: {currentUploadId}} = this.props;
+        const key = upload.operationId || upload.id;
+        const isActive = upload.id === currentUploadId;
+        const name = upload.file.name;
+
         return FileUploadSampleList.renderProgressUploadListItem(
             key,
             name,
             upload,
             isActive,
-            () => this.onProgressUploadClick(upload, sample),
-            () => this.onProgressUploadDelete(upload, sample)
+            () => this.onProgressUploadClick(upload, null),
+            () => this.onProgressUploadDelete(upload, null)
+        );
+    }
+
+    renderProgressUploadSampleSample(upload, sample) {
+        const {currentSampleId} = this.props;
+        const key = sample.id;
+        const isActive = sample.id === currentSampleId;
+        const name = this._createSampleLabel(sample);
+        return FileUploadSampleList.renderProgressUploadListItem(
+            key,
+            name,
+            upload,
+            isActive,
+            () => this.onProgressUploadClick(null, sample),
+            () => this.onProgressUploadDelete(null, sample)
         );
     }
 
