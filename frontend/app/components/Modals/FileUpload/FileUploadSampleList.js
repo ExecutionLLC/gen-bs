@@ -387,7 +387,11 @@ export default class FileUploadSampleList extends React.Component {
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
         if (!samples.length) {
-            return this.renderProgressUploadSampleAjax(upload);
+            if (upload.operationId) {
+                return this.renderProgressUploadSampleOperation(upload);
+            } else {
+                return this.renderProgressUploadSampleAjax(upload);
+            }
         } else {
             return (
                 samples.map((sample) => this.renderProgressUploadSampleSample(upload, sample))
@@ -397,7 +401,7 @@ export default class FileUploadSampleList extends React.Component {
 
     renderProgressUploadSampleAjax(upload) {
         const {fileUpload: {currentUploadId}} = this.props;
-        const key = upload.operationId || upload.id;
+        const key = upload.id;
         const isActive = upload.id === currentUploadId;
         const name = upload.file.name;
 
@@ -407,13 +411,23 @@ export default class FileUploadSampleList extends React.Component {
             upload,
             isActive,
             () => this.onUploadItemClick(upload.id),
-            () => {
-                if (upload.operationId) {
-                    this.onUploadItemDelete(upload.operationId);
-                } else {
-                    this.onUploadAbort(upload.id);
-                }
-            }
+            () => this.onUploadAbort(upload.id)
+        );
+    }
+
+    renderProgressUploadSampleOperation(upload) {
+        const {fileUpload: {currentUploadId}} = this.props;
+        const key = upload.operationId;
+        const isActive = upload.id === currentUploadId;
+        const name = upload.file.name;
+
+        return FileUploadSampleList.renderProgressUploadListItem(
+            key,
+            name,
+            upload,
+            isActive,
+            () => this.onUploadItemClick(upload.id),
+            () => this.onUploadItemDelete(upload.operationId)
         );
     }
 
