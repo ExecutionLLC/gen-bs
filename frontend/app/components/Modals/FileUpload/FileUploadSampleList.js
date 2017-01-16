@@ -349,6 +349,39 @@ export default class FileUploadSampleList extends React.Component {
             progressStatus === uploadState.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
     }
 
+    static renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
+        return (
+            <li key={key}
+                className={classNames({
+                    'active': isActive
+                })}>
+                <a
+                    type='button'
+                    onClick={onClick}
+                >
+                    <label className='radio'>
+                        <input type='radio' name='viewsRadios'/>
+                        <i />
+                    </label>
+                    {this.renderRefreshIcon(upload)}
+                    <span className='link-label'>
+                        {name}
+                    </span>
+                    {this.renderProgressBar(upload)}
+                </a>
+                <div className='right-menu'>
+                    <button
+                        className='btn btn-link-light-default'
+                        type='button'
+                        onClick={onDelete}
+                    >
+                        <i className='md-i'>highlight_off</i>
+                    </button>
+                </div>
+            </li>
+        );
+    }
+
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
         if (!samples.length) {
@@ -365,35 +398,13 @@ export default class FileUploadSampleList extends React.Component {
         const key = sample ? sample.id : (upload.operationId || upload.id);
         const isActive = sample ? sample.id === currentSampleId : upload.id === currentUploadId;
         const name = sample ? this._createSampleLabel(sample) : upload.file.name;
-        return (
-            <li key={key}
-                className={classNames({
-                    'active': isActive
-                })}>
-                <a
-                    type='button'
-                    onClick={() => this.onProgressUploadClick(upload, sample)}
-                >
-                    <label className='radio'>
-                        <input type='radio' name='viewsRadios'/>
-                        <i />
-                    </label>
-                    {FileUploadSampleList.renderRefreshIcon(upload)}
-                    <span className='link-label'>
-                        {name}
-                    </span>
-                    {FileUploadSampleList.renderProgressBar(upload)}
-                </a>
-                <div className='right-menu'>
-                    <button
-                        className='btn btn-link-light-default'
-                        type='button'
-                        onClick={() => this.onProgressUploadDelete(upload, sample)}
-                    >
-                        <i className='md-i'>highlight_off</i>
-                    </button>
-                </div>
-            </li>
+        return FileUploadSampleList.renderProgressUploadListItem(
+            key,
+            name,
+            upload,
+            isActive,
+            () => this.onProgressUploadClick(upload, sample),
+            () => this.onProgressUploadDelete(upload, sample)
         );
     }
 
