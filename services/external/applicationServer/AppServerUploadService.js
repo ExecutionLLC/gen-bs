@@ -206,10 +206,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             const vcfFileId = operation.getId();
             const vcfFileName = operation.getSampleFileName();
             async.waterfall([
-                (callback) => this.services.samples.initMetadataForUploadedSample(
+                (callback) => this.services.samples.updateSamplesForVcfFile(
                     user, vcfFileId, vcfFileName, sampleGenotypes, callback
                 ),
-                (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
                 (samples, callback) => {
                     callback(null, {
                         status,

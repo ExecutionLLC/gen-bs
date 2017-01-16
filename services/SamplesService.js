@@ -107,6 +107,64 @@ class SamplesService extends UserEntityServiceBase {
         }
     }
 
+    /**
+     * This function updates the list of samples that are in the VCF file being uploaded.
+     * Before this call, the DB may contain samples that was received by simple VCF-header parsing.
+     * If the DB contains entries that are not in {samples}, they are considered wrong and will
+     * be deleted.
+     * If the {samples} contains entries that are not in the DB yet, they will be added to DB.
+     *
+     * @param {User} user - (???)
+     * @param {number} vcfFileId - Id of the VCF file currently being uploaded.
+     * @param {string} vcfFileName
+     * @param {Array} samples - Array of the sample names that was received after analysis from AS.
+     * @param {Function} callback - (???)
+     */
+    updateSamplesForVcfFile(user, vcfFileId, vcfFileName, samples, callback) {
+        this.logger.debug(`user: ${JSON.stringify(user, null, 2)}`);
+        this.logger.debug(`vcfFileId: ${JSON.stringify(vcfFileId, null, 2)}`);
+        this.logger.debug(`samples: ${JSON.stringify(samples, null, 2)}`);
+
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                console.log(`existing samples ${existingSamples}`);
+
+                const wrongSamples = _.filter(existingSamples, sample => {
+                    !_.some(samples, ['genotypeName', sample.genotypeName])
+                });
+                console.log(`wrong samples ${wrongSamples}`);
+                if (wrongSamples) {
+                    async.map(wrongSamples, (sample, callback) => {
+                        this.remove(user, sample.id, callback);
+                    }, callback);
+                }
+            },
+            (items, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                const newSamples = _.filter(samples, newSample => {
+                    !_.some(existingSamples, ['genotypeName', newSample])
+                });
+                console.log(`new samples ${newSamples}`);
+                if (newSamples) {
+                    this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples, (error, sampleIds) => {
+                        callback(error, sampleIds);
+                    });
+                } else {
+                    callback(null, []);
+                }
+            },
+            (sampleIds, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, samples) => {
+                    console.log(`${error} ${samples} ${callback}`);
+                    callback(error, samples);
+                })
+        ], callback);
+    }
+
     _loadAndVerifyPriority(user, callback) {
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.countActive(user.id, callback),
