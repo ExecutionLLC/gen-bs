@@ -291,15 +291,12 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    renderIcon(isSuccessOrNull) {
-        if (isSuccessOrNull) {
-            return (
-                <i className='icon-state md-i text-success'>check_circle</i>
-            );
+    renderIcon(isSuccess) {
+        if (isSuccess) {
+            return <i className='icon-state md-i text-success'>check_circle</i>;
+        } else {
+            return <i className='icon-state md-i text-danger'>error_outline</i>;
         }
-        return (
-            <i className='icon-state md-i text-danger'>error_outline</i>
-        );
     }
 
     static renderProgressBar(uploadItem) {
