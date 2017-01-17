@@ -143,13 +143,11 @@ export default class FileUploadSampleList extends React.Component {
         const {currentHistorySamplesIds, currentSampleId, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
         if (upload) {
-            if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
-                if (!showNew) {
-                    return null;
-                }
+            if (showNew && (sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
                 return this._renderSampleNew(sample, label, sample.id === currentSampleId);
+            } else {
+                return null;
             }
-            return null;
         } else {
             if (showNew) {
                 return null;
