@@ -136,31 +136,18 @@ export default class FileUploadSampleList extends React.Component {
             if (showNew) {
                 return null;
             }
-            if (samplesHash[sample.id].type === entityType.USER) {
-                return this.renderListItem(
-                    sample.id,
-                    sample.id === currentSampleId,
-                    null,
-                    (id) => this.onSampleItemClick(id),
-                    (id) => this.onSampleItemSelectForAnalysis(id),
-                    (id) => this.onSampleItemDelete(id),
-                    label,
-                    sample.description,
-                    sample.created
-                );
-            } else {
-                return this.renderListItem(
-                    sample.id,
-                    sample.id === currentSampleId,
-                    null,
-                    (id) => this.onSampleItemClick(id),
-                    (id) => this.onSampleItemSelectForAnalysis(id),
-                    null,
-                    label,
-                    sample.description,
-                    sample.created
-                );
-            }
+            const isDeletable = samplesHash[sample.id].type === entityType.USER;
+            return this.renderListItem(
+                sample.id,
+                sample.id === currentSampleId,
+                null,
+                (id) => this.onSampleItemClick(id),
+                (id) => this.onSampleItemSelectForAnalysis(id),
+                isDeletable ? (id) => this.onSampleItemDelete(id) : null,
+                label,
+                sample.description,
+                sample.created
+            );
         }
     }
 
