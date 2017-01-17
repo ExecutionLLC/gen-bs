@@ -82,21 +82,22 @@ describe('Search', function () {
             && message.result.data
             && _.isArray(message.result.data));
             if (endMessage) {
-                const rows = endMessage.result.data;
+                const {header, data} = endMessage.result;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
 
                 const fieldIdToMetadata = CollectionUtils.createHashByKey(allFields, 'id');
 
                 // Check that rows are received.
-                assert.ok(rows.length);
+                assert.ok(data.length);
 
                 // Check that all field ids from the data lay either in sample or in source fields.
-                _.each(rows, row => {
-                    _.each(row.fields, (rowField) => {
-                        const fieldId = rowField.fieldId;
-                        assert.ok(fieldId);
-                        assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
-                    });
+                _.each(header, head => {
+                    const fieldId = head.fieldId;
+                    assert.ok(fieldId);
+                    assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
+                });
+
+                _.each(data, row => {
                     assert.ok(row.comments);
                     assert.ok(row.searchKey);
                 });

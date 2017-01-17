@@ -55,11 +55,12 @@ class SchedulerService extends ServiceBase {
         }
     }
 
-    stop() {
+    stop(callback) {
         _.each(this.tasks, (task) => {
             this._stopTask(task);
         });
         this.logger.info('Scheduler service is stopped.');
+        callback(null)
     }
 
     _stopTask(task) {
