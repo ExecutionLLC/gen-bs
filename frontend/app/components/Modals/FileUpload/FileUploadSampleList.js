@@ -166,45 +166,25 @@ export default class FileUploadSampleList extends React.Component {
 
     _renderUploadedDataFileError(upload, label) {
         const {fileUpload: {currentUploadId}} = this.props;
-        if (typeof upload.id === 'string') {
-            return this.renderListItem(
-                upload.id,
-                upload.id === currentUploadId,
-                false,
-                (id) => this.onUploadErrorItemClick(id),
-                null,
-                (id) => this.onUploadErrorDelete(id),
-                label,
-                upload.error.message,
-                null
-            );
-        } else {
-            if (upload.operationId) {
-                return this.renderListItem(
-                    upload.operationId,
-                    upload.operationId === currentUploadId,
-                    false,
-                    (id) => this.onNotUploadedErrorItemClick(id),
-                    null,
-                    (id) => this.onUploadErrorDelete(id),
-                    label,
-                    upload.error.message,
-                    null
-                );
-            } else {
-                return this.renderListItem(
-                    upload.id,
-                    upload.id === currentUploadId,
-                    false,
-                    (id) => this.onNotUploadedErrorItemClick(id),
-                    null,
-                    (id) => this.onNotUploadedErrorItemDelete(id),
-                    label,
-                    upload.error.message,
-                    null
-                );
-            }
-        }
+        const {id, operationId, error: {message}} = upload;
+        const isUploaded = typeof upload.id === 'string';
+        const isOperationId = !isUploaded && operationId;
+        const key = isOperationId ? operationId : id;
+        const isActive = key === currentUploadId;
+        const clickAsUploaded = isUploaded;
+        const deleteAsUploaded = isUploaded || isOperationId;
+
+        return this.renderListItem(
+            key,
+            isActive,
+            false,
+            () => clickAsUploaded ? this.onUploadErrorItemClick(key) : this.onNotUploadedErrorItemClick(key),
+            null,
+            () => deleteAsUploaded ? this.onUploadErrorDelete(key) : this.onNotUploadedErrorItemDelete(key),
+            label,
+            message,
+            null
+        );
     }
 
 
