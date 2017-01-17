@@ -66,10 +66,11 @@ export default class FileUploadSampleList extends React.Component {
                 });
             } else {
                 const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
-                return this.renderProgressUploadSample({
-                    upload,
-                    samples: uploadSamples
-                });
+                if (uploadSamples.length) {
+                    return this.renderProgressUploadSamples(uploadSamples, upload);
+                } else {
+                    return this.renderProgressUploadFile(upload);
+                }
             }
         });
     }
@@ -390,15 +391,6 @@ export default class FileUploadSampleList extends React.Component {
         return samples.map(
             (sample) => this.renderProgressUploadSampleSample(upload, sample)
         );
-    }
-
-    renderProgressUploadSample(uploadData) {
-        const {upload, samples} = uploadData;
-        if (!samples.length) {
-            return this.renderProgressUploadFile(upload);
-        } else {
-            return this.renderProgressUploadSamples(samples, upload);
-        }
     }
 
     renderProgressUploadSampleAjax(upload) {
