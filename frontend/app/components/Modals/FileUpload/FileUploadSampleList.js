@@ -58,12 +58,19 @@ export default class FileUploadSampleList extends React.Component {
         });
         const currentUploadsData = _.map(currentUploads, upload => {
             const isError = upload.progressStatus === fileUploadStatus.ERROR;
-            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
-            return {
-                upload,
-                samples: uploadSamples,
-                isError
-            };
+            if (isError) {
+                return {
+                    upload,
+                    isError: true
+                };
+            } else {
+                const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
+                return {
+                    upload,
+                    samples: uploadSamples,
+                    isError: false
+                };
+            }
         });
         return (
             currentUploadsData.map((data) =>
