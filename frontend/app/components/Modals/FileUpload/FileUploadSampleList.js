@@ -136,7 +136,7 @@ export default class FileUploadSampleList extends React.Component {
             if (showNew) {
                 return null;
             }
-            const isDeletable = samplesHash[sample.id].type === entityType.USER;
+            const isDeletable = sample.type === entityType.USER;
             return this.renderListItem(
                 sample.id,
                 sample.id === currentSampleId,
