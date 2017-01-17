@@ -125,6 +125,20 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    _renderSampleNew(sample, label, isActive) {
+        return this.renderListItem(
+            sample.id,
+            isActive,
+            true,
+            (id) => this.onSampleItemClick(id),
+            (id) => this.onSampleItemSelectForAnalysis(id),
+            (id) => this.onSampleItemDelete(id),
+            label,
+            sample.description,
+            sample.created
+        );
+    }
+
     _renderUploadedDataSample(uploadData, showNew) {
         const {currentHistorySamplesIds, currentSampleId, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
@@ -133,17 +147,7 @@ export default class FileUploadSampleList extends React.Component {
                 if (!showNew) {
                     return null;
                 }
-                return this.renderListItem(
-                    sample.id,
-                    sample.id === currentSampleId,
-                    true,
-                    (id) => this.onSampleItemClick(id),
-                    (id) => this.onSampleItemSelectForAnalysis(id),
-                    (id) => this.onSampleItemDelete(id),
-                    label,
-                    sample.description,
-                    sample.created
-                );
+                return this._renderSampleNew(sample, label, sample.id === currentSampleId);
             }
             return null;
         } else {
