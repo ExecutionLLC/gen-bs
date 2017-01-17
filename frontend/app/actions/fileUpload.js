@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import {uploadState} from '../utils/uploadUtils';
-
+import {samplesListAddSamples} from './samplesList';
 /*
  * action types
  */
@@ -210,9 +210,10 @@ export function uploadFile(fileUploadId) {
         dispatch(changeFileUploadProgress(0, uploadState.AJAX, fp.id));
         const abortRequest = sendFile(
             fp.file,
-            (operationId) => {
+            (upload) => {
                 delete requestAbortFunctions[fp.id];
-                dispatch(receiveFileOperation(operationId, fp.id));
+                dispatch(receiveFileOperation(upload, fp.id));
+                dispatch(samplesListAddSamples(upload.sampleList));
             },
             (percentage) => {
                 console.log('progress', percentage);

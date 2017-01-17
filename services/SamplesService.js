@@ -132,9 +132,7 @@ class SamplesService extends UserEntityServiceBase {
             (existingSamples, callback) => {
                 console.log(`existing samples ${existingSamples}`);
 
-                const wrongSamples = _.filter(existingSamples, sample => {
-                    !_.some(samples, ['genotypeName', sample.genotypeName])
-                });
+                const wrongSamples = _.filter(existingSamples, sample => _.indexOf(samples, sample.genotypeName) < 0);
                 console.log(`wrong samples ${wrongSamples}`);
                 if (wrongSamples) {
                     async.map(wrongSamples, (sample, callback) => {
@@ -145,9 +143,7 @@ class SamplesService extends UserEntityServiceBase {
             (items, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
                 (error, existingSamples) => callback(error, existingSamples)),
             (existingSamples, callback) => {
-                const newSamples = _.filter(samples, newSample => {
-                    !_.some(existingSamples, ['genotypeName', newSample])
-                });
+                const newSamples = _.filter(samples, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
                 console.log(`new samples ${newSamples}`);
                 if (newSamples) {
                     this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples, (error, sampleIds) => {
