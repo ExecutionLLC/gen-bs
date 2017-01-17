@@ -115,69 +115,84 @@ export default class FileUploadSampleList extends React.Component {
         return getItemLabelByNameAndType(sampleName, type);
     }
 
-
-    _renderUploadedData(uploadData, showNew) {
-        const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
+    _renderUploadedDataSample(uploadData, showNew) {
+        const {currentHistorySamplesIds, currentSampleId, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
-        if (sample) {
-            if (upload) {
-                if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
-                    if (!showNew) {
-                        return null;
-                    }
-                    return this.renderListItem(
-                        sample.id,
-                        sample.id === currentSampleId,
-                        true,
-                        (id) => this.onSampleItemClick(id),
-                        (id) => this.onSampleItemSelectForAnalysis(id),
-                        (id) => this.onSampleItemDelete(id),
-                        label,
-                        sample.description,
-                        sample.created
-                    );
-                }
-                return null;
-            } else {
-                if (showNew) {
+        if (upload) {
+            if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
+                if (!showNew) {
                     return null;
                 }
-                if (samplesHash[sample.id].type === entityType.USER) {
-                    return this.renderListItem(
-                        sample.id,
-                        sample.id === currentSampleId,
-                        null,
-                        (id) => this.onSampleItemClick(id),
-                        (id) => this.onSampleItemSelectForAnalysis(id),
-                        (id) => this.onSampleItemDelete(id),
-                        label,
-                        sample.description,
-                        sample.created
-                    );
-                } else {
-                    return this.renderListItem(
-                        sample.id,
-                        sample.id === currentSampleId,
-                        null,
-                        (id) => this.onSampleItemClick(id),
-                        (id) => this.onSampleItemSelectForAnalysis(id),
-                        null,
-                        label,
-                        sample.description,
-                        sample.created
-                    );
-                }
+                return this.renderListItem(
+                    sample.id,
+                    sample.id === currentSampleId,
+                    true,
+                    (id) => this.onSampleItemClick(id),
+                    (id) => this.onSampleItemSelectForAnalysis(id),
+                    (id) => this.onSampleItemDelete(id),
+                    label,
+                    sample.description,
+                    sample.created
+                );
             }
+            return null;
         } else {
             if (showNew) {
                 return null;
             }
-            if (typeof upload.id === 'string') {
+            if (samplesHash[sample.id].type === entityType.USER) {
                 return this.renderListItem(
-                    upload.id,
-                    upload.id === currentUploadId,
+                    sample.id,
+                    sample.id === currentSampleId,
+                    null,
+                    (id) => this.onSampleItemClick(id),
+                    (id) => this.onSampleItemSelectForAnalysis(id),
+                    (id) => this.onSampleItemDelete(id),
+                    label,
+                    sample.description,
+                    sample.created
+                );
+            } else {
+                return this.renderListItem(
+                    sample.id,
+                    sample.id === currentSampleId,
+                    null,
+                    (id) => this.onSampleItemClick(id),
+                    (id) => this.onSampleItemSelectForAnalysis(id),
+                    null,
+                    label,
+                    sample.description,
+                    sample.created
+                );
+            }
+        }
+    }
+
+    _renderUploadedDataFile(uploadData, showNew) {
+        if (showNew) {
+            return null;
+        }
+        const {fileUpload: {currentUploadId}} = this.props;
+        const {label, upload} = uploadData;
+        if (typeof upload.id === 'string') {
+            return this.renderListItem(
+                upload.id,
+                upload.id === currentUploadId,
+                false,
+                (id) => this.onUploadErrorItemClick(id),
+                null,
+                (id) => this.onUploadErrorDelete(id),
+                label,
+                upload.error.message,
+                null
+            );
+        } else {
+            if (upload.operationId) {
+                return this.renderListItem(
+                    upload.operationId,
+                    upload.operationId === currentUploadId,
                     false,
-                    (id) => this.onUploadErrorItemClick(id),
+                    (id) => this.onNotUploadedErrorItemClick(id),
                     null,
                     (id) => this.onUploadErrorDelete(id),
                     label,
@@ -185,32 +200,28 @@ export default class FileUploadSampleList extends React.Component {
                     null
                 );
             } else {
-                if (upload.operationId) {
-                    return this.renderListItem(
-                        upload.operationId,
-                        upload.operationId === currentUploadId,
-                        false,
-                        (id) => this.onNotUploadedErrorItemClick(id),
-                        null,
-                        (id) => this.onUploadErrorDelete(id),
-                        label,
-                        upload.error.message,
-                        null
-                    );
-                } else {
-                    return this.renderListItem(
-                        upload.id,
-                        upload.id === currentUploadId,
-                        false,
-                        (id) => this.onNotUploadedErrorItemClick(id),
-                        null,
-                        (id) => this.onNotUploadedErrorItemDelete(id),
-                        label,
-                        upload.error.message,
-                        null
-                    );
-                }
+                return this.renderListItem(
+                    upload.id,
+                    upload.id === currentUploadId,
+                    false,
+                    (id) => this.onNotUploadedErrorItemClick(id),
+                    null,
+                    (id) => this.onNotUploadedErrorItemDelete(id),
+                    label,
+                    upload.error.message,
+                    null
+                );
             }
+        }
+    }
+
+
+    _renderUploadedData(uploadData, showNew) {
+        const {sample} = uploadData;
+        if (sample) {
+            return this._renderUploadedDataSample(uploadData, showNew);
+        } else {
+            return this._renderUploadedDataFile(uploadData, showNew);
         }
     }
 
