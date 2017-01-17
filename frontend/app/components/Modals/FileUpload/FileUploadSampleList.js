@@ -59,13 +59,10 @@ export default class FileUploadSampleList extends React.Component {
         return _.map(currentUploads, upload => {
             const isError = upload.progressStatus === fileUploadStatus.ERROR;
             if (isError) {
-                return this._renderUploadedDataFileError(
-                    {
-                        label: upload.file.name,
-                        upload: upload
-                    },
-                    false
-                );
+                return this._renderUploadedDataFileError({
+                    label: upload.file.name,
+                    upload: upload
+                });
             } else {
                 const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
                 if (uploadSamples.length) {
@@ -170,10 +167,7 @@ export default class FileUploadSampleList extends React.Component {
         }
     }
 
-    _renderUploadedDataFileError(uploadData, showNew) {
-        if (showNew) {
-            return null;
-        }
+    _renderUploadedDataFileError(uploadData) {
         const {fileUpload: {currentUploadId}} = this.props;
         const {label, upload} = uploadData;
         if (typeof upload.id === 'string') {
@@ -223,7 +217,11 @@ export default class FileUploadSampleList extends React.Component {
         if (sample) {
             return this._renderUploadedDataSample(uploadData, showNew);
         } else {
-            return this._renderUploadedDataFileError(uploadData, showNew);
+            if (showNew) {
+                return null;
+            } else {
+                return this._renderUploadedDataFileError(uploadData);
+            }
         }
     }
 
