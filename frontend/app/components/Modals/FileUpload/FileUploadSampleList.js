@@ -111,6 +111,21 @@ export default class FileUploadSampleList extends React.Component {
         return getItemLabelByNameAndType(sampleName, type);
     }
 
+    _renderSampleOld(sample, label, isActive) {
+        const isDeletable = sample.type === entityType.USER;
+        return this.renderListItem(
+            sample.id,
+            isActive,
+            null,
+            (id) => this.onSampleItemClick(id),
+            (id) => this.onSampleItemSelectForAnalysis(id),
+            isDeletable ? (id) => this.onSampleItemDelete(id) : null,
+            label,
+            sample.description,
+            sample.created
+        );
+    }
+
     _renderUploadedDataSample(uploadData, showNew) {
         const {currentHistorySamplesIds, currentSampleId, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
         const {label, upload, sample} = uploadData;
@@ -135,19 +150,9 @@ export default class FileUploadSampleList extends React.Component {
         } else {
             if (showNew) {
                 return null;
+            } else {
+                return this._renderSampleOld(sample, label, sample.id === currentSampleId);
             }
-            const isDeletable = sample.type === entityType.USER;
-            return this.renderListItem(
-                sample.id,
-                sample.id === currentSampleId,
-                null,
-                (id) => this.onSampleItemClick(id),
-                (id) => this.onSampleItemSelectForAnalysis(id),
-                isDeletable ? (id) => this.onSampleItemDelete(id) : null,
-                label,
-                sample.description,
-                sample.created
-            );
         }
     }
 
