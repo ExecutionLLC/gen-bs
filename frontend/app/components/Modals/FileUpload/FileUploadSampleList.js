@@ -381,18 +381,26 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    renderProgressUploadFile(upload) {
+        if (upload.operationId) {
+            return this.renderProgressUploadSampleOperation(upload);
+        } else {
+            return this.renderProgressUploadSampleAjax(upload);
+        }
+    }
+
+    renderProgressUploadSamples(samples, upload) {
+        return samples.map(
+            (sample) => this.renderProgressUploadSampleSample(upload, sample)
+        );
+    }
+
     renderProgressUploadSample(uploadData) {
         const {upload, samples} = uploadData;
         if (!samples.length) {
-            if (upload.operationId) {
-                return this.renderProgressUploadSampleOperation(upload);
-            } else {
-                return this.renderProgressUploadSampleAjax(upload);
-            }
+            return this.renderProgressUploadFile(upload);
         } else {
-            return (
-                samples.map((sample) => this.renderProgressUploadSampleSample(upload, sample))
-            );
+            return this.renderProgressUploadSamples(samples, upload);
         }
     }
 
