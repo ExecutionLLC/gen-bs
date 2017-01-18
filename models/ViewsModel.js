@@ -60,14 +60,15 @@ class ViewsModel extends SecureModelBase {
     }
 
     _add(userId, languageId, view, shouldGenerateId, callback) {
+        const viewText = _.find(view.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._ensureNameIsValid(view.name, callback),
+                (callback) => this._ensureNameIsValid(viewText.name, callback),
                 (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        name: view.name.trim(),
+                        name: viewText.name.trim(),
                         type: view.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
@@ -75,8 +76,8 @@ class ViewsModel extends SecureModelBase {
                 (viewId, callback) => {
                     const dataToInsert = {
                         viewId: viewId,
-                        languageId,
-                        description: view.description
+                        languageId: viewText.languageId,
+                        description: viewText.description
                     };
                     this._unsafeInsert('view_text', dataToInsert, trx, (error) => {
                         callback(error, viewId);
@@ -305,10 +306,17 @@ class ViewsModel extends SecureModelBase {
             },
             (viewsTexts, callback) => this._toCamelCase(viewsTexts, callback),
             (viewsTexts, callback) => {
-                const textsHash = CollectionUtils.createHashByKey(viewsTexts, 'viewId');
+                const textsHash = _.groupBy(viewsTexts, 'viewId');
                 const viewsWithDescription = _.map(views, view => {
                     return Object.assign({}, view, {
-                        description: textsHash[view.viewId].description
+                        text: _.map(textsHash[view.viewId], text => {
+                            const {description, languageId} = text;
+                            return {
+                                name: view.name,
+                                description,
+                                languageId
+                            };
+                        })
                     });
                 });
                 callback(null, viewsWithDescription);
