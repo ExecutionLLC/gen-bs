@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import {filterBuilderChangeAttr, filterBuilderRestartEdit} from '../../../actions/filterBuilder';
 import config from '../../../../config';
+import * as i18n from '../../../utils/i18n';
 
 export default class NewFilterInputs extends Component {
 
@@ -27,7 +28,7 @@ export default class NewFilterInputs extends Component {
                               className='form-control text-primary'
                               data-localize='filters.setup.new.name.help'
                               placeholder={`Set ${texts.filter} name`}
-                              value={editingFilter.name}
+                              value={i18n.getEntityText(editingFilter, 'en').name}
                               maxLength={config.FILTERS.MAX_NAME_LENGTH}
                               onChange={(e) => this.onNameChange(e.target.value)}
                           />
@@ -39,7 +40,7 @@ export default class NewFilterInputs extends Component {
                               className='form-control'
                               data-localize='filters.setup.new.description'
                               placeholder={`Set ${texts.filter} description (optional)`}
-                              value={editingFilter.description}
+                              value={i18n.getEntityText(editingFilter, 'en').description}
                               maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
                               onChange={(e) => this.onDescriptionChange(e.target.value)}
                           />
@@ -60,7 +61,7 @@ export default class NewFilterInputs extends Component {
         const editingFilter = filterBuilder.editingFilter.filter;
         dispatch(filterBuilderChangeAttr({
             name,
-            description: editingFilter.description
+            description: i18n.getEntityText(editingFilter, 'en').description
         }));
     }
 
@@ -68,7 +69,7 @@ export default class NewFilterInputs extends Component {
         const {dispatch, filterBuilder} = this.props;
         const editingFilter = filterBuilder.editingFilter.filter;
         dispatch(filterBuilderChangeAttr({
-            name: editingFilter.name,
+            name: i18n.getEntityText(editingFilter, 'en').name,
             description
         }));
     }

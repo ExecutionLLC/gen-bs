@@ -14,6 +14,7 @@ import {
 } from '../../../actions/filterBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import {isFilterComplexModel} from '../../../utils/filterUtils';
+import * as i18n from '../../../utils/i18n';
 
 
 export default class ExistentFilterSelect extends Component {
@@ -65,7 +66,7 @@ export default class ExistentFilterSelect extends Component {
     renderFiltersSelector(filters) {
         const selectItems = filters.map( filter => ({
             value: filter.id,
-            label: getItemLabelByNameAndType(filter.name, filter.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(filter, 'en').name, filter.type)
         }));
 
         return (

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import DialogBase from './DialogBase';
 import {closeSavedFilesDialog, downloadSavedFileAsync} from '../../actions/savedFiles';
+import * as i18n from '../../utils/i18n';
 
 class SavedFilesModal extends DialogBase {
     constructor(props) {
@@ -85,7 +86,7 @@ class SavedFilesModal extends DialogBase {
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
                 <td>{savedFileSamplesNames.join(', ')}</td>
-                <td>{filter.name}</td>
+                <td>{(i18n.getEntityText(filter, 'en') || {}/*FIXME crutch for no filter name*/).name}</td>
                 <td>{view.name}</td>
                 <td>{model ? model.name : ''}</td>
                 <td>

@@ -31,6 +31,7 @@ import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 import config from '../../../../config';
+import * as i18n from '../../../utils/i18n';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -639,7 +640,7 @@ export default class AnalysisRightPane extends React.Component {
                 })}
                 <dl>
                     <dt>Filter</dt>
-                    <dd>{selectedFilter && getItemLabelByNameAndType(selectedFilter.name, selectedFilter.type)}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, 'en').name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
@@ -697,7 +698,7 @@ export default class AnalysisRightPane extends React.Component {
         const filters = this.props.filtersList.hashedArray.array;
         return filters.map((filterItem) => {
             const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
+            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, 'en').name, filterItem.type);
             return {
                 value: filterItem.id, label, disabled: isDisabled
             };

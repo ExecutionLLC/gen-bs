@@ -5,6 +5,7 @@ import {filterUtils, genomicsParsedRulesValidate, opsUtils, isFilterComplexModel
 import FieldUtils from '../utils/fieldUtils';
 import {entityType} from '../utils/entityTypes';
 import {ImmutableHashedArray} from '../utils/immutable';
+import * as i18n from '../utils/i18n';
 
 
 /**
@@ -90,11 +91,17 @@ function reduceFBuilderStartEdit(state, action) {
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?
-            Object.assign({}, filter, {
-                type: entityType.USER,
-                name: `Copy of ${filter.name}`,
-                id: null
-            }) :
+            i18n.changeEntityText(
+                {
+                    ...filter,
+                    type: entityType.USER,
+                    id: null
+                },
+                'en',
+                {
+                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, 'en').name),
+                }
+            ) :
             filter,
         filter.id,
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)), // need for type convert from 'valueType' to 'type'
@@ -159,7 +166,9 @@ function reduceFBuilderChangeAttr(state, action) {
     return Object.assign({}, state, {
         editingFilter: state.editingFilter ?
             Object.assign({}, state.editingFilter, {
-                filter: Object.assign({}, state.editingFilter.filter,
+                filter: i18n.changeEntityText(
+                    state.editingFilter.filter,
+                    'en',
                     {
                         name: action.name,
                         description: action.description
