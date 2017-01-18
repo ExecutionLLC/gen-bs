@@ -192,10 +192,18 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 progress,
                 error: null
             }, (error) => callback(error)),
-            (callback) => this._createUploadProgressResult(user, session, operation, message, callback),
-            (result, callback) => super._createOperationResult(
-                session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, false, result, null, callback
-            )
+            (callback) => {
+                this._createUploadProgressResult(user, session, operation, message, callback)
+            },
+            (result, callback) => {
+                if (result.error) {
+                    message.error = { message: result.error, code: -500};
+                    this._handleUploadError(user, session, operation, message, callback);
+                } else {
+                    super._createOperationResult(session, operation, null, operation.getUserId(),
+                        EVENTS.onOperationResultReceived, false, result, null, callback);
+                }
+            }
         ], callback);
     }
 
@@ -209,11 +217,15 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 (callback) => this.services.samples.updateSamplesForVcfFile(
                     user, vcfFileId, vcfFileName, sampleGenotypes, callback
                 ),
-                (samples, callback) => {
+                /*(callback) => this.services.samples.verifySamplesForVcfFile(
+                    user, vcfFileId, vcfFileName, sampleGenotypes, callback
+                ),*/
+                (samples, /*error,*/ callback) => {
                     callback(null, {
                         status,
                         progress,
-                        metadata: samples
+                        metadata: samples/*,
+                        error*/
                     });
                 }
             ], callback);
@@ -283,8 +295,8 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         });
     }
 
-    getUploadOperations(sesssion) {
-        return _.filter(sesssion.operations, operation => operation instanceof UploadOperation);
+    getUploadOperations(session) {
+        return _.filter(session.operations, operation => operation instanceof UploadOperation);
     }
 }
 

@@ -8,7 +8,7 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsService = require('./FieldsService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
-const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
+const {SAMPLE_UPLOAD_STATUS, SAMPLE_UPLOAD_STATE} = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
@@ -87,13 +87,14 @@ class SamplesService extends UserEntityServiceBase {
         this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
     }
 
-    initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, callback) {
+    initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, uploadState, callback) {
         const samples = _.map(genotypes, genotype => {
             return {
                 id: Uuid.v4(),
                 fileName: vcfFileName,
                 vcfFileId,
-                genotypeName: genotype
+                genotypeName: genotype,
+                uploadState: uploadState || SAMPLE_UPLOAD_STATE.UNCONFIRMED
             }
         });
         this.theModel.addSamples(user.id, user.language, samples, callback);
@@ -125,39 +126,81 @@ class SamplesService extends UserEntityServiceBase {
         this.logger.debug(`vcfFileId: ${JSON.stringify(vcfFileId, null, 2)}`);
         this.logger.debug(`samples: ${JSON.stringify(samples, null, 2)}`);
 
+        samples = samples.concat(['NewSample1', 'NewSample2']);
+
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
                 (error, existingSamples) => callback(error, existingSamples)),
             (existingSamples, callback) => {
                 console.log(`existing samples ${existingSamples}`);
+                const notFoundSamples = _.filter(existingSamples, sample => _.indexOf(samples, sample.genotypeName) < 0);
+                console.log(`AS hasn't found these samples: ${notFoundSamples}`);
 
-                const wrongSamples = _.filter(existingSamples, sample => _.indexOf(samples, sample.genotypeName) < 0);
-                console.log(`wrong samples ${wrongSamples}`);
-                if (wrongSamples) {
-                    async.map(wrongSamples, (sample, callback) => {
-                        this.remove(user, sample.id, callback);
-                    }, callback);
-                }
+                const sampleUploadStates = _.map(existingSamples, (sample) => {
+                    return Object.assign({}, sample, {
+                        genotypeName: _.indexOf(samples, sample.genotypeName) < 0
+                            ? SAMPLE_UPLOAD_STATE.NOT_FOUND
+                            : SAMPLE_UPLOAD_STATE.COMPLETED
+                    });
+                });
+                async.map(sampleUploadStates, (sample, callback) => {
+                    return this.update(user, sample, callback);
+                }, (error, result) => {
+                    callback(error, result);
+                });
             },
-            (items, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
-                (error, existingSamples) => callback(error, existingSamples)),
+            (items, callback) => {
+                this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                    (error, existingSamples) => callback(error, existingSamples))
+            },
             (existingSamples, callback) => {
                 const newSamples = _.filter(samples, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
                 console.log(`new samples ${newSamples}`);
                 if (newSamples) {
-                    this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples, (error, sampleIds) => {
+                    this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples,
+                        SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => {
                         callback(error, sampleIds);
                     });
                 } else {
                     callback(null, []);
                 }
             },
-            (sampleIds, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+            (sampleIds, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], false,
                 (error, samples) => {
                     console.log(`${error} ${samples} ${callback}`);
                     callback(error, samples);
                 })
+        ], callback);
+    }
+
+    verifySamplesForVcfFile(user, vcfFileId, vcfFileName, samples, callback) {
+        this.logger.debug(`user: ${JSON.stringify(user, null, 2)}`);
+        this.logger.debug(`vcfFileId: ${JSON.stringify(vcfFileId, null, 2)}`);
+        this.logger.debug(`samples: ${JSON.stringify(samples, null, 2)}`);
+
+        samples = samples.concat(['NewSample1', 'NewSample2']);
+
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                console.log(`existing samples ${existingSamples}`);
+                const wrongSamples = _.filter(existingSamples, sample => _.indexOf(samples, sample.genotypeName) < 0);
+                console.log(`wrong samples ${wrongSamples}`);
+                if (wrongSamples.length > 0) {
+                    callback(null, existingSamples, 'Mismatched samples');
+                } else {
+                    const newSamples = _.filter(samples, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
+                    console.log(`new samples ${newSamples}`);
+                    if (newSamples.length > 0) {
+                        callback(null, existingSamples, 'Mismatched samples');
+                    } else {
+                        callback(null, existingSamples, null);
+                    }
+                }
+            }
         ], callback);
     }
 

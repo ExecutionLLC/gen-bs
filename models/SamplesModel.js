@@ -17,7 +17,8 @@ const mappedColumns = [
     'isAnalyzed',
     'isDeleted',
     'values',
-    'timestamp'
+    'timestamp',
+    'uploadState'
 ];
 
 const SampleTableNames = {
@@ -131,6 +132,7 @@ class SamplesModel extends SecureModelBase {
                     description
                 }, (error) => callback(error)),
                 (callback) => this._updateSampleMetadataValues(trx, sampleId, sampleToUpdate.sampleMetadata, (error) => callback(error)),
+                (callback) => this._setUploadState(trx, sampleId, sampleToUpdate.uploadState, sampleToUpdate.error, (error) => callback(error)),
                 (callback) => this._find(trx, sampleId, userId, callback)
             ], callback);
         }, callback);
@@ -170,6 +172,16 @@ class SamplesModel extends SecureModelBase {
             });
     }
 
+    _setUploadState(trx, sampleId, uploadState, error, callback) {
+        trx(SampleTableNames.Sample)
+            .where('id', sampleId)
+            .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                uploadState,
+                error
+            }))
+            .asCallback((error) => callback(error, sampleId));
+    }
+
     _add(userId, languageId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             this._addInTransaction(userId, sample, languageId, shouldGenerateId, trx, callback);
@@ -183,7 +195,7 @@ class SamplesModel extends SecureModelBase {
     }
 
     _addSample(languageId, sample, shouldGenerateId, trx, callback) {
-        const {id, vcfFileId, type, isAnalyzed, genotypeName, analyzedTimestamp, fileName, description} =sample;
+        const {id, vcfFileId, type, isAnalyzed, genotypeName, analyzedTimestamp, fileName, description, uploadState} =sample;
         async.waterfall([
             (callback) => {
                 const dataToInsert = {
@@ -192,7 +204,8 @@ class SamplesModel extends SecureModelBase {
                     isAnalyzed: isAnalyzed || false,
                     genotypeName: genotypeName || null,
                     analyzedTimestamp: analyzedTimestamp || null,
-                    vcfFileId
+                    vcfFileId,
+                    uploadState
                 };
                 this._insert(dataToInsert, trx, callback);
             },
@@ -354,6 +367,8 @@ class SamplesModel extends SecureModelBase {
             `${SampleTableNames.Sample}.analyzed_timestamp`,
             `${SampleTableNames.Sample}.type`,
             `${SampleTableNames.Sample}.created`,
+            `${SampleTableNames.Sample}.upload_state`,
+            `${SampleTableNames.Sample}.error`,
             `${SampleTableNames.VcfFile}.creator`,
             `${SampleTableNames.VcfFile}.file_name`
         ])

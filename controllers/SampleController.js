@@ -47,9 +47,10 @@ class SampleController extends UserEntityControllerBase {
                 const decoder = new StringDecoder('utf8');
                 const buf = Buffer.from(uint8data);
                 const text = decoder.write(buf);
-                const sampleList = this._findSamples(text);
-                console.log(sampleList);
-                callback(null, sampleFile, fileName, sampleList);
+                const sampleNames = this._findSamples(text);
+                const sampleNamesFake = sampleNames.concat(['FakeSample1', 'FakeSample2']);
+                console.log(`sampleNamesFake ${sampleNamesFake}`);
+                callback(null, sampleFile, fileName, sampleNamesFake);
             },
             (sampleFile, fileName, sampleList, callback) => {
                 const fileInfo = {
@@ -69,7 +70,7 @@ class SampleController extends UserEntityControllerBase {
                 });
             },
             (operationId, upload, sampleList, callback) => {
-                this.services.samples.initMetadataForUploadedSample(user, upload.id, upload.fileName, sampleList, (error, sampleIds) => {
+                this.services.samples.initMetadataForUploadedSample(user, upload.id, upload.fileName, sampleList, null, (error, sampleIds) => {
                     callback(error, operationId, upload, sampleIds);
                 });
             },
