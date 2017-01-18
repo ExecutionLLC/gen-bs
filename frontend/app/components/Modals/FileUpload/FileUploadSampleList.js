@@ -100,7 +100,7 @@ export default class FileUploadSampleList extends React.Component {
         });
         const sortedFilteredUploads = _.sortBy(filteredUploadedSamples, ['date']).reverse();
         return (
-            sortedFilteredUploads.map((item) => this._renderUploadedData(item, showNew))
+            sortedFilteredUploads.map((item) => this._renderUploadedDataSample(item, showNew))
         );
     }
 
@@ -178,20 +178,6 @@ export default class FileUploadSampleList extends React.Component {
             message,
             null
         );
-    }
-
-
-    _renderUploadedData(uploadData, showNew) {
-        const {sample, upload, label} = uploadData;
-        if (sample) {
-            return this._renderUploadedDataSample(uploadData, showNew);
-        } else {
-            if (showNew) {
-                return null;
-            } else {
-                return this._renderUploadedDataFileError(upload, label);
-            }
-        }
     }
 
     renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
