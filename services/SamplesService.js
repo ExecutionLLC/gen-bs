@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const Uuid = require('node-uuid');
 const async = require('async');
+const fs = require('fs');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsService = require('./FieldsService.js');
@@ -33,16 +34,18 @@ class SamplesService extends UserEntityServiceBase {
      * */
     upload(session, user, localFileInfo, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
+        const fileId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.services.applicationServer.uploadSample(session, user,
-                localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this._createHistoryEntry(
+            (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
+            (fileId, callback) => this._createHistoryEntry(
                 user,
                 operationId,
                 localFileInfo.originalFileName,
-                (error) => callback(error, operationId)
+                (error) => callback(error, fileId)
             ),
+            (fileId, callback) => this.services.applicationServer.uploadSample(session, user,
+                fileId, localFileInfo.originalFileName, callback),
             (operationId, callback) => this._loadAndVerifyPriority(
                 user,
                 (error, priority) => callback(error, operationId, priority)
@@ -50,6 +53,14 @@ class SamplesService extends UserEntityServiceBase {
             (operationId, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
                 operationId, priority, (error) => callback(error, operationId))
         ], callback);
+    }
+
+    _uploadSample(sampleLocalPath, fileId, callback) {
+        const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
+        const fileStream = fs.createReadStream(sampleLocalPath);
+        this.services.objectStorage.uploadObject(newSamplesBucket, fileId, fileStream,
+            (error, result) => callback(null, fileId)
+        );
     }
 
     remove(user, itemId, callback) {

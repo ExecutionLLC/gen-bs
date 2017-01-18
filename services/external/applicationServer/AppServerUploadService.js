@@ -22,34 +22,13 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         super(services, models);
     }
 
-    uploadSample(session, user, sampleLocalPath, sampleFileName, callback) {
+    uploadSample(session, user, fileId, sampleFileName, callback) {
         async.waterfall([
-            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
+            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, fileId, callback),
             (operation, callback) => {
                 operation.setSampleFileName(sampleFileName);
                 operation.setUserId(user.id);
-                callback(null, operation);
-            },
-            (operation, callback) => {
-                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const fileStream = fs.createReadStream(sampleLocalPath);
-                this.services.objectStorage.uploadObject(newSamplesBucket, operation.getId(), fileStream,
-                    (error) => callback(null, error, operation)
-                );
-            },
-            (error, operation, callback) => {
-                if (error) {
-                    // We didn't start the upload session on app server yet.
-                    operation.setSendCloseToAppServer(false);
-
-                    // But started it locally, so remove it.
-                    async.waterfall([
-                        (callback) => this.services.sessions.findSystemSession(callback),
-                        (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
-                    ], () => callback(error));
-                } else {
-                    callback(null, operation.getId());
-                }
+                callback(null, operation.getId());
             }
         ], callback);
     }

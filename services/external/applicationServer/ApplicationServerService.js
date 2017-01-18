@@ -68,8 +68,8 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      * @param sampleFileName Original name of the sample file.
      * @param callback (error, operationId)
      * */
-    uploadSample(session, user, sampleLocalPath, sampleFileName, callback) {
-        this.services.applicationServerUpload.uploadSample(session, user, sampleLocalPath, sampleFileName, callback);
+    uploadSample(session, user, fileId, sampleFileName, callback) {
+        this.services.applicationServerUpload.uploadSample(session, user, fileId, sampleFileName, callback);
     }
 
     /**
