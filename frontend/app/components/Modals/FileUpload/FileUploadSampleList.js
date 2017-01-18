@@ -11,7 +11,6 @@ import {
     abortRequest
 } from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
-import {uploadState} from '../../../utils/uploadUtils';
 import {modalName} from '../../../actions/modalWindows';
 
 function fileUploadStatusErrorOrReady(status) {
@@ -266,26 +265,26 @@ export default class FileUploadSampleList extends React.Component {
     static renderProgressBar(uploadItem) {
         const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
-            [uploadState.AJAX]: {
+            [fileUploadStatus.AJAX]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
                 }),
                 renderMessage: 'Loading..'
             },
-            [uploadState.TASK_RUNNING]: {
+            [fileUploadStatus.TASK_RUNNING]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
                 renderMessage: <span className='text-primary'>Saving...</span>
             },
-            [uploadState.IN_PROGRESS]: {
+            [fileUploadStatus.IN_PROGRESS]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
                 renderMessage: <span className='text-primary'>Saving...</span>
             }
         };
-        const currentStage = STAGES[progressStatus] || STAGES[uploadState.AJAX];
+        const currentStage = STAGES[progressStatus] || STAGES[fileUploadStatus.AJAX];
         if (!currentStage) {
             return null;
         }
@@ -309,7 +308,7 @@ export default class FileUploadSampleList extends React.Component {
     static renderRefreshIcon(uploadItem) {
         const {progressStatus} = uploadItem;
         return <i className={classNames('icon-state md-i md-spin',
-            progressStatus === uploadState.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
+            progressStatus === fileUploadStatus.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
     }
 
     static renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
