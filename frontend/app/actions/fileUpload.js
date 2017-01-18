@@ -162,7 +162,7 @@ function receiveFileOperation(upload, id) {
     };
 }
 
-function sendFile(file, onOperationId, onProgress, onError) {
+function sendFile(file, onUploaded, onProgress, onError) {
     return sampleUploadsClient.upload(
         file,
         onProgress,
@@ -170,7 +170,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
             if (err) {
                 onError(err);
             } else {
-                onOperationId(res);
+                onUploaded(res);
             }
         }
     );
@@ -209,9 +209,9 @@ export function uploadFile(fileUploadId) {
         dispatch(changeFileUploadProgress(0, uploadState.AJAX, fp.id));
         const abortRequest = sendFile(
             fp.file,
-            (operationId) => {
+            (upload) => {
                 delete requestAbortFunctions[fp.id];
-                dispatch(receiveFileOperation(operationId, fp.id));
+                dispatch(receiveFileOperation(upload, fp.id));
             },
             (percentage) => {
                 console.log('progress', percentage);
