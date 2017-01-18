@@ -40,7 +40,7 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
             (fileId, callback) => this._createHistoryEntry(
                 user,
-                operationId,
+                fileId,
                 localFileInfo.originalFileName,
                 (error) => callback(error, fileId)
             ),
@@ -59,7 +59,7 @@ class SamplesService extends UserEntityServiceBase {
         const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
         const fileStream = fs.createReadStream(sampleLocalPath);
         this.services.objectStorage.uploadObject(newSamplesBucket, fileId, fileStream,
-            (error, result) => callback(null, fileId)
+            (error, result) => callback(error, fileId)
         );
     }
 
