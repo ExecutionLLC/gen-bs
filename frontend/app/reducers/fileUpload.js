@@ -81,7 +81,7 @@ function createFileProcess(file, id) {
     };
 }
 
-function reduceFilterListReceive(state, action) {
+function reduceUploadsListReceive(state, action) {
     return {
         ...state,
         filesProcesses: _.map(action.uploads, upload => {
@@ -98,14 +98,8 @@ function reduceFilterListReceive(state, action) {
                 progressStatus: status,
                 error
             };
-        })
-    };
-}
-
-function reduceClearUploadState() {
-    return {
-        ...initialState,
-        filesProcesses: []
+        }),
+        currentUploadId: null
     };
 }
 
@@ -203,7 +197,7 @@ function reduceFileUploadChangeProgress(state, action) {
     };
 }
 
-function setUploadId(state, action) {
+function reduceSetCurrentUploadId(state, action) {
     return {
         ...state,
         currentUploadId: action.uploadId
@@ -244,9 +238,6 @@ export default function fileUpload(state = initialState, action) {
 
     switch (action.type) {
 
-        case ActionTypes.CLEAR_UPLOAD_STATE:
-            return reduceClearUploadState();
-
         case ActionTypes.REQUEST_GZIP:
             return reduceRequestGZIP(state, action);
 
@@ -275,10 +266,10 @@ export default function fileUpload(state = initialState, action) {
             return reduceFileUploadChangeProgress(state, action);
 
         case ActionTypes.UPLOADS_LIST_RECEIVE:
-            return reduceFilterListReceive(state, action);
+            return reduceUploadsListReceive(state, action);
 
         case ActionTypes.SET_CURRENT_UPLOAD_ID:
-            return setUploadId(state, action);
+            return reduceSetCurrentUploadId(state, action);
 
         case ActionTypes.INVALIDATE_CURRENT_UPLOAD_ID:
             return reduceInvalidateCurrentUploadId(state, action);

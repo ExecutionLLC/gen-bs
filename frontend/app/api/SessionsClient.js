@@ -47,7 +47,7 @@ export default class SessionsClient extends ClientBase {
             return null;
         }
 
-        const sessionId = response.body.sessionId;
+        const sessionId = response.body && response.body.sessionId;
         if (!sessionId) {
             return null;
         }

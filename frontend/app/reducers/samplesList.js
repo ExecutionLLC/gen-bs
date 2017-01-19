@@ -155,7 +155,7 @@ function reduceDisableSampleEdit(state, action) {
     };
 }
 
-function addSamples(state, action) {
+function reduceSamplesListAddSamples(state, action) {
     const {samples} = action;
     const {hashedArray} = state;
     let {array: currentSamples}= hashedArray;
@@ -186,7 +186,7 @@ function reduceSetEditingSampleId(state, action) {
     };
 }
 
-function updateSampleFields(state, action) {
+function reduceSamplesListUpdateSamplesFields(state, action) {
     const {samples} = action;
     const {hashedArray: {array: currentSamples}} = state;
     const updatedSampleHash = _.keyBy(samples, 'id');
@@ -258,13 +258,13 @@ export default function samplesList(state = {
             return reduceDisableSampleEdit(state, action);
 
         case ActionTypes.SAMPLES_LIST_ADD_SAMPLES:
-            return addSamples(state, action);
+            return reduceSamplesListAddSamples(state, action);
 
         case ActionTypes.SET_EDITING_SAMPLE_ID:
             return reduceSetEditingSampleId(state, action);
 
         case ActionTypes.SAMPLES_LIST_UPDATE_SAMPLES_FIELDS:
-            return updateSampleFields(state, action);
+            return reduceSamplesListUpdateSamplesFields(state, action);
 
         case ActionTypes.SAMPLES_LIST_REMOVE_SAMPLE:
             return reduceSamplesListRemoveSample(state, action);
