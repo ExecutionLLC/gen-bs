@@ -5,7 +5,6 @@ import Promise from 'bluebird';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
-import {uploadState} from '../utils/uploadUtils';
 
 /*
  * action types
@@ -17,7 +16,6 @@ export const RECEIVE_FILE_UPLOAD = 'RECEIVE_FILE_UPLOAD';
 export const RECEIVE_FILE_OPERATION = 'RECEIVE_FILE_OPERATION';
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS';
 export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
-export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
@@ -28,7 +26,10 @@ export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
 
 export const fileUploadStatus = {
     ERROR: 'error',
-    READY: 'ready'
+    READY: 'ready', // equals to WS_PROGRESS_STATUSES.READY
+    AJAX: 'ajax',
+    TASK_RUNNING: 'task_running',
+    IN_PROGRESS: 'in_progress' // seems like did not received
 };
 
 const {sampleUploadsClient} = apiFacade;
@@ -163,7 +164,7 @@ function receiveFileOperation(upload, id) {
     };
 }
 
-function sendFile(file, onOperationId, onProgress, onError) {
+function sendFile(file, onUploaded, onProgress, onError) {
     return sampleUploadsClient.upload(
         file,
         onProgress,
@@ -171,7 +172,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
             if (err) {
                 onError(err);
             } else {
-                onOperationId(res);
+                onUploaded(res);
             }
         }
     );
@@ -207,16 +208,16 @@ export function uploadFile(fileUploadId) {
             return;
         }
         dispatch(requestFileUpload(fp.id));
-        dispatch(changeFileUploadProgress(0, uploadState.AJAX, fp.id));
+        dispatch(changeFileUploadProgress(0, fileUploadStatus.AJAX, fp.id));
         const abortRequest = sendFile(
             fp.file,
-            (operationId) => {
+            (upload) => {
                 delete requestAbortFunctions[fp.id];
-                dispatch(receiveFileOperation(operationId, fp.id));
+                dispatch(receiveFileOperation(upload, fp.id));
             },
             (percentage) => {
                 console.log('progress', percentage);
-                dispatch(changeFileUploadProgress(percentage, uploadState.AJAX, fp.id));
+                dispatch(changeFileUploadProgress(percentage, fileUploadStatus.AJAX, fp.id));
             },
             (err) => {
                 console.error('Upload FAILED: ', err.responseText);
@@ -300,12 +301,6 @@ function addFileForUpload(file) {
     };
 }
 
-
-export function clearUploadState() {
-    return {
-        type: CLEAR_UPLOAD_STATE
-    };
-}
 
 function fileUploadError(id, error) {
     return {
