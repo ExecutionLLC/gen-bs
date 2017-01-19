@@ -712,13 +712,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getModelOptions() {
-        const {modelsList, historyItem} = this.props;
+        const {modelsList, historyItem, ui: {languageId}} = this.props;
         const models = modelsList.hashedArray.array;
         return models
             .filter((model) => model.analysisType === historyItem.type)
             .map((model) => {
                 const isDisabled = this.isModelDisabled(model);
-                const label = getItemLabelByNameAndType(model.name, model.type);
+                const label = getItemLabelByNameAndType(i18n.getEntityText(model, languageId).name, model.type);
                 return {value: model.id, label, disabled: isDisabled};
             });
     }
