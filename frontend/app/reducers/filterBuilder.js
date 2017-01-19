@@ -113,7 +113,7 @@ function reduceFBuilderStartEdit(state, action) {
 
     return Object.assign({}, state, {
         filtersStrategy,
-        filtersList:newFiltersList,
+        filtersList: newFiltersList,
         editingFilter: editingFilter,
         originalFilter: editingFilter,
         allowedFields
