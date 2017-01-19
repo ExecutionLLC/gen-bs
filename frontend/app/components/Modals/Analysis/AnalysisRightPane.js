@@ -716,10 +716,10 @@ export default class AnalysisRightPane extends React.Component {
         const models = modelsList.hashedArray.array;
         return models
             .filter((model) => model.analysisType === historyItem.type)
-            .map((sampleItem) => {
-                const isDisabled = this.isModelDisabled(sampleItem);
-                const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
-                return {value: sampleItem.id, label, disabled: isDisabled};
+            .map((model) => {
+                const isDisabled = this.isModelDisabled(model);
+                const label = getItemLabelByNameAndType(model.name, model.type);
+                return {value: model.id, label, disabled: isDisabled};
             });
     }
 
