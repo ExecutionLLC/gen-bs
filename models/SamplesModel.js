@@ -371,6 +371,7 @@ class SamplesModel extends SecureModelBase {
 
         if (excludeDeleted) {
             query = query.andWhere(`${SampleTableNames.Sample}.is_deleted`, false);
+            query = query.andWhere(`${SampleTableNames.VcfFile}.is_deleted`, false);
         }
 
         if (sampleIdsOrNull) {
