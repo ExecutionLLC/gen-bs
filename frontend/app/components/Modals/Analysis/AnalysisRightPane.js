@@ -613,7 +613,7 @@ export default class AnalysisRightPane extends React.Component {
             filtersList: {hashedArray: {hash: filtersHash}},
             modelsList: {hashedArray: {hash: modelsHash}},
             viewsList: {hashedArray: {hash: viewsHash}},
-            ui: {language} // FIXME langu
+            ui: {languageId}
         } = this.props;
 
         const selectedFilter = filtersHash[historyItem.filterId];
@@ -641,7 +641,7 @@ export default class AnalysisRightPane extends React.Component {
                 })}
                 <dl>
                     <dt>Filter</dt>
-                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, language).name, selectedFilter.type)}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
@@ -696,11 +696,11 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getFilterOptions() {
-        const {ui: {language}} = this.props; // FIXME langu
+        const {ui: {languageId}} = this.props;
         const filters = this.props.filtersList.hashedArray.array;
         return filters.map((filterItem) => {
             const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, language).name, filterItem.type);
+            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type);
             return {
                 value: filterItem.id, label, disabled: isDisabled
             };
@@ -822,11 +822,11 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onFiltersClick() {
-        const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {language}} = this.props;//FIXME langu
+        const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
         const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         const filterFiltersStrategy = {name: filterBuilderStrategyName.FILTER};
-        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList, language));
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList, languageId));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         dispatch(openModal(modalName.FILTERS));
@@ -838,7 +838,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelClick() {
-        const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {language}} = this.props;//FIXME langu
+        const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const samplesTypes = _.reduce(
             sampleTypesForAnalysisType[historyItem.type],
@@ -854,7 +854,7 @@ export default class AnalysisRightPane extends React.Component {
             ...modelsList,
             hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === historyItem.type))
         };
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList, language));
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList, languageId));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal(modalName.FILTERS));
