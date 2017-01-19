@@ -101,7 +101,7 @@ const SETTINGS = {
     headers: {
         // Session header is used for testing only.
         sessionHeader: makeDefault(ENV.GEN_WS_TEST_SESSION_HEADER, 'X-Session-Id'),
-        languageHeader: makeDefault(ENV.GEN_LANGUAGE_HEADER, 'X-Langu-Id')
+        languageHeader: makeDefault(ENV.GEN_LANGUAGE_HEADER, 'X-Language-Id')
     },
     sessions: {
         sessionCookieName: makeDefault(ENV.GEN_WS_SESSION_COOKIE_NAME, 'gen-ws-session'),

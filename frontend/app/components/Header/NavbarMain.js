@@ -15,10 +15,6 @@ import {entityType} from '../../utils/entityTypes';
 
 class NavbarMain extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {
             dispatch,
@@ -95,12 +91,11 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ui, ws, variantsTable, samplesList, fileUpload} = state;
+    const {auth, userData, ws, variantsTable, samplesList, fileUpload} = state;
 
     return {
         auth,
         userData,
-        ui,
         ws,
         variantsTable,
         samplesList,

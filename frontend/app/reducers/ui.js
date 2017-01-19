@@ -6,7 +6,7 @@ export default function ui(state = {
     currentLimit: 100,
     currentOffset: 0,
     isAnalyzeTooltipVisible: false,
-    language: 'en'
+    languageId: 'en'
 }, action) {
 
     switch (action.type) {
