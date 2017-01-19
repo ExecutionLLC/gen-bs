@@ -25,7 +25,7 @@ function editModelLanguageNotNullConstrains(knex) {
     console.log('=> Update model language constrains...');
     return knex.schema
         .table('model_text', table => {
-            table.dropPrimary('filter_text_pkey')
+            table.dropPrimary('model_text_pkey')
         })
         .then(() => knex.raw('ALTER TABLE model_text ALTER COLUMN language_id DROP NOT NULL'))
         .then(() => knex.schema
