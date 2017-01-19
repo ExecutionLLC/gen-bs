@@ -62,14 +62,13 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      * Sends specified file sample to application server.
      *
      * @param session Session to which the file belongs.
-     * @param sampleId Id of the sample.
      * @param user Session owner.
-     * @param sampleLocalPath Full local path to the sample file.
+     * @param fileId file id from amazon.
      * @param sampleFileName Original name of the sample file.
      * @param callback (error, operationId)
      * */
-    uploadSample(session, user, fileId, sampleFileName, callback) {
-        this.services.applicationServerUpload.uploadSample(session, user, fileId, sampleFileName, callback);
+    uploadSample(user, fileId, sampleFileName, callback) {
+        this.services.applicationServerUpload.uploadSample(user, fileId, sampleFileName, callback);
     }
 
     /**

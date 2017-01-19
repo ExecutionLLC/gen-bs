@@ -34,17 +34,16 @@ class SamplesService extends UserEntityServiceBase {
      * */
     upload(session, user, localFileInfo, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
-        const fileId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
+            (callback) => this._uploadSample(localFileInfo.localFilePath, callback),
             (fileId, callback) => this._createHistoryEntry(
                 user,
                 fileId,
                 localFileInfo.originalFileName,
                 (error) => callback(error, fileId)
             ),
-            (fileId, callback) => this.services.applicationServer.uploadSample(session, user,
+            (fileId, callback) => this.services.applicationServer.uploadSample(user,
                 fileId, localFileInfo.originalFileName, callback),
             (operationId, callback) => this._loadAndVerifyPriority(
                 user,
@@ -55,7 +54,8 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    _uploadSample(sampleLocalPath, fileId, callback) {
+    _uploadSample(sampleLocalPath, callback) {
+        const fileId = Uuid.v4();
         const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
         const fileStream = fs.createReadStream(sampleLocalPath);
         this.services.objectStorage.uploadObject(newSamplesBucket, fileId, fileStream,
