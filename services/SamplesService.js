@@ -139,7 +139,7 @@ class SamplesService extends UserEntityServiceBase {
 
                 const sampleUploadStates = _.map(existingSamples, (sample) => {
                     return Object.assign({}, sample, {
-                        genotypeName: _.indexOf(samples, sample.genotypeName) < 0
+                        uploadState: _.indexOf(samples, sample.genotypeName) < 0
                             ? SAMPLE_UPLOAD_STATE.NOT_FOUND
                             : SAMPLE_UPLOAD_STATE.COMPLETED
                     });
