@@ -64,7 +64,7 @@ const WS_INSTANCE_MESSAGE_TYPES = createEnum({
     SAMPLE_UPLOAD_COMPLETED: 'sample_upload_completed'
 });
 
-const SAMPLE_UPLOAD_STATE = createEnum({
+const WS_SAMPLE_UPLOAD_STATE = createEnum({
     UNCONFIRMED: 'unconfirmed', // the sample was created after header parsing on WS
     NOT_FOUND: 'not_found', // the sample was not found during parsing on AS
     COMPLETED: 'completed', // the sample was successfully parsed on AS
@@ -81,5 +81,5 @@ module.exports = {
 	SAMPLE_UPLOAD_STATUS,
     LOGIN_TYPES,
     EVENT_TYPES,
-    SAMPLE_UPLOAD_STATE
+    WS_SAMPLE_UPLOAD_STATE
 };

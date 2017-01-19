@@ -8,7 +8,7 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsService = require('./FieldsService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
-const {SAMPLE_UPLOAD_STATUS, SAMPLE_UPLOAD_STATE} = require('../utils/Enums');
+const {SAMPLE_UPLOAD_STATUS, WS_SAMPLE_UPLOAD_STATE} = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
@@ -94,7 +94,7 @@ class SamplesService extends UserEntityServiceBase {
                 fileName: vcfFileName,
                 vcfFileId,
                 genotypeName: genotype,
-                uploadState: uploadState || SAMPLE_UPLOAD_STATE.UNCONFIRMED
+                uploadState: uploadState || WS_SAMPLE_UPLOAD_STATE.UNCONFIRMED
             }
         });
         this.theModel.addSamples(user.id, user.language, samples, callback);
@@ -140,8 +140,8 @@ class SamplesService extends UserEntityServiceBase {
                 const sampleUploadStates = _.map(existingSamples, (sample) => {
                     return Object.assign({}, sample, {
                         uploadState: _.indexOf(samples, sample.genotypeName) < 0
-                            ? SAMPLE_UPLOAD_STATE.NOT_FOUND
-                            : SAMPLE_UPLOAD_STATE.COMPLETED
+                            ? WS_SAMPLE_UPLOAD_STATE.NOT_FOUND
+                            : WS_SAMPLE_UPLOAD_STATE.COMPLETED
                     });
                 });
                 async.map(sampleUploadStates, (sample, callback) => {
@@ -159,7 +159,7 @@ class SamplesService extends UserEntityServiceBase {
                 console.log(`new samples ${newSamples}`);
                 if (newSamples) {
                     this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples,
-                        SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => {
+                        WS_SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => {
                         callback(error, sampleIds);
                     });
                 } else {

@@ -32,6 +32,13 @@ export const fileUploadStatus = {
     IN_PROGRESS: 'in_progress' // seems like did not received
 };
 
+export const SAMPLE_UPLOAD_STATE = { // equals to WS_SAMPLE_UPLOAD_STATE
+    UNCONFIRMED: 'unconfirmed', // the sample was created after header parsing on WS
+    NOT_FOUND: 'not_found', // the sample was not found during parsing on AS
+    COMPLETED: 'completed', // the sample was successfully parsed on AS
+    ERROR: 'error' // an error has occurred while parsing the file with this sample.
+};
+
 const {sampleUploadsClient} = apiFacade;
 
 const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting upload.' +
