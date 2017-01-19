@@ -61,7 +61,7 @@ class ModelsModel extends SecureModelBase {
         const modelText = _.find(model.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._ensureNameIsValid(model.name, callback),
+                (callback) => this._ensureNameIsValid(modelText.name, callback),
                 (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
