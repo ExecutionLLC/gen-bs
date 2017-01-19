@@ -68,7 +68,6 @@ class ViewsModel extends SecureModelBase {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        name: viewText.name.trim(),
                         type: view.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
@@ -77,6 +76,7 @@ class ViewsModel extends SecureModelBase {
                     const dataToInsert = {
                         viewId: viewId,
                         languageId: viewText.languageId,
+                        name: viewText.name.trim(),
                         description: viewText.description
                     };
                     this._unsafeInsert('view_text', dataToInsert, trx, (error) => {
@@ -218,7 +218,6 @@ class ViewsModel extends SecureModelBase {
             `${TableNames.Views}.type`,
             `${TableNames.Views}.is_deleted`,
             `${TableNames.Views}.is_copy_disabled`,
-            `${TableNames.Views}.name`,
             `${TableNames.Views}.creator`
         ])
             .from(TableNames.ViewVersions)
@@ -310,9 +309,9 @@ class ViewsModel extends SecureModelBase {
                 const viewsWithDescription = _.map(views, view => {
                     return Object.assign({}, view, {
                         text: _.map(textsHash[view.viewId], text => {
-                            const {description, languageId} = text;
+                            const {description, languageId, name} = text;
                             return {
-                                name: view.name,
+                                name,
                                 description,
                                 languageId
                             };

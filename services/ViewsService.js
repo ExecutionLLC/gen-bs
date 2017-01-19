@@ -49,13 +49,16 @@ class ViewsService extends UserEntityServiceBase {
     }
 
     _checkViewNameExists(view, views, callback) {
-        if (!_.isString(view.name)) {
+        const viewText = _.find(view.text, textData => _.isNull(textData.languageId));
+        if (!_.isString(viewText.name)) {
             callback(new Error('View name should be a string.'));
             return;
         }
-        const viewName = view.name.trim();
+        const viewName = viewText.name.trim();
         const viewExists = _.some(
-            views, v => v.name.trim() == viewName
+            views, v => _.some(v.text, textData => {
+                return textData.name.trim() == viewName;
+            })
         );
         if (viewExists) {
             callback(new Error('View with this name already exists.'));
