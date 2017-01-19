@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
-import classNames from 'classnames';
 
 import VariantsTableRow from './VariantsTableRow';
 
@@ -115,15 +114,9 @@ export default class VariantsTableRows extends Component {
 
     renderTempRow() {
         const {variantsHeader} = this.props;
-        const style = {
-            visibility: 'hidden'
-        };
-        const sortedActiveClass = classNames({
-            'active': false
-        });
         return [
             VariantsTableRows.renderLoadingItem(),
-            <tr style={style}>
+            <tr style={{visibility: 'hidden'}}>
                 <td className='btntd row_checkbox'>
                     <div>{1}</div>
                 </td>
@@ -147,7 +140,7 @@ export default class VariantsTableRows extends Component {
                 </td>
                 {_.map(variantsHeader, () => {
                     return (
-                        <td className={sortedActiveClass}>
+                        <td>
                             <div>
                             </div>
                         </td>
