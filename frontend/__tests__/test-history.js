@@ -31,7 +31,7 @@ const TestIds = {
 const {sampleFieldsList, totalFieldsList} = MOCK_APP_STATE.fields;
 const searchOperationId = 'searchOperationId';
 
-describe.skip('Mocked History State', () => {
+describe('Mocked History State', () => {
     const state = buildHistoryState();
     const {
         initialAppState,
