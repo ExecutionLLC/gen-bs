@@ -87,7 +87,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, sampleDefaultType, inde
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersStrategy, filtersList} = action;
+    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersStrategy, filtersList, languageId} = action;
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?
@@ -97,9 +97,9 @@ function reduceFBuilderStartEdit(state, action) {
                     type: entityType.USER,
                     id: null
                 },
-                'en',
+                languageId,
                 {
-                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, 'en').name),
+                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, languageId).name),
                 }
             ) :
             filter,
@@ -168,7 +168,7 @@ function reduceFBuilderChangeAttr(state, action) {
             Object.assign({}, state.editingFilter, {
                 filter: i18n.changeEntityText(
                     state.editingFilter.filter,
-                    'en',
+                    action.languageId,
                     {
                         name: action.name,
                         description: action.description

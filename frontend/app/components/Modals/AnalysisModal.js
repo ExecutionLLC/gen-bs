@@ -44,6 +44,7 @@ class AnalysisModal extends React.Component {
                     fields={this.props.fields}
                     isAnalysisBringToFront={this.state.isAnalysisBringToFront}
                     onAnalysisShow={() => this.onAnalysisShow()}
+                    ui={this.props.ui}
                 />
             </Modal>
         );
@@ -63,7 +64,7 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, analysesHistory, viewsList, filtersList, modelsList, samplesList, fields} = state;
+    const {auth, analysesHistory, viewsList, filtersList, modelsList, samplesList, fields, ui} = state;
 
     
     const historyList = analysesHistory.history;
@@ -85,7 +86,8 @@ function mapStateToProps(state) {
         isHistoryReceivedAll: analysesHistory.isReceivedAll,
         isHistoryRequesting: analysesHistory.isRequesting,
         newHistoryItem,
-        isLoadingHistoryData: analysesHistory.isLoadingHistoryData
+        isLoadingHistoryData: analysesHistory.isLoadingHistoryData,
+        ui
     };
 }
 

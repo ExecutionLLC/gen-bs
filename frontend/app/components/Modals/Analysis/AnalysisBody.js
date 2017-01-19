@@ -47,6 +47,7 @@ export default class AnalysisBody extends React.Component {
                         modelsList={this.props.modelsList}
                         fields={this.props.fields}
                         isBringToFront={this.props.isAnalysisBringToFront}
+                        ui={this.props.ui}
                     />}
                 </div>
             </Modal.Body>

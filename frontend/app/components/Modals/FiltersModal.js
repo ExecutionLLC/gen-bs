@@ -142,7 +142,8 @@ class FiltersModal extends Component {
     }
 
     getTrimmedFilterName(filter) {
-        return i18n.getEntityText(filter, 'en').name.trim();
+        const {ui: {language}} = this.props; // FIXME langu
+        return i18n.getEntityText(filter, language).name.trim();
     }
 
     /**

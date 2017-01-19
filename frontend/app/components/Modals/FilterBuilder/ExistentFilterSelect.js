@@ -64,9 +64,10 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderFiltersSelector(filters) {
+        const {ui: {language}} = this.props;//FIXME langu
         const selectItems = filters.map( filter => ({
             value: filter.id,
-            label: getItemLabelByNameAndType(i18n.getEntityText(filter, 'en').name, filter.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(filter, language).name, filter.type)
         }));
 
         return (
@@ -140,23 +141,23 @@ export default class ExistentFilterSelect extends Component {
     }
 
     onSelectChange(filters, filterId) {
-        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId)));
+        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId, this.props.ui.language)));//FIXME langu
     }
 
     onDuplicateClick() {
         const filter = this.getSelectedFilter();
-        this.props.dispatch(filterBuilderRestartEdit(true, filter));
+        this.props.dispatch(filterBuilderRestartEdit(true, filter, this.props.ui.language));//FIXME langu
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        this.props.dispatch(filterBuilderRestartEdit(false, filter));
+        this.props.dispatch(filterBuilderRestartEdit(false, filter, this.props.ui.language));//FIXME langu
     }
 
     onDeleteFilterClick() {
-        const {dispatch} = this.props;
+        const {dispatch, ui: {language}} = this.props;//FIXME langu
         const filterId = this.getSelectedFilter().id;
-        dispatch(filterBuilderDeleteFilter(filterId)).then((newFilter) => {
+        dispatch(filterBuilderDeleteFilter(filterId, language)).then((newFilter) => {
             dispatch(fireOnSaveAction(newFilter));
         });
     }

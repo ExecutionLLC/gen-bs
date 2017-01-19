@@ -79,14 +79,14 @@ class SavedFilesModal extends DialogBase {
 
     renderSavedFileRow(savedFile) {
         const {filter, view, model, samples, timestamp} = savedFile;
-        const {samplesList: {hashedArray: {hash: samplesHashedArray}}} = this.props;
+        const {samplesList: {hashedArray: {hash: samplesHashedArray}}, ui: {language}} = this.props; // FIXME langu
         const savedFileSamples = _.map(samples, sample => samplesHashedArray[sample.id]);
         const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? sample.name : '???');
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
                 <td>{savedFileSamplesNames.join(', ')}</td>
-                <td>{(i18n.getEntityText(filter, 'en') || {}/*FIXME crutch for no filter name*/).name}</td>
+                <td>{(i18n.getEntityText(filter, language) || {}/*FIXME crutch for no filter name*/).name}</td>
                 <td>{view.name}</td>
                 <td>{model ? model.name : ''}</td>
                 <td>
@@ -119,12 +119,13 @@ SavedFilesModal.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { savedFiles: {list}, auth: {isDemo}, samplesList } = state;
+    const { savedFiles: {list}, auth: {isDemo}, samplesList, ui } = state;
 
     return {
         savedFiles: list,
         isDemo,
-        samplesList
+        samplesList,
+        ui
     };
 }
 
