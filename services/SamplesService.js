@@ -113,20 +113,20 @@ class SamplesService extends UserEntityServiceBase {
 
     /**
      * This function updates the list of samples that are in the VCF file being uploaded.
-     * Before this call, the DB may contain samples that was received by simple VCF-header parsing.
+     * Before this call, the DB may contain samples that was received by simple VCF-header parsing on WS.
      * If the DB contains entries that are not in {samples}, they are considered wrong and will
      * be deleted.
-     * If the {samples} contains entries that are not in the DB yet, they will be added to DB.
+     * If the <param>sampleNames</param> contains entries that are not in the DB yet, they will be added to DB.
      *
-     * @param {User} user - (???)
+     * @param {Object} user - Current user object.
      * @param {number} vcfFileId - Id of the VCF file currently being uploaded.
-     * @param {string} vcfFileName
-     * @param {Array} samples - Array of the sample names that was received after analysis from AS.
-     * @param {Function} callback - (???)
+     * @param {string} vcfFileName - VCF file name
+     * @param {Array} sampleNames - Array of the sample names that was received after analysis from AS.
+     * @param {Function} callback - callback (error, samples)
      */
-    updateSamplesForVcfFile(user, vcfFileId, vcfFileName, samples, callback) {
+    updateSamplesForVcfFile(user, vcfFileId, vcfFileName, sampleNames, callback) {
 
-        samples = samples.concat(['NewSample1', 'NewSample2']); // TODO: remove this line
+        sampleNames = sampleNames.concat(['NewSample1', 'NewSample2']); // TODO: remove this line
 
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
@@ -135,7 +135,7 @@ class SamplesService extends UserEntityServiceBase {
             (existingSamples, callback) => {
                 const samplesWithNewState = _.map(existingSamples, (sample) => {
                     return Object.assign({}, sample, {
-                        uploadState: _.includes(samples, sample.genotypeName)
+                        uploadState: _.includes(sampleNames, sample.genotypeName)
                             ? WS_SAMPLE_UPLOAD_STATE.NOT_FOUND
                             : WS_SAMPLE_UPLOAD_STATE.COMPLETED
                     });
@@ -147,15 +147,15 @@ class SamplesService extends UserEntityServiceBase {
             (items, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
                 (error, existingSamples) => callback(error, existingSamples)),
             (existingSamples, callback) => {
-                const newSamples = _.filter(samples, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
+                const newSamples = _.filter(sampleNames, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
                 if (newSamples.length) {
                     this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples,
-                        WS_SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => callback(error, sampleIds));
+                        WS_SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => callback(error));
                 } else {
-                    callback(null, []);
+                    callback(null);
                 }
             },
-            (sampleIds, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], false,
+            (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
                 (error, samples) => callback(error, samples))
         ], callback);
     }

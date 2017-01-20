@@ -48,7 +48,7 @@ class SampleController extends UserEntityControllerBase {
                 const buf = Buffer.from(uint8data);
                 const text = decoder.write(buf);
                 const sampleNames = this._findSamples(text);
-                const sampleNamesFake = sampleNames.concat(['FakeSample1', 'FakeSample2']);
+                const sampleNamesFake = sampleNames.concat(['FakeSample1', 'FakeSample2']); // TODO: remove this line
                 console.log(`sampleNamesFake ${sampleNamesFake}`);
                 callback(null, sampleFile, fileName, sampleNamesFake);
             },

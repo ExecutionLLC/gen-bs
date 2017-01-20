@@ -195,7 +195,8 @@ class SamplesModel extends SecureModelBase {
     }
 
     _addSample(languageId, sample, shouldGenerateId, trx, callback) {
-        const {id, vcfFileId, type, isAnalyzed, genotypeName, analyzedTimestamp, fileName, description, uploadState} =sample;
+        const {id, vcfFileId, type, isAnalyzed, genotypeName, analyzedTimestamp, fileName, description,
+            uploadState} = sample;
         async.waterfall([
             (callback) => {
                 const dataToInsert = {

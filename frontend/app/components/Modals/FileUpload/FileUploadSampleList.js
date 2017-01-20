@@ -145,7 +145,9 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     _renderSampleError(sample, label, isActive) {
-        const message = sample.error || (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND ? 'Not found' : 'Unknown error');
+        const message = sample.error || (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
+                ? 'The sample is not found in VCF'
+                : 'Unknown error');
         return this.renderListItem(
             sample.id,
             isActive,
