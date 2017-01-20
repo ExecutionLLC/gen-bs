@@ -7,6 +7,7 @@ import {
 import config from '../../config';
 import {samplesListAddSamples} from './samplesList';
 import {samplesListUpdateSamplesFields} from './samplesList';
+import _ from 'lodash';
 
 /*
  * action types
@@ -170,7 +171,16 @@ function receiveClosedByUserMessage() {
 }
 
 function receiveErrorMessage(wsData) {
+    const {result: {metadata: samples}} = wsData;
     return (dispatch) => {
+        if (samples) {
+            dispatch(samplesListAddSamples(
+                _.map(samples, (sample) => {
+                    sample.error = wsData.error.message;
+                    return sample;
+                })
+            ));
+        }
         console.error('Error: ' + JSON.stringify(wsData.error));
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {

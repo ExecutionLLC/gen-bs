@@ -8,7 +8,9 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const METHODS = require('./AppServerMethods');
-const {SAMPLE_UPLOAD_STATUS} = require('../../../utils/Enums');
+const {
+    SAMPLE_UPLOAD_STATUS,
+    WS_SAMPLE_UPLOAD_STATE} = require('../../../utils/Enums');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
     CONVERTING: 'converting',
@@ -163,20 +165,38 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             }, (error) => callback(error)),
             (callback) => {
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const sampleId = operation.getId();
-                this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
+                const vcfFileId = operation.getId();
+                this.services.objectStorage.deleteObject(newSamplesBucket, vcfFileId,
                     (error, result) => callback(error)
                 );
             },
-            (callback) => this.toggleNextOperation(operation.getId(), callback),
-            (callback) => this._createOperationResult(
+            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                const sampleUploadStates = _.map(existingSamples, (sample) => {
+                    return Object.assign({}, sample, {
+                        uploadState: WS_SAMPLE_UPLOAD_STATE.ERROR
+                    });
+                });
+                async.map(sampleUploadStates, (sample, callback) => {
+                    return this.services.samples.update(user, sample, callback);
+                }, (error, result) => callback(error, result));
+            },
+            (items, callback) => this.toggleNextOperation(operation.getId(), callback),
+            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => this._createOperationResult(
                 session,
                 operation,
                 null,
                 operation.getUserId(),
                 EVENTS.onOperationResultReceived,
                 true,
-                null,
+                {
+                    status: SAMPLE_UPLOAD_STATUS.ERROR,
+                    progress: 0,
+                    metadata: existingSamples
+                },
                 error,
                 callback
             )
