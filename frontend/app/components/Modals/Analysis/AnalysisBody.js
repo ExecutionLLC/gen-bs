@@ -34,6 +34,7 @@ export default class AnalysisBody extends React.Component {
                         filtersList={this.props.filtersList}
                         samplesList={this.props.samplesList}
                         modelsList={this.props.modelsList}
+                        ui={this.props.ui}
                     />
                     {!isLoadingHistoryData && <AnalysisRightPane
                         dispatch={dispatch}
