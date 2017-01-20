@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import BaseRule from './BaseRule';
 
-const compoundHeterozygousModelRuleName = 'Compound Heterozygous';
+const compoundHeterozygousModelRuleName = 'CompoundHeterozygousModel';
 const gtGtField = 'GT_GT';
 
 export default class CompoundHeterozygousModelRule extends BaseRule {
@@ -16,7 +16,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
         if (!model) {
             return false;
         }
-        return model.rules.name ? model.name === compoundHeterozygousModelRuleName : false;
+        return model.rules.name ? model.rules.name === compoundHeterozygousModelRuleName : false;
     }
 
     isValid() {
