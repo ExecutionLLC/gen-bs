@@ -128,7 +128,7 @@ class SavedFilesService extends UserEntityServiceBase {
                                 timestamp: savedFile.timestamp,
                                 view: {
                                     id: view.id,
-                                    text: view.name
+                                    text: view.text
                                 },
                                 filter: {
                                     id: filter.id,
