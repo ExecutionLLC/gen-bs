@@ -28,11 +28,11 @@ class AnalysisService extends UserEntityServiceBase {
         if (this.services.users.isDemoUserId(user.id)) {
             callback(null, null);
         } else {
-            if (name) {
+            if (text.name) {
                 const newAnalysis = {
                     creator: user.id,
-                    name,
                     text,
+                    languageId,
                     type,
                     viewId,
                     filterId,
@@ -49,15 +49,14 @@ class AnalysisService extends UserEntityServiceBase {
     update(user, item, callback) {
         if (this.services.users.isDemoUserId(user.id)) {
             callback(null, []);
-        } else if (item.name) {
+        } else if (item.text.name) {
             async.waterfall([
                 (callback) => {
                     this.models.analysis.find(user.id, item.id, callback)
                 },
                 (analysys, callback) => {
                     const newAnalysis = Object.assign({}, analysys, {
-                        name: item.name,
-                        description: item.description,
+                        text: item.text,
                         lastQueryDate: item.lastQueryDate
                     });
                     super.update(user, newAnalysis, callback)
