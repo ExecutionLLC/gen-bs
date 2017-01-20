@@ -61,13 +61,15 @@ export default class AnalysisRightPane extends React.Component {
 
 
     renderAnalysisHeader(historyItem, disabled, isDemo) {
+        const {ui: {languageId}} = this.props;
+
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
                     {historyItem.id && this.renderDeleteAnalysisButton()}
-                    {this.renderAnalysisName(historyItem.name, isDemo)}
+                    {this.renderAnalysisName(i18n.getEntityText(historyItem, languageId).name, isDemo)}
                     {this.renderAnalysisDates(historyItem.createdDate)}
-                    {this.renderAnalysisDescription(historyItem.description, isDemo)}
+                    {this.renderAnalysisDescription(i18n.getEntityText(historyItem, languageId).description, isDemo)}
                 </div>
                 {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
@@ -746,12 +748,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalysisNameChange(name) {
-        const {dispatch, historyItem} = this.props;
+        const {dispatch, historyItem, ui: {languageId}} = this.props;
         if (!name) {
             return;
         }
         if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem({...historyItem, name}));
+            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {name})));
             dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
         } else {
             dispatch(this.actionEdit({name}));
@@ -759,9 +761,9 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalysisDescriptionChange(description) {
-        const {dispatch, historyItem} = this.props;
+        const {dispatch, historyItem, ui: {languageId}} = this.props;
         if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem({...historyItem, description}));
+            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {description})));
             dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
         } else {
             dispatch(this.actionEdit({description}));
@@ -769,8 +771,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onDuplicateButtonClick() {
-        const {dispatch, historyItem} = this.props;
-        dispatch(duplicateAnalysesHistoryItem(historyItem));
+        const {dispatch, historyItem, ui: {languageId}} = this.props;
+        dispatch(duplicateAnalysesHistoryItem(historyItem, languageId));
     }
 
     onCancelButtonClick() {
@@ -778,26 +780,33 @@ export default class AnalysisRightPane extends React.Component {
             dispatch,
             samplesList: {hashedArray: {array: samples}},
             viewsList: {hashedArray: {array: views}},
-            filtersList: {hashedArray: {array: filters}}
+            filtersList: {hashedArray: {array: filters}},
+            ui: {languageId}
         } = this.props;
         const sample = getDefaultOrStandardItem(samples);
         const filter = getDefaultOrStandardItem(filters);
         const view = getDefaultOrStandardItem(views);
-        dispatch(createNewHistoryItem(sample, filter, view));
+        dispatch(createNewHistoryItem(sample, filter, view, languageId));
     }
 
     onAnalyzeButtonClick(isEditing) {
-        const {dispatch, historyItem, currentItemId} = this.props;
-        dispatch(analyze({
-            id: isEditing ? null : currentItemId,
-            name: historyItem.name,
-            description: historyItem.description,
-            type: historyItem.type,
-            samples: historyItem.samples,
-            viewId: historyItem.viewId,
-            filterId: historyItem.filterId,
-            modelId: historyItem.modelId
-        })).then((analysis) => {
+        const {dispatch, historyItem, currentItemId, ui: {languageId}} = this.props;
+        const searchParams = i18n.changeEntityText(
+            {
+                id: isEditing ? null : currentItemId,
+                type: historyItem.type,
+                samples: historyItem.samples,
+                viewId: historyItem.viewId,
+                filterId: historyItem.filterId,
+                modelId: historyItem.modelId
+            },
+            languageId,
+            {
+                name: i18n.getEntityText(historyItem, languageId).name,
+                description: i18n.getEntityText(historyItem, languageId).description
+            }
+        );
+        dispatch(analyze(searchParams)).then((analysis) => {
             if (isEditing && analysis) {
                 dispatch(setEditedHistoryItem(analysis));
             } else if (analysis) {
@@ -880,12 +889,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     actionEdit(change) {
-        const {samplesList, modelsList, auth: {isDemo}} = this.props;
+        const {samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         return editAnalysesHistoryItem(
             samplesList,
             modelsList,
             isDemo,
-            change
+            change,
+            languageId
         );
     }
 }

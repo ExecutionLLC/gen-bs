@@ -145,6 +145,7 @@ class AnalysisModel extends SecureModelBase {
         const {
             text, samples
         } = analysis;
+        const analysisText = _.find(analysis.text, text => _.isNull(text.languageId));
         async.waterfall([
             (callback) => {
                 const {
@@ -162,11 +163,12 @@ class AnalysisModel extends SecureModelBase {
                 this._insert(analysisDataToInsert, trx, callback);
             },
             (analysisId, callback) => {
+                const {languageId, name, description} = analysisText
                 const analysisTextDataToInsert = {
                     analysisId: analysisId,
-                    languageId: text.languageId,
-                    name: text.name,
-                    description: text.description
+                    languageId,
+                    name,
+                    description
                 };
                 this._unsafeInsert(
                     TableNames.AnalysisText,

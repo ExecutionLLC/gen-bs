@@ -43,12 +43,13 @@ export function setCurrentAnalysesHistoryId(id) {
     };
 }
 
-export function createNewHistoryItem(sample, filter, view) {
+export function createNewHistoryItem(sample, filter, view, languageId) {
     return {
         type: CREATE_NEW_HISTORY_ITEM,
         sample,
         filter,
-        view
+        view,
+        languageId
     };
 }
 
@@ -95,20 +96,22 @@ export function prepareAnalysesHistoryToSearch(search) {
     };
 }
 
-export function duplicateAnalysesHistoryItem(historyItem) {
+export function duplicateAnalysesHistoryItem(historyItem, languageId) {
     return {
         type: DUPLICATE_ANALYSES_HISTORY_ITEM,
-        historyItem
+        historyItem,
+        languageId
     };
 }
 
-export function editAnalysesHistoryItem(samplesList, modelsList, isDemo, changeItem) {
+export function editAnalysesHistoryItem(samplesList, modelsList, isDemo, changeItem, languageId) {
     return {
         type: EDIT_ANALYSES_HISTORY_ITEM,
         samplesList,
         modelsList,
         isDemo,
-        changeItem
+        changeItem,
+        languageId
     };
 }
 

@@ -45,3 +45,7 @@ export function changeEntityText(entity, languageId, text) {
 export function makeCopyOfText(copyOfWhat) {
     return `Copy of ${copyOfWhat}`;
 }
+
+export function makeDescriptionOfText(descriptionOfWhat) {
+    return `Description of ${descriptionOfWhat}`;
+}
