@@ -93,7 +93,7 @@ class ViewsModal extends React.Component {
     }
 
     getTrimmedViewName(view) {
-        const {ui: {languageId}} = this.props;debugger;//21
+        const {ui: {languageId}} = this.props;
         return i18n.getEntityText(view, languageId).name.trim();
     }
 

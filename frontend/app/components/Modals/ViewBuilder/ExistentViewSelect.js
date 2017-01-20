@@ -59,7 +59,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderViewSelector(views) {
-        const {ui: {languageId}} = this.props;debugger;//31
+        const {ui: {languageId}} = this.props;
 
         const selectorItems = views.map( viewItem => ({
             value: viewItem.id,
@@ -136,24 +136,24 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onSelectedViewChanged(viewId) {
-        const {dispatch, ui: {languageId}} = this.props;debugger;//2
+        const {dispatch, ui: {languageId}} = this.props;
         dispatch(viewBuilderRestartEdit(false, this.getViewForId(viewId), languageId));
     }
 
     onDuplicateViewClick() {
-        const {dispatch, viewBuilder, ui: {languageId}} = this.props;debugger;//3
+        const {dispatch, viewBuilder, ui: {languageId}} = this.props;
         const editingView = viewBuilder.editingView;
         dispatch(viewBuilderRestartEdit(true, editingView, languageId));
     }
 
     onResetViewClick() {
-        const {dispatch, ui: {languageId}} = this.props;debugger;//4
+        const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
         dispatch(viewBuilderRestartEdit(false, this.getViewForId(editingViewId), languageId));
     }
 
     onDeleteViewClick() {
-        const {dispatch, ui: {languageId}} = this.props;debugger;//5
+        const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
         dispatch(viewBuilderDeleteView(editingViewId, languageId)).then((newView) => {
             dispatch(fireOnSaveAction(newView));

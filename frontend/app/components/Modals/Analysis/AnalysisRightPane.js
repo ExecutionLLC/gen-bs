@@ -621,7 +621,6 @@ export default class AnalysisRightPane extends React.Component {
         const selectedFilter = filtersHash[historyItem.filterId];
         const selectedModel = historyItem.modelId && modelsHash[historyItem.modelId];
         const selectedView = viewsHash[historyItem.viewId];
-        debugger;//see model
         return (
             <div className='dl-group-view-mode'>
                 <dl>
@@ -681,7 +680,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getViewOptions() {
-        const {ui: {languageId}} = this.props;debugger;//32
+        const {ui: {languageId}} = this.props;
         const views = this.props.viewsList.hashedArray.array;
         return views.map(
             (viewItem) => {
@@ -817,7 +816,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-        const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;debugger;//1
+        const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const allowedFields = FieldUtils.makeViewFilterAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields, languageId));

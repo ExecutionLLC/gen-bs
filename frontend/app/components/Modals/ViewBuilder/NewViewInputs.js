@@ -7,7 +7,7 @@ export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const {viewBuilder, validationMessage, ui: {languageId}} = this.props;debugger;//14
+        const {viewBuilder, validationMessage, ui: {languageId}} = this.props;
         const newView = viewBuilder.editingView;
 
         return (
@@ -56,7 +56,7 @@ export default class NewViewInputs extends React.Component {
     }
 
     onNameChange(name) {
-        const {editingView} = this.props.viewBuilder;debugger;//12
+        const {editingView} = this.props.viewBuilder;
         const {ui: {languageId}} = this.props;
         this.props.dispatch(viewBuilderChangeAttr(
             {
@@ -68,7 +68,7 @@ export default class NewViewInputs extends React.Component {
     }
 
     onDescriptionChange(description) {
-        const {editingView} = this.props.viewBuilder;debugger;//13
+        const {editingView} = this.props.viewBuilder;
         const {ui: {languageId}} = this.props;
         this.props.dispatch(viewBuilderChangeAttr(
             {
@@ -80,7 +80,7 @@ export default class NewViewInputs extends React.Component {
     }
 
     onCancelClick() {
-        const {dispatch, viewBuilder, viewsList, ui: {languageId}} = this.props;debugger;//11
+        const {dispatch, viewBuilder, viewsList, ui: {languageId}} = this.props;
         const parentView = viewsList.hashedArray.hash[viewBuilder.editingViewParentId];
         dispatch(viewBuilderRestartEdit(false, parentView, languageId));
     }
