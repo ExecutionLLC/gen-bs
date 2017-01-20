@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const Uuid = require('node-uuid');
 const BluebirdPromise = require('bluebird');
 
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
@@ -7,12 +6,63 @@ const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 exports.up = function (knex) {
     return editFilterLanguageNotNullConstrains(knex)
         .then(() => editModelLanguageNotNullConstrains(knex))
-        .then(() => editViewTextTable(knex));
+        .then(() => editViewTextTable(knex))
+        .then(() => updateUserFilters(knex))
+        .then(() => updateUserModels(knex))
+        .then(() => updateUserViews(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function updateUserFilters(knex) {
+    return knex.select('id')
+        .from('filter')
+        .where('type', 'user')
+        .then((results) => _.map(results, result => ChangeCaseUtil.convertKeysToCamelCase(result)))
+        .then((filters) => {
+            return BluebirdPromise.mapSeries(filters, filter => {
+                return knex('filter_text')
+                    .where('filter_id', filter.id)
+                    .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                        languageId: null
+                    }));
+            });
+        });
+}
+
+function updateUserModels(knex) {
+    return knex.select('id')
+        .from('model')
+        .where('type', 'user')
+        .then((results) => _.map(results, result => ChangeCaseUtil.convertKeysToCamelCase(result)))
+        .then((models) => {
+            return BluebirdPromise.mapSeries(models, model => {
+                return knex('model_text')
+                    .where('model_id', model.id)
+                    .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                        languageId: null
+                    }));
+            });
+        });
+}
+
+function updateUserViews(knex) {
+    return knex.select('id')
+        .from('view')
+        .where('type', 'user')
+        .then((results) => _.map(results, result => ChangeCaseUtil.convertKeysToCamelCase(result)))
+        .then((views) => {
+            return BluebirdPromise.mapSeries(views, view => {
+                return knex('view_text')
+                    .where('view_id', view.id)
+                    .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                        languageId: null
+                    }));
+            });
+        });
+}
 
 function editFilterLanguageNotNullConstrains(knex) {
     console.log('=> Update filter language constrains...');
@@ -46,7 +96,6 @@ function editViewTextTable(knex) {
     return addViewTextNameColumn(knex)
         .then(() => findViews(knex))
         .then((views) => {
-            console.log(views);
             return BluebirdPromise.mapSeries(views, view => {
                 return updateViewName(knex, view);
             });
