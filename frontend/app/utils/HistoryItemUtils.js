@@ -28,14 +28,14 @@ export function makeHistoryItem(historyItem, languageId) {
         },
         languageId,
         {
-            name: trimName(`Copy of ${i18n.getEntityText(historyItem, languageId).name}`)//TODO langu const
+            name: trimName(i18n.makeCopyOfText(i18n.getEntityText(historyItem, languageId).name))
         }
     );
 }
 
 export function makeNewHistoryItem(sample, filter, view, languageId) {
     const name = trimName(
-        `${formatDate(new Date())}_${sample ? sample.name : ''}_${filter ? i18n.getEntityText(filter, languageId).name : ''}_${view ? i18n.getEntityText(view, languageId).name : ''}`//TODO langu const
+        `${formatDate(new Date())}_${sample ? sample.name : ''}_${filter ? i18n.getEntityText(filter, languageId).name : ''}_${view ? i18n.getEntityText(view, languageId).name : ''}`
     );
     return i18n.changeEntityText(
         {
@@ -88,7 +88,7 @@ export function makeNewHistoryItem(sample, filter, view, languageId) {
         languageId,
         {
             name: name,
-            description: trimDescription(`Description of ${name}`)//TODO langu const
+            description: trimDescription(i18n.makeDescriptionOfText(name))
         }
     );
 }
