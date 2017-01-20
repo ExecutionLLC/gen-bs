@@ -648,7 +648,7 @@ export default class AnalysisRightPane extends React.Component {
                 {historyItem.modelId &&
                     <dl>
                         <dt>Model</dt>
-                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name/*TODO langu model???*/, selectedModel.type)}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
