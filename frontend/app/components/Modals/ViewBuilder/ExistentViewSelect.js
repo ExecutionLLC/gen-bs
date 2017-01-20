@@ -12,6 +12,7 @@ import {
     fireOnSaveAction
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
+import * as i18n from '../../../utils/i18n';
 
 
 export default class ExistentViewSelect extends React.Component {
@@ -58,9 +59,11 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderViewSelector(views) {
+        const {ui: {languageId}} = this.props;debugger;//31
+
         const selectorItems = views.map( viewItem => ({
             value: viewItem.id,
-            label: getItemLabelByNameAndType(viewItem.name, viewItem.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type)
         }));
 
         return (
@@ -133,26 +136,26 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onSelectedViewChanged(viewId) {
-        const {dispatch} = this.props;
-        dispatch(viewBuilderRestartEdit(false, this.getViewForId(viewId)));
+        const {dispatch, ui: {languageId}} = this.props;debugger;//2
+        dispatch(viewBuilderRestartEdit(false, this.getViewForId(viewId), languageId));
     }
 
     onDuplicateViewClick() {
-        const {dispatch, viewBuilder} = this.props;
+        const {dispatch, viewBuilder, ui: {languageId}} = this.props;debugger;//3
         const editingView = viewBuilder.editingView;
-        dispatch(viewBuilderRestartEdit(true, editingView));
+        dispatch(viewBuilderRestartEdit(true, editingView, languageId));
     }
 
     onResetViewClick() {
-        const {dispatch} = this.props;
+        const {dispatch, ui: {languageId}} = this.props;debugger;//4
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderRestartEdit(false, this.getViewForId(editingViewId)));
+        dispatch(viewBuilderRestartEdit(false, this.getViewForId(editingViewId), languageId));
     }
 
     onDeleteViewClick() {
-        const {dispatch} = this.props;
+        const {dispatch, ui: {languageId}} = this.props;debugger;//5
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderDeleteView(editingViewId)).then((newView) => {
+        dispatch(viewBuilderDeleteView(editingViewId, languageId)).then((newView) => {
             dispatch(fireOnSaveAction(newView));
         });
     }

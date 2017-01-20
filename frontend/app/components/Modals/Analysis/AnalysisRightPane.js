@@ -619,7 +619,7 @@ export default class AnalysisRightPane extends React.Component {
         const selectedFilter = filtersHash[historyItem.filterId];
         const selectedModel = historyItem.modelId && modelsHash[historyItem.modelId];
         const selectedView = viewsHash[historyItem.viewId];
-
+        debugger;//see model
         return (
             <div className='dl-group-view-mode'>
                 <dl>
@@ -646,12 +646,12 @@ export default class AnalysisRightPane extends React.Component {
                 {historyItem.modelId &&
                     <dl>
                         <dt>Model</dt>
-                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name, selectedModel.type)}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name/*TODO langu model???*/, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
                     <dt>View</dt>
-                    <dd>{selectedView && getItemLabelByNameAndType(selectedView.name, selectedView.type)}</dd>
+                    <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type)}</dd>
                 </dl>
 
                 <hr />
@@ -679,11 +679,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getViewOptions() {
+        const {ui: {languageId}} = this.props;debugger;//32
         const views = this.props.viewsList.hashedArray.array;
         return views.map(
             (viewItem) => {
                 const isDisabled = this.isViewDisabled(viewItem);
-                const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
+                const label = getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type);
                 return {
                     value: viewItem.id, label, disabled: isDisabled
                 };
@@ -807,10 +808,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-        const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;debugger;//1
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const allowedFields = FieldUtils.makeViewFilterAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
-        dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
+        dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields, languageId));
         const action = this.actionEdit({viewId: null});
         dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         dispatch(openModal(modalName.VIEWS));

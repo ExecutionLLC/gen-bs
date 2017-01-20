@@ -82,13 +82,14 @@ class SavedFilesModal extends DialogBase {
         const {samplesList: {hashedArray: {hash: samplesHashedArray}}, ui: {languageId}} = this.props;
         const savedFileSamples = _.map(samples, sample => samplesHashedArray[sample.id]);
         const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? sample.name : '???');
+        debugger;//see model 2, see filter crunch
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
                 <td>{savedFileSamplesNames.join(', ')}</td>
                 <td>{(i18n.getEntityText(filter, languageId) || {}/*FIXME crutch for no filter name*/).name}</td>
-                <td>{view.name}</td>
-                <td>{model ? model.name : ''}</td>
+                <td>{i18n.getEntityText(view, languageId).name}</td>
+                <td>{model ? model.name : ''/*TODO langu model*/}</td>
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}

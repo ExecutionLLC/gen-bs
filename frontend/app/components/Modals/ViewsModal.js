@@ -11,6 +11,7 @@ import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 import {modalName} from '../../actions/modalWindows';
+import * as i18n from '../../utils/i18n';
 
 class ViewsModal extends React.Component {
 
@@ -21,7 +22,7 @@ class ViewsModal extends React.Component {
         const isNew = editingView ? editingView.id === null : false;
         const isViewEditable = editingView && entityTypeIsEditable(editingView.type);
         const isLoginRequired = editingView && entityTypeIsDemoDisabled(editingView.type, isDemo);
-        const editedViewNameTrimmed = editingView && editingView.name.trim();
+        const editedViewNameTrimmed = editingView && this.getTrimmedViewName(editingView);
 
         const validationMessage = editingView ? this.getValidationMessage(
             editingView,
@@ -91,6 +92,11 @@ class ViewsModal extends React.Component {
         );
     }
 
+    getTrimmedViewName(view) {
+        const {ui: {languageId}} = this.props;debugger;//21
+        return i18n.getEntityText(view, languageId).name.trim();
+    }
+
     onClose() {
         const {dispatch, closeModal} = this.props;
         closeModal(modalName.VIEWS); // TODO: closeModal must have no params (it's obvious that we close views)
@@ -107,7 +113,7 @@ class ViewsModal extends React.Component {
     getValidationMessage(editingView, editedViewName, isViewEditable, views) {
         const viewNameExists = isViewEditable && _(views)
                 .filter(view => view.type !== entityType.HISTORY)
-                .some(view => view.name.trim() === editedViewName
+                .some(view => this.getTrimmedViewName(view) === editedViewName
                     && view.id != editingView.id
                 );
         if (viewNameExists) {
@@ -127,14 +133,15 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder, userData, fields, viewsList} = state;
+    const {auth, viewBuilder, userData, fields, viewsList, ui} = state;
 
     return {
         auth,
         viewBuilder,
         userData,
         fields,
-        viewsList
+        viewsList,
+        ui
     };
 }
 

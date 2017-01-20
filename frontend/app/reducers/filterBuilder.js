@@ -99,7 +99,7 @@ function reduceFBuilderStartEdit(state, action) {
                 },
                 languageId,
                 {
-                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, languageId).name),
+                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, languageId).name)
                 }
             ) :
             filter,
