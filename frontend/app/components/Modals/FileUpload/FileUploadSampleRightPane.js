@@ -155,7 +155,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         } else if (currentUploadId) {
             content = this.renderUpload(currentUploadId);
         } else {
-            content = this.renderUploadArea(isDemo);
+            content = this.renderNewUploadArea(isDemo);
         }
 
         return (
@@ -220,7 +220,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         );
     }
 
-    renderUploadArea(isDemo) {
+    renderNewUploadArea(isDemo) {
         const {isDragoverState} = this.state;
         return (
             <div className={classNames('empty', {'empty-upload': !isDemo})}>
