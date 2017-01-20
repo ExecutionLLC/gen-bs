@@ -8,7 +8,10 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsService = require('./FieldsService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
-const {SAMPLE_UPLOAD_STATUS, WS_SAMPLE_UPLOAD_STATE} = require('../utils/Enums');
+const {
+    SAMPLE_UPLOAD_STATUS,
+    WS_SAMPLE_UPLOAD_STATE
+} = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
@@ -122,85 +125,38 @@ class SamplesService extends UserEntityServiceBase {
      * @param {Function} callback - (???)
      */
     updateSamplesForVcfFile(user, vcfFileId, vcfFileName, samples, callback) {
-        this.logger.debug(`user: ${JSON.stringify(user, null, 2)}`);
-        this.logger.debug(`vcfFileId: ${JSON.stringify(vcfFileId, null, 2)}`);
-        this.logger.debug(`samples: ${JSON.stringify(samples, null, 2)}`);
 
-        samples = samples.concat(['NewSample1', 'NewSample2']);
+        samples = samples.concat(['NewSample1', 'NewSample2']); // TODO: remove this line
 
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
                 (error, existingSamples) => callback(error, existingSamples)),
             (existingSamples, callback) => {
-                console.log(`existing samples ${existingSamples}`);
-                const notFoundSamples = _.filter(existingSamples, sample => _.indexOf(samples, sample.genotypeName) < 0);
-                console.log(`AS hasn't found these samples: ${notFoundSamples}`);
-
-                const sampleUploadStates = _.map(existingSamples, (sample) => {
+                const samplesWithNewState = _.map(existingSamples, (sample) => {
                     return Object.assign({}, sample, {
-                        uploadState: _.indexOf(samples, sample.genotypeName) < 0
+                        uploadState: _.includes(samples, sample.genotypeName)
                             ? WS_SAMPLE_UPLOAD_STATE.NOT_FOUND
                             : WS_SAMPLE_UPLOAD_STATE.COMPLETED
                     });
                 });
-                async.map(sampleUploadStates, (sample, callback) => {
+                async.map(samplesWithNewState, (sample, callback) => {
                     return this.update(user, sample, callback);
-                }, (error, result) => {
-                    callback(error, result);
-                });
+                }, (error, result) => callback(error, result));
             },
-            (items, callback) => {
-                this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
-                    (error, existingSamples) => callback(error, existingSamples))
-            },
+            (items, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, existingSamples) => callback(error, existingSamples)),
             (existingSamples, callback) => {
                 const newSamples = _.filter(samples, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
-                console.log(`new samples ${newSamples}`);
-                if (newSamples) {
+                if (newSamples.length) {
                     this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples,
-                        WS_SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => {
-                        callback(error, sampleIds);
-                    });
+                        WS_SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => callback(error, sampleIds));
                 } else {
                     callback(null, []);
                 }
             },
             (sampleIds, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], false,
-                (error, samples) => {
-                    console.log(`${error} ${samples} ${callback}`);
-                    callback(error, samples);
-                })
-        ], callback);
-    }
-
-    verifySamplesForVcfFile(user, vcfFileId, vcfFileName, samples, callback) {
-        this.logger.debug(`user: ${JSON.stringify(user, null, 2)}`);
-        this.logger.debug(`vcfFileId: ${JSON.stringify(vcfFileId, null, 2)}`);
-        this.logger.debug(`samples: ${JSON.stringify(samples, null, 2)}`);
-
-        samples = samples.concat(['NewSample1', 'NewSample2']);
-
-        async.waterfall([
-            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
-                (error, existingSamples) => callback(error, existingSamples)),
-            (existingSamples, callback) => {
-                console.log(`existing samples ${existingSamples}`);
-                const wrongSamples = _.filter(existingSamples, sample => _.indexOf(samples, sample.genotypeName) < 0);
-                console.log(`wrong samples ${wrongSamples}`);
-                if (wrongSamples.length > 0) {
-                    callback(null, existingSamples, 'Mismatched samples');
-                } else {
-                    const newSamples = _.filter(samples, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
-                    console.log(`new samples ${newSamples}`);
-                    if (newSamples.length > 0) {
-                        callback(null, existingSamples, 'Mismatched samples');
-                    } else {
-                        callback(null, existingSamples, null);
-                    }
-                }
-            }
+                (error, samples) => callback(error, samples))
         ], callback);
     }
 

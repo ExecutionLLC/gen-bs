@@ -10,7 +10,8 @@ const ErrorUtils = require('../../../utils/ErrorUtils');
 const METHODS = require('./AppServerMethods');
 const {
     SAMPLE_UPLOAD_STATUS,
-    WS_SAMPLE_UPLOAD_STATE} = require('../../../utils/Enums');
+    WS_SAMPLE_UPLOAD_STATE
+} = require('../../../utils/Enums');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
     CONVERTING: 'converting',
@@ -212,9 +213,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 progress,
                 error: null
             }, (error) => callback(error)),
-            (callback) => {
-                this._createUploadProgressResult(user, session, operation, message, callback)
-            },
+            (callback) => this._createUploadProgressResult(user, session, operation, message, callback),
             (result, callback) => {
                 if (result.error) {
                     message.error = { message: result.error, code: -500};
@@ -237,15 +236,11 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 (callback) => this.services.samples.updateSamplesForVcfFile(
                     user, vcfFileId, vcfFileName, sampleGenotypes, callback
                 ),
-                /*(callback) => this.services.samples.verifySamplesForVcfFile(
-                    user, vcfFileId, vcfFileName, sampleGenotypes, callback
-                ),*/
-                (samples, /*error,*/ callback) => {
+                (samples, callback) => {
                     callback(null, {
                         status,
                         progress,
-                        metadata: samples/*,
-                        error*/
+                        metadata: samples
                     });
                 }
             ], callback);

@@ -161,7 +161,7 @@ function reduceSamplesListAddSamples(state, action) {
     let {array: currentSamples}= hashedArray;
 
     _.forEach(samples, sample => {
-        const ind = _.findIndex(currentSamples, function(curSample) { return curSample.id === sample.id; });
+        const ind = _.findIndex(currentSamples, (curSample) => { return curSample.id === sample.id; });
         if (ind > -1) {
             currentSamples[ind] = sample;
         } else {

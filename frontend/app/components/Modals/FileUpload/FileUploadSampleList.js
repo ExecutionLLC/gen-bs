@@ -136,13 +136,10 @@ export default class FileUploadSampleList extends React.Component {
     renderUploadedData(uploadedItems, isNew) {
         const {currentSampleId} = this.props;
         return _.map(uploadedItems, (item) => {
-            switch (item.sample.uploadState) {
-                case SAMPLE_UPLOAD_STATE.COMPLETED:
-                    return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew);
-                case SAMPLE_UPLOAD_STATE.UNCONFIRMED:
-                case SAMPLE_UPLOAD_STATE.ERROR:
-                case SAMPLE_UPLOAD_STATE.NOT_FOUND:
-                    return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
+            if (item.sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
+                return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew);
+            } else {
+                return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
             }
         });
     }

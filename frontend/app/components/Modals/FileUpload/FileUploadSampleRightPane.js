@@ -8,7 +8,8 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {
     uploadFiles,
-    fileUploadStatus, SAMPLE_UPLOAD_STATE
+    fileUploadStatus,
+    SAMPLE_UPLOAD_STATE
 } from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {
