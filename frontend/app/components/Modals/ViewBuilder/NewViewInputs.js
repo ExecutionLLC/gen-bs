@@ -57,23 +57,25 @@ export default class NewViewInputs extends React.Component {
 
     onNameChange(name) {
         const {editingView} = this.props.viewBuilder;debugger;//12
+        const {ui: {languageId}} = this.props;
         this.props.dispatch(viewBuilderChangeAttr(
             {
                 name,
-                description: editingView.description
+                description: i18n.getEntityText(editingView, languageId).description
             },
-            this.props.ui.languageId
+            languageId
         ));
     }
 
     onDescriptionChange(description) {
         const {editingView} = this.props.viewBuilder;debugger;//13
+        const {ui: {languageId}} = this.props;
         this.props.dispatch(viewBuilderChangeAttr(
             {
-                name: editingView.name,
+                name: i18n.getEntityText(editingView, languageId).name,
                 description
             },
-            this.props.ui.languageId
+            languageId
         ));
     }
 
