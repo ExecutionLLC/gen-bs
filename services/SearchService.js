@@ -38,10 +38,10 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, session, languageId, analysis, limit, offset, callback) {
-        const {id, name, description, type, samples, modelId, viewId, filterId} = analysis;
+        const {id, text, type, samples, modelId, viewId, filterId} = analysis;
         if (_.isEmpty(id)) {
-            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, name, description, type, samples, limit, offset], (param) => {
-                return  _.isUndefined(param) || _.isNull(param);
+            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, text, type, samples, limit, offset], (param) => {
+                return _.isUndefined(param) || _.isNull(param);
             });
             if (hasUndefOrNullParam) {
                 callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
@@ -49,8 +49,7 @@ class SearchService extends ServiceBase {
                         viewId: viewId || 'undefined',
                         filterId: filterId || 'undefined',
                         samples: samples || 'undefined',
-                        name: name || 'undefined',
-                        description: description || 'undefined',
+                        text,
                         type: type || 'undefined',
                         limit: _.isNumber(limit) ? limit : 'undefined',
                         offset: _.isNumber(offset) ? offset : 'undefined'
@@ -59,7 +58,7 @@ class SearchService extends ServiceBase {
                 async.waterfall([
                     (callback) => {
                         this.services.analysis.add(
-                            user, languageId, name, description, type, viewId, filterId, modelId, samples, callback
+                            user, languageId, text, type, viewId, filterId, modelId, samples, callback
                         );
                     },
                     (analysis, callback) => {
@@ -80,7 +79,7 @@ class SearchService extends ServiceBase {
                     (callback) => {
                         this.services.analysis.find(user, id, callback);
                     },
-                    (analysis, callback) =>{
+                    (analysis, callback) => {
                         analysis.lastQueryDate = new Date();
                         this.services.analysis.update(user, analysis, callback);
                     },
@@ -88,7 +87,7 @@ class SearchService extends ServiceBase {
                         const {samples, modelId, viewId, filterId} = analysis;
                         this._sendSearchRequest(
                             user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
-                            (error, operationId) => callback(error ,  {operationId, analysis})
+                            (error, operationId) => callback(error, {operationId, analysis})
                         );
                     }
                 ],
@@ -141,7 +140,7 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const {session: {userId}, result: {tableData:{ header, data }}} = message;
+        const {session: {userId}, result: {tableData:{header, data}}} = message;
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
@@ -156,10 +155,10 @@ class SearchService extends ServiceBase {
                     const searchKeyObject = _.find(viewData, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
-                    
+
                     const fieldValueObjects = _.map(header, headerObject => {
                         const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId || 'source'}`];
-                        return fieldWithId ? fieldWithId.fieldValue: null
+                        return fieldWithId ? fieldWithId.fieldValue : null
                     });
                     const searchKey = searchKeyObject.fieldValue;
                     const comments = _.map(searchKeyToCommentsArrayHash[searchKey], ({id, comment}) => ({id, comment}));
@@ -234,7 +233,7 @@ class SearchService extends ServiceBase {
                 [
                     (callback) => this.services.views.find(user, viewId, callback),
                     (view, callback) => this.services.fields.findMany(
-                        _.map(view.viewListItems,item => item.fieldId),
+                        _.map(view.viewListItems, item => item.fieldId),
                         callback
                     ),
                 ], callback
