@@ -7,6 +7,7 @@ exports.up = function (knex) {
     return editFilterLanguageNotNullConstrains(knex)
         .then(() => editModelLanguageNotNullConstrains(knex))
         .then(() => editViewTextTable(knex))
+        .then(() => editAnalysisLanguageNotNullConstrains(knex))
         .then(() => updateUserFilters(knex))
         .then(() => updateUserModels(knex))
         .then(() => updateUserViews(knex));
@@ -88,6 +89,20 @@ function editModelLanguageNotNullConstrains(knex) {
         .then(() => knex.schema
             .table('model_text', table => {
                 table.unique(['model_id', 'language_id']);
+            })
+        );
+}
+
+function editAnalysisLanguageNotNullConstrains(knex) {
+    console.log('=> Update analysis language constrains...');
+    return knex.schema
+        .table('analysis_text', table => {
+            table.dropPrimary('analysis_text_pkey')
+        })
+        .then(() => knex.raw('ALTER TABLE analysis_text ALTER COLUMN language_id DROP NOT NULL'))
+        .then(() => knex.schema
+            .table('analysis_text', table => {
+                table.unique(['analysis_id', 'language_id']);
             })
         );
 }
