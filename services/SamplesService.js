@@ -136,8 +136,8 @@ class SamplesService extends UserEntityServiceBase {
                 const samplesWithNewState = _.map(existingSamples, (sample) => {
                     return Object.assign({}, sample, {
                         uploadState: _.includes(sampleNames, sample.genotypeName)
-                            ? WS_SAMPLE_UPLOAD_STATE.NOT_FOUND
-                            : WS_SAMPLE_UPLOAD_STATE.COMPLETED
+                            ? WS_SAMPLE_UPLOAD_STATE.COMPLETED
+                            : WS_SAMPLE_UPLOAD_STATE.NOT_FOUND
                     });
                 });
                 async.map(samplesWithNewState, (sample, callback) => {

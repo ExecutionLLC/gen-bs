@@ -64,7 +64,7 @@ export default class FileUploadSampleList extends React.Component {
 
             if (uploadSamples.length) {
                 if (isError) {
-                     return _.map(uploadSamples, (sample) => this._renderSampleError(sample, sample.name, sample.id === currentSampleId));
+                    return _.map(uploadSamples, (sample) => this._renderSampleError(sample, sample.name, sample.id === currentSampleId));
                 } else {
                     return this.renderProgressUploadSamples(uploadSamples, upload);
                 }
@@ -108,7 +108,7 @@ export default class FileUploadSampleList extends React.Component {
         const sortedFilteredUploads = _.orderBy(filteredUploadedSamples, ['date'], ['desc']);
 
         return _.groupBy(sortedFilteredUploads, (item) => {
-            return !_.isNil(item.upload) && fileUploadStatusErrorOrReady(item.upload)
+            return !_.isNil(item.upload) && fileUploadStatusErrorOrReady(item.upload);
         });
     }
 
