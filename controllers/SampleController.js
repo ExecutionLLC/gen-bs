@@ -41,17 +41,14 @@ class SampleController extends UserEntityControllerBase {
                     callback(null, sampleFile, fileName);
                 }
             },
-            (sampleFile, fileName, callback) => {
-                const compressed = fs.readFileSync(sampleFile.path);
-                const uint8data = pako.inflate(compressed);
-                const decoder = new StringDecoder('utf8');
-                const buf = Buffer.from(uint8data);
-                const text = decoder.write(buf);
-                const sampleNames = this._findSamples(text);
-                const sampleNamesFake = sampleNames.concat(['FakeSample1', 'FakeSample2']); // TODO: remove this line
-                console.log(`sampleNamesFake ${sampleNamesFake}`);
-                callback(null, sampleFile, fileName, sampleNamesFake);
-            },
+            (sampleFile, fileName, callback) => this._parseSampleNames(sampleFile,
+                (error, sampleNames) => {
+                    if (error) {
+                        callback(null, sampleFile, fileName, []);
+                    } else {
+                        callback(error, sampleFile, fileName, sampleNames.concat(['FakeSample1', 'FakeSample2'])); // TODO: remove fake samples
+                    }
+                }),
             (sampleFile, fileName, sampleList, callback) => {
                 const fileInfo = {
                     localFilePath: sampleFile.path,
@@ -91,6 +88,24 @@ class SampleController extends UserEntityControllerBase {
         });
     }
 
+    _parseSampleNames(sampleFile, callback) {
+        fs.readFile(sampleFile.path, (error, content) => {
+            if (error) {
+                callback(error);
+            } else {
+                try {
+                    const uint8data = pako.inflate(content);
+                    const decoder = new StringDecoder('utf8');
+                    const text = decoder.write(Buffer.from(uint8data));
+                    const sampleNames = SampleController._findSamples(text);
+                    callback(null, sampleNames);
+                } catch (error) {
+                    callback(error);
+                }
+            }
+        });
+    }
+
     _removeSampleFile(localFilePath) {
         fs.unlink(localFilePath, (error) => {
             if (error) {
@@ -99,11 +114,16 @@ class SampleController extends UserEntityControllerBase {
         });
     }
 
-    _findSamples(text) {
-        const columns_line = text.match(/^#[^#].*/gm)[0].substr(1);
-        const array = columns_line && columns_line.split(/\s/g);
-        const VCF_COLUMNS = ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'];
-        return _.difference(array, VCF_COLUMNS);
+    static _findSamples(text) {
+        const found = text.match(/^#[^#].*/gm);
+        if (found.length) {
+            const columns_line = found[0].substr(1);
+            const array = columns_line && columns_line.split(/\s/g);
+            const VCF_COLUMNS = ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'];
+            return _.difference(array, VCF_COLUMNS);
+        } else {
+            return [];
+        }
     }
 
     createRouter() {
