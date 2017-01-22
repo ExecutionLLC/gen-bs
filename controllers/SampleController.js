@@ -46,7 +46,7 @@ class SampleController extends UserEntityControllerBase {
                     if (error) {
                         callback(null, sampleFile, fileName, []);
                     } else {
-                        callback(error, sampleFile, fileName, sampleNames.concat(['FakeSample1', 'FakeSample2'])); // TODO: remove fake samples
+                        callback(error, sampleFile, fileName, sampleNames);
                     }
                 }),
             (sampleFile, fileName, sampleList, callback) => {

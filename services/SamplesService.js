@@ -136,9 +136,6 @@ class SamplesService extends UserEntityServiceBase {
      * @param {Function} callback - callback (error, samples)
      */
     updateSamplesForVcfFile(user, vcfFileId, vcfFileName, sampleNames, callback) {
-
-        sampleNames = sampleNames.concat(['NewSample1', 'NewSample2']); // TODO: remove this line
-
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
