@@ -31,6 +31,7 @@ import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 import config from '../../../../config';
+import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -726,12 +727,15 @@ export default class AnalysisRightPane extends React.Component {
 
     getSampleOptions(value, selectedSamplesHash) {
         const samples = this.props.samplesList.hashedArray.array;
-        return samples.map((sampleItem) => {
-            const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
-            const {type: sampleType, id: sampleId, name: sampleName} = sampleItem;
-            const label = getItemLabelByNameAndType(sampleName, sampleType);
-            return {value: sampleId, label, disabled: isDisabled};
-        });
+        return _.chain(samples)
+            .filter((sample) => sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED)
+            .map((sampleItem) => {
+                const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
+                const {type: sampleType, id: sampleId, name: sampleName} = sampleItem;
+                const label = getItemLabelByNameAndType(sampleName, sampleType);
+                return {value: sampleId, label, disabled: isDisabled};
+            })
+            .value();
     }
 
     onDeleteAnalysisClick() {
