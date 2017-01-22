@@ -18,7 +18,8 @@ const mappedColumns = [
     'isDeleted',
     'values',
     'timestamp',
-    'uploadState'
+    'uploadState',
+    'error'
 ];
 
 const SampleTableNames = {
