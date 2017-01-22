@@ -184,7 +184,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     _handleUploadProgress(user, session, operation, message, callback) {
-        const {result: {status, progress}} = message;
+        const {result: {progress}} = message;
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.update(user, {
                 id: operation.getId(),
@@ -193,15 +193,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 error: null
             }, (error) => callback(error)),
             (callback) => this._createUploadProgressResult(user, session, operation, message, callback),
-            (result, callback) => {
-                if (result.error) {
-                    message.error = { message: result.error, code: -500};
-                    this._handleUploadError(user, session, operation, message, callback);
-                } else {
-                    super._createOperationResult(session, operation, null, operation.getUserId(),
-                        EVENTS.onOperationResultReceived, false, result, null, callback);
-                }
-            }
+            (result, callback) => super._createOperationResult(
+                session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, false, result, null, callback
+            )
         ], callback);
     }
 
