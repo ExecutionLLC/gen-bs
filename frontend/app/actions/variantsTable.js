@@ -184,20 +184,26 @@ export function createCommentAsync(alt, pos, reference, chrom, searchKey, commen
     };
 }
 
-export function updateCommentAsync(id, alt, pos, ref, chrom, searchKey, comment) {//TODO langu get comment object
+export function updateCommentAsync(oldComment, alt, pos, ref, chrom, searchKey, newCommentText) {
 
     return (dispatch) => {
-        const commentObject = i18n.setEntityText(
+        const oldCommentTexts = i18n.getEntityLanguageTexts(oldComment);
+        const {id} = oldComment;
+        const commentObject = i18n.changeEntityText(
+            i18n.setEntityLanguageTexts(
+                {
+                    id,
+                    alt,
+                    pos,
+                    reference: ref,
+                    chrom,
+                    searchKey
+                },
+                oldCommentTexts
+            ),
+            null,
             {
-                id,
-                alt,
-                pos,
-                reference: ref,
-                chrom,
-                searchKey
-            },
-            {
-                comment
+                comment: newCommentText
             }
         );
         return new Promise(

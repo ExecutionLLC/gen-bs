@@ -76,7 +76,7 @@ export default class VariantsTableComment extends Component {
                 this.props.dispatch(createCommentAsync(alt, pos, reference, chrom, searchKey, comment));
             }
         } else if (comment) {
-            this.props.dispatch(updateCommentAsync(comments[0].id, alt, pos, reference, chrom, searchKey, comment));
+            this.props.dispatch(updateCommentAsync(comments[0], alt, pos, reference, chrom, searchKey, comment));
         } else {
             this.props.dispatch(removeCommentAsync(comments[0].id, searchKey));
         }
