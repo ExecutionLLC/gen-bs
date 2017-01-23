@@ -19,13 +19,13 @@ class FieldsModel extends ModelBase {
 
     findAll(callback) {
         this.db.transactionally((trx, callback) => {
-            this._findFields(trx, null, null, null, null, null, null, null, callback);
+            this._findFields(trx, null, null, null, null, null, null, callback);
         }, callback);
     }
 
     findMany(fieldIds, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findFields(trx, fieldIds, null, null, null, null, null, null, callback);
+            this._findFields(trx, fieldIds, null, null, null, null, null, callback);
         }, callback);
     }
 
@@ -33,7 +33,7 @@ class FieldsModel extends ModelBase {
         const fieldIds = [fieldId];
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findFields(trx, fieldIds, null, null, null, null, null, null, callback),
+                (callback) => this._findFields(trx, fieldIds, null, null, null, null, null, callback),
                 (fields, callback) => callback(null, _.first(fields))
             ], callback);
         }, callback);
@@ -42,12 +42,13 @@ class FieldsModel extends ModelBase {
     addMany(languageId, fieldsMetadata, callback) {
         this.db.transactionally((trx, callback) => {
             async.map(fieldsMetadata, (fieldMetadata, callback) => {
-                this.addInTransaction(trx, languageId, fieldMetadata, false, callback);
+                this._addInTransaction(trx, languageId, fieldMetadata, false, callback);
             }, callback);
         }, callback);
     }
 
     _addInTransaction(trx, languageId, metadata, shouldGenerateId, callback) {
+        const fieldText = _.first(metadata.text);
         async.waterfall([
             (callback) => {
                 const dataToInsert = {
@@ -66,9 +67,9 @@ class FieldsModel extends ModelBase {
             (metadataId, callback) => {
                 const dataToInsert = {
                     fieldId: metadataId,
-                    languageId,
-                    description: metadata.description,
-                    label: metadata.label
+                    languageId: fieldText.languageId,
+                    description: fieldText.description,
+                    label: fieldText.label
                 };
                 this._unsafeInsert(TableNames.FieldText, dataToInsert, trx, (error) => {
                     callback(error, metadataId);
@@ -149,14 +150,14 @@ class FieldsModel extends ModelBase {
 
     findSourcesFields(callback) {
         this.db.transactionally((trx, callback) => {
-            this._findFields(trx, null, null, true, null, null, null, null, callback);
+            this._findFields(trx, null, null, true, null, null, null, callback);
         }, callback);
     }
 
     _findIdOfTheSameAsOrNullInTransaction(fieldMetadata, trx, callback) {
         const {name, valueType, dimension} = fieldMetadata;
         async.waterfall([
-            (callback) => this._findFields(trx, null, null, null, null, name, valueType, dimension, callback),
+            (callback) => this._findFields(trx, null, null, null, name, valueType, dimension, callback),
             (fields, callback) => callback(null, fields.length ? _.first(fields).id : null)
         ], callback)
     }
@@ -165,7 +166,6 @@ class FieldsModel extends ModelBase {
                 fieldIdsOrNull,
                 isMandatoryOrNull,
                 isSourceOrNull,
-                languageIdOrNull,
                 nameOrNull,
                 valueTypeOrNull,
                 dimensionOrNull,
@@ -176,7 +176,6 @@ class FieldsModel extends ModelBase {
                 fieldIdsOrNull,
                 isMandatoryOrNull,
                 isSourceOrNull,
-                languageIdOrNull,
                 nameOrNull,
                 valueTypeOrNull,
                 dimensionOrNull,
@@ -194,7 +193,7 @@ class FieldsModel extends ModelBase {
                 const fieldIdsToKeywords = _.groupBy(keywords, keyword => keyword.fieldId);
                 const fieldsWithKeywords = _.map(fieldValues,
                     (field) => {
-                        return Object.assign({}, field,{
+                        return Object.assign({}, field, {
                             keywords: fieldIdsToKeywords[field.id] || []
                         });
                     });
@@ -207,7 +206,6 @@ class FieldsModel extends ModelBase {
                       fieldIdsOrNull,
                       isMandatoryOrNull,
                       isSourceOrNull,
-                      languageIdOrNull,
                       nameOrNull,
                       valueTypeOrNull,
                       dimensionOrNull,
@@ -223,7 +221,8 @@ class FieldsModel extends ModelBase {
             `${TableNames.Field}.is_hyperlink`,
             `${TableNames.Field}.hyperlink_template`,
             `${TableNames.FieldText}.label`,
-            `${TableNames.FieldText}.description`
+            `${TableNames.FieldText}.description`,
+            `${TableNames.FieldText}.language_id`
         ])
             .from(TableNames.Field)
             .leftJoin(TableNames.FieldText, `${TableNames.FieldText}.field_id`, `${TableNames.Field}.id`)
@@ -237,7 +236,6 @@ class FieldsModel extends ModelBase {
         if (isSourceOrNull) {
             query = query.andWhereNot(`${TableNames.Field}.source_name`, 'sample');
         }
-        query = query.andWhere(`${TableNames.FieldText}.language_id`, languageIdOrNull || this.models.config.defaultLanguId);
 
         if (nameOrNull) {
             query = query.andWhere(`${TableNames.Field}.name`, nameOrNull);
@@ -252,6 +250,36 @@ class FieldsModel extends ModelBase {
         async.waterfall([
             callback => query.asCallback(callback),
             (fields, callback) => this._toCamelCase(fields, callback),
+            (fields, callback) => {
+                const groupedByIdFields = _.groupBy(fields, 'id');
+                const resultFields = _.map(groupedByIdFields, group => {
+                    const text = _.map(group, field => {
+                        const {languageId, label, description} = field;
+                        return {
+                            languageId,
+                            label,
+                            description
+                        }
+                    });
+                    const defaultField = group[0];
+                    const {
+                        id, name, sourceName, valueType, isMandatory, isInvisible, dimension, isHyperlink, hyperlinkTemplate
+                    } = defaultField;
+                    return {
+                        id,
+                        name,
+                        sourceName,
+                        valueType,
+                        isMandatory,
+                        isInvisible,
+                        dimension,
+                        isHyperlink,
+                        hyperlinkTemplate,
+                        text
+                    }
+                });
+                callback(null, resultFields);
+            },
             (fields, callback) => {
                 if (fieldIdsOrNull) {
                     this._ensureAllItemsFound(fields, fieldIdsOrNull, callback);
