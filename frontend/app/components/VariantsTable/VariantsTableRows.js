@@ -103,6 +103,7 @@ export default class VariantsTableRows extends Component {
                               isSelected={isSelected}
                               fields={fields}
                               auth={this.props.auth}
+                              ui={this.props.ui}
                               dispatch={this.props.dispatch}
                               tableElement={this}
                               onSelected={

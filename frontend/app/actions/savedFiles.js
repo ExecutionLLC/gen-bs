@@ -6,6 +6,7 @@ import ExportUtils from '../utils/exportUtils';
 import {handleApiBodylessResponseErrorAsync, handleApiResponseErrorAsync} from './errorHandler';
 import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
+import * as i18n from '../utils/i18n';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
@@ -123,6 +124,9 @@ export function exportToFile(exportType) {
             },
             fields: {
                 totalFieldsHashedArray: {hash: totalFieldsHash}
+            },
+            ui: {
+                languageId
             }
         } = getState();
 
@@ -140,7 +144,7 @@ export function exportToFile(exportType) {
         const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
             .map(rowIndex => [
                 ...variants[rowIndex].fields,
-                ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]
+                ...[_.isEmpty(variants[rowIndex].comments) ? '' : i18n.getEntityText(variants[rowIndex].comments[0], languageId).comment]
             ])
             .value();
 

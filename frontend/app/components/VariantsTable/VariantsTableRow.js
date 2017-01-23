@@ -27,7 +27,8 @@ export default class VariantsTableRow extends ComponentBase {
             rowIndex,
             variantsHeader,
             sortState,
-            isSelected
+            isSelected,
+            ui
         } = this.props;
         const rowFields = row.fields;
         const mandatoryFields = row.mandatoryFields;
@@ -71,6 +72,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       comments={comments}
                                       tableElement={this.props.tableElement}
                                       onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
+                                      ui={ui}
                 />
                 {_.map(rowFields, (value, index) =>
                     this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)

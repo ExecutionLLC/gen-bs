@@ -4,6 +4,7 @@ import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
 import {requestTableScrollPositionReset} from './ui';
+import * as i18n from '../utils/i18n';
 
 /*
  * action types
@@ -159,14 +160,18 @@ function receiveAnalysisOperationId(operationId) {
 
 export function createCommentAsync(alt, pos, reference, chrom, searchKey, comment) {
     return (dispatch, getState) => {
-        const commentObject = {
-            alt,
-            pos,
-            reference,
-            chrom,
-            searchKey,
-            comment
-        };
+        const commentObject = i18n.setEntityText(
+            {
+                alt,
+                pos,
+                reference,
+                chrom,
+                searchKey
+            },
+            {
+                comment
+            }
+        );
         const {ui: {languageId}} = getState();
         return new Promise((resolve) => commentsClient.add(
             languageId,
@@ -179,19 +184,22 @@ export function createCommentAsync(alt, pos, reference, chrom, searchKey, commen
     };
 }
 
-export function updateCommentAsync(id, alt, pos, ref, chrom, searchKey, comment) {
+export function updateCommentAsync(id, alt, pos, ref, chrom, searchKey, comment) {//TODO langu get comment object
 
     return (dispatch) => {
-
-        const commentObject = {
-            id,
-            alt,
-            pos,
-            reference: ref,
-            chrom,
-            searchKey,
-            comment
-        };
+        const commentObject = i18n.setEntityText(
+            {
+                id,
+                alt,
+                pos,
+                reference: ref,
+                chrom,
+                searchKey
+            },
+            {
+                comment
+            }
+        );
         return new Promise(
             (resolve) => commentsClient.update(commentObject, (error, response) => resolve({error, response}))
         ).then(
