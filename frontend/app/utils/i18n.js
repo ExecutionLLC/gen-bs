@@ -17,27 +17,34 @@ function getEntityTextTranslation(entityTexts, languageId) {
     return _.find(entityTexts, {languageId});
 }
 
+export function getEntityLanguageTexts(entity) {
+    return entity.text;
+}
+
+export function setEntityLanguageTexts(entity, texts) {
+    return {...entity, text: texts};
+}
+
 export function getEntityText(entity, languageId) {
-    let text = getEntityTextTranslation(entity.text, null);
+    const entityLanguageTexts = getEntityLanguageTexts(entity);
+    let text = getEntityTextTranslation(entityLanguageTexts, null);
     if (!text) {
-        text = getEntityTextTranslation(entity.text, languageId);
+        text = getEntityTextTranslation(entityLanguageTexts, languageId);
     }
     if (!text) {
-        text = getEntityTextTranslation(entity.text, DEFAULT_LANGUAGE_ID);
+        text = getEntityTextTranslation(entityLanguageTexts, DEFAULT_LANGUAGE_ID);
     }
     return text;
 }
 
 export function setEntityText(entity, text) {
-    return {
-        ...entity,
-        text: [
-            {
-                ...text,
-                languageId: null
-            }
-        ]
-    };
+    return setEntityLanguageTexts(
+        entity,
+        [{
+            ...text,
+            languageId: null
+        }]
+    );
 }
 
 export function changeEntityText(entity, languageId, text) {
