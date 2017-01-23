@@ -134,7 +134,7 @@ class CommentsModel extends SecureModelBase {
     }
 
     _mapColumns(commentData) {
-        const {id, alt, chrom, pos, reference, searchKey, languageId, comment} = commentData;
+        const {id, alt, chrom, pos, reference, searchKey, languageId, comment, creator} = commentData;
         return {
             id,
             searchKey,
@@ -147,7 +147,8 @@ class CommentsModel extends SecureModelBase {
                     languageId,
                     comment
                 }
-            ]
+            ],
+            creator
         }
     }
 
