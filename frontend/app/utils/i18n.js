@@ -28,18 +28,21 @@ export function getEntityText(entity, languageId) {
     return text;
 }
 
-export function changeEntityText(entity, languageId, text) {
-    const entityText = getEntityText(entity, languageId);
+export function setEntityText(entity, text) {
     return {
         ...entity,
         text: [
             {
-                ...entityText,
                 ...text,
                 languageId: null
             }
         ]
     };
+}
+
+export function changeEntityText(entity, languageId, text) {
+    const entityText = getEntityText(entity, languageId);
+    return setEntityText(entity, {...entityText, ...text});
 }
 
 export function makeCopyOfText(copyOfWhat) {
