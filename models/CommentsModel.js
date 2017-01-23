@@ -18,48 +18,36 @@ const mappedColumns = [
     'comment'
 ];
 
+const TableNames = {
+    Comment: 'comment',
+    CommentText: 'comment_text'
+};
+
 class CommentsModel extends SecureModelBase {
     constructor(models) {
-        super(models, 'comment', mappedColumns);
+        super(models, TableNames.Comment, mappedColumns);
     }
 
     findAllBySearchKeys(userId, languageId, searchKeys, callback) {
-        this.db.asCallback((knex, callback) => {
-            this._prepareCommentsBaseSelectQuery(knex, userId, languageId)
-                .whereIn('search_key', searchKeys)
-                .asCallback((error, commentsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        const comments = _.map(commentsData || [], commentData => this._mapColumns(commentData));
-                        callback(null, comments);
-                    }
-                });
+        this.db.transactionally((trx, callback) => {
+            this._fetchCommentsData(trx, null, userId, searchKeys, true, callback);
         }, callback);
     }
 
     findAll(userId, callback) {
-        async.waterfall([
-            (callback) => this._fetchUserComments(userId, callback),
-            (comments, callback) => this._mapItems(comments, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            this._fetchCommentsData(trx, null, userId, null, true, callback);
+        }, callback);
     }
 
     findMany(userId, commentIds, callback) {
-        async.waterfall([
-            (callback) => this._fetchComments(commentIds, callback),
-            (comments, callback) => this._ensureAllItemsFound(comments, commentIds, callback),
-            (comments, callback) => async.map(comments, (comment, callback) => {
-                this._ensureItemNotDeleted(comment, callback);
-            }, callback),
-            (comments, callback) => async.map(comments, (comment, callback) => {
-                this._checkUserIsCorrect(userId, comment, callback);
-            }, callback),
-            (comments, callback) => this._mapItems(comments, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            this._fetchCommentsData(trx, commentIds, userId, null, true, callback);
+        }, callback);
     }
 
     _add(userId, languageId, comment, shouldGenerateId, callback) {
+        const commentText = _.find(comment.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
@@ -77,8 +65,8 @@ class CommentsModel extends SecureModelBase {
                 (commentId, callback) => {
                     const dataToInsert = {
                         commentId,
-                        languageId,
-                        comment: comment.comment
+                        languageId: commentText.languageId,
+                        comment: commentText.comment
                     };
                     this._unsafeInsert('comment_text', dataToInsert, trx, (error) => {
                         callback(error, commentId);
@@ -89,6 +77,7 @@ class CommentsModel extends SecureModelBase {
     }
 
     _update(userId, comment, commentToUpdate, callback) {
+        const commentText = _.find(commentToUpdate.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
@@ -102,19 +91,20 @@ class CommentsModel extends SecureModelBase {
                     this._unsafeUpdate(comment.id, dataToUpdate, trx, callback);
                 },
                 (commentId, callback) => {
+                    const {languageId, comment} = commentText;
                     const dataToUpdate = {
-                        languageId: comment.languageId,
-                        comment: commentToUpdate.comment
+                        comment
                     };
-                    this._updateCommentText(commentId, dataToUpdate, trx, callback);
+                    this._updateCommentText(commentId, languageId, dataToUpdate, trx, callback);
                 }
             ], callback);
         }, callback);
     }
 
-    _updateCommentText(commentId, dataToUpdate, trx, callback) {
+    _updateCommentText(commentId, languageId, dataToUpdate, trx, callback) {
         trx('comment_text')
             .where('comment_id', commentId)
+            .andWhere('language_id', languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
             .asCallback((error) => {
                 callback(error, commentId);
@@ -123,72 +113,83 @@ class CommentsModel extends SecureModelBase {
 
     _fetch(userId, commentId, callback) {
         async.waterfall([
-            (callback) => this._fetchComment(commentId, callback),
+            (callback) => this._fetchComment(userId, commentId, callback),
             (commentData, callback) => this._checkUserIsCorrect(userId, commentData, callback)
         ], callback);
     }
 
-    _fetchComment(commentId, callback) {
-        this.db.asCallback((knex, callback) => {
-            this._prepareCommentsBaseSelectQuery(knex)
-                .where('id', commentId)
-                .asCallback((error, commentData) => {
-                    if (error || !commentData.length) {
-                        callback(error || new Error('Item not found: ' + commentId));
+    _fetchComment(userId, commentId, callback) {
+        this.db.asCallback((trx, callback) => {
+            async.waterfall([
+                (callback) => this._fetchCommentsData(trx, [commentId], userId, null, false, callback),
+                (comments) => {
+                    if (!comments.length) {
+                        callback(new Error('Item not found: ' + commentId));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(commentData[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(comments[0]));
                     }
-                });
+                }
+            ], callback);
         }, callback);
     }
 
-    _fetchUserComments(userId, callback) {
-        this.db.asCallback((knex, callback) => {
-            this._prepareCommentsBaseSelectQuery(knex)
-                .where('creator', userId)
-                .andWhere('is_deleted', false)
-                .asCallback((error, commentsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(commentsData));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchComments(commentIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            this._prepareCommentsBaseSelectQuery(knex)
-                .whereIn('id', commentIds)
-                .asCallback((error, commentsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(commentsData));
-                    }
-                });
-        }, callback);
-    }
-
-    /**
-     * Creates query for `comment` table joined with `comment_text` table, with optional user id and language id params.
-     * */
-    _prepareCommentsBaseSelectQuery(knex, userId, languageId) {
-        let query = knex
-            .select()
-            .from(this.baseTableName)
-            .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
-            .where('is_deleted', false);
-        if (userId) {
-            query = query
-                .andWhere('creator', userId);
+    _mapColumns(commentData) {
+        const {id, alt, chrom, pos, reference, searchKey, languageId, comment} = commentData;
+        return {
+            id,
+            searchKey,
+            alt,
+            chrom,
+            pos,
+            reference,
+            text: [
+                {
+                    languageId,
+                    comment
+                }
+            ]
         }
-        if (languageId) {
-            query = query
-                .andWhere('comment_text.language_id', languageId);
+    }
+
+    _fetchCommentsData(trx, commentIdsOrNull, userIdOrNull, searchKeysOrNull, excludeDeleted, callback) {
+        let query = trx.select([
+            `${TableNames.Comment}.id`,
+            `${TableNames.Comment}.reference`,
+            `${TableNames.Comment}.chrom`,
+            `${TableNames.Comment}.pos`,
+            `${TableNames.Comment}.alt`,
+            `${TableNames.Comment}.search_key`,
+            `${TableNames.Comment}.creator`,
+            `${TableNames.CommentText}.language_id`,
+            `${TableNames.CommentText}.comment`
+        ])
+            .from(TableNames.Comment)
+            .leftJoin(TableNames.CommentText, `${TableNames.Comment}.id`, `${TableNames.CommentText}.comment_id`)
+            .whereRaw('1 = 1');
+
+        if (userIdOrNull) {
+            query = query.andWhere('creator', userIdOrNull);
         }
-        return query;
+
+        if (excludeDeleted) {
+            query = query.andWhere('is_deleted', false);
+        }
+
+        if (commentIdsOrNull) {
+            query = query.andWhere(`${TableNames.Comment}.id`, 'in', commentIdsOrNull);
+        }
+        if (searchKeysOrNull) {
+            query = query.andWhere(`${TableNames.Comment}.search_key`, 'in', searchKeysOrNull);
+        }
+
+        async.waterfall([
+            callback => query.asCallback(callback),
+            (comments, callback) => this._toCamelCase(comments, callback),
+            (comments, callback) => {
+                const mappedComments = _.map(comments, commentData => this._mapColumns(commentData));
+                callback(null, mappedComments);
+            }
+        ], callback);
     }
 }
 

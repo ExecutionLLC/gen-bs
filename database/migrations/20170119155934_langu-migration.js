@@ -10,12 +10,24 @@ exports.up = function (knex) {
         .then(() => editAnalysisLanguageNotNullConstrains(knex))
         .then(() => updateUserFilters(knex))
         .then(() => updateUserModels(knex))
-        .then(() => updateUserViews(knex));
+        .then(() => updateUserViews(knex))
+        .then(() => updateCommentTexs(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function updateCommentTexs(knex) {
+    console.log('=> Update comments...');
+    return knex.raw('ALTER TABLE comment_text ALTER COLUMN language_id DROP NOT NULL')
+        .then(() => knex('comment_text')
+            .whereNotNull('language_id')
+            .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                languageId: null
+            }))
+        );
+}
 
 function updateUserFilters(knex) {
     return knex.select('id')
