@@ -161,7 +161,7 @@ class SearchService extends ServiceBase {
                         return fieldWithId ? fieldWithId.fieldValue : null
                     });
                     const searchKey = searchKeyObject.fieldValue;
-                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], ({id, comment}) => ({id, comment}));
+                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], ({id, text}) => ({id, text}));
 
                     return {
                         searchKey,
