@@ -11,12 +11,27 @@ exports.up = function (knex) {
         .then(() => updateUserFilters(knex))
         .then(() => updateUserModels(knex))
         .then(() => updateUserViews(knex))
-        .then(() => updateCommentTexs(knex));
+        .then(() => updateCommentTexs(knex))
+        .then(() => editFieldTextTable(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function editFieldTextTable(knex) {
+    console.log('=> Update fields table constrains...');
+    return knex.schema
+        .table('field_text', table => {
+            table.dropPrimary('field_text_pkey')
+        })
+        .then(() => knex.raw('ALTER TABLE field_text ALTER COLUMN language_id DROP NOT NULL'))
+        .then(() => knex.schema
+            .table('field_text', table => {
+                table.unique(['field_id', 'language_id']);
+            })
+        );
+}
 
 function updateCommentTexs(knex) {
     console.log('=> Update comments...');
