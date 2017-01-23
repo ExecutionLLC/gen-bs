@@ -54,7 +54,6 @@ export default class AnalysisHistoryList extends React.Component {
     }
 
     renderListItem(isActive, historyItem, isNew) {
-        isNew = !!isNew ? isNew : false;
         return (
             <li
                 key={historyItem.id}
