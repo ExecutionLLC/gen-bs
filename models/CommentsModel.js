@@ -40,6 +40,18 @@ class CommentsModel extends SecureModelBase {
         }, callback);
     }
 
+    find(userId, commentId, callback) {
+        const commentIds = [commentId];
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._fetchCommentsData(trx, commentIds, userId, null, true, callback),
+                (comments, callback) => callback(null, _.first(comments))
+            ], (error, comment) => {
+                callback(error, comment);
+            });
+        }, callback);
+    }
+
     findMany(userId, commentIds, callback) {
         this.db.transactionally((trx, callback) => {
             this._fetchCommentsData(trx, commentIds, userId, null, true, callback);
