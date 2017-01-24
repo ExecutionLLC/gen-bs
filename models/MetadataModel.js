@@ -110,7 +110,8 @@ class MetadataModel extends ModelBase {
             `${TableNames.Metadata}.is_editable`,
             `${TableNames.Metadata}.is_invisible`,
             `${TableNames.MetadataText}.label`,
-            `${TableNames.MetadataText}.description`
+            `${TableNames.MetadataText}.description`,
+            `${TableNames.MetadataText}.language_id`
         ])
             .from(TableNames.Metadata)
             .leftJoin(TableNames.MetadataText, `${TableNames.MetadataText}.metadata_id`, `${TableNames.Metadata}.id`)
