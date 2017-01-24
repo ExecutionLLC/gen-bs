@@ -52,7 +52,7 @@ export default class VariantsTableRows extends Component {
 
     renderTableBody(rows, sortState, isFilteringOrSorting, variantsAnalysisPresent, variantsHeader, fields, selectedRowIndices) {
         if (isFilteringOrSorting || !variantsAnalysisPresent) {
-            return VariantsTableRows.renderLoadingItem();
+            return this.renderTempRow();
         } else {
             return _.map(rows,
                 (row, index) =>
@@ -107,10 +107,48 @@ export default class VariantsTableRows extends Component {
                               dispatch={this.props.dispatch}
                               tableElement={this}
                               onSelected={
-                                (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
+                                  (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
                               }
             />
         );
+    }
+
+    renderTempRow() {
+        const {variantsHeader} = this.props;
+        return [
+            VariantsTableRows.renderLoadingItem(),
+            <tr style={{visibility: 'hidden'}}>
+                <td className='btntd row_checkbox'>
+                    <div>{1}</div>
+                </td>
+                <td className='btntd row_checkbox'
+                    key='row_checkbox'>
+                    <div>
+                        <label className='checkbox'>
+                            <input type='checkbox'/>
+                            <i/>
+                        </label>
+                        <span />
+                    </div>
+                </td>
+                <td className='btntd'>
+                    <div>
+                    </div>
+                </td>
+                <td className='comment'>
+                    <div>
+                    </div>
+                </td>
+                {_.map(variantsHeader, () => {
+                    return (
+                        <td>
+                            <div>
+                            </div>
+                        </td>
+                    );
+                })}
+            </tr>
+        ];
     }
 
     static renderLoadingItem() {
