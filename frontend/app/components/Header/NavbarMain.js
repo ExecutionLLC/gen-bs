@@ -11,6 +11,8 @@ import Auth from './NavbarMain/Auth';
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
 import {fileUploadStatus} from '../../actions/fileUpload';
 import {entityType} from '../../utils/entityTypes';
+import * as PropTypes from 'react/lib/ReactPropTypes';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 
 class NavbarMain extends Component {
@@ -63,7 +65,8 @@ class NavbarMain extends Component {
                 <div className='navbar-inner'>
                     <div className='dropdown'>
                         <a role='button' className='btn navbar-btn brand dropdown-toggle'>
-                            AGx </a>
+                            {this.props.p.t('common.agx')}
+                        </a>
                     </div>
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
@@ -99,9 +102,14 @@ function mapStateToProps(state) {
         ws,
         variantsTable,
         samplesList,
-        fileUpload
+        fileUpload,
+        p: getP(state)
     };
 }
+
+NavbarMain.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
 export default connect(mapStateToProps)(NavbarMain);
 
