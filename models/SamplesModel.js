@@ -123,13 +123,10 @@ class SamplesModel extends SecureModelBase {
     }
 
     update(userId, sampleId, sampleToUpdate, callback) {
-        const {name, description} = sampleToUpdate;
+        const sampleText = _.find(sampleToUpdate.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._updateSampleText(trx, sampleId, {
-                    name,
-                    description
-                }, (error) => callback(error)),
+                (callback) => this._updateSampleText(trx, sampleId, sampleText, (error) => callback(error)),
                 (callback) => this._updateSampleMetadataValues(trx, sampleId, sampleToUpdate.sampleMetadata, (error) => callback(error)),
                 (callback) => this._find(trx, sampleId, userId, callback)
             ], callback);
@@ -139,6 +136,7 @@ class SamplesModel extends SecureModelBase {
     _updateSampleText(trx, sampleId, sampleText, callback) {
         trx(SampleTableNames.SampleText)
             .where('sample_id', sampleId)
+            .andWhere('language_id', sampleText.languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(sampleText))
             .asCallback(callback);
     }
@@ -150,10 +148,11 @@ class SamplesModel extends SecureModelBase {
     }
 
     _updateSampleMetadata(trx, sampleId, metadata, callback) {
-        const {metadataId, value} = metadata;
+        const {metadataId, text: {languageId, value}} = metadata;
         trx(SampleTableNames.SampleMetadata)
             .where('sample_id', sampleId)
             .andWhere('metadata_id', metadataId)
+            .andWhere('language_id', languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase({value}))
             .asCallback(callback);
     }
@@ -202,7 +201,7 @@ class SamplesModel extends SecureModelBase {
                     sampleId,
                     name,
                     description,
-                    languageId: languageId || Config.defaultLanguId
+                    languageId: null
                 };
                 this._addSampleText(trx, genotypeText, (error) => callback(error, sampleId))
             },
@@ -234,7 +233,14 @@ class SamplesModel extends SecureModelBase {
     }
 
     _addSampleMetadata(trx, editableFields, callback) {
-        async.map(editableFields, (editableField, callback) => {
+        async.map(editableFields, (field, callback) => {
+            const {sampleId, metadataId, text: {languageId, value}} = field;
+            const editableField = {
+                sampleId,
+                metadataId,
+                languageId,
+                value
+            };
             this._unsafeInsert(SampleTableNames.SampleMetadata, editableField, trx, callback);
         }, callback);
     }
@@ -274,7 +280,12 @@ class SamplesModel extends SecureModelBase {
                             sampleFields: [],
                             sampleMetadata: _.map(editableMetadata, fieldWithId => ({
                                 metadataId: fieldWithId.id,
-                                value: null
+                                text: [
+                                    {
+                                        value: null,
+                                        languageId: null
+                                    }
+                                ]
                             }))
                         });
                     });
@@ -290,9 +301,7 @@ class SamplesModel extends SecureModelBase {
             (samples, callback) => this._attachSampleFields(trx, samples, callback),
             (samples, callback) => this._attachSampleMetadata(trx, samples, callback),
             (samples, callback) => this._attachSampleText(trx, samples, callback)
-        ], (error, views) => {
-            callback(error, views);
-        });
+        ], callback);
     }
 
     _attachSampleFields(trx, samples, callback) {
@@ -332,12 +341,17 @@ class SamplesModel extends SecureModelBase {
         async.waterfall([
             (callback) => this._findSampleTextByIds(trx, sampleIds, callback),
             (sampleTexts, callback) => {
-                const sampleTextBySampleId = CollectionUtils.createHashByKey(sampleTexts, 'sampleId');
+                const textsHash = _.groupBy(sampleTexts, 'sampleId');
                 const samplesWithText = _.map(samples, sample => {
-                    const {name, description} = sampleTextBySampleId[sample.id];
                     return Object.assign({}, sample, {
-                        name,
-                        description
+                        text: _.map(textsHash[sample.id], text => {
+                            const {description, languageId, name} = text;
+                            return {
+                                name,
+                                description,
+                                languageId
+                            };
+                        })
                     });
                 });
                 callback(null, samplesWithText);
@@ -411,7 +425,31 @@ class SamplesModel extends SecureModelBase {
                 .from(SampleTableNames.SampleMetadata)
                 .whereIn('sample_id', sampleIds)
                 .asCallback(callback),
-            (rows, callback) => this._toCamelCase(rows, callback)
+            (rows, callback) => {
+                this._toCamelCase(rows, callback)
+            },
+            (rows, callback) => {
+                const groupesBySampleId = _.groupBy(rows, row => row.sampleId);
+                const groupedByMetadataAndLanguageId = _.flatMap(groupesBySampleId, groupBySampleId => {
+                    const groupedByMetadataId = _.groupBy(groupBySampleId, group => group.metadataId);
+                    return _.map(groupedByMetadataId, group => {
+                        const defaultMetadata = _.first(group);
+                        const {sampleId, metadataId} = defaultMetadata;
+                        return {
+                            sampleId,
+                            metadataId,
+                            text: _.map(group, groupValue => {
+                                const {languageId, value} = groupValue;
+                                return {
+                                    languageId,
+                                    value
+                                }
+                            })
+                        };
+                    });
+                });
+                callback(null, groupedByMetadataAndLanguageId);
+            }
         ], callback);
     }
 

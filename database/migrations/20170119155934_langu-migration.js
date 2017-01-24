@@ -12,12 +12,34 @@ exports.up = function (knex) {
         .then(() => updateUserModels(knex))
         .then(() => updateUserViews(knex))
         .then(() => updateCommentTexs(knex))
-        .then(() => editFieldTextTable(knex));
+        .then(() => editFieldTextTable(knex))
+        .then(() => editSampleMetadataTable(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function editSampleMetadataTable(knex) {
+    console.log('=> Update sample metadata table ...');
+    return knex.schema
+        .table('sample_metadata', table => {
+            table.string('language_id', 2)
+                .references('id')
+                .inTable('language');
+            table.unique(['sample_id', 'language_id', 'metadata_id']);
+        })
+        .then(() => knex('sample').select('id')
+            .whereNot('type', 'user'))
+        .then((samples) => {
+            const sampleIds = _.map(samples, sample => sample.id);
+            return knex('sample_metadata')
+                .update({
+                    'language_id': 'en'
+                })
+                .whereIn('sample_id', sampleIds)
+        });
+}
 
 function editFieldTextTable(knex) {
     console.log('=> Update fields table constrains...');
