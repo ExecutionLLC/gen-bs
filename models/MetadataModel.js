@@ -20,38 +20,38 @@ class MetadataModel extends ModelBase {
     }
 
     findAll(callback) {
-        this._findMetadata(null, null, null, callback);
+        this._findMetadata(null, null, callback);
     }
 
     findMany(metadataIds, callback) {
-        this._findMetadata(metadataIds, null, null, callback);
+        this._findMetadata(metadataIds, null, callback);
     }
 
     findEditableMetadata(callback) {
-        this._findMetadata(null, null, true, callback);
+        this._findMetadata(null, true, callback);
     }
 
     find(metadataId, callback) {
         const metadataIds = [metadataId];
         async.waterfall([
-            (callback) => this._findMetadata(metadataIds, null, null, callback),
+            (callback) => this._findMetadata(metadataIds, null, callback),
             (fields, callback) => callback(null, _.first(fields))
         ], callback);
     }
 
-    _findMetadata(metadataIds, languageIdOrNull, isEditableOrNull, callback) {
+    _findMetadata(metadataIds, isEditableOrNull, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findMetadataValues(trx, metadataIds, languageIdOrNull, isEditableOrNull, callback),
-                (metadataValues, callback) => this._attachAvailableValues(metadataValues, languageIdOrNull, callback)
+                (callback) => this._findMetadataValues(trx, metadataIds, isEditableOrNull, callback),
+                (metadataValues, callback) => this._attachAvailableValues(trx, metadataValues, callback)
             ], callback);
         }, callback);
     }
 
-    _attachAvailableValues(metadataValues, languageIdOrNull, callback) {
+    _attachAvailableValues(trx, metadataValues, callback) {
         const fieldIds = _.map(metadataValues, field => field.id);
         async.waterfall([
-            (callback) => this._findAvailableValuesForMetadataIds(fieldIds, languageIdOrNull, callback),
+            (callback) => this._findAvailableValuesForMetadataIds(trx, fieldIds, callback),
             (availableValues, callback) => {
                 const metadataIdsToAvailableValues = _.groupBy(
                     availableValues, availableValue => availableValue.metadataId
@@ -59,7 +59,7 @@ class MetadataModel extends ModelBase {
                 const fieldsWithAvailableValues = _.map(
                     metadataValues,
                     (metadata) => {
-                        return Object.assign({}, metadata,{
+                        return Object.assign({}, metadata, {
                             availableValues: metadataIdsToAvailableValues[metadata.id] || []
                         });
                     }
@@ -70,26 +70,39 @@ class MetadataModel extends ModelBase {
 
     }
 
-    _findAvailableValuesForMetadataIds(fieldIds, languageIdOrNull, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
+    _findAvailableValuesForMetadataIds(trx, fieldIds, callback) {
+        async.waterfall([
+            (callback) => trx.select()
                 .from(TableNames.MetadataAvailableValue)
                 .innerJoin(TableNames.MetadataAvailableValueText,
                     `${TableNames.MetadataAvailableValueText}.metadata_available_value_id`,
                     `${TableNames.MetadataAvailableValue}.id`)
                 .whereIn('metadata_id', fieldIds)
-                .andWhere('language_id', languageIdOrNull || this.models.config.defaultLanguId)
-                .asCallback((error, fieldAvailableValues) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldAvailableValues));
-                    }
+                .asCallback(callback),
+            (valueItems, callback) => this._toCamelCase(valueItems, callback),
+            (valueItems, callback) => {
+                const availableValuesGroups = _.groupBy(valueItems, item => item.metadataAvailableValueId);
+                const availableValues = _.map(availableValuesGroups, groupValues => {
+                    const defaultValue = _.first(groupValues);
+                    const {metadataAvailableValueId, metadataId} = defaultValue;
+                    return {
+                        metadataId,
+                        metadataAvailableValueId,
+                        text: _.map(groupValues, groupValue => {
+                            const {languageId, value} = groupValue;
+                            return {
+                                languageId,
+                                value
+                            };
+                        })
+                    };
                 });
-        }, callback);
+                callback(null, availableValues);
+            }
+        ], callback);
     }
 
-    _findMetadataValues(trx, metadataIds, languageIdOrNull, isEditableOrNull, callback) {
+    _findMetadataValues(trx, metadataIds, isEditableOrNull, callback) {
         let query = trx.select([
             `${TableNames.Metadata}.id`,
             `${TableNames.Metadata}.name`,
@@ -105,8 +118,6 @@ class MetadataModel extends ModelBase {
         if (metadataIds) {
             query = query.andWhere(`${TableNames.Metadata}.id`, 'in', metadataIds);
         }
-        query = query.andWhere(`${TableNames.MetadataText}.language_id`, languageIdOrNull || this.models.config.defaultLanguId);
-
         if (isEditableOrNull) {
             query = query.andWhere(`${TableNames.Metadata}.is_editable`, isEditableOrNull);
         }
@@ -114,6 +125,32 @@ class MetadataModel extends ModelBase {
         async.waterfall([
             callback => query.asCallback(callback),
             (fields, callback) => this._toCamelCase(fields, callback),
+            (fields, callback) => {
+                const groupedByIdFields = _.groupBy(fields, 'id');
+                const resultFields = _.map(groupedByIdFields, group => {
+                    const text = _.map(group, field => {
+                        const {languageId, label, description} = field;
+                        return {
+                            languageId,
+                            label,
+                            description
+                        }
+                    });
+                    const defaultField = _.first(group);
+                    const {
+                        id, name, isEditable, isInvisible, valueType
+                    } = defaultField;
+                    return {
+                        id,
+                        name,
+                        isEditable,
+                        valueType,
+                        isInvisible,
+                        text
+                    };
+                });
+                callback(null, resultFields);
+            },
             (fields, callback) => {
                 if (metadataIds) {
                     this._ensureAllItemsFound(fields, metadataIds, callback);
