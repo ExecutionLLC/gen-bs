@@ -124,10 +124,10 @@ class SamplesService extends UserEntityServiceBase {
 
     /**
      * This function updates the list of samples that are in the VCF file being uploaded.
-     * Before this call, the DB may contain samples that was received by simple VCF-header parsing on WS.
-     * If the DB contains entries that are not in {samples}, they are considered wrong and will
-     * be deleted.
-     * If the <param>sampleNames</param> contains entries that are not in the DB yet, they will be added to DB.
+     * Before this call, the DB may contain samples that was received by trivial VCF-header parsing on WS.
+     * If the DB contains entries that are not in {sampleNames}, they are considered wrong and will
+     * be marked as NOT_FOUND.
+     * If the {sampleNames} contains entries that are not in the DB yet, they will be added to DB.
      *
      * @param {Object} user - Current user object.
      * @param {number} vcfFileId - Id of the VCF file currently being uploaded.
