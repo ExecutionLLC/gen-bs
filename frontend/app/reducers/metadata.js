@@ -1,8 +1,6 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/metadata';
-import {ImmutableHashedArray} from '../utils/immutable';
-import FieldUtils from '../utils/fieldUtils';
 
 const initialState = {
     editableMetadata: []
