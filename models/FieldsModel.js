@@ -261,7 +261,7 @@ class FieldsModel extends ModelBase {
                             description
                         }
                     });
-                    const defaultField = group[0];
+                    const defaultField = _.first(group);
                     const {
                         id, name, sourceName, valueType, isMandatory, isInvisible, dimension, isHyperlink, hyperlinkTemplate
                     } = defaultField;
@@ -276,7 +276,7 @@ class FieldsModel extends ModelBase {
                         isHyperlink,
                         hyperlinkTemplate,
                         text
-                    }
+                    };
                 });
                 callback(null, resultFields);
             },
