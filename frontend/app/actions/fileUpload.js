@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
-import {samplesListAddSamples} from './samplesList';
+import {samplesListAddOrUpdateSamples} from './samplesList';
 /*
  * action types
  */
@@ -221,7 +221,7 @@ export function uploadFile(fileUploadId) {
             (upload) => {
                 delete requestAbortFunctions[fp.id];
                 dispatch(receiveFileOperation(upload, fp.id));
-                dispatch(samplesListAddSamples(upload.sampleList));
+                dispatch(samplesListAddOrUpdateSamples(upload.sampleList));
             },
             (percentage) => {
                 console.log('progress', percentage);

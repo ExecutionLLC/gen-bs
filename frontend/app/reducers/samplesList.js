@@ -155,7 +155,7 @@ function reduceDisableSampleEdit(state, action) {
     };
 }
 
-function reduceSamplesListAddSamples(state, action) {
+function reduceSamplesListAddOrUpdateSamples(state, action) {
     const {samples} = action;
     let newHashedArray = state.hashedArray;
     _.forEach(samples, sample => {
@@ -254,8 +254,8 @@ export default function samplesList(state = {
         case ActionTypes.DISABLE_SAMPLE_EDIT:
             return reduceDisableSampleEdit(state, action);
 
-        case ActionTypes.SAMPLES_LIST_ADD_SAMPLES:
-            return reduceSamplesListAddSamples(state, action);
+        case ActionTypes.SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES:
+            return reduceSamplesListAddOrUpdateSamples(state, action);
 
         case ActionTypes.SET_EDITING_SAMPLE_ID:
             return reduceSetEditingSampleId(state, action);
