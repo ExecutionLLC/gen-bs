@@ -157,19 +157,16 @@ function reduceDisableSampleEdit(state, action) {
 
 function reduceSamplesListAddSamples(state, action) {
     const {samples} = action;
-    const {hashedArray} = state;
-    let {array: currentSamples}= hashedArray;
-
+    let newHashedArray = state.hashedArray;
     _.forEach(samples, sample => {
-        const ind = _.findIndex(currentSamples, (curSample) => { return curSample.id === sample.id; });
-        if (ind > -1) {
-            currentSamples[ind] = sample;
+        if (newHashedArray.hash[sample.id]) {
+            newHashedArray = ImmutableHashedArray.replaceItemId(newHashedArray, sample.id, sample);
         } else {
-            currentSamples.push(sample);
+            newHashedArray = ImmutableHashedArray.appendItem(newHashedArray, sample);
         }
     });
 
-    const sortedSamples = _.sortBy(currentSamples, (sample) => sample.name.toLowerCase());
+    const sortedSamples = _.sortBy(newHashedArray.array, (sample) => sample.name.toLowerCase());
     return {
         ...state,
         hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples)

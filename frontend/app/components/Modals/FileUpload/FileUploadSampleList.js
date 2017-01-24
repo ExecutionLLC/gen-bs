@@ -44,9 +44,9 @@ export default class FileUploadSampleList extends React.Component {
                 <ul id='samplesTabs'
                     className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
-                    {this.renderUploadedData(uploadedData[true], true)}
+                    {this.renderUploadedData(uploadedData[0], true)}
                     {this.renderCurrentUploadData()}
-                    {this.renderUploadedData(uploadedData[false], false)}
+                    {this.renderUploadedData(uploadedData[1], false)}
                 </ul>
             </div>
         );
@@ -59,7 +59,7 @@ export default class FileUploadSampleList extends React.Component {
             return upload.progressStatus !== fileUploadStatus.READY;
         });
         return _.map(currentUploads, upload => {
-            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
+            const uploadSamples = _.filter(sampleList.hashedArray.array, {vcfFileId: upload.operationId});
             const isError = upload.progressStatus === fileUploadStatus.ERROR;
 
             if (uploadSamples.length) {
@@ -107,7 +107,7 @@ export default class FileUploadSampleList extends React.Component {
         });
         const sortedFilteredUploads = _.orderBy(filteredUploadedSamples, ['date'], ['desc']);
 
-        return _.groupBy(sortedFilteredUploads, (item) => {
+        return _.partition(sortedFilteredUploads, (item) => {
             return !_.isNil(item.upload) && fileUploadStatusErrorOrReady(item.upload);
         });
     }

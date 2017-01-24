@@ -116,9 +116,9 @@ class SampleController extends UserEntityControllerBase {
 
     static _findSamples(text) {
         const found = text.match(/^#[^#].*/gm);
-        if (found.length) {
+        if (found && found.length) {
             const columns_line = found[0].substr(1);
-            const array = columns_line && columns_line.split(/\s/g);
+            const array = columns_line && columns_line.split(/\t/);
             const VCF_COLUMNS = ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'];
             return _.difference(array, VCF_COLUMNS);
         } else {

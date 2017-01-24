@@ -133,8 +133,8 @@ class SampleHeader extends React.Component {
 export default class FileUploadSampleRightPane extends React.Component {
 
     RENDER_MODE = {
-        UPLOAD: { label: 'File'},
-        SAMPLE: { label: 'Sample'}
+        UPLOAD: {label: 'File'},
+        SAMPLE: {label: 'Sample'}
     };
 
     constructor(props) {
@@ -195,9 +195,9 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {fileUpload: {filesProcesses}} = this.props;
         const fileProcess = _.find(filesProcesses, fp => fp.id === uploadId || fp.operationId === uploadId);
         if (fileProcess && fileProcess.error) {
-            return FileUploadSampleRightPane.renderLoadError();
+            return FileUploadSampleRightPane.renderLoadError(this.RENDER_MODE.UPLOAD);
         } else {
-            return FileUploadSampleRightPane.renderLoad();
+            return FileUploadSampleRightPane.renderLoad(this.RENDER_MODE.UPLOAD);
         }
     }
 

@@ -176,8 +176,10 @@ function receiveErrorMessage(wsData) {
         if (samples) {
             dispatch(samplesListAddSamples(
                 _.map(samples, (sample) => {
-                    sample.error = wsData.error.message;
-                    return sample;
+                    return {
+                        ...sample,
+                        error: wsData.error.message
+                    };
                 })
             ));
         }
