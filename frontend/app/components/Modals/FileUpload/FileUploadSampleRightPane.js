@@ -20,6 +20,7 @@ import {
 } from '../../../actions/samplesList';
 import config from '../../../../config';
 import {modalName} from '../../../actions/modalWindows';
+import * as i18n from '../../../utils/i18n';
 
 
 function cancelDOMEvent(e) {
@@ -311,11 +312,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderCurrentValues(sample) {
-        const {fields} = this.props;
+        const {fields, languageId} = this.props;
         const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
         const fieldsRenders = fields
             .filter(field => !field.isInvisible)
-            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
+            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash, languageId));
         return (
             <div className='dl-group-view-mode'>
                 {fieldsRenders}
@@ -373,18 +374,19 @@ export default class FileUploadSampleRightPane extends React.Component {
         changeShowValues(!edited);
     }
 
-    renderReadOnlyField(field, fieldIdToValuesHash) {
+    renderReadOnlyField(field, fieldIdToValuesHash, languageId) {
         let fieldValue = fieldIdToValuesHash[field.id];
         // If field has available values, then the value is id of the actual option.
         // We then need to retrieve the actual value corresponding to the option.
         if (!_.isEmpty(field.availableValues)) {
             const option = _.find(field.availableValues,
                 availableValue => availableValue.id === fieldValue);
-            fieldValue = option && option.value || '';
+            const valueText = option && i18n.getEntityText(option, languageId);
+            fieldValue = valueText && valueText.value || '';
         }
         return (
             <dl key={field.id}>
-                <dt>{field.label}</dt>
+                <dt>{i18n.getEntityText(field, languageId).label}</dt>
                 <dd>{fieldValue}</dd>
             </dl>
         );
@@ -402,7 +404,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderEditableValues(sampleId) {
-        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}} = this.props;
+        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}, languageId} = this.props;
         if (!editingSample || editingSample.id !== sampleId) {
             return null;
         }
@@ -414,6 +416,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                        fieldIdToValuesHash={fieldIdToValuesHash}
                                        changeShowValues={changeShowValues}
                                        disabled={editingSampleDisabled}
+                                       languageId={languageId}
             />
         );
     }

@@ -13,7 +13,7 @@ class FileUploadModal extends Component {
     }
 
     render() {
-        const {showModal} = this.props;
+        const {showModal, ui: {languageId}} = this.props;
         return (
             <Modal
                 id='file-upload-modal'
@@ -29,6 +29,7 @@ class FileUploadModal extends Component {
                 />
                 <FileUploadBody
                     dispatch={this.props.dispatch}
+                    languageId={languageId}
                     fileUpload={this.props.fileUpload}
                     editableFieldsList={this.props.editableFieldsList}
                     samplesList={this.props.samplesList}
@@ -60,7 +61,7 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}} = state;
+    const {auth, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}, ui} = state;
     const currentHistorySamplesIds = newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : [];
     return {
         auth,
@@ -70,7 +71,8 @@ function mapStateToProps(state) {
         editableFieldsList: editableFields,
         sampleSearch: samplesList.search,
         currentSampleId: samplesList.currentSampleId,
-        editingSample: samplesList.editingSample
+        editingSample: samplesList.editingSample,
+        ui
     };
 }
 
