@@ -24,7 +24,7 @@ export default class ViewBuilder extends React.Component {
     }
 
     render() {
-        const {dispatch, fields, viewBuilder} = this.props;
+        const {dispatch, fields, viewBuilder, ui: {languageId}} = this.props;
         const allAvailableFields = viewBuilder.allowedFields;
         const view = viewBuilder.editingView;
         const viewItemsLength = view.viewListItems.length;
@@ -44,12 +44,12 @@ export default class ViewBuilder extends React.Component {
 
             const currentField = fields.totalFieldsHashedArray.hash[viewItem.fieldId];
             const currentValue = currentField ? Object.assign({}, currentField, {
-                label: FieldUtils.makeFieldViewsCaption(currentField)
+                label: FieldUtils.makeFieldViewsCaption(currentField, languageId)
             }): {id: null};
 
             const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
             const selectOptions = fieldsForSelection.map((f) => {
-                return {value: f.id, label: FieldUtils.makeFieldViewsCaption(f)};
+                return {value: f.id, label: FieldUtils.makeFieldViewsCaption(f, languageId)};
             });
             const {sortOrder, sortDirection, fieldId} = viewItem;
             const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);

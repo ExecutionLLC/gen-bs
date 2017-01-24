@@ -9,7 +9,7 @@ import * as SamplesUtils from '../../utils/samplesUtils';
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples} = this.props;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
@@ -61,14 +61,14 @@ export default class VariantsTableHead extends Component {
                 {_.map(variantsHeader, (fieldSampleExist) =>
                     this.renderFieldHeader(
                         fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
-                        samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch)
                 )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist,isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist,isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = {
             ...totalFieldsHash[fieldId],
@@ -96,6 +96,7 @@ export default class VariantsTableHead extends Component {
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
                          currentVariants={this.props.ws.currentVariants}
+                         languageId={languageId}
                          disabled={isFetching}
             />
         );

@@ -10,7 +10,7 @@ const initialState = {
 };
 
 function reduceReceiveMetadata(action, state) {
-    const allMetadata = FieldUtils.sortAndAddLabels(action.fields);
+    const allMetadata = action.fields;
     const editableMetadata = _.filter(allMetadata, ['isEditable', true]);
     return Object.assign({}, state, {
         allMetadata: ImmutableHashedArray.makeFromArray(allMetadata),

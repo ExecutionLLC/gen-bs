@@ -104,7 +104,7 @@ function reduceFBuilderStartEdit(state, action) {
             ) :
             filter,
         filter.id,
-        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)), // need for type convert from 'valueType' to 'type'
+        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f, null, languageId)), // need for type convert from 'valueType' to 'type'
         allowedFields
     );
     const newFiltersList = {

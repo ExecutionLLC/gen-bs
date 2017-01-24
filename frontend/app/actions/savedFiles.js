@@ -137,7 +137,7 @@ export function exportToFile(exportType) {
             const field = totalFieldsHash[listItem.fieldId];
             const sample = variantsAnalysisSamplesHash[listItem.sampleId];
             const sampleType = sample && SamplesUtils.typeLabels[sample.type];
-            return FieldUtils.makeFieldSavedCaption(field, sampleType);
+            return FieldUtils.makeFieldSavedCaption(field, sampleType, languageId);
         })
         .concat(['Comment']);
 
