@@ -23,7 +23,7 @@ export default class AnalysisHistoryList extends React.Component {
         return (
             <div className='split-scroll' ref={REFS.CONTAINER}>
                 <ul id='analysisTabs' className='nav nav-componentes nav-with-right-menu'>
-                    {newHistoryItem && this.renderListItem(!currentItemId, newHistoryItem)}
+                    {newHistoryItem && this.renderListItem(!currentItemId, newHistoryItem, true)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
                     {!isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
@@ -53,7 +53,7 @@ export default class AnalysisHistoryList extends React.Component {
         clearTimeout(this.loadingTimer);
     }
 
-    renderListItem(isActive,historyItem) {
+    renderListItem(isActive, historyItem, isNew) {
         return (
             <li
                 key={historyItem.id}
@@ -70,10 +70,10 @@ export default class AnalysisHistoryList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        {historyItem.name}
+                        {isNew ? 'New analysis' : historyItem.name}
                     </span>
                     <span className='link-desc'>
-                        {historyItem.description}
+                        {isNew ? 'Customize the settings for new analysis' : historyItem.description}
                     </span>
                 </a>
             </li>
