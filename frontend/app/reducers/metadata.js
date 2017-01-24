@@ -5,15 +5,13 @@ import {ImmutableHashedArray} from '../utils/immutable';
 import FieldUtils from '../utils/fieldUtils';
 
 const initialState = {
-    editableMetadata: [],
-    allMetadata: []
+    editableMetadata: []
 };
 
 function reduceReceiveMetadata(action, state) {
     const allMetadata = action.fields;
     const editableMetadata = _.filter(allMetadata, ['isEditable', true]);
     return Object.assign({}, state, {
-        allMetadata: ImmutableHashedArray.makeFromArray(allMetadata),
         editableMetadata
     });
 }
