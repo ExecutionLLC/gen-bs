@@ -81,13 +81,13 @@ class MetadataModel extends ModelBase {
                 .asCallback(callback),
             (valueItems, callback) => this._toCamelCase(valueItems, callback),
             (valueItems, callback) => {
-                const availableValuesGroups = _.groupBy(valueItems, item => item.metadataAvailableValueId);
+                const availableValuesGroups = _.groupBy(valueItems, item => item.id);
                 const availableValues = _.map(availableValuesGroups, groupValues => {
                     const defaultValue = _.first(groupValues);
-                    const {metadataAvailableValueId, metadataId} = defaultValue;
+                    const {id, metadataId} = defaultValue;
                     return {
                         metadataId,
-                        metadataAvailableValueId,
+                        id,
                         text: _.map(groupValues, groupValue => {
                             const {languageId, value} = groupValue;
                             return {
