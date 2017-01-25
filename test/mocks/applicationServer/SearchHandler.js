@@ -59,7 +59,7 @@ class SearchHandler extends HandlerBase {
 
         const testData = _.map(mockData, data => _.map(data, columnData => {
             return Object.assign({}, columnData, {
-                sourceName: samples[0]
+                fieldSource: samples[0].sample
             })
         }));
 

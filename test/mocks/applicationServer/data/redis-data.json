@@ -1,15 +1,15 @@
 [
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33920652279809,
+      "fieldValue": "33920652279809",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 249152622,
+      "fieldValue": "249152622",
       "fieldName": "POS"
     },
     {
@@ -17,7 +17,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 88.59,
+      "fieldValue": "88.59",
       "fieldName": "QUAL"
     },
     {
@@ -35,15 +35,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -51,7 +51,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -69,15 +69,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -85,7 +85,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -103,15 +103,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -119,7 +119,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -137,15 +137,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -153,7 +153,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -171,15 +171,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -187,7 +187,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -205,15 +205,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -221,7 +221,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -239,15 +239,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -255,7 +255,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -273,15 +273,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -289,7 +289,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -307,15 +307,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -323,7 +323,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -341,15 +341,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -357,7 +357,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -375,15 +375,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -391,7 +391,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -409,15 +409,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -425,7 +425,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -443,15 +443,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -459,7 +459,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -477,15 +477,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -493,7 +493,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -511,15 +511,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -527,7 +527,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -545,15 +545,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -561,7 +561,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -579,15 +579,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -595,7 +595,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -613,15 +613,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -629,7 +629,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -647,15 +647,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492708876289,
+      "fieldValue": "51492708876289",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845471,
+      "fieldValue": "248845471",
       "fieldName": "POS"
     },
     {
@@ -663,7 +663,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1057.47,
+      "fieldValue": "1057.47",
       "fieldName": "QUAL"
     },
     {
@@ -681,15 +681,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -697,7 +697,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -715,15 +715,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -731,7 +731,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -749,15 +749,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -765,7 +765,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -783,15 +783,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -799,7 +799,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -817,15 +817,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -833,7 +833,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -851,15 +851,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -867,7 +867,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -885,15 +885,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -901,7 +901,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -919,15 +919,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -935,7 +935,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -953,15 +953,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -969,7 +969,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -987,15 +987,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1003,7 +1003,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1021,15 +1021,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1037,7 +1037,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1055,15 +1055,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1071,7 +1071,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1089,15 +1089,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1105,7 +1105,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1123,15 +1123,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1139,7 +1139,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1157,15 +1157,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1173,7 +1173,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1191,15 +1191,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1207,7 +1207,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1225,15 +1225,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1241,7 +1241,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1259,15 +1259,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1275,7 +1275,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1293,15 +1293,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33900518899713,
+      "fieldValue": "33900518899713",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248845411,
+      "fieldValue": "248845411",
       "fieldName": "POS"
     },
     {
@@ -1309,7 +1309,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 386.08,
+      "fieldValue": "386.08",
       "fieldName": "QUAL"
     },
     {
@@ -1327,15 +1327,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1343,7 +1343,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1361,15 +1361,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1377,7 +1377,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1395,15 +1395,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1411,7 +1411,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1429,15 +1429,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1445,7 +1445,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1463,15 +1463,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1479,7 +1479,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1497,15 +1497,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1513,7 +1513,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1531,15 +1531,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51492675321857,
+      "fieldValue": "51492675321857",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248844959,
+      "fieldValue": "248844959",
       "fieldName": "POS"
     },
     {
@@ -1547,7 +1547,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 15.1,
+      "fieldValue": "15.1",
       "fieldName": "QUAL"
     },
     {
@@ -1565,15 +1565,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33898403659777,
+      "fieldValue": "33898403659777",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248813135,
+      "fieldValue": "248813135",
       "fieldName": "POS"
     },
     {
@@ -1581,7 +1581,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 844.52,
+      "fieldValue": "844.52",
       "fieldName": "QUAL"
     },
     {
@@ -1599,15 +1599,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33898403659777,
+      "fieldValue": "33898403659777",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248813135,
+      "fieldValue": "248813135",
       "fieldName": "POS"
     },
     {
@@ -1615,7 +1615,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 844.52,
+      "fieldValue": "844.52",
       "fieldName": "QUAL"
     },
     {
@@ -1633,15 +1633,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33898403659777,
+      "fieldValue": "33898403659777",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248813135,
+      "fieldValue": "248813135",
       "fieldName": "POS"
     },
     {
@@ -1649,7 +1649,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 844.52,
+      "fieldValue": "844.52",
       "fieldName": "QUAL"
     },
     {
@@ -1667,15 +1667,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33898403659777,
+      "fieldValue": "33898403659777",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248813135,
+      "fieldValue": "248813135",
       "fieldName": "POS"
     },
     {
@@ -1683,7 +1683,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 844.52,
+      "fieldValue": "844.52",
       "fieldName": "QUAL"
     },
     {
@@ -1701,15 +1701,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51489041022977,
+      "fieldValue": "51489041022977",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248789504,
+      "fieldValue": "248789504",
       "fieldName": "POS"
     },
     {
@@ -1717,7 +1717,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 776.37,
+      "fieldValue": "776.37",
       "fieldName": "QUAL"
     },
     {
@@ -1735,15 +1735,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51489037746177,
+      "fieldValue": "51489037746177",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248789454,
+      "fieldValue": "248789454",
       "fieldName": "POS"
     },
     {
@@ -1751,7 +1751,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 832.23,
+      "fieldValue": "832.23",
       "fieldName": "QUAL"
     },
     {
@@ -1769,15 +1769,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51485642391553,
+      "fieldValue": "51485642391553",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248737645,
+      "fieldValue": "248737645",
       "fieldName": "POS"
     },
     {
@@ -1785,7 +1785,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 229.61,
+      "fieldValue": "229.61",
       "fieldName": "QUAL"
     },
     {
@@ -1803,15 +1803,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51485642391553,
+      "fieldValue": "51485642391553",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248737645,
+      "fieldValue": "248737645",
       "fieldName": "POS"
     },
     {
@@ -1819,7 +1819,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 229.61,
+      "fieldValue": "229.61",
       "fieldName": "QUAL"
     },
     {
@@ -1837,15 +1837,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51482208829441,
+      "fieldValue": "51482208829441",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248685253,
+      "fieldValue": "248685253",
       "fieldName": "POS"
     },
     {
@@ -1853,7 +1853,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1441.33,
+      "fieldValue": "1441.33",
       "fieldName": "QUAL"
     },
     {
@@ -1871,15 +1871,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33885510500353,
+      "fieldValue": "33885510500353",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248616401,
+      "fieldValue": "248616401",
       "fieldName": "POS"
     },
     {
@@ -1887,7 +1887,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 329,
+      "fieldValue": "329",
       "fieldName": "QUAL"
     },
     {
@@ -1905,15 +1905,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33882498400257,
+      "fieldValue": "33882498400257",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248570440,
+      "fieldValue": "248570440",
       "fieldName": "POS"
     },
     {
@@ -1921,7 +1921,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 161.83,
+      "fieldValue": "161.83",
       "fieldName": "QUAL"
     },
     {
@@ -1939,15 +1939,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51473423728641,
+      "fieldValue": "51473423728641",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248551203,
+      "fieldValue": "248551203",
       "fieldName": "POS"
     },
     {
@@ -1955,7 +1955,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 273.57,
+      "fieldValue": "273.57",
       "fieldName": "QUAL"
     },
     {
@@ -1973,15 +1973,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51473423728641,
+      "fieldValue": "51473423728641",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248551203,
+      "fieldValue": "248551203",
       "fieldName": "POS"
     },
     {
@@ -1989,7 +1989,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 273.57,
+      "fieldValue": "273.57",
       "fieldName": "QUAL"
     },
     {
@@ -2007,15 +2007,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33877052227585,
+      "fieldValue": "33877052227585",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248487338,
+      "fieldValue": "248487338",
       "fieldName": "POS"
     },
     {
@@ -2023,7 +2023,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 370.36,
+      "fieldValue": "370.36",
       "fieldName": "QUAL"
     },
     {
@@ -2041,15 +2041,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33877052227585,
+      "fieldValue": "33877052227585",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248487338,
+      "fieldValue": "248487338",
       "fieldName": "POS"
     },
     {
@@ -2057,7 +2057,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 370.36,
+      "fieldValue": "370.36",
       "fieldName": "QUAL"
     },
     {
@@ -2075,15 +2075,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33875193364481,
+      "fieldValue": "33875193364481",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248458974,
+      "fieldValue": "248458974",
       "fieldName": "POS"
     },
     {
@@ -2091,7 +2091,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 895.33,
+      "fieldValue": "895.33",
       "fieldName": "QUAL"
     },
     {
@@ -2109,15 +2109,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 104243931054081,
+      "fieldValue": "104243931054081",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248458875,
+      "fieldValue": "248458875",
       "fieldName": "POS"
     },
     {
@@ -2125,7 +2125,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 780.56,
+      "fieldValue": "780.56",
       "fieldName": "QUAL"
     },
     {
@@ -2143,15 +2143,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33875179339777,
+      "fieldValue": "33875179339777",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248458760,
+      "fieldValue": "248458760",
       "fieldName": "POS"
     },
     {
@@ -2159,7 +2159,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 415.15,
+      "fieldValue": "415.15",
       "fieldName": "QUAL"
     },
     {
@@ -2177,15 +2177,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51467359879169,
+      "fieldValue": "51467359879169",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248458676,
+      "fieldValue": "248458676",
       "fieldName": "POS"
     },
     {
@@ -2193,7 +2193,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 294.02,
+      "fieldValue": "294.02",
       "fieldName": "QUAL"
     },
     {
@@ -2211,15 +2211,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33875128156161,
+      "fieldValue": "33875128156161",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248457979,
+      "fieldValue": "248457979",
       "fieldName": "POS"
     },
     {
@@ -2227,7 +2227,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 873.52,
+      "fieldValue": "873.52",
       "fieldName": "QUAL"
     },
     {
@@ -2245,15 +2245,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51461338169345,
+      "fieldValue": "51461338169345",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248366792,
+      "fieldValue": "248366792",
       "fieldName": "POS"
     },
     {
@@ -2261,7 +2261,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 320.54,
+      "fieldValue": "320.54",
       "fieldName": "QUAL"
     },
     {
@@ -2279,15 +2279,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51459843817473,
+      "fieldValue": "51459843817473",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248343990,
+      "fieldValue": "248343990",
       "fieldName": "POS"
     },
     {
@@ -2295,7 +2295,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 316.67,
+      "fieldValue": "316.67",
       "fieldName": "QUAL"
     },
     {
@@ -2313,15 +2313,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33853583917057,
+      "fieldValue": "33853583917057",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248129240,
+      "fieldValue": "248129240",
       "fieldName": "POS"
     },
     {
@@ -2329,7 +2329,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 510.76,
+      "fieldValue": "510.76",
       "fieldName": "QUAL"
     },
     {
@@ -2347,15 +2347,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33853563535361,
+      "fieldValue": "33853563535361",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248128929,
+      "fieldValue": "248128929",
       "fieldName": "POS"
     },
     {
@@ -2363,7 +2363,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 132.33,
+      "fieldValue": "132.33",
       "fieldName": "QUAL"
     },
     {
@@ -2381,15 +2381,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33852527542273,
+      "fieldValue": "33852527542273",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248113121,
+      "fieldValue": "248113121",
       "fieldName": "POS"
     },
     {
@@ -2397,7 +2397,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 369.12,
+      "fieldValue": "369.12",
       "fieldName": "QUAL"
     },
     {
@@ -2415,15 +2415,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33852521316353,
+      "fieldValue": "33852521316353",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248113026,
+      "fieldValue": "248113026",
       "fieldName": "POS"
     },
     {
@@ -2431,7 +2431,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 2313.04,
+      "fieldValue": "2313.04",
       "fieldName": "QUAL"
     },
     {
@@ -2449,15 +2449,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51444681211905,
+      "fieldValue": "51444681211905",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248112627,
+      "fieldValue": "248112627",
       "fieldName": "POS"
     },
     {
@@ -2465,7 +2465,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1027.94,
+      "fieldValue": "1027.94",
       "fieldName": "QUAL"
     },
     {
@@ -2483,15 +2483,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850706952193,
+      "fieldValue": "33850706952193",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248085341,
+      "fieldValue": "248085341",
       "fieldName": "POS"
     },
     {
@@ -2499,7 +2499,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 246.69,
+      "fieldValue": "246.69",
       "fieldName": "QUAL"
     },
     {
@@ -2517,15 +2517,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850706952193,
+      "fieldValue": "33850706952193",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248085341,
+      "fieldValue": "248085341",
       "fieldName": "POS"
     },
     {
@@ -2533,7 +2533,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 246.69,
+      "fieldValue": "246.69",
       "fieldName": "QUAL"
     },
     {
@@ -2551,15 +2551,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850692730881,
+      "fieldValue": "33850692730881",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248085124,
+      "fieldValue": "248085124",
       "fieldName": "POS"
     },
     {
@@ -2567,7 +2567,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1080.69,
+      "fieldValue": "1080.69",
       "fieldName": "QUAL"
     },
     {
@@ -2585,15 +2585,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850692730881,
+      "fieldValue": "33850692730881",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248085124,
+      "fieldValue": "248085124",
       "fieldName": "POS"
     },
     {
@@ -2601,7 +2601,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1080.69,
+      "fieldValue": "1080.69",
       "fieldName": "QUAL"
     },
     {
@@ -2619,15 +2619,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51442838601729,
+      "fieldValue": "51442838601729",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084511,
+      "fieldValue": "248084511",
       "fieldName": "POS"
     },
     {
@@ -2635,7 +2635,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1126.01,
+      "fieldValue": "1126.01",
       "fieldName": "QUAL"
     },
     {
@@ -2653,15 +2653,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51442838601729,
+      "fieldValue": "51442838601729",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084511,
+      "fieldValue": "248084511",
       "fieldName": "POS"
     },
     {
@@ -2669,7 +2669,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1126.01,
+      "fieldValue": "1126.01",
       "fieldName": "QUAL"
     },
     {
@@ -2687,15 +2687,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850650066945,
+      "fieldValue": "33850650066945",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084473,
+      "fieldValue": "248084473",
       "fieldName": "POS"
     },
     {
@@ -2703,7 +2703,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 262.54,
+      "fieldValue": "262.54",
       "fieldName": "QUAL"
     },
     {
@@ -2721,15 +2721,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850650066945,
+      "fieldValue": "33850650066945",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084473,
+      "fieldValue": "248084473",
       "fieldName": "POS"
     },
     {
@@ -2737,7 +2737,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 262.54,
+      "fieldValue": "262.54",
       "fieldName": "QUAL"
     },
     {
@@ -2755,15 +2755,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51442835521537,
+      "fieldValue": "51442835521537",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084464,
+      "fieldValue": "248084464",
       "fieldName": "POS"
     },
     {
@@ -2771,7 +2771,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1353.4,
+      "fieldValue": "1353.4",
       "fieldName": "QUAL"
     },
     {
@@ -2789,15 +2789,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51442835521537,
+      "fieldValue": "51442835521537",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084464,
+      "fieldValue": "248084464",
       "fieldName": "POS"
     },
     {
@@ -2805,7 +2805,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1353.4,
+      "fieldValue": "1353.4",
       "fieldName": "QUAL"
     },
     {
@@ -2823,15 +2823,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33850647511041,
+      "fieldValue": "33850647511041",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248084434,
+      "fieldValue": "248084434",
       "fieldName": "POS"
     },
     {
@@ -2839,41 +2839,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 293.39,
-      "fieldName": "QUAL"
-    },
-    {
-      "fieldValue": "A",
-      "fieldName": "ALT"
-    },
-    {
-      "fieldValue": "G",
-      "fieldName": "REF"
-    },
-    {
-      "fieldValue": ".",
-      "fieldName": "ID"
-    }
-  ],
-  [
-    {
-      "fieldValue": 1,
-      "fieldName": "CHROM"
-    },
-    {
-      "fieldValue": 33850647511041,
-      "fieldName": "search_key"
-    },
-    {
-      "fieldValue": 248084434,
-      "fieldName": "POS"
-    },
-    {
-      "fieldValue": "PASS",
-      "fieldName": "FILTER"
-    },
-    {
-      "fieldValue": 293.39,
+      "fieldValue": "293.39",
       "fieldName": "QUAL"
     },
     {
@@ -2891,15 +2857,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441222811649,
+      "fieldValue": "33850647511041",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059856,
+      "fieldValue": "248084434",
       "fieldName": "POS"
     },
     {
@@ -2907,7 +2873,41 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 224.51,
+      "fieldValue": "293.39",
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": "1",
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": "51441222811649",
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": "248059856",
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": "224.51",
       "fieldName": "QUAL"
     },
     {
@@ -2925,15 +2925,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441222811649,
+      "fieldValue": "51441222811649",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059856,
+      "fieldValue": "248059856",
       "fieldName": "POS"
     },
     {
@@ -2941,7 +2941,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 224.51,
+      "fieldValue": "224.51",
       "fieldName": "QUAL"
     },
     {
@@ -2959,15 +2959,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441213374465,
+      "fieldValue": "51441213374465",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059712,
+      "fieldValue": "248059712",
       "fieldName": "POS"
     },
     {
@@ -2975,7 +2975,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 638.59,
+      "fieldValue": "638.59",
       "fieldName": "QUAL"
     },
     {
@@ -2993,15 +2993,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441213374465,
+      "fieldValue": "51441213374465",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059712,
+      "fieldValue": "248059712",
       "fieldName": "POS"
     },
     {
@@ -3009,7 +3009,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 638.59,
+      "fieldValue": "638.59",
       "fieldName": "QUAL"
     },
     {
@@ -3027,15 +3027,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33849026740225,
+      "fieldValue": "33849026740225",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059703,
+      "fieldValue": "248059703",
       "fieldName": "POS"
     },
     {
@@ -3043,7 +3043,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 697.65,
+      "fieldValue": "697.65",
       "fieldName": "QUAL"
     },
     {
@@ -3061,15 +3061,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 33849026740225,
+      "fieldValue": "33849026740225",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059703,
+      "fieldValue": "248059703",
       "fieldName": "POS"
     },
     {
@@ -3077,7 +3077,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 697.65,
+      "fieldValue": "697.65",
       "fieldName": "QUAL"
     },
     {
@@ -3095,15 +3095,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441197907969,
+      "fieldValue": "51441197907969",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059476,
+      "fieldValue": "248059476",
       "fieldName": "POS"
     },
     {
@@ -3111,7 +3111,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 45.83,
+      "fieldValue": "45.83",
       "fieldName": "QUAL"
     },
     {
@@ -3129,15 +3129,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441197907969,
+      "fieldValue": "51441197907969",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248059476,
+      "fieldValue": "248059476",
       "fieldName": "POS"
     },
     {
@@ -3145,7 +3145,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 45.83,
+      "fieldValue": "45.83",
       "fieldName": "QUAL"
     },
     {
@@ -3163,15 +3163,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441156554753,
+      "fieldValue": "51441156554753",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248058845,
+      "fieldValue": "248058845",
       "fieldName": "POS"
     },
     {
@@ -3179,7 +3179,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 2093.84,
+      "fieldValue": "2093.84",
       "fieldName": "QUAL"
     },
     {
@@ -3197,15 +3197,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441156554753,
+      "fieldValue": "51441156554753",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248058845,
+      "fieldValue": "248058845",
       "fieldName": "POS"
     },
     {
@@ -3213,7 +3213,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 2093.84,
+      "fieldValue": "2093.84",
       "fieldName": "QUAL"
     },
     {
@@ -3231,15 +3231,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441151049729,
+      "fieldValue": "51441151049729",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248058761,
+      "fieldValue": "248058761",
       "fieldName": "POS"
     },
     {
@@ -3247,7 +3247,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 482.25,
+      "fieldValue": "482.25",
       "fieldName": "QUAL"
     },
     {
@@ -3265,15 +3265,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51441151049729,
+      "fieldValue": "51441151049729",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248058761,
+      "fieldValue": "248058761",
       "fieldName": "POS"
     },
     {
@@ -3281,7 +3281,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 482.25,
+      "fieldValue": "482.25",
       "fieldName": "QUAL"
     },
     {
@@ -3299,15 +3299,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51437641728001,
+      "fieldValue": "51437641728001",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248005213,
+      "fieldValue": "248005213",
       "fieldName": "POS"
     },
     {
@@ -3315,7 +3315,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1767.7,
+      "fieldValue": "1767.7",
       "fieldName": "QUAL"
     },
     {
@@ -3333,15 +3333,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51437641728001,
+      "fieldValue": "51437641728001",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248005213,
+      "fieldValue": "248005213",
       "fieldName": "POS"
     },
     {
@@ -3349,7 +3349,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1767.7,
+      "fieldValue": "1767.7",
       "fieldName": "QUAL"
     },
     {
@@ -3367,15 +3367,15 @@
   ],
   [
     {
-      "fieldValue": 1,
+      "fieldValue": "1",
       "fieldName": "CHROM"
     },
     {
-      "fieldValue": 51437620166657,
+      "fieldValue": "51437620166657",
       "fieldName": "search_key"
     },
     {
-      "fieldValue": 248004884,
+      "fieldValue": "248004884",
       "fieldName": "POS"
     },
     {
@@ -3383,7 +3383,7 @@
       "fieldName": "FILTER"
     },
     {
-      "fieldValue": 1499.38,
+      "fieldValue": "1499.38",
       "fieldName": "QUAL"
     },
     {

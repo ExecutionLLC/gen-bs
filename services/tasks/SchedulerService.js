@@ -23,7 +23,7 @@ class SchedulerService extends ServiceBase {
         this._executeTask = this._executeTask.bind(this);
     }
 
-    start() {
+    start(callback) {
         if (!this.config.scheduler.enabled) {
             this.logger.error('Scheduler is disabled in config.');
             return;
@@ -35,6 +35,7 @@ class SchedulerService extends ServiceBase {
         _.each(activeTasks, (task) => {
             this._executeTask(task);
         });
+        callback(null);
     }
 
     _executeTask(task) {
@@ -54,11 +55,12 @@ class SchedulerService extends ServiceBase {
         }
     }
 
-    stop() {
+    stop(callback) {
         _.each(this.tasks, (task) => {
             this._stopTask(task);
         });
         this.logger.info('Scheduler service is stopped.');
+        callback(null)
     }
 
     _stopTask(task) {

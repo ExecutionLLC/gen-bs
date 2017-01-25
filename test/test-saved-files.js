@@ -7,6 +7,7 @@ const Uuid = require('node-uuid');
 
 const Config = require('../utils/Config');
 const Urls = require('./utils/Urls');
+const {ENTITY_TYPES} = require('../utils/Enums');
 const SessionsClient = require('./utils/SessionsClient');
 const SavedFilesClient = require('./utils/SavedFilesClient');
 const SamplesClient = require('./utils/SamplesClient');
@@ -14,7 +15,6 @@ const ClientBase = require('./utils/ClientBase');
 
 const DefaultViews = require('../database/defaults/views/default-views.json');
 const DefaultFilters = require('../database/defaults/filters/default-filters.json');
-const Sample = require('../database/defaults/samples/TN1000.json').sample;
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
@@ -62,7 +62,7 @@ describe('Saved Files', () => {
 
             samplesClient.getAll(sessionId, (error, response) => {
                 const samples = ClientBase.readBodyWithCheck(error, response);
-                const sample = _.find(samples, sample => sample.fileName === Sample.file_name);
+                const sample = _.find(samples, sample => sample.type === ENTITY_TYPES.DEFAULT);
                 sampleId = sample.id;
 
                 done();
