@@ -13,6 +13,8 @@ import {
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 import {modalName} from '../../../actions/modalWindows';
 import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
+import * as i18n from '../../../utils/i18n';
+
 
 function fileUploadStatusErrorOrReady(upload) {
     return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus);
@@ -112,9 +114,9 @@ export default class FileUploadSampleList extends React.Component {
         });
     }
 
-    _createSampleLabel(sample) {
+    _createSampleLabel(sample, languageId) {
         const {type} = sample;
-        const sampleName = sample.name;
+        const sampleName = i18n.getEntityText(sample, languageId).name;
         return getItemLabelByNameAndType(sampleName, type);
     }
 
@@ -396,10 +398,10 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderProgressUploadSampleSample(upload, sample) {
-        const {currentSampleId} = this.props;
+        const {currentSampleId, languageId} = this.props;
         const key = sample.id;
         const isActive = sample.id === currentSampleId;
-        const name = this._createSampleLabel(sample);
+        const name = this._createSampleLabel(sample, languageId);
         return FileUploadSampleList.renderProgressUploadListItem(
             key,
             name,
@@ -519,5 +521,6 @@ export default class FileUploadSampleList extends React.Component {
 FileUploadSampleList.propTypes = {
     onSelectSample: React.PropTypes.func.isRequired,
     onSelectUpload: React.PropTypes.func.isRequired,
-    closeModal: React.PropTypes.func.isRequired
+    closeModal: React.PropTypes.func.isRequired,
+    languageId: React.PropTypes.string.isRequired
 };

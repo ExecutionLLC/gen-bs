@@ -69,7 +69,7 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     render() {
-        const {dispatch, samplesList, fileUpload, currentSampleId, currentHistorySamplesIds, closeModal} = this.props;
+        const {dispatch, samplesList, fileUpload, currentSampleId, currentHistorySamplesIds, closeModal, languageId} = this.props;
         const {searchWord, samplesSearchHash} = this.state;
 
         return (
@@ -89,6 +89,7 @@ export default class FileUploadLeftPane extends React.Component {
                     samplesSearchHash={samplesSearchHash}
                     currentHistorySamplesIds={currentHistorySamplesIds}
                     closeModal={closeModal}
+                    languageId={languageId}
                 />
             </div>
         );
