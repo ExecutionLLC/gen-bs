@@ -35,7 +35,7 @@ export function makeHistoryItem(historyItem, languageId) {
 
 export function makeNewHistoryItem(sample, filter, view, languageId) {
     const name = trimName(
-        `${formatDate(new Date())}_${sample ? sample.name : ''}_${filter ? i18n.getEntityText(filter, languageId).name : ''}_${view ? i18n.getEntityText(view, languageId).name : ''}`
+        `${formatDate(new Date())}_${sample ? i18n.getEntityText(sample, languageId).name : ''}_${filter ? i18n.getEntityText(filter, languageId).name : ''}_${view ? i18n.getEntityText(view, languageId).name : ''}`
     );
     return i18n.changeEntityText(
         {
