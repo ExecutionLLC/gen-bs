@@ -55,7 +55,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderCurrentUploadData() {
-        const {fileUpload: {filesProcesses}, sampleList} = this.props;
+        const {fileUpload: {filesProcesses}, sampleList, languageId} = this.props;
         const {currentSampleId} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
             return upload.progressStatus !== fileUploadStatus.READY;
@@ -66,7 +66,10 @@ export default class FileUploadSampleList extends React.Component {
 
             if (uploadSamples.length) {
                 if (isError) {
-                    return _.map(uploadSamples, (sample) => this._renderSampleError(sample, sample.name, sample.id === currentSampleId));
+                    return _.map(uploadSamples, (sample) => {
+                        const sampleName = i18n.getEntityText(sample, languageId).name;
+                        return this._renderSampleError(sample, sampleName, sample.id === currentSampleId);
+                    });
                 } else {
                     return this.renderProgressUploadSamples(uploadSamples, upload);
                 }
@@ -81,11 +84,12 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     getUploadedData() {
-        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
+        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}, languageId} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields) && sample.type !== entityType.HISTORY);
         const samplesData = _.map(uploadedSamples, sample => {
-            const {vcfFileId, name: sampleName, created: sampleCreated} = sample;
+            const {vcfFileId, created: sampleCreated} = sample;
+            const sampleName = i18n.getEntityText(sample, languageId).name;
             const currentUpload = uploadHash[vcfFileId];
             return {
                 label: sampleName,
@@ -120,8 +124,9 @@ export default class FileUploadSampleList extends React.Component {
         return getItemLabelByNameAndType(sampleName, type);
     }
 
-    _renderSample(sample, label, isActive, isNew) {
+    _renderSample(sample, label, isActive, isNew, languageId) {
         const isDeletable = sample.type === entityType.USER;
+        const description = i18n.getEntityText(sample, languageId).description;
         return this.renderListItem(
             sample.id,
             isActive,
@@ -130,16 +135,16 @@ export default class FileUploadSampleList extends React.Component {
             (id) => this.onSampleItemSelectForAnalysis(id),
             isDeletable ? (id) => this.onSampleItemDelete(id) : null,
             label,
-            sample.description,
+            description,
             sample.created
         );
     }
 
     renderUploadedData(uploadedItems, isNew) {
-        const {currentSampleId} = this.props;
+        const {currentSampleId, languageId} = this.props;
         return _.map(uploadedItems, (item) => {
             if (item.sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
-                return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew);
+                return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew, languageId);
             } else {
                 return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
             }
