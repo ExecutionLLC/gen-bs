@@ -4,6 +4,7 @@ const _ = require('lodash');
 const {rusFilters} = require('./20170124180008_add-ruslanguage-data/filters');
 const {rusViews} = require('./20170124180008_add-ruslanguage-data/views');
 const {rusModels} = require('./20170124180008_add-ruslanguage-data/models');
+const {rusSamples} = require('./20170124180008_add-ruslanguage-data/samples');
 
 exports.up = function (knex) {
     console.log('=> Add rus table data ...');
@@ -16,12 +17,43 @@ exports.up = function (knex) {
         })
         .then(() => {
             return BluebirdPromise.mapSeries(rusModels, model => addModel(model, knex))
+        })
+        .then(() => {
+            return BluebirdPromise.mapSeries(rusSamples, sample => addSampleText(sample, knex))
         });
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function createSampleName(fileName, genotype) {
+    const name = genotype ? `${fileName}:${genotype}` : fileName;
+    return name.substr(-50, 50);
+}
+
+function addSampleText(sample, knex) {
+    return knex('vcf_file')
+        .select('id')
+        .where('file_name', sample.fileName)
+        .then((results) => _.first(results)['id'])
+        .then((vcfFileId) => {
+            return knex('sample')
+                .select(['id', 'genotype_name'])
+                .where('vcf_file_id', vcfFileId)
+                .then((results) => {
+                    return BluebirdPromise.mapSeries(results, result => {
+                        return knex('sample_text')
+                            .insert({
+                                sample_id: result['id'],
+                                language_id: 'ru',
+                                name: createSampleName(sample.ruName, result['genotype_name']),
+                                description: ''
+                            });
+                    })
+                })
+        });
+}
 
 function addModel(model, knex) {
     return knex('model_text')
@@ -36,7 +68,7 @@ function addModel(model, knex) {
                     description: model.ruDescription,
                     name: model.ruName
                 })
-        })
+        });
 }
 
 function addView(view, knex) {
@@ -51,8 +83,8 @@ function addView(view, knex) {
                     language_id: 'ru',
                     description: view.ruDescription,
                     name: view.ruName
-                })
-        })
+                });
+        });
 }
 
 function addFilter(filter, knex) {
@@ -67,8 +99,8 @@ function addFilter(filter, knex) {
                     language_id: 'ru',
                     description: filter.ruDescription,
                     name: filter.ruName
-                })
-        })
+                });
+        });
 }
 
 function addRusLanguage(knex) {
