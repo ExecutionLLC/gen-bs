@@ -172,12 +172,12 @@ export default class FieldUtils {
 
     static sortByLabels(fields, languageId) {
         return fields.slice().sort((a, b) => {
-                const fieldLabelA = this.getFieldLabel(a, languageId);
-                const fieldLabelB = this.getFieldLabel(b, languageId);
-                if (fieldLabelA > fieldLabelB) {return 1;}
-                if (fieldLabelA < fieldLabelB) {return -1;}
-                return 0;
-            });
+            const fieldLabelA = this.getFieldLabel(a, languageId);
+            const fieldLabelB = this.getFieldLabel(b, languageId);
+            if (fieldLabelA > fieldLabelB) {return 1;}
+            if (fieldLabelA < fieldLabelB) {return -1;}
+            return 0;
+        });
     }
 
     static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList, languageId) {
