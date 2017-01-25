@@ -55,7 +55,9 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, samplesList: {editingSample: {description, id, type}}} = this.props;
+        const {auth: {isDemo}, samplesList: {editingSample}, languageId} = this.props;
+        const {id, type} = editingSample;
+        const description = i18n.getEntityText(editingSample, languageId).description;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -86,7 +88,9 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, samplesList: {editingSample: {name, id, type}}} = this.props;
+        const {auth: {isDemo}, samplesList: {editingSample}, languageId} = this.props;
+        const {id, type} = editingSample;
+        const name = i18n.getEntityText(editingSample, languageId).name;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -144,7 +148,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     render() {
-        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId} = this.props;
+        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId, languageId} = this.props;
         const {isDemo} = auth;
         const {currentUploadId} = fileUpload;
         const {editingSample, hashedArray: {hash: samplesHash}} = samplesList;
@@ -168,6 +172,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <SampleHeader samplesList={samplesList}
                                   auth={auth}
                                   fileUpload={fileUpload}
+                                  languageId={languageId}
                                   dispatch={dispatch}
                     />}
                 </div>
