@@ -637,7 +637,7 @@ export default class AnalysisRightPane extends React.Component {
                             <dt><span data-localize='general.sample'>Sample</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && getItemLabelByNameAndType(sample.name, sample.type)}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type)}</dd>
                         </dl>
                     );
                 })}
@@ -736,7 +736,8 @@ export default class AnalysisRightPane extends React.Component {
             .filter((sample) => sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED)
             .map((sampleItem) => {
                 const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
-                const {type: sampleType, id: sampleId, name: sampleName} = sampleItem;
+                const {type: sampleType, id: sampleId} = sampleItem;
+                const sampleName = i18n.getEntityText(sampleItem).name;
                 const label = getItemLabelByNameAndType(sampleName, sampleType);
                 return {value: sampleId, label, disabled: isDisabled};
             })
