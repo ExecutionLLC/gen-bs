@@ -61,6 +61,7 @@
     "node-optimize": "https://github.com/karatheodory/node-optimize.git#es6-support",
     "node-uuid": "1.4.7",
     "optimist": "0.6.1",
+    "pako": "^1.0.4",
     "passport": "0.3.2",
     "passport-google-oauth20": "1.0.0",
     "pg": "6.0.3",

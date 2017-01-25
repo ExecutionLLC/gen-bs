@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
-
+import {samplesListAddOrUpdateSamples} from './samplesList';
 /*
  * action types
  */
@@ -19,7 +19,7 @@ export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
-export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
+export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_UPLOAD';
 export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
 export const INVALIDATE_CURRENT_UPLOAD_ID = 'INVALIDATE_CURRENT_UPLOAD_ID';
 export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
@@ -30,6 +30,13 @@ export const fileUploadStatus = {
     AJAX: 'ajax',
     TASK_RUNNING: 'task_running',
     IN_PROGRESS: 'in_progress' // seems like did not received
+};
+
+export const SAMPLE_UPLOAD_STATE = { // equals to WS_SAMPLE_UPLOAD_STATE
+    UNCONFIRMED: 'unconfirmed', // the sample was created after header parsing on WS
+    NOT_FOUND: 'not_found', // the sample was not found during parsing on AS
+    COMPLETED: 'completed', // the sample was successfully parsed on AS
+    ERROR: 'error' // an error has occurred while parsing the file with this sample.
 };
 
 const {sampleUploadsClient} = apiFacade;
@@ -214,6 +221,7 @@ export function uploadFile(fileUploadId) {
             (upload) => {
                 delete requestAbortFunctions[fp.id];
                 dispatch(receiveFileOperation(upload, fp.id));
+                dispatch(samplesListAddOrUpdateSamples(upload.sampleList));
             },
             (percentage) => {
                 console.log('progress', percentage);

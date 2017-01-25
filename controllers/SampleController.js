@@ -5,6 +5,9 @@ const fs = require('fs');
 const async = require('async');
 
 const UserEntityControllerBase = require('./base/UserEntityControllerBase');
+const _ = require('lodash');
+const pako = require('pako');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 class SampleController extends UserEntityControllerBase {
     constructor(services) {
@@ -29,14 +32,20 @@ class SampleController extends UserEntityControllerBase {
                 } else {
                     callback(new Error('Sample file is not specified.'));
                 }
-            }, (sampleFile, callback) => {
+            },
+            (sampleFile, callback) => {
                 const fileName = (body && body.fileName) ? body.fileName : sampleFile.originalname;
                 if (!fileName) {
                     callback(new Error('Sample has no file name.'));
                 } else {
                     callback(null, sampleFile, fileName);
                 }
-            }, (sampleFile, fileName, callback) => {
+            },
+            (sampleFile, fileName, callback) => this._parseSampleNames(sampleFile,
+                (error, sampleNames) => {
+                    callback(error, sampleFile, fileName, error ? [] : sampleNames);
+                }),
+            (sampleFile, fileName, sampleList, callback) => {
                 const fileInfo = {
                     localFilePath: sampleFile.path,
                     fileSize: sampleFile.size,
@@ -45,20 +54,50 @@ class SampleController extends UserEntityControllerBase {
                 this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
-                    callback(error, operationId);
+                    callback(error, operationId, sampleList);
                 });
-            }, (operationId, callback) => {
+            },
+            (operationId, sampleList, callback) => {
                 this.services.sampleUploadHistory.find(user, operationId, (error, upload) => {
-                    callback(error, operationId, upload)
+                    callback(error, operationId, upload, sampleList);
                 });
-            }
-        ], (error, operationId, upload) => {
-            if (isCancelled) {
-                this.services.sampleUploadHistory.remove(user, operationId, () => {
-                    this.sendInternalError(response, new Error('Upload cancelled'));
+            },
+            (operationId, upload, sampleList, callback) => {
+                this.services.samples.initMetadataForUploadedSample(user, upload.id, upload.fileName, sampleList, null, (error, sampleIds) => {
+                    callback(error, operationId, upload, sampleIds);
                 });
+            },
+            (operationId, upload, sampleIds, callback) => {
+                this.services.samples.findMany(user, sampleIds, (error, sampleData) => {
+                    upload.sampleList = sampleData;
+                    callback(error, operationId, upload);
+                });
+            }],
+            (error, operationId, upload) => {
+                if (isCancelled) {
+                    this.services.sampleUploadHistory.remove(user, operationId, () => {
+                        this.sendInternalError(response, new Error('Upload cancelled'));
+                    });
+                } else {
+                    this.sendErrorOrJson(response, error, {operationId, upload});
+                }
+        });
+    }
+
+    _parseSampleNames(sampleFile, callback) {
+        fs.readFile(sampleFile.path, (error, content) => {
+            if (error) {
+                callback(error);
             } else {
-                this.sendErrorOrJson(response, error, {operationId, upload});
+                try {
+                    const uint8data = pako.inflate(content);
+                    const decoder = new StringDecoder('utf8');
+                    const text = decoder.write(Buffer.from(uint8data));
+                    const sampleNames = SampleController._findSamples(text);
+                    callback(null, sampleNames);
+                } catch (error) {
+                    callback(error);
+                }
             }
         });
     }
@@ -69,6 +108,18 @@ class SampleController extends UserEntityControllerBase {
                 this.services.logger.error('Error removing uploaded sample file: ' + error);
             }
         });
+    }
+
+    static _findSamples(text) {
+        const found = text.match(/^#[^#].*/gm);
+        if (found && found.length) {
+            const columns_line = found[0].substr(1);
+            const array = columns_line && columns_line.split(/\t/);
+            const VCF_COLUMNS = ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'];
+            return _.difference(array, VCF_COLUMNS);
+        } else {
+            return [];
+        }
     }
 
     createRouter() {

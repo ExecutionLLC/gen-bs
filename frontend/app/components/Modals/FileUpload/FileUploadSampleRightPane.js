@@ -8,7 +8,8 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {
     uploadFiles,
-    fileUploadStatus
+    fileUploadStatus,
+    SAMPLE_UPLOAD_STATE
 } from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {
@@ -131,153 +132,157 @@ class SampleHeader extends React.Component {
 
 export default class FileUploadSampleRightPane extends React.Component {
 
+    RENDER_MODE = {
+        UPLOAD: {label: 'File'},
+        SAMPLE: {label: 'Sample'}
+    };
+
     constructor(props) {
         super(props);
         this.state = {isDragoverState: false};
     }
 
     render() {
-        const {samplesList, auth, dispatch, fileUpload, isBringToFront} = this.props;
-        const {editingSample} = samplesList;
+        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId} = this.props;
+        const {isDemo} = auth;
+        const {currentUploadId} = fileUpload;
+        const {editingSample, hashedArray: {hash: samplesHash}} = samplesList;
+        const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
+        const isSelectedSampleValid = selectedSample && (selectedSample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED ||
+            selectedSample.uploadState === SAMPLE_UPLOAD_STATE.UNCONFIRMED);
+
+        let content = null;
+        if (selectedSample) {
+            content = this.renderSample(selectedSample);
+        } else if (currentUploadId) {
+            content = this.renderUpload(currentUploadId);
+        } else {
+            content = this.renderNewUploadArea(isDemo);
+        }
+
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 <div className='split-top'>
-                    {editingSample && <SampleHeader samplesList={samplesList}
-                                                    auth={auth}
-                                                    fileUpload={fileUpload}
-                                                    dispatch={dispatch}
+                    {editingSample && isSelectedSampleValid &&
+                    <SampleHeader samplesList={samplesList}
+                                  auth={auth}
+                                  fileUpload={fileUpload}
+                                  dispatch={dispatch}
                     />}
                 </div>
-                {this.renderSample()}
-            </div>
-        );
-    }
-
-    renderSample() {
-        const {
-            currentSampleId,
-            auth: {isDemo},
-            fileUpload: {currentUploadId, filesProcesses},
-            samplesList: {hashedArray: {hash: samplesHash}}
-        } = this.props;
-        const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
-        if (selectedSample) {
-            return (
                 <div className='split-scroll'>
-                    <div className='form-padding'>
-                        {this.renderSampleContent(selectedSample)}
+                    <div className='form-horizontal form-padding'>
+                        {content}
                     </div>
                 </div>
-            );
-        }
-        if (currentUploadId == null) {
-            return this.renderUpload(isDemo);
-        }
-        const fileProcess = _.find(
-            filesProcesses,
-            fp => fp.id === currentUploadId || fp.operationId === currentUploadId
+            </div>
         );
+    }
+
+    renderSample(sample) {
+        switch (sample.uploadState) {
+            case SAMPLE_UPLOAD_STATE.COMPLETED:
+            case SAMPLE_UPLOAD_STATE.UNCONFIRMED:
+                return this.renderSampleContent(sample);
+            case SAMPLE_UPLOAD_STATE.NOT_FOUND:
+            case SAMPLE_UPLOAD_STATE.ERROR:
+            default:
+                return FileUploadSampleRightPane.renderLoadError(this.RENDER_MODE.SAMPLE);
+        }
+    }
+
+    renderUpload(uploadId) {
+        const {fileUpload: {filesProcesses}} = this.props;
+        const fileProcess = _.find(filesProcesses, fp => fp.id === uploadId || fp.operationId === uploadId);
         if (fileProcess && fileProcess.error) {
-            return this.renderLoadError();
+            return FileUploadSampleRightPane.renderLoadError(this.RENDER_MODE.UPLOAD);
         } else {
-            return this.renderLoad();
+            return FileUploadSampleRightPane.renderLoad();
         }
     }
 
-    renderLoad() {
+    static renderLoad() {
         return (
-            <div className='split-scroll'>
-                <div className='form-horizontal form-padding'>
-                    <div className='alert alert-help'>
-                        <p>
-                            <strong>Wait. </strong><span>File is loading</span>
-                        </p>
-                    </div>
-                </div>
+            <div className='alert alert-help'>
+                <p>
+                    <strong>Wait. </strong><span>File is loading</span>
+                </p>
             </div>
         );
     }
 
-    renderLoadError() {
+    static renderLoadError(renderMode) {
         return (
-            <div className='split-scroll'>
-                <div className='form-horizontal form-padding'>
-                    <div className='alert alert-danger'>
-                        <p>
-                            <strong>Error!</strong><span>File not loaded or damaged</span>
-                        </p>
-                    </div>
-                </div>
+            <div className='alert alert-danger'>
+                <p>
+                    <strong>Error! </strong><span>{renderMode.label} not loaded or damaged</span>
+                </p>
             </div>
         );
     }
 
-    renderUpload(isDemo) {
+    renderNewUploadArea(isDemo) {
         const {isDragoverState} = this.state;
         return (
-            <div className='split-scroll'>
-                <div className='form-horizontal form-padding'>
-                    <div className={classNames('empty', {'empty-upload': !isDemo})}>
-                        <div className='btn-group btn-group-xlg'>
-                            {!isDemo &&
-                            <button className={classNames('btn btn-link-default', {'drop-zone': isDragoverState})}
-                                    onClick={this.onUploadClick.bind(this)}
-                                    onDragOver={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (!isDragoverState) {
-                                            this.setDndState(true);
-                                        }
-                                    }}
-                                    onDragEnter={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (!isDragoverState) {
-                                            this.setDndState(true);
-                                        }
-                                    }}
-                                    onDragLeave={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (isDragoverState) {
-                                            this.setDndState(false);
-                                        }
-                                    }}
-                                    onDragExit={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (isDragoverState) {
-                                            this.setDndState(false);
-                                        }
-                                    }}
-                                    onDrop={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (isDragoverState) {
-                                            this.setDndState(false);
-                                        }
-                                        this.onFilesDrop(e.dataTransfer.files);
-                                    }}
-                            >
-                                <input
-                                    onChange={ (e) => {
-                                        this.onUploadChanged(e.target.files);
-                                        e.target.value = null;
-                                    }}
-                                    style={{display: 'none'}}
-                                    ref='fileInput'
-                                    id='file-select'
-                                    type='file'
-                                    accept='.vcf,.gz'
-                                    name='files[]'
-                                    defaultValue=''
-                                    multiple='multiple'
-                                />
-                                <h3>Drop vcf files here or <span
-                                    className='text-underline'>click here</span> to
-                                    select</h3>
-                            </button>
-                            }
-                            {isDemo &&
-                            <h3><i className='md-i'>perm_identity</i>Please login or
-                                register to upload new samples</h3>}
-                        </div>
-                    </div>
+            <div className={classNames('empty', {'empty-upload': !isDemo})}>
+                <div className='btn-group btn-group-xlg'>
+                    {!isDemo &&
+                    <button className={classNames('btn btn-link-default', {'drop-zone': isDragoverState})}
+                            onClick={this.onUploadClick.bind(this)}
+                            onDragOver={(e) => {
+                                cancelDOMEvent(e);
+                                if (!isDragoverState) {
+                                    this.setDndState(true);
+                                }
+                            }}
+                            onDragEnter={(e) => {
+                                cancelDOMEvent(e);
+                                if (!isDragoverState) {
+                                    this.setDndState(true);
+                                }
+                            }}
+                            onDragLeave={(e) => {
+                                cancelDOMEvent(e);
+                                if (isDragoverState) {
+                                    this.setDndState(false);
+                                }
+                            }}
+                            onDragExit={(e) => {
+                                cancelDOMEvent(e);
+                                if (isDragoverState) {
+                                    this.setDndState(false);
+                                }
+                            }}
+                            onDrop={(e) => {
+                                cancelDOMEvent(e);
+                                if (isDragoverState) {
+                                    this.setDndState(false);
+                                }
+                                this.onFilesDrop(e.dataTransfer.files);
+                            }}
+                    >
+                        <input
+                            onChange={ (e) => {
+                                this.onUploadChanged(e.target.files);
+                                e.target.value = null;
+                            }}
+                            style={{display: 'none'}}
+                            ref='fileInput'
+                            id='file-select'
+                            type='file'
+                            accept='.vcf,.gz'
+                            name='files[]'
+                            defaultValue=''
+                            multiple='multiple'
+                        />
+                        <h3>Drop vcf files here or <span
+                            className='text-underline'>click here</span> to
+                            select</h3>
+                    </button>
+                    }
+                    {isDemo &&
+                    <h3><i className='md-i'>perm_identity</i>Please login or
+                        register to upload new samples</h3>}
                 </div>
             </div>
         );

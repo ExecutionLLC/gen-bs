@@ -9,7 +9,10 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsService = require('./FieldsService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
-const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
+const {
+    SAMPLE_UPLOAD_STATUS,
+    WS_SAMPLE_UPLOAD_STATE
+} = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
@@ -98,13 +101,14 @@ class SamplesService extends UserEntityServiceBase {
         this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
     }
 
-    initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, callback) {
+    initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, uploadState, callback) {
         const samples = _.map(genotypes, genotype => {
             return {
                 id: Uuid.v4(),
                 fileName: vcfFileName,
                 vcfFileId,
-                genotypeName: genotype
+                genotypeName: genotype,
+                uploadState: uploadState || WS_SAMPLE_UPLOAD_STATE.UNCONFIRMED
             }
         });
         this.theModel.addSamples(user.id, user.language, samples, callback);
@@ -116,6 +120,52 @@ class SamplesService extends UserEntityServiceBase {
         } else {
             callback(null, false);
         }
+    }
+
+    /**
+     * This function updates the list of samples that are in the VCF file being uploaded.
+     * Before this call, the DB may contain samples that was received by trivial VCF-header parsing on WS.
+     * If the DB contains entries that are not in {sampleNames}, they are considered wrong and will
+     * be marked as NOT_FOUND.
+     * If the {sampleNames} contains entries that are not in the DB yet, they will be added to DB.
+     *
+     * @param {Object} user - Current user object.
+     * @param {number} vcfFileId - Id of the VCF file currently being uploaded.
+     * @param {string} vcfFileName - VCF file name
+     * @param {Array} sampleNames - Array of the sample names that was received after analysis from AS.
+     * @param {Function} callback - callback (error, samples)
+     */
+    updateSamplesForVcfFile(user, vcfFileId, vcfFileName, sampleNames, callback) {
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                const samplesWithNewState = _.map(existingSamples, (sample) => {
+                    return Object.assign({}, sample, {
+                        uploadState: _.includes(sampleNames, sample.genotypeName)
+                            ? WS_SAMPLE_UPLOAD_STATE.COMPLETED
+                            : WS_SAMPLE_UPLOAD_STATE.NOT_FOUND
+                    });
+                });
+                async.map(samplesWithNewState, (sample, callback) => {
+                    return this.update(user, sample, callback);
+                }, (error, result) => callback(error, result));
+            },
+            (items, callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                const newSamples = _.filter(sampleNames, newSample => !_.some(existingSamples, ['genotypeName', newSample]));
+                if (newSamples.length) {
+                    this.initMetadataForUploadedSample(user, vcfFileId, vcfFileName, newSamples,
+                        WS_SAMPLE_UPLOAD_STATE.COMPLETED, (error, sampleIds) => callback(error));
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => this.theModel.findSamplesByVcfFileIds(user.id, [vcfFileId], true,
+                (error, samples) => callback(error, samples))
+        ], callback);
     }
 
     _loadAndVerifyPriority(user, callback) {
