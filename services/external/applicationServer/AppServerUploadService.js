@@ -8,7 +8,10 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const METHODS = require('./AppServerMethods');
-const {SAMPLE_UPLOAD_STATUS} = require('../../../utils/Enums');
+const {
+    SAMPLE_UPLOAD_STATUS,
+    WS_SAMPLE_UPLOAD_STATE
+} = require('../../../utils/Enums');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
     CONVERTING: 'converting',
@@ -142,20 +145,39 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             }, (error) => callback(error)),
             (callback) => {
                 const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const sampleId = operation.getId();
-                this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
+                const vcfFileId = operation.getId();
+                this.services.objectStorage.deleteObject(newSamplesBucket, vcfFileId,
                     (error, result) => callback(error)
                 );
             },
-            (callback) => this.toggleNextOperation(operation.getId(), callback),
-            (callback) => this._createOperationResult(
+            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => {
+                const sampleUploadStates = _.map(existingSamples, (sample) => {
+                    return Object.assign({}, sample, {
+                        uploadState: WS_SAMPLE_UPLOAD_STATE.ERROR,
+                        error: error.message
+                    });
+                });
+                async.map(sampleUploadStates, (sample, callback) => {
+                    return this.services.samples.update(user, sample, callback);
+                }, (error, result) => callback(error, result));
+            },
+            (items, callback) => this.toggleNextOperation(operation.getId(), callback),
+            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                (error, existingSamples) => callback(error, existingSamples)),
+            (existingSamples, callback) => this._createOperationResult(
                 session,
                 operation,
                 null,
                 operation.getUserId(),
                 EVENTS.onOperationResultReceived,
                 true,
-                null,
+                {
+                    status: SAMPLE_UPLOAD_STATUS.ERROR,
+                    progress: 0,
+                    metadata: existingSamples
+                },
                 error,
                 callback
             )
@@ -163,7 +185,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     _handleUploadProgress(user, session, operation, message, callback) {
-        const {result: {status, progress}} = message;
+        const {result: {progress}} = message;
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.update(user, {
                 id: operation.getId(),
@@ -185,10 +207,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             const vcfFileId = operation.getId();
             const vcfFileName = operation.getSampleFileName();
             async.waterfall([
-                (callback) => this.services.samples.initMetadataForUploadedSample(
+                (callback) => this.services.samples.updateSamplesForVcfFile(
                     user, vcfFileId, vcfFileName, sampleGenotypes, callback
                 ),
-                (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
                 (samples, callback) => {
                     callback(null, {
                         status,
@@ -263,8 +284,8 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         });
     }
 
-    getUploadOperations(sesssion) {
-        return _.filter(sesssion.operations, operation => operation instanceof UploadOperation);
+    getUploadOperations(session) {
+        return _.filter(session.operations, operation => operation instanceof UploadOperation);
     }
 }
 

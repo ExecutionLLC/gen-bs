@@ -72,7 +72,6 @@ class ServiceFacade {
         this.objectStorage = new ObjectStorageService(this, models);
 
         this.scheduler = new SchedulerService(this, models);
-        this.scheduler.start();
 
         _.map(this)
             .filter(service => service instanceof ServiceBase)

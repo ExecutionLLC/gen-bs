@@ -64,6 +64,13 @@ const WS_INSTANCE_MESSAGE_TYPES = createEnum({
     SAMPLE_UPLOAD_COMPLETED: 'sample_upload_completed'
 });
 
+const WS_SAMPLE_UPLOAD_STATE = createEnum({
+    UNCONFIRMED: 'unconfirmed', // the sample was created after header parsing on WS
+    NOT_FOUND: 'not_found', // the sample was not found during parsing on AS
+    COMPLETED: 'completed', // the sample was successfully parsed on AS
+    ERROR: 'error' // an error has occurred while parsing the file with this sample.
+});
+
 module.exports = {
     OBJECT_STORAGE_TYPES,
     SEARCH_SERVICE_EVENTS,
@@ -73,5 +80,6 @@ module.exports = {
     ANALYSIS_TYPES,
 	SAMPLE_UPLOAD_STATUS,
     LOGIN_TYPES,
-    EVENT_TYPES
+    EVENT_TYPES,
+    WS_SAMPLE_UPLOAD_STATE
 };

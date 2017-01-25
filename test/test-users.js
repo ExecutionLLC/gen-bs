@@ -30,11 +30,11 @@ describe('Users', () => {
             gender: 'TestUserGender' + r,
             loginType: isPassword ? 'password' : 'google',
             password: password,
-            email: 'TestUserEmail' + r + '@example.com',
+            email: ('TestUserEmail' + r + '@example.com').toLowerCase(),
             phone: 'TestUserPhone' + r,
             company: 'TestUserCompany' + r,
             speciality: 'TestUserSpeciality' + r,
-            language: ('' + r).slice(-2),
+            language: 'en',
             numberPaidSamples: Math.floor(r * 10 + 1)
         }
     }
@@ -51,7 +51,7 @@ describe('Users', () => {
             assert.deepStrictEqual(addedUser, Object.assign({}, user, {
                 id: addedUser.id,
                 password: null,
-                defaultLanguId: 'en', // language got from header...
+                defaultLanguageId: 'en', // language got from header...
                 language: 'en', // ... it is not expected behavior but it is for now
                 isDeleted: false
             }));
@@ -104,7 +104,7 @@ describe('Users', () => {
     function checkUpdateResult(userToUpdate, userUpdated) {
         assert.deepStrictEqual(userUpdated, Object.assign({}, userToUpdate, {
             password: null,
-            defaultLanguId: 'en', // language got from header...
+            defaultLanguageId: 'en', // language got from header...
             language: 'en', // ... it is not expected behavior but it is for now
             isDeleted: false
         }));

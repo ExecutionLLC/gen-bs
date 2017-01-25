@@ -12,9 +12,10 @@ import {
 } from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 import {modalName} from '../../../actions/modalWindows';
+import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
 
-function fileUploadStatusErrorOrReady(status) {
-    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
+function fileUploadStatusErrorOrReady(upload) {
+    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus);
 }
 
 export default class FileUploadSampleList extends React.Component {
@@ -37,14 +38,15 @@ export default class FileUploadSampleList extends React.Component {
 
     render() {
         const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
+        const uploadedData = this.getUploadedData();
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
                     className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
-                    {this.renderUploadedData(true)}
+                    {this.renderUploadedData(uploadedData[0], true)}
                     {this.renderCurrentUploadData()}
-                    {this.renderUploadedData(false)}
+                    {this.renderUploadedData(uploadedData[1], false)}
                 </ul>
             </div>
         );
@@ -52,17 +54,23 @@ export default class FileUploadSampleList extends React.Component {
 
     renderCurrentUploadData() {
         const {fileUpload: {filesProcesses}, sampleList} = this.props;
+        const {currentSampleId} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
             return upload.progressStatus !== fileUploadStatus.READY;
         });
         return _.map(currentUploads, upload => {
+            const uploadSamples = _.filter(sampleList.hashedArray.array, {vcfFileId: upload.operationId});
             const isError = upload.progressStatus === fileUploadStatus.ERROR;
-            if (isError) {
-                return this._renderUploadedDataFileError(upload, upload.file.name);
-            } else {
-                const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
-                if (uploadSamples.length) {
+
+            if (uploadSamples.length) {
+                if (isError) {
+                    return _.map(uploadSamples, (sample) => this._renderSampleError(sample, sample.name, sample.id === currentSampleId));
+                } else {
                     return this.renderProgressUploadSamples(uploadSamples, upload);
+                }
+            } else {
+                if (isError) {
+                    return this._renderUploadedDataFileError(upload, upload.file.name);
                 } else {
                     return this.renderProgressUploadFile(upload);
                 }
@@ -70,7 +78,7 @@ export default class FileUploadSampleList extends React.Component {
         });
     }
 
-    renderUploadedData(showNew) {
+    getUploadedData() {
         const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields) && sample.type !== entityType.HISTORY);
@@ -97,10 +105,11 @@ export default class FileUploadSampleList extends React.Component {
                 return label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
             }
         });
-        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples, ['date']).reverse();
-        return (
-            sortedFilteredUploads.map((item) => this._renderUploadedDataSample(item, showNew))
-        );
+        const sortedFilteredUploads = _.orderBy(filteredUploadedSamples, ['date'], ['desc']);
+
+        return _.partition(sortedFilteredUploads, (item) => {
+            return !_.isNil(item.upload) && fileUploadStatusErrorOrReady(item.upload);
+        });
     }
 
     _createSampleLabel(sample) {
@@ -109,12 +118,12 @@ export default class FileUploadSampleList extends React.Component {
         return getItemLabelByNameAndType(sampleName, type);
     }
 
-    _renderSampleOld(sample, label, isActive) {
+    _renderSample(sample, label, isActive, isNew) {
         const isDeletable = sample.type === entityType.USER;
         return this.renderListItem(
             sample.id,
             isActive,
-            null,
+            isNew ? true : null,
             (id) => this.onSampleItemClick(id),
             (id) => this.onSampleItemSelectForAnalysis(id),
             isDeletable ? (id) => this.onSampleItemDelete(id) : null,
@@ -124,36 +133,32 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
-    _renderSampleNew(sample, label, isActive) {
+    renderUploadedData(uploadedItems, isNew) {
+        const {currentSampleId} = this.props;
+        return _.map(uploadedItems, (item) => {
+            if (item.sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
+                return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew);
+            } else {
+                return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
+            }
+        });
+    }
+
+    _renderSampleError(sample, label, isActive) {
+        const message = sample.error || (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
+                ? 'The sample is not found in VCF'
+                : 'Unknown error');
         return this.renderListItem(
             sample.id,
             isActive,
-            true,
+            false,
             (id) => this.onSampleItemClick(id),
-            (id) => this.onSampleItemSelectForAnalysis(id),
+            null,
             (id) => this.onSampleItemDelete(id),
             label,
-            sample.description,
-            sample.created
+            message,
+            null
         );
-    }
-
-    _renderUploadedDataSample(uploadData, showNew) {
-        const {currentHistorySamplesIds, currentSampleId} = this.props;
-        const {label, upload, sample} = uploadData;
-        if (upload) {
-            if (showNew && (sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
-                return this._renderSampleNew(sample, label, sample.id === currentSampleId);
-            } else {
-                return null;
-            }
-        } else {
-            if (showNew) {
-                return null;
-            } else {
-                return this._renderSampleOld(sample, label, sample.id === currentSampleId);
-            }
-        }
     }
 
     _renderUploadedDataFileError(upload, label) {

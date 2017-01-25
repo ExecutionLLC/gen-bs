@@ -5,8 +5,9 @@ import {
     fileUploadErrorForOperationId, invalidateCurrentUploadId
 } from './fileUpload';
 import config from '../../config';
-import {samplesListAddSamples} from './samplesList';
+import {samplesListAddOrUpdateSamples} from './samplesList';
 import {samplesListUpdateSamplesFields} from './samplesList';
+import _ from 'lodash';
 
 /*
  * action types
@@ -153,7 +154,7 @@ function receiveUploadMessage(wsData) {
     return (dispatch) => {
         const {operationId, result: {progress, status, metadata: samples}} = wsData;
         if (samples && status !== WS_PROGRESS_STATUSES.READY) {
-            dispatch(samplesListAddSamples(samples));
+            dispatch(samplesListAddOrUpdateSamples(samples));
             dispatch(invalidateCurrentUploadId(samples));
         }
         if (samples && status === WS_PROGRESS_STATUSES.READY) {
@@ -170,7 +171,18 @@ function receiveClosedByUserMessage() {
 }
 
 function receiveErrorMessage(wsData) {
+    const {result: {metadata: samples}} = wsData;
     return (dispatch) => {
+        if (samples) {
+            dispatch(samplesListAddOrUpdateSamples(
+                _.map(samples, (sample) => {
+                    return {
+                        ...sample,
+                        error: wsData.error.message
+                    };
+                })
+            ));
+        }
         console.error('Error: ' + JSON.stringify(wsData.error));
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {

@@ -101,14 +101,12 @@ describe('Model', () => {
 
                     // Update created filter.
                     const modelToUpdate = _.cloneDeep(addedModel);
-                    modelToUpdate.name = 'Test Model ' + Uuid.v4();
                     modelToUpdate.type = ENTITY_TYPES.ADVANCED;
 
                     modelsClient.update(sessionId, modelToUpdate, (error, response) => {
                         const updatedModel = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedModel);
                         assert.notEqual(updatedModel.id, modelToUpdate.id);
-                        assert.equal(updatedModel.name, modelToUpdate.name);
                         assert.equal(updatedModel.type, ENTITY_TYPES.USER, 'Model type change should not be allowed by update.');
                         done();
                     });

@@ -120,7 +120,7 @@ export class ImmutableHashedArray {
             throw new Error('Missing id');
         }
         if (hash[newItem.id] && newItem.id !== id) {
-            throw new Error(`Duplicate id ${newItem.id}`);
+            throw new Error(`Mismatched id ${newItem.id}`);
         }
         const itemIndex = this._findIndexForId(array, id);
         if (itemIndex < 0) {
