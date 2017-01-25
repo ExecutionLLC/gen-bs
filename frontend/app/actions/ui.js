@@ -34,7 +34,7 @@ export function completeTableScrollPositionReset() {
  */
 
 /**
- * @param {{id: string?, name: string, description: string, type: string, samples: {id: string, type: string}[], viewId: string, filterId: string, modelId: string?}} searchParams
+ * @param {{id: string?, type: string, samples: {id: string, type: string}[], viewId: string, filterId: string, modelId: string?, text: {name: string, description: string, languageId: ?string}[]}} searchParams
  * @returns {function(*, *)}
  */
 export function analyze(searchParams) {

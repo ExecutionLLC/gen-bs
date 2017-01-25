@@ -457,8 +457,8 @@ export const filterUtils = {
     /**
      * Convert Genomics object to rules
      * @throws GenomicsParseError, UndefinedGenomicsConditionError, UndefinedGenomicsOperatorError
-     * @param {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} data query object
-     * @return {?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}}
+     * @param {?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} data query object
+     * @return {?{condition: string, rules: {condition: *=, field: string=, id: string=, sampleType: string=, operator: string=, value: *=}[]}}
      */
     getRulesFromGenomics: function (data) {
         if (data == null) {
