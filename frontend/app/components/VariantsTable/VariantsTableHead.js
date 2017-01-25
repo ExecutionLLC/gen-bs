@@ -70,7 +70,7 @@ export default class VariantsTableHead extends Component {
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist,isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = {
             ...totalFieldsHash[fieldId],
