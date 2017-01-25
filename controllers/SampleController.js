@@ -43,11 +43,7 @@ class SampleController extends UserEntityControllerBase {
             },
             (sampleFile, fileName, callback) => this._parseSampleNames(sampleFile,
                 (error, sampleNames) => {
-                    if (error) {
-                        callback(null, sampleFile, fileName, []);
-                    } else {
-                        callback(error, sampleFile, fileName, sampleNames);
-                    }
+                    callback(error, sampleFile, fileName, error ? [] : sampleNames);
                 }),
             (sampleFile, fileName, sampleList, callback) => {
                 const fileInfo = {
