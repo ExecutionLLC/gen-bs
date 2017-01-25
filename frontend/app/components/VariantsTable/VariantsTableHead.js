@@ -5,6 +5,8 @@ import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
 import * as SamplesUtils from '../../utils/samplesUtils';
+import * as i18n from '../../utils/i18n';
+
 
 export default class VariantsTableHead extends Component {
 
@@ -83,7 +85,7 @@ export default class VariantsTableHead extends Component {
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
         const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
-        const sampleName = currentSample ? currentSample.name : null;
+        const sampleName = currentSample ? i18n.getEntityText(currentSample, languageId).name : null;
         return (
             <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
                          fieldMetadata={fieldMetadata}
