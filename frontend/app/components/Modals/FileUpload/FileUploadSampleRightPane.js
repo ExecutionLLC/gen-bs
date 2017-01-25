@@ -148,7 +148,8 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {currentUploadId} = fileUpload;
         const {editingSample, hashedArray: {hash: samplesHash}} = samplesList;
         const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
-        const isSelectedSampleValid = selectedSample && selectedSample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED;
+        const isSelectedSampleValid = selectedSample && (selectedSample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED ||
+            selectedSample.uploadState === SAMPLE_UPLOAD_STATE.UNCONFIRMED);
 
         let content = null;
         if (selectedSample) {
@@ -181,9 +182,8 @@ export default class FileUploadSampleRightPane extends React.Component {
     renderSample(sample) {
         switch (sample.uploadState) {
             case SAMPLE_UPLOAD_STATE.COMPLETED:
-                return this.renderSampleContent(sample);
             case SAMPLE_UPLOAD_STATE.UNCONFIRMED:
-                return FileUploadSampleRightPane.renderLoad(this.RENDER_MODE.SAMPLE);
+                return this.renderSampleContent(sample);
             case SAMPLE_UPLOAD_STATE.NOT_FOUND:
             case SAMPLE_UPLOAD_STATE.ERROR:
             default:
@@ -197,15 +197,15 @@ export default class FileUploadSampleRightPane extends React.Component {
         if (fileProcess && fileProcess.error) {
             return FileUploadSampleRightPane.renderLoadError(this.RENDER_MODE.UPLOAD);
         } else {
-            return FileUploadSampleRightPane.renderLoad(this.RENDER_MODE.UPLOAD);
+            return FileUploadSampleRightPane.renderLoad();
         }
     }
 
-    static renderLoad(renderMode) {
+    static renderLoad() {
         return (
             <div className='alert alert-help'>
                 <p>
-                    <strong>Wait. </strong><span>{renderMode.label} is loading</span>
+                    <strong>Wait. </strong><span>File is loading</span>
                 </p>
             </div>
         );
