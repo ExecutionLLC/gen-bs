@@ -13,12 +13,27 @@ exports.up = function (knex) {
         .then(() => updateUserViews(knex))
         .then(() => updateCommentTexs(knex))
         .then(() => editFieldTextTable(knex))
-        .then(() => editSampleMetadataTable(knex));
+        .then(() => editSampleMetadataTable(knex))
+        .then(() => editSampleTextTable(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function editSampleTextTable(knex) {
+    console.log('=> Update sample text table constrains...');
+    return knex.schema
+        .table('sample_text', table => {
+            table.dropPrimary('sample_text_pkey')
+        })
+        .then(() => knex.raw('ALTER TABLE sample_text ALTER COLUMN language_id DROP NOT NULL'))
+        .then(() => knex.schema
+            .table('sample_text', table => {
+                table.unique(['sample_id', 'language_id']);
+            })
+        );
+}
 
 function editSampleMetadataTable(knex) {
     console.log('=> Update sample metadata table ...');
