@@ -23,7 +23,7 @@ import {
     modelsListReceive
 } from './modelsList';
 import {getDefaultOrStandardItem} from '../utils/entityTypes';
-import {analyze} from './ui';
+import {analyze, setCurrentLanguageId} from './ui';
 import {uploadsListReceive} from './fileUpload';
 import * as i18n from '../utils/i18n';
 
@@ -81,6 +81,7 @@ export function fetchUserDataAsync() {
             } = userData;
 
             dispatch(receiveUserData(userData));
+            dispatch(setCurrentLanguageId(userData.profileMetadata.defaultLanguageId));
             dispatch(filtersListReceive(filters));
             dispatch(viewsListReceive(views));
             dispatch(modelsListReceive(models));

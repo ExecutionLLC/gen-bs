@@ -15,6 +15,7 @@ export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
 export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
+export const SET_CURRENT_LANGUAGE_ID = 'SET_CURRENT_LANGUAGE_ID';
 
 export function requestTableScrollPositionReset() {
     return {
@@ -76,5 +77,12 @@ export function analyze(searchParams) {
                 resolve(searchAnalysis);
             }).catch((error) => reject(error));
         });
+    };
+}
+
+export function setCurrentLanguageId(languageId) {
+    return {
+        type: SET_CURRENT_LANGUAGE_ID,
+        languageId
     };
 }
