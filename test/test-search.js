@@ -87,10 +87,10 @@ describe('Search', function () {
 
                 const fieldIdToMetadata = CollectionUtils.createHashByKey(allFields, 'id');
 
-                // Check that rows are received.
+                // Check that data are received.
                 assert.ok(data.length);
 
-                // Check that all field ids from the data lay either in sample or in source fields.
+                // Check that all field ids from the data header lay either in sample or in source fields.
                 _.each(header, head => {
                     const fieldId = head.fieldId;
                     assert.ok(fieldId);

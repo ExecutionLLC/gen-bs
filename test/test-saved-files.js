@@ -62,7 +62,7 @@ describe('Saved Files', () => {
 
             samplesClient.getAll(sessionId, (error, response) => {
                 const samples = ClientBase.readBodyWithCheck(error, response);
-                const sample = _.first(samples, sample => sample.type === ENTITY_TYPES.DEFAULT);
+                const sample = _.find(samples, sample => sample.type === ENTITY_TYPES.DEFAULT);
                 sampleId = sample.id;
 
                 done();
