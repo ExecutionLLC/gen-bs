@@ -77,11 +77,9 @@ function reduceReceiveUpdatedSample(state, action) {
 
 function reduceReceiveSamplesList(state, action) {
     const {samples} = action;
-    const sortedSamples = _.sortBy(samples, (sample) => sample.name.toLowerCase());
-
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
+        hashedArray: ImmutableHashedArray.makeFromArray(samples),
         editingSample: null
     };
 }
