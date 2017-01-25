@@ -109,11 +109,12 @@ class SampleHeader extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList: {editingSample: {name, description}}} = this.props;
+        const {dispatch, samplesList: {editingSample}, languageId} = this.props;
+        const {name, description} = i18n.getEntityText(editingSample, languageId);
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
-        dispatch(updateSampleText(sampleId, newName, newDescription));
-        dispatch(requestUpdateSampleTextAsync(sampleId))
+        dispatch(updateSampleText(sampleId, newName, newDescription, languageId));
+        dispatch(requestUpdateSampleTextAsync(sampleId, languageId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
                 dispatch(setCurrentSampleId(newSample.id));

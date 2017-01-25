@@ -9,6 +9,7 @@ import {
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 import {changeFileUploadProgressState, fileUploadStatus} from './fileUpload';
 import {entityType} from '../utils/entityTypes';
+import * as i18n from '../utils/i18n';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -85,12 +86,13 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
     };
 }
 
-export function updateSampleText(sampleId, name, description) {
+export function updateSampleText(sampleId, name, description, languageId) {
     return {
         type: UPDATE_SAMPLE_TEXT,
         sampleId,
         name,
-        description
+        description,
+        languageId
     };
 }
 
@@ -177,7 +179,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
 }
 
 // TODO refactor requestUpdateSampleFieldsAsync and requestUpdateSampleTextAsync, it have huge common part
-export function requestUpdateSampleTextAsync(sampleId) {
+export function requestUpdateSampleTextAsync(sampleId, languageId) {
     return (dispatch, getState) => {
         const {samplesList: {hashedArray: {hash}, editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
         const currentEditedSample = hash[sampleId];
@@ -185,14 +187,7 @@ export function requestUpdateSampleTextAsync(sampleId) {
             return Promise.resolve();
         }
         dispatch(disableSampleEdit(sampleId, true));
-        const {
-            name: editingSampleName, description: editingSampleDescription
-        } = editingSample;
-        const newEditingSample = {
-            ...currentEditedSample,
-            name: editingSampleName,
-            description: editingSampleDescription
-        };
+        const newEditingSample = i18n.setEntityLanguageTexts(currentEditedSample, i18n.getEntityLanguageTexts(editingSample));
         return new Promise((resolve) => samplesClient.update(
             newEditingSample,
             (error, response) => resolve({error, response})

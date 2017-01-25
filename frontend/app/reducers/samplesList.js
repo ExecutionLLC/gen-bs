@@ -4,6 +4,8 @@ import * as ActionTypes from '../actions/samplesList';
 import immutableArray from '../utils/immutableArray';
 import {ImmutableHashedArray} from '../utils/immutable';
 import {entityType} from '../utils/entityTypes';
+import * as i18n from '../utils/i18n';
+
 
 function reduceRequestSamples(state) {
     return state;
@@ -34,20 +36,20 @@ function reduceUpdateSampleValue(state, action) {
 }
 
 function reduceUpdateSampleText(state, action) {
-    const {name, description, sampleId} = action;
+    const {name, description, sampleId, languageId} = action;
     const {editingSample} = state;
 
     if (!editingSample || editingSample.id !== sampleId) {
         return state;
     }
 
-    const newName = name || editingSample.name;
-    const newDescription = description || editingSample.description;
-    const newEditingSample = {
-        ...editingSample,
+    const editingSampleText = i18n.getEntityText(editingSample, languageId);
+    const newName = name || editingSampleText.name;
+    const newDescription = description || editingSampleText.description;
+    const newEditingSample = i18n.setEntityText(editingSample, {
         name: newName,
         description: newDescription
-    };
+    });
 
     return {
         ...state,
