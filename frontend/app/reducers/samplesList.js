@@ -164,10 +164,9 @@ function reduceSamplesListAddOrUpdateSamples(state, action) {
         }
     });
 
-    const sortedSamples = _.sortBy(newHashedArray.array, (sample) => sample.name.toLowerCase());
     return {
         ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples)
+        hashedArray: newHashedArray
     };
 }
 
