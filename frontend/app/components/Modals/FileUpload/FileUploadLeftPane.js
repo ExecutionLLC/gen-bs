@@ -36,13 +36,13 @@ export default class FileUploadLeftPane extends React.Component {
 
         // Calculates search value for the specified editable field.
         function getSearchValue(editableField, sampleEditableFieldValue, languageId) {
-            if (_.isNull(sampleEditableFieldValue.value)) {
+            if (_.isNull(sampleEditableFieldValue)) {
                 return '';
             }
             if (_.isEmpty(editableField.availableValues)) {
-                return sampleEditableFieldValue.value;
+                return sampleEditableFieldValue;
             } else {
-                const selectedAvailableValue = _.find(editableField.availableValues, {'id': sampleEditableFieldValue.value});
+                const selectedAvailableValue = _.find(editableField.availableValues, {'id': sampleEditableFieldValue});
                 return i18n.getEntityText(selectedAvailableValue, languageId).value;
             }
         }
@@ -52,11 +52,11 @@ export default class FileUploadLeftPane extends React.Component {
             const metadataHash = _.keyBy(sample.sampleMetadata, 'metadataId');
             const sampleSearchValues = _.map(editableFields, editableField => {
                 const sampleEditableField = metadataHash[editableField.id];
-                return getSearchValue(editableField, sampleEditableField, languageId)
+                return getSearchValue(editableField, i18n.getEntityText(sampleEditableField, languageId).value, languageId)
                     .toLocaleLowerCase();
             });
-            sampleSearchValues.push(sample.name.toLocaleLowerCase());
-            const sampleDescription = sample.description;
+            sampleSearchValues.push(i18n.getEntityText(sample, languageId).name.toLocaleLowerCase());
+            const sampleDescription = i18n.getEntityText(sample, languageId).description;
             if (sampleDescription) {
                 sampleSearchValues.push(sampleDescription.toLocaleLowerCase());
             }
