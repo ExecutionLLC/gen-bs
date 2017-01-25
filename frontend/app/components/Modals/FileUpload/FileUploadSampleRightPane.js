@@ -114,7 +114,7 @@ class SampleHeader extends React.Component {
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
         dispatch(updateSampleText(sampleId, newName, newDescription, languageId));
-        dispatch(requestUpdateSampleTextAsync(sampleId, languageId))
+        dispatch(requestUpdateSampleTextAsync(sampleId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
                 dispatch(setCurrentSampleId(newSample.id));

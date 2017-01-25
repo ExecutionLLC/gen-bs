@@ -179,7 +179,7 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
 }
 
 // TODO refactor requestUpdateSampleFieldsAsync and requestUpdateSampleTextAsync, it have huge common part
-export function requestUpdateSampleTextAsync(sampleId, languageId) {
+export function requestUpdateSampleTextAsync(sampleId) {
     return (dispatch, getState) => {
         const {samplesList: {hashedArray: {hash}, editingSample, onSaveAction, onSaveActionPropertyId}} = getState();
         const currentEditedSample = hash[sampleId];
