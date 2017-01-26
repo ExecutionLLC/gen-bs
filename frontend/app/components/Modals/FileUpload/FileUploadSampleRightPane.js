@@ -315,16 +315,16 @@ export default class FileUploadSampleRightPane extends React.Component {
         this.refs.fileInput.click();
     }
 
-    static makeFieldIdToValuesHash(sample) {
+    static makeFieldIdToValuesHash(sample, languageId) {
         return _(sample.sampleMetadata)
             .keyBy((value) => value.metadataId)
-            .mapValues((values) => values.value)
+            .mapValues((values) => i18n.getEntityText(values, languageId).value)
             .value();
     }
 
     renderCurrentValues(sample) {
         const {fields, languageId} = this.props;
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample, languageId);
         const fieldsRenders = fields
             .filter(field => !field.isInvisible)
             .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash, languageId));
@@ -419,7 +419,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         if (!editingSample || editingSample.id !== sampleId) {
             return null;
         }
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(editingSample);
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(editingSample, languageId);
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}

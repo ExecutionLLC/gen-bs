@@ -77,12 +77,13 @@ function requestSamples() {
     };
 }
 
-export function updateSampleValue(sampleId, valueFieldId, value) {
+export function updateSampleValue(sampleId, valueFieldId, value, languageId) {
     return {
         type: UPDATE_SAMPLE_VALUE,
         sampleId,
         valueFieldId,
-        value
+        value,
+        languageId
     };
 }
 

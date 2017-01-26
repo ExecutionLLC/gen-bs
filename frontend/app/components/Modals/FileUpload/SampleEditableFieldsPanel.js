@@ -20,8 +20,8 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     onSampleValueUpdated(sampleId, fieldId, newValue) {
-        const {dispatch} = this.props;
-        dispatch(updateSampleValue(sampleId, fieldId, newValue));
+        const {dispatch, languageId} = this.props;
+        dispatch(updateSampleValue(sampleId, fieldId, newValue, languageId));
     }
 
     onSaveEditedSampleClick(e, sampleId) {

@@ -12,18 +12,18 @@ function reduceRequestSamples(state) {
 }
 
 function reduceUpdateSampleValue(state, action) {
-    const {valueFieldId, value, sampleId} = action;
+    const {valueFieldId, value, sampleId, languageId} = action;
     const {editingSample} = state;
 
     if (!editingSample || editingSample.id !== sampleId) {
         return state;
     }
 
-    const newValue = {metadataId: valueFieldId, value: value};
     const sampleValues = editingSample.sampleMetadata;
     const valueIndex = _.findIndex(sampleValues, {metadataId: valueFieldId});
-
-    const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
+    const editingSampleValue = sampleValues[valueIndex];
+    const newSampleValue = i18n.changeEntityText(editingSampleValue, languageId, {value});
+    const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newSampleValue);
     const newEditingSample = {
         ...editingSample,
         sampleMetadata: newSampleValues
