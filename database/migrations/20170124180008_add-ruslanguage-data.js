@@ -5,6 +5,7 @@ const {rusFilters} = require('./20170124180008_add-ruslanguage-data/filters');
 const {rusViews} = require('./20170124180008_add-ruslanguage-data/views');
 const {rusModels} = require('./20170124180008_add-ruslanguage-data/models');
 const {rusSamples} = require('./20170124180008_add-ruslanguage-data/samples');
+const {rusMetadata} = require('./20170124180008_add-ruslanguage-data/metadata');
 
 exports.up = function (knex) {
     console.log('=> Add rus table data ...');
@@ -20,12 +21,31 @@ exports.up = function (knex) {
         })
         .then(() => {
             return BluebirdPromise.mapSeries(rusSamples, sample => addSampleText(sample, knex))
+        })
+        .then(() => {
+            return BluebirdPromise.mapSeries(rusMetadata, metadata => addMetadata(metadata, knex))
         });
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function addMetadata(metadata, knex) {
+    return knex('metadata')
+        .select('id')
+        .where('name', metadata.name)
+        .then((results) => _.first(results)['id'])
+        .then((metadataId) => {
+            return knex('metadata_text')
+                .insert({
+                    metadata_id: metadataId,
+                    language_id: 'ru',
+                    description: metadata.ruDescription,
+                    label: metadata.ruLabel
+                })
+        })
+}
 
 function createSampleName(fileName, genotype) {
     const name = genotype ? `${fileName}:${genotype}` : fileName;
