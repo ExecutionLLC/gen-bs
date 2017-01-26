@@ -124,7 +124,7 @@ class KeywordsModel extends ModelBase {
     _createKeyword(keywordMetadata, synonymsByKeywordId) {
         const synonyms = synonymsByKeywordId[keywordMetadata.id];
         return Object.assign({}, keywordMetadata, {
-            synonyms
+            text: synonyms
         });
     }
 
