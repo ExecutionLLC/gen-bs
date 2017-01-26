@@ -78,7 +78,9 @@ class AnalysisModel extends SecureModelBase {
     }
 
     _updateInTransaction(analysisId, analysisToUpdate, trx, callback) {
-        const {text:{name, description, languageId}, lastQueryDate} = analysisToUpdate;
+        const {lastQueryDate} = analysisToUpdate;
+        const analysisText = _.find(analysisToUpdate.text, text => _.isNull(text.languageId));
+        const {name, description, languageId} = analysisText;
         async.waterfall([
                 (callback) => {
                     const updateAnalysisData = {
