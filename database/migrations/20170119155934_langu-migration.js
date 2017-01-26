@@ -14,12 +14,29 @@ exports.up = function (knex) {
         .then(() => updateCommentTexs(knex))
         .then(() => editFieldTextTable(knex))
         .then(() => editSampleMetadataTable(knex))
-        .then(() => editSampleTextTable(knex));
+        .then(() => editSampleTextTable(knex))
+        .then(() => updateSampleTextData(knex));
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function updateSampleTextData(knex) {
+    return knex.select('id')
+        .from('sample')
+        .where('type', 'user')
+        .then((results) => _.map(results, result => ChangeCaseUtil.convertKeysToCamelCase(result)))
+        .then((samples) => {
+            return BluebirdPromise.mapSeries(samples, sample => {
+                return knex('sample_text')
+                    .where('sample_id', sample.id)
+                    .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                        languageId: null
+                    }));
+            });
+        });
+}
 
 function editSampleTextTable(knex) {
     console.log('=> Update sample text table constrains...');
