@@ -11,6 +11,7 @@ import Auth from './NavbarMain/Auth';
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
 import {fileUploadStatus, SAMPLE_UPLOAD_STATE} from '../../actions/fileUpload';
 import {entityType} from '../../utils/entityTypes';
+import {setCurrentLanguageId} from '../../actions/ui';
 
 
 class NavbarMain extends Component {
@@ -82,16 +83,40 @@ class NavbarMain extends Component {
                     />
                     <SavedFiles dispatch={this.props.dispatch}/>
                     <Auth {...this.props} />
+                    {this.renderLanguageButton('English', 'en')}
+                    {this.renderLanguageButton('Русский', 'ru')}
+                    {this.renderLanguageButton('汉语', 'zh')}
                 </div>
             </nav>
-
-
         );
+    }
+
+    renderLanguageButton(languageName, languageId) {
+        const {ui: {languageId: currentLanguageId}} = this.props;
+        const isCurrentLanguage = currentLanguageId === languageId;
+        return (
+            <div>
+                <button
+                    onClick={() => this.onChangeLanguage(languageId)}
+                    style={{whiteSpace: 'nowrap'}}
+                >
+                    {isCurrentLanguage ?
+                        <u>{languageName}</u> :
+                        languageName
+                    }
+                </button>
+            </div>
+        );
+    }
+
+    onChangeLanguage(languageId) {
+        const {dispatch} = this.props;
+        dispatch(setCurrentLanguageId(languageId));
     }
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ws, variantsTable, samplesList, fileUpload} = state;
+    const {auth, userData, ws, variantsTable, samplesList, fileUpload, ui} = state;
 
     return {
         auth,
@@ -99,7 +124,8 @@ function mapStateToProps(state) {
         ws,
         variantsTable,
         samplesList,
-        fileUpload
+        fileUpload,
+        ui
     };
 }
 
