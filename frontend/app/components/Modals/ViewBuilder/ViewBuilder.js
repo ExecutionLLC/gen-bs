@@ -136,7 +136,7 @@ export default class ViewBuilder extends React.Component {
         return [
             ...viewItem.keywords.map((keywordId) => {
                 const currentKeyword = keywords[keywordId];
-                const synonymText = i18n.getEntityText(currentKeyword);
+                const synonymText = i18n.getEntityText(currentKeyword, languageId);
                 return {value: synonymText.keywordId, label: `${synonymText.value}`};
             })
         ];
