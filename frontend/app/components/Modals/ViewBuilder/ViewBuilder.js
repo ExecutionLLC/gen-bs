@@ -13,6 +13,7 @@ import {
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
+import * as i18n from '../../../utils/i18n';
 
 
 export default class ViewBuilder extends React.Component {
@@ -56,8 +57,8 @@ export default class ViewBuilder extends React.Component {
 
             //keywords
             const currentValueKeywordsHash = this.createFieldKeywordsHash(currentValue);
-            const keywordsCurrentValue = this.createCurrentKeywordValues(viewItem, currentValueKeywordsHash);
-            const keywordsSelectOptions = this.createFieldKeywordsSelectOptions(currentValue);
+            const keywordsCurrentValue = this.createCurrentKeywordValues(viewItem, currentValueKeywordsHash, languageId);
+            const keywordsSelectOptions = this.createFieldKeywordsSelectOptions(currentValue, languageId);
 
             return (
 
@@ -131,11 +132,12 @@ export default class ViewBuilder extends React.Component {
         );
     }
 
-    createCurrentKeywordValues(viewItem, keywords) {
+    createCurrentKeywordValues(viewItem, keywords, languageId) {
         return [
             ...viewItem.keywords.map((keywordId) => {
                 const currentKeyword = keywords[keywordId];
-                return {value: currentKeyword.synonyms[0].keywordId, label: `${currentKeyword.synonyms[0].value}`};
+                const synonymText = i18n.getEntityText(currentKeyword);
+                return {value: synonymText.keywordId, label: `${synonymText.value}`};
             })
         ];
     }
@@ -148,14 +150,14 @@ export default class ViewBuilder extends React.Component {
         }
     }
 
-    createFieldKeywordsSelectOptions(field) {
+    createFieldKeywordsSelectOptions(field, languageId) {
         if (!field.id) {
             return [];
         } else {
             return [
-
                 ...field.keywords.map((keyword) => {
-                    return {value: keyword.synonyms[0].keywordId, label: `${keyword.synonyms[0].value}`};
+                    const synonymText = i18n.getEntityText(keyword, languageId);
+                    return {value: synonymText.keywordId, label: `${synonymText.value}`};
                 })
             ];
         }
