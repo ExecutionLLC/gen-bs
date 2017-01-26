@@ -1,12 +1,13 @@
 import _ from 'lodash';
 
 /*
+All translatable entities must have 'text' property, for example:
 filter: {
-    type: "starndard",
+    ...<some filter's properties>,
     text: [
-        {languageId: 'en', name: 'Filter1', description: 'descr1'},
-        {languageId: 'ru', name: 'фильтр1', description: 'описание1'},
-        {languageId: null, text: 'хуильтр1', description: 'хуисание1'}
+        {languageId: 'en', name: 'Filter name in en', description: 'Filter description in en'},
+        {languageId: 'ru', name: 'Filter name in en', description: 'Filter description in ru'},
+        {languageId: null, text: 'User defined filter name', description: 'User defined filter description'}
     ]
 }
  */
