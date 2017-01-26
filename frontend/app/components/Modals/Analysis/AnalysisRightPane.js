@@ -452,13 +452,14 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalyzeButton() {
-        const {historyItem, modelsList, fields, samplesList} = this.props;
+        const {historyItem, modelsList, fields, samplesList, ui: {languageId}} = this.props;
         const validationRules = [
             new CompoundHeterozygousModelRule({
                 historyItem,
                 modelsList,
                 fields,
-                samplesList
+                samplesList,
+                languageId
             })
         ];
         const validationResults = _.map(validationRules, rule => rule.validate());
