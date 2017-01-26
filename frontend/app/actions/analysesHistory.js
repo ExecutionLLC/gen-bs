@@ -160,7 +160,8 @@ export function updateAnalysesHistoryItemAsync(historyItemId) {
         });
         return new Promise(
             (resolve) => analysesHistoryClient.update(historyItem, (error, response) => resolve({error, response}))
-        ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response)));
+        ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
+        ).then(({error, response}) => response.body);
     };
 }
 

@@ -759,7 +759,8 @@ export default class AnalysisRightPane extends React.Component {
         }
         if (historyItem.id) {
             dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {name})));
-            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
+                .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
         } else {
             dispatch(this.actionEdit({name}));
         }
@@ -769,7 +770,8 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, ui: {languageId}} = this.props;
         if (historyItem.id) {
             dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {description})));
-            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
+                .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
         } else {
             dispatch(this.actionEdit({description}));
         }
