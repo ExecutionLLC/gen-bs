@@ -6,6 +6,7 @@ const {rusViews} = require('./20170124180008_add-ruslanguage-data/views');
 const {rusModels} = require('./20170124180008_add-ruslanguage-data/models');
 const {rusSamples} = require('./20170124180008_add-ruslanguage-data/samples');
 const {rusMetadata} = require('./20170124180008_add-ruslanguage-data/metadata');
+const {rusMetadataValues} = require('./20170124180008_add-ruslanguage-data/metadataValues');
 
 exports.up = function (knex) {
     console.log('=> Add rus table data ...');
@@ -24,12 +25,37 @@ exports.up = function (knex) {
         })
         .then(() => {
             return BluebirdPromise.mapSeries(rusMetadata, metadata => addMetadata(metadata, knex))
+        })
+        .then(() => {
+            return BluebirdPromise.mapSeries(rusMetadataValues, metadataValue => addMetadataValues(metadataValue, knex))
         });
 };
 
 exports.down = function () {
     throw new Error('Not implemented');
 };
+
+function addMetadataValues(metadataValue, knex) {
+    return knex.queryBuilder()
+        .select('metadata_available_value_id')
+        .from('metadata_available_value')
+        .leftJoin(
+            'metadata_available_value_text',
+            'metadata_available_value.id',
+            'metadata_available_value_text.metadata_available_value_id'
+        )
+        .where('metadata_id', metadataValue.metadataId)
+        .andWhere('value', metadataValue.value)
+        .then((results) => _.first(results)['metadata_available_value_id'])
+        .then((id) => {
+            return knex('metadata_available_value_text')
+                .insert({
+                    metadata_available_value_id: id,
+                    language_id: 'ru',
+                    value: metadataValue.ruValue
+                })
+        })
+}
 
 function addMetadata(metadata, knex) {
     return knex('metadata')
