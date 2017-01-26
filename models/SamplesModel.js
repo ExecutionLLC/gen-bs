@@ -151,7 +151,9 @@ class SamplesModel extends SecureModelBase {
     }
 
     _updateSampleMetadata(trx, sampleId, metadata, callback) {
-        const {metadataId, text: {languageId, value}} = metadata;
+        const {metadataId} = metadata;
+        const metadataText = _.find(metadata.text, text => _.isNull(text.languageId));
+        const {languageId, value} = metadataText;
         trx(SampleTableNames.SampleMetadata)
             .where('sample_id', sampleId)
             .andWhere('metadata_id', metadataId)
