@@ -42,16 +42,19 @@ class SampleController extends UserEntityControllerBase {
                 }
             },
             (sampleFile, fileName, callback) => this._parseSampleNames(sampleFile,
-                (error, sampleNames) => {
-                    callback(error, sampleFile, fileName, error ? [] : sampleNames);
-                }),
-            (sampleFile, fileName, sampleList, callback) => {
+                (error, sampleNames) => callback(null, sampleFile, fileName, error, error ? [] : sampleNames)),
+            (sampleFile, fileName, parseError, sampleNames, callback) => {
+                this.services.samples.createHistoryEntry(user, fileName, parseError, (error, fileId) => {
+                    callback(error || parseError, sampleFile, fileName, sampleNames, fileId);
+                });
+            },
+            (sampleFile, fileName, sampleList, operationId, callback) => {
                 const fileInfo = {
                     localFilePath: sampleFile.path,
                     fileSize: sampleFile.size,
                     originalFileName: fileName
                 };
-                this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
+                this.services.samples.upload(session, user, fileInfo, operationId, (error, operationId) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
                     callback(error, operationId, sampleList);
@@ -93,8 +96,8 @@ class SampleController extends UserEntityControllerBase {
                     const uint8data = pako.inflate(content);
                     const decoder = new StringDecoder('utf8');
                     const text = decoder.write(Buffer.from(uint8data));
-                    const sampleNames = SampleController._findSamples(text);
-                    callback(null, sampleNames);
+                    const {error, sampleNames} = SampleController._findSamples(text);
+                    callback(error, sampleNames);
                 } catch (error) {
                     callback(error);
                 }
@@ -116,9 +119,22 @@ class SampleController extends UserEntityControllerBase {
             const columns_line = found[0].substr(1);
             const array = columns_line && columns_line.split(/\t/);
             const VCF_COLUMNS = ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'];
-            return _.difference(array, VCF_COLUMNS);
+            if (!_.every(VCF_COLUMNS, mandatoryColumn => _.includes(array, mandatoryColumn))) {
+                return {
+                    error: 'Unknown columns header format',
+                    samples: []
+                };
+            } else {
+                return {
+                    error: null,
+                    samples: _.difference(array, VCF_COLUMNS)
+                };
+            }
         } else {
-            return [];
+            return {
+                error: 'Corrupted VCF header',
+                samples: []
+            };
         }
     }
 

@@ -228,11 +228,11 @@ export function uploadFile(fileUploadId) {
                 dispatch(changeFileUploadProgress(percentage, fileUploadStatus.AJAX, fp.id));
             },
             (err) => {
-                console.error('Upload FAILED: ', err.responseText);
+                console.error('Upload FAILED: ', err);
                 delete requestAbortFunctions[fp.id];
                 dispatch(fileUploadError(fp.id, {
                     code: null,
-                    message: err.responseText
+                    message: err
                 }));
             }
         );
