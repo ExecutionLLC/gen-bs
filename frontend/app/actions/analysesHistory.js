@@ -174,7 +174,7 @@ export function deleteServerAnalysesHistoryItemAsync(historyItemId) {
         ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
         ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId))
         ).then(() => {
-            const {analysesHistory:{currentHistoryId}} = getState();
+            const {analysesHistory: {currentHistoryId}} = getState();
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
         });
     };
