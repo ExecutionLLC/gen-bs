@@ -66,6 +66,9 @@ class SampleController extends UserEntityControllerBase {
                 });
             },
             (operationId, upload, sampleList, callback) => {
+                if (!sampleList || !sampleList .length) {
+                    sampleList = [null]; // add null item to create single unnamed sample in case when VCF is valid and contains no genotype name
+                }
                 this.services.samples.initMetadataForUploadedSample(user, upload.id, upload.fileName, sampleList, null, (error, sampleIds) => {
                     callback(error, operationId, upload, sampleIds);
                 });
@@ -96,8 +99,8 @@ class SampleController extends UserEntityControllerBase {
                     const uint8data = pako.inflate(content);
                     const decoder = new StringDecoder('utf8');
                     const text = decoder.write(Buffer.from(uint8data));
-                    const {error, sampleNames} = SampleController._findSamples(text);
-                    callback(error, sampleNames);
+                    const {error, samples} = SampleController._findSamples(text);
+                    callback(error, samples);
                 } catch (error) {
                     callback(error);
                 }

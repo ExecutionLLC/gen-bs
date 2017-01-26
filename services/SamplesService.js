@@ -14,7 +14,7 @@ const {
     WS_SAMPLE_UPLOAD_STATE
 } = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
-const {ERROR_CODES} = require('../utils/ErrorUtils');
+const ErrorUtils = require('../utils/ErrorUtils');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
@@ -41,7 +41,7 @@ class SamplesService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
-            (callback) => this.services.applicationServer.uploadSample(user,
+            (fileId, callback) => this.services.applicationServer.uploadSample(user,
                 fileId, localFileInfo.originalFileName, callback),
             (operationId, callback) => this._loadAndVerifyPriority(
                 user,
@@ -103,7 +103,7 @@ class SamplesService extends UserEntityServiceBase {
                 vcfFileId,
                 genotypeName: genotype,
                 uploadState: uploadState || WS_SAMPLE_UPLOAD_STATE.UNCONFIRMED
-            }
+            };
         });
         this.theModel.addSamples(user.id, user.language, samples, callback);
     }
@@ -185,10 +185,7 @@ class SamplesService extends UserEntityServiceBase {
             creator: user.id,
             status: error ? SAMPLE_UPLOAD_STATUS.ERROR : SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
             progress: 0,
-            error: {
-                code: ERROR_CODES.INTERNAL_ERROR,
-                message: error
-            },
+            error: error ? ErrorUtils.createInternalError(error) : null,
         }, (error) => callback(error, id));
     }
 }
