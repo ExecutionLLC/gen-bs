@@ -129,7 +129,7 @@ function addNoGZippedForUpload(files) {
  * @param {function(string)} onError
  */
 function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
-    if (!(file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') ||
+    if (!(file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') &&
         !(file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz')) {
         onError('Unsupported file type: must be Variant Call Format'
             + ' (VCF) 4.1 or higher or VCF compressed with gzip');
