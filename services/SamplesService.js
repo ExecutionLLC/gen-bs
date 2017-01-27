@@ -35,7 +35,7 @@ class SamplesService extends UserEntityServiceBase {
     /**
      * Sends sample to application server for processing.
      * */
-    upload(session, user, localFileInfo, callback) {
+    upload(session, user, localFileInfo, sampleList, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
@@ -46,14 +46,21 @@ class SamplesService extends UserEntityServiceBase {
                 localFileInfo.originalFileName,
                 (error) => callback(error, fileId)
             ),
-            (fileId, callback) => this.services.applicationServer.uploadSample(user,
-                fileId, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this._loadAndVerifyPriority(
-                user,
-                (error, priority) => callback(error, operationId, priority)
+            (fileId, callback) => this.initMetadataForUploadedSample(
+                user, fileId, localFileInfo.originalFileName, sampleList, null, (error, sampleIds) => {
+                    callback(error, fileId, sampleIds);
+                }
             ),
-            (operationId, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
-                operationId, priority, (error) => callback(error, operationId))
+            (fileId, sampleIds, callback) => this.services.applicationServer.uploadSample(user,
+                fileId, localFileInfo.originalFileName, (error, operationId) => {
+                    callback(error, operationId, sampleIds);
+                }),
+            (operationId, sampleIds, callback) => this._loadAndVerifyPriority(
+                user,
+                (error, priority) => callback(error, operationId, sampleIds, priority)
+            ),
+            (operationId, sampleIds, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
+                operationId, priority, (error) => callback(error, operationId, sampleIds))
         ], callback);
     }
 
