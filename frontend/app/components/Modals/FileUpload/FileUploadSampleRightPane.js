@@ -32,13 +32,6 @@ function cancelDOMEvent(e) {
 // and must re-render only if props are changed to prevent clearing the name and description.
 class SampleHeader extends React.Component {
 
-    shouldComponentUpdate(nextProps) {
-        return (
-            this.props.editingSample !== nextProps.editingSample ||
-            this.props.fileUpload !== nextProps.fileUpload ||
-            this.props.auth !== nextProps.auth
-        );
-    }
 
     render() {
         const {editingSample, fileUpload: {filesProcesses}} = this.props;
