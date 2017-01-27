@@ -36,19 +36,29 @@ class SamplesService extends UserEntityServiceBase {
     /**
      * Sends sample to application server for processing.
      * */
-    upload(session, user, localFileInfo, fileId, callback) {
+    upload(session, user, localFileInfo, fileId, sampleList, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
-            (fileId, callback) => this.services.applicationServer.uploadSample(user,
-                fileId, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this._loadAndVerifyPriority(
+            (fileId, callback) => {
+                if (!sampleList || !sampleList .length) {
+                    sampleList = [null]; // add null item to create single unnamed sample in case when VCF is valid and contains no genotype name
+                }
+                this.initMetadataForUploadedSample(user, fileId, localFileInfo.originalFileName, sampleList, null, (error, sampleIds) => {
+                    callback(error, fileId, sampleIds);
+                });
+            },
+            (fileId, sampleIds, callback) => this.services.applicationServer.uploadSample(user,
+                fileId, localFileInfo.originalFileName, (error, operationId) => {
+                    callback(error, operationId, sampleIds);
+                }),
+            (operationId, sampleIds, callback) => this._loadAndVerifyPriority(
                 user,
-                (error, priority) => callback(error, operationId, priority)
+                (error, priority) => callback(error, operationId, sampleIds, priority)
             ),
-            (operationId, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
-                operationId, priority, (error) => callback(error, operationId))
+            (operationId, sampleIds, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
+                operationId, priority, (error) => callback(error, operationId, sampleIds))
         ], callback);
     }
 

@@ -128,6 +128,11 @@ class SampleHeader extends React.Component {
             );
         }
     }
+
+    onSampleItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(samplesListServerRemoveSample(id));
+    }
 }
 
 export default class FileUploadSampleRightPane extends React.Component {
@@ -428,10 +433,5 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {dispatch, closeModal} = this.props;
         dispatch(sampleSaveCurrent(sampleId));
         closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
-    }
-
-    onSampleItemDelete(id) {
-        const {dispatch} = this.props;
-        dispatch(samplesListServerRemoveSample(id));
     }
 }
