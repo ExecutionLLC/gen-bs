@@ -34,14 +34,14 @@ class SampleHeader extends React.Component {
 
     shouldComponentUpdate(nextProps) {
         return (
-            this.props.samplesList.editingSample !== nextProps.samplesList.editingSample ||
+            this.props.editingSample !== nextProps.editingSample ||
             this.props.fileUpload !== nextProps.fileUpload ||
             this.props.auth !== nextProps.auth
         );
     }
 
     render() {
-        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
+        const {editingSample, fileUpload: {filesProcesses}} = this.props;
         const isProcessing = _.some(
             filesProcesses,
             (fileProcess) => fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY
@@ -58,7 +58,7 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, samplesList: {editingSample: {description, id, type}}} = this.props;
+        const {auth: {isDemo}, editingSample: {description, id, type}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -89,7 +89,7 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, samplesList: {editingSample: {name, id, type}}} = this.props;
+        const {auth: {isDemo}, editingSample: {name, id, type}} = this.props;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -108,7 +108,7 @@ class SampleHeader extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList: {editingSample: {name, description}}} = this.props;
+        const {dispatch, editingSample: {name, description}} = this.props;
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
         dispatch(updateSampleText(sampleId, newName, newDescription));
@@ -120,7 +120,7 @@ class SampleHeader extends React.Component {
     }
 
     renderDeleteSampleButton() {
-        const {samplesList: {editingSample}} = this.props;
+        const {editingSample} = this.props;
         if (entityTypeIsEditable(editingSample.type)) {
             return (
                 <button
@@ -173,7 +173,7 @@ export default class FileUploadSampleRightPane extends React.Component {
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 <div className='split-top'>
                     {editingSample && isSelectedSampleValid &&
-                    <SampleHeader samplesList={samplesList}
+                    <SampleHeader editingSample={editingSample}
                                   auth={auth}
                                   fileUpload={fileUpload}
                                   dispatch={dispatch}
