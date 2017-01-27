@@ -33,7 +33,11 @@ function cancelDOMEvent(e) {
 class SampleHeader extends React.Component {
 
     shouldComponentUpdate(nextProps) {
-        return this.props.samplesList.editingSample !== nextProps.samplesList.editingSample;
+        return (
+            this.props.samplesList.editingSample !== nextProps.samplesList.editingSample ||
+            this.props.fileUpload !== nextProps.fileUpload ||
+            this.props.auth !== nextProps.auth
+        );
     }
 
     render() {
