@@ -54,7 +54,7 @@ class UserModel extends RemovableModelBase {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
-                        defaultLanguageId: user.defaultLanguageId || user.language,
+                        defaultLanguageId: user.defaultLanguageId || this.models.config.defaultLanguId,
                         isDeleted: false,
                         gender: user.gender,
                         phone: user.phone,

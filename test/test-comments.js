@@ -55,7 +55,12 @@ describe('Comments', () => {
             pos: 1234,
             alt: 'cdsa',
             searchKey: 123456,
-            comment: 'This is test comment'
+            text: [
+                {
+                    languageId: null,
+                    comment: 'This is test comment'
+                }
+            ]
         };
         commentsClient.add(sessionId, languId, commentToAdd, (error, response) => {
             const addedComment = ClientBase.readBodyWithCheck(error, response);
