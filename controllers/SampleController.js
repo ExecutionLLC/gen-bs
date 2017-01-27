@@ -5,9 +5,7 @@ const fs = require('fs');
 const async = require('async');
 
 const UserEntityControllerBase = require('./base/UserEntityControllerBase');
-const _ = require('lodash');
-const pako = require('pako');
-const StringDecoder = require('string_decoder').StringDecoder;
+const VCFParseUtils = require('../utils/VCFParseUtils');
 
 class SampleController extends UserEntityControllerBase {
     constructor(services) {
@@ -41,7 +39,7 @@ class SampleController extends UserEntityControllerBase {
                     callback(null, sampleFile, fileName);
                 }
             },
-            (sampleFile, fileName, callback) => this._parseSampleNames(sampleFile,
+            (sampleFile, fileName, callback) => VCFParseUtils.parseSampleNames(sampleFile,
                 (error, sampleNames) => callback(null, sampleFile, fileName, error, error ? [] : sampleNames)),
             (sampleFile, fileName, parseError, sampleNames, callback) => {
                 this.services.samples.createHistoryEntry(user, fileName, parseError, (error, fileId) => {
@@ -90,55 +88,12 @@ class SampleController extends UserEntityControllerBase {
         });
     }
 
-    _parseSampleNames(sampleFile, callback) {
-        fs.readFile(sampleFile.path, (error, content) => {
-            if (error) {
-                callback(error);
-            } else {
-                try {
-                    const uint8data = pako.inflate(content);
-                    const decoder = new StringDecoder('utf8');
-                    const text = decoder.write(Buffer.from(uint8data));
-                    const {error, samples} = SampleController._findSamples(text);
-                    callback(error, samples);
-                } catch (error) {
-                    callback(error);
-                }
-            }
-        });
-    }
-
     _removeSampleFile(localFilePath) {
         fs.unlink(localFilePath, (error) => {
             if (error) {
                 this.services.logger.error('Error removing uploaded sample file: ' + error);
             }
         });
-    }
-
-    static _findSamples(text) {
-        const found = text.match(/^#[^#].*/gm);
-        if (found && found.length) {
-            const columns_line = found[0].substr(1);
-            const array = columns_line && columns_line.split(/\t/);
-            const VCF_COLUMNS = ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'];
-            if (!_.every(VCF_COLUMNS, mandatoryColumn => _.includes(array, mandatoryColumn))) {
-                return {
-                    error: 'Unknown columns header format',
-                    samples: []
-                };
-            } else {
-                return {
-                    error: null,
-                    samples: _.difference(array, VCF_COLUMNS)
-                };
-            }
-        } else {
-            return {
-                error: 'Corrupted VCF header',
-                samples: []
-            };
-        }
     }
 
     createRouter() {
