@@ -51,19 +51,14 @@ class SampleController extends UserEntityControllerBase {
                     fileSize: sampleFile.size,
                     originalFileName: fileName
                 };
-                this.services.samples.upload(session, user, fileInfo, (error, operationId) => {
+                this.services.samples.upload(session, user, fileInfo, sampleList, (error, operationId, sampleIds) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
-                    callback(error, operationId, sampleList);
+                    callback(error, operationId, sampleIds);
                 });
             },
-            (operationId, sampleList, callback) => {
+            (operationId, sampleIds, callback) => {
                 this.services.sampleUploadHistory.find(user, operationId, (error, upload) => {
-                    callback(error, operationId, upload, sampleList);
-                });
-            },
-            (operationId, upload, sampleList, callback) => {
-                this.services.samples.initMetadataForUploadedSample(user, upload.id, upload.fileName, sampleList, null, (error, sampleIds) => {
                     callback(error, operationId, upload, sampleIds);
                 });
             },
