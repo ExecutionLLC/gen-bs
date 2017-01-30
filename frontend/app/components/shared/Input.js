@@ -7,14 +7,18 @@ export default class Input extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: props.value
+            value: props.value,
+            changed: false
         };
     }
 
     componentWillReceiveProps(newProps) {
-        this.state = {
-            value: newProps.value
-        };
+        if (!this.state.changed) {
+            this.state = {
+                value: newProps.value,
+                changed: false
+            };
+        }
     }
 
     render() {
@@ -32,6 +36,7 @@ export default class Input extends Component {
 
     onInputBlur(evt) {
         const {onChange} = this.props;
+        this.setState({changed: false});
         onChange(evt.target.value);
     }
 
@@ -51,7 +56,7 @@ export default class Input extends Component {
         if (validationRegex && !new RegExp(validationRegex).test(value)){
             return;
         }
-        this.setState({value});
+        this.setState({value, changed: true});
 
         if (onChanging) {
             onChanging(value);

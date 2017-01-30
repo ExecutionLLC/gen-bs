@@ -171,11 +171,10 @@ function receiveClosedByUserMessage() {
 }
 
 function receiveErrorMessage(wsData) {
-    const {result: {metadata: samples}} = wsData;
     return (dispatch) => {
-        if (samples) {
+        if (wsData.result && wsData.result.metadata && wsData.result.metadata.samples) {
             dispatch(samplesListAddOrUpdateSamples(
-                _.map(samples, (sample) => {
+                _.map(wsData.result.metadata.samples, (sample) => {
                     return {
                         ...sample,
                         error: wsData.error.message

@@ -32,7 +32,7 @@ class App extends Component {
     componentWillMount() {
         // preload the font, wait for 30 seconds.
         const observer = new FontFaceObserver('Roboto-Medium');
-        observer.load(null, 30);
+        observer.load(null, 30000);
     }
 
     componentDidMount() {

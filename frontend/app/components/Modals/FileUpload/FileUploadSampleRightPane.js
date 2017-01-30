@@ -33,12 +33,9 @@ function cancelDOMEvent(e) {
 // and must re-render only if props are changed to prevent clearing the name and description.
 class SampleHeader extends React.Component {
 
-    shouldComponentUpdate(nextProps) {
-        return this.props.samplesList.editingSample !== nextProps.samplesList.editingSample;
-    }
 
     render() {
-        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
+        const {editingSample, fileUpload: {filesProcesses}} = this.props;
         const isProcessing = _.some(
             filesProcesses,
             (fileProcess) => fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY
@@ -55,7 +52,7 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, samplesList: {editingSample}, languageId} = this.props;
+        const {auth: {isDemo}, editingSample, languageId} = this.props;
         const {id, type} = editingSample;
         const description = i18n.getEntityText(editingSample, languageId).description;
         return (
@@ -88,7 +85,7 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, samplesList: {editingSample}, languageId} = this.props;
+        const {auth: {isDemo}, editingSample, languageId} = this.props;
         const {id, type} = editingSample;
         const name = i18n.getEntityText(editingSample, languageId).name;
         return (
@@ -109,7 +106,7 @@ class SampleHeader extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList: {editingSample}, languageId} = this.props;
+        const {dispatch, editingSample, languageId} = this.props;
         const {name, description} = i18n.getEntityText(editingSample, languageId);
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
@@ -122,7 +119,7 @@ class SampleHeader extends React.Component {
     }
 
     renderDeleteSampleButton() {
-        const {samplesList: {editingSample}} = this.props;
+        const {editingSample} = this.props;
         if (entityTypeIsEditable(editingSample.type)) {
             return (
                 <button
@@ -133,6 +130,11 @@ class SampleHeader extends React.Component {
                 </button>
             );
         }
+    }
+
+    onSampleItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(samplesListServerRemoveSample(id));
     }
 }
 
@@ -170,7 +172,7 @@ export default class FileUploadSampleRightPane extends React.Component {
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 <div className='split-top'>
                     {editingSample && isSelectedSampleValid &&
-                    <SampleHeader samplesList={samplesList}
+                    <SampleHeader editingSample={editingSample}
                                   auth={auth}
                                   fileUpload={fileUpload}
                                   languageId={languageId}
@@ -437,10 +439,5 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {dispatch, closeModal} = this.props;
         dispatch(sampleSaveCurrent(sampleId));
         closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
-    }
-
-    onSampleItemDelete(id) {
-        const {dispatch} = this.props;
-        dispatch(samplesListServerRemoveSample(id));
     }
 }
