@@ -732,13 +732,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getSampleOptions(value, selectedSamplesHash) {
-        const samples = this.props.samplesList.hashedArray.array;
+        const {ui: {languageId}, samplesList: {hashedArray: {array: samples}}} = this.props;
         return _.chain(samples)
             .filter((sample) => sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED)
             .map((sampleItem) => {
                 const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
                 const {type: sampleType, id: sampleId} = sampleItem;
-                const sampleName = i18n.getEntityText(sampleItem).name;
+                const sampleName = i18n.getEntityText(sampleItem, languageId).name;
                 const label = getItemLabelByNameAndType(sampleName, sampleType);
                 return {value: sampleId, label, disabled: isDisabled};
             })
