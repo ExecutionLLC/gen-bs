@@ -7,11 +7,11 @@ import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
 import Auth from './NavbarMain/Auth';
+import LanguageDropdown from './NavbarMain/LanguageDropdown';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
 import {fileUploadStatus, SAMPLE_UPLOAD_STATE} from '../../actions/fileUpload';
 import {entityType} from '../../utils/entityTypes';
-import {setCurrentLanguageId} from '../../actions/ui';
 
 
 class NavbarMain extends Component {
@@ -82,37 +82,13 @@ class NavbarMain extends Component {
                                     selectedRowIndices={selectedRowIndices}
                     />
                     <SavedFiles dispatch={this.props.dispatch}/>
+                    <LanguageDropdown dispatch={this.props.dispatch} languageId={this.props.ui.languageId}/>
                     <Auth {...this.props} />
-                    {this.renderLanguageButton('English', 'en')}
-                    {this.renderLanguageButton('Русский', 'ru')}
-                    {this.renderLanguageButton('汉语', 'zh')}
                 </div>
             </nav>
         );
     }
 
-    renderLanguageButton(languageName, languageId) {
-        const {ui: {languageId: currentLanguageId}} = this.props;
-        const isCurrentLanguage = currentLanguageId === languageId;
-        return (
-            <div>
-                <button
-                    onClick={() => this.onChangeLanguage(languageId)}
-                    style={{whiteSpace: 'nowrap'}}
-                >
-                    {isCurrentLanguage ?
-                        <u>{languageName}</u> :
-                        languageName
-                    }
-                </button>
-            </div>
-        );
-    }
-
-    onChangeLanguage(languageId) {
-        const {dispatch} = this.props;
-        dispatch(setCurrentLanguageId(languageId));
-    }
 }
 
 function mapStateToProps(state) {
