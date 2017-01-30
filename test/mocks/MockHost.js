@@ -95,8 +95,10 @@ class MockHost {
     }
 
     stop(callback) {
-        this.applicationServer.stop();
-        this.server.stop(callback);
+        async.waterfall([
+            (callback) => this.applicationServer.stop((error) => callback(error)),
+            (callback) => this.server.stop((error) => callback(error))
+        ], callback);
     }
 }
 

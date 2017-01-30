@@ -20,7 +20,7 @@ export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
-export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
+export const SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES = 'SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES';
 export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 export const SAMPLES_LIST_UPDATE_SAMPLES_FIELDS = 'SAMPLES_LIST_UPDATE_SAMPLES_FIELDS';
@@ -38,9 +38,9 @@ const DELETE_SAMPLE_ERROR_MESSAGE = 'We are really sorry, but there is an error 
  * Action Creators
  */
 
-export function samplesListAddSamples(samples) {
+export function samplesListAddOrUpdateSamples(samples) {
     return {
-        type: SAMPLES_LIST_ADD_SAMPLES,
+        type: SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES,
         samples
     };
 }

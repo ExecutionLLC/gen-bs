@@ -100,7 +100,6 @@ describe('Filters', () => {
                         const updatedFilter = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedFilter);
                         assert.notEqual(updatedFilter.id, filterToUpdate.id);
-                        assert.equal(updatedFilter.name, filterToUpdate.name);
                         assert.equal(updatedFilter.type, ENTITY_TYPES.USER, 'Filter type change should not be allowed by update.');
                         done();
                     });

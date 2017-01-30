@@ -94,14 +94,12 @@ describe('Views', () => {
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
-                    viewToUpdate.name = 'Test View ' + Uuid.v4();
                     viewToUpdate.type = ENTITY_TYPES.ADVANCED;
 
                     viewsClient.update(sessionId, viewToUpdate, (error, response) => {
                         const updatedView = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedView);
                         assert.notEqual(updatedView.id, viewToUpdate.id);
-                        assert.equal(updatedView.name, viewToUpdate.name);
                         assert.equal(updatedView.type, ENTITY_TYPES.USER, 'View type change should not be allowed by update.');
                         done();
                     });

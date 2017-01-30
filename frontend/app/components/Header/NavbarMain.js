@@ -9,7 +9,7 @@ import SavedFiles from './NavbarMain/SavedFiles';
 import Auth from './NavbarMain/Auth';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
-import {fileUploadStatus} from '../../actions/fileUpload';
+import {fileUploadStatus, SAMPLE_UPLOAD_STATE} from '../../actions/fileUpload';
 import {entityType} from '../../utils/entityTypes';
 import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
@@ -49,8 +49,8 @@ class NavbarMain extends Component {
                 if (sample &&
                     upload &&
                     sample.type !== entityType.HISTORY &&
-                    _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus)
-                ) {
+                    _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus) &&
+                    sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
                     return count + 1;
                 } else {
                     return count;
