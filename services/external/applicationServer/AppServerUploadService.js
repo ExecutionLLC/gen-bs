@@ -276,7 +276,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                                 null,
                                 callback
                             )
-                        ],callback);
+                        ], callback);
                     }
                 }
             ], callback);
