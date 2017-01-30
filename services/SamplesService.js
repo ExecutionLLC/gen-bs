@@ -42,7 +42,7 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
             (fileId, callback) => {
-                if (!sampleList || !sampleList .length) {
+                if (!sampleList || !sampleList.length) {
                     sampleList = [null]; // add null item to create single unnamed sample in case when VCF is valid and contains no genotype name
                 }
                 this.initMetadataForUploadedSample(user, fileId, localFileInfo.originalFileName, sampleList, null, (error, sampleIds) => {
