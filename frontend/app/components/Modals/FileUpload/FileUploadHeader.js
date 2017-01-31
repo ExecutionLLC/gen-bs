@@ -5,7 +5,7 @@ import {Modal} from 'react-bootstrap';
 export default class FileUploadHeader extends React.Component {
 
     render() {
-        const {showUploadHide, onUploadHide} = this.props;
+        const {showUploadHide, onUploadHide, p} = this.props;
 
         return (
 
@@ -21,7 +21,7 @@ export default class FileUploadHeader extends React.Component {
                         <i className='md-i'>keyboard_backspace</i>
                     </button>
                     }
-                    <span className='modal-title-text'>Samples</span>
+                    <span className='modal-title-text'>{p.t('samples.title')}</span>
                 </Modal.Title>
             </Modal.Header>
 

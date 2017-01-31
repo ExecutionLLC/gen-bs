@@ -145,9 +145,10 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     _renderSampleError(sample, label, isActive) {
+        const {p} = this.props;
         const message = sample.error || (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
-                ? 'The sample is not found in VCF'
-                : 'Unknown error');
+                ? p.t('samples.error.sampleNotFound')
+                : p.t('samples.error.unknown'));
         return this.renderListItem(
             sample.id,
             isActive,
@@ -185,6 +186,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
+        const {p} = this.props;
         return (
             <li key={id}
                 className={classNames({
@@ -206,7 +208,7 @@ export default class FileUploadSampleList extends React.Component {
                         {description}
                     </span>
                     {uploadedTimeOrNull && <span className='small link-desc'>
-                       Uploaded: {formatDate(uploadedTimeOrNull)}
+                        {p.t('samples.uploaded')}: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
                 {onDelete && !onSelectForAnalysis ?
@@ -227,7 +229,7 @@ export default class FileUploadSampleList extends React.Component {
 
     renderDropdown(id, onSelectForAnalysis, onDelete) {
         const isOpen = this.state.showPopup === id;
-        const {sampleList:{onSaveAction}} = this.props;
+        const {sampleList:{onSaveAction}, p} = this.props;
         const isRenderDropDown = (onSaveAction && onSelectForAnalysis) || onDelete;
         const className = classNames({'dropdown': true, 'right-menu': true, 'open': isOpen});
         return (
@@ -246,13 +248,13 @@ export default class FileUploadSampleList extends React.Component {
                             href='#'
                             className='selectForAnalysisBtn'
                             onClick={() => onSelectForAnalysis(id)}
-                        > Select for analysis</a>
+                        >{p.t('samples.selectForAnalysis')}</a>
                     </li>}
                     {onDelete && <li>
                         <a
                             href='#'
                             onClick={() => onDelete(id)}
-                        >Delete</a>
+                        >{p.t('samples.deleteSample')}</a>
                     </li>}
                 </ul>
             </div>
@@ -267,26 +269,27 @@ export default class FileUploadSampleList extends React.Component {
         }
     }
 
-    static renderProgressBar(uploadItem) {
+    renderProgressBar(uploadItem) {
+        const {p} = this.props;
         const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
             [fileUploadStatus.AJAX]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
                 }),
-                renderMessage: 'Loading..'
+                renderMessage: p.t('samples.loading')
             },
             [fileUploadStatus.TASK_RUNNING]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                renderMessage: <span className='text-primary'>Saving...</span>
+                renderMessage: <span className='text-primary'>{p.t('samples.saving')}</span>
             },
             [fileUploadStatus.IN_PROGRESS]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                renderMessage: <span className='text-primary'>Saving...</span>
+                renderMessage: <span className='text-primary'>{p.t('samples.saving')}</span>
             }
         };
         const currentStage = STAGES[progressStatus] || STAGES[fileUploadStatus.AJAX];
@@ -316,7 +319,7 @@ export default class FileUploadSampleList extends React.Component {
             progressStatus === fileUploadStatus.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
     }
 
-    static renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
+    renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
         return (
             <li key={key}
                 className={classNames({
@@ -330,7 +333,7 @@ export default class FileUploadSampleList extends React.Component {
                         <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
-                    {this.renderRefreshIcon(upload)}
+                    {FileUploadSampleList.renderRefreshIcon(upload)}
                     <span className='link-label'>
                         {name}
                     </span>
@@ -369,7 +372,7 @@ export default class FileUploadSampleList extends React.Component {
         const isActive = upload.id === currentUploadId;
         const name = upload.file.name;
 
-        return FileUploadSampleList.renderProgressUploadListItem(
+        return this.renderProgressUploadListItem(
             key,
             name,
             upload,
@@ -385,7 +388,7 @@ export default class FileUploadSampleList extends React.Component {
         const isActive = upload.id === currentUploadId;
         const name = upload.file.name;
 
-        return FileUploadSampleList.renderProgressUploadListItem(
+        return this.renderProgressUploadListItem(
             key,
             name,
             upload,
@@ -400,7 +403,7 @@ export default class FileUploadSampleList extends React.Component {
         const key = sample.id;
         const isActive = sample.id === currentSampleId;
         const name = this._createSampleLabel(sample);
-        return FileUploadSampleList.renderProgressUploadListItem(
+        return this.renderProgressUploadListItem(
             key,
             name,
             upload,
@@ -411,6 +414,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderNewListItem(isActive) {
+        const {p} = this.props;
         return (
             <li className={classNames({
                 'active': isActive
@@ -422,10 +426,10 @@ export default class FileUploadSampleList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        New sample
+                        {p.t('samples.newSample')}
                     </span>
                     <span className='link-desc'>
-                        Upload vcf file
+                        {p.t('samples.newSampleDescription')}
                     </span>
                 </a>
             </li>

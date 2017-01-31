@@ -1,5 +1,49 @@
 export default {
-  common: {
-    agx: 'АГ-икс'
-  }
-}
+    common: {
+        agx: 'АГ-икс'
+    },
+    samples: {
+        title: 'Сэмплы',
+
+        // left pane
+        newSample: 'Новый сэмпл',
+        newSampleDescription: 'Загрузите VCF-файл',
+        uploaded: 'Загружено',
+        selectForAnalysis: 'Выбрать для анализа',
+        deleteSample: 'Удалить',
+        error: {
+            sampleNotFound: 'Сэмпл не найден в VCF-файле',
+            unknown: 'Неизвестная ошибка'
+        },
+        loading: 'Загрузка...',
+        saving: 'Сохранение...',
+
+        // right pane
+        loginOrRegister: 'Пожалуйста, войдите или зарегистрируйтесь, чтобы загружать новые сэмплы',
+        editingSample: {
+            descriptionPlaceholder: 'Описание сэмпла (опционально)',
+            deleteSample: 'Удалить сэмпл',
+            namePlaceholder: 'Имя сэмпла (обязательно для заполнения)',
+            uploaded: 'Загружено',
+            wait: 'Ожидайте. Загрузка',
+            edit: 'Редактировать',
+            registerToAnalyze: 'Пожалуйста, зарегистрируйтесь, чтобы выполнить анализ.',
+            selectForAnalysis: 'Выбрать для анализа',
+            save: 'Сохранить',
+            cancel: 'Отмена'
+        },
+        dropAreaText: {
+            dropVcfFileHereOr: 'Перетащите VCF-файлы сюда или ',
+            clickHere: 'кликните',
+            toSelect: ' чтобы выбрать'
+        },
+        rightPaneError: {
+            title: 'Ошибка! ',
+            description: '%{label} не загружен или поврежден'
+        },
+        rightPaneWait: {
+            title: 'Ожидайте. ',
+            description: 'Файл загружается'
+        }
+    }
+};
