@@ -4,14 +4,14 @@ const BluebirdPromise = require('bluebird');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
 exports.up = function (knex) {
-    return editFilterLanguageNotNullConstrains(knex)
-        .then(() => editModelLanguageNotNullConstrains(knex))
+    return editFilterLanguageNotNullConstraints(knex)
+        .then(() => editModelLanguageNotNullConstraints(knex))
         .then(() => editViewTextTable(knex))
         .then(() => editAnalysisTable(knex))
         .then(() => updateUserFilters(knex))
         .then(() => updateUserModels(knex))
         .then(() => updateUserViews(knex))
-        .then(() => updateCommentTexs(knex))
+        .then(() => updateCommentTexts(knex))
         .then(() => editFieldTextTable(knex))
         .then(() => editSampleMetadataTable(knex))
         .then(() => editSampleTextTable(knex))
@@ -39,10 +39,10 @@ function updateSampleTextData(knex) {
 }
 
 function editSampleTextTable(knex) {
-    console.log('=> Update sample text table constrains...');
+    console.log('=> Update sample text table constraints...');
     return knex.schema
         .table('sample_text', table => {
-            table.dropPrimary('sample_text_pkey')
+            table.dropPrimary('sample_text_pkey');
         })
         .then(() => knex.raw('ALTER TABLE sample_text ALTER COLUMN language_id DROP NOT NULL'))
         .then(() => knex.schema
@@ -53,7 +53,7 @@ function editSampleTextTable(knex) {
 }
 
 function editSampleMetadataTable(knex) {
-    console.log('=> Update sample metadata table ...');
+    console.log('=> Update sample metadata table...');
     return knex.schema
         .table('sample_metadata', table => {
             table.string('language_id', 2)
@@ -69,15 +69,15 @@ function editSampleMetadataTable(knex) {
                 .update({
                     'language_id': 'en'
                 })
-                .whereIn('sample_id', sampleIds)
+                .whereIn('sample_id', sampleIds);
         });
 }
 
 function editFieldTextTable(knex) {
-    console.log('=> Update fields table constrains...');
+    console.log('=> Update fields table constraints...');
     return knex.schema
         .table('field_text', table => {
-            table.dropPrimary('field_text_pkey')
+            table.dropPrimary('field_text_pkey');
         })
         .then(() => knex.raw('ALTER TABLE field_text ALTER COLUMN language_id DROP NOT NULL'))
         .then(() => knex.schema
@@ -87,7 +87,7 @@ function editFieldTextTable(knex) {
         );
 }
 
-function updateCommentTexs(knex) {
+function updateCommentTexts(knex) {
     console.log('=> Update comments...');
     return knex.raw('ALTER TABLE comment_text ALTER COLUMN language_id DROP NOT NULL')
         .then(() => knex('comment_text')
@@ -146,11 +146,11 @@ function updateUserViews(knex) {
         });
 }
 
-function editFilterLanguageNotNullConstrains(knex) {
-    console.log('=> Update filter language constrains...');
+function editFilterLanguageNotNullConstraints(knex) {
+    console.log('=> Update filter language constraints...');
     return knex.schema
         .table('filter_text', table => {
-            table.dropPrimary('filter_text_pkey')
+            table.dropPrimary('filter_text_pkey');
         })
         .then(() => knex.raw('ALTER TABLE filter_text ALTER COLUMN language_id DROP NOT NULL'))
         .then(() => knex.schema
@@ -160,11 +160,11 @@ function editFilterLanguageNotNullConstrains(knex) {
         );
 }
 
-function editModelLanguageNotNullConstrains(knex) {
-    console.log('=> Update model language constrains...');
+function editModelLanguageNotNullConstraints(knex) {
+    console.log('=> Update model language constraints...');
     return knex.schema
         .table('model_text', table => {
-            table.dropPrimary('model_text_pkey')
+            table.dropPrimary('model_text_pkey');
         })
         .then(() => knex.raw('ALTER TABLE model_text ALTER COLUMN language_id DROP NOT NULL'))
         .then(() => knex.schema
@@ -175,10 +175,10 @@ function editModelLanguageNotNullConstrains(knex) {
 }
 
 function editAnalysisTable(knex) {
-    console.log('=> Update analysis language constrains...');
+    console.log('=> Update analysis language constraints...');
     return knex.schema
         .table('analysis_text', table => {
-            table.dropPrimary('analysis_text_pkey')
+            table.dropPrimary('analysis_text_pkey');
         })
         .then(() => knex.raw('ALTER TABLE analysis_text ALTER COLUMN language_id DROP NOT NULL'))
         .then(() => knex.schema
