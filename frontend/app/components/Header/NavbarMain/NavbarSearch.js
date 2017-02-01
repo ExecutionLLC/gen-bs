@@ -21,6 +21,7 @@ class NavbarSearch extends Component {
     }
 
     render() {
+        const {p} = this.props;
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
             <div className='navbar-search'>
@@ -34,7 +35,7 @@ class NavbarSearch extends Component {
                      type='text'
                      data-localize='results.search'
                      className='form-control placeholder-inverse'
-                     placeholder='Search for mutations of current sample analysis'
+                     placeholder={p.t('navBar.searchPlaceholder')}
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
@@ -93,7 +94,8 @@ NavbarSearch.propTypes = {
     onGlobalSearchRequested: React.PropTypes.func.isRequired,
     // callback(globalSearchString)
     onGlobalSearchStringChanged: React.PropTypes.func.isRequired,
-    search: React.PropTypes.string.isRequired
+    search: React.PropTypes.string.isRequired,
+    p: React.PropTypes.shape({t: React.PropTypes.func.isRequired}).isRequired
 };
 
 export default connect(mapStateToProps)(NavbarSearch);

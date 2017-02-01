@@ -11,6 +11,7 @@ class LoginForm extends Component {
     }
 
     render() {
+        const {p} = this.props;
         const {login, password} = this.state;
         const isDisabled = !(login && password);
         return (
@@ -38,7 +39,8 @@ class LoginForm extends Component {
                 <button className='btn btn-primary  btn-uppercase login-button'
                         type='submit'
                         disabled={isDisabled}
-                >Login
+                >
+                    {p.t('navBar.auth.login')}
                 </button>
             </form>
         );

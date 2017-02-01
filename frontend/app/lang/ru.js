@@ -50,6 +50,31 @@ export default {
         caption: 'Гостевой режим',
         loginLinkPrefix: '',
         loginLinkLabel: 'Залогиньтесь',
-        loginLinkSuffix: ', пожалуйста',
+        loginLinkSuffix: ', пожалуйста'
+    },
+    navBar: {
+        auth: {
+            login: 'Войти',
+            logout: 'Выйти',
+            authorizedUserTitle: '',
+            demoUserTitle: 'Загеристрируйтесь или войдите для получения дополнительных возможностей',
+            googleAccountTitle: 'Войдите через Гугл',
+            dropdownHeader: 'Войти через',
+            googleAccountCaption: 'Гугл',
+            loginPasswordCaption: 'или с паролем'
+        },
+        exports: {
+            formats: {
+                sql: 'SQL',
+                csv: 'CSV',
+                txt: 'Текст'
+            },
+            popupHeader: 'Экспорт',
+            popupCaption: 'Выберите формат экспортируемого файла'
+        },
+        searchPlaceholder: 'Поиск мутаций в текущем анализе',
+        samplesButton: 'Сэмплы',
+        analysesButton: 'Анализы',
+        savedFilesButton: 'Сохранённые файлы'
     }
 };

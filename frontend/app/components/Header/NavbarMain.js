@@ -71,19 +71,26 @@ class NavbarMain extends Component {
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
                         badge={newSamplesCount || null}
+                        p={this.props.p}
                     />
                     <AnalysisButton
                         openAnalysisModal={() => this.props.openAnalysisModal()}
+                        p={this.props.p}
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
                         search={search}
+                        p={this.props.p}
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}
+                                    p={this.props.p}
                     />
-                    <SavedFiles dispatch={this.props.dispatch}/>
+                    <SavedFiles
+                        dispatch={this.props.dispatch}
+                        p={this.props.p}
+                    />
                     <Auth {...this.props} />
                 </div>
             </nav>

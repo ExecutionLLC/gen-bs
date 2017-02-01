@@ -51,5 +51,30 @@ export default {
         loginLinkPrefix: 'Please ',
         loginLinkLabel: 'login',
         loginLinkSuffix: ''
+    },
+    navBar: {
+        auth: {
+            login: 'Login',
+            logout: 'Logout',
+            authorizedUserTitle: '',
+            demoUserTitle: 'Register or login for access additional features',
+            googleAccountTitle: 'Login using Google Account',
+            dropdownHeader: 'Login with',
+            googleAccountCaption: 'Google Account',
+            loginPasswordCaption: 'OR login'
+        },
+        exports: {
+            formats: {
+                sql: 'SQL',
+                csv: 'CSV',
+                txt: 'Text'
+            },
+            popupHeader: 'Export',
+            popupCaption: 'Select export format'
+        },
+        searchPlaceholder: 'Search for mutations of current sample analysis',
+        samplesButton: 'Samples',
+        analysesButton: 'Analyses',
+        savedFilesButton: 'Saved Files'
     }
 };
