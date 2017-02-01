@@ -115,8 +115,9 @@ class Auth extends Component {
                         <li className='dropdown-header'>{p.t('navBar.auth.loginPasswordCaption')}</li>
                         <li>
                             <LoginForm
-                                dispatch={this.props.dispatch}
+                                dispatch={dispatch}
                                 closeLoginForm={() => this.handleClickOutside()}
+                                p={p}
                             />
                         </li>
                     </ul>
