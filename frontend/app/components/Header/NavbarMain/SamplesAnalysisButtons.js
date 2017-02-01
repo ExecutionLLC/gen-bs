@@ -17,7 +17,6 @@ export class SamplesButton extends Component {
                         onClick={() => this.props.openSamplesModal()}
                     ><span
                         className='hidden-xs'
-                        data-localize='samples.title'
                     >{this.props.p.t('navBar.samplesButton')}</span><span className='visible-xs'><i className='ag22 ag-blood-test-3'></i></span>
                         {this.props.badge != null &&
                         <span className='badge badge-inverse'>{this.props.badge}</span>
@@ -53,7 +52,7 @@ export class AnalysisButton extends Component {
                         data-target='#analysis'
                         data-toggle='modal'
                         onClick={() => this.props.openAnalysisModal()}
-                    ><span className='hidden-xs' data-localize='query.title'>{this.props.p.t('navBar.analysesButton')}</span>
+                    ><span className='hidden-xs'>{this.props.p.t('navBar.analysesButton')}</span>
                         <span className='visible-xs'><i className='ag22 ag-flask'></i></span>
                     </a>
                     {ENABLE_PERFORMANCE_CONTROLS &&

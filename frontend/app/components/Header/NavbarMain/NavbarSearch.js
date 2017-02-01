@@ -33,7 +33,6 @@ class NavbarSearch extends Component {
                 <div className={classNames('navbar-search-field navbar-search-xs', {'hidden-xs': !this.state.showPopup})}>
                     <input
                      type='text'
-                     data-localize='results.search'
                      className='form-control placeholder-inverse'
                      placeholder={p.t('navBar.searchPlaceholder')}
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}

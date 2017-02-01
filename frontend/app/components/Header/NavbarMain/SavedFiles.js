@@ -13,7 +13,7 @@ export default class SavedFiles extends Component {
                    onClick={() => this.onButtonClick()}
                 >
                     <span>
-                        <span className='hidden-xs' data-localize='files.title'>
+                        <span className='hidden-xs'>
                             {p.t('navBar.savedFilesButton')}
                         </span>
                         <span className='visible-xs'>
