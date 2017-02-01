@@ -15,8 +15,13 @@ export default class ExportDropdown extends ComponentBase {
         return !_.isEmpty(selectedRowIndices);
     }
 
-    render() {
+    renderExportItem(formatId) {
         const {p} = this.props;
+        const formatLabel = p.t(`navBar.exports.formats.${formatId}`);
+        return <MenuItem eventKey={formatId}>{formatLabel}</MenuItem>;
+    }
+
+    render() {
         const exportDropdownTitle = this.renderExportButtonTitle();
         return (
             <div>
@@ -26,9 +31,9 @@ export default class ExportDropdown extends ComponentBase {
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
                                  disabled={!this.haveSelectedVariants()}
                     >
-                        <MenuItem eventKey='csv'>{p.t('navBar.exports.formats.csv')}</MenuItem>
-                        <MenuItem eventKey='sql'>{p.t('navBar.exports.formats.sql')}</MenuItem>
-                        <MenuItem eventKey='txt'>{p.t('navBar.exports.formats.txt')}</MenuItem>
+                        {this.renderExportItem('csv')}
+                        {this.renderExportItem('sql')}
+                        {this.renderExportItem('txt')}
                     </NavDropdown>
                 </Nav>
             </div>
