@@ -62,6 +62,15 @@ export default {
             dropdownHeader: 'Login with',
             googleAccountCaption: 'Google Account',
             loginPasswordCaption: 'OR login'
+        },
+        exports: {
+            formats: {
+                sql: 'SQL',
+                csv: 'CSV',
+                txt: 'Text'
+            },
+            popupHeader: 'Export',
+            popupCaption: 'Select export format'
         }
     }
 };

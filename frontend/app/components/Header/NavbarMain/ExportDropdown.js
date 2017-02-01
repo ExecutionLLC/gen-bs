@@ -16,6 +16,7 @@ export default class ExportDropdown extends ComponentBase {
     }
 
     render() {
+        const {p} = this.props;
         const exportDropdownTitle = this.renderExportButtonTitle();
         return (
             <div>
@@ -25,9 +26,9 @@ export default class ExportDropdown extends ComponentBase {
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
                                  disabled={!this.haveSelectedVariants()}
                     >
-                        <MenuItem eventKey='csv'>CSV</MenuItem>
-                        <MenuItem eventKey='sql'>SQL</MenuItem>
-                        <MenuItem eventKey='txt'>Text</MenuItem>
+                        <MenuItem eventKey='csv'>{p.t('navBar.exports.formats.csv')}</MenuItem>
+                        <MenuItem eventKey='sql'>{p.t('navBar.exports.formats.sql')}</MenuItem>
+                        <MenuItem eventKey='txt'>{p.t('navBar.exports.formats.txt')}</MenuItem>
                     </NavDropdown>
                 </Nav>
             </div>
@@ -35,12 +36,13 @@ export default class ExportDropdown extends ComponentBase {
     }
 
     renderExportButtonTitle() {
+        const {p} = this.props;
         if (!this.haveSelectedVariants()) {
-            return (<span><span className='hidden-xs'>Export</span><span className='visible-xs'><span className='dropdown-menu-header'>Select export format</span><i className='md-i md-cloud_download md-replace-to-close'></i></span></span>);
+            return (<span><span className='hidden-xs'>{p.t('navBar.exports.popupHeader')}</span><span className='visible-xs'><span className='dropdown-menu-header'>{p.t('navBar.exports.popupCaption')}</span><i className='md-i md-cloud_download md-replace-to-close'></i></span></span>);
         } else {
             const {selectedRowIndices} = this.props;
             const selectedVariantsCount = selectedRowIndices.length;
-            return (<span><span className='hidden-xs'>Export</span><span className='visible-xs'><span className='dropdown-menu-header'>Select export format</span><i className='md-i md-cloud_download md-replace-to-close'></i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
+            return (<span><span className='hidden-xs'>{p.t('navBar.exports.popupHeader')}</span><span className='visible-xs'><span className='dropdown-menu-header'>{p.t('navBar.exports.popupCaption')}</span><i className='md-i md-cloud_download md-replace-to-close'></i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
         }
     }
 

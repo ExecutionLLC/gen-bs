@@ -62,6 +62,15 @@ export default {
             dropdownHeader: 'Войти через',
             googleAccountCaption: 'Гугл',
             loginPasswordCaption: 'или с паролем'
+        },
+        exports: {
+            formats: {
+                sql: 'SQL',
+                csv: 'CSV',
+                txt: 'Текст'
+            },
+            popupHeader: 'Экспорт',
+            popupCaption: 'Выберите формат экспортируемого файла'
         }
     }
 };

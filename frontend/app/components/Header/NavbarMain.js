@@ -82,6 +82,7 @@ class NavbarMain extends Component {
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}
+                                    p={this.props.p}
                     />
                     <SavedFiles dispatch={this.props.dispatch}/>
                     <Auth {...this.props} />
