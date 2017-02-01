@@ -71,6 +71,9 @@ export default {
             },
             popupHeader: 'Export',
             popupCaption: 'Select export format'
+        },
+        search: {
+            placeholder: 'Search for mutations of current sample analysis'
         }
     }
 };

@@ -71,6 +71,9 @@ export default {
             },
             popupHeader: 'Экспорт',
             popupCaption: 'Выберите формат экспортируемого файла'
+        },
+        search: {
+            placeholder: 'Поиск мутаций в текущем анализе'
         }
     }
 };

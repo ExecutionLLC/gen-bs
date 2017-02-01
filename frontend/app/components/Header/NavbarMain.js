@@ -79,6 +79,7 @@ class NavbarMain extends Component {
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
                         search={search}
+                        p={this.props.p}
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}
