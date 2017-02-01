@@ -26,7 +26,7 @@ export default class VariantsTableComment extends Component {
     }
 
     render() {
-        const {auth, comments, searchKey} = this.props;
+        const {auth, comments, searchKey, p} = this.props;
         if (auth.isDemo) {
             return (
                 this.renderComment()
@@ -54,7 +54,7 @@ export default class VariantsTableComment extends Component {
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {(_.isEmpty(comments)) ? 'Add Comment' : comments[0].comment}</a>
+                                {(_.isEmpty(comments)) ? p.t('variantsTableAddComment') : comments[0].comment}</a>
 
                         </div>
                     </OverlayTrigger>
@@ -90,7 +90,8 @@ export default class VariantsTableComment extends Component {
             reference,
             chrom,
             searchKey,
-            comments
+            comments,
+            p
         } = this.props;
 
         const comment = this.state.comment;
@@ -102,7 +103,7 @@ export default class VariantsTableComment extends Component {
                         <div>
                             <div className=''>
                                     <textarea rows='7'
-                                              placeholder='Your comments here...'
+                                              placeholder={p.t('variantsTableCommentPlaceholder')}
                                               className='form-control material-input input-large'
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
@@ -114,12 +115,12 @@ export default class VariantsTableComment extends Component {
                                         className='btn btn-uppercase btn-link editable-submit'
                                         onClick={() => this.onSaveClick(alt, pos,
                                             reference, chrom, searchKey, comment, comments)}
-                                >Save
+                                >{p.t('variantsTableSaveComment')}
                                 </button>
                                 <button type='button'
                                         onClick={() => this.refs.overlay.toggle()}
                                         className='btn btn-uppercase btn-link editable-cancel'>
-                                    Cancel
+                                    {p.t('variantsTableCancelComment')}
                                 </button>
                             </div>
                         </div>

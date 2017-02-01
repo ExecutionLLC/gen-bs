@@ -108,6 +108,7 @@ export default class VariantsTableRows extends Component {
                               onSelected={
                                   (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
                               }
+                              p={this.props.p}
             />
         );
     }

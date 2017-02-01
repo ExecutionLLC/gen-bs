@@ -80,5 +80,9 @@ export default {
     errors: {
         unexpectedErrorTitle: 'Ошибка',
         errorCode: 'Код ошибки: %{errorCode}'
-    }
+    },
+    variantsTableAddComment: 'Добавить комментарий',
+    variantsTableCommentPlaceholder: 'Добавьте комментарий...',
+    variantsTableSaveComment: 'Сохранить',
+    variantsTableCancelComment: 'Отменить'
 };
