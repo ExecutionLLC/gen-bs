@@ -20,9 +20,82 @@ const SESSION_STATUS = {
 };
 const UploadOperation = require('../../operations/UploadOperation');
 
+
+/**
+ * Make queue for asynchronous functions.
+ * Execute the callbacks in the same order as the asynchronous functions executed.
+ * Example:
+ * const q = makeAsyncQueue(); // global queue
+ * // Function that sometimes callback will be called back quickly,
+ * // and sometimes later. We want to receive callbacks in the same order as
+ * // 'someAsyncFunction' called.
+ * function someAsyncFunction() {
+ *   const done = q(); // 'done' must be called before callback.
+ *   doStuff(..., (result) => { // this function can be called in any order depending on the 'doStuff' functionality
+ *     done(() => { // this function will be called in the same order as 'someAsyncFunction'
+ *       callback(result); // calling back
+ *     });
+ *   });
+ * }
+ * @returns {function()}
+ */
+function makeAsyncQueue() {
+    /**
+     * Pairs of [id, function()]
+     * When call id is called back then we must execute the function
+     * or set the function for further execution in desired order.
+     * @type {Array.<[*, function()]>}
+     */
+    const callsQueue = [];
+
+    /**
+     * Set callback for call id is ready, this call is called back.
+     * @param {*} callId
+     * @param {function()} callback
+     */
+    function setReady(callId, callback) {
+        /**
+         * this identifier must be there
+         * @type {number}
+         */
+        const queueIndex = callsQueue.findIndex(qr => callId === qr[0]);
+        callsQueue[queueIndex][1] = callback;
+    }
+
+    /**
+     * Check queue for executed callbacks and execute it in the order.
+     * Execute all consequent present callbacks, break when no next callback found.
+     */
+    function checkReady() {
+        while (callsQueue.length) {
+            const callback = callsQueue[0][1];
+            if (!callback) {
+                break;
+            }
+            callsQueue.shift();
+            callback();
+        }
+    }
+
+    /**
+     * Return the function that stores incoming call to the queue
+     * and returns the function that must be called before callback execution.
+     */
+    return () => {
+        const callIdentifier = {}; // we will compare by '===' so the empty object is appropriate here as unique identifier
+        callsQueue.push([callIdentifier, null]); // no function before callback is executed
+        return (callback) => {
+            setReady(callIdentifier, callback);
+            checkReady();
+        };
+    };
+}
+
+
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
         super(services, models);
+        this._uploadProgressAsyncQueue = makeAsyncQueue();
     }
 
     uploadSample(user, fileId, sampleFileName, callback) {
@@ -113,6 +186,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     processUploadResult(session, operation, message, callback) {
+        const queueDone = this._uploadProgressAsyncQueue();
         this.logger.debug('Processing upload result for ' + operation);
         const result = message.result;
         /**@type {string}*/
@@ -120,13 +194,22 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.users.find(operation.getUserId(), callback),
             (user, callback) => {
-                if (this._isAsErrorMessage(message)) {
-                    this._handleUploadError(user, session, operation, message, callback);
-                } else if (status !== SESSION_STATUS.READY) {
-                    this._handleUploadProgress(user, session, operation, message, callback);
-                } else {
-                    this._completeUpload(user, session, operation, message, callback);
-                }
+
+                const doStuff = (callback) => {
+                    if (this._isAsErrorMessage(message)) {
+                        this._handleUploadError(user, session, operation, message, callback);
+                    } else if (status !== SESSION_STATUS.READY) {
+                        this._handleUploadProgress(user, session, operation, message, callback);
+                    } else {
+                        this._completeUpload(user, session, operation, message, callback);
+                    }
+                };
+
+                doStuff((err, res) => {
+                    queueDone(() => {
+                        callback(err, res);
+                    });
+                });
             }
         ], callback);
     }
