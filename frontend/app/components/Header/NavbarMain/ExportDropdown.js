@@ -41,14 +41,25 @@ export default class ExportDropdown extends ComponentBase {
     }
 
     renderExportButtonTitle() {
-        const {p} = this.props;
-        if (!this.haveSelectedVariants()) {
-            return (<span><span className='hidden-xs'>{p.t('navBar.exports.popupHeader')}</span><span className='visible-xs'><span className='dropdown-menu-header'>{p.t('navBar.exports.popupCaption')}</span><i className='md-i md-cloud_download md-replace-to-close'></i></span></span>);
-        } else {
-            const {selectedRowIndices} = this.props;
-            const selectedVariantsCount = selectedRowIndices.length;
-            return (<span><span className='hidden-xs'>{p.t('navBar.exports.popupHeader')}</span><span className='visible-xs'><span className='dropdown-menu-header'>{p.t('navBar.exports.popupCaption')}</span><i className='md-i md-cloud_download md-replace-to-close'></i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
-        }
+        const {p, selectedRowIndices} = this.props;
+        const selectedVariantsCount = this.haveSelectedVariants() ? selectedRowIndices.length : 0;
+        return (
+            <span>
+                <span className='hidden-xs'>
+                    {p.t('navBar.exports.popupHeader')}
+                </span>
+                <span className='visible-xs'>
+                    <span className='dropdown-menu-header'>
+                        {p.t('navBar.exports.popupCaption')}
+                    </span>
+                    <i className='md-i md-cloud_download md-replace-to-close' />
+                </span>
+                { selectedVariantsCount ?
+                    <span className='badge badge-warning'>{selectedVariantsCount}</span> :
+                    null
+                }
+            </span>
+        );
     }
 
     onExportItemSelected(event, selectedKey) {
