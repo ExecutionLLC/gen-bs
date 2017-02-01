@@ -72,9 +72,7 @@ export default {
             popupHeader: 'Export',
             popupCaption: 'Select export format'
         },
-        search: {
-            placeholder: 'Search for mutations of current sample analysis'
-        },
+        searchPlaceholder: 'Search for mutations of current sample analysis',
         samplesButton: 'Samples',
         analysesButton: 'Analyses',
         savedFilesButton: 'Saved Files'

@@ -72,9 +72,7 @@ export default {
             popupHeader: 'Экспорт',
             popupCaption: 'Выберите формат экспортируемого файла'
         },
-        search: {
-            placeholder: 'Поиск мутаций в текущем анализе'
-        },
+        searchPlaceholder: 'Поиск мутаций в текущем анализе',
         samplesButton: 'Сэмплы',
         analysesButton: 'Анализы',
         savedFilesButton: 'Сохранённые файлы'

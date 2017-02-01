@@ -35,7 +35,7 @@ class NavbarSearch extends Component {
                      type='text'
                      data-localize='results.search'
                      className='form-control placeholder-inverse'
-                     placeholder={p.t('navBar.search.placeholder')}
+                     placeholder={p.t('navBar.searchPlaceholder')}
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
