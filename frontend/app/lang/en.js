@@ -76,6 +76,7 @@ export default {
             placeholder: 'Search for mutations of current sample analysis'
         },
         samplesButton: 'Samples',
-        analysesButton: 'Analyses'
+        analysesButton: 'Analyses',
+        savedFilesButton: 'Saved Files'
     }
 };

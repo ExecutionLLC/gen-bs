@@ -87,7 +87,10 @@ class NavbarMain extends Component {
                                     selectedRowIndices={selectedRowIndices}
                                     p={this.props.p}
                     />
-                    <SavedFiles dispatch={this.props.dispatch}/>
+                    <SavedFiles
+                        dispatch={this.props.dispatch}
+                        p={this.props.p}
+                    />
                     <Auth {...this.props} />
                 </div>
             </nav>

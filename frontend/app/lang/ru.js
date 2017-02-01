@@ -76,6 +76,7 @@ export default {
             placeholder: 'Поиск мутаций в текущем анализе'
         },
         samplesButton: 'Сэмплы',
-        analysesButton: 'Анализы'
+        analysesButton: 'Анализы',
+        savedFilesButton: 'Сохранённые файлы'
     }
 };
