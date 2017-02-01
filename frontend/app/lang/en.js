@@ -48,7 +48,8 @@ export default {
     },
     demoPopup: {
         caption: 'Demo Mode',
-        loginPrompt: 'Please %{loginLink}',
-        loginLinkLabel: 'login'
+        loginLinkPrefix: 'Please ',
+        loginLinkLabel: 'login',
+        loginLinkSuffix: ''
     }
 };
