@@ -45,5 +45,10 @@ export default {
             title: 'Wait. ',
             description: 'File is loading'
         }
+    },
+    demoPopup: {
+        caption: 'Demo Mode',
+        loginPrompt: 'Please __', // __ - login link template
+        loginLinkLabel: 'login'
     }
 };

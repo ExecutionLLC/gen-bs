@@ -45,5 +45,10 @@ export default {
             title: 'Ожидайте. ',
             description: 'Файл загружается'
         }
+    },
+    demoPopup: {
+        caption: 'Гостевой режим',
+        loginPrompt: '__, пожалуйста', // __ - место под ссылку для логина
+        loginLinkLabel: 'Залогиньтесь'
     }
 };
