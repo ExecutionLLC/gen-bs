@@ -76,5 +76,9 @@ export default {
         samplesButton: 'Samples',
         analysesButton: 'Analyses',
         savedFilesButton: 'Saved Files'
+    },
+    errors: {
+        unexpectedErrorTitle: 'Unexpected Error',
+        errorCode: 'Error code: %{errorCode}'
     }
 };
