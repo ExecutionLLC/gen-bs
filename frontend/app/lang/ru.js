@@ -74,6 +74,8 @@ export default {
         },
         search: {
             placeholder: 'Поиск мутаций в текущем анализе'
-        }
+        },
+        samplesButton: 'Сэмплы',
+        analysesButton: 'Анализы'
     }
 };

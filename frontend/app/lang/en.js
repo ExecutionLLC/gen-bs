@@ -74,6 +74,8 @@ export default {
         },
         search: {
             placeholder: 'Search for mutations of current sample analysis'
-        }
+        },
+        samplesButton: 'Samples',
+        analysesButton: 'Analyses'
     }
 };

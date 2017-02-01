@@ -71,9 +71,11 @@ class NavbarMain extends Component {
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
                         badge={newSamplesCount || null}
+                        p={this.props.p}
                     />
                     <AnalysisButton
                         openAnalysisModal={() => this.props.openAnalysisModal()}
+                        p={this.props.p}
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
