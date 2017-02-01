@@ -26,7 +26,7 @@ const rusModels = [
     },
     {
         enName: 'Autosomal dominant de novo, parents unaffected',
-        ruName: 'Аутосомно-доминантное De Novo, родители не зависит',
+        ruName: 'Аутосомно-доминантное De Novo, родители не затронуты',
         ruDescription: ''
     },
     {
@@ -36,7 +36,7 @@ const rusModels = [
     },
     {
         enName: 'Autosomal recessive inherited, parents unaffected',
-        ruName: 'Аутосомно-рец. наследственные, родители не зависит',
+        ruName: 'Аутосомно-рец. наследственные, родители не затронуты',
         ruDescription: ''
     }
 ];

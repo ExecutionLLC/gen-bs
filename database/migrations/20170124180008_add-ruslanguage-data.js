@@ -8,6 +8,8 @@ const {rusSamples} = require('./20170124180008_add-ruslanguage-data/samples');
 const {rusMetadata} = require('./20170124180008_add-ruslanguage-data/metadata');
 const {rusMetadataValues} = require('./20170124180008_add-ruslanguage-data/metadataValues');
 
+const RU_ID = 'ru';
+
 exports.up = function (knex) {
     console.log('=> Add rus table data ...');
     return addRusLanguage(knex)
@@ -51,9 +53,9 @@ function addMetadataValues(metadataValue, knex) {
             return knex('metadata_available_value_text')
                 .insert({
                     metadata_available_value_id: id,
-                    language_id: 'ru',
+                    language_id: RU_ID,
                     value: metadataValue.ruValue
-                })
+                });
         })
 }
 
@@ -66,16 +68,18 @@ function addMetadata(metadata, knex) {
             return knex('metadata_text')
                 .insert({
                     metadata_id: metadataId,
-                    language_id: 'ru',
+                    language_id: RU_ID,
                     description: metadata.ruDescription,
                     label: metadata.ruLabel
-                })
+                });
         })
 }
 
+const GENOTYPE_NAME_MAX_LENGTH = 50;
+
 function createSampleName(fileName, genotype) {
     const name = genotype ? `${fileName}:${genotype}` : fileName;
-    return name.substr(-50, 50);
+    return name.substr(-GENOTYPE_NAME_MAX_LENGTH, GENOTYPE_NAME_MAX_LENGTH); // get last GENOTYPE_NAME_MAX_LENGTH chars
 }
 
 function addSampleText(sample, knex) {
@@ -92,9 +96,9 @@ function addSampleText(sample, knex) {
                         return knex('sample_text')
                             .insert({
                                 sample_id: result['id'],
-                                language_id: 'ru',
+                                language_id: RU_ID,
                                 name: createSampleName(sample.ruName, result['genotype_name']),
-                                description: ''
+                                description: sample.ruDescription
                             });
                     })
                 })
@@ -110,7 +114,7 @@ function addModel(model, knex) {
             return knex('model_text')
                 .insert({
                     model_id: modelId,
-                    language_id: 'ru',
+                    language_id: RU_ID,
                     description: model.ruDescription,
                     name: model.ruName
                 })
@@ -126,7 +130,7 @@ function addView(view, knex) {
             return knex('view_text')
                 .insert({
                     view_id: viewId,
-                    language_id: 'ru',
+                    language_id: RU_ID,
                     description: view.ruDescription,
                     name: view.ruName
                 });
@@ -142,7 +146,7 @@ function addFilter(filter, knex) {
             return knex('filter_text')
                 .insert({
                     filter_id: filterId,
-                    language_id: 'ru',
+                    language_id: RU_ID,
                     description: filter.ruDescription,
                     name: filter.ruName
                 });
@@ -152,7 +156,7 @@ function addFilter(filter, knex) {
 function addRusLanguage(knex) {
     return knex('language')
         .insert({
-            id: 'ru',
+            id: RU_ID,
             description: 'Russian'
         });
 }
