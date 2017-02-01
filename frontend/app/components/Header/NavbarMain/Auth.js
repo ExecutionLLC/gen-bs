@@ -75,7 +75,7 @@ class Auth extends Component {
     }
 
     _renderForDemoUser(dropdownClasses) {
-        const {dispatch, auth: {isDemo, errorMessage}} = this.props;
+        const {dispatch, auth: {isDemo, errorMessage}, p} = this.props;
         return (
             <div>
 
@@ -85,6 +85,7 @@ class Auth extends Component {
                         errorMessage={errorMessage}
                         dispatch={dispatch}
                         onLoginClick={() => this.onLoginDropdownClick()}
+                        p={p}
                     />
                     }
                     <a href='#'

@@ -45,5 +45,11 @@ export default {
             title: 'Wait. ',
             description: 'File is loading'
         }
+    },
+    demoPopup: {
+        caption: 'Demo Mode',
+        loginLinkPrefix: 'Please ',
+        loginLinkLabel: 'login',
+        loginLinkSuffix: ''
     }
 };
