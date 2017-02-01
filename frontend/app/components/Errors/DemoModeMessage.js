@@ -22,7 +22,7 @@ export default class DemoModeMessage extends Component {
     render() {
         const {p} = this.props;
         const loginLink = (
-            <a href='#' onClick={() => this.onLoginClick()}>
+            <a key={0} href='#' onClick={() => this.onLoginClick()}>
                 <span>{p.t('demoPopup.loginLinkLabel')}</span>
             </a>
         );
