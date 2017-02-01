@@ -48,7 +48,7 @@ export default {
     },
     demoPopup: {
         caption: 'Demo Mode',
-        loginPrompt: 'Please __', // __ - login link template
+        loginPrompt: 'Please %{loginLink}',
         loginLinkLabel: 'login'
     }
 };

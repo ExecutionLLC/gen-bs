@@ -1,16 +1,20 @@
 import React, {Component} from 'react';
 
-function substArray(template, delimiter, arr) {
-    return template
-        .split(delimiter)
-        .reduce(
-            (a, s, i) => {
-                return i ?
-                    [...a, arr[i - 1], s] :
-                    [...a, s]
-            },
-            []
+function substObject(template, arr) {
+    const out = [];
+    template
+        .replace(
+            /(.*?)(?:%{(.*?)}|$)/g,
+            (_0, prefix, key) => {
+                if(prefix) {
+                    out.push(prefix);
+                }
+                if (key != null) {
+                    out.push(arr[key]);
+                }
+            }
         );
+    return out;
 }
 
 export default class DemoModeMessage extends Component {
@@ -23,7 +27,7 @@ export default class DemoModeMessage extends Component {
             </a>
         );
         const loginPromptTemplate = p.t('demoPopup.loginPrompt');
-        const loginPrompt = substArray(loginPromptTemplate, '__', [loginLink]);
+        const loginPrompt = substObject(loginPromptTemplate, {loginLink});
 
         return (
             <div className='alert alert-inverse alert-fixed demomode-alert'

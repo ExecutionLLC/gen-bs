@@ -48,7 +48,7 @@ export default {
     },
     demoPopup: {
         caption: 'Гостевой режим',
-        loginPrompt: '__, пожалуйста', // __ - место под ссылку для логина
+        loginPrompt: '%{loginLink}, пожалуйста',
         loginLinkLabel: 'Залогиньтесь'
     }
 };
