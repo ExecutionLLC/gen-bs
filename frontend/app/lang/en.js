@@ -51,5 +51,17 @@ export default {
         loginLinkPrefix: 'Please ',
         loginLinkLabel: 'login',
         loginLinkSuffix: ''
+    },
+    navBar: {
+        auth: {
+            login: 'Login',
+            logout: 'Logout',
+            authorizedUserTitle: '',
+            demoUserTitle: 'Register or login for access additional features',
+            googleAccountTitle: 'Login using Google Account',
+            dropdownHeader: 'Login with',
+            googleAccountCaption: 'Google Account',
+            loginPasswordCaption: 'OR login'
+        }
     }
 };

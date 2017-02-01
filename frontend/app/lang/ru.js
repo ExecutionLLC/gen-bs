@@ -51,5 +51,17 @@ export default {
         loginLinkPrefix: '',
         loginLinkLabel: 'Залогиньтесь',
         loginLinkSuffix: ', пожалуйста',
+    },
+    navBar: {
+        auth: {
+            login: 'Войти',
+            logout: 'Выйти',
+            authorizedUserTitle: '',
+            demoUserTitle: 'Загеристрируйтесь или войдите для получения дополнительных возможностей',
+            googleAccountTitle: 'Войдите через Гугл',
+            dropdownHeader: 'Войти через',
+            googleAccountCaption: 'Гугл',
+            loginPasswordCaption: 'или с паролем'
+        }
     }
 };
