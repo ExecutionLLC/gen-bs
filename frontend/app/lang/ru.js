@@ -50,7 +50,7 @@ export default {
         caption: 'Гостевой режим',
         loginLinkPrefix: '',
         loginLinkLabel: 'Залогиньтесь',
-        loginLinkSuffix: ', пожалуйста',
+        loginLinkSuffix: ', пожалуйста'
     },
     navBar: {
         auth: {
