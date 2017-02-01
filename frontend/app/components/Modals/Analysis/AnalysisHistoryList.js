@@ -54,6 +54,7 @@ export default class AnalysisHistoryList extends React.Component {
     }
 
     renderListItem(isActive, historyItem, isNew) {
+        const {p} = this.props;
         return (
             <li
                 key={historyItem.id}
@@ -70,10 +71,10 @@ export default class AnalysisHistoryList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        {isNew ? 'New analysis' : historyItem.name}
+                        {isNew ? p.t('analysis.leftPane.newAnalysis') : historyItem.name}
                     </span>
                     <span className='link-desc'>
-                        {isNew ? 'Customize the settings for new analysis' : historyItem.description}
+                        {isNew ? p.t('analysis.leftPane.newAnalysisDescription') : historyItem.description}
                     </span>
                 </a>
             </li>

@@ -5,6 +5,7 @@ import config from '../../../../config';
 
 export default class AnalysisHistorySearch extends React.Component {
     render() {
+        const {p} = this.props;
         return (
             <div className='split-top'>
                 <div className='navbar-search navbar-search-left'>
@@ -17,7 +18,7 @@ export default class AnalysisHistorySearch extends React.Component {
                                 config.ANALYSIS.MAX_DESCRIPTION_LENGTH
                             )}
                             className='form-control material-input-sm'
-                            placeholder='Search for analyses name or description'
+                            placeholder={p.t('analysis.leftPane.searchPlaceHolder')}
                             onChange={(e) => this.props.onSearch(e.target.value)}
                         />
                     </div>
