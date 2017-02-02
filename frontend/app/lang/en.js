@@ -84,5 +84,6 @@ export default {
     variantsTableAddComment: 'Add comment',
     variantsTableCommentPlaceholder: 'Your comments here...',
     variantsTableSaveComment: 'Save',
-    variantsTableCancelComment: 'Cancel'
+    variantsTableCancelComment: 'Cancel',
+    variantsTableEmpty: 'Results are empty!'
 };

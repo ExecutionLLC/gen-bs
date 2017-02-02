@@ -52,7 +52,7 @@ class VariantsTableReact extends Component {
                         }
                     </table>
                     { isVariantsEmpty &&
-                    <VariantsTableEmpty />
+                    <VariantsTableEmpty p={p} />
                     }
                 </div>
                 }
