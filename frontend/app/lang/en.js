@@ -170,5 +170,10 @@ export default {
         title: 'Auto Logout',
         text: 'Your session will be automatically closed after %{secs} seconds.',
         buttonExtend: 'Extend session'
+    },
+    closeAllSessions: {
+        title: 'Other Session is Opened',
+        text: 'We have another your session opened. If you want to close it and start a new one here, please press the button below or just close the dialog.',
+        buttonClose: 'Close Other Session'
     }
 };
