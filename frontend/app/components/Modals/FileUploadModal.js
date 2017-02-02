@@ -5,7 +5,6 @@ import {Modal} from 'react-bootstrap';
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
 import {modalName} from '../../actions/modalWindows';
-// import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
 
 class FileUploadModal extends Component {

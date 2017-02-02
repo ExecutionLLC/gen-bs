@@ -77,6 +77,58 @@ export default {
         analysesButton: 'Analyses',
         savedFilesButton: 'Saved Files'
     },
+    analysis: {
+        title: 'Analyses',
+
+        leftPane: {
+            searchPlaceHolder: 'Search for analyses name or description',
+            newAnalysis: 'New analysis',
+            newAnalysisDescription: 'Customize the settings for new analysis'
+        },
+        rightPane: {
+            deleteAnalysis: 'Delete analysis',
+            analysisNamePlaceHolder: 'Analysis name (it can\'t be empty)',
+            created: 'Created',
+            analysisDescriptionPlaceHolder: 'Analysis description (optional)',
+            duplicate: 'Duplicate to make changes',
+            analysisType: {
+                single: 'Single',
+                tumor: 'Tumor/Normal',
+                family: 'Family'
+            },
+            sampleType: {
+                single: 'Single',
+                tumor: 'Tumor',
+                normal: 'Normal',
+                proband: 'Proband',
+                mother: 'Mother',
+                father: 'Father'
+            },
+            sampleTypeAbbr: {
+                single: 'S',
+                tumor: 'T',
+                normal: 'N',
+                proband: 'P',
+                mother: 'M',
+                father: 'F'
+            },
+            content: {
+                sample: 'Sample',
+                samples: 'Samples',
+                filter: 'Filter',
+                filters: 'Filters',
+                model: 'Model',
+                models: 'Models',
+                view: 'View',
+                views: 'Views',
+                analyze: 'Analyze',
+                restoreToDefault: 'Restore to default',
+                analysisType: 'Analysis type',
+                duplicate: 'Duplicate',
+                viewResults: 'View results'
+            }
+        }
+    },
     errors: {
         unexpectedErrorTitle: 'Unexpected Error',
         errorCode: 'Error code: %{errorCode}'

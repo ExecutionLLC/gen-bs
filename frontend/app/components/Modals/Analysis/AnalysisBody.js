@@ -10,7 +10,7 @@ export default class AnalysisBody extends React.Component {
     render() {
         const {
             dispatch,
-            currentHistoryId, newHistoryItem, isLoadingHistoryData
+            currentHistoryId, newHistoryItem, isLoadingHistoryData, p
         } = this.props;
         const selectedHistoryItem =
             currentHistoryId ?
@@ -34,6 +34,7 @@ export default class AnalysisBody extends React.Component {
                         filtersList={this.props.filtersList}
                         samplesList={this.props.samplesList}
                         modelsList={this.props.modelsList}
+                        p={p}
                     />
                     {!isLoadingHistoryData && <AnalysisRightPane
                         dispatch={dispatch}
@@ -47,6 +48,7 @@ export default class AnalysisBody extends React.Component {
                         modelsList={this.props.modelsList}
                         fields={this.props.fields}
                         isBringToFront={this.props.isAnalysisBringToFront}
+                        p={p}
                     />}
                 </div>
             </Modal.Body>

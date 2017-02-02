@@ -77,6 +77,58 @@ export default {
         analysesButton: 'Анализы',
         savedFilesButton: 'Сохранённые файлы'
     },
+    analysis: {
+        title: 'Анализы',
+
+        leftPane: {
+            searchPlaceHolder: 'Поиск анализа по названию или описанию',
+            newAnalysis: 'Новый анализ',
+            newAnalysisDescription: 'Введите параметры для нового анализа'
+        },
+        rightPane: {
+            deleteAnalysis: 'Удалить анализ',
+            analysisNamePlaceHolder: 'Имя анализа (обязательно)',
+            created: 'Создан',
+            analysisDescriptionPlaceHolder: 'Описание анализа (опционально)',
+            duplicate: 'Добавить копию чтобы внести изменения',
+            analysisType: {
+                single: 'Одиночный',
+                tumor: 'Опухоль/Здоровый',
+                family: 'Семья'
+            },
+            sampleType: {
+                single: 'Одиночый',
+                tumor: 'Опухоль',
+                normal: 'Здоровый',
+                proband: 'Пробанд',
+                mother: 'Мать',
+                father: 'Отец'
+            },
+            sampleTypeAbbr: {
+                single: 'Одн',
+                tumor: 'Опх',
+                normal: 'Здр',
+                proband: 'П',
+                mother: 'М',
+                father: 'О'
+            },
+            content: {
+                sample: 'Сэмпл',
+                samples: 'Сэмплы',
+                filter: 'Фильтр',
+                filters: 'Фильтры',
+                model: 'Модель',
+                models: 'Модели',
+                view: 'Представление',
+                views: 'Представления',
+                analyze: 'Начать анализ',
+                restoreToDefault: 'Сбросить настройки',
+                analysisType: 'Тип анализа',
+                duplicate: 'Создать копию',
+                viewResults: 'Просмотреть результаты'
+            }
+        }
+    },
     errors: {
         unexpectedErrorTitle: 'Ошибка',
         errorCode: 'Код ошибки: %{errorCode}'

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import AnalysisHeader from './Analysis/AnalysisHeader';
 import AnalysisBody from './Analysis/AnalysisBody';
-
+import {getP} from 'redux-polyglot/dist/selectors';
 
 class AnalysisModal extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class AnalysisModal extends React.Component {
     }
 
     render() {
-        const {showModal} = this.props;
+        const {showModal, p} = this.props;
 
         return (
             <Modal
@@ -26,6 +26,7 @@ class AnalysisModal extends React.Component {
                 <AnalysisHeader
                     showAnalysisHide={this.state.isAnalysisBringToFront}
                     onAnalysisHide={() => this.onAnalysisHide()}
+                    p={p}
                 />
                 <AnalysisBody
                     dispatch={this.props.dispatch}
@@ -44,6 +45,7 @@ class AnalysisModal extends React.Component {
                     fields={this.props.fields}
                     isAnalysisBringToFront={this.state.isAnalysisBringToFront}
                     onAnalysisShow={() => this.onAnalysisShow()}
+                    p={p}
                 />
             </Modal>
         );
@@ -85,8 +87,13 @@ function mapStateToProps(state) {
         isHistoryReceivedAll: analysesHistory.isReceivedAll,
         isHistoryRequesting: analysesHistory.isRequesting,
         newHistoryItem,
-        isLoadingHistoryData: analysesHistory.isLoadingHistoryData
+        isLoadingHistoryData: analysesHistory.isLoadingHistoryData,
+        p: getP(state)
     };
 }
+
+AnalysisModal.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
 export default connect(mapStateToProps)(AnalysisModal);
