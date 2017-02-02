@@ -26,16 +26,7 @@ import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem} from '../actions/analysesHistory';
 import * as PropTypes from 'react/lib/ReactPropTypes';
-import {setLanguage} from 'redux-polyglot/dist/actions';
-import {getP, getLocale} from 'redux-polyglot/dist/selectors';
-
-import en from '../lang/en';
-import ru from '../lang/ru';
-
-const languages = {
-    en,
-    ru
-};
+import {getP} from 'redux-polyglot/dist/selectors';
 
 
 class App extends Component {
@@ -81,11 +72,7 @@ class App extends Component {
                  <div className='container-fluid'>
                     <NavbarMain
                         openAnalysisModal={() => {
-                            // dispatch(openModal(modalName.ANALYSIS));
-                            dispatch(this.props.locale === 'en'
-                                ? setLanguage('ru', languages['ru'])
-                                : setLanguage('en', languages['en'])
-                            );
+                            dispatch(openModal(modalName.ANALYSIS));
                         }}
                         openSamplesModal={() => {
                             dispatch(samplesOnSave(selectedSamplesIds, null, 'changeItem.sample.index', 'changeItem.sample.id', action));
@@ -169,8 +156,7 @@ function mapStateToProps(state) {
         modelsList,
         analysesHistory,
         showErrorWindow,
-        p: getP(state),
-        locale: getLocale(state)
+        p: getP(state)
     };
 }
 
