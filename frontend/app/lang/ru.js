@@ -141,5 +141,16 @@ export default {
         empty: 'Не найдено',
         headComment: 'Комментарий',
         loading: 'Загрузка...'
+    },
+    savedFiles: {
+        title: 'Сохранённые файлы',
+        registerCaption: 'Войдите для доступа к сохранениям.',
+        emptyCaption: 'Тут будут сохранённые файлы. Пока ничего не сохранено.',
+        headerDate: 'Дата',
+        headerSample: 'Сэмпл',
+        headerFilter: 'Фильтр',
+        headerView: 'Представление',
+        headerModel: 'Модель',
+        buttonDownload: 'Скачать'
     }
 };
