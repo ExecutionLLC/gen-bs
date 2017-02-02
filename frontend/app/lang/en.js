@@ -86,5 +86,6 @@ export default {
     variantsTableSaveComment: 'Save',
     variantsTableCancelComment: 'Cancel',
     variantsTableEmpty: 'Results are empty!',
-    variantsTableHeadComment: 'Comment'
+    variantsTableHeadComment: 'Comment',
+    variantsTableLoading: 'Loading...'
 };

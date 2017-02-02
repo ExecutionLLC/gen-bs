@@ -86,5 +86,6 @@ export default {
     variantsTableSaveComment: 'Сохранить',
     variantsTableCancelComment: 'Отменить',
     variantsTableEmpty: 'Не найдено',
-    variantsTableHeadComment: 'Комментарий'
+    variantsTableHeadComment: 'Комментарий',
+    variantsTableLoading: 'Загрузка...'
 };

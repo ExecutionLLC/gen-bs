@@ -25,7 +25,7 @@ export default class VariantsTableRows extends Component {
                    ref={REFS.CONTAINER}>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
                 !!variantsAnalysis, variantsHeader, fields, selectedRowIndices)}
-            {!isFilteringOrSorting && this.canLoadMore() && VariantsTableRows.renderLoadingItem()}
+            {!isFilteringOrSorting && this.canLoadMore() && this.renderLoadingItem()}
             </tbody>
         );
     }
@@ -116,7 +116,7 @@ export default class VariantsTableRows extends Component {
     renderTempRow() {
         const {variantsHeader} = this.props;
         return [
-            VariantsTableRows.renderLoadingItem(),
+            this.renderLoadingItem(),
             <tr style={{visibility: 'hidden'}}>
                 <td className='btntd row_checkbox'>
                     <div>{1}</div>
@@ -151,11 +151,13 @@ export default class VariantsTableRows extends Component {
         ];
     }
 
-    static renderLoadingItem() {
+    renderLoadingItem() {
+        const {p} = this.props;
+
         return (
             <tr ref={REFS.LOADING}>
                 <td colSpan='100'>
-                    <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
+                    <div className='table-loader'>{p.t('variantsTableLoading')}<i className='md-i'>autorenew</i>
                     </div>
                 </td>
             </tr>
