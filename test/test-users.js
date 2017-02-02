@@ -34,7 +34,7 @@ describe('Users', () => {
             phone: 'TestUserPhone' + r,
             company: 'TestUserCompany' + r,
             speciality: 'TestUserSpeciality' + r,
-            language: 'en',
+            languageId: 'en',
             numberPaidSamples: Math.floor(r * 10 + 1)
         }
     }
@@ -52,7 +52,7 @@ describe('Users', () => {
                 id: addedUser.id,
                 password: null,
                 defaultLanguageId: 'en', // language got from header...
-                language: 'en', // ... it is not expected behavior but it is for now
+                languageId: 'en', // ... it is not expected behavior but it is for now
                 isDeleted: false
             }));
             done();
@@ -105,7 +105,7 @@ describe('Users', () => {
         assert.deepStrictEqual(userUpdated, Object.assign({}, userToUpdate, {
             password: null,
             defaultLanguageId: 'en', // language got from header...
-            language: 'en', // ... it is not expected behavior but it is for now
+            languageId: 'en', // ... it is not expected behavior but it is for now
             isDeleted: false
         }));
     }

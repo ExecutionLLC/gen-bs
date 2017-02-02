@@ -128,19 +128,19 @@ class SavedFilesService extends UserEntityServiceBase {
                                 timestamp: savedFile.timestamp,
                                 view: {
                                     id: view.id,
-                                    name: view.name
+                                    text: view.text
                                 },
                                 filter: {
                                     id: filter.id,
-                                    name: filter.name
+                                    text: filter.text
                                 },
                                 model: !model ? null : {
-                                    id: model.id,
-                                    name: model.name
-                                },
+                                        id: model.id,
+                                        text: model.text
+                                    },
                                 analysis: {
                                     id: analysis.id,
-                                    name: analysis.name
+                                    text: analysis.text
                                 },
                                 samples: savedFileSamples
                             }

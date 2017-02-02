@@ -23,8 +23,9 @@ import {
     modelsListReceive
 } from './modelsList';
 import {getDefaultOrStandardItem} from '../utils/entityTypes';
-import {analyze} from './ui';
+import {analyze, setCurrentLanguageId} from './ui';
 import {uploadsListReceive} from './fileUpload';
+import * as i18n from '../utils/i18n';
 
 /*
  * action types
@@ -80,6 +81,7 @@ export function fetchUserDataAsync() {
             } = userData;
 
             dispatch(receiveUserData(userData));
+            dispatch(setCurrentLanguageId(userData.profileMetadata.defaultLanguageId));
             dispatch(filtersListReceive(filters));
             dispatch(viewsListReceive(views));
             dispatch(modelsListReceive(models));
@@ -99,22 +101,30 @@ export function fetchUserDataAsync() {
                 return;
             }
             const lastHistoryAnalysis = analyses[0];
-            dispatch(createNewHistoryItem(sample, filter, view));
+            dispatch(createNewHistoryItem(sample, filter, view, languageId));
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(lastHistoryAnalysis ? lastHistoryAnalysis.id : null))
                 .then(() => {
+                    const currentAnalysis = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
                     const {
-                        name, description, type, samples, viewId, filterId, modelId
-                    } = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
-                    dispatch(analyze({
-                        id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
-                        name,
-                        description,
-                        type,
-                        samples,
-                        viewId,
-                        filterId,
-                        modelId
-                    }));
+                        type, samples, viewId, filterId, modelId
+                    } = currentAnalysis;
+                    const {name, description} = i18n.getEntityText(currentAnalysis, languageId);
+                    const searchParams = i18n.changeEntityText(
+                        {
+                            id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
+                            type,
+                            samples,
+                            viewId,
+                            filterId,
+                            modelId
+                        },
+                        languageId,
+                        {
+                            name,
+                            description
+                        }
+                    );
+                    dispatch(analyze(searchParams));
                 });
         });
     };

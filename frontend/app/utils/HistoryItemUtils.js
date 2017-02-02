@@ -6,6 +6,7 @@ import {sampleType, sampleTypesForAnalysisType} from './samplesUtils';
 import {analysisType} from './analyseUtils';
 import config from '../../config';
 import {formatDate} from './dateUtil';
+import * as i18n from './i18n';
 
 
 function trimName(name) {
@@ -17,69 +18,79 @@ function trimDescription(description) {
 }
 
 
-export function makeHistoryItem(historyItem) {
-    return {
-        ...historyItem,
-        name: trimName(`Copy of ${historyItem.name}`),
-        createdDate: new Date(),
-        lastQueryDate: new Date(),
-        id: null
-    };
+export function makeHistoryItem(historyItem, languageId) {
+    return i18n.changeEntityText(
+        {
+            ...historyItem,
+            createdDate: new Date(),
+            lastQueryDate: new Date(),
+            id: null
+        },
+        languageId,
+        {
+            name: trimName(i18n.makeCopyOfText(i18n.getEntityText(historyItem, languageId).name))
+        }
+    );
 }
 
-export function makeNewHistoryItem(sample, filter, view) {
+export function makeNewHistoryItem(sample, filter, view, languageId) {
     const name = trimName(
-        `${formatDate(new Date())}_${sample ? sample.name : ''}_${filter ? filter.name : ''}_${view ? view.name : ''}`
+        `${formatDate(new Date())}_${sample ? i18n.getEntityText(sample, languageId).name : ''}_${filter ? i18n.getEntityText(filter, languageId).name : ''}_${view ? i18n.getEntityText(view, languageId).name : ''}`
     );
-    return {
-        id: null,
-        name: name,
-        description: trimDescription(`Description of ${name}`),
-        createdDate: new Date(),
-        lastQueryDate: new Date(),
-        filterId: filter ?
-            filter.id :
-            null,
-        viewId: view ? view.id : null,
-        type: analysisType.SINGLE,
-        modelId: null,
-        samples: [{
-            id: sample ? sample.id : null,
-            type: sampleType.SINGLE
-        }]
+    return i18n.changeEntityText(
+        {
+            id: null,
+            createdDate: new Date(),
+            lastQueryDate: new Date(),
+            filterId: filter ?
+                filter.id :
+                null,
+            viewId: view ? view.id : null,
+            type: analysisType.SINGLE,
+            modelId: null,
+            samples: [{
+                id: sample ? sample.id : null,
+                type: sampleType.SINGLE
+            }]
 /* can make other types like this:
-        // tumor
-        type: analysisType.TUMOR,
-        model: historyItem.filters[0] // select approptiate
-        samples: [
-            {
-                id: sample.id, // select approptiate
-                type: sampleType.TUMOR
-            },
-            {
-                id: sample.id, // select approptiate
-                type: sampleType.NORMAL
-            }
-        ]
-        // family
-        type: analysisType.FAMILY,
-        model: historyItem.filters[0] // select approptiate
-        samples: [
-            {
-                id: sample.id, // select approptiate
-                type: sampleType.PROBAND
-            },
-            {
-                id: sample.id, // select approptiate
-                type: sampleType.MOTHER
-            },
-            {
-                id: historyItem.sample.id, // select approptiate
-                type: sampleType.FATHER
-            }
-        ]
+            // tumor
+            type: analysisType.TUMOR,
+            model: historyItem.filters[0] // select approptiate
+            samples: [
+                {
+                    id: sample.id, // select approptiate
+                    type: sampleType.TUMOR
+                },
+                {
+                    id: sample.id, // select approptiate
+                    type: sampleType.NORMAL
+                }
+            ]
+            // family
+            type: analysisType.FAMILY,
+            model: historyItem.filters[0] // select approptiate
+            samples: [
+                {
+                    id: sample.id, // select approptiate
+                    type: sampleType.PROBAND
+                },
+                {
+                    id: sample.id, // select approptiate
+                    type: sampleType.MOTHER
+                },
+                {
+                    id: historyItem.sample.id, // select approptiate
+                    type: sampleType.FATHER
+                }
+            ]
  */
-    };
+        },
+        languageId,
+        {
+            name: name,
+            description: trimDescription(i18n.makeDescriptionOfText(name))
+        }
+    );
 }
 
 /**
@@ -167,13 +178,13 @@ function changeType(historyItem, samplesList, modelsList, isDemo, targetType) {
     return typeConvert(historyItem, targetType);
 }
 
-export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, change) {
+export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, change, languageId) {
     let editingHistoryItem = historyItem;
     if (change.name != null) {
-        editingHistoryItem = {...editingHistoryItem, name: change.name};
+        editingHistoryItem = i18n.changeEntityText(editingHistoryItem, languageId, {name: change.name});
     }
     if (change.description != null) {
-        editingHistoryItem = {...editingHistoryItem, description: change.description};
+        editingHistoryItem = i18n.changeEntityText(editingHistoryItem, languageId, {description: change.description});
     }
     if (change.type != null) {
         editingHistoryItem = changeType(editingHistoryItem, samplesList, modelsList, isDemo, change.type);

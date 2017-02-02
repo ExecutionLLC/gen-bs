@@ -21,6 +21,7 @@ import {
 } from '../../../actions/samplesList';
 import config from '../../../../config';
 import {modalName} from '../../../actions/modalWindows';
+import * as i18n from '../../../utils/i18n';
 
 
 function cancelDOMEvent(e) {
@@ -51,7 +52,9 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, editingSample: {description, id, type}} = this.props;
+        const {auth: {isDemo}, editingSample, languageId} = this.props;
+        const {id, type} = editingSample;
+        const description = i18n.getEntityText(editingSample, languageId).description;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -82,7 +85,9 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, editingSample: {name, id, type}} = this.props;
+        const {auth: {isDemo}, editingSample, languageId} = this.props;
+        const {id, type} = editingSample;
+        const name = i18n.getEntityText(editingSample, languageId).name;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -101,10 +106,11 @@ class SampleHeader extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, editingSample: {name, description}} = this.props;
+        const {dispatch, editingSample, languageId} = this.props;
+        const {name, description} = i18n.getEntityText(editingSample, languageId);
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
-        dispatch(updateSampleText(sampleId, newName, newDescription));
+        dispatch(updateSampleText(sampleId, newName, newDescription, languageId));
         dispatch(requestUpdateSampleTextAsync(sampleId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
@@ -145,7 +151,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     render() {
-        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId} = this.props;
+        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId, languageId} = this.props;
         const {isDemo} = auth;
         const {currentUploadId} = fileUpload;
         const {editingSample, hashedArray: {hash: samplesHash}} = samplesList;
@@ -169,6 +175,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                     <SampleHeader editingSample={editingSample}
                                   auth={auth}
                                   fileUpload={fileUpload}
+                                  languageId={languageId}
                                   dispatch={dispatch}
                     />}
                 </div>
@@ -310,19 +317,19 @@ export default class FileUploadSampleRightPane extends React.Component {
         this.refs.fileInput.click();
     }
 
-    static makeFieldIdToValuesHash(sample) {
+    static makeFieldIdToValuesHash(sample, languageId) {
         return _(sample.sampleMetadata)
             .keyBy((value) => value.metadataId)
-            .mapValues((values) => values.value)
+            .mapValues((values) => i18n.getEntityText(values, languageId).value)
             .value();
     }
 
     renderCurrentValues(sample) {
-        const {fields} = this.props;
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
+        const {fields, languageId} = this.props;
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample, languageId);
         const fieldsRenders = fields
             .filter(field => !field.isInvisible)
-            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
+            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash, languageId));
         return (
             <div className='dl-group-view-mode'>
                 {fieldsRenders}
@@ -380,18 +387,19 @@ export default class FileUploadSampleRightPane extends React.Component {
         changeShowValues(!edited);
     }
 
-    renderReadOnlyField(field, fieldIdToValuesHash) {
+    renderReadOnlyField(field, fieldIdToValuesHash, languageId) {
         let fieldValue = fieldIdToValuesHash[field.id];
         // If field has available values, then the value is id of the actual option.
         // We then need to retrieve the actual value corresponding to the option.
         if (!_.isEmpty(field.availableValues)) {
             const option = _.find(field.availableValues,
                 availableValue => availableValue.id === fieldValue);
-            fieldValue = option && option.value || '';
+            const valueText = option && i18n.getEntityText(option, languageId);
+            fieldValue = valueText && valueText.value || '';
         }
         return (
             <dl key={field.id}>
-                <dt>{field.label}</dt>
+                <dt>{i18n.getEntityText(field, languageId).label}</dt>
                 <dd>{fieldValue}</dd>
             </dl>
         );
@@ -409,11 +417,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderEditableValues(sampleId) {
-        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}} = this.props;
+        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}, languageId} = this.props;
         if (!editingSample || editingSample.id !== sampleId) {
             return null;
         }
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(editingSample);
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(editingSample, languageId);
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
@@ -421,6 +429,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                        fieldIdToValuesHash={fieldIdToValuesHash}
                                        changeShowValues={changeShowValues}
                                        disabled={editingSampleDisabled}
+                                       languageId={languageId}
             />
         );
     }

@@ -20,7 +20,7 @@ const mappedColumns = [
     'loginType',
     'password',
     'numberPaidSamples',
-    'language',
+    'languageId',
     'speciality',
     'company'
 ];
@@ -54,7 +54,7 @@ class UserModel extends RemovableModelBase {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
-                        defaultLanguageId: user.defaultLanguageId || user.language,
+                        defaultLanguageId: user.defaultLanguageId || this.models.config.defaultLanguId,
                         isDeleted: false,
                         gender: user.gender,
                         phone: user.phone,
@@ -189,8 +189,6 @@ class UserModel extends RemovableModelBase {
                     callback(error || new Error('Item not found: ' + userId));
                 } else {
                     let data = ChangeCaseUtil.convertKeysToCamelCase(userData[0]);
-                    data.language = data.defaultLanguageId;
-                    delete data.languageId;
                     delete data.userId;
                     callback(null, data);
                 }
@@ -229,7 +227,6 @@ class UserModel extends RemovableModelBase {
             .then((users) => users[0])
             .then((user) => ChangeCaseUtil.convertKeysToCamelCase(user))
             .then((user) => {
-                user.language = user.defaultLanguageId;
                 return this._mapColumns(user);
             });
     }

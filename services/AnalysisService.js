@@ -1,6 +1,7 @@
 'use strict';
 
 const async = require('async');
+const _ = require('lodash');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
@@ -24,15 +25,15 @@ class AnalysisService extends UserEntityServiceBase {
         }
     }
 
-    add(user, languageId, name, description, type, viewId, filterId, modelId, samples, callback) {
+    add(user, languageId, text, type, viewId, filterId, modelId, samples, callback) {
         if (this.services.users.isDemoUserId(user.id)) {
             callback(null, null);
         } else {
-            if (name) {
+            const analysisText = _.find(text, textData => _.isNull(textData.languageId));
+            if (analysisText.name) {
                 const newAnalysis = {
                     creator: user.id,
-                    name,
-                    description,
+                    text,
                     languageId,
                     type,
                     viewId,
@@ -48,17 +49,17 @@ class AnalysisService extends UserEntityServiceBase {
     }
 
     update(user, item, callback) {
+        const analysisText = _.find(item.text, textData => _.isNull(textData.languageId));
         if (this.services.users.isDemoUserId(user.id)) {
             callback(null, []);
-        } else if (item.name) {
+        } else if (analysisText.name) {
             async.waterfall([
                 (callback) => {
                     this.models.analysis.find(user.id, item.id, callback)
                 },
                 (analysys, callback) => {
                     const newAnalysis = Object.assign({}, analysys, {
-                        name: item.name,
-                        description: item.description,
+                        text: item.text,
                         lastQueryDate: item.lastQueryDate
                     });
                     super.update(user, newAnalysis, callback)

@@ -1,12 +1,13 @@
 import React from 'react';
 import {viewBuilderChangeAttr, viewBuilderRestartEdit} from '../../../actions/viewBuilder';
 import config from '../../../../config';
+import * as i18n from '../../../utils/i18n';
 
 export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const {viewBuilder, validationMessage} = this.props;
+        const {viewBuilder, validationMessage, ui: {languageId}} = this.props;
         const newView = viewBuilder.editingView;
 
         return (
@@ -26,7 +27,7 @@ export default class NewViewInputs extends React.Component {
                             className='form-control text-primary'
                             data-localize='views.setup.new.name.help'
                             placeholder='Set view name'
-                            value={newView.name}
+                            value={i18n.getEntityText(newView, languageId).name}
                             maxLength={config.VIEWS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
@@ -38,7 +39,7 @@ export default class NewViewInputs extends React.Component {
                             className='form-control'
                             data-localize='views.setup.new.description'
                             placeholder='Set view description (optional)'
-                            value={newView.description}
+                            value={i18n.getEntityText(newView, languageId).description}
                             maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
                             onChange={(e) => this.onDescriptionChange(e.target.value)}
                         />
@@ -49,31 +50,39 @@ export default class NewViewInputs extends React.Component {
                             </button>
                         </div>
                     </div>
-                  </div>  
+                </div>
             </div>
         );
     }
 
     onNameChange(name) {
         const {editingView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderChangeAttr({
-            name,
-            description: editingView.description
-        }));
+        const {ui: {languageId}} = this.props;
+        this.props.dispatch(viewBuilderChangeAttr(
+            {
+                name,
+                description: i18n.getEntityText(editingView, languageId).description
+            },
+            languageId
+        ));
     }
 
     onDescriptionChange(description) {
         const {editingView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderChangeAttr({
-            name: editingView.name,
-            description
-        }));
+        const {ui: {languageId}} = this.props;
+        this.props.dispatch(viewBuilderChangeAttr(
+            {
+                name: i18n.getEntityText(editingView, languageId).name,
+                description
+            },
+            languageId
+        ));
     }
 
     onCancelClick() {
-        const {dispatch, viewBuilder, viewsList} = this.props;
+        const {dispatch, viewBuilder, viewsList, ui: {languageId}} = this.props;
         const parentView = viewsList.hashedArray.hash[viewBuilder.editingViewParentId];
-        dispatch(viewBuilderRestartEdit(false, parentView));
+        dispatch(viewBuilderRestartEdit(false, parentView, languageId));
     }
 
 }

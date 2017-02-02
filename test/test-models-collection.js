@@ -27,8 +27,9 @@ const TestUser = {
 const UnknownModelId = Uuid.v4();
 
 const checkModel = (model) => {
+    const modelText = model.text[0];
     assert.ok(model.id);
-    assert.ok(model.name);
+    assert.ok(modelText.name);
     assert.ok(
         _.some(ENTITY_TYPES.allValues, (type) => model.type === type)
     );
@@ -89,14 +90,20 @@ describe('Model', () => {
                 const models = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(models);
                 const model = models[0];
-                model.name = 'Test Model ' + Uuid.v4();
+                model.text = [
+                    {
+                        languageId: null,
+                        name: 'Test Model ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
 
                 modelsClient.add(sessionId, languId, model, (error, response) => {
                     const addedModel = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(addedModel);
                     assert.notEqual(addedModel.id, model.id, 'Model id is not' +
                         ' changed.');
-                    assert.equal(addedModel.name, model.name);
+                    assert.equal(addedModel.text[0].name, model.text[0].name);
                     assert.equal(addedModel.type, ENTITY_TYPES.USER);
 
                     // Update created filter.
@@ -123,8 +130,13 @@ describe('Model', () => {
                 assert.ok(models);
                 const nonUserModel = _.find(models, model => model.type !== ENTITY_TYPES.USER);
                 assert.ok(nonUserModel, 'Cannot find any non-user model');
-                nonUserModel.name = 'Test Name' + Uuid.v4();
-
+                nonUserModel.text = [
+                    {
+                        languageId: null,
+                        name: 'Test Name' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
                 modelsClient.update(sessionId, nonUserModel, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -144,16 +156,20 @@ describe('Model', () => {
                 const models = response.body;
                 assert.ok(models);
                 const model = models[0];
-                model.name = 'Test Model ' + Uuid.v4();
-                model.description = Uuid.v4();
-
+                model.text = [
+                    {
+                        languageId: null,
+                        name: 'Test Model ' + Uuid.v4(),
+                        description: Uuid.v4()
+                    }
+                ];
                 modelsClient.add(sessionId, languId, model, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const addedModel = response.body;
                     assert.ok(addedModel);
-                    assert.equal(addedModel.name, model.name);
-                    assert.equal(addedModel.description, model.description);
+                    assert.equal(addedModel.text[0].name, model.text[0].name);
+                    assert.equal(addedModel.text[0].description, model.text[0].description);
 
                     // Delete created filter
                     modelsClient.remove(sessionId, addedModel.id, (error, response) => {
@@ -172,7 +188,13 @@ describe('Model', () => {
 
                                 // It should fail to update removed filter.
                                 const modelToUpdate = _.cloneDeep(addedModel);
-                                modelToUpdate.name = 'Test Model ' + Uuid.v4();
+                                model.text = [
+                                    {
+                                        languageId: null,
+                                        name: 'Test Model ' + Uuid.v4(),
+                                        description: ''
+                                    }
+                                ];
 
                                 modelsClient.update(sessionId, modelToUpdate, (error, response) => {
                                     ClientBase.expectErrorResponse(error, response);
@@ -191,8 +213,13 @@ describe('Model', () => {
                 const models = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(models);
                 const model = models[0];
-                model.name = '';
-
+                model.text = [
+                    {
+                        languageId: null,
+                        name: '',
+                        description: ''
+                    }
+                ];
                 modelsClient.add(sessionId, languId, model, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -206,7 +233,13 @@ describe('Model', () => {
                 const models = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(models);
                 const model = models[0];
-
+                model.text = [
+                    {
+                        languageId: null,
+                        name: model.text[0].name,
+                        description: ''
+                    }
+                ];
                 modelsClient.add(sessionId, languId, model, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -221,8 +254,13 @@ describe('Model', () => {
                 const models = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(models);
                 const model = models[0];
-                model.name = ' ' + model.name + ' ';
-
+                model.text = [
+                    {
+                        languageId: null,
+                        name: ' ' + model.text[0].name + ' ',
+                        description: ''
+                    }
+                ];
                 modelsClient.add(sessionId, languId, model, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -245,26 +283,36 @@ describe('Model', () => {
                 const models = response.body;
                 assert.ok(models);
                 const model = models[0];
-                model.name = 'Test Model ' + Uuid.v4();
-                // Will search the filter by description below.
-                model.description = Uuid.v4();
+                model.text = [
+                    {
+                        languageId: null,
+                        name: 'Test Model ' + Uuid.v4(),
+                        description: Uuid.v4()
+                    }
+                ];
 
                 modelsClient.add(sessionId, languId, model, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const addedModel = response.body;
                     assert.ok(addedModel);
-                    assert.equal(addedModel.name, model.name);
-                    assert.equal(addedModel.description, model.description);
+                    assert.equal(addedModel.text[0].name, model.text[0].name);
+                    assert.equal(addedModel.text[0].description, model.text[0].description);
 
                     // Now it should return.
                     modelsClient.getAll(sessionId, (error, response) => {
                         const models = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(_.some(models, f => f.id === addedModel.id));
-                        assert.ok(_.some(models, f => f.description === model.description));
+                        assert.ok(_.some(models, f => f.text[0].description === model.text[0].description));
 
                         const modelToUpdate = Object.assign({}, addedModel, {
-                            name: Uuid.v4()
+                            text: [
+                                {
+                                    languageId: null,
+                                    name: Uuid.v4(),
+                                    description: addedModel.text[0].description
+                                }
+                            ]
                         });
 
                         // Make new version.
@@ -278,7 +326,7 @@ describe('Model', () => {
                                 modelsClient.getAll(sessionId, (error, response) => {
                                     // Now filters list should not return the filter.
                                     const models = ClientBase.readBodyWithCheck(error, response);
-                                    assert.ok(!_.some(models, f => f.description === model.description));
+                                    assert.ok(!_.some(models, f => f.text[0].description === model.text[0].description));
 
                                     done();
                                 });

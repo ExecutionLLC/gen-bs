@@ -135,8 +135,13 @@ describe('Search', function () {
                                 wsState.sampleFields = sampleFields;
                                 const analysis = {
                                     id: null,
-                                    name: 'test name',
-                                    description: 'test_descr',
+                                    text: [
+                                        {
+                                            languageId: null,
+                                            name: 'test name',
+                                            description: 'test_descr'
+                                        }
+                                    ],
                                     type: 'single',
                                     samples: [
                                         {

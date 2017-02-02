@@ -78,7 +78,9 @@ class AnalysisModel extends SecureModelBase {
     }
 
     _updateInTransaction(analysisId, analysisToUpdate, trx, callback) {
-        const {name, description, languageId, lastQueryDate} = analysisToUpdate;
+        const {lastQueryDate} = analysisToUpdate;
+        const analysisText = _.find(analysisToUpdate.text, text => _.isNull(text.languageId));
+        const {name, description, languageId} = analysisText;
         async.waterfall([
                 (callback) => {
                     const updateAnalysisData = {
@@ -143,8 +145,9 @@ class AnalysisModel extends SecureModelBase {
 
     _addInTransaction(userId, languageId, analysis, shouldGenerateId, trx, callback) {
         const {
-            name, description, samples
+            text, samples
         } = analysis;
+        const analysisText = _.find(analysis.text, text => _.isNull(text.languageId));
         async.waterfall([
             (callback) => {
                 const {
@@ -162,6 +165,7 @@ class AnalysisModel extends SecureModelBase {
                 this._insert(analysisDataToInsert, trx, callback);
             },
             (analysisId, callback) => {
+                const {languageId, name, description} = analysisText
                 const analysisTextDataToInsert = {
                     analysisId: analysisId,
                     languageId,
@@ -308,16 +312,20 @@ class AnalysisModel extends SecureModelBase {
 
         return {
             id,
-            name,
-            description,
+            text: [
+                {
+                    name,
+                    description,
+                    languageId
+                }
+            ],
             filterId: filterVersionId,
             viewId: viewVersionId,
             modelId: modelVersionId,
             createdDate: timestamp,
             lastQueryDate,
             type,
-            samples,
-            languageId
+            samples
         };
     }
 }
