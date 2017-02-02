@@ -38,22 +38,22 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderTitle() {
+        const {p} = this.props;
         return (
-            <h5 data-localize='views.setup.selector.label'>Available Views</h5>
+            <h5>{p.t('view.existentViewSelect.title')}</h5>
         );
     }
 
     renderWarning(isDemoSession, selectedViewType) {
-        const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
+        const {p} = this.props;
+        const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType, p);
 
         if (!warningText) {
             return null;
         }
         return (
             <div className='alert alert-help'>
-                <span data-localize='views.setup.selector.description'>
-                    {warningText}
-                </span>
+                <span>{warningText}</span>
             </div>
         );
     }
@@ -88,6 +88,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderDuplicateViewButton(isDemoSession) {
+        const {p} = this.props;
         const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
         return (
             <button type='button'
@@ -97,31 +98,33 @@ export default class ExistentViewSelect extends React.Component {
                     disabled={isDemoSession}
                     title={duplicateButtonTooltip}
             >
-                <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
+                <span className='hidden-xs'>{p.t('view.existentViewSelect.duplicate')}</span>
                 <span className='visible-xs'><i className='md-i'>content_copy</i></span>
             </button>
         );
     }
 
     renderResetViewButton() {
+        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onResetViewClick()}
             >
-                <span data-localize='views.setup.reset.title' className='hidden-xs'>Reset View</span>
+                <span className='hidden-xs'>{p.t('view.existentViewSelect.reset')}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
         );
     }
 
     renderDeleteViewButton() {
+        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onDeleteViewClick()}
             >
-                <span data-localize='views.setup.delete.title' className='hidden-xs'>Delete View</span>
+                <span className='hidden-xs'>{p.t('view.existentViewSelect.deleteItem')}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
         );

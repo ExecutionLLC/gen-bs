@@ -15,14 +15,12 @@ export default class NewFilterInputs extends Component {
             <div className='form-rows'>
                 { validationMessage &&
                 <div className='alert alert-help'>
-                        <span data-localize='filters.setup.selector.description'>
-                            {validationMessage}
-                        </span>
+                    <span>{validationMessage}</span>
                 </div>
                 }
                 <div className='form-group row-new-item'>
                       <div className='col-sm-6'>
-                          <label data-localize='filters.setup.new.name.title'>New {texts.Filter}</label>
+                          <label>New {texts.Filter}</label>
                           <input
                               type='text'
                               className='form-control text-primary'

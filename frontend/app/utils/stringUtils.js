@@ -24,16 +24,16 @@ export function getItemLabelByNameAndType(itemName, itemType) {
     return itemType === entityType.HISTORY ? itemName + ' (from history)' : itemName;
 }
 
-export function getReadonlyReasonForSessionAndType(what, isDemoSession, selectedViewFilterType) {
+export function getReadonlyReasonForSessionAndType(what, isDemoSession, selectedViewFilterType, p) {
     switch (selectedViewFilterType) {
         case entityType.HISTORY:
-            return `This ${what} is history ${what}, duplicate it to make changes.`;
+            return p.t('filterAndModel.readOnlyReason.historyEntity', {entity: what});
         case entityType.USER:
             return '';
     }
-    const descriptionText = `This ${what} is not editable, duplicate it to make changes.`;
+    const descriptionText = p.t('filterAndModel.readOnlyReason.notEditable', {entity: what});
     if (isDemoSession) {
-        return descriptionText + ' (Only for registered users)';
+        return descriptionText + p.t('filterAndModel.readOnlyReason.forRegisteredUsers');
     } else {
         return descriptionText;
     }

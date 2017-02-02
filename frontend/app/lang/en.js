@@ -175,5 +175,96 @@ export default {
         title: 'Other Session is Opened',
         text: 'We have another your session opened. If you want to close it and start a new one here, please press the button below or just close the dialog.',
         buttonClose: 'Close Other Session'
+    },
+    filterAndModel: {
+        texts: {
+            filter: {
+                lowercase: 'filter',
+                uppercase: 'Filter'
+            },
+            filters: {
+                lowercase: 'filters',
+                uppercase: 'Filters'
+            },
+            model: {
+                lowercase: 'model',
+                uppercase: 'Model'
+            },
+            models: {
+                lowercase: 'models',
+                uppercase: 'Models'
+            },
+            modelMismatch: 'Model analysis type mismatch'
+        },
+        header: {
+            title: 'Setup'
+        },
+        noRulesToSetup: 'This %{obj} has no rules to setup',
+        rulesGroupHeader: {
+            addButton: {
+                addRule: 'Add rule',
+                addGroup: 'Add group',
+                deleteItem: 'Delete'
+            },
+            radioButton: {
+                and: 'AND',
+                or: 'OR'
+            }
+        },
+        ruleContainer: {
+            deleteItem: 'Delete'
+        },
+        validationMessage: {
+            nameAlreadyExists: '%{obj} with this name is already exists.',
+            empty: 'Name cannot be empty',
+            lengthExceeded: 'Name length should be less than %{maxLength}'
+        },
+        existentFilterSelect: {
+            title: 'Available %{filtersOrModels}',
+            duplicate: 'Duplicate',
+            reset: 'Reset %{filterOrModel}',
+            deleteItem: 'Delete %{filterOrModel}'
+        },
+        readOnlyReason: {
+            historyEntity: 'This %{entity} is history %{entity}, duplicate it to make changes.',
+            notEditable: 'This %{entity} is not editable, duplicate it to make changes.',
+            forRegisteredUsers: ' (Only for registered users)'
+        },
+        saveAndSelect: 'Save and Select',
+        select: 'Select',
+        cancel: 'Cancel',
+        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}'
+    },
+    view: {
+        existentViewSelect: {
+            title: 'Available Views',
+            duplicate: 'Duplicate',
+            reset: 'Reset View',
+            deleteItem: 'Delete View'
+        },
+        saveAndSelect: 'Save and Select',
+        select: 'Select',
+        cancel: 'Cancel',
+        loginRequiredMsg: 'Login or register to select advanced view',
+        header: {
+            title: 'Setup Views'
+        },
+        newViewInputs: {
+            newView: 'New View',
+            namePlaceholder: 'Set view name',
+            description: 'Description',
+            descriptionPlaceHolder: 'Set view description (optional)'
+        },
+        keywordSelector: {
+            placeholder: {
+                chooseKeywords: 'Choose keywords',
+                noKeywords: 'No keywords defined for the field'
+            }
+        },
+        viewBuilder: {
+            title: 'Table Columns',
+            columnsSorting: 'Column Name and Sort Order',
+            columnsFilter: 'Keywords'
+        }
     }
 };

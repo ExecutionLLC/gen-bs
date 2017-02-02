@@ -25,7 +25,7 @@ export default class ViewBuilder extends React.Component {
     }
 
     render() {
-        const {dispatch, fields, viewBuilder, ui: {languageId}} = this.props;
+        const {dispatch, fields, viewBuilder, ui: {languageId}, p} = this.props;
         const allAvailableFields = viewBuilder.allowedFields;
         const view = viewBuilder.editingView;
         const viewItemsLength = view.viewListItems.length;
@@ -83,7 +83,9 @@ export default class ViewBuilder extends React.Component {
                             <Select
                                 options={keywordsSelectOptions}
                                 multi={true}
-                                placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
+                                placeholder={(keywordsSelectOptions.length)
+                                    ? p.t('view.keywordSelector.placeholder.chooseKeywords')
+                                    : p.t('view.keywordSelector.placeholder.noKeywords')}
                                 value={keywordsCurrentValue}
                                 onChange={ (val) => this.onChangeKeyword(index, val)}
                                 clearable={true}
@@ -109,20 +111,15 @@ export default class ViewBuilder extends React.Component {
         return (
 
             <div className='form-rows'>
-                <h5 data-localize='views.setup.settings.title'>Table Columns</h5>
+                <h5>{p.t('view.viewBuilder.title')}</h5>
                 <div className='form-group hidden-xs'>
 
                     <div className='col-sm-6'>
-                       
-                        <small className='text-muted' data-localize='views.setup.settings.columns_sorting'>Column Name
-                            and Sort Order
-                        </small>
+                        <small className='text-muted'>{p.t('view.viewBuilder.columnsSorting')}</small>
                     </div>
 
                     <div className='col-sm-6'>
-                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>
-                           Keywords
-                        </small>
+                        <small className='text-muted'>{p.t('view.viewBuilder.columnsFilter')}</small>
                     </div>
                 </div>
 

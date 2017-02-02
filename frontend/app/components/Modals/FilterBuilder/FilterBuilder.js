@@ -163,7 +163,8 @@ class FilterQueryBuilder extends React.Component {
             /** @type {boolean} */
             disabled,
             /** @type function(Object) */
-            dispatch
+            dispatch,
+            p
         } = this.props;
 
         return (
@@ -172,6 +173,7 @@ class FilterQueryBuilder extends React.Component {
                 disabled={disabled}
                 makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
+                p={p}
             />
         );
     }
@@ -483,7 +485,8 @@ export default class FilterBuilder extends React.Component {
             fields,
             texts,
             ui: {languageId},
-            dispatch
+            dispatch,
+            p
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
         const parsedFilter = filterBuilder.editingFilter.parsedFilter;
@@ -497,8 +500,9 @@ export default class FilterBuilder extends React.Component {
                         rules={parsedFilter}
                         disabled={!entityTypeIsEditable(filter.type)}
                         dispatch={dispatch}
+                        p={p}
                     /> :
-                    <div>{`This ${texts.filter} has no rules to setup`}</div>
+                    <div>{p.t('filterAndModel.noRulesToSetup', {obj: texts.filter})}</div>
                 }
             </div>
         );

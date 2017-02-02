@@ -175,5 +175,96 @@ export default {
         title: 'Сайт открыт в другом окне',
         text: 'В другом окне или браузере выполнен вход под текущей учётной записью. Если вы хотите закрыть тот сеанс - нажмите кнопку, которая находится внизу или закройте этот диалог.',
         buttonClose: 'Закрыть сеанс в другой вкладке'
+    },
+    filterAndModel: {
+        texts: {
+            filter: {
+                lowercase: 'фильтр',
+                uppercase: 'Фильтр'
+            },
+            filters: {
+                lowercase: 'фильтры',
+                uppercase: 'Фильтры'
+            },
+            model: {
+                lowercase: 'модель',
+                uppercase: 'Модель'
+            },
+            models: {
+                lowercase: 'модели',
+                uppercase: 'Модели'
+            },
+            modelMismatch: 'Неподходящая модель анализа'
+        },
+        header: {
+            title: 'Настройка'
+        },
+        noRulesToSetup: '%{obj} не содержит настраиваемых правил',
+        rulesGroupHeader: {
+            addButton: {
+                addRule: 'Добавить правило',
+                addGroup: 'Добавить группу',
+                deleteItem: 'Удалить'
+            },
+            radioButton: {
+                and: 'И',
+                or: 'ИЛИ'
+            }
+        },
+        ruleContainer: {
+            deleteItem: 'Удалить'
+        },
+        validationMessage: {
+            nameAlreadyExists: '%{obj} с таким именем уже существует.',
+            empty: 'Имя не должно быть пустым',
+            lengthExceeded: 'Длина имени может быть не более %{maxLength}'
+        },
+        existentFilterSelect: {
+            title: 'Доступные %{filtersOrModels}',
+            duplicate: 'Создать копию',
+            reset: 'Сбросить %{filterOrModel}',
+            deleteItem: 'Удалить %{filterOrModel}'
+        },
+        readOnlyReason: {
+            historyEntity: '%{entity} является историческим, создайте копию и внесите в неё изменения.',
+            notEditable: '%{entity} только для чтения, создайте копию и внесите в неё изменения.',
+            forRegisteredUsers: ' (Только для зарегистрированных пользователей)'
+        },
+        saveAndSelect: 'Сохранить и выбрать',
+        select: 'Выбрать',
+        cancel: 'Отмена',
+        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые %{filtersOrModels}'
+    },
+    view: {
+        existentViewSelect: {
+            title: 'Доступные Представления',
+            duplicate: 'Создать копию',
+            reset: 'Сбросить представление',
+            deleteItem: 'Удалить представление'
+        },
+        saveAndSelect: 'Сохранить и Выбрать',
+        select: 'Выбрать',
+        cancel: 'Отмена',
+        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутое представление',
+        header: {
+            title: 'Настройка представлений'
+        },
+        newViewInputs: {
+            newView: 'Новое представление',
+            namePlaceholder: 'Введите имя представления',
+            description: 'Описание',
+            descriptionPlaceHolder: 'Введите описание (опционально)'
+        },
+        keywordSelector: {
+            placeholder: {
+                chooseKeywords: 'Выберите ключевые слова',
+                noKeywords: 'Для данного поля нет ключевых слов'
+            }
+        },
+        viewBuilder: {
+            title: 'Колонки',
+            columnsSorting: 'Имя колонки и порядок сортировки',
+            columnsFilter: 'Ключевые слова'
+        }
     }
 };

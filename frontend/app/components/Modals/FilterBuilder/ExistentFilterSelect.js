@@ -43,13 +43,17 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderTitle(texts) {
+        const {p} = this.props;
         return (
-            <h5 data-localize='filters.setup.selector.label'>Available {texts.Filters}</h5>
+            <h5 data-localize='filters.setup.selector.label'>
+                {p.t('filterAndModel.existentFilterSelect.title', {filtersOrModels: texts.Filters})}
+            </h5>
         );
     }
 
     renderWarning(isDemoSession, selectedFilterType, texts) {
-        const warningText = getReadonlyReasonForSessionAndType(texts.filter, isDemoSession, selectedFilterType);
+        const {p} = this.props;
+        const warningText = getReadonlyReasonForSessionAndType(texts.filter, isDemoSession, selectedFilterType, p);
 
         if (!warningText) {
             return null;
@@ -93,6 +97,7 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderDuplicateFilterButton(isDemoSession, texts) {
+        const {p} = this.props;
         const title = isDemoSession ? `Login or register to work with ${texts.filter}` : 'Make a copy for editing';
         return (
             <button type='button'
@@ -102,31 +107,33 @@ export default class ExistentFilterSelect extends Component {
                     disabled={isDemoSession}
                     title={title}
             >
-                <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
+                <span data-localize='actions.duplicate.title' className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.duplicate')}</span>
                 <span className='visible-xs'><i className='md-i'>content_copy</i></span>
             </button>
         );
     }
 
     renderResetFilterButton(texts) {
+        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onResetFilterClick()}
             >
-                <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset {texts.Filter}</span>
+                <span className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.reset', {filterOrModel: texts.Filter})}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
         );
     }
 
     renderDeleteFilterButton(texts) {
+        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onDeleteFilterClick()}
             >
-                <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete {texts.Filter}</span>
+                <span className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.deleteItem', {filterOrModel: texts.Filter})}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
         );
