@@ -33,18 +33,19 @@ export function viewBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function viewBuilderStartEdit(makeNew, view, allowedFields) {
+export function viewBuilderStartEdit(makeNew, view, allowedFields, languageId) {
     return {
         type: VBUILDER_START_EDIT,
         makeNew,
         view,
-        allowedFields
+        allowedFields,
+        languageId
     };
 }
 
-export function viewBuilderRestartEdit(makeNew, view) {
+export function viewBuilderRestartEdit(makeNew, view, languageId) {
     return (dispatch, getState) => {
-        dispatch(viewBuilderStartEdit(makeNew, view, getState().viewBuilder.allowedFields));
+        dispatch(viewBuilderStartEdit(makeNew, view, getState().viewBuilder.allowedFields, languageId));
     };
 }
 
@@ -60,11 +61,12 @@ export function viewBuilderEndEdit() {
     };
 }
 
-export function viewBuilderChangeAttr(attr) {
+export function viewBuilderChangeAttr(attr, languageId) {
     return {
         type: VBUILDER_CHANGE_ATTR,
         name: attr.name,
-        description: attr.description
+        description: attr.description,
+        languageId
     };
 }
 
@@ -163,7 +165,7 @@ export function viewBuilderSaveAndSelectView() {
     };
 }
 
-export function viewBuilderDeleteView(viewId) {
+export function viewBuilderDeleteView(viewId, languageId) {
     return (dispatch, getState) => {
         return new Promise((resolve) => {
             dispatch(viewsListServerDeleteView(viewId))
@@ -174,7 +176,7 @@ export function viewBuilderDeleteView(viewId) {
                     } = getState();
                     const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                     const newView = viewIdToViewHash[newViewId];
-                    dispatch(viewBuilderRestartEdit(false, newView));
+                    dispatch(viewBuilderRestartEdit(false, newView, languageId));
                     resolve(newView);
                 });
         });

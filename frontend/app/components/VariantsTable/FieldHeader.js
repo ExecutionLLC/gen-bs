@@ -16,7 +16,7 @@ export default class FieldHeaderControls extends Component {
     }
 
     render() {
-        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleType, sampleId, sampleName} = this.props;
+        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleType, sampleId, sampleName, languageId} = this.props;
         const columnSortParams = sortState ? _.find(sortState, {fieldId: fieldMetadata.id, sampleId})
             : null;
 
@@ -48,7 +48,7 @@ export default class FieldHeaderControls extends Component {
             }
         );
 
-        const {label, title} = FieldUtils.makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType);
+        const {label, title} = FieldUtils.makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType, languageId);
 
         return (
             <td>

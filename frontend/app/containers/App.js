@@ -62,7 +62,7 @@ class App extends Component {
     render() {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
-            samplesList, modelsList, auth: {isDemo}} = this.props;
+            samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         const currentHistoryId = analysesHistory.currentHistoryId;
         const historyList = analysesHistory.history;
         const newHistoryItem = analysesHistory.newHistoryItem;
@@ -71,7 +71,7 @@ class App extends Component {
                 historyList.find((historyItem) => historyItem.id === currentHistoryId) :
                 newHistoryItem;
         const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
-        const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}});
+        const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId);
 
         return (
             <div className='main subnav-closed' id='main'>

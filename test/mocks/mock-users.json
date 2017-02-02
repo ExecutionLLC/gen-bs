@@ -5,7 +5,7 @@
     "last_name": "Demo",
     "email": "demo@demo.com",
     "speciality": "doctor",
-    "language": "en",
+    "languageId": "en",
     "number_paid_samples": 0
   },
   {
@@ -14,7 +14,7 @@
     "last_name": "Vaughn",
     "email": "valarievaughn@electonic.com",
     "speciality": "doctor",
-    "language": "en",
+    "languageId": "en",
     "number_paid_samples": 10,
     "login": "valarie",
     "password": "password"
@@ -25,7 +25,7 @@
     "last_name": "Kuri",
     "email": "mariakuri@electonic.com",
     "speciality": "assistant",
-    "language": "en",
+    "languageId": "en",
     "number_paid_samples": 11,
     "login": "maria",
     "password": "password"

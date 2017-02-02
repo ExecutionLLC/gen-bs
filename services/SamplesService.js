@@ -14,6 +14,7 @@ const {
     WS_SAMPLE_UPLOAD_STATE
 } = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
+const ErrorUtils = require('../utils/ErrorUtils');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
@@ -35,22 +36,19 @@ class SamplesService extends UserEntityServiceBase {
     /**
      * Sends sample to application server for processing.
      * */
-    upload(session, user, localFileInfo, sampleList, callback) {
+    upload(session, user, localFileInfo, fileId, sampleList, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this._uploadSample(localFileInfo.localFilePath, callback),
-            (fileId, callback) => this._createHistoryEntry(
-                user,
-                fileId,
-                localFileInfo.originalFileName,
-                (error) => callback(error, fileId)
-            ),
-            (fileId, callback) => this.initMetadataForUploadedSample(
-                user, fileId, localFileInfo.originalFileName, sampleList, null, (error, sampleIds) => {
-                    callback(error, fileId, sampleIds);
+            (callback) => this._uploadSample(localFileInfo.localFilePath, fileId, callback),
+            (fileId, callback) => {
+                if (!sampleList || !sampleList.length) {
+                    sampleList = [null]; // add null item to create single unnamed sample in case when VCF is valid and contains no genotype name
                 }
-            ),
+                this.initMetadataForUploadedSample(user, fileId, localFileInfo.originalFileName, sampleList, null, (error, sampleIds) => {
+                    callback(error, fileId, sampleIds);
+                });
+            },
             (fileId, sampleIds, callback) => this.services.applicationServer.uploadSample(user,
                 fileId, localFileInfo.originalFileName, (error, operationId) => {
                     callback(error, operationId, sampleIds);
@@ -64,8 +62,7 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    _uploadSample(sampleLocalPath, callback) {
-        const fileId = Uuid.v4();
+    _uploadSample(sampleLocalPath, fileId, callback) {
         const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
         const fileStream = fs.createReadStream(sampleLocalPath);
         this.services.objectStorage.uploadObject(newSamplesBucket, fileId, fileStream,
@@ -116,7 +113,7 @@ class SamplesService extends UserEntityServiceBase {
                 vcfFileId,
                 genotypeName: genotype,
                 uploadState: uploadState || WS_SAMPLE_UPLOAD_STATE.UNCONFIRMED
-            }
+            };
         });
         this.theModel.addSamples(user.id, user.language, samples, callback);
     }
@@ -190,14 +187,16 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    _createHistoryEntry(user, operationId, fileName, callback) {
+    createHistoryEntry(user, fileName, error, callback) {
+        const id = Uuid.v4();
         this.services.sampleUploadHistory.add(user, user.language, {
-            id: operationId,
+            id,
             fileName,
             creator: user.id,
-            status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
-            progress: 0
-        }, callback);
+            status: error ? SAMPLE_UPLOAD_STATUS.ERROR : SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
+            progress: 0,
+            error: error ? ErrorUtils.createInternalError(error) : null,
+        }, (error) => callback(error, id));
     }
 }
 

@@ -28,6 +28,7 @@ export default class VariantsTableRow extends ComponentBase {
             variantsHeader,
             sortState,
             isSelected,
+            ui,
             p
         } = this.props;
         const rowFields = row.fields;
@@ -72,6 +73,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       comments={comments}
                                       tableElement={this.props.tableElement}
                                       onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
+                                      ui={ui}
                                       p={p}
                 />
                 {_.map(rowFields, (value, index) =>

@@ -9,6 +9,7 @@ import {
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 import {changeFileUploadProgressState, fileUploadStatus} from './fileUpload';
 import {entityType} from '../utils/entityTypes';
+import * as i18n from '../utils/i18n';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -76,21 +77,23 @@ function requestSamples() {
     };
 }
 
-export function updateSampleValue(sampleId, valueFieldId, value) {
+export function updateSampleValue(sampleId, valueFieldId, value, languageId) {
     return {
         type: UPDATE_SAMPLE_VALUE,
         sampleId,
         valueFieldId,
-        value
+        value,
+        languageId
     };
 }
 
-export function updateSampleText(sampleId, name, description) {
+export function updateSampleText(sampleId, name, description, languageId) {
     return {
         type: UPDATE_SAMPLE_TEXT,
         sampleId,
         name,
-        description
+        description,
+        languageId
     };
 }
 
@@ -185,14 +188,7 @@ export function requestUpdateSampleTextAsync(sampleId) {
             return Promise.resolve();
         }
         dispatch(disableSampleEdit(sampleId, true));
-        const {
-            name: editingSampleName, description: editingSampleDescription
-        } = editingSample;
-        const newEditingSample = {
-            ...currentEditedSample,
-            name: editingSampleName,
-            description: editingSampleDescription
-        };
+        const newEditingSample = i18n.setEntityLanguageTexts(currentEditedSample, i18n.getEntityLanguageTexts(editingSample));
         return new Promise((resolve) => samplesClient.update(
             newEditingSample,
             (error, response) => resolve({error, response})

@@ -32,6 +32,7 @@ import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 import config from '../../../../config';
 import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
+import * as i18n from '../../../utils/i18n';
 
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -61,13 +62,15 @@ export default class AnalysisRightPane extends React.Component {
 
 
     renderAnalysisHeader(historyItem, disabled, isDemo) {
+        const {ui: {languageId}} = this.props;
+
         return (
             <div className='split-top'>
                 <div className='form-horizontal form-padding'>
                     {historyItem.id && this.renderDeleteAnalysisButton()}
-                    {this.renderAnalysisName(historyItem.name, isDemo)}
+                    {this.renderAnalysisName(i18n.getEntityText(historyItem, languageId).name, isDemo)}
                     {this.renderAnalysisDates(historyItem.createdDate)}
-                    {this.renderAnalysisDescription(historyItem.description, isDemo)}
+                    {this.renderAnalysisDescription(i18n.getEntityText(historyItem, languageId).description, isDemo)}
                 </div>
                 {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
@@ -459,13 +462,14 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalyzeButton() {
-        const {historyItem, modelsList, fields, samplesList, p} = this.props;
+        const {historyItem, modelsList, fields, samplesList, ui: {languageId}, p} = this.props;
         const validationRules = [
             new CompoundHeterozygousModelRule({
                 historyItem,
                 modelsList,
                 fields,
-                samplesList
+                samplesList,
+                languageId
             })
         ];
         const validationResults = _.map(validationRules, rule => rule.validate());
@@ -629,13 +633,13 @@ export default class AnalysisRightPane extends React.Component {
             filtersList: {hashedArray: {hash: filtersHash}},
             modelsList: {hashedArray: {hash: modelsHash}},
             viewsList: {hashedArray: {hash: viewsHash}},
+            ui: {languageId},
             p
         } = this.props;
 
         const selectedFilter = filtersHash[historyItem.filterId];
         const selectedModel = historyItem.modelId && modelsHash[historyItem.modelId];
         const selectedView = viewsHash[historyItem.viewId];
-
         return (
             <div className='dl-group-view-mode'>
                 <dl>
@@ -651,23 +655,23 @@ export default class AnalysisRightPane extends React.Component {
                             <dt><span data-localize='general.sample'>{p.t('analysis.rightPane.content.sample')}</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && getItemLabelByNameAndType(sample.name, sample.type)}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type)}</dd>
                         </dl>
                     );
                 })}
                 <dl>
                     <dt>Filter</dt>
-                    <dd>{selectedFilter && getItemLabelByNameAndType(selectedFilter.name, selectedFilter.type)}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
                         <dt>Model</dt>
-                        <dd>{selectedModel && getItemLabelByNameAndType(selectedModel.name, selectedModel.type)}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
                     <dt>View</dt>
-                    <dd>{selectedView && getItemLabelByNameAndType(selectedView.name, selectedView.type)}</dd>
+                    <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type)}</dd>
                 </dl>
 
                 <hr />
@@ -695,11 +699,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getViewOptions() {
+        const {ui: {languageId}} = this.props;
         const views = this.props.viewsList.hashedArray.array;
         return views.map(
             (viewItem) => {
                 const isDisabled = this.isViewDisabled(viewItem);
-                const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
+                const label = getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type);
                 return {
                     value: viewItem.id, label, disabled: isDisabled
                 };
@@ -712,10 +717,11 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getFilterOptions() {
+        const {ui: {languageId}} = this.props;
         const filters = this.props.filtersList.hashedArray.array;
         return filters.map((filterItem) => {
             const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
+            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type);
             return {
                 value: filterItem.id, label, disabled: isDisabled
             };
@@ -727,14 +733,14 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getModelOptions() {
-        const {modelsList, historyItem} = this.props;
+        const {modelsList, historyItem, ui: {languageId}} = this.props;
         const models = modelsList.hashedArray.array;
         return models
             .filter((model) => model.analysisType === historyItem.type)
-            .map((sampleItem) => {
-                const isDisabled = this.isModelDisabled(sampleItem);
-                const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
-                return {value: sampleItem.id, label, disabled: isDisabled};
+            .map((model) => {
+                const isDisabled = this.isModelDisabled(model);
+                const label = getItemLabelByNameAndType(i18n.getEntityText(model, languageId).name, model.type);
+                return {value: model.id, label, disabled: isDisabled};
             });
     }
 
@@ -743,12 +749,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getSampleOptions(value, selectedSamplesHash) {
-        const samples = this.props.samplesList.hashedArray.array;
+        const {ui: {languageId}, samplesList: {hashedArray: {array: samples}}} = this.props;
         return _.chain(samples)
             .filter((sample) => sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED)
             .map((sampleItem) => {
                 const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
-                const {type: sampleType, id: sampleId, name: sampleName} = sampleItem;
+                const {type: sampleType, id: sampleId} = sampleItem;
+                const sampleName = i18n.getEntityText(sampleItem, languageId).name;
                 const label = getItemLabelByNameAndType(sampleName, sampleType);
                 return {value: sampleId, label, disabled: isDisabled};
             })
@@ -763,31 +770,33 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalysisNameChange(name) {
-        const {dispatch, historyItem} = this.props;
+        const {dispatch, historyItem, ui: {languageId}} = this.props;
         if (!name) {
             return;
         }
         if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem({...historyItem, name}));
-            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
+            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {name})));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
+                .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
         } else {
             dispatch(this.actionEdit({name}));
         }
     }
 
     onAnalysisDescriptionChange(description) {
-        const {dispatch, historyItem} = this.props;
+        const {dispatch, historyItem, ui: {languageId}} = this.props;
         if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem({...historyItem, description}));
-            dispatch(updateAnalysesHistoryItemAsync(historyItem.id));
+            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {description})));
+            dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
+                .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
         } else {
             dispatch(this.actionEdit({description}));
         }
     }
 
     onDuplicateButtonClick() {
-        const {dispatch, historyItem} = this.props;
-        dispatch(duplicateAnalysesHistoryItem(historyItem));
+        const {dispatch, historyItem, ui: {languageId}} = this.props;
+        dispatch(duplicateAnalysesHistoryItem(historyItem, languageId));
     }
 
     onCancelButtonClick() {
@@ -795,26 +804,33 @@ export default class AnalysisRightPane extends React.Component {
             dispatch,
             samplesList: {hashedArray: {array: samples}},
             viewsList: {hashedArray: {array: views}},
-            filtersList: {hashedArray: {array: filters}}
+            filtersList: {hashedArray: {array: filters}},
+            ui: {languageId}
         } = this.props;
         const sample = getDefaultOrStandardItem(samples);
         const filter = getDefaultOrStandardItem(filters);
         const view = getDefaultOrStandardItem(views);
-        dispatch(createNewHistoryItem(sample, filter, view));
+        dispatch(createNewHistoryItem(sample, filter, view, languageId));
     }
 
     onAnalyzeButtonClick(isEditing) {
-        const {dispatch, historyItem, currentItemId} = this.props;
-        dispatch(analyze({
-            id: isEditing ? null : currentItemId,
-            name: historyItem.name,
-            description: historyItem.description,
-            type: historyItem.type,
-            samples: historyItem.samples,
-            viewId: historyItem.viewId,
-            filterId: historyItem.filterId,
-            modelId: historyItem.modelId
-        })).then((analysis) => {
+        const {dispatch, historyItem, currentItemId, ui: {languageId}} = this.props;
+        const searchParams = i18n.changeEntityText(
+            {
+                id: isEditing ? null : currentItemId,
+                type: historyItem.type,
+                samples: historyItem.samples,
+                viewId: historyItem.viewId,
+                filterId: historyItem.filterId,
+                modelId: historyItem.modelId
+            },
+            languageId,
+            {
+                name: i18n.getEntityText(historyItem, languageId).name,
+                description: i18n.getEntityText(historyItem, languageId).description
+            }
+        );
+        dispatch(analyze(searchParams)).then((analysis) => {
             if (isEditing && analysis) {
                 dispatch(setEditedHistoryItem(analysis));
             } else if (analysis) {
@@ -825,10 +841,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-        const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
-        const allowedFields = FieldUtils.makeViewFilterAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
-        dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
+        const allowedFields = FieldUtils.makeViewFilterAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList, languageId);
+        dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields, languageId));
         const action = this.actionEdit({viewId: null});
         dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         dispatch(openModal(modalName.VIEWS));
@@ -840,11 +856,11 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onFiltersClick() {
-        const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
-        const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList, languageId);
         const filterFiltersStrategy = {name: filterBuilderStrategyName.FILTER};
-        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList, languageId));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         dispatch(openModal(modalName.FILTERS));
@@ -856,7 +872,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelClick() {
-        const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const samplesTypes = _.reduce(
             sampleTypesForAnalysisType[historyItem.type],
@@ -866,13 +882,13 @@ export default class AnalysisRightPane extends React.Component {
             }),
             {}
         );
-        const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
+        const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash, languageId);
         const modelFiltersStrategy = {name: filterBuilderStrategyName.MODEL, analysisType: historyItem.type};
         const analysisTypeModelsList = {
             ...modelsList,
             hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === historyItem.type))
         };
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList));
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList, languageId));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal(modalName.FILTERS));
@@ -897,12 +913,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     actionEdit(change) {
-        const {samplesList, modelsList, auth: {isDemo}} = this.props;
+        const {samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         return editAnalysesHistoryItem(
             samplesList,
             modelsList,
             isDemo,
-            change
+            change,
+            languageId
         );
     }
 }

@@ -7,6 +7,7 @@ import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
 import Auth from './NavbarMain/Auth';
+import LanguageDropdown from './NavbarMain/LanguageDropdown';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
 import {fileUploadStatus, SAMPLE_UPLOAD_STATE} from '../../actions/fileUpload';
@@ -91,17 +92,17 @@ class NavbarMain extends Component {
                         dispatch={this.props.dispatch}
                         p={this.props.p}
                     />
+                    <LanguageDropdown dispatch={this.props.dispatch} languageId={this.props.ui.languageId}/>
                     <Auth {...this.props} />
                 </div>
             </nav>
-
-
         );
     }
+
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ws, variantsTable, samplesList, fileUpload} = state;
+    const {auth, userData, ws, variantsTable, samplesList, fileUpload, ui} = state;
 
     return {
         auth,
@@ -110,6 +111,7 @@ function mapStateToProps(state) {
         variantsTable,
         samplesList,
         fileUpload,
+        ui,
         p: getP(state)
     };
 }

@@ -113,8 +113,14 @@ export default class RequestWrapper {
             if (err) {
                 onComplete(err);
             } else {
-                if (res && res.body && res.body.upload) {
-                    onComplete(null, res.body.upload);
+                if (res && res.body) {
+                    if (res.body.upload) {
+                        onComplete(null, res.body.upload);
+                    } else if (res.body.message) {
+                        onComplete(res.body.message);
+                    } else {
+                        onComplete(new Error('Invalid upload response'));
+                    }
                 } else {
                     onComplete(new Error('Invalid upload response'));
                 }

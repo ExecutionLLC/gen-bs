@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import {requestAppendAnalysesHistoryAsync} from '../../../actions/analysesHistory';
+import * as i18n from '../../../utils/i18n';
 
 
 const PAGINATION = {
@@ -54,7 +55,7 @@ export default class AnalysisHistoryList extends React.Component {
     }
 
     renderListItem(isActive, historyItem, isNew) {
-        const {p} = this.props;
+        const {ui: {languageId}, p} = this.props;
         return (
             <li
                 key={historyItem.id}
@@ -71,10 +72,10 @@ export default class AnalysisHistoryList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        {isNew ? p.t('analysis.leftPane.newAnalysis') : historyItem.name}
+                        {isNew ? p.t('analysis.leftPane.newAnalysis') : i18n.getEntityText(historyItem, languageId).name}
                     </span>
                     <span className='link-desc'>
-                        {isNew ? p.t('analysis.leftPane.newAnalysisDescription') : historyItem.description}
+                        {isNew ? p.t('analysis.leftPane.newAnalysisDescription') : i18n.getEntityText(historyItem, languageId).description}
                     </span>
                 </a>
             </li>

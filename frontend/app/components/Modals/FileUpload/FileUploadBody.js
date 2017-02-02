@@ -14,7 +14,7 @@ export default class FileUploadBody extends React.Component {
         const {
             dispatch, fileUpload, editableFieldsList, samplesList,
             currentSampleId, auth, closeModal, currentHistorySamplesIds,
-            onUploadHide, p
+            onUploadHide, languageId, p
         } = this.props;
         return (
             <Modal.Body>
@@ -29,6 +29,7 @@ export default class FileUploadBody extends React.Component {
                         currentHistorySamplesIds={currentHistorySamplesIds}
                         closeModal={closeModal}
                         onSelectUpload={() => this.onSelectUpload()}
+                        languageId={languageId}
                         p={p}
                     />
                     <FileUploadSampleRightPane
@@ -43,6 +44,7 @@ export default class FileUploadBody extends React.Component {
                         changeShowValues={(e) => this.setShowValuesState(e)}
                         isBringToFront={this.props.isUploadBringToFront}
                         onUploadHide={onUploadHide}
+                        languageId={languageId}
                         p={p}
                     />
                 </div>

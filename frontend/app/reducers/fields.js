@@ -14,7 +14,7 @@ const initialState = {
 };
 
 function reduceReceiveTotalFields(action, state) {
-    const totalFields = FieldUtils.sortAndAddLabels(action.fields);
+    const totalFields = action.fields;
     const sourceFields = _.filter(totalFields, (field) => FieldUtils.isSourceField(field));
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {

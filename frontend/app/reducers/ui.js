@@ -26,6 +26,11 @@ export default function ui(state = {
                 isAnalyzeTooltipVisible: action.flag
             });
 
+        case ActionTypes.SET_CURRENT_LANGUAGE_ID:
+            return Object.assign({}, state, {
+                languageId: action.languageId
+            });
+
         default:
             return state;
     }

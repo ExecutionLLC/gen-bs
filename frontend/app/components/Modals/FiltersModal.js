@@ -12,6 +12,7 @@ import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 import {modalName} from '../../actions/modalWindows';
+import * as i18n from '../../utils/i18n';
 
 
 // Texts that differs filter builder from model builder
@@ -55,7 +56,7 @@ class FiltersModal extends Component {
         const editingFilter = editingFilterObject && editingFilterObject.filter;
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
-        const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
+        const editingFilterNameTrimmed = editingFilter && this.getTrimmedFilterName(editingFilter);
         const texts = filterBuilder.filtersStrategy ? filterBuilderTexts[filterBuilder.filtersStrategy.name] : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
@@ -140,6 +141,11 @@ class FiltersModal extends Component {
         );
     }
 
+    getTrimmedFilterName(filter) {
+        const {ui: {languageId}} = this.props;
+        return i18n.getEntityText(filter, languageId).name.trim();
+    }
+
     /**
      * @param {Object}editingFilter
      * @param {boolean}isFilterEditable
@@ -153,7 +159,7 @@ class FiltersModal extends Component {
                 .filter(filter => filter.type !== entityType.HISTORY
                 // Next line is done to work with models. Filters have no analysis type.
                 && filter.analysisType === editingFilter.analysisType)
-                .some(filter => filter.name.trim() === editingFilterName
+                .some(filter => this.getTrimmedFilterName(filter) === editingFilterName
                     && filter.id != editingFilter.id
                 );
         if (filterNameExists) {
@@ -174,10 +180,11 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const {filterBuilder, auth, fields} = state;
+    const {filterBuilder, ui, auth, fields} = state;
 
     return {
         fields,
+        ui,
         filterBuilder,
         auth
     };

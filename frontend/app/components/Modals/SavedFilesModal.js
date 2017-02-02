@@ -5,6 +5,7 @@ import {getP} from 'redux-polyglot/dist/selectors';
 
 import DialogBase from './DialogBase';
 import {closeSavedFilesDialog, downloadSavedFileAsync} from '../../actions/savedFiles';
+import * as i18n from '../../utils/i18n';
 
 class SavedFilesModal extends DialogBase {
     constructor(props) {
@@ -68,7 +69,7 @@ class SavedFilesModal extends DialogBase {
                           <th>{p.t('savedFiles.headerSample')}</th>
                           <th>{p.t('savedFiles.headerFilter')}</th>
                           <th>{p.t('savedFiles.headerView')}</th>
-                          {/*TODO check Models header after the merge*/}
+                          <th>{p.t('savedFiles.headerModel')}</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -81,16 +82,16 @@ class SavedFilesModal extends DialogBase {
 
     renderSavedFileRow(savedFile) {
         const {filter, view, model, samples, timestamp} = savedFile;
-        const {samplesList: {hashedArray: {hash: samplesHashedArray}}, p} = this.props;
+        const {samplesList: {hashedArray: {hash: samplesHashedArray}}, ui: {languageId}, p} = this.props;
         const savedFileSamples = _.map(samples, sample => samplesHashedArray[sample.id]);
-        const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? sample.name : '???');
+        const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? i18n.getEntityText(sample, languageId).name : '???');
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
                 <td>{savedFileSamplesNames.join(', ')}</td>
-                <td>{filter.name}</td>
-                <td>{view.name}</td>
-                <td>{model ? model.name : ''}</td>
+                <td>{i18n.getEntityText(filter, languageId).name}</td>
+                <td>{i18n.getEntityText(view, languageId).name}</td>
+                <td>{model ? i18n.getEntityText(model, languageId).name : ''}</td>
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}
@@ -121,12 +122,13 @@ SavedFilesModal.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { savedFiles: {list}, auth: {isDemo}, samplesList } = state;
+    const { savedFiles: {list}, auth: {isDemo}, samplesList, ui } = state;
 
     return {
         savedFiles: list,
         isDemo,
         samplesList,
+        ui,
         p: getP(state)
     };
 }

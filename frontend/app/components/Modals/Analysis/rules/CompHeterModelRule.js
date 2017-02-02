@@ -1,6 +1,8 @@
 import _ from 'lodash';
 
 import BaseRule from './BaseRule';
+import * as i18n from '../../../../utils/i18n';
+
 
 const compoundHeterozygousModelRuleName = 'CompoundHeterozygousModel';
 const gtGtField = 'GT_GT';
@@ -20,17 +22,17 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
     }
 
     isValid() {
-        const {historyItem: {samples}, fields, samplesList} = this.props;
+        const {historyItem: {samples}, fields, samplesList, languageId} = this.props;
         const analysesSamples = _.map(samples, sample => samplesList.hashedArray.hash[sample.id]);
         const invalidGenotypeSample = _.find(analysesSamples, sample => _.isNull(sample.genotypeName));
         if (invalidGenotypeSample) {
             return {
                 isValid: false,
-                errorMessage: `Sample '${invalidGenotypeSample.name}' doesn't have any genotype.`
+                errorMessage: `Sample '${i18n.getEntityText(invalidGenotypeSample, languageId).name}' doesn't have any genotype.`
             };
         }
         const invalidGtFieldSample = _.find(analysesSamples, sample => {
-            const sampleFields = _.map(sample.sampleFields, value =>fields.totalFieldsHashedArray.hash[value.fieldId]);
+            const sampleFields = _.map(sample.sampleFields, value => fields.totalFieldsHashedArray.hash[value.fieldId]);
             return !_.some(sampleFields, sampleField => {
                 return sampleField.name === gtGtField;
             });
@@ -38,7 +40,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
         if (invalidGtFieldSample) {
             return {
                 isValid: false,
-                errorMessage: `Sample '${invalidGtFieldSample.name}' doesn't have ${gtGtField} field.`
+                errorMessage: `Sample '${i18n.getEntityText(invalidGenotypeSample, languageId).name}' doesn't have ${gtGtField} field.`
             };
         }
         return {

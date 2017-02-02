@@ -6,10 +6,6 @@ import ComponentBase from '../../shared/ComponentBase';
 
 export default class ExportDropdown extends ComponentBase {
 
-    constructor(props) {
-        super(props);
-    }
-
     haveSelectedVariants() {
         const {selectedRowIndices} = this.props;
         return !_.isEmpty(selectedRowIndices);

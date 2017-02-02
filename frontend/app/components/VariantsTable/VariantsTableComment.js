@@ -4,29 +4,30 @@ import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 import {createCommentAsync, updateCommentAsync, removeCommentAsync} from '../../actions/variantsTable';
 import config from '../../../config';
+import * as i18n from '../../utils/i18n';
 
 
 export default class VariantsTableComment extends Component {
     constructor(props) {
         super(props);
-        const {comments} = this.props;
+        const {comments, ui: {languageId}} = this.props;
         this.state = {
-            comment: (_.isEmpty(comments)) ? '' : comments[0].comment
+            comment: (_.isEmpty(comments)) ? '' : i18n.getEntityText(comments[0], languageId).comment
         };
     }
 
     renderComment() {
-        const {comments} = this.props;
+        const {comments, ui: {languageId}} = this.props;
         return (
             <td className='comment'>
                 <div>
-                    {(_.isEmpty(comments)) ? ' ' : comments[0].comment}
+                    {(_.isEmpty(comments)) ? ' ' : i18n.getEntityText(comments[0], languageId).comment}
                 </div>
             </td>);
     }
 
     render() {
-        const {auth, comments, searchKey, p} = this.props;
+        const {auth, comments, searchKey, ui: {languageId}, p} = this.props;
         if (auth.isDemo) {
             return (
                 this.renderComment()
@@ -54,7 +55,7 @@ export default class VariantsTableComment extends Component {
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : comments[0].comment}</a>
+                                {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : i18n.getEntityText(comments[0], languageId).comment}</a>
 
                         </div>
                     </OverlayTrigger>
@@ -75,7 +76,7 @@ export default class VariantsTableComment extends Component {
                 this.props.dispatch(createCommentAsync(alt, pos, reference, chrom, searchKey, comment));
             }
         } else if (comment) {
-            this.props.dispatch(updateCommentAsync(comments[0].id, alt, pos, reference, chrom, searchKey, comment));
+            this.props.dispatch(updateCommentAsync(comments[0], alt, pos, reference, chrom, searchKey, comment));
         } else {
             this.props.dispatch(removeCommentAsync(comments[0].id, searchKey));
         }
@@ -91,6 +92,7 @@ export default class VariantsTableComment extends Component {
             chrom,
             searchKey,
             comments,
+            ui: {languageId},
             p
         } = this.props;
 
@@ -106,7 +108,7 @@ export default class VariantsTableComment extends Component {
                                               placeholder={p.t('variantsTable.commentPlaceholder')}
                                               className='form-control material-input input-large'
                                               onChange={(e) => this.onCommentChanged(e)}
-                                              defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
+                                              defaultValue={(_.isEmpty(comments)) ? '' : i18n.getEntityText(comments[0], languageId).comment}
                                               maxLength={config.ANALYSIS.MAX_COMMENT_LENGTH}
                                     />
                             </div>
@@ -134,7 +136,6 @@ export default class VariantsTableComment extends Component {
 
 VariantsTableComment.propTypes = {
     comments: React.PropTypes.array.isRequired,
-    comment: React.PropTypes.string,
     reference: React.PropTypes.string.isRequired,
     pos: React.PropTypes.string.isRequired,
     alt: React.PropTypes.string.isRequired,

@@ -14,6 +14,7 @@ import {
 } from '../../../actions/filterBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import {isFilterComplexModel} from '../../../utils/filterUtils';
+import * as i18n from '../../../utils/i18n';
 
 
 export default class ExistentFilterSelect extends Component {
@@ -63,9 +64,10 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderFiltersSelector(filters) {
+        const {ui: {languageId}} = this.props;
         const selectItems = filters.map( filter => ({
             value: filter.id,
-            label: getItemLabelByNameAndType(filter.name, filter.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(filter, languageId).name, filter.type)
         }));
 
         return (
@@ -139,23 +141,23 @@ export default class ExistentFilterSelect extends Component {
     }
 
     onSelectChange(filters, filterId) {
-        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId)));
+        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId, this.props.ui.languageId)));
     }
 
     onDuplicateClick() {
         const filter = this.getSelectedFilter();
-        this.props.dispatch(filterBuilderRestartEdit(true, filter));
+        this.props.dispatch(filterBuilderRestartEdit(true, filter, this.props.ui.languageId));
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        this.props.dispatch(filterBuilderRestartEdit(false, filter));
+        this.props.dispatch(filterBuilderRestartEdit(false, filter, this.props.ui.languageId));
     }
 
     onDeleteFilterClick() {
-        const {dispatch} = this.props;
+        const {dispatch, ui: {languageId}} = this.props;
         const filterId = this.getSelectedFilter().id;
-        dispatch(filterBuilderDeleteFilter(filterId)).then((newFilter) => {
+        dispatch(filterBuilderDeleteFilter(filterId, languageId)).then((newFilter) => {
             dispatch(fireOnSaveAction(newFilter));
         });
     }

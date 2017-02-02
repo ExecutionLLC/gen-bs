@@ -12,7 +12,7 @@ export default class AnalysisLeftPane extends React.Component {
 
         const {
             dispatch, historyList, initialHistoryList, historyListSearch,
-            isHistoryReceivedAll, isHistoryRequesting, newHistoryItem, p
+            isHistoryReceivedAll, isHistoryRequesting, newHistoryItem, ui, p
         } = this.props;
 
         return (
@@ -34,6 +34,7 @@ export default class AnalysisLeftPane extends React.Component {
                     onSelectHistory={this.props.onSelectHistory}
                     viewsList={this.props.viewsList}
                     filtersList={this.props.filtersList}
+                    ui={ui}
                     p={p}
                 />
             </div>

@@ -1,5 +1,8 @@
 import _ from 'lodash';
-import gzip from '../utils/gzip';
+import {
+    gzip,
+    isGzipFormat
+} from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
 
@@ -126,18 +129,19 @@ function addNoGZippedForUpload(files) {
  * @param {function(string)} onError
  */
 function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
-    if (file.type === 'application/gzip'
-        || file.type === 'application/x-gzip'
-        || file.name.split('.').pop() === 'gz') {
-        onGzipped(file);
-    } else if (file.type === 'text/vcard'
-        || file.type === 'text/directory'
-        || file.name.split('.').pop() === 'vcf') {
-        onGzipStart();
-        gzip(file).then(gzippedFile => onGzipped(gzippedFile));
-    } else {
+    if (!(file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') &&
+        !(file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz')) {
         onError('Unsupported file type: must be Variant Call Format'
             + ' (VCF) 4.1 or higher or VCF compressed with gzip');
+    } else {
+        isGzipFormat(file).then(isGz => {
+            if (isGz) {
+                onGzipped(file);
+            } else {
+                onGzipStart();
+                gzip(file).then(gzippedFile => onGzipped(gzippedFile));
+            }
+        });
     }
 }
 
@@ -228,11 +232,11 @@ export function uploadFile(fileUploadId) {
                 dispatch(changeFileUploadProgress(percentage, fileUploadStatus.AJAX, fp.id));
             },
             (err) => {
-                console.error('Upload FAILED: ', err.responseText);
+                console.error('Upload FAILED: ', err);
                 delete requestAbortFunctions[fp.id];
                 dispatch(fileUploadError(fp.id, {
                     code: null,
-                    message: err.responseText
+                    message: err
                 }));
             }
         );
