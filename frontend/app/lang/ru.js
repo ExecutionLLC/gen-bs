@@ -81,11 +81,13 @@ export default {
         unexpectedErrorTitle: 'Ошибка',
         errorCode: 'Код ошибки: %{errorCode}'
     },
-    variantsTableAddComment: 'Добавить комментарий',
-    variantsTableCommentPlaceholder: 'Добавьте комментарий...',
-    variantsTableSaveComment: 'Сохранить',
-    variantsTableCancelComment: 'Отменить',
-    variantsTableEmpty: 'Не найдено',
-    variantsTableHeadComment: 'Комментарий',
-    variantsTableLoading: 'Загрузка...'
+    variantsTable: {
+        addComment: 'Добавить комментарий',
+        commentPlaceholder: 'Добавьте комментарий...',
+        saveComment: 'Сохранить',
+        cancelComment: 'Отменить',
+        empty: 'Не найдено',
+        headComment: 'Комментарий',
+        loading: 'Загрузка...'
+    }
 };

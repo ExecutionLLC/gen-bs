@@ -42,7 +42,7 @@ export default class VariantsTableHead extends Component {
                     <div>
                         <div className='variants-table-header-label'>
                             <a type='button' className='btn-link-default'>
-                                {p.t('variantsTableHeadComment')}
+                                {p.t('variantsTable.headComment')}
                             </a>
 
                         </div>

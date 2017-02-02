@@ -10,7 +10,7 @@ export default class VariantsTableEmpty extends Component {
                 <div className='empty'>
                       <h3>
                       <i className='md-i'>hourglass_empty</i>
-                          {p.t('variantsTableEmpty')}
+                          {p.t('variantsTable.empty')}
                       </h3>
                 </div>
             </div>

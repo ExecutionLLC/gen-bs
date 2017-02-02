@@ -54,7 +54,7 @@ export default class VariantsTableComment extends Component {
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {(_.isEmpty(comments)) ? p.t('variantsTableAddComment') : comments[0].comment}</a>
+                                {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : comments[0].comment}</a>
 
                         </div>
                     </OverlayTrigger>
@@ -103,7 +103,7 @@ export default class VariantsTableComment extends Component {
                         <div>
                             <div className=''>
                                     <textarea rows='7'
-                                              placeholder={p.t('variantsTableCommentPlaceholder')}
+                                              placeholder={p.t('variantsTable.commentPlaceholder')}
                                               className='form-control material-input input-large'
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
@@ -115,12 +115,12 @@ export default class VariantsTableComment extends Component {
                                         className='btn btn-uppercase btn-link editable-submit'
                                         onClick={() => this.onSaveClick(alt, pos,
                                             reference, chrom, searchKey, comment, comments)}
-                                >{p.t('variantsTableSaveComment')}
+                                >{p.t('variantsTable.saveComment')}
                                 </button>
                                 <button type='button'
                                         onClick={() => this.refs.overlay.toggle()}
                                         className='btn btn-uppercase btn-link editable-cancel'>
-                                    {p.t('variantsTableCancelComment')}
+                                    {p.t('variantsTable.cancelComment')}
                                 </button>
                             </div>
                         </div>

@@ -81,11 +81,13 @@ export default {
         unexpectedErrorTitle: 'Unexpected Error',
         errorCode: 'Error code: %{errorCode}'
     },
-    variantsTableAddComment: 'Add comment',
-    variantsTableCommentPlaceholder: 'Your comments here...',
-    variantsTableSaveComment: 'Save',
-    variantsTableCancelComment: 'Cancel',
-    variantsTableEmpty: 'Results are empty!',
-    variantsTableHeadComment: 'Comment',
-    variantsTableLoading: 'Loading...'
+    variantsTable: {
+        addComment: 'Add comment',
+        commentPlaceholder: 'Your comments here...',
+        saveComment: 'Save',
+        cancelComment: 'Cancel',
+        empty: 'Results are empty!',
+        headComment: 'Comment',
+        loading: 'Loading...'
+    }
 };

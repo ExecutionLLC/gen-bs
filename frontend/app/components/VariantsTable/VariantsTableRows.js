@@ -157,7 +157,7 @@ export default class VariantsTableRows extends Component {
         return (
             <tr ref={REFS.LOADING}>
                 <td colSpan='100'>
-                    <div className='table-loader'>{p.t('variantsTableLoading')}<i className='md-i'>autorenew</i>
+                    <div className='table-loader'>{p.t('variantsTable.loading')}<i className='md-i'>autorenew</i>
                     </div>
                 </td>
             </tr>
