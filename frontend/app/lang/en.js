@@ -141,5 +141,16 @@ export default {
         empty: 'Results are empty!',
         headComment: 'Comment',
         loading: 'Loading...'
+    },
+    savedFiles: {
+        title: 'Saved Files',
+        registerCaption: 'Please register to access your saved files here.',
+        emptyCaption: 'Here will be the files you have exported, but there are no such files for now.',
+        headerDate: 'Date',
+        headerSample: 'Sample',
+        headerFilter: 'Filter',
+        headerView: 'View',
+        headerModel: 'Model',
+        buttonDownload: 'Download'
     }
 };

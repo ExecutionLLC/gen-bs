@@ -1,6 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import { connect } from 'react-redux';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import DialogBase from './DialogBase';
 import {closeSavedFilesDialog, downloadSavedFileAsync} from '../../actions/savedFiles';
@@ -16,8 +17,9 @@ class SavedFilesModal extends DialogBase {
     }
 
     renderTitleContents() {
+        const {p} = this.props;
         return (
-            <div>Saved Files</div>
+            <div>{p.t('savedFiles.title')}</div>
         );
     }
 
@@ -34,14 +36,14 @@ class SavedFilesModal extends DialogBase {
     }
 
     renderEmptyContents() {
-        const {isDemo} = this.props;
+        const {isDemo, p} = this.props;
         if (isDemo) {
             return (
-                <div className='empty'><h3><i className='md-i'>perm_identity</i>Please register to access your saved files here.</h3></div>
+                <div className='empty'><h3><i className='md-i'>perm_identity</i>{p.t('savedFiles.registerCaption')}</h3></div>
             );
         } else {
             return (
-                <div className='empty'><h3><i className='md-i'>hourglass_empty</i>Here will be the files you have exported, but there are no such files for now.</h3></div>
+                <div className='empty'><h3><i className='md-i'>hourglass_empty</i>{p.t('savedFiles.emptyCaption')}</h3></div>
             );
         }
     }
@@ -50,7 +52,7 @@ class SavedFilesModal extends DialogBase {
         if (!this.haveSavedFiles) {
             return this.renderEmptyContents();
         }
-        const {savedFiles} = this.props;
+        const {savedFiles, p} = this.props;
         // Now just take last ten elements.
         // TODO: Add pagination for saved files.
         const sortedFiles = _(savedFiles)
@@ -62,10 +64,11 @@ class SavedFilesModal extends DialogBase {
                   <table className='table table-condensed table-vertical-top table-responsive-transform table-export-labels'>
                       <thead>
                       <tr>
-                          <th>Date</th>
-                          <th>Sample</th>
-                          <th>Filter</th>
-                          <th>View</th>
+                          <th>{p.t('savedFiles.headerDate')}</th>
+                          <th>{p.t('savedFiles.headerSample')}</th>
+                          <th>{p.t('savedFiles.headerFilter')}</th>
+                          <th>{p.t('savedFiles.headerView')}</th>
+                          {/*TODO check Models header after the merge*/}
                       </tr>
                       </thead>
                       <tbody>
@@ -78,7 +81,7 @@ class SavedFilesModal extends DialogBase {
 
     renderSavedFileRow(savedFile) {
         const {filter, view, model, samples, timestamp} = savedFile;
-        const {samplesList: {hashedArray: {hash: samplesHashedArray}}} = this.props;
+        const {samplesList: {hashedArray: {hash: samplesHashedArray}}, p} = this.props;
         const savedFileSamples = _.map(samples, sample => samplesHashedArray[sample.id]);
         const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? sample.name : '???');
         return (
@@ -94,7 +97,7 @@ class SavedFilesModal extends DialogBase {
                         type='button'
                         className='btn btn-uppercase btn-link'
                     >
-                        <span>Download</span>
+                        <span>{p.t('savedFiles.buttonDownload')}</span>
                     </button>
                 </td>
             </tr>
@@ -123,7 +126,8 @@ function mapStateToProps(state) {
     return {
         savedFiles: list,
         isDemo,
-        samplesList
+        samplesList,
+        p: getP(state)
     };
 }
 
