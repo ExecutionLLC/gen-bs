@@ -165,5 +165,10 @@ export default {
         },
         waitCaption: 'Пожалуйста, подождите...',
         buttonUseHere: 'Открыть в этом окне'
+    },
+    autoLogout: {
+        title: 'Автоматический выход',
+        text: 'Сеанс будет автоматически завершён через %{secs}с.',
+        buttonExtend: 'Отложить'
     }
 };

@@ -165,5 +165,10 @@ export default {
         },
         waitCaption: 'Please, wait a moment...',
         buttonUseHere: 'Use Here'
+    },
+    autoLogout: {
+        title: 'Auto Logout',
+        text: 'Your session will be automatically closed after %{secs} seconds.',
+        buttonExtend: 'Extend session'
     }
 };
