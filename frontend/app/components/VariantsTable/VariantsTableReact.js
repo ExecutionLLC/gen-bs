@@ -42,16 +42,18 @@ class VariantsTableReact extends Component {
                         <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
                                            ref={(ref) => ref && this.onAppear(true, ref)}
+                                           p={p}
                         />
                         { !isVariantsEmpty &&
                         <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props}
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
                                            ref={(ref) => ref && this.onAppear(false, ref)}
+                                           p={p}
                         />
                         }
                     </table>
                     { isVariantsEmpty &&
-                    <VariantsTableEmpty />
+                    <VariantsTableEmpty p={p} />
                     }
                 </div>
                 }

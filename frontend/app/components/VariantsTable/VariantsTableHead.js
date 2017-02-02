@@ -9,7 +9,7 @@ import * as SamplesUtils from '../../utils/samplesUtils';
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples} = this.props;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, p} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
@@ -42,7 +42,7 @@ export default class VariantsTableHead extends Component {
                     <div>
                         <div className='variants-table-header-label'>
                             <a type='button' className='btn-link-default'>
-                                Comment
+                                {p.t('variantsTable.headComment')}
                             </a>
 
                         </div>

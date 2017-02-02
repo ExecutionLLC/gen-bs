@@ -80,5 +80,14 @@ export default {
     errors: {
         unexpectedErrorTitle: 'Unexpected Error',
         errorCode: 'Error code: %{errorCode}'
+    },
+    variantsTable: {
+        addComment: 'Add comment',
+        commentPlaceholder: 'Your comments here...',
+        saveComment: 'Save',
+        cancelComment: 'Cancel',
+        empty: 'Results are empty!',
+        headComment: 'Comment',
+        loading: 'Loading...'
     }
 };
