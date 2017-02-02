@@ -9,7 +9,7 @@ class ErrorModal extends Component {
         const {p} = this.props;
         return (
             <Modal.Header>
-                <Modal.Title data-localize='error.heading'>
+                <Modal.Title>
                     {p.t('errors.errorTitle')}
                 </Modal.Title>
             </Modal.Header>

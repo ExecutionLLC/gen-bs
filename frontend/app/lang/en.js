@@ -155,5 +155,25 @@ export default {
         headerView: 'View',
         headerModel: 'Model',
         buttonDownload: 'Download'
+    },
+    anotherPageOpened: {
+        title: 'Another Page is Active',
+        text: {
+            prefix: 'Please ',
+            link: 'click here',
+            suffix: ' to use Alapy Genomics Explorer in this window. All other opened windows will be logged off/stopped and all running processes terminated. Your account supports only one session to be open at a time'
+        },
+        waitCaption: 'Please, wait a moment...',
+        buttonUseHere: 'Use Here'
+    },
+    autoLogout: {
+        title: 'Auto Logout',
+        text: 'Your session will be automatically closed after %{secs} seconds.',
+        buttonExtend: 'Extend session'
+    },
+    closeAllSessions: {
+        title: 'Other Session is Opened',
+        text: 'We have another your session opened. If you want to close it and start a new one here, please press the button below or just close the dialog.',
+        buttonClose: 'Close Other Session'
     }
 };
