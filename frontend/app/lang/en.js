@@ -155,5 +155,15 @@ export default {
         headerView: 'View',
         headerModel: 'Model',
         buttonDownload: 'Download'
+    },
+    anotherPageOpened: {
+        title: 'Another Page is Active',
+        text: {
+            prefix: 'Please ',
+            link: 'click here',
+            suffix: ' to use Alapy Genomics Explorer in this window. All other opened windows will be logged off/stopped and all running processes terminated. Your account supports only one session to be open at a time'
+        },
+        waitCaption: 'Please, wait a moment...',
+        buttonUseHere: 'Use Here'
     }
 };

@@ -155,5 +155,15 @@ export default {
         headerView: 'Представление',
         headerModel: 'Модель',
         buttonDownload: 'Скачать'
+    },
+    anotherPageOpened: {
+        title: 'Сайт открыт в другой странице',
+        text: {
+            prefix: '',
+            link: 'Кликните здесь',
+            suffix: ', чтобы открыть Alapy Genomics Explorer в этом окне. Все другие открытые с этим сайтом окна будут остановлены. Ваш аккаунт позволяет работать с сайтом только в одном окне.'
+        },
+        waitCaption: 'Пожалуйста, подождите...',
+        buttonUseHere: 'Открыть в этом окне'
     }
 };
