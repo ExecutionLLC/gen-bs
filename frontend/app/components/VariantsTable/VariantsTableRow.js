@@ -209,6 +209,7 @@ export default class VariantsTableRow extends ComponentBase {
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.row !== nextProps.row
             || this.props.isSelected !== nextProps.isSelected
+            || this.props.p !== nextProps.p
             || this.state !== nextState;
     }
 }

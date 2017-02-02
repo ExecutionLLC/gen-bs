@@ -41,8 +41,8 @@ export default class VariantsTableRows extends Component {
     shouldComponentUpdate(nextProps) {
         return this.props.variants !== nextProps.variants
             || this.props.variantsTable.isFilteringOrSorting !== nextProps.variantsTable.isFilteringOrSorting
-            || this.props.variantsTable.selectedRowIndices !==
-            nextProps.variantsTable.selectedRowIndices;
+            || this.props.variantsTable.selectedRowIndices !== nextProps.variantsTable.selectedRowIndices
+            || this.props.p !== nextProps.p;
     }
 
     componentWillUnmount() {
