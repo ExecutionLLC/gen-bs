@@ -130,8 +130,11 @@ export default {
         }
     },
     errors: {
+        errorTitle: 'Error',
         unexpectedErrorTitle: 'Unexpected Error',
-        errorCode: 'Error code: %{errorCode}'
+        errorCode: 'Error code: %{errorCode}',
+        unknownError: 'Unknown error',
+        buttonClose: 'Close'
     },
     variantsTable: {
         addComment: 'Add comment',
