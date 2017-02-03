@@ -5,6 +5,7 @@ import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {formatDate} from './../../../utils/dateUtil';
+import * as HistoryItemUtils from '../../../utils/HistoryItemUtils';
 import {
     duplicateAnalysesHistoryItem,
     createNewHistoryItem,
@@ -795,8 +796,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onDuplicateButtonClick() {
-        const {dispatch, historyItem, ui: {languageId}} = this.props;
-        dispatch(duplicateAnalysesHistoryItem(historyItem, languageId));
+        const {dispatch, historyItem, ui: {languageId}, p} = this.props;
+        const historyItemName = i18n.getEntityText(historyItem, languageId).name;
+        const newHistoryItemName = p.t('analysis.copyOf', {name: historyItemName});
+        dispatch(duplicateAnalysesHistoryItem(historyItem, {name: newHistoryItemName}, languageId));
     }
 
     onCancelButtonClick() {
@@ -805,12 +808,19 @@ export default class AnalysisRightPane extends React.Component {
             samplesList: {hashedArray: {array: samples}},
             viewsList: {hashedArray: {array: views}},
             filtersList: {hashedArray: {array: filters}},
-            ui: {languageId}
+            ui: {languageId},
+            p
         } = this.props;
         const sample = getDefaultOrStandardItem(samples);
         const filter = getDefaultOrStandardItem(filters);
         const view = getDefaultOrStandardItem(views);
-        dispatch(createNewHistoryItem(sample, filter, view, languageId));
+        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
+        const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
+        dispatch(createNewHistoryItem(
+            sample, filter, view,
+            {name: newAnalysisName, description: newAnalysisDescription},
+            languageId
+        ));
     }
 
     onAnalyzeButtonClick(isEditing) {
@@ -844,7 +854,7 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const allowedFields = FieldUtils.makeViewFilterAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList, languageId);
-        dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields, languageId));
+        dispatch(viewBuilderStartEdit(null, viewsList.hashedArray.hash[historyItem.viewId], allowedFields, languageId));
         const action = this.actionEdit({viewId: null});
         dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         dispatch(openModal(modalName.VIEWS));
@@ -860,7 +870,7 @@ export default class AnalysisRightPane extends React.Component {
         const mainSample = samplesHash[historyItem.samples[0].id];
         const allowedFields = FieldUtils.makeViewFilterAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList, languageId);
         const filterFiltersStrategy = {name: filterBuilderStrategyName.FILTER};
-        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList, languageId));
+        dispatch(filterBuilderStartEdit(null, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList, languageId));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         dispatch(openModal(modalName.FILTERS));
@@ -888,7 +898,7 @@ export default class AnalysisRightPane extends React.Component {
             ...modelsList,
             hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === historyItem.type))
         };
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList, languageId));
+        dispatch(filterBuilderStartEdit(null, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList, languageId));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal(modalName.FILTERS));

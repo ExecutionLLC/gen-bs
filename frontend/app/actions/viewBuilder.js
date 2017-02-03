@@ -33,19 +33,19 @@ export function viewBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function viewBuilderStartEdit(makeNew, view, allowedFields, languageId) {
+export function viewBuilderStartEdit(newViewInfo, view, allowedFields, languageId) {
     return {
         type: VBUILDER_START_EDIT,
-        makeNew,
+        newViewInfo,
         view,
         allowedFields,
         languageId
     };
 }
 
-export function viewBuilderRestartEdit(makeNew, view, languageId) {
+export function viewBuilderRestartEdit(newViewInfo, view, languageId) {
     return (dispatch, getState) => {
-        dispatch(viewBuilderStartEdit(makeNew, view, getState().viewBuilder.allowedFields, languageId));
+        dispatch(viewBuilderStartEdit(newViewInfo, view, getState().viewBuilder.allowedFields, languageId));
     };
 }
 
@@ -176,7 +176,7 @@ export function viewBuilderDeleteView(viewId, languageId) {
                     } = getState();
                     const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                     const newView = viewIdToViewHash[newViewId];
-                    dispatch(viewBuilderRestartEdit(false, newView, languageId));
+                    dispatch(viewBuilderRestartEdit(null, newView, languageId));
                     resolve(newView);
                 });
         });

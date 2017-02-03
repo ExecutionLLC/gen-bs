@@ -127,7 +127,9 @@ export default {
                 duplicate: 'Duplicate',
                 viewResults: 'View results'
             }
-        }
+        },
+        copyOf: 'Copy of %{name}',
+        descriptionOf: 'Description of %{name}'
     },
     errors: {
         errorTitle: 'Error',
@@ -233,7 +235,8 @@ export default {
         saveAndSelect: 'Save and Select',
         select: 'Select',
         cancel: 'Cancel',
-        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}'
+        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}',
+        copyOf: 'Copy of %{name}'
     },
     view: {
         existentViewSelect: {
@@ -265,6 +268,7 @@ export default {
             title: 'Table Columns',
             columnsSorting: 'Column Name and Sort Order',
             columnsFilter: 'Keywords'
-        }
+        },
+        copyOf: 'Copy of %{name}'
     }
 };

@@ -127,7 +127,9 @@ export default {
                 duplicate: 'Создать копию',
                 viewResults: 'Просмотреть результаты'
             }
-        }
+        },
+        copyOf: 'Копия %{name}',
+        descriptionOf: 'Описание %{name}'
     },
     errors: {
         errorTitle: 'Ошибка',
@@ -233,7 +235,8 @@ export default {
         saveAndSelect: 'Сохранить и выбрать',
         select: 'Выбрать',
         cancel: 'Отмена',
-        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые %{filtersOrModels}'
+        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые %{filtersOrModels}',
+        copyOf: 'Копия %{name}'
     },
     view: {
         existentViewSelect: {
@@ -265,6 +268,7 @@ export default {
             title: 'Колонки',
             columnsSorting: 'Имя колонки и порядок сортировки',
             columnsFilter: 'Ключевые слова'
-        }
+        },
+        copyOf: 'Копия %{name}'
     }
 };

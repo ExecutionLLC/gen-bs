@@ -43,12 +43,13 @@ export function setCurrentAnalysesHistoryId(id) {
     };
 }
 
-export function createNewHistoryItem(sample, filter, view, languageId) {
+export function createNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
     return {
         type: CREATE_NEW_HISTORY_ITEM,
         sample,
         filter,
         view,
+        newHistoryItemInfo,
         languageId
     };
 }
@@ -96,10 +97,11 @@ export function prepareAnalysesHistoryToSearch(search) {
     };
 }
 
-export function duplicateAnalysesHistoryItem(historyItem, languageId) {
+export function duplicateAnalysesHistoryItem(historyItem, newHistoryItemInfo, languageId) {
     return {
         type: DUPLICATE_ANALYSES_HISTORY_ITEM,
         historyItem,
+        newHistoryItemInfo,
         languageId
     };
 }
