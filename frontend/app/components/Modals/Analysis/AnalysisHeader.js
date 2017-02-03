@@ -16,8 +16,7 @@ export default class AnalysisHeader extends React.Component {
                         onClick={onAnalysisHide}
                     ><i className='md-i'>keyboard_backspace</i></button>
                     }
-                    <span className='modal-title-text'
-                          data-localize='query.title'>{p.t('analysis.title')}</span>
+                    <span className='modal-title-text'>{p.t('analysis.title')}</span>
                 </Modal.Title>
             </Modal.Header>
         );

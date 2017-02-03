@@ -227,6 +227,12 @@ export default {
             reset: 'Сбросить %{filterOrModel}',
             deleteItem: 'Удалить %{filterOrModel}'
         },
+        newFilterInputs: {
+            newFilter: 'Создать %{filterOrModel}',
+            namePlaceholder: 'Введите имя',
+            description: 'Описание',
+            descriptionPlaceholder: 'Введите описание (опиционально)'
+        },
         readOnlyReason: {
             historyEntity: '%{entity} является историческим, создайте копию и внесите в неё изменения.',
             notEditable: '%{entity} только для чтения, создайте копию и внесите в неё изменения.',

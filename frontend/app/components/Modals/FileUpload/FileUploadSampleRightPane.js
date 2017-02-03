@@ -62,7 +62,6 @@ class SampleHeader extends React.Component {
                         value={description || ''}
                         placeholder={p.t('samples.editingSample.descriptionPlaceholder')}
                         className='form-control material-input-sm'
-                        data-localize='query.settings.description'
                         maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, null, e)}
                         disabled={!entityTypeIsEditable(type) || isDemo}
@@ -96,7 +95,6 @@ class SampleHeader extends React.Component {
                         value={name}
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder={p.t('samples.editingSample.namePlaceholder')}
-                        data-localize='query.settings.name'
                         maxLength={config.UPLOADS.MAX_NAME_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, e, null)}
                         disabled={!entityTypeIsEditable(type) || isDemo}
@@ -127,7 +125,7 @@ class SampleHeader extends React.Component {
                     className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                     onClick={() => this.onSampleItemDelete(editingSample.id)}
                 >
-                    <span data-localize='query.delete_sample'>{p.t('samples.editingSample.deleteSample')}</span>
+                    <span>{p.t('samples.editingSample.deleteSample')}</span>
                 </button>
             );
         }

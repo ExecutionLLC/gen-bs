@@ -227,6 +227,12 @@ export default {
             reset: 'Reset %{filterOrModel}',
             deleteItem: 'Delete %{filterOrModel}'
         },
+        newFilterInputs: {
+            newFilter: 'New %{filterOrModel}',
+            namePlaceholder: 'Set %{filterOrModel} name',
+            description: 'Description',
+            descriptionPlaceholder: 'Set %{filterOrModel} description (optional)'
+        },
         readOnlyReason: {
             historyEntity: 'This %{entity} is history %{entity}, duplicate it to make changes.',
             notEditable: 'This %{entity} is not editable, duplicate it to make changes.',
