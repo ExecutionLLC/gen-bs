@@ -44,6 +44,14 @@ export default {
         rightPaneWait: {
             title: 'Wait. ',
             description: 'File is loading'
+        },
+        errors: {
+            updateSampleFieldsError: 'We are really sorry, but there is an error while updating sample fields.' +
+                ' Be sure we are working on resolving the issue. You can also try to reload page and try again.',
+            fetchSamplesError: 'We are really sorry, but there is an error while getting the list of samples' +
+                ' from our server. Be sure we are working on resolving the issue. You can also try to reload page and try again.',
+            deleteSampleError: 'We are really sorry, but there is an error while deleting sample.' +
+                ' Be sure we are working on resolving the issue. You can also try to reload page and try again.'
         }
     },
     demoPopup: {
@@ -131,14 +139,45 @@ export default {
             }
         },
         copyOf: 'Copy of %{name}',
-        descriptionOf: 'Description of %{name}'
+        descriptionOf: 'Description of %{name}',
+        error: {
+            historyError: 'Cannot update analyses history. Please try again.',
+            getSampleNetworkError: 'Cannot get sample (network error). Please try again.',
+            getSampleServerError: 'Cannot get sample (server error). Please try again.',
+            getViewError: 'Cannot get view. Please try again.',
+            getFilterError: 'Cannot get filter. Please try again.',
+            getModelError: 'Cannot get model. Please try again.'
+        }
     },
     errors: {
         errorTitle: 'Error',
         unexpectedErrorTitle: 'Unexpected Error',
         errorCode: 'Error code: %{errorCode}',
         unknownError: 'Unknown error',
-        buttonClose: 'Close'
+        buttonClose: 'Close',
+        /*
+         * login errors
+         */
+        loginError: 'Authorization failed. You can reload page and try again.',
+        loginGoogleError: 'Google authorization failed.',
+        closeAllUserSessionError: 'Error while closing all user sessions.',
+        closeOtherSocketsError: 'Error while closing other sockets. Please reload page and try again.',
+        /*
+         * field errors
+         */
+        totalFieldsNetworkError: 'Cannot get list of all fields (network error). You can reload page and try again.',
+        totalFieldsServerError: 'Cannot get list of all fields (server error). You can reload page and try again.',
+        /*
+         * file upload errors
+         */
+        deleteUploadError: 'We are really sorry, but there is an error while deleting upload.' +
+            ' Be sure we are working on resolving the issue. You can also try to reload page and try again.',
+        /*
+         * user data errors
+         */
+        fetchUserDataNetworkError: 'Cannot load user data. You can reload page and try again.',
+        cannotFindDefaultItemsError: 'Cannot determine set of default settings (sample, view, filter). ' +
+            'You can try to set sample, filter, view by hand or try to reload page.'
     },
     variantsTable: {
         addComment: 'Add comment',
@@ -147,7 +186,15 @@ export default {
         cancelComment: 'Cancel',
         empty: 'Results are empty!',
         headComment: 'Comment',
-        loading: 'Loading...'
+        loading: 'Loading...',
+        errors: {
+            analyzeSampleError: 'Cannot analyze data. Please try again.',
+            nextDataError: 'Cannot get next part of data. Please try again.',
+            searchInResultsError: 'Cannot analyze results. Please try again.', // TODO: doubtful description
+            addCommentError: 'Cannot add commentary. Please try again.',
+            updateCommentError: 'Cannot update commentary. Please try again.',
+            deleteCommentError: 'Cannot delete commentary. Please try again.'
+        }
     },
     savedFiles: {
         title: 'Saved Files',
@@ -158,7 +205,11 @@ export default {
         headerFilter: 'Filter',
         headerView: 'View',
         headerModel: 'Model',
-        buttonDownload: 'Download'
+        buttonDownload: 'Download',
+        errors: {
+            uploadError: 'Error while uploading exported file',
+            downloadError: 'Error downloading exported file'
+        }
     },
     anotherPageOpened: {
         title: 'Another Page is Active',
@@ -259,7 +310,16 @@ export default {
         saveAndSelect: 'Save and Select',
         select: 'Select',
         cancel: 'Cancel',
-        copyOf: 'Copy of %{name}'
+        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}',
+        copyOf: 'Copy of %{name}',
+        errors: {
+            createFilterError: 'Cannot create new filter. Please try again.',
+            updateFilterError: 'Cannot update filter. Please try again.',
+            deleteFilterError: 'Cannot delete filter. Please try again.',
+            createModelError: 'Cannot create new model. Please try again.',
+            updateModelError: 'Cannot update model. Please try again.',
+            deleteModelError: 'Cannot delete model. Please try again.'
+        }
     },
     view: {
         existentViewSelect: {
@@ -300,6 +360,14 @@ export default {
             notEditable: 'This view is not editable, duplicate it to make changes.',
             forRegisteredUsers: ' (Only for registered users)'
         },
-        orderTitle: 'Desc/Asc'
+        orderTitle: 'Desc/Asc',
+        errors: {
+            createViewNetworkError: 'Cannot create new view (network error). Please try again.',
+            createViewServerError: 'Cannot create new view (server error). Please try again.',
+            updateViewNetworkError: 'Cannot update view (network error). Please try again.',
+            updateViewServerError: 'Cannot update view (server error). Please try again.',
+            deleteViewNetworkError: 'Cannot delete view (network error). Please try again.',
+            deleteViewServerError: 'Cannot delete view (server error). Please try again.'
+        }
     }
 };

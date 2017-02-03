@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
@@ -9,9 +10,6 @@ import {handleError} from './errorHandler';
 
 export const REQUEST_TOTAL_FIELDS = 'REQUEST_TOTAL_FIELDS';
 export const RECEIVE_TOTAL_FIELDS = 'RECEIVE_TOTAL_FIELDS';
-
-const TOTAL_FIELDS_NETWORK_ERROR = 'Cannot get list of all fields (network error). You can reload page and try again.';
-const TOTAL_FIELDS_SERVER_ERROR = 'Cannot get list of all fields (server error). You can reload page and try again.';
 
 const samplesClient = apiFacade.samplesClient;
 
@@ -34,14 +32,16 @@ export function receiveTotalFields(json) {
 
 export function fetchTotalFields() {
 
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(requestTotalFields());
 
         samplesClient.getAllFields((error, response) => {
             if (error) {
-                dispatch(handleError(null, TOTAL_FIELDS_NETWORK_ERROR));
+                const p = getP(getState());
+                dispatch(handleError(null, p.t('errors.totalFieldsNetworkError')));
             } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, TOTAL_FIELDS_SERVER_ERROR));
+                const p = getP(getState());
+                dispatch(handleError(null, p.t('errors.totalFieldsServerError')));
             } else {
                 dispatch(receiveTotalFields(response.body));
             }

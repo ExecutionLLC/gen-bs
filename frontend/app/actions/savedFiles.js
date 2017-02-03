@@ -1,5 +1,6 @@
 import Moment from 'moment';
 import _ from 'lodash';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
@@ -14,9 +15,6 @@ export const SAVED_FILE_UPLOAD_RESULT_RECEIVED = 'SAVED_FILE_UPLOAD_RESULT_RECEI
 export const SAVED_FILE_DOWNLOAD_RESULT_RECEIVED = 'SAVED_FILE_DOWNLOAD_RESULT_RECEIVED';
 export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
-
-const UPLOAD_ERROR_MESSAGE = 'Error while uploading exported file';
-const DOWNLOAD_ERROR_MESSAGE = 'Error downloading exported file';
 
 const savedFilesClient = apiFacade.savedFilesClient;
 
@@ -48,9 +46,10 @@ function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
             fileMetadata,
             fileBlob,
             (error, response) => resolve({error, response}))
-        ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPLOAD_ERROR_MESSAGE, error, response))
-        ).then(
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('savedFiles.errors.uploadError'), error, response));
+        }).then(
             (response) => response.body
         ).then((savedFile) => dispatch(savedFileUploadResultReceived(savedFile)));
     };
@@ -102,7 +101,10 @@ export function downloadSavedFileAsync(savedFile) {
             savedFile.id,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) => dispatch(handleApiBodylessResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiBodylessResponseErrorAsync(p.t('savedFiles.errors.downloadError'), error, response));
+            }
         ).then((response) => dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name)));
     };
 }
