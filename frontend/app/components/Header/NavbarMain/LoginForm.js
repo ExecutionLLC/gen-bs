@@ -26,7 +26,7 @@ class LoginForm extends Component {
                        value={login}
                        type='text'
                        key='login'
-                       placeholder='Login'
+                       placeholder={p.t('navBar.auth.loginPlaceholder')}
                        name='username'
                        onChange={(e) => this.onLoginChanged(e)}/>
                 <input className='form-control material-input-sm'
@@ -34,7 +34,7 @@ class LoginForm extends Component {
                        type='password'
                        key='password'
                        name='password'
-                       placeholder='Password'
+                       placeholder={p.t('navBar.auth.passwordPlaceholder')}
                        onChange={(e) => this.onPasswordChanged(e)}/>
                 <button className='btn btn-primary  btn-uppercase login-button'
                         type='submit'

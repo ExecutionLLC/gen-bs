@@ -56,6 +56,8 @@ export default {
         auth: {
             login: 'Login',
             logout: 'Logout',
+            loginPlaceholder: 'Login',
+            passwordPlaceholder: 'Password',
             authorizedUserTitle: '',
             demoUserTitle: 'Register or login for access additional features',
             googleAccountTitle: 'Login using Google Account',
@@ -297,6 +299,7 @@ export default {
             historyEntity: 'This view is history view, duplicate it to make changes.',
             notEditable: 'This view is not editable, duplicate it to make changes.',
             forRegisteredUsers: ' (Only for registered users)'
-        }
+        },
+        orderTitle: 'Desc/Asc'
     }
 };

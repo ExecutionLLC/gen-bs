@@ -56,6 +56,8 @@ export default {
         auth: {
             login: 'Войти',
             logout: 'Выйти',
+            loginPlaceholder: 'Логин',
+            passwordPlaceholder: 'Пароль',
             authorizedUserTitle: '',
             demoUserTitle: 'Загеристрируйтесь или войдите для получения дополнительных возможностей',
             googleAccountTitle: 'Войдите через Гугл',
@@ -297,6 +299,7 @@ export default {
             historyEntity: 'Представление является историческим, создайте копию и внесите в неё изменения.',
             notEditable: 'Представление только для чтения, создайте копию и внесите в неё изменения.',
             forRegisteredUsers: ' (Только для зарегистрированных пользователей)'
-        }
+        },
+        orderTitle: 'Сортировка'
     }
 };
