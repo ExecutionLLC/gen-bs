@@ -140,19 +140,21 @@ export default class ExistentViewSelect extends React.Component {
 
     onSelectedViewChanged(viewId) {
         const {dispatch, ui: {languageId}} = this.props;
-        dispatch(viewBuilderRestartEdit(false, this.getViewForId(viewId), languageId));
+        dispatch(viewBuilderRestartEdit(null, this.getViewForId(viewId), languageId));
     }
 
     onDuplicateViewClick() {
-        const {dispatch, viewBuilder, ui: {languageId}} = this.props;
+        const {dispatch, viewBuilder, ui: {languageId}, p} = this.props;
         const editingView = viewBuilder.editingView;
-        dispatch(viewBuilderRestartEdit(true, editingView, languageId));
+        const editingViewName = i18n.getEntityText(editingView, languageId).name;
+        const newViewName = p.t('view.copyOf', {name: editingViewName});
+        dispatch(viewBuilderRestartEdit({name: newViewName}, editingView, languageId));
     }
 
     onResetViewClick() {
         const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderRestartEdit(false, this.getViewForId(editingViewId), languageId));
+        dispatch(viewBuilderRestartEdit(null, this.getViewForId(editingViewId), languageId));
     }
 
     onDeleteViewClick() {

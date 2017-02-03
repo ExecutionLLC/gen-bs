@@ -266,6 +266,7 @@ export default {
             title: 'Колонки',
             columnsSorting: 'Имя колонки и порядок сортировки',
             columnsFilter: 'Ключевые слова'
-        }
+        },
+        copyOf: 'Копия %{name}'
     }
 };

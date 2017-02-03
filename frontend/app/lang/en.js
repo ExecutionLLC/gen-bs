@@ -266,6 +266,7 @@ export default {
             title: 'Table Columns',
             columnsSorting: 'Column Name and Sort Order',
             columnsFilter: 'Keywords'
-        }
+        },
+        copyOf: 'Copy of %{name}'
     }
 };
