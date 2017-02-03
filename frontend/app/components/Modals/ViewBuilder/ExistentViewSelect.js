@@ -46,7 +46,7 @@ export default class ExistentViewSelect extends React.Component {
 
     renderWarning(isDemoSession, selectedViewType) {
         const {p} = this.props;
-        const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType, p);
+        const warningText = getReadonlyReasonForSessionAndType(isDemoSession, selectedViewType, (path) => p.t(`view.readOnlyReason.${path}`));
 
         if (!warningText) {
             return null;
@@ -89,7 +89,7 @@ export default class ExistentViewSelect extends React.Component {
 
     renderDuplicateViewButton(isDemoSession) {
         const {p} = this.props;
-        const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
+        const duplicateButtonTooltip = isDemoSession ? p.t('view.loginToWork') : p.t('view.makeCopy');
         return (
             <button type='button'
                     className='btn btn-default'

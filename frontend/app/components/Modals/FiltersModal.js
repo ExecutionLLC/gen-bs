@@ -30,6 +30,9 @@ class FiltersModal extends Component {
                     Filters: p.t('filterAndModel.texts.filters.uppercase'),
                     getStrategyValidationMessage(/*filter, strategyData*/) {
                         return '';
+                    },
+                    p(path) {
+                        return p.t(`filterAndModel.texts.filters.${path}`);
                     }
                 };
             case filterBuilderStrategyName.MODEL:
@@ -41,7 +44,10 @@ class FiltersModal extends Component {
                     getStrategyValidationMessage(model, strategyData) {
                         return model.analysisType === strategyData.analysisType ?
                             '' :
-                            p.t('filterAndModel.texts.modelMismatch');
+                            p.t('filterAndModel.modelMismatch');
+                    },
+                    p(path) {
+                        return p.t(`filterAndModel.texts.models.${path}`);
                     }
                 };
         }
@@ -77,7 +83,7 @@ class FiltersModal extends Component {
             '';
 
         const title = isLoginRequired ?
-            p.t('filterAndModel.loginRequiredMsg', {filtersOrModels: texts.filters}) :
+            texts.p('loginRequiredMsg') :
             strategyValidationMessage;
 
         const confirmButtonParams = {
@@ -163,7 +169,6 @@ class FiltersModal extends Component {
      * @return {string}
      */
     getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters, texts) {
-        const {p} = this.props;
         const filterNameExists = isFilterEditable && _(filters)
                 .filter(filter => filter.type !== entityType.HISTORY
                 // Next line is done to work with models. Filters have no analysis type.
@@ -172,15 +177,15 @@ class FiltersModal extends Component {
                     && filter.id != editingFilter.id
                 );
         if (filterNameExists) {
-            return p.t('filterAndModel.validationMessage.nameAlreadyExists', {obj: texts.Filter});
+            return texts.p('validationMessage.nameAlreadyExists');
         }
 
         if (!editingFilterName) {
-            return p.t('filterAndModel.validationMessage.empty');
+            return texts.p('validationMessage.empty');
         }
 
         if (editingFilterName && editingFilterName.length > config.FILTERS.MAX_NAME_LENGTH) {
-            return p.t('filterAndModel.validationMessage.lengthExceeded', {maxLength: config.FILTERS.MAX_NAME_LENGTH});
+            return texts.p('validationMessage.lengthExceeded', {maxLength: config.FILTERS.MAX_NAME_LENGTH});
         }
 
         return '';

@@ -74,7 +74,7 @@ export default class ViewBuilder extends React.Component {
                             />
                         </div>
                         <div className='btn-group' data-toggle='tooltip'
-                             data-placement='bottom' data-container='body' title='Desc/Asc Descending'>
+                             data-placement='bottom' data-container='body' title={p.t('view.orderTitle')}>
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
                     </div>

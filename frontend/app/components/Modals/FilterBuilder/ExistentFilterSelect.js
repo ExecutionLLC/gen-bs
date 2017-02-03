@@ -43,17 +43,15 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderTitle(texts) {
-        const {p} = this.props;
         return (
             <h5>
-                {p.t('filterAndModel.existentFilterSelect.title', {filtersOrModels: texts.Filters})}
+                {texts.p('existentSelect.title')}
             </h5>
         );
     }
 
     renderWarning(isDemoSession, selectedFilterType, texts) {
-        const {p} = this.props;
-        const warningText = getReadonlyReasonForSessionAndType(texts.filter, isDemoSession, selectedFilterType, p);
+        const warningText = getReadonlyReasonForSessionAndType(isDemoSession, selectedFilterType, (path) => texts.p(`readOnlyReason.${path}`));
 
         if (!warningText) {
             return null;
@@ -97,8 +95,7 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderDuplicateFilterButton(isDemoSession, texts) {
-        const {p} = this.props;
-        const title = isDemoSession ? `Login or register to work with ${texts.filter}` : 'Make a copy for editing';
+        const title = isDemoSession ? texts.p('loginToWork') : texts.p('makeCopy');
         return (
             <button type='button'
                     className='btn btn-default in'
@@ -107,33 +104,31 @@ export default class ExistentFilterSelect extends Component {
                     disabled={isDemoSession}
                     title={title}
             >
-                <span className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.duplicate')}</span>
+                <span className='hidden-xs'>{texts.p('existentSelect.duplicate')}</span>
                 <span className='visible-xs'><i className='md-i'>content_copy</i></span>
             </button>
         );
     }
 
     renderResetFilterButton(texts) {
-        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onResetFilterClick()}
             >
-                <span className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.reset', {filterOrModel: texts.Filter})}</span>
+                <span className='hidden-xs'>{texts.p('existentSelect.reset')}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
         );
     }
 
     renderDeleteFilterButton(texts) {
-        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onDeleteFilterClick()}
             >
-                <span className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.deleteItem', {filterOrModel: texts.Filter})}</span>
+                <span className='hidden-xs'>{texts.p('existentSelect.deleteItem')}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
         );

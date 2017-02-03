@@ -56,6 +56,8 @@ export default {
         auth: {
             login: 'Войти',
             logout: 'Выйти',
+            loginPlaceholder: 'Логин',
+            passwordPlaceholder: 'Пароль',
             authorizedUserTitle: '',
             demoUserTitle: 'Загеристрируйтесь или войдите для получения дополнительных возможностей',
             googleAccountTitle: 'Войдите через Гугл',
@@ -180,28 +182,66 @@ export default {
     },
     filterAndModel: {
         texts: {
-            filter: {
-                lowercase: 'фильтр',
-                uppercase: 'Фильтр'
-            },
             filters: {
-                lowercase: 'фильтры',
-                uppercase: 'Фильтры'
-            },
-            model: {
-                lowercase: 'модель',
-                uppercase: 'Модель'
+                header: 'Настройка фильтров',
+                noRulesToSetup: 'Фильтр не содержит настраиваемых правил',
+                existentSelect: {
+                    title: 'Доступные фильтры',
+                    duplicate: 'Создать копию',
+                    reset: 'Сбросить фиьлтр',
+                    deleteItem: 'Удалить фильтр'
+                },
+                validationMessage: {
+                    nameAlreadyExists: 'Фильтр с таким именем уже существует.',
+                    empty: 'Имя не должно быть пустым',
+                    lengthExceeded: 'Длина имени может быть не более %{maxLength}'
+                },
+                newInputs: {
+                    newCaption: 'Создать фильтр',
+                    namePlaceholder: 'Введите имя фильтра',
+                    description: 'Описание',
+                    descriptionPlaceholder: 'Введите описание фильтра (опиционально)'
+                },
+                readOnlyReason: {
+                    historyEntity: 'Фильтр является историческим, создайте копию и внесите в неё изменения.',
+                    notEditable: 'Фильтр только для чтения, создайте копию и внесите в неё изменения.',
+                    forRegisteredUsers: ' (Только для зарегистрированных пользователей)'
+                },
+                loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые фильтры',
+                loginToWork: 'Войдите или зарегистрируйтесь для работы с фильтром',
+                makeCopy: 'Скопируйте для изменения'
             },
             models: {
-                lowercase: 'модели',
-                uppercase: 'Модели'
-            },
-            modelMismatch: 'Неподходящая модель анализа'
+                header: 'Настройка моделей',
+                noRulesToSetup: 'Модель не содержит настраиваемых правил',
+                existentSelect: {
+                    title: 'Доступные модели',
+                    duplicate: 'Создать копию',
+                    reset: 'Сбросить модиль',
+                    deleteItem: 'Удалить модель'
+                },
+                validationMessage: {
+                    nameAlreadyExists: 'Модель с таким именем уже существует.',
+                    empty: 'Имя не должно быть пустым',
+                    lengthExceeded: 'Длина имени может быть не более %{maxLength}'
+                },
+                newInputs: {
+                    newCaption: 'Создать модель',
+                    namePlaceholder: 'Введите имя модели',
+                    description: 'Описание',
+                    descriptionPlaceholder: 'Введите описание модели (опиционально)'
+                },
+                readOnlyReason: {
+                    historyEntity: 'Модель является исторической, создайте копию и внесите в неё изменения.',
+                    notEditable: 'Модель только для чтения, создайте копию и внесите в неё изменения.',
+                    forRegisteredUsers: ' (Только для зарегистрированных пользователей)'
+                },
+                loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые модели',
+                loginToWork: 'Войдите или зарегистрируйтесь для работы с моделью',
+                makeCopy: 'Скопируйте для изменения'
+            }
         },
-        header: {
-            title: 'Настройка'
-        },
-        noRulesToSetup: '%{obj} не содержит настраиваемых правил',
+        modelMismatch: 'Неподходящая модель анализа',
         rulesGroupHeader: {
             addButton: {
                 addRule: 'Добавить правило',
@@ -216,32 +256,9 @@ export default {
         ruleContainer: {
             deleteItem: 'Удалить'
         },
-        validationMessage: {
-            nameAlreadyExists: '%{obj} с таким именем уже существует.',
-            empty: 'Имя не должно быть пустым',
-            lengthExceeded: 'Длина имени может быть не более %{maxLength}'
-        },
-        existentFilterSelect: {
-            title: 'Доступные %{filtersOrModels}',
-            duplicate: 'Создать копию',
-            reset: 'Сбросить %{filterOrModel}',
-            deleteItem: 'Удалить %{filterOrModel}'
-        },
-        newFilterInputs: {
-            newFilter: 'Создать %{filterOrModel}',
-            namePlaceholder: 'Введите имя',
-            description: 'Описание',
-            descriptionPlaceholder: 'Введите описание (опиционально)'
-        },
-        readOnlyReason: {
-            historyEntity: '%{entity} является историческим, создайте копию и внесите в неё изменения.',
-            notEditable: '%{entity} только для чтения, создайте копию и внесите в неё изменения.',
-            forRegisteredUsers: ' (Только для зарегистрированных пользователей)'
-        },
         saveAndSelect: 'Сохранить и выбрать',
         select: 'Выбрать',
         cancel: 'Отмена',
-        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые %{filtersOrModels}',
         copyOf: 'Копия %{name}'
     },
     view: {
@@ -255,6 +272,8 @@ export default {
         select: 'Выбрать',
         cancel: 'Отмена',
         loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутое представление',
+        loginToWork: 'Войдите или зарегистрируйтесь для работы с представлением',
+        makeCopy: 'Скопируйте для изменения',
         header: {
             title: 'Настройка представлений'
         },
@@ -275,6 +294,12 @@ export default {
             columnsSorting: 'Имя колонки и порядок сортировки',
             columnsFilter: 'Ключевые слова'
         },
-        copyOf: 'Копия %{name}'
+        copyOf: 'Копия %{name}',
+        readOnlyReason: {
+            historyEntity: 'Представление является историческим, создайте копию и внесите в неё изменения.',
+            notEditable: 'Представление только для чтения, создайте копию и внесите в неё изменения.',
+            forRegisteredUsers: ' (Только для зарегистрированных пользователей)'
+        },
+        orderTitle: 'Сортировка'
     }
 };
