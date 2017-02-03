@@ -148,17 +148,20 @@ export default class ExistentFilterSelect extends Component {
     }
 
     onSelectChange(filters, filterId) {
-        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId, this.props.ui.languageId)));
+        this.props.dispatch(filterBuilderRestartEdit(null, this.getFilterForId(filters, filterId, this.props.ui.languageId)));
     }
 
     onDuplicateClick() {
+        const {p, ui: {languageId}} = this.props;
         const filter = this.getSelectedFilter();
-        this.props.dispatch(filterBuilderRestartEdit(true, filter, this.props.ui.languageId));
+        const selectedFilterName = i18n.getEntityText(filter, languageId).name;
+        const newFilterName = p.t('filterAndModel.copyOf', {name: selectedFilterName});
+        this.props.dispatch(filterBuilderRestartEdit({name: newFilterName}, filter, this.props.ui.languageId));
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        this.props.dispatch(filterBuilderRestartEdit(false, filter, this.props.ui.languageId));
+        this.props.dispatch(filterBuilderRestartEdit(null, filter, this.props.ui.languageId));
     }
 
     onDeleteFilterClick() {

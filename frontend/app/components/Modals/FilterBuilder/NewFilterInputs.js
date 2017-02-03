@@ -81,7 +81,7 @@ export default class NewFilterInputs extends Component {
     onCancelClick() {
         const {dispatch, filterBuilder, ui: {languageId}} = this.props;
         const parentFilter = filterBuilder.filtersList.hashedArray.hash[filterBuilder.editingFilter.parentFilterId];
-        dispatch(filterBuilderRestartEdit(false, parentFilter, languageId));
+        dispatch(filterBuilderRestartEdit(null, parentFilter, languageId));
     }
 
 }

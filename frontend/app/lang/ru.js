@@ -233,7 +233,8 @@ export default {
         saveAndSelect: 'Сохранить и выбрать',
         select: 'Выбрать',
         cancel: 'Отмена',
-        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые %{filtersOrModels}'
+        loginRequiredMsg: 'Войдите или зарегистрируйтесь чтобы выбрать продвинутые %{filtersOrModels}',
+        copyOf: 'Копия %{name}'
     },
     view: {
         existentViewSelect: {

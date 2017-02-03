@@ -233,7 +233,8 @@ export default {
         saveAndSelect: 'Save and Select',
         select: 'Select',
         cancel: 'Cancel',
-        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}'
+        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}',
+        copyOf: 'Copy of %{name}'
     },
     view: {
         existentViewSelect: {

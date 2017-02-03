@@ -87,10 +87,10 @@ function applyFilterChange(parsedFilter, fieldDefaultId, sampleDefaultType, inde
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersStrategy, filtersList, languageId} = action;
+    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, newFilterInfo, filtersStrategy, filtersList, languageId} = action;
     const editingFilter = parseFilterForEditing(
-        makeNew,
-        makeNew ?
+        newFilterInfo,
+        newFilterInfo ?
             i18n.changeEntityText(
                 {
                     ...filter,
@@ -99,7 +99,7 @@ function reduceFBuilderStartEdit(state, action) {
                 },
                 languageId,
                 {
-                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, languageId).name)
+                    name: newFilterInfo.name
                 }
             ) :
             filter,
