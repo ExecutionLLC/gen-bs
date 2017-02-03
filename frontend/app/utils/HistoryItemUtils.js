@@ -33,10 +33,18 @@ export function makeHistoryItem(historyItem, newHistoryItemInfo, languageId) {
     );
 }
 
-export function makeNewHistoryItem(sample, filter, view, languageId) {
-    const name = trimName(
-        `${formatDate(new Date())}_${sample ? i18n.getEntityText(sample, languageId).name : ''}_${filter ? i18n.getEntityText(filter, languageId).name : ''}_${view ? i18n.getEntityText(view, languageId).name : ''}`
-    );
+export function makeNewHistoryItemName(sample, filter, view, languageId) {
+
+    function makeOptionalEntityName(entity) {
+        return entity ?
+            i18n.getEntityText(entity, languageId).name :
+            '';
+    }
+
+    return `${formatDate(new Date())}_${makeOptionalEntityName(sample)}_${makeOptionalEntityName(filter)}_${makeOptionalEntityName(view)}`;
+}
+
+export function makeNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
     return i18n.changeEntityText(
         {
             id: null,
@@ -87,8 +95,8 @@ export function makeNewHistoryItem(sample, filter, view, languageId) {
         },
         languageId,
         {
-            name: name,
-            description: trimDescription(i18n.makeDescriptionOfText(name))
+            name: trimName(newHistoryItemInfo.name),
+            description: trimDescription(newHistoryItemInfo.description)
         }
     );
 }

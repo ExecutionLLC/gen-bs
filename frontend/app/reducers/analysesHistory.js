@@ -166,10 +166,10 @@ function reduceToggleLoadingHistoryData(state, action) {
 }
 
 function reduceCreateNewHistoryItem(state, action) {
-    const {sample, filter, view, languageId} = action;
+    const {sample, filter, view, newHistoryItemInfo, languageId} = action;
     return {
         ...state,
-        newHistoryItem: HistoryItemUtils.makeNewHistoryItem(sample, filter, view, languageId)
+        newHistoryItem: HistoryItemUtils.makeNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId)
     };
 }
 

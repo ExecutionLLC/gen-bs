@@ -5,6 +5,7 @@ import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {formatDate} from './../../../utils/dateUtil';
+import * as HistoryItemUtils from '../../../utils/HistoryItemUtils';
 import {
     duplicateAnalysesHistoryItem,
     createNewHistoryItem,
@@ -807,12 +808,19 @@ export default class AnalysisRightPane extends React.Component {
             samplesList: {hashedArray: {array: samples}},
             viewsList: {hashedArray: {array: views}},
             filtersList: {hashedArray: {array: filters}},
-            ui: {languageId}
+            ui: {languageId},
+            p
         } = this.props;
         const sample = getDefaultOrStandardItem(samples);
         const filter = getDefaultOrStandardItem(filters);
         const view = getDefaultOrStandardItem(views);
-        dispatch(createNewHistoryItem(sample, filter, view, languageId));
+        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
+        const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
+        dispatch(createNewHistoryItem(
+            sample, filter, view,
+            {name: newAnalysisName, description: newAnalysisDescription},
+            languageId
+        ));
     }
 
     onAnalyzeButtonClick(isEditing) {

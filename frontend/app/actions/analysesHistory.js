@@ -43,12 +43,13 @@ export function setCurrentAnalysesHistoryId(id) {
     };
 }
 
-export function createNewHistoryItem(sample, filter, view, languageId) {
+export function createNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
     return {
         type: CREATE_NEW_HISTORY_ITEM,
         sample,
         filter,
         view,
+        newHistoryItemInfo,
         languageId
     };
 }

@@ -128,7 +128,8 @@ export default {
                 viewResults: 'Просмотреть результаты'
             }
         },
-        copyOf: 'Копия %{name}'
+        copyOf: 'Копия %{name}',
+        descriptionOf: 'Описание %{name}'
     },
     errors: {
         errorTitle: 'Ошибка',

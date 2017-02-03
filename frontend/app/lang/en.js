@@ -128,7 +128,8 @@ export default {
                 viewResults: 'View results'
             }
         },
-        copyOf: 'Copy of %{name}'
+        copyOf: 'Copy of %{name}',
+        descriptionOf: 'Description of %{name}'
     },
     errors: {
         errorTitle: 'Error',
