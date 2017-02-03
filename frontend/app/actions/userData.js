@@ -36,10 +36,6 @@ import * as i18n from '../utils/i18n';
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA';
 export const REQUEST_USERDATA = 'REQUEST_USERDATA';
 
-const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot load user data. You can reload page and try again.';
-const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' +
-                                        'You can try to set sample, filter, view by hand or try to reload page.';
-
 const dataClient = apiFacade.dataClient;
 
 /*
@@ -68,7 +64,10 @@ export function fetchUserDataAsync() {
             languageId,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_USER_DATA_NETWORK_ERROR, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('errors.fetchUserDataNetworkError'), error, response));
+            }
         ).then((response) => {
             const userData = response.body;
             const {
@@ -101,7 +100,7 @@ export function fetchUserDataAsync() {
             const filter = getDefaultOrStandardItem(filters);
             const view = getDefaultOrStandardItem(views);
             if (!sample || !filter || !view) {
-                dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                dispatch(handleError(null, p.t('errors.cannotFindDefaultItemsError')));
                 return;
             }
             const lastHistoryAnalysis = analyses[0];

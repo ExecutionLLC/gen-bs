@@ -7,7 +7,7 @@ export default class ViewBuilderHeader extends React.Component {
         const {p} = this.props;
         return (
             <Modal.Header closeButton>
-                <Modal.Title data-localize='views.heading'>
+                <Modal.Title>
                     {p.t('view.header.title')}
                 </Modal.Title>
             </Modal.Header>

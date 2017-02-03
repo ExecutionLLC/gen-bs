@@ -5,6 +5,7 @@ import {
 } from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
@@ -43,9 +44,6 @@ export const SAMPLE_UPLOAD_STATE = { // equals to WS_SAMPLE_UPLOAD_STATE
 };
 
 const {sampleUploadsClient} = apiFacade;
-
-const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting upload.' +
-    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
 const requestAbortFunctions = {};
@@ -86,11 +84,13 @@ export function uploadsListRemoveUpload(uploadId) {
 }
 
 export function uploadsListServerRemoveUpload(uploadId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise((resolve) => {
             sampleUploadsClient.remove(uploadId, (error, response) => resolve({error, response}));
-        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_UPLOAD_ERROR_MESSAGE, error, response))
-        ).then(() => {
+        }).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('errors.deleteUploadError'), error, response));
+        }).then(() => {
             dispatch(uploadsListRemoveUpload(uploadId));
         });
     };

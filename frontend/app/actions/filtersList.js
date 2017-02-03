@@ -1,6 +1,7 @@
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 const filtersClient = apiFacade.filtersClient;
 
@@ -11,10 +12,6 @@ export const FILTERS_LIST_ADD_FILTER = 'FILTERS_LIST_ADD_FILTER';
 export const FILTERS_LIST_DELETE_FILTER = 'FILTERS_LIST_DELETE_FILTER';
 export const FILTERS_LIST_EDIT_FILTER = 'FILTERS_LIST_EDIT_FILTER';
 export const FILTERS_LIST_SET_HISTORY_FILTER = 'FILTERS_LIST_SET_HISTORY_FILTER';
-
-const CREATE_FILTER_ERROR_MESSAGE = 'Cannot create new filter. Please try again.';
-const UPDATE_FILTER_ERROR_MESSAGE = 'Cannot update filter. Please try again.';
-const DELETE_FILTER_ERROR_MESSAGE = 'Cannot delete filter. Please try again.';
 
 
 export function filtersListStartServerOperation() {
@@ -59,7 +56,7 @@ export function filtersListEditFilter(filterId, filter) {
 }
 
 export function filtersListServerCreateFilterAsync(filter, languageId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(filtersListStartServerOperation());
         return new Promise((resolve) => filtersClient.add(
             languageId,
@@ -67,7 +64,8 @@ export function filtersListServerCreateFilterAsync(filter, languageId) {
             (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
             dispatch(filtersListEndServerOperation());
-            return dispatch(handleApiResponseErrorAsync(CREATE_FILTER_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('filterAndModel.errors.createFilterError'), error, response));
         }).then((response) => response.body
         ).then((newFilter) => {
             dispatch(filtersListAddFilter(newFilter));
@@ -82,7 +80,8 @@ export function filtersListServerUpdateFilterAsync(filter) {
         return new Promise((resolve) => filtersClient.update(filter, (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
             dispatch(filtersListEndServerOperation());
-            return dispatch(handleApiResponseErrorAsync(UPDATE_FILTER_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('filterAndModel.errors.updateFilterError'), error, response));
         }).then((response) => response.body
         ).then((updatedFilter) => {
             dispatch(filtersListEditFilter(filter.id, updatedFilter));
@@ -94,12 +93,13 @@ export function filtersListServerUpdateFilterAsync(filter) {
 }
 
 export function filtersListServerDeleteFilterAsync(filterId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(filtersListStartServerOperation());
         return new Promise((resolve) => filtersClient.remove(filterId, (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
             dispatch(filtersListEndServerOperation());
-            return dispatch(handleApiResponseErrorAsync(DELETE_FILTER_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('filterAndModel.errors.deleteFilterError'), error, response));
         }).then(() => dispatch(filtersListDeleteFilter(filterId)));
     };
 }
