@@ -76,7 +76,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         type='button'
                         className='btn btn-link btn-uppercase'
                     >
-                        <span data-localize='actions.save_select.title'>{p.t('samples.editingSample.save')}</span>
+                        <span>{p.t('samples.editingSample.save')}</span>
                     </button>
 
                     <button

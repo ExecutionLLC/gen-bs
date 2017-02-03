@@ -25,7 +25,6 @@ export default class NewViewInputs extends React.Component {
                         <input
                             type='text'
                             className='form-control text-primary'
-                            data-localize='views.setup.new.name.help'
                             placeholder={p.t('view.newViewInputs.namePlaceholder')}
                             value={i18n.getEntityText(newView, languageId).name}
                             maxLength={config.VIEWS.MAX_NAME_LENGTH}

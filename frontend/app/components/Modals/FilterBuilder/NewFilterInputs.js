@@ -9,7 +9,7 @@ export default class NewFilterInputs extends Component {
     render() {
 
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        const {validationMessage, texts, ui: {languageId}} = this.props;
+        const {validationMessage, texts, ui: {languageId}, p} = this.props;
 
         return (
             <div className='form-rows'>
@@ -20,24 +20,22 @@ export default class NewFilterInputs extends Component {
                 }
                 <div className='form-group row-new-item'>
                       <div className='col-sm-6'>
-                          <label>New {texts.Filter}</label>
+                          <label>{p.t('filterAndModel.newFilterInputs.newFilter', {filterOrModel: texts.Filter})}</label>
                           <input
                               type='text'
                               className='form-control text-primary'
-                              data-localize='filters.setup.new.name.help'
-                              placeholder={`Set ${texts.filter} name`}
+                              placeholder={p.t('filterAndModel.newFilterInputs.namePlaceholder', {filterOrModel: texts.filter})}
                               value={i18n.getEntityText(editingFilter, languageId).name}
                               maxLength={config.FILTERS.MAX_NAME_LENGTH}
                               onChange={(e) => this.onNameChange(e.target.value)}
                           />
                       </div>
                       <div className='col-sm-6 input-group'>
-                          <label data-localize='general.description'>Description</label>
+                          <label>{p.t('filterAndModel.newFilterInputs.description')}</label>
                           <input
                               type='text'
                               className='form-control'
-                              data-localize='filters.setup.new.description'
-                              placeholder={`Set ${texts.filter} description (optional)`}
+                              placeholder={p.t('filterAndModel.newFilterInputs.descriptionPlaceholder', {filterOrModel: texts.filter})}
                               value={i18n.getEntityText(editingFilter, languageId).description}
                               maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
                               onChange={(e) => this.onDescriptionChange(e.target.value)}

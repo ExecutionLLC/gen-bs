@@ -96,7 +96,7 @@ export default class AnalysisRightPane extends React.Component {
         const {p} = this.props;
         return (
             <div>
-                <h5><span data-localize='general.filter'>{p.t('analysis.rightPane.content.filter')}</span></h5>
+                <h5><span>{p.t('analysis.rightPane.content.filter')}</span></h5>
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group'>
                         <div className='btn-group btn-group-icon'>
@@ -106,7 +106,7 @@ export default class AnalysisRightPane extends React.Component {
                                 disabled={disabled}
                                 onClick={() => this.onFiltersClick()}
                             >
-                                <span className='text-muted' data-localize='filters.title'>{p.t('analysis.rightPane.content.filters')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.filters')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
@@ -147,7 +147,7 @@ export default class AnalysisRightPane extends React.Component {
         const {p} = this.props;
         return (
             <div>
-                <h5><span data-localize='general.model'>{p.t('analysis.rightPane.content.model')}</span></h5>
+                <h5><span>{p.t('analysis.rightPane.content.model')}</span></h5>
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group '>
                         <div className='btn-group btn-group-icon'>
@@ -157,7 +157,7 @@ export default class AnalysisRightPane extends React.Component {
                                 disabled={disabled}
                                 onClick={() => this.onModelClick()}
                             >
-                                <span className='text-muted' data-localize='models.title'>{p.t('analysis.rightPane.content.models')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.models')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
@@ -183,7 +183,7 @@ export default class AnalysisRightPane extends React.Component {
         const {p} = this.props;
         return (
             <div>
-                <h5><span data-localize='general.view'>{p.t('analysis.rightPane.content.view')}</span></h5>
+                <h5><span>{p.t('analysis.rightPane.content.view')}</span></h5>
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group '>
                         <div className='btn-group btn-group-icon'>
@@ -193,7 +193,7 @@ export default class AnalysisRightPane extends React.Component {
                                 disabled={disabled}
                                 onClick={() => this.onViewsClick()}
                             >
-                                <span className='text-muted' data-localize='views.title'>{p.t('analysis.rightPane.content.views')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.views')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
@@ -259,7 +259,7 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div>
-                <h5><span data-localize='general.sample'>{p.t('analysis.rightPane.content.sample')}</span></h5>
+                <h5><span>{p.t('analysis.rightPane.content.sample')}</span></h5>
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group'>
                         <div className='btn-group btn-group-icon'>
@@ -268,7 +268,7 @@ export default class AnalysisRightPane extends React.Component {
                                 disabled={disabled}
                                 onClick={() => this.onSamplesClick(0)}
                             >
-                                <span className='text-muted' data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                             </button>
                         </div>
@@ -285,7 +285,7 @@ export default class AnalysisRightPane extends React.Component {
                         </div>
                         <div className='btn-group-prefix'>
                             <label className='label label-dark-default label-round'>
-                                <span data-localize='query.single.title'>{p.t('analysis.rightPane.sampleTypeAbbr.single')}</span>
+                                <span>{p.t('analysis.rightPane.sampleTypeAbbr.single')}</span>
                             </label>
                         </div>
                         
@@ -298,7 +298,7 @@ export default class AnalysisRightPane extends React.Component {
     renderSamplesSelectsTumorNormalHeader() {
         const {p} = this.props;
         return (
-            <h5><span data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span></h5>
+            <h5><span>{p.t('analysis.rightPane.content.samples')}</span></h5>
         );
     }
 
@@ -315,7 +315,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(0)}
                         >
-                                <span className='text-muted' data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
@@ -331,7 +331,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group-prefix'>
                         <label className='label label-dark-default label-round'>
-                            <span data-localize='query.tumor_normal.tumor.title'>{p.t('analysis.rightPane.sampleTypeAbbr.tumor')}</span>
+                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.tumor')}</span>
                         </label>
                     </div>
                     
@@ -353,7 +353,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(1)}
                         >
-                                <span className='text-muted' data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
@@ -369,7 +369,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group-prefix'>
                         <label className='label label-default label-round'>
-                            <span data-localize='query.tumor_normal.normal.title'>{p.t('analysis.rightPane.sampleTypeAbbr.normal')}</span>
+                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.normal')}</span>
                         </label>
                     </div>
                     
@@ -381,7 +381,7 @@ export default class AnalysisRightPane extends React.Component {
     renderSamplesSelectsFamilyHeader() {
         const {p} = this.props;
         return (
-            <h5><span data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span></h5>
+            <h5><span>{p.t('analysis.rightPane.content.samples')}</span></h5>
         );
     }
 
@@ -398,7 +398,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(0)}
                         >
-                                <span className='text-muted' data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
@@ -414,7 +414,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group-prefix'>
                         <label className='label label-default label-round'>
-                            <span data-localize='query.family.proband.title'>{p.t('analysis.rightPane.sampleTypeAbbr.proband')}</span>
+                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.proband')}</span>
                         </label>
                     </div>
                     
@@ -436,7 +436,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             onClick={() => this.onSamplesClick(i)}
                         >
-                                <span className='text-muted' data-localize='samples.title'>{p.t('analysis.rightPane.content.samples')}</span>
+                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
                                 <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
@@ -453,7 +453,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group-prefix'>
                         <label className='label label-default label-round'>
-                            <span data-localize='query.family.mother.short'>{sample ? typeLabels[sample.type] : ''}</span>
+                            <span>{sample ? typeLabels[sample.type] : ''}</span>
                         </label>
                     </div>
                     
@@ -487,7 +487,7 @@ export default class AnalysisRightPane extends React.Component {
                     title={buttonParams.title}
                     onClick={() => this.onAnalyzeButtonClick(true)}
                 >
-                    <span data-localize='query.analyze.title'>{p.t('analysis.rightPane.content.analyze')}</span>
+                    <span>{p.t('analysis.rightPane.content.analyze')}</span>
                 </button>
                 <a
                     type='button'
@@ -505,7 +505,7 @@ export default class AnalysisRightPane extends React.Component {
                 className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                 onClick={() => this.onDeleteAnalysisClick()}
             >
-                <span data-localize='query.delete_analysis'>{p.t('analysis.rightPane.deleteAnalysis')}</span>
+                <span>{p.t('analysis.rightPane.deleteAnalysis')}</span>
             </button>
         );
     }
@@ -520,7 +520,6 @@ export default class AnalysisRightPane extends React.Component {
                         disabled={disabled}
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder={p.t('analysis.rightPane.analysisNamePlaceHolder')}
-                        data-localize='query.settings.name'
                         maxLength={config.ANALYSIS.MAX_NAME_LENGTH}
                         onChange={(str) => this.onAnalysisNameChange(str)}
                     />
@@ -585,7 +584,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='label-group-date'>
                 <label>
-                    <span data-localize='general.created_date'>{p.t('analysis.rightPane.created')}</span>: <span>{formatDate(createdDate)}</span>
+                    <span>{p.t('analysis.rightPane.created')}</span>: <span>{formatDate(createdDate)}</span>
                 </label>
             </div>
         );
@@ -601,7 +600,6 @@ export default class AnalysisRightPane extends React.Component {
                         disabled={disabled}
                         placeholder={p.t('analysis.rightPane.analysisDescriptionPlaceHolder')}
                         className='form-control material-input-sm'
-                        data-localize='query.settings.description'
                         onChange={(str) => this.onAnalysisDescriptionChange(str)}
                     />
                 </div>
@@ -620,7 +618,7 @@ export default class AnalysisRightPane extends React.Component {
                     role='tab'
                     onClick={onClick}
                 >
-                    <span data-localize='query.single.title'>
+                    <span>
                         {tabCaption}
                     </span>
                 </a>
@@ -653,7 +651,7 @@ export default class AnalysisRightPane extends React.Component {
 
                     return (
                         <dl key={sampleId}>
-                            <dt><span data-localize='general.sample'>{p.t('analysis.rightPane.content.sample')}</span>
+                            <dt><span>{p.t('analysis.rightPane.content.sample')}</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
                             <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type)}</dd>

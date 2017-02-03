@@ -73,7 +73,7 @@ export default class ViewBuilder extends React.Component {
                                 disabled={isDisableEditing || !isFieldAvailable}
                             />
                         </div>
-                        <div className='btn-group' data-localize='views.setup.settings.sort' data-toggle='tooltip'
+                        <div className='btn-group' data-toggle='tooltip'
                              data-placement='bottom' data-container='body' title='Desc/Asc Descending'>
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>

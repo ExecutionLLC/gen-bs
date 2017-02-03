@@ -45,7 +45,7 @@ export default class ExistentFilterSelect extends Component {
     renderTitle(texts) {
         const {p} = this.props;
         return (
-            <h5 data-localize='filters.setup.selector.label'>
+            <h5>
                 {p.t('filterAndModel.existentFilterSelect.title', {filtersOrModels: texts.Filters})}
             </h5>
         );
@@ -60,7 +60,7 @@ export default class ExistentFilterSelect extends Component {
         }
         return (
             <div className='alert alert-help'>
-                <span data-localize='filters.setup.selector.description'>
+                <span>
                     {warningText}
                 </span>
             </div>
@@ -87,7 +87,7 @@ export default class ExistentFilterSelect extends Component {
 
     renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts) {
         return (
-            <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
+            <div className='btn-group' data-toggle='tooltip'
                  data-placement='bottom' data-container='body'>
                 {isFilterDuplicable && this.renderDuplicateFilterButton(isDemoSession, texts)}
                 {isFilterEditable && this.renderResetFilterButton(texts)}
@@ -107,7 +107,7 @@ export default class ExistentFilterSelect extends Component {
                     disabled={isDemoSession}
                     title={title}
             >
-                <span data-localize='actions.duplicate.title' className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.duplicate')}</span>
+                <span className='hidden-xs'>{p.t('filterAndModel.existentFilterSelect.duplicate')}</span>
                 <span className='visible-xs'><i className='md-i'>content_copy</i></span>
             </button>
         );
