@@ -102,9 +102,9 @@ export default {
             analysisDescriptionPlaceHolder: 'Описание анализа (опционально)',
             duplicate: 'Добавить копию чтобы внести изменения',
             analysisType: {
-                single: 'Одиночный',
-                tumor: 'Опухоль/Здоровый',
-                family: 'Семейный'
+                single: 'Стандартный',
+                tumor: 'Рак/Норма',
+                family: 'Трио'
             },
             sampleType: {
                 single: 'Одиночый',
@@ -115,9 +115,9 @@ export default {
                 father: 'Отец'
             },
             sampleTypeAbbr: {
-                single: 'Одн',
-                tumor: 'Опх',
-                normal: 'Здр',
+                single: 'С',
+                tumor: 'Р',
+                normal: 'Н',
                 proband: 'П',
                 mother: 'М',
                 father: 'О'
