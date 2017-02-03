@@ -205,7 +205,9 @@ export default {
                     notEditable: 'This filter is not editable, duplicate it to make changes.',
                     forRegisteredUsers: ' (Only for registered users)'
                 },
-                loginRequiredMsg: 'Login or register to select advanced filters'
+                loginRequiredMsg: 'Login or register to select advanced filters',
+                loginToWork: 'Login or register to work with filter',
+                makeCopy: 'Make a copy for editing'
             },
             _models: {
                 header: 'Setup Models',
@@ -232,7 +234,9 @@ export default {
                     notEditable: 'This model is not editable, duplicate it to make changes.',
                     forRegisteredUsers: ' (Only for registered users)'
                 },
-                loginRequiredMsg: 'Login or register to select advanced models'
+                loginRequiredMsg: 'Login or register to select advanced models',
+                loginToWork: 'Login or register to work with model',
+                makeCopy: 'Make a copy for editing'
             }
         },
         modelMismatch: 'Model analysis type mismatch',
@@ -266,6 +270,8 @@ export default {
         select: 'Select',
         cancel: 'Cancel',
         loginRequiredMsg: 'Login or register to select advanced view',
+        loginToWork: 'Login or register to work with view',
+        makeCopy: 'Make a copy for editing',
         header: {
             title: 'Setup Views'
         },

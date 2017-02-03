@@ -95,7 +95,7 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderDuplicateFilterButton(isDemoSession, texts) {
-        const title = isDemoSession ? `Login or register to work with ${texts.filter}` : 'Make a copy for editing'; // TODO langu
+        const title = isDemoSession ? texts.p('loginToWork') : texts.p('makeCopy');
         return (
             <button type='button'
                     className='btn btn-default in'
