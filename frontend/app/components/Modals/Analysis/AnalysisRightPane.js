@@ -795,8 +795,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onDuplicateButtonClick() {
-        const {dispatch, historyItem, ui: {languageId}} = this.props;
-        dispatch(duplicateAnalysesHistoryItem(historyItem, languageId));
+        const {dispatch, historyItem, ui: {languageId}, p} = this.props;
+        const historyItemName = i18n.getEntityText(historyItem, languageId).name;
+        const newHistoryItemName = p.t('analysis.copyOf', {name: historyItemName});
+        dispatch(duplicateAnalysesHistoryItem(historyItem, {name: newHistoryItemName}, languageId));
     }
 
     onCancelButtonClick() {

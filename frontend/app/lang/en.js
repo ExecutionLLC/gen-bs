@@ -127,7 +127,8 @@ export default {
                 duplicate: 'Duplicate',
                 viewResults: 'View results'
             }
-        }
+        },
+        copyOf: 'Copy of %{name}'
     },
     errors: {
         errorTitle: 'Error',

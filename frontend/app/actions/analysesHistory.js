@@ -96,10 +96,11 @@ export function prepareAnalysesHistoryToSearch(search) {
     };
 }
 
-export function duplicateAnalysesHistoryItem(historyItem, languageId) {
+export function duplicateAnalysesHistoryItem(historyItem, newHistoryItemInfo, languageId) {
     return {
         type: DUPLICATE_ANALYSES_HISTORY_ITEM,
         historyItem,
+        newHistoryItemInfo,
         languageId
     };
 }

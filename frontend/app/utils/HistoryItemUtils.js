@@ -18,7 +18,7 @@ function trimDescription(description) {
 }
 
 
-export function makeHistoryItem(historyItem, languageId) {
+export function makeHistoryItem(historyItem, newHistoryItemInfo, languageId) {
     return i18n.changeEntityText(
         {
             ...historyItem,
@@ -28,7 +28,7 @@ export function makeHistoryItem(historyItem, languageId) {
         },
         languageId,
         {
-            name: trimName(i18n.makeCopyOfText(i18n.getEntityText(historyItem, languageId).name))
+            name: trimName(newHistoryItemInfo.name)
         }
     );
 }

@@ -70,10 +70,10 @@ function reducePrepareAnalysesHistoryToSearch(state, action) {
 }
 
 function reduceDuplicateAnalysesHistoryItem(state, action) {
-    const {historyItem, languageId} = action;
+    const {historyItem, newHistoryItemInfo, languageId} = action;
     return {
         ...state,
-        newHistoryItem: HistoryItemUtils.makeHistoryItem(historyItem, languageId),
+        newHistoryItem: HistoryItemUtils.makeHistoryItem(historyItem, newHistoryItemInfo, languageId),
         currentHistoryId: null
     };
 }

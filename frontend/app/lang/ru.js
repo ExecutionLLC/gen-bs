@@ -127,7 +127,8 @@ export default {
                 duplicate: 'Создать копию',
                 viewResults: 'Просмотреть результаты'
             }
-        }
+        },
+        copyOf: 'Копия %{name}'
     },
     errors: {
         errorTitle: 'Ошибка',
