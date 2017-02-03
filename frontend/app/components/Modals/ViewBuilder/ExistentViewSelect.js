@@ -46,7 +46,7 @@ export default class ExistentViewSelect extends React.Component {
 
     renderWarning(isDemoSession, selectedViewType) {
         const {p} = this.props;
-        const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType, p);
+        const warningText = getReadonlyReasonForSessionAndType(isDemoSession, selectedViewType, (path) => p.t(`view.readOnlyReason.${path}`));
 
         if (!warningText) {
             return null;

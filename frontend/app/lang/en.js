@@ -180,28 +180,62 @@ export default {
     },
     filterAndModel: {
         texts: {
-            filter: {
-                lowercase: 'filter',
-                uppercase: 'Filter'
+            _filters: {
+                header: 'Setup Filters',
+                noRulesToSetup: 'This filter has no rules to setup',
+                existentSelect: {
+                    title: 'Available Filters',
+                    duplicate: 'Duplicate',
+                    reset: 'Reset Filter',
+                    deleteItem: 'Delete Filter'
+                },
+                validationMessage: {
+                    nameAlreadyExists: 'Filter with this name is already exists.',
+                    empty: 'Name cannot be empty',
+                    lengthExceeded: 'Name length should be less than %{maxLength}'
+                },
+                newInputs: {
+                    newCaption: 'New Filter',
+                    namePlaceholder: 'Set filter name',
+                    description: 'Description',
+                    descriptionPlaceholder: 'Set filter description (optional)'
+                },
+                readOnlyReason: {
+                    historyEntity: 'This filter is history filter, duplicate it to make changes.',
+                    notEditable: 'This filter is not editable, duplicate it to make changes.',
+                    forRegisteredUsers: ' (Only for registered users)'
+                },
+                loginRequiredMsg: 'Login or register to select advanced filters'
             },
-            filters: {
-                lowercase: 'filters',
-                uppercase: 'Filters'
-            },
-            model: {
-                lowercase: 'model',
-                uppercase: 'Model'
-            },
-            models: {
-                lowercase: 'models',
-                uppercase: 'Models'
-            },
-            modelMismatch: 'Model analysis type mismatch'
+            _models: {
+                header: 'Setup Models',
+                noRulesToSetup: 'This model has no rules to setup',
+                existentSelect: {
+                    title: 'Available Models',
+                    duplicate: 'Duplicate',
+                    reset: 'Reset Model',
+                    deleteItem: 'Delete Model'
+                },
+                validationMessage: {
+                    nameAlreadyExists: 'Filter with this name is already exists.',
+                    empty: 'Name cannot be empty',
+                    lengthExceeded: 'Name length should be less than %{maxLength}'
+                },
+                newInputs: {
+                    newCaption: 'New Model',
+                    namePlaceholder: 'Set model name',
+                    description: 'Description',
+                    descriptionPlaceholder: 'Set model description (optional)'
+                },
+                readOnlyReason: {
+                    historyEntity: 'This model is history model, duplicate it to make changes.',
+                    notEditable: 'This model is not editable, duplicate it to make changes.',
+                    forRegisteredUsers: ' (Only for registered users)'
+                },
+                loginRequiredMsg: 'Login or register to select advanced models'
+            }
         },
-        header: {
-            title: 'Setup'
-        },
-        noRulesToSetup: 'This %{obj} has no rules to setup',
+        modelMismatch: 'Model analysis type mismatch',
         rulesGroupHeader: {
             addButton: {
                 addRule: 'Add rule',
@@ -216,32 +250,9 @@ export default {
         ruleContainer: {
             deleteItem: 'Delete'
         },
-        validationMessage: {
-            nameAlreadyExists: '%{obj} with this name is already exists.',
-            empty: 'Name cannot be empty',
-            lengthExceeded: 'Name length should be less than %{maxLength}'
-        },
-        existentFilterSelect: {
-            title: 'Available %{filtersOrModels}',
-            duplicate: 'Duplicate',
-            reset: 'Reset %{filterOrModel}',
-            deleteItem: 'Delete %{filterOrModel}'
-        },
-        newFilterInputs: {
-            newFilter: 'New %{filterOrModel}',
-            namePlaceholder: 'Set %{filterOrModel} name',
-            description: 'Description',
-            descriptionPlaceholder: 'Set %{filterOrModel} description (optional)'
-        },
-        readOnlyReason: {
-            historyEntity: 'This %{entity} is history %{entity}, duplicate it to make changes.',
-            notEditable: 'This %{entity} is not editable, duplicate it to make changes.',
-            forRegisteredUsers: ' (Only for registered users)'
-        },
         saveAndSelect: 'Save and Select',
         select: 'Select',
         cancel: 'Cancel',
-        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}',
         copyOf: 'Copy of %{name}'
     },
     view: {
@@ -275,6 +286,11 @@ export default {
             columnsSorting: 'Column Name and Sort Order',
             columnsFilter: 'Keywords'
         },
-        copyOf: 'Copy of %{name}'
+        copyOf: 'Copy of %{name}',
+        readOnlyReason: {
+            historyEntity: 'This view is history view, duplicate it to make changes.',
+            notEditable: 'This view is not editable, duplicate it to make changes.',
+            forRegisteredUsers: ' (Only for registered users)'
+        }
     }
 };

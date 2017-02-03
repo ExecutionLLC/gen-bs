@@ -502,7 +502,7 @@ export default class FilterBuilder extends React.Component {
                         dispatch={dispatch}
                         p={p}
                     /> :
-                    <div>{p.t('filterAndModel.noRulesToSetup', {obj: texts.filter})}</div>
+                    <div>{texts.p('noRulesToSetup')}</div>
                 }
             </div>
         );

@@ -4,12 +4,12 @@ import {Modal} from 'react-bootstrap';
 
 export default class FilterBuilderHeader extends Component {
     render() {
-        const {texts, p} = this.props;
+        const {texts} = this.props;
 
         return (
             <Modal.Header closeButton>
                 <Modal.Title>
-                    {p.t('filterAndModel.header.title')} {texts.Filters}
+                    {texts.p('header')}
                 </Modal.Title>
             </Modal.Header>
         );
