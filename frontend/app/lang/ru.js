@@ -253,7 +253,7 @@ export default {
             newView: 'Новое представление',
             namePlaceholder: 'Введите имя представления',
             description: 'Описание',
-            descriptionPlaceHolder: 'Введите описание (опционально)'
+            descriptionPlaceholder: 'Введите описание (опционально)'
         },
         keywordSelector: {
             placeholder: {

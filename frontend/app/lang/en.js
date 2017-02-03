@@ -253,7 +253,7 @@ export default {
             newView: 'New View',
             namePlaceholder: 'Set view name',
             description: 'Description',
-            descriptionPlaceHolder: 'Set view description (optional)'
+            descriptionPlaceholder: 'Set view description (optional)'
         },
         keywordSelector: {
             placeholder: {
