@@ -182,7 +182,7 @@ export default {
     },
     filterAndModel: {
         texts: {
-            _filters: {
+            filters: {
                 header: 'Настройка фильтров',
                 noRulesToSetup: 'Фильтр не содержит настраиваемых правил',
                 existentSelect: {
@@ -211,7 +211,7 @@ export default {
                 loginToWork: 'Войдите или зарегистрируйтесь для работы с фильтром',
                 makeCopy: 'Скопируйте для изменения'
             },
-            _models: {
+            models: {
                 header: 'Настройка моделей',
                 noRulesToSetup: 'Модель не содержит настраиваемых правил',
                 existentSelect: {

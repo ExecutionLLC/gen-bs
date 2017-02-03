@@ -32,7 +32,7 @@ class FiltersModal extends Component {
                         return '';
                     },
                     p(path) {
-                        return p.t(`filterAndModel.texts._filters.${path}`);
+                        return p.t(`filterAndModel.texts.filters.${path}`);
                     }
                 };
             case filterBuilderStrategyName.MODEL:
@@ -47,7 +47,7 @@ class FiltersModal extends Component {
                             p.t('filterAndModel.modelMismatch');
                     },
                     p(path) {
-                        return p.t(`filterAndModel.texts._models.${path}`);
+                        return p.t(`filterAndModel.texts.models.${path}`);
                     }
                 };
         }
