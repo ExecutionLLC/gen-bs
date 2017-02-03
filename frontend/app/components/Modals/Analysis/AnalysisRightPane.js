@@ -659,17 +659,17 @@ export default class AnalysisRightPane extends React.Component {
                     );
                 })}
                 <dl>
-                    <dt>Filter</dt>
+                    <dt>{p.t('analysis.rightPane.content.filter')}</dt>
                     <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
-                        <dt>Model</dt>
+                        <dt>{p.t('analysis.rightPane.content.model')}</dt>
                         <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type)}</dd>
                     </dl>
                 }
                 <dl>
-                    <dt>View</dt>
+                    <dt>{p.t('analysis.rightPane.content.view')}</dt>
                     <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type)}</dd>
                 </dl>
 
