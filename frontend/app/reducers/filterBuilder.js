@@ -11,8 +11,8 @@ import * as i18n from '../utils/i18n';
 /**
  * @param {boolean} isNew
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
- * @param {{id: string, label: string, type: string}[]} fields
  * @param {string} parentFilterId
+ * @param {{id: string, label: string, type: string}[]} fields
  * @param {{id: string, label: string, type: string, sampleType: string=}[]} allowedFields
  * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string, sampleDefaultType: string=}}
  */
