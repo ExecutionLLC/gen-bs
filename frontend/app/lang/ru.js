@@ -308,6 +308,26 @@ export default {
         ruleContainer: {
             deleteItem: 'Удалить'
         },
+        rulesConditions: {
+            equal: 'равно',
+            not_equal: 'не равно',
+            in: 'среди',
+            not_in: 'не среди',
+            less: 'меньше',
+            less_or_equal: 'меньше или равно',
+            greater: 'больше',
+            greater_or_equal: 'больше или равно',
+            between: 'между',
+            not_between: 'не между',
+            begins_with: 'начинается с',
+            not_begins_with: 'не начинается с',
+            contains: 'содержит',
+            not_contains: 'не содержит',
+            ends_with: 'заканчивается на',
+            not_ends_with: 'не заканчивается на',
+            is_null: 'null',
+            is_not_null: 'не null'
+        },
         saveAndSelect: 'Сохранить и выбрать',
         select: 'Выбрать',
         cancel: 'Отмена',
