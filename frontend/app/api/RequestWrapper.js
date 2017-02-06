@@ -107,7 +107,11 @@ export default class RequestWrapper {
         formData.append('sample', file);
         formData.append('fileName', file.name);
         const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
-        request.on('progress', (p) => onProgress(p.percent));
+        request.on('progress', (p) => {
+            if (p.percent) {
+                onProgress(p.percent);
+            }
+        });
         request.send(formData);
         RequestWrapper._sendRequest(request, (err, res) => {
             if (err) {
