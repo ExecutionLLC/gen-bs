@@ -311,8 +311,8 @@ export default {
         saveAndSelect: 'Save and Select',
         select: 'Select',
         cancel: 'Cancel',
-        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}',
         copyOf: 'Copy of %{name}',
+        loginRequiredMsg: 'Login or register to select advanced %{filtersOrModels}',
         errors: {
             createFilterError: 'Cannot create new filter. Please try again.',
             updateFilterError: 'Cannot update filter. Please try again.',
