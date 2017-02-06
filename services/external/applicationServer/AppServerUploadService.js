@@ -84,10 +84,13 @@ function makeAsyncQueue() {
     return () => {
         const callIdentifier = {}; // we will compare by '===' so the empty object is appropriate here as unique identifier
         callsQueue.push([callIdentifier, null]); // no function before callback is executed
-        return (callback) => {
+
+        function queueDone(callback) {
             setReady(callIdentifier, callback);
             checkReady();
-        };
+        }
+
+        return queueDone;
     };
 }
 
