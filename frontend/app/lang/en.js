@@ -234,7 +234,7 @@ export default {
     },
     filterAndModel: {
         texts: {
-            _filters: {
+            filters: {
                 header: 'Setup Filters',
                 noRulesToSetup: 'This filter has no rules to setup',
                 existentSelect: {
@@ -263,7 +263,7 @@ export default {
                 loginToWork: 'Login or register to work with filter',
                 makeCopy: 'Make a copy for editing'
             },
-            _models: {
+            models: {
                 header: 'Setup Models',
                 noRulesToSetup: 'This model has no rules to setup',
                 existentSelect: {
