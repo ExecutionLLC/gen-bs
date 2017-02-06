@@ -24,10 +24,6 @@ class FiltersModal extends Component {
         switch (strategyName) {
             case filterBuilderStrategyName.FILTER:
                 return {
-                    filter: p.t('filterAndModel.texts.filter.lowercase'),
-                    filters: p.t('filterAndModel.texts.filters.lowercase'),
-                    Filter: p.t('filterAndModel.texts.filter.uppercase'),
-                    Filters: p.t('filterAndModel.texts.filters.uppercase'),
                     getStrategyValidationMessage(/*filter, strategyData*/) {
                         return '';
                     },
@@ -37,10 +33,6 @@ class FiltersModal extends Component {
                 };
             case filterBuilderStrategyName.MODEL:
                 return {
-                    filter: p.t('filterAndModel.texts.model.lowercase'),
-                    filters: p.t('filterAndModel.texts.models.lowercase'),
-                    Filter: p.t('filterAndModel.texts.model.uppercase'),
-                    Filters: p.t('filterAndModel.texts.models.uppercase'),
                     getStrategyValidationMessage(model, strategyData) {
                         return model.analysisType === strategyData.analysisType ?
                             '' :
