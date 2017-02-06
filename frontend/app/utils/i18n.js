@@ -12,7 +12,7 @@ filter: {
 }
  */
 
-const DEFAULT_LANGUAGE_ID = 'en';
+export const DEFAULT_LANGUAGE_ID = 'en';
 
 function getEntityTextTranslation(entityTexts, languageId) {
     return _.find(entityTexts, {languageId});
