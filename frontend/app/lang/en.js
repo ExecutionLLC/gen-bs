@@ -85,7 +85,8 @@ export default {
         searchPlaceholder: 'Search for mutations of current sample analysis',
         samplesButton: 'Samples',
         analysesButton: 'Analyses',
-        savedFilesButton: 'Saved Files'
+        savedFilesButton: 'Saved Files',
+        selectLanguageTitle: 'Select language'
     },
     analysis: {
         title: 'Analyses',

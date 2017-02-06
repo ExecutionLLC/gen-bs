@@ -92,7 +92,7 @@ class NavbarMain extends Component {
                         dispatch={this.props.dispatch}
                         p={this.props.p}
                     />
-                    <LanguageDropdown dispatch={this.props.dispatch} languageId={this.props.ui.languageId}/>
+                    <LanguageDropdown dispatch={this.props.dispatch} languageId={this.props.ui.languageId} p={this.props.p}/>
                     <Auth {...this.props} />
                 </div>
             </nav>

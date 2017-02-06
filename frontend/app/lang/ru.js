@@ -85,7 +85,8 @@ export default {
         searchPlaceholder: 'Поиск мутаций в текущем анализе',
         samplesButton: 'Сэмплы',
         analysesButton: 'Анализы',
-        savedFilesButton: 'Сохранённые файлы'
+        savedFilesButton: 'Сохранённые файлы',
+        selectLanguageTitle: 'Выбор языка'
     },
     analysis: {
         title: 'Анализы',
