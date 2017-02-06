@@ -4,8 +4,8 @@ import React, {Component} from 'react';
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
-import * as SamplesUtils from '../../utils/samplesUtils';
 import * as i18n from '../../utils/i18n';
+import FieldUtils from '../../utils/fieldUtils';
 
 
 export default class VariantsTableHead extends Component {
@@ -23,9 +23,10 @@ export default class VariantsTableHead extends Component {
             );
         }
 
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
         const samplesTypesHash = _(variantsAnalysis.samples).map((sampleInfo) =>
             variantsAnalysis.samples.length > 1 ?
-                ({id: sampleInfo.id, type: SamplesUtils.typeLabels[sampleInfo.type]}) :
+                ({id: sampleInfo.id, type: typeLabels[sampleInfo.type]}) :
                 ({id: sampleInfo.id, type: ''})
         ).keyBy(sampleInfo => sampleInfo.id).value();
         return (

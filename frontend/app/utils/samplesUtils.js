@@ -16,15 +16,6 @@ export const sampleTypesForAnalysisType = {
     [analysisType.FAMILY]: [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]
 };
 
-export const typeLabels = {
-    [sampleType.SINGLE]: 'S',
-    [sampleType.TUMOR]: 'T',
-    [sampleType.NORMAL]: 'N',
-    [sampleType.PROBAND]: 'P',
-    [sampleType.MOTHER]: 'M',
-    [sampleType.FATHER]: 'F'
-};
-
 export function isMainSample(type) {
     return type === sampleType.TUMOR || type === sampleType.PROBAND;
 }
