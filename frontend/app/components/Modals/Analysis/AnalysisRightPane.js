@@ -655,23 +655,23 @@ export default class AnalysisRightPane extends React.Component {
                             <dt><span>{p.t('analysis.rightPane.content.sample')}</span>
                                 ({this.sampleTypeCaption(sampleInfo.type)})
                             </dt>
-                            <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type)}</dd>
+                            <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type, p)}</dd>
                         </dl>
                     );
                 })}
                 <dl>
                     <dt>{p.t('analysis.rightPane.content.filter')}</dt>
-                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type)}</dd>
+                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type, p)}</dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
                         <dt>{p.t('analysis.rightPane.content.model')}</dt>
-                        <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type)}</dd>
+                        <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type, p)}</dd>
                     </dl>
                 }
                 <dl>
                     <dt>{p.t('analysis.rightPane.content.view')}</dt>
-                    <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type)}</dd>
+                    <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type, p)}</dd>
                 </dl>
 
                 <hr />
@@ -699,12 +699,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getViewOptions() {
-        const {ui: {languageId}} = this.props;
+        const {ui: {languageId}, p} = this.props;
         const views = this.props.viewsList.hashedArray.array;
         return views.map(
             (viewItem) => {
                 const isDisabled = this.isViewDisabled(viewItem);
-                const label = getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type);
+                const label = getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type, p);
                 return {
                     value: viewItem.id, label, disabled: isDisabled
                 };
@@ -717,11 +717,11 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getFilterOptions() {
-        const {ui: {languageId}} = this.props;
+        const {ui: {languageId}, p} = this.props;
         const filters = this.props.filtersList.hashedArray.array;
         return filters.map((filterItem) => {
             const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type);
+            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type, p);
             return {
                 value: filterItem.id, label, disabled: isDisabled
             };
@@ -733,13 +733,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getModelOptions() {
-        const {modelsList, historyItem, ui: {languageId}} = this.props;
+        const {modelsList, historyItem, ui: {languageId}, p} = this.props;
         const models = modelsList.hashedArray.array;
         return models
             .filter((model) => model.analysisType === historyItem.type)
             .map((model) => {
                 const isDisabled = this.isModelDisabled(model);
-                const label = getItemLabelByNameAndType(i18n.getEntityText(model, languageId).name, model.type);
+                const label = getItemLabelByNameAndType(i18n.getEntityText(model, languageId).name, model.type, p);
                 return {value: model.id, label, disabled: isDisabled};
             });
     }
@@ -749,14 +749,14 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getSampleOptions(value, selectedSamplesHash) {
-        const {ui: {languageId}, samplesList: {hashedArray: {array: samples}}} = this.props;
+        const {ui: {languageId}, samplesList: {hashedArray: {array: samples}}, p} = this.props;
         return _.chain(samples)
             .filter((sample) => sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED)
             .map((sampleItem) => {
                 const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id] || _.isEmpty(sampleItem.sampleFields));
                 const {type: sampleType, id: sampleId} = sampleItem;
                 const sampleName = i18n.getEntityText(sampleItem, languageId).name;
-                const label = getItemLabelByNameAndType(sampleName, sampleType);
+                const label = getItemLabelByNameAndType(sampleName, sampleType, p);
                 return {value: sampleId, label, disabled: isDisabled};
             })
             .value();

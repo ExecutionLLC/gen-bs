@@ -370,5 +370,6 @@ export default {
             deleteViewNetworkError: 'Cannot delete view (network error). Please try again.',
             deleteViewServerError: 'Cannot delete view (server error). Please try again.'
         }
-    }
+    },
+    historyEntity: '%{name} (from history)'
 };

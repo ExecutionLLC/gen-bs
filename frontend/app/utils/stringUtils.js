@@ -20,8 +20,8 @@ export function getUrlParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-export function getItemLabelByNameAndType(itemName, itemType) {
-    return itemType === entityType.HISTORY ? itemName + ' (from history)' : itemName;
+export function getItemLabelByNameAndType(itemName, itemType, p) {
+    return itemType === entityType.HISTORY ? p.t('historyEntity', {name: itemName}) : itemName;
 }
 
 export function getReadonlyReasonForSessionAndType(isDemoSession, selectedViewFilterType, pt) {

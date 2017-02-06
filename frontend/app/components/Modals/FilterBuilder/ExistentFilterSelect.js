@@ -66,10 +66,10 @@ export default class ExistentFilterSelect extends Component {
     }
 
     renderFiltersSelector(filters) {
-        const {ui: {languageId}} = this.props;
+        const {ui: {languageId}, p} = this.props;
         const selectItems = filters.map( filter => ({
             value: filter.id,
-            label: getItemLabelByNameAndType(i18n.getEntityText(filter, languageId).name, filter.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(filter, languageId).name, filter.type, p)
         }));
 
         return (

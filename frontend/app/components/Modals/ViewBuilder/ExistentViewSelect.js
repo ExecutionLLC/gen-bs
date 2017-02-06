@@ -59,11 +59,11 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderViewSelector(views) {
-        const {ui: {languageId}} = this.props;
+        const {ui: {languageId}, p} = this.props;
 
         const selectorItems = views.map( viewItem => ({
             value: viewItem.id,
-            label: getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type, p)
         }));
 
         return (

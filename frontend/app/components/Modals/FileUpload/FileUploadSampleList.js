@@ -118,10 +118,10 @@ export default class FileUploadSampleList extends React.Component {
         });
     }
 
-    _createSampleLabel(sample, languageId) {
+    _createSampleLabel(sample, languageId, p) {
         const {type} = sample;
         const sampleName = i18n.getEntityText(sample, languageId).name;
-        return getItemLabelByNameAndType(sampleName, type);
+        return getItemLabelByNameAndType(sampleName, type, p);
     }
 
     _renderSample(sample, label, isActive, isNew, languageId) {
@@ -406,10 +406,10 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderProgressUploadSampleSample(upload, sample) {
-        const {currentSampleId, languageId} = this.props;
+        const {currentSampleId, languageId, p} = this.props;
         const key = sample.id;
         const isActive = sample.id === currentSampleId;
-        const name = this._createSampleLabel(sample, languageId);
+        const name = this._createSampleLabel(sample, languageId, p);
         return this.renderProgressUploadListItem(
             key,
             name,
