@@ -131,14 +131,16 @@ export function exportToFile(exportType) {
                 languageId
             }
         } = getState();
+        const p = getP(getState());
 
         const variantsAnalysisSamplesHash = _.keyBy(variantsAnalysis.samples, (sample) => sample.id);
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
             const sample = variantsAnalysisSamplesHash[listItem.sampleId];
-            const sampleType = sample && SamplesUtils.typeLabels[sample.type];
+            const sampleType = sample && typeLabels[sample.type];
             return FieldUtils.makeFieldSavedCaption(field, sampleType, languageId);
         })
         .concat(['Comment']);

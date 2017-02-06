@@ -26,7 +26,7 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
-import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
+import {sampleType, sampleTypesForAnalysisType} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
 import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
@@ -426,6 +426,7 @@ export default class AnalysisRightPane extends React.Component {
     renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash) {
         const {p} = this.props;
         const value = sample ? sample.id : null;
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
 
         return (
             <div className='form-group' key={i}>
