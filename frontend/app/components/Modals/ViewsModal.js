@@ -17,7 +17,7 @@ import * as i18n from '../../utils/i18n';
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth: {isDemo}, showModal, viewBuilder, viewsList, p, dispatch} = this.props;
+        const {auth: {isDemo}, showModal, viewBuilder, viewsList, ui, p, dispatch} = this.props;
         const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
@@ -62,8 +62,12 @@ class ViewsModal extends React.Component {
                                 { isNew &&
                                     <div className='modal-padding'>
                                         <NewViewInputs
-                                            {...this.props}
                                             validationMessage={validationMessage}
+                                            viewsList={viewsList}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                         <ViewBuilder
                                             {...this.props}
