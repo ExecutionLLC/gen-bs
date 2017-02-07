@@ -23,7 +23,8 @@ class NavbarMain extends Component {
             dispatch,
             variantsTable: {selectedRowIndices, searchInResultsParams: {topSearch: {search}}},
             samplesList,
-            fileUpload: {filesProcesses}
+            fileUpload: {filesProcesses},
+            ui: {languages}
         } = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
@@ -61,7 +62,6 @@ class NavbarMain extends Component {
         );
 
         return (
-
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
                     <div className='dropdown'>
@@ -92,7 +92,14 @@ class NavbarMain extends Component {
                         dispatch={this.props.dispatch}
                         p={this.props.p}
                     />
-                    <LanguageDropdown dispatch={this.props.dispatch} languageId={this.props.ui.languageId} p={this.props.p}/>
+                    {languages && languages.length &&
+                    <LanguageDropdown
+                        dispatch={this.props.dispatch}
+                        languages={languages}
+                        languageId={this.props.ui.languageId}
+                        p={this.props.p}
+                    />
+                    }
                     <Auth {...this.props} />
                 </div>
             </nav>

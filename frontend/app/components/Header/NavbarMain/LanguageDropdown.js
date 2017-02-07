@@ -8,29 +8,27 @@ import {setCurrentLanguageId} from '../../../actions/ui';
 
 export default class LanguageDropdown extends ComponentBase {
 
-    static LANGUAGE = [
-        {name: 'English', languageId: 'en'},
-        {name: 'Русский', languageId: 'ru'}
-    ];
-
-    static getLanguageNameForId(languageId) {
-        return (_.find(this.LANGUAGE, {languageId}) || {name: '???'}).name;
+    getLanguageNameForId(languageId) {
+        const {languages} = this.props;
+        return (_.find(languages, {id: languageId}) || {description: '???'}).description;
     }
 
     render() {
+        const {languages} = this.props;
+
         return (
             <div>
                 <Nav>
                     <NavDropdown title={this.renderLanguageButtonTitle()}
                                  onSelect={(e, item) => this.onLanguageSelected(e, item)}
                     >
-                        {_.map(LanguageDropdown.LANGUAGE, (languageInfo) => {
+                        {_.map(languages, (languageInfo) => {
                             return (
                                 <MenuItem
-                                    key={languageInfo.languageId}
-                                    eventKey={languageInfo.languageId}
+                                    key={languageInfo.id}
+                                    eventKey={languageInfo.id}
                                 >
-                                    {languageInfo.name}
+                                    {languageInfo.description}
                                 </MenuItem>
                             );
                         })}
@@ -44,7 +42,7 @@ export default class LanguageDropdown extends ComponentBase {
         const {languageId, p} = this.props;
         return (
             <span>
-                <span className='hidden-xs'>{LanguageDropdown.getLanguageNameForId(languageId)}</span>
+                <span className='hidden-xs'>{this.getLanguageNameForId(languageId)}</span>
                 <span className='visible-xs'>
                     <span className='dropdown-menu-header'>{p.t('navBar.selectLanguageTitle')}</span>
                     <i className='md-i md-language md-replace-to-close' />
@@ -63,5 +61,6 @@ export default class LanguageDropdown extends ComponentBase {
 LanguageDropdown.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     languageId: React.PropTypes.string.isRequired,
+    languages: React.PropTypes.array.isRequired,
     p: React.PropTypes.shape({t: React.PropTypes.func.isRequired}).isRequired
 };
