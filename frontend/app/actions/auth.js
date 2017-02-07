@@ -152,7 +152,8 @@ function openDemoSessionAsync() {
             dispatch(restoreOldSessionAsync(true));
         } else {
             const p = getP(getState());
-            dispatch([loginError('Session id is empty'),
+            dispatch([
+                loginError(p.t('errors.sessionIsEmpty')),
                 handleError(null, p.t('errors.loginError'))
             ]);
         }

@@ -5,7 +5,6 @@ import {getP} from 'redux-polyglot/dist/selectors';
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleApiBodylessResponseErrorAsync, handleApiResponseErrorAsync} from './errorHandler';
-import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
 import * as i18n from '../utils/i18n';
 

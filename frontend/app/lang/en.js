@@ -159,6 +159,7 @@ export default {
         /*
          * login errors
          */
+        sessionIsEmpty: 'Session id is empty',
         loginError: 'Authorization failed. You can reload page and try again.',
         loginGoogleError: 'Google authorization failed.',
         closeAllUserSessionError: 'Error while closing all user sessions.',

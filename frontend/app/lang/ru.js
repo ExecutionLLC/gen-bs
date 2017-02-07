@@ -159,6 +159,7 @@ export default {
         /*
          * login errors
          */
+        sessionIsEmpty: 'Идентификатор сессии пуст',
         loginError: 'Ошибка авторизации. Вы можете обновить страницу и попробовать снова.',
         loginGoogleError: 'Ошибка авторизации через Google.',
         closeAllUserSessionError: 'Ошибка при закрытии всех других сессий.',
