@@ -66,7 +66,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     renderRowButtons() {
-        const {sampleId} = this.props;
+        const {sampleId, p} = this.props;
         return (
             <div>
                 <hr/>
@@ -76,7 +76,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         type='button'
                         className='btn btn-link btn-uppercase'
                     >
-                        <span data-localize='actions.save_select.title'>Save</span>
+                        <span>{p.t('samples.editingSample.save')}</span>
                     </button>
 
                     <button
@@ -84,7 +84,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                         type='button'
                         className='btn btn-link-default btn-uppercase'
                     >
-                        <span>Cancel</span>
+                        <span>{p.t('samples.editingSample.cancel')}</span>
                     </button>
                 </div>
             </div>

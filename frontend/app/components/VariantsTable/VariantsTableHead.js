@@ -4,14 +4,14 @@ import React, {Component} from 'react';
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
-import * as SamplesUtils from '../../utils/samplesUtils';
 import * as i18n from '../../utils/i18n';
+import FieldUtils from '../../utils/fieldUtils';
 
 
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}} = this.props;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}, p} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
@@ -23,9 +23,10 @@ export default class VariantsTableHead extends Component {
             );
         }
 
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
         const samplesTypesHash = _(variantsAnalysis.samples).map((sampleInfo) =>
             variantsAnalysis.samples.length > 1 ?
-                ({id: sampleInfo.id, type: SamplesUtils.typeLabels[sampleInfo.type]}) :
+                ({id: sampleInfo.id, type: typeLabels[sampleInfo.type]}) :
                 ({id: sampleInfo.id, type: ''})
         ).keyBy(sampleInfo => sampleInfo.id).value();
         return (
@@ -44,7 +45,7 @@ export default class VariantsTableHead extends Component {
                     <div>
                         <div className='variants-table-header-label'>
                             <a type='button' className='btn-link-default'>
-                                Comment
+                                {p.t('variantsTable.headComment')}
                             </a>
 
                         </div>

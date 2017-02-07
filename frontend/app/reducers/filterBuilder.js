@@ -11,8 +11,8 @@ import * as i18n from '../utils/i18n';
 /**
  * @param {boolean} isNew
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
- * @param {{id: string, label: string, type: string}[]} fields
  * @param {string} parentFilterId
+ * @param {{id: string, label: string, type: string}[]} fields
  * @param {{id: string, label: string, type: string, sampleType: string=}[]} allowedFields
  * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string, sampleDefaultType: string=}}
  */
@@ -87,10 +87,10 @@ function applyFilterChange(parsedFilter, fieldDefaultId, sampleDefaultType, inde
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersStrategy, filtersList, languageId} = action;
+    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, newFilterInfo, filtersStrategy, filtersList, languageId} = action;
     const editingFilter = parseFilterForEditing(
-        makeNew,
-        makeNew ?
+        newFilterInfo,
+        newFilterInfo ?
             i18n.changeEntityText(
                 {
                     ...filter,
@@ -99,12 +99,12 @@ function reduceFBuilderStartEdit(state, action) {
                 },
                 languageId,
                 {
-                    name: i18n.makeCopyOfText(i18n.getEntityText(filter, languageId).name)
+                    name: newFilterInfo.name
                 }
             ) :
             filter,
         filter.id,
-        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f, null, languageId)), // need for type convert from 'valueType' to 'type'
+        totalFieldsList.map(f => FieldUtils.makeFieldTyped(f)),
         allowedFields
     );
     const newFiltersList = {

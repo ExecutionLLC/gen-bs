@@ -61,10 +61,10 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersStrategy, filtersList, languageId) {
+export function filterBuilderStartEdit(newFilterInfo, filter, fields, allowedFields, filtersStrategy, filtersList, languageId) {
     return {
         type: FBUILDER_START_EDIT,
-        makeNew,
+        newFilterInfo,
         filter,
         filtersStrategy,
         filtersList,
@@ -74,12 +74,12 @@ export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, f
     };
 }
 
-export function filterBuilderRestartEdit(makeNew, filter, languageId) {
+export function filterBuilderRestartEdit(newFilterInfo, filter, languageId) {
     return (dispatch, getState) => {
         const state = getState();
         const {filterBuilder: {allowedFields, filtersStrategy}, fields} = state;
         const strategyActions = filterBuilderStrategyActions[filtersStrategy.name];
-        dispatch(filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersStrategy, strategyActions.getList(state), languageId));
+        dispatch(filterBuilderStartEdit(newFilterInfo, filter, fields, allowedFields, filtersStrategy, strategyActions.getList(state), languageId));
     };
 }
 
@@ -177,7 +177,7 @@ export function filterBuilderDeleteFilter(filterId, languageId) {
                     const {hashedArray} = filterBuilder.filtersList;
                     const newFilterId = (filterId == editingFilterId) ? hashedArray.array[0].id : editingFilterId;
                     const newFilter = hashedArray.hash[newFilterId];
-                    dispatch(filterBuilderRestartEdit(false, newFilter, languageId));
+                    dispatch(filterBuilderRestartEdit(null, newFilter, languageId));
                     resolve(newFilter);
                 });
         });

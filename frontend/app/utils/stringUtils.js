@@ -20,20 +20,20 @@ export function getUrlParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-export function getItemLabelByNameAndType(itemName, itemType) {
-    return itemType === entityType.HISTORY ? itemName + ' (from history)' : itemName;
+export function getItemLabelByNameAndType(itemName, itemType, p) {
+    return itemType === entityType.HISTORY ? p.t('historyEntity', {name: itemName}) : itemName;
 }
 
-export function getReadonlyReasonForSessionAndType(what, isDemoSession, selectedViewFilterType) {
+export function getReadonlyReasonForSessionAndType(isDemoSession, selectedViewFilterType, pt) {
     switch (selectedViewFilterType) {
         case entityType.HISTORY:
-            return `This ${what} is history ${what}, duplicate it to make changes.`;
+            return pt('historyEntity');
         case entityType.USER:
             return '';
     }
-    const descriptionText = `This ${what} is not editable, duplicate it to make changes.`;
+    const descriptionText = pt('notEditable');
     if (isDemoSession) {
-        return descriptionText + ' (Only for registered users)';
+        return descriptionText + pt('forRegisteredUsers');
     } else {
         return descriptionText;
     }

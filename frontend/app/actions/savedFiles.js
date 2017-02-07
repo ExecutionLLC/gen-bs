@@ -1,10 +1,10 @@
 import Moment from 'moment';
 import _ from 'lodash';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleApiBodylessResponseErrorAsync, handleApiResponseErrorAsync} from './errorHandler';
-import * as SamplesUtils from '../utils/samplesUtils';
 import FieldUtils from '../utils/fieldUtils';
 import * as i18n from '../utils/i18n';
 
@@ -14,9 +14,6 @@ export const SAVED_FILE_UPLOAD_RESULT_RECEIVED = 'SAVED_FILE_UPLOAD_RESULT_RECEI
 export const SAVED_FILE_DOWNLOAD_RESULT_RECEIVED = 'SAVED_FILE_DOWNLOAD_RESULT_RECEIVED';
 export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
-
-const UPLOAD_ERROR_MESSAGE = 'Error while uploading exported file';
-const DOWNLOAD_ERROR_MESSAGE = 'Error downloading exported file';
 
 const savedFilesClient = apiFacade.savedFilesClient;
 
@@ -48,9 +45,10 @@ function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
             fileMetadata,
             fileBlob,
             (error, response) => resolve({error, response}))
-        ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPLOAD_ERROR_MESSAGE, error, response))
-        ).then(
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('savedFiles.errors.uploadError'), error, response));
+        }).then(
             (response) => response.body
         ).then((savedFile) => dispatch(savedFileUploadResultReceived(savedFile)));
     };
@@ -102,7 +100,10 @@ export function downloadSavedFileAsync(savedFile) {
             savedFile.id,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) => dispatch(handleApiBodylessResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiBodylessResponseErrorAsync(p.t('savedFiles.errors.downloadError'), error, response));
+            }
         ).then((response) => dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name)));
     };
 }
@@ -129,14 +130,16 @@ export function exportToFile(exportType) {
                 languageId
             }
         } = getState();
+        const p = getP(getState());
 
         const variantsAnalysisSamplesHash = _.keyBy(variantsAnalysis.samples, (sample) => sample.id);
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
             const sample = variantsAnalysisSamplesHash[listItem.sampleId];
-            const sampleType = sample && SamplesUtils.typeLabels[sample.type];
+            const sampleType = sample && typeLabels[sample.type];
             return FieldUtils.makeFieldSavedCaption(field, sampleType, languageId);
         })
         .concat(['Comment']);

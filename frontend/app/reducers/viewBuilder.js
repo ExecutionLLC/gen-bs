@@ -24,8 +24,8 @@ function createViewItem(fieldId) {
 }
 
 function reduceVBuilderStartEdit(state, action) {
-    const {view, makeNew, allowedFields, languageId} = action;
-    const editingView = makeNew ?
+    const {view, newViewInfo, allowedFields, languageId} = action;
+    const editingView = newViewInfo ?
         i18n.changeEntityText(
             {
                 ...view,
@@ -34,14 +34,14 @@ function reduceVBuilderStartEdit(state, action) {
             },
             languageId,
             {
-                name: i18n.makeCopyOfText(i18n.getEntityText(view, languageId).name)
+                name: newViewInfo.name
             }
         ) :
         view;
     return Object.assign({}, state, {
         editingView: editingView,
         originalView: editingView,
-        editingViewIsNew: makeNew,
+        editingViewIsNew: !!newViewInfo,
         editingViewParentId: view.id,
         allowedFields
     });

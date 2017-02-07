@@ -3,19 +3,19 @@ import React, {Component} from 'react';
 export default class VariantsTableLoadError extends Component {
 
     render() {
-        const error = this.props.error;
+        const {error, p} = this.props;
         return (
 
             <div className='panel panel-danger'>
                 <div className='panel-heading'>
-                    <h3 className='panel-title'>Unexpected Error</h3>
+                    <h3 className='panel-title'>{p.t('errors.unexpectedErrorTitle')}</h3>
                 </div>
                 {error && <div className='panel-body'>
                     <div>
                         <strong>{error.message}</strong>
                     </div>
                     <div>
-                        <small>Error code: {error.code}</small>
+                        <small>{p.t('errors.errorCode', {errorCode: error.code})}</small>
                     </div>
                 </div>}
             </div>

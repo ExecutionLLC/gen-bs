@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { polyglotReducer } from 'redux-polyglot';
 
 import auth from './auth';
 import userData from './userData';
@@ -37,7 +38,8 @@ const genApp = combineReducers({
     fileUpload,
     errorHandler,
     analysesHistory,
-    metadata
+    metadata,
+    polyglot: polyglotReducer
 });
 
 export default genApp;

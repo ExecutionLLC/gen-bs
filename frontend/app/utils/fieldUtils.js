@@ -31,14 +31,15 @@ export default class FieldUtils {
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
      * @param {string=} sourceName
      * @param {string} languageId
+     * @param {Object.<string, string>} typeLabels
      * @returns {{id: string, label: string, type: string}}
      */
-    static makeFieldSourceCaption(field, sourceName, languageId) {
+    static makeFieldSourceCaption(field, sourceName, languageId, typeLabels) {
         const fieldLabel = this.getFieldLabel(field, languageId);
         var label;
 
         if (field.sampleType) {
-            label = `(${SamplesUtils.typeLabels[field.sampleType]}) ${fieldLabel}`;
+            label = `(${typeLabels[field.sampleType]}) ${fieldLabel}`;
         } else {
             if (sourceName) {
                 label = `${fieldLabel} -- ${sourceName}`;
@@ -73,13 +74,27 @@ export default class FieldUtils {
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
-     * @param {string=} sourceName
-     * @param {string} languageId
      * @returns {{id: string, label: string, type: string}}
      */
-    static makeFieldSelectItemValue(field, sourceName, languageId) {
+    static makeFieldTyped(field) {
+        return {
+            id: field.id,
+            sampleType: field.sampleType,
+            type: field.valueType === 'float' ? 'double' : field.valueType
+        };
+    }
 
-        var label = this.makeFieldSourceCaption(field, sourceName, languageId);
+    /**
+     * Make field structure usable for filters dialog purposes
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
+     * @param {string=} sourceName
+     * @param {string} languageId
+     * @param {Object.<string, string>} typeLabels
+     * @returns {{id: string, label: string, type: string}}
+     */
+    static makeFieldSelectItemValue(field, sourceName, languageId, typeLabels) {
+
+        var label = this.makeFieldSourceCaption(field, sourceName, languageId, typeLabels);
 
         return {
             id: field.id,
@@ -87,6 +102,14 @@ export default class FieldUtils {
             sampleType: field.sampleType,
             type: field.valueType === 'float' ? 'double' : field.valueType
         };
+    }
+
+    static makeFieldTypeLabels(p) {
+        const abbrPath = 'analysis.rightPane.sampleTypeAbbr.';
+        return _(SamplesUtils.sampleType)
+            .mapKeys(type => type)
+            .mapValues(type => p.t(`${abbrPath}${type}`))
+            .value();
     }
 
     /**

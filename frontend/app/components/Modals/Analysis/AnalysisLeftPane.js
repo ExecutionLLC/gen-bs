@@ -12,7 +12,7 @@ export default class AnalysisLeftPane extends React.Component {
 
         const {
             dispatch, historyList, initialHistoryList, historyListSearch,
-            isHistoryReceivedAll, isHistoryRequesting, newHistoryItem, ui
+            isHistoryReceivedAll, isHistoryRequesting, newHistoryItem, ui, p
         } = this.props;
 
         return (
@@ -20,6 +20,7 @@ export default class AnalysisLeftPane extends React.Component {
                 <AnalysisHistorySearch
                     search={historyListSearch}
                     onSearch={(str) => this.onSearchChange(str)}
+                    p={p}
                 />
                 <AnalysisHistoryList
                     dispatch={dispatch}
@@ -34,6 +35,7 @@ export default class AnalysisLeftPane extends React.Component {
                     viewsList={this.props.viewsList}
                     filtersList={this.props.filtersList}
                     ui={ui}
+                    p={p}
                 />
             </div>
         );

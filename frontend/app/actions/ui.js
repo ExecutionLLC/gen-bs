@@ -9,13 +9,22 @@ import {
     requestAnalyze,
     requestSetCurrentParams
 } from './websocket';
+import {setLanguage} from 'redux-polyglot/dist/actions';
+
+import en from '../lang/en';
+import ru from '../lang/ru';
+
+const languages = {
+    en,
+    ru
+};
 
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
 export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
-export const SET_CURRENT_LANGUAGE_ID = 'SET_CURRENT_LANGUAGE_ID';
+export const STORE_CURRENT_LANGUAGE_ID = 'STORE_CURRENT_LANGUAGE_ID';
 
 export function requestTableScrollPositionReset() {
     return {
@@ -80,9 +89,16 @@ export function analyze(searchParams) {
     };
 }
 
-export function setCurrentLanguageId(languageId) {
+function storeCurrentLanguageId(languageId) {
     return {
-        type: SET_CURRENT_LANGUAGE_ID,
+        type: STORE_CURRENT_LANGUAGE_ID,
         languageId
+    };
+}
+
+export function setCurrentLanguageId(languageId) {
+    return (dispatch) => {
+        dispatch(storeCurrentLanguageId(languageId));
+        dispatch(setLanguage(languageId, languages[languageId]));
     };
 }

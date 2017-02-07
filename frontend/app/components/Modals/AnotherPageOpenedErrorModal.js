@@ -1,6 +1,8 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import {getP} from 'redux-polyglot/dist/selectors';
+
 
 import DialogBase from './DialogBase';
 import {
@@ -19,20 +21,27 @@ class AnotherPageOpenedErrorModal extends DialogBase {
     }
 
     renderTitleContents() {
-        return (<div>Another Page is Active</div>);
+        const {p} = this.props;
+        return <div>{p.t('anotherPageOpened.title')}</div>;
     }
 
     renderBodyContents() {
-        return (<div>Please <a href='#' onClick={() => this.closeOtherSockets()}>click here</a> to use Alapy
-            Genomics Explorer in this window. All other opened windows will be logged off/stopped and all
-            running processes terminated. Your account supports only one session to be open at a time</div>);
+        const {p} = this.props;
+        return (
+            <div>
+                {p.t('anotherPageOpened.text.prefix')}
+                <a href='#' onClick={() => this.closeOtherSockets()}>{p.t('anotherPageOpened.text.link')}</a>
+                {p.t('anotherPageOpened.text.suffix')}
+            </div>
+        );
     }
 
     renderFooterContents() {
+        const {p} = this.props;
         return (
             <div>
                 { this.props.isWaitingForClose &&
-                <span className='form-padding'>Please, wait a moment...</span>
+                <span className='form-padding'>{p.t('anotherPageOpened.waitCaption')}</span>
                 }
                 <button
                     type='button'
@@ -40,7 +49,7 @@ class AnotherPageOpenedErrorModal extends DialogBase {
                     className='btn btn-default'
                     disabled={this.props.isWaitingForClose}
                 >
-                    Use Here
+                    {p.t('anotherPageOpened.buttonUseHere')}
                 </button>
             </div>
         );
@@ -64,4 +73,10 @@ class AnotherPageOpenedErrorModal extends DialogBase {
     }
 }
 
-export default connect(() => ({}))(AnotherPageOpenedErrorModal);
+function mapStateToProps(state) {
+    return {
+        p: getP(state)
+    };
+}
+
+export default connect(mapStateToProps)(AnotherPageOpenedErrorModal);

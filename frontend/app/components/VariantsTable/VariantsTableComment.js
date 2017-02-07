@@ -27,7 +27,7 @@ export default class VariantsTableComment extends Component {
     }
 
     render() {
-        const {auth, comments, searchKey, ui: {languageId}} = this.props;
+        const {auth, comments, searchKey, ui: {languageId}, p} = this.props;
         if (auth.isDemo) {
             return (
                 this.renderComment()
@@ -55,7 +55,7 @@ export default class VariantsTableComment extends Component {
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {(_.isEmpty(comments)) ? 'Add Comment' : i18n.getEntityText(comments[0], languageId).comment}</a>
+                                {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : i18n.getEntityText(comments[0], languageId).comment}</a>
 
                         </div>
                     </OverlayTrigger>
@@ -92,7 +92,8 @@ export default class VariantsTableComment extends Component {
             chrom,
             searchKey,
             comments,
-            ui: {languageId}
+            ui: {languageId},
+            p
         } = this.props;
 
         const comment = this.state.comment;
@@ -104,7 +105,7 @@ export default class VariantsTableComment extends Component {
                         <div>
                             <div className=''>
                                     <textarea rows='7'
-                                              placeholder='Your comments here...'
+                                              placeholder={p.t('variantsTable.commentPlaceholder')}
                                               className='form-control material-input input-large'
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : i18n.getEntityText(comments[0], languageId).comment}
@@ -116,12 +117,12 @@ export default class VariantsTableComment extends Component {
                                         className='btn btn-uppercase btn-link editable-submit'
                                         onClick={() => this.onSaveClick(alt, pos,
                                             reference, chrom, searchKey, comment, comments)}
-                                >Save
+                                >{p.t('variantsTable.saveComment')}
                                 </button>
                                 <button type='button'
                                         onClick={() => this.refs.overlay.toggle()}
                                         className='btn btn-uppercase btn-link editable-cancel'>
-                                    Cancel
+                                    {p.t('variantsTable.cancelComment')}
                                 </button>
                             </div>
                         </div>

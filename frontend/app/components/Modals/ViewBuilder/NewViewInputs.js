@@ -7,38 +7,36 @@ export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const {viewBuilder, validationMessage, ui: {languageId}} = this.props;
+        const {viewBuilder, validationMessage, ui: {languageId}, p} = this.props;
         const newView = viewBuilder.editingView;
 
         return (
             <div className='form-rows'>
                 { validationMessage &&
                 <div className='alert alert-help'>
-                        <span data-localize='views.setup.selector.description'>
-                            {validationMessage}
-                        </span>
+                    <span>
+                        {validationMessage}
+                    </span>
                 </div>
                 }
                 <div className='form-group row-new-item'>
                     <div className='col-sm-6'>
-                        <label data-localize='views.setup.new.name.title'>New View</label>
+                        <label>{p.t('view.newViewInputs.newView')}</label>
                         <input
                             type='text'
                             className='form-control text-primary'
-                            data-localize='views.setup.new.name.help'
-                            placeholder='Set view name'
+                            placeholder={p.t('view.newViewInputs.namePlaceholder')}
                             value={i18n.getEntityText(newView, languageId).name}
                             maxLength={config.VIEWS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
                     <div className='col-sm-6 input-group'>
-                        <label data-localize='general.description'>Description</label>
+                        <label>{p.t('view.newViewInputs.description')}</label>
                         <input
                             type='text'
                             className='form-control'
-                            data-localize='views.setup.new.description'
-                            placeholder='Set view description (optional)'
+                            placeholder={p.t('view.newViewInputs.descriptionPlaceholder')}
                             value={i18n.getEntityText(newView, languageId).description}
                             maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
                             onChange={(e) => this.onDescriptionChange(e.target.value)}
@@ -82,7 +80,7 @@ export default class NewViewInputs extends React.Component {
     onCancelClick() {
         const {dispatch, viewBuilder, viewsList, ui: {languageId}} = this.props;
         const parentView = viewsList.hashedArray.hash[viewBuilder.editingViewParentId];
-        dispatch(viewBuilderRestartEdit(false, parentView, languageId));
+        dispatch(viewBuilderRestartEdit(null, parentView, languageId));
     }
 
 }

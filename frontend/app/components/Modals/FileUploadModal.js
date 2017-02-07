@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
 import {modalName} from '../../actions/modalWindows';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 class FileUploadModal extends Component {
     constructor(props) {
@@ -26,6 +27,7 @@ class FileUploadModal extends Component {
                 <FileUploadHeader
                     showUploadHide={this.state.isUploadBringToFront}
                     onUploadHide={() => this.onUploadHide()}
+                    p={this.props.p}
                 />
                 <FileUploadBody
                     dispatch={this.props.dispatch}
@@ -42,6 +44,7 @@ class FileUploadModal extends Component {
                     isUploadBringToFront={this.state.isUploadBringToFront}
                     onUploadShow={() => this.onUploadShow()}
                     onUploadHide={() => this.onUploadHide()}
+                    p={this.props.p}
                 />
             </Modal>
         );
@@ -72,8 +75,13 @@ function mapStateToProps(state) {
         sampleSearch: samplesList.search,
         currentSampleId: samplesList.currentSampleId,
         editingSample: samplesList.editingSample,
-        ui
+        ui,
+        p: getP(state)
     };
 }
+
+FileUploadModal.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
 export default connect(mapStateToProps)(FileUploadModal);

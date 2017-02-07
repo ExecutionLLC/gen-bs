@@ -11,7 +11,7 @@
   .panel {
     margin-bottom: @padding-large-vertical;
     + .panel {
-      margin-top:-1px;
+      margin-top: -1px;
     }
   }
   .panel-heading {
@@ -43,7 +43,12 @@
       padding: @padding-large-vertical;
     }
   }
+}
 
+.panel-danger {
+  > .panel-heading {
+    color: #ffffff;
+  }
 }
 
 

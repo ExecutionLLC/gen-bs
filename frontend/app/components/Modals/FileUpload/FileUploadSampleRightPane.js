@@ -52,7 +52,7 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, editingSample, languageId} = this.props;
+        const {auth: {isDemo}, editingSample, languageId, p} = this.props;
         const {id, type} = editingSample;
         const description = i18n.getEntityText(editingSample, languageId).description;
         return (
@@ -60,9 +60,8 @@ class SampleHeader extends React.Component {
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={description || ''}
-                        placeholder='Sample description (optional)'
+                        placeholder={p.t('samples.editingSample.descriptionPlaceholder')}
                         className='form-control material-input-sm'
-                        data-localize='query.settings.description'
                         maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, null, e)}
                         disabled={!entityTypeIsEditable(type) || isDemo}
@@ -73,19 +72,20 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDates(createdDate) {
+        const {p} = this.props;
         return (
             <div className='label-group-date'>
                 {createdDate ? (
-                        <label>Uploaded: {formatDate(createdDate)}</label>
+                        <label>{p.t('samples.editingSample.uploaded')}: {formatDate(createdDate)}</label>
                     ) : (
-                        <label><span className='text-primary'><i className='md-i'>schedule</i>Wait. Saving</span></label>
+                        <label><span className='text-primary'><i className='md-i'>schedule</i>{p.t('samples.editingSample.wait')}</span></label>
                     )}
             </div>
         );
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, editingSample, languageId} = this.props;
+        const {auth: {isDemo}, editingSample, languageId, p} = this.props;
         const {id, type} = editingSample;
         const name = i18n.getEntityText(editingSample, languageId).name;
         return (
@@ -94,8 +94,7 @@ class SampleHeader extends React.Component {
                     <Input
                         value={name}
                         className='form-control material-input-sm material-input-heading text-primary'
-                        placeholder="Sample name (it can't be empty)"
-                        data-localize='query.settings.name'
+                        placeholder={p.t('samples.editingSample.namePlaceholder')}
                         maxLength={config.UPLOADS.MAX_NAME_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, e, null)}
                         disabled={!entityTypeIsEditable(type) || isDemo}
@@ -119,14 +118,14 @@ class SampleHeader extends React.Component {
     }
 
     renderDeleteSampleButton() {
-        const {editingSample} = this.props;
+        const {editingSample, p} = this.props;
         if (entityTypeIsEditable(editingSample.type)) {
             return (
                 <button
                     className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                     onClick={() => this.onSampleItemDelete(editingSample.id)}
                 >
-                    <span data-localize='query.delete_sample'>Delete sample</span>
+                    <span>{p.t('samples.editingSample.deleteSample')}</span>
                 </button>
             );
         }
@@ -151,7 +150,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     render() {
-        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId, languageId} = this.props;
+        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId, languageId, p} = this.props;
         const {isDemo} = auth;
         const {currentUploadId} = fileUpload;
         const {editingSample, hashedArray: {hash: samplesHash}} = samplesList;
@@ -177,6 +176,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                   fileUpload={fileUpload}
                                   languageId={languageId}
                                   dispatch={dispatch}
+                                  p={p}
                     />}
                 </div>
                 <div className='split-scroll'>
@@ -196,7 +196,7 @@ export default class FileUploadSampleRightPane extends React.Component {
             case SAMPLE_UPLOAD_STATE.NOT_FOUND:
             case SAMPLE_UPLOAD_STATE.ERROR:
             default:
-                return FileUploadSampleRightPane.renderLoadError(this.RENDER_MODE.SAMPLE);
+                return this.renderLoadError(this.RENDER_MODE.SAMPLE);
         }
     }
 
@@ -204,33 +204,36 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {fileUpload: {filesProcesses}} = this.props;
         const fileProcess = _.find(filesProcesses, fp => fp.id === uploadId || fp.operationId === uploadId);
         if (fileProcess && fileProcess.error) {
-            return FileUploadSampleRightPane.renderLoadError(this.RENDER_MODE.UPLOAD);
+            return this.renderLoadError(this.RENDER_MODE.UPLOAD);
         } else {
-            return FileUploadSampleRightPane.renderLoad();
+            return this.renderLoad();
         }
     }
 
-    static renderLoad() {
+    renderLoad() {
+        const {p} = this.props;
         return (
             <div className='alert alert-help'>
                 <p>
-                    <strong>Wait. </strong><span>File is loading</span>
+                    <strong>{p.t('samples.rightPaneWait.title')}</strong><span>{p.t('samples.rightPaneWait.description')}</span>
                 </p>
             </div>
         );
     }
 
-    static renderLoadError(renderMode) {
+    renderLoadError(renderMode) {
+        const {p} = this.props;
         return (
             <div className='alert alert-danger'>
                 <p>
-                    <strong>Error! </strong><span>{renderMode.label} not loaded or damaged</span>
+                    <strong>{p.t('samples.rightPaneError.title')}</strong><span>{p.t('samples.rightPaneError.description', {label: renderMode.label})}</span>
                 </p>
             </div>
         );
     }
 
     renderNewUploadArea(isDemo) {
+        const {p} = this.props;
         const {isDragoverState} = this.state;
         return (
             <div className={classNames('empty', {'empty-upload': !isDemo})}>
@@ -284,14 +287,15 @@ export default class FileUploadSampleRightPane extends React.Component {
                             defaultValue=''
                             multiple='multiple'
                         />
-                        <h3>Drop vcf files here or <span
-                            className='text-underline'>click here</span> to
-                            select</h3>
+                        <h3>
+                            {p.t('samples.dropAreaText.dropVcfFileHereOr')}
+                            <span className='text-underline'>{p.t('samples.dropAreaText.clickHere')}</span>
+                            {p.t('samples.dropAreaText.toSelect')}
+                        </h3>
                     </button>
                     }
                     {isDemo &&
-                    <h3><i className='md-i'>perm_identity</i>Please login or
-                        register to upload new samples</h3>}
+                    <h3><i className='md-i'>perm_identity</i>{p.t('samples.loginOrRegister')}</h3>}
                 </div>
             </div>
         );
@@ -351,10 +355,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSelectButton(isDemoSession, sample) {
+        const {p} = this.props;
         if (entityTypeIsDemoDisabled(sample.type, isDemoSession)) {
             return (
                 <span>
-                    Please register to analyze this sample.
+                    {p.t('samples.editingSample.registerToAnalyze')}
                 </span>
             );
         }
@@ -364,17 +369,18 @@ export default class FileUploadSampleRightPane extends React.Component {
                className='btn btn-link btn-uppercase'
                type='button'
             >
-                <span>Select for analysis</span>
+                <span>{p.t('samples.editingSample.selectForAnalysis')}</span>
             </a>
         );
     }
 
     renderEditButton(sampleType) {
+        const {p} = this.props;
         if (entityTypeIsEditable(sampleType)) {
             return (
                 <a onClick={() => this.onShowValuesClick()}
                    className='btn btn-link btn-uppercase' role='button'
-                   href='#'>Edit
+                   href='#'>{p.t('samples.editingSample.edit')}
                 </a>
             );
         }
@@ -417,7 +423,7 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderEditableValues(sampleId) {
-        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}, languageId} = this.props;
+        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}, languageId, p} = this.props;
         if (!editingSample || editingSample.id !== sampleId) {
             return null;
         }
@@ -430,6 +436,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                                        changeShowValues={changeShowValues}
                                        disabled={editingSampleDisabled}
                                        languageId={languageId}
+                                       p={p}
             />
         );
     }

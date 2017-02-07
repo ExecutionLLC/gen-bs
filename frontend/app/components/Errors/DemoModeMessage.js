@@ -3,14 +3,22 @@ import React, {Component} from 'react';
 export default class DemoModeMessage extends Component {
 
     render() {
+        const {p} = this.props;
+
         return (
             <div className='alert alert-inverse alert-fixed demomode-alert'
                  role='alert'>
                 { this.props.errorMessage &&
                 <p>{this.props.errorMessage}</p>
                 }
-                <p>Demo Mode</p>
-                <p>Please <a href='#' onClick={() => this.onLoginClick()}><span>login</span></a></p>
+                <p>{p.t('demoPopup.caption')}</p>
+                <p>
+                    {p.t('demoPopup.loginLinkPrefix')}
+                    <a href='#' onClick={() => this.onLoginClick()}>
+                        <span>{p.t('demoPopup.loginLinkLabel')}</span>
+                    </a>
+                    {p.t('demoPopup.loginLinkSuffix')}
+                </p>
             </div>
         );
     }

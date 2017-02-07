@@ -25,6 +25,10 @@ import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem} from '../actions/analysesHistory';
+import {setCurrentLanguageId} from '../actions/ui';
+import * as PropTypes from 'react/lib/ReactPropTypes';
+import {getP} from 'redux-polyglot/dist/selectors';
+import * as i18n from '../utils/i18n';
 
 
 class App extends Component {
@@ -38,6 +42,7 @@ class App extends Component {
     componentDidMount() {
         const {dispatch} = this.props;
         const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
+        dispatch(setCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
         dispatch(loginWithGoogle());
 
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
@@ -69,7 +74,9 @@ class App extends Component {
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain
-                        openAnalysisModal={() => dispatch(openModal(modalName.ANALYSIS))}
+                        openAnalysisModal={() => {
+                            dispatch(openModal(modalName.ANALYSIS));
+                        }}
                         openSamplesModal={() => {
                             dispatch(samplesOnSave(selectedSamplesIds, null, 'changeItem.sample.index', 'changeItem.sample.id', action));
                             dispatch(openModal(modalName.UPLOAD));
@@ -151,8 +158,12 @@ function mapStateToProps(state) {
         viewsList,
         modelsList,
         analysesHistory,
-        showErrorWindow
+        showErrorWindow,
+        p: getP(state)
     };
 }
 
+App.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 export default connect(mapStateToProps)(App);

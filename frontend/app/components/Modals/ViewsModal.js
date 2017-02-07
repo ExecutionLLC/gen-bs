@@ -1,6 +1,7 @@
-import React  from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import config from '../../../config';
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
@@ -16,7 +17,7 @@ import * as i18n from '../../utils/i18n';
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth: {isDemo}, showModal, viewBuilder, viewsList} = this.props;
+        const {auth: {isDemo}, showModal, viewBuilder, viewsList, p} = this.props;
         const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
@@ -32,8 +33,8 @@ class ViewsModal extends React.Component {
         ) : '';
 
         const confirmButtonParams = {
-            caption: isViewEditable ? 'Save and Select' : 'Select',
-            title: isLoginRequired ? 'Login or register to select advanced view' : '',
+            caption: isViewEditable ? p.t('view.saveAndSelect') : p.t('view.select'),
+            title: isLoginRequired ? p.t('view.loginRequiredMsg') : '',
             disabled: isLoginRequired || !!validationMessage
         };
 
@@ -52,7 +53,9 @@ class ViewsModal extends React.Component {
                 }
                 { editingView &&
                 <div>
-                    <ViewBuilderHeader />
+                    <ViewBuilderHeader
+                        p={p}
+                    />
                     <form>
                         <Modal.Body>
                             <div className='modal-body-scroll'>
@@ -141,9 +144,13 @@ function mapStateToProps(state) {
         userData,
         fields,
         viewsList,
-        ui
+        ui,
+        p: getP(state)
     };
 }
 
-export default connect(mapStateToProps)(ViewsModal);
+ViewsModal.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
+export default connect(mapStateToProps)(ViewsModal);

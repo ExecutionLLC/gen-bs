@@ -12,7 +12,7 @@ filter: {
 }
  */
 
-const DEFAULT_LANGUAGE_ID = 'en';
+export const DEFAULT_LANGUAGE_ID = 'en';
 
 function getEntityTextTranslation(entityTexts, languageId) {
     return _.find(entityTexts, {languageId});
@@ -51,12 +51,4 @@ export function setEntityText(entity, text) {
 export function changeEntityText(entity, languageId, text) {
     const entityText = getEntityText(entity, languageId);
     return setEntityText(entity, {...entityText, ...text});
-}
-
-export function makeCopyOfText(copyOfWhat) {
-    return `Copy of ${copyOfWhat}`;
-}
-
-export function makeDescriptionOfText(descriptionOfWhat) {
-    return `Description of ${descriptionOfWhat}`;
 }
