@@ -29,6 +29,13 @@ class UsersController extends ControllerBase {
 
     update(request, response) {
         async.waterfall([
+            (callback) => {
+                if (request.session.type === 'DEMO') {
+                    callback('You cannot change the DEMO user data');
+                } else {
+                    callback(null);
+                }
+            },
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (item, callback) => {
@@ -58,7 +65,7 @@ class UsersController extends ControllerBase {
                 }
             },
             (userData, callback) => {
-                this.services.users.update(request.user.id, request.languageId, userData, callback);
+                this.services.users.update(userData.id, request.languageId, userData, callback);
             }
         ], (error, updatedItem) => {
             this.sendErrorOrJson(response, error, updatedItem);

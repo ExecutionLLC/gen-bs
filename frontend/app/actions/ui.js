@@ -102,12 +102,12 @@ function storeCurrentLanguageId(languageId) {
 
 export function setCurrentLanguageId(languageId) {
     return (dispatch, getState) => {
-        const {userData: {profileMetadata}} = getState();
+        const {userData: {profileMetadata}, auth: {isDemo}} = getState();
 
         dispatch(storeCurrentLanguageId(languageId));
         dispatch(setLanguage(languageId, languages[languageId]));
 
-        if (profileMetadata.defaultLanguageId === languageId) {
+        if (profileMetadata.defaultLanguageId === languageId || isDemo) {
             return Promise.resolve();
         } else {
             const userToUpdate = profileMetadata;
