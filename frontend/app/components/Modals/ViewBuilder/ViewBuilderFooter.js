@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Modal} from 'react-bootstrap';
 
 import {viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
@@ -42,3 +42,14 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
 }
+
+ViewBuilderFooter.propTypes = {
+    confirmButtonParams: PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        disabled: PropTypes.bool.isRequired
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};

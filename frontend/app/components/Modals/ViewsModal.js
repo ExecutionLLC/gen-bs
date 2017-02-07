@@ -17,7 +17,7 @@ import * as i18n from '../../utils/i18n';
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth: {isDemo}, showModal, viewBuilder, viewsList, p} = this.props;
+        const {auth: {isDemo}, showModal, viewBuilder, viewsList, p, dispatch} = this.props;
         const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
@@ -83,9 +83,10 @@ class ViewsModal extends React.Component {
                             </div>
                         </Modal.Body>
                         <ViewBuilderFooter
-                            {...this.props}
                             closeModal={() => this.onClose()}
                             confirmButtonParams={confirmButtonParams}
+                            p={p}
+                            dispatch={dispatch}
                         />
                     </form>
                 </div>
