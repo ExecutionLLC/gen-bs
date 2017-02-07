@@ -1,6 +1,6 @@
 const CHINESE_ID = 'zh';
 
-exports.up = function(knex, Promise) {
+exports.up = function(knex) {
     return knex('language')
         .where('id', CHINESE_ID)
         .del();
