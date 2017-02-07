@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import HttpStatus from 'http-status';
+import {setLanguage} from 'redux-polyglot/dist/actions';
 
 import {
     fetchVariantsAsync,
@@ -9,7 +11,8 @@ import {
     requestAnalyze,
     requestSetCurrentParams
 } from './websocket';
-import {setLanguage} from 'redux-polyglot/dist/actions';
+import apiFacade from '../api/ApiFacade';
+
 
 import en from '../lang/en';
 import ru from '../lang/ru';
@@ -19,6 +22,7 @@ const languages = {
     ru
 };
 
+const usersClient = apiFacade.usersClient;
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
@@ -97,8 +101,35 @@ function storeCurrentLanguageId(languageId) {
 }
 
 export function setCurrentLanguageId(languageId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const {userData: {profileMetadata}} = getState();
+
         dispatch(storeCurrentLanguageId(languageId));
         dispatch(setLanguage(languageId, languages[languageId]));
+
+        if (profileMetadata.defaultLanguageId === languageId) {
+            return Promise.resolve();
+        } else {
+            const userToUpdate = profileMetadata;
+            userToUpdate.defaultLanguageId = languageId;
+            return new Promise(
+                (resolve) => {
+                    usersClient.update(userToUpdate, (error, response) => resolve({error, response}));
+                }).then(({error, response}) => {
+                    let errorMsg = null;
+                    if (error) {
+                        errorMsg = error.message;
+                    } else if (!response.body) {
+                        errorMsg = response.text;
+                    } else if (response.status !== HttpStatus.OK) {
+                        errorMsg = response.body ? response.body.message : response.text;
+                    }
+                    if (errorMsg) {
+                        console.error(`Failed to update user's default language: ${errorMsg}`);
+                    }
+                }).catch((error) => {
+                    console.error(`Failed to update user's default language: ${error}`);
+                });
+        }
     };
 }

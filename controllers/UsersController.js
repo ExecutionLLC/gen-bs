@@ -2,6 +2,7 @@
 
 const Express = require('express');
 const async = require('async');
+const _ = require('lodash');
 const ControllerBase = require('./base/ControllerBase');
 
 class UsersController extends ControllerBase {
@@ -26,9 +27,48 @@ class UsersController extends ControllerBase {
         });
     }
 
+    update(request, response) {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.getRequestBody(request, callback),
+            (item, callback) => {
+                if ('user' in item && 'key' in item) { // full access to perform update action
+                    if (item.key === this.config.regserver.ADD_USER_KEY) {
+                        callback(null, item.user);
+                    } else {
+                        callback('Invalid update user key');
+                    }
+                } else { // user tries to update himself
+                    if (request.user.id !== item.id) {
+                        callback('Insufficient rights to perform action'); // TODO: change phrase
+                    } else {
+                        async.waterfall([
+                            (callback) => this.services.users.find(item.id, callback),
+                            (existingUser, callback) => {
+                                if (!_.isEqual(
+                                    _.omit(existingUser, ['defaultLanguageId']), _.omit(item, ['defaultLanguageId']))) {
+                                    // report error
+                                    callback('Cannot update other fields! Only defaultLanguageId is allowed.')
+                                } else {
+                                    callback(null, item);
+                                }
+                            }
+                            ], callback);
+                    }
+                }
+            },
+            (userData, callback) => {
+                this.services.users.update(request.user.id, request.languageId, userData, callback);
+            }
+        ], (error, updatedItem) => {
+            this.sendErrorOrJson(response, error, updatedItem);
+        });
+    }
+
     createRouter() {
         const router = new Express();
         router.post('/', this.add.bind(this));
+        router.put('/', this.update.bind(this));
         return router;
     }
 }
