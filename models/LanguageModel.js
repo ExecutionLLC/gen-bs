@@ -3,6 +3,7 @@
 const _ = require('lodash');
 
 const ModelBase = require('./ModelBase');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 const mappedColumns = ['id', 'description'];
 

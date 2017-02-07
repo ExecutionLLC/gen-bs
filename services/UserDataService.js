@@ -84,6 +84,9 @@ class UserDataService extends ServiceBase {
                     },
                     uploads: (callback) => {
                         this.services.sampleUploadHistory.findNotFinishedUploads(user, null, null, callback);
+                    },
+                    languages: (callback) => {
+                        this.services.language.findAll(callback);
                     }
                 }, callback);
             }
