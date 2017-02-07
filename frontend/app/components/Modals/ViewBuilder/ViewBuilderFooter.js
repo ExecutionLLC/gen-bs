@@ -14,7 +14,6 @@ export default class ViewBuilderFooter extends React.Component {
                     onClick={() => this.cancelOnClick()}
                     type='button'
                     className='btn btn-default'
-                    data-dismiss='modal'
                 >
                     <span>{p.t('view.cancel')}</span>
                 </button>
