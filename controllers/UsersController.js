@@ -42,14 +42,13 @@ class UsersController extends ControllerBase {
                     if (request.session.type === 'DEMO') {
                         callback('You cannot change the DEMO user data');
                     } else if (request.user.id !== item.id) {
-                        callback('Insufficient rights to perform action'); // TODO: change phrase
+                        callback('Insufficient rights to perform action');
                     } else { // user tries to update himself
                         async.waterfall([
                             (callback) => this.services.users.find(item.id, callback),
                             (existingUser, callback) => {
                                 if (!_.isEqual(
                                     _.omit(existingUser, ['defaultLanguageId']), _.omit(item, ['defaultLanguageId']))) {
-                                    // report error
                                     callback('Cannot update other fields! Only defaultLanguageId is allowed.')
                                 } else {
                                     callback(null, item);

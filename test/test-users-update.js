@@ -4,17 +4,13 @@ const assert = require('assert');
 
 const Config = require('../utils/Config');
 const Urls = require('./utils/Urls');
-
 const UsersClient = require('./utils/UsersClient');
-
-const urls = new Urls('localhost', Config.port);
-const usersClient = new UsersClient(urls);
-
 const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
 const MockUsers = require('./mocks/mock-users.json');
 
-
+const urls = new Urls('localhost', Config.port);
+const usersClient = new UsersClient(urls);
 const sessionsClient = new SessionsClient(urls);
 const languId = Config.defaultLanguId; // used to create request headers
 const wrongLanguageId = 'fr';
