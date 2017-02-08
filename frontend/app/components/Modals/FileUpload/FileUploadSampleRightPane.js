@@ -140,8 +140,8 @@ class SampleHeader extends React.Component {
 export default class FileUploadSampleRightPane extends React.Component {
 
     RENDER_MODE = {
-        UPLOAD: {label: 'File'},
-        SAMPLE: {label: 'Sample'}
+        UPLOAD: {labelPath: 'samples.rightPaneError.description.file'},
+        SAMPLE: {labelPath: 'samples.rightPaneError.description.sample'}
     };
 
     constructor(props) {
@@ -226,7 +226,7 @@ export default class FileUploadSampleRightPane extends React.Component {
         return (
             <div className='alert alert-danger'>
                 <p>
-                    <strong>{p.t('samples.rightPaneError.title')}</strong><span>{p.t('samples.rightPaneError.description', {label: renderMode.label})}</span>
+                    <strong>{p.t('samples.rightPaneError.title')}</strong><span>{p.t(renderMode.labelPath)}</span>
                 </p>
             </div>
         );
