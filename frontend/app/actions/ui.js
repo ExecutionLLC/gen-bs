@@ -29,6 +29,7 @@ export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
 export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
 export const STORE_CURRENT_LANGUAGE_ID = 'STORE_CURRENT_LANGUAGE_ID';
+export const STORE_AVAILABLE_LANGUAGES = 'STORE_AVAILABLE_LANGUAGES';
 
 export function requestTableScrollPositionReset() {
     return {
@@ -131,5 +132,12 @@ export function setCurrentLanguageId(languageId) {
                     console.error(`Failed to update user's default language: ${error}`);
                 });
         }
+    };
+}
+
+export function storeAvailableLanguages(languages) {
+    return {
+        type: STORE_AVAILABLE_LANGUAGES,
+        languages
     };
 }
