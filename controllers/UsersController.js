@@ -29,13 +29,6 @@ class UsersController extends ControllerBase {
 
     update(request, response) {
         async.waterfall([
-            (callback) => {
-                if (request.session.type === 'DEMO') {
-                    callback('You cannot change the DEMO user data');
-                } else {
-                    callback(null);
-                }
-            },
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (item, callback) => {
@@ -45,10 +38,12 @@ class UsersController extends ControllerBase {
                     } else {
                         callback('Invalid update user key');
                     }
-                } else { // user tries to update himself
-                    if (request.user.id !== item.id) {
+                } else {
+                    if (request.session.type === 'DEMO') {
+                        callback('You cannot change the DEMO user data');
+                    } else if (request.user.id !== item.id) {
                         callback('Insufficient rights to perform action'); // TODO: change phrase
-                    } else {
+                    } else { // user tries to update himself
                         async.waterfall([
                             (callback) => this.services.users.find(item.id, callback),
                             (existingUser, callback) => {
