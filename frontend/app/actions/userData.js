@@ -48,10 +48,10 @@ function requestUserData() {
     };
 }
 
-function receiveUserData(json) {
+function receiveUserData(profileMetadata) {
     return {
         type: RECEIVE_USERDATA,
-        userData: json,
+        profileMetadata,
         receivedAt: Date.now()
     };
 }
@@ -79,11 +79,12 @@ export function fetchUserDataAsync() {
                 totalFields,
                 savedFiles,
                 analyses,
-                uploads
+                uploads,
+                profileMetadata
             } = userData;
 
-            dispatch(receiveUserData(userData));
-            dispatch(setCurrentLanguageId(userData.profileMetadata.defaultLanguageId));
+            dispatch(receiveUserData(profileMetadata));
+            dispatch(setCurrentLanguageId(profileMetadata.defaultLanguageId));
             const p = getP(getState()); // get new state because of its changing in 'setCurrentLanguageId' action
             dispatch(filtersListReceive(filters));
             dispatch(viewsListReceive(views));
