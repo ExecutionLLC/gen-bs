@@ -12,8 +12,9 @@ class UsersClient extends ClientBase {
         RequestWrapper.post(this.urls.users(), null, user, callback);
     }
 
-    update(user, callback) {
-        RequestWrapper.put(this.urls.users(), null, user, callback);
+    update(sessionId, languageId, user, callback) {
+        RequestWrapper.put(this.urls.users(),
+            this._makeHeaders({sessionId, languId: languageId}), user, callback);
     }
 }
 

@@ -14,6 +14,7 @@ import SessionsClient from './SessionsClient';
 import ViewsClient from './ViewsClient';
 import SavedFilesClient from './SavedFilesClient';
 import SampleUploadsClient from './SampleUploadsClient';
+import UsersClient from './UsersClient';
 
 class ApiFacade {
     constructor() {
@@ -30,6 +31,7 @@ class ApiFacade {
         this._savedFilesClient = new SavedFilesClient(urls);
         this._viewsClient = new ViewsClient(urls);
         this._sampleUploadsClient = new SampleUploadsClient(urls);
+        this._usersClient = new UsersClient(urls);
     }
 
     get dataClient() {
@@ -74,6 +76,10 @@ class ApiFacade {
 
     get sampleUploadsClient() {
         return this._sampleUploadsClient;
+    }
+
+    get usersClient() {
+        return this._usersClient;
     }
 }
 
