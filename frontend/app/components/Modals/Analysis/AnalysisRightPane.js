@@ -471,13 +471,14 @@ export default class AnalysisRightPane extends React.Component {
                 modelsList,
                 fields,
                 samplesList,
-                languageId
+                languageId,
+                p
             })
         ];
         const validationResults = _.map(validationRules, rule => rule.validate());
         const error = _.find(validationResults, {isValid: false});
         const buttonParams = {
-            title: error ? error.errorMessage : 'Click for analyze with analysis initial versions of filter and view',
+            title: error ? error.errorMessage : p.t('analysis.rightPane.content.analyzeTitle'),
             disabled: error ? true : false
         };
         return (

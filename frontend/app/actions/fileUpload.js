@@ -124,15 +124,15 @@ function addNoGZippedForUpload(files) {
 /**
  * Make gzipped file or return the input file if already gzipped
  * @param {File} file
+ * @param {Object} p
  * @param {function()} onGzipStart
  * @param {function(File)} onGzipped
  * @param {function(string)} onError
  */
-function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
+function ensureGzippedFile(file, p, onGzipStart, onGzipped, onError) {
     if (!(file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') &&
         !(file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz')) {
-        onError('Unsupported file type: must be Variant Call Format'
-            + ' (VCF) 4.1 or higher or VCF compressed with gzip');
+        onError(p.t('samples.errors.unsupportedFileFormat'));
     } else {
         isGzipFormat(file).then(isGz => {
             if (isGz) {
@@ -284,12 +284,14 @@ export function fileUploadErrorForOperationId(error, operationId) {
 
 
 function addFileForUpload(file) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const p = getP(getState());
         return new Promise((resolve) => {
             const fileWithId = {id: idCounter++, file};
             dispatch(addNoGZippedForUpload([fileWithId]));
             ensureGzippedFile(
                 fileWithId.file,
+                p,
                 () => {
                     dispatch(requestGzip(fileWithId.id));
                 },
