@@ -25,7 +25,7 @@ export default class VariantsTableRows extends Component {
                    ref={REFS.CONTAINER}>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
                 !!variantsAnalysis, variantsHeader, fields, selectedRowIndices)}
-            {!isFilteringOrSorting && this.canLoadMore() && VariantsTableRows.renderLoadingItem()}
+            {!isFilteringOrSorting && this.canLoadMore() && this.renderLoadingItem()}
             </tbody>
         );
     }
@@ -41,8 +41,8 @@ export default class VariantsTableRows extends Component {
     shouldComponentUpdate(nextProps) {
         return this.props.variants !== nextProps.variants
             || this.props.variantsTable.isFilteringOrSorting !== nextProps.variantsTable.isFilteringOrSorting
-            || this.props.variantsTable.selectedRowIndices !==
-            nextProps.variantsTable.selectedRowIndices;
+            || this.props.variantsTable.selectedRowIndices !== nextProps.variantsTable.selectedRowIndices
+            || this.props.p !== nextProps.p;
     }
 
     componentWillUnmount() {
@@ -52,7 +52,7 @@ export default class VariantsTableRows extends Component {
 
     renderTableBody(rows, sortState, isFilteringOrSorting, variantsAnalysisPresent, variantsHeader, fields, selectedRowIndices) {
         if (isFilteringOrSorting || !variantsAnalysisPresent) {
-            return VariantsTableRows.renderLoadingItem();
+            return this.renderTempRow();
         } else {
             return _.map(rows,
                 (row, index) =>
@@ -103,20 +103,62 @@ export default class VariantsTableRows extends Component {
                               isSelected={isSelected}
                               fields={fields}
                               auth={this.props.auth}
+                              ui={this.props.ui}
                               dispatch={this.props.dispatch}
                               tableElement={this}
                               onSelected={
-                                (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
+                                  (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
                               }
+                              p={this.props.p}
             />
         );
     }
 
-    static renderLoadingItem() {
+    renderTempRow() {
+        const {variantsHeader} = this.props;
+        return [
+            this.renderLoadingItem(),
+            <tr style={{visibility: 'hidden'}}>
+                <td className='btntd row_checkbox'>
+                    <div>{1}</div>
+                </td>
+                <td className='btntd row_checkbox'
+                    key='row_checkbox'>
+                    <div>
+                        <label className='checkbox'>
+                            <input type='checkbox'/>
+                            <i/>
+                        </label>
+                        <span />
+                    </div>
+                </td>
+                <td className='btntd'>
+                    <div>
+                    </div>
+                </td>
+                <td className='comment'>
+                    <div>
+                    </div>
+                </td>
+                {_.map(variantsHeader, () => {
+                    return (
+                        <td>
+                            <div>
+                            </div>
+                        </td>
+                    );
+                })}
+            </tr>
+        ];
+    }
+
+    renderLoadingItem() {
+        const {p} = this.props;
+
         return (
             <tr ref={REFS.LOADING}>
                 <td colSpan='100'>
-                    <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
+                    <div className='table-loader'>{p.t('variantsTable.loading')}<i className='md-i'>autorenew</i>
                     </div>
                 </td>
             </tr>

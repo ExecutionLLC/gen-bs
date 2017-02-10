@@ -17,7 +17,9 @@ const mappedColumns = [
     'isAnalyzed',
     'isDeleted',
     'values',
-    'timestamp'
+    'timestamp',
+    'uploadState',
+    'error'
 ];
 
 const SampleTableNames = {
@@ -123,14 +125,12 @@ class SamplesModel extends SecureModelBase {
     }
 
     update(userId, sampleId, sampleToUpdate, callback) {
-        const {name, description} = sampleToUpdate;
+        const sampleText = _.find(sampleToUpdate.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._updateSampleText(trx, sampleId, {
-                    name,
-                    description
-                }, (error) => callback(error)),
+                (callback) => this._updateSampleText(trx, sampleId, sampleText, (error) => callback(error)),
                 (callback) => this._updateSampleMetadataValues(trx, sampleId, sampleToUpdate.sampleMetadata, (error) => callback(error)),
+                (callback) => this._setUploadState(trx, sampleId, sampleToUpdate.uploadState, sampleToUpdate.error, (error) => callback(error)),
                 (callback) => this._find(trx, sampleId, userId, callback)
             ], callback);
         }, callback);
@@ -139,6 +139,7 @@ class SamplesModel extends SecureModelBase {
     _updateSampleText(trx, sampleId, sampleText, callback) {
         trx(SampleTableNames.SampleText)
             .where('sample_id', sampleId)
+            .andWhere('language_id', sampleText.languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(sampleText))
             .asCallback(callback);
     }
@@ -150,10 +151,13 @@ class SamplesModel extends SecureModelBase {
     }
 
     _updateSampleMetadata(trx, sampleId, metadata, callback) {
-        const {metadataId, value} = metadata;
+        const {metadataId} = metadata;
+        const metadataText = _.find(metadata.text, text => _.isNull(text.languageId));
+        const {languageId, value} = metadataText;
         trx(SampleTableNames.SampleMetadata)
             .where('sample_id', sampleId)
             .andWhere('metadata_id', metadataId)
+            .andWhere('language_id', languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase({value}))
             .asCallback(callback);
     }
@@ -170,6 +174,16 @@ class SamplesModel extends SecureModelBase {
             });
     }
 
+    _setUploadState(trx, sampleId, uploadState, error, callback) {
+        trx(SampleTableNames.Sample)
+            .where('id', sampleId)
+            .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                uploadState,
+                error
+            }))
+            .asCallback((error) => callback(error, sampleId));
+    }
+
     _add(userId, languageId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             this._addInTransaction(userId, sample, languageId, shouldGenerateId, trx, callback);
@@ -183,7 +197,8 @@ class SamplesModel extends SecureModelBase {
     }
 
     _addSample(languageId, sample, shouldGenerateId, trx, callback) {
-        const {id, vcfFileId, type, isAnalyzed, genotypeName, analyzedTimestamp, fileName, description} =sample;
+        const {id, vcfFileId, type, isAnalyzed, genotypeName, analyzedTimestamp, fileName, description,
+            uploadState} = sample;
         async.waterfall([
             (callback) => {
                 const dataToInsert = {
@@ -192,7 +207,8 @@ class SamplesModel extends SecureModelBase {
                     isAnalyzed: isAnalyzed || false,
                     genotypeName: genotypeName || null,
                     analyzedTimestamp: analyzedTimestamp || null,
-                    vcfFileId
+                    vcfFileId,
+                    uploadState
                 };
                 this._insert(dataToInsert, trx, callback);
             },
@@ -202,7 +218,7 @@ class SamplesModel extends SecureModelBase {
                     sampleId,
                     name,
                     description,
-                    languageId: languageId || Config.defaultLanguId
+                    languageId: null
                 };
                 this._addSampleText(trx, genotypeText, (error) => callback(error, sampleId))
             },
@@ -234,7 +250,14 @@ class SamplesModel extends SecureModelBase {
     }
 
     _addSampleMetadata(trx, editableFields, callback) {
-        async.map(editableFields, (editableField, callback) => {
+        async.map(editableFields, (field, callback) => {
+            const {sampleId, metadataId, text: {languageId, value}} = field;
+            const editableField = {
+                sampleId,
+                metadataId,
+                languageId,
+                value
+            };
             this._unsafeInsert(SampleTableNames.SampleMetadata, editableField, trx, callback);
         }, callback);
     }
@@ -274,7 +297,12 @@ class SamplesModel extends SecureModelBase {
                             sampleFields: [],
                             sampleMetadata: _.map(editableMetadata, fieldWithId => ({
                                 metadataId: fieldWithId.id,
-                                value: null
+                                text: [
+                                    {
+                                        value: null,
+                                        languageId: null
+                                    }
+                                ]
                             }))
                         });
                     });
@@ -290,9 +318,7 @@ class SamplesModel extends SecureModelBase {
             (samples, callback) => this._attachSampleFields(trx, samples, callback),
             (samples, callback) => this._attachSampleMetadata(trx, samples, callback),
             (samples, callback) => this._attachSampleText(trx, samples, callback)
-        ], (error, views) => {
-            callback(error, views);
-        });
+        ], callback);
     }
 
     _attachSampleFields(trx, samples, callback) {
@@ -332,12 +358,17 @@ class SamplesModel extends SecureModelBase {
         async.waterfall([
             (callback) => this._findSampleTextByIds(trx, sampleIds, callback),
             (sampleTexts, callback) => {
-                const sampleTextBySampleId = CollectionUtils.createHashByKey(sampleTexts, 'sampleId');
+                const textsHash = _.groupBy(sampleTexts, 'sampleId');
                 const samplesWithText = _.map(samples, sample => {
-                    const {name, description} = sampleTextBySampleId[sample.id];
                     return Object.assign({}, sample, {
-                        name,
-                        description
+                        text: _.map(textsHash[sample.id], text => {
+                            const {description, languageId, name} = text;
+                            return {
+                                name,
+                                description,
+                                languageId
+                            };
+                        })
                     });
                 });
                 callback(null, samplesWithText);
@@ -354,6 +385,8 @@ class SamplesModel extends SecureModelBase {
             `${SampleTableNames.Sample}.analyzed_timestamp`,
             `${SampleTableNames.Sample}.type`,
             `${SampleTableNames.Sample}.created`,
+            `${SampleTableNames.Sample}.upload_state`,
+            `${SampleTableNames.Sample}.error`,
             `${SampleTableNames.VcfFile}.creator`,
             `${SampleTableNames.VcfFile}.file_name`
         ])
@@ -371,6 +404,7 @@ class SamplesModel extends SecureModelBase {
 
         if (excludeDeleted) {
             query = query.andWhere(`${SampleTableNames.Sample}.is_deleted`, false);
+            query = query.andWhere(`${SampleTableNames.VcfFile}.is_deleted`, false);
         }
 
         if (sampleIdsOrNull) {
@@ -410,7 +444,31 @@ class SamplesModel extends SecureModelBase {
                 .from(SampleTableNames.SampleMetadata)
                 .whereIn('sample_id', sampleIds)
                 .asCallback(callback),
-            (rows, callback) => this._toCamelCase(rows, callback)
+            (rows, callback) => {
+                this._toCamelCase(rows, callback)
+            },
+            (rows, callback) => {
+                const groupesBySampleId = _.groupBy(rows, row => row.sampleId);
+                const groupedByMetadataAndLanguageId = _.flatMap(groupesBySampleId, groupBySampleId => {
+                    const groupedByMetadataId = _.groupBy(groupBySampleId, group => group.metadataId);
+                    return _.map(groupedByMetadataId, group => {
+                        const defaultMetadata = _.first(group);
+                        const {sampleId, metadataId} = defaultMetadata;
+                        return {
+                            sampleId,
+                            metadataId,
+                            text: _.map(group, groupValue => {
+                                const {languageId, value} = groupValue;
+                                return {
+                                    languageId,
+                                    value
+                                }
+                            })
+                        };
+                    });
+                });
+                callback(null, groupedByMetadataAndLanguageId);
+            }
         ], callback);
     }
 

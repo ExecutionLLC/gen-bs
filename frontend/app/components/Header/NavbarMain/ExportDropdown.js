@@ -6,13 +6,15 @@ import ComponentBase from '../../shared/ComponentBase';
 
 export default class ExportDropdown extends ComponentBase {
 
-    constructor(props) {
-        super(props);
-    }
-
     haveSelectedVariants() {
         const {selectedRowIndices} = this.props;
         return !_.isEmpty(selectedRowIndices);
+    }
+
+    renderExportItem(formatId) {
+        const {p} = this.props;
+        const formatLabel = p.t(`navBar.exports.formats.${formatId}`);
+        return <MenuItem eventKey={formatId}>{formatLabel}</MenuItem>;
     }
 
     render() {
@@ -25,9 +27,9 @@ export default class ExportDropdown extends ComponentBase {
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
                                  disabled={!this.haveSelectedVariants()}
                     >
-                        <MenuItem eventKey='csv'>CSV</MenuItem>
-                        <MenuItem eventKey='sql'>SQL</MenuItem>
-                        <MenuItem eventKey='txt'>Text</MenuItem>
+                        {this.renderExportItem('csv')}
+                        {this.renderExportItem('sql')}
+                        {this.renderExportItem('txt')}
                     </NavDropdown>
                 </Nav>
             </div>
@@ -35,13 +37,25 @@ export default class ExportDropdown extends ComponentBase {
     }
 
     renderExportButtonTitle() {
-        if (!this.haveSelectedVariants()) {
-            return (<span><span className='hidden-xs'>Export</span><span className='visible-xs'><span className='dropdown-menu-header'>Select export format</span><i className='md-i md-cloud_download md-replace-to-close'></i></span></span>);
-        } else {
-            const {selectedRowIndices} = this.props;
-            const selectedVariantsCount = selectedRowIndices.length;
-            return (<span><span className='hidden-xs'>Export</span><span className='visible-xs'><span className='dropdown-menu-header'>Select export format</span><i className='md-i md-cloud_download md-replace-to-close'></i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
-        }
+        const {p, selectedRowIndices} = this.props;
+        const selectedVariantsCount = this.haveSelectedVariants() ? selectedRowIndices.length : 0;
+        return (
+            <span>
+                <span className='hidden-xs'>
+                    {p.t('navBar.exports.popupHeader')}
+                </span>
+                <span className='visible-xs'>
+                    <span className='dropdown-menu-header'>
+                        {p.t('navBar.exports.popupCaption')}
+                    </span>
+                    <i className='md-i md-cloud_download md-replace-to-close' />
+                </span>
+                { selectedVariantsCount ?
+                    <span className='badge badge-warning'>{selectedVariantsCount}</span> :
+                    null
+                }
+            </span>
+        );
     }
 
     onExportItemSelected(event, selectedKey) {

@@ -106,9 +106,10 @@ class FilterQueryBuilder extends React.Component {
      * @param {number[]} indexPath
      * @param {{field: string, sampleType: string=, operator: string, value: *}} item
      * @param {boolean} disabled
+     * @param {{t: function(string): string}} p
      * @returns {React.Component}
      */
-    static makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) {
+    static makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled, p) {
         const fieldFromSample = item.sampleType ?
             _.find(allowedFields, {id: item.field, sampleType: item.sampleType}) :
             _.find(allowedFields, {id: item.field});
@@ -126,6 +127,7 @@ class FilterQueryBuilder extends React.Component {
                 validationRegex = {itemRestrictions.fieldValidationRegexp}
                 disabled={disabled || !fieldFromSample}
                 onChange={ (item) => FilterQueryBuilder.onChangeItem(item, indexPath, allowedFields, dispatch) }
+                p={p}
             />
         );
     }
@@ -163,15 +165,17 @@ class FilterQueryBuilder extends React.Component {
             /** @type {boolean} */
             disabled,
             /** @type function(Object) */
-            dispatch
+            dispatch,
+            p
         } = this.props;
 
         return (
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
-                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) }
+                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled, p) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
+                p={p}
             />
         );
     }
@@ -425,7 +429,8 @@ class FieldFilterItem extends React.Component {
             /** @type {function(?{field: string, sampleType: string=, operator: string, value: *})} */
             onChange,
             /** @type {string} */
-            validationRegex
+            validationRegex,
+            p
         } = this.props;
 
         /** @type {{value: string, label: string}[]} */
@@ -439,9 +444,13 @@ class FieldFilterItem extends React.Component {
         });
         /** @type {string} */
         const selectFieldValue = this.makeFieldIdWithSampleType(item.field, item.sampleType);
+        const genomicsRuleOperatorsLabels = _.mapValues(
+            filterUtils.settings.genomicsOperators,
+            (f, op) => p.t(`filterAndModel.rulesConditions.${op}`)
+        );
         /** @type {{value: string, label: string}[]} */
         const selectOperatorList = allowedOpsTypes.map((opname) => {
-            return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]};
+            return {value: opname, label: genomicsRuleOperatorsLabels[opname]};
         });
         /** @type {string} */
         const selectOperatorValue = item.operator;
@@ -482,22 +491,26 @@ export default class FilterBuilder extends React.Component {
             filterBuilder,
             fields,
             texts,
-            dispatch
+            ui: {languageId},
+            dispatch,
+            p
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
         const parsedFilter = filterBuilder.editingFilter.parsedFilter;
         const allowedFields = filterBuilder.allowedFields;
+        const fieldSampleLabels = FieldUtils.makeFieldTypeLabels(p);
         return (
             <div className='builder-wrapper'>
                 {!isFilterComplexModel(filter) ?
                     <FilterQueryBuilder
-                        allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
-                        totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
+                        allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f, null, languageId, fieldSampleLabels) )}
+                        totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f, null, languageId, fieldSampleLabels) )}
                         rules={parsedFilter}
                         disabled={!entityTypeIsEditable(filter.type)}
                         dispatch={dispatch}
+                        p={p}
                     /> :
-                    <div>{`This ${texts.filter} has no rules to setup`}</div>
+                    <div>{texts.p('noRulesToSetup')}</div>
                 }
             </div>
         );

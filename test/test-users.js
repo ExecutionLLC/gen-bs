@@ -10,16 +10,32 @@ const UsersClient = require('./utils/UsersClient');
 const urls = new Urls('localhost', Config.port);
 const usersClient = new UsersClient(urls);
 
+const ClientBase = require('./utils/ClientBase');
+const SessionsClient = require('./utils/SessionsClient');
+const TestUser = require('./mocks/mock-users.json')[1];
+
+const sessionsClient = new SessionsClient(urls);
+const languId = Config.defaultLanguId;
+
 describe('Users', () => {
+
+    let sessionId = null;
 
     before((done) => {
         webServer.restoreModelsMocks();
-        done();
+        sessionsClient.openSession(TestUser.email, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            sessionId = SessionsClient.getSessionFromResponse(response);
+            done();
+        });
     });
 
     after((done) => {
         webServer.setModelsMocks();
-        done();
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            done();
+        });
     });
 
     function makeUser(isPassword, password) {
@@ -30,11 +46,11 @@ describe('Users', () => {
             gender: 'TestUserGender' + r,
             loginType: isPassword ? 'password' : 'google',
             password: password,
-            email: 'TestUserEmail' + r + '@example.com',
+            email: ('TestUserEmail' + r + '@example.com').toLowerCase(),
             phone: 'TestUserPhone' + r,
             company: 'TestUserCompany' + r,
             speciality: 'TestUserSpeciality' + r,
-            language: ('' + r).slice(-2),
+            languageId: 'en',
             numberPaidSamples: Math.floor(r * 10 + 1)
         }
     }
@@ -51,8 +67,8 @@ describe('Users', () => {
             assert.deepStrictEqual(addedUser, Object.assign({}, user, {
                 id: addedUser.id,
                 password: null,
-                defaultLanguId: 'en', // language got from header...
-                language: 'en', // ... it is not expected behavior but it is for now
+                defaultLanguageId: 'en', // language got from header...
+                languageId: 'en', // ... it is not expected behavior but it is for now
                 isDeleted: false
             }));
             done();
@@ -104,8 +120,8 @@ describe('Users', () => {
     function checkUpdateResult(userToUpdate, userUpdated) {
         assert.deepStrictEqual(userUpdated, Object.assign({}, userToUpdate, {
             password: null,
-            defaultLanguId: 'en', // language got from header...
-            language: 'en', // ... it is not expected behavior but it is for now
+            defaultLanguageId: 'en', // language got from header...
+            languageId: 'en', // ... it is not expected behavior but it is for now
             isDeleted: false
         }));
     }
@@ -117,7 +133,7 @@ describe('Users', () => {
             assert.equal(result.status, 200);
             const addedUser = result.body;
             const user2 = Object.assign({}, makeUser(), {id: addedUser.id});
-            usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+            usersClient.update(sessionId, languId, {key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
                 assert.equal(err, null);
                 assert.equal(result.status, 200);
                 const updatedUser = result.body;
@@ -134,7 +150,7 @@ describe('Users', () => {
             assert.equal(result.status, 200);
             const addedUser = result.body;
             const user2 = Object.assign({}, makeUser(), {id: addedUser.id, email: addedUser.email});
-            usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+            usersClient.update(sessionId, languId, {key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
                 assert.equal(err, null);
                 assert.equal(result.status, 200);
                 const updatedUser = result.body;
@@ -155,7 +171,7 @@ describe('Users', () => {
                 assert.equal(result.status, 200);
                 const addeduser2 = result.body;
                 const user2WithEmailOf1 = Object.assign({}, makeUser(), {id: addeduser2.id, email: user1.email});
-                usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2WithEmailOf1}, (err, result) => {
+                usersClient.update(sessionId, languId, {key: Config.regserver.ADD_USER_KEY, user: user2WithEmailOf1}, (err, result) => {
                     assert.equal(err, null);
                     assert.equal(result.status, 500);
                     done();

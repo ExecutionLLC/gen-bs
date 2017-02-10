@@ -1,6 +1,7 @@
-import React  from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import config from '../../../config';
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
@@ -11,28 +12,30 @@ import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 import {modalName} from '../../actions/modalWindows';
+import * as i18n from '../../utils/i18n';
 
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth: {isDemo}, showModal, viewBuilder, viewsList} = this.props;
+        const {auth: {isDemo}, showModal, viewBuilder, viewsList, p} = this.props;
         const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
         const isViewEditable = editingView && entityTypeIsEditable(editingView.type);
         const isLoginRequired = editingView && entityTypeIsDemoDisabled(editingView.type, isDemo);
-        const editedViewNameTrimmed = editingView && editingView.name.trim();
+        const editedViewNameTrimmed = editingView && this.getTrimmedViewName(editingView);
 
         const validationMessage = editingView ? this.getValidationMessage(
             editingView,
             editedViewNameTrimmed,
             isViewEditable,
-            views
+            views,
+            p
         ) : '';
 
         const confirmButtonParams = {
-            caption: isViewEditable ? 'Save and Select' : 'Select',
-            title: isLoginRequired ? 'Login or register to select advanced view' : '',
+            caption: isViewEditable ? p.t('view.saveAndSelect') : p.t('view.select'),
+            title: isLoginRequired ? p.t('view.loginRequiredMsg') : '',
             disabled: isLoginRequired || !!validationMessage
         };
 
@@ -51,7 +54,9 @@ class ViewsModal extends React.Component {
                 }
                 { editingView &&
                 <div>
-                    <ViewBuilderHeader />
+                    <ViewBuilderHeader
+                        p={p}
+                    />
                     <form>
                         <Modal.Body>
                             <div className='modal-body-scroll'>
@@ -91,6 +96,11 @@ class ViewsModal extends React.Component {
         );
     }
 
+    getTrimmedViewName(view) {
+        const {ui: {languageId}} = this.props;
+        return i18n.getEntityText(view, languageId).name.trim();
+    }
+
     onClose() {
         const {dispatch, closeModal} = this.props;
         closeModal(modalName.VIEWS); // TODO: closeModal must have no params (it's obvious that we close views)
@@ -102,24 +112,25 @@ class ViewsModal extends React.Component {
      * @param {string}editedViewName
      * @param {boolean}isViewEditable
      * @param {Array<Object>}views
+     * @param {Object}p
      * @return {string}
      */
-    getValidationMessage(editingView, editedViewName, isViewEditable, views) {
+    getValidationMessage(editingView, editedViewName, isViewEditable, views, p) {
         const viewNameExists = isViewEditable && _(views)
                 .filter(view => view.type !== entityType.HISTORY)
-                .some(view => view.name.trim() === editedViewName
+                .some(view => this.getTrimmedViewName(view) === editedViewName
                     && view.id != editingView.id
                 );
         if (viewNameExists) {
-            return 'View with this name is already exists.';
+            return p.t('view.validationMessage.nameAlreadyExists');
         }
 
         if (!editedViewName) {
-            return 'Name cannot be empty';
+            return p.t('view.validationMessage.empty');
         }
 
         if (editedViewName && editedViewName.length > config.VIEWS.MAX_NAME_LENGTH) {
-            return `Name length should be less than ${config.VIEWS.MAX_NAME_LENGTH}.`;
+            return p.t('view.validationMessage.lengthExceeded', {maxLength: config.VIEWS.MAX_NAME_LENGTH});
         }
 
         return '';
@@ -127,16 +138,21 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder, userData, fields, viewsList} = state;
+    const {auth, viewBuilder, userData, fields, viewsList, ui} = state;
 
     return {
         auth,
         viewBuilder,
         userData,
         fields,
-        viewsList
+        viewsList,
+        ui,
+        p: getP(state)
     };
 }
 
-export default connect(mapStateToProps)(ViewsModal);
+ViewsModal.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
+export default connect(mapStateToProps)(ViewsModal);

@@ -61,24 +61,25 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersStrategy, filtersList) {
+export function filterBuilderStartEdit(newFilterInfo, filter, fields, allowedFields, filtersStrategy, filtersList, languageId) {
     return {
         type: FBUILDER_START_EDIT,
-        makeNew,
+        newFilterInfo,
         filter,
         filtersStrategy,
         filtersList,
         fields,
-        allowedFields
+        allowedFields,
+        languageId
     };
 }
 
-export function filterBuilderRestartEdit(makeNew, filter) {
+export function filterBuilderRestartEdit(newFilterInfo, filter, languageId) {
     return (dispatch, getState) => {
         const state = getState();
         const {filterBuilder: {allowedFields, filtersStrategy}, fields} = state;
         const strategyActions = filterBuilderStrategyActions[filtersStrategy.name];
-        dispatch(filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersStrategy, strategyActions.getList(state)));
+        dispatch(filterBuilderStartEdit(newFilterInfo, filter, fields, allowedFields, filtersStrategy, strategyActions.getList(state), languageId));
     };
 }
 
@@ -94,11 +95,12 @@ export function filterBuilderEndEdit() {
     };
 }
 
-export function filterBuilderChangeAttr(attr) {
+export function filterBuilderChangeAttr(attr, languageId) {
     return {
         type: FBUILDER_CHANGE_ATTR,
         name: attr.name,
-        description: attr.description
+        description: attr.description,
+        languageId
     };
 }
 
@@ -164,7 +166,7 @@ export function filterBuilderChangeFilter(index, change) {
     };
 }
 
-export function filterBuilderDeleteFilter(filterId) {
+export function filterBuilderDeleteFilter(filterId, languageId) {
     return (dispatch, getState) => {
         return new Promise((resolve) => {
             const {filterBuilder} = getState();
@@ -175,7 +177,7 @@ export function filterBuilderDeleteFilter(filterId) {
                     const {hashedArray} = filterBuilder.filtersList;
                     const newFilterId = (filterId == editingFilterId) ? hashedArray.array[0].id : editingFilterId;
                     const newFilter = hashedArray.hash[newFilterId];
-                    dispatch(filterBuilderRestartEdit(false, newFilter));
+                    dispatch(filterBuilderRestartEdit(null, newFilter, languageId));
                     resolve(newFilter);
                 });
         });

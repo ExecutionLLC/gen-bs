@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
@@ -15,15 +16,6 @@ export const VIEWS_LIST_ADD_VIEW = 'VIEWS_LIST_ADD_VIEW';
 export const VIEWS_LIST_DELETE_VIEW = 'VIEWS_LIST_DELETE_VIEW';
 export const VIEWS_LIST_EDIT_VIEW = 'VIEWS_LIST_EDIT_VIEW';
 export const VIEWS_LIST_SET_HISTORY_VIEW = 'VIEWS_LIST_SET_HISTORY_VIEW';
-
-const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
-const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
-
-const UPDATE_VIEW_NETWORK_ERROR = 'Cannot update view (network error). Please try again.';
-const UPDATE_VIEW_SERVER_ERROR = 'Cannot update view (server error). Please try again.';
-
-const DELETE_VIEW_NETWORK_ERROR = 'Cannot delete view (network error). Please try again.';
-const DELETE_VIEW_SERVER_ERROR = 'Cannot delete view (server error). Please try again.';
 
 
 export function viewsListStartServerOperation() {
@@ -68,16 +60,18 @@ export function viewsListEditView(viewId, view) {
 }
 
 export function viewsListServerCreateView(view, languageId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
             viewsClient.add(languageId, view, (error, response) => {
                 dispatch(viewsListEndServerOperation());
                 if (error) {
-                    dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
+                    const p = getP(getState());
+                    dispatch(handleError(null, p.t('view.errors.createViewNetworkError')));
                     reject();
                 } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, CREATE_VIEW_SERVER_ERROR));
+                    const p = getP(getState());
+                    dispatch(handleError(null, p.t('view.errors.createViewServerError')));
                     reject();
                 } else {
                     const newView = response.body;
@@ -90,16 +84,18 @@ export function viewsListServerCreateView(view, languageId) {
 }
 
 export function viewsListServerUpdateView(view) {
-    return (dispatch,getState) => {
+    return (dispatch, getState) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
             viewsClient.update(view, (error, response) => {
                 dispatch(viewsListEndServerOperation());
                 if (error) {
-                    dispatch(handleError(null, UPDATE_VIEW_NETWORK_ERROR));
+                    const p = getP(getState());
+                    dispatch(handleError(null, p.t('view.errors.updateViewNetworkError')));
                     reject();
                 } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_VIEW_SERVER_ERROR));
+                    const p = getP(getState());
+                    dispatch(handleError(null, p.t('view.errors.updateViewServerError')));
                     reject();
                 } else {
                     const updatedView = response.body;
@@ -114,16 +110,18 @@ export function viewsListServerUpdateView(view) {
 }
 
 export function viewsListServerDeleteView(viewId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
             viewsClient.remove(viewId, (error, response) => {
                 dispatch(viewsListEndServerOperation());
                 if (error) {
-                    dispatch(handleError(null, DELETE_VIEW_NETWORK_ERROR));
+                    const p = getP(getState());
+                    dispatch(handleError(null, p.t('view.errors.deleteViewNetworkError')));
                     reject();
                 } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, DELETE_VIEW_SERVER_ERROR));
+                    const p = getP(getState());
+                    dispatch(handleError(null, p.t('view.errors.deleteViewServerError')));
                     reject();
                 } else {
                     dispatch(viewsListDeleteView(viewId));

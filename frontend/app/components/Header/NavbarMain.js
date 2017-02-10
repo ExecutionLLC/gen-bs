@@ -7,10 +7,13 @@ import NavbarSearch from './NavbarMain/NavbarSearch';
 import ExportDropdown from './NavbarMain/ExportDropdown';
 import SavedFiles from './NavbarMain/SavedFiles';
 import Auth from './NavbarMain/Auth';
+import LanguageDropdown from './NavbarMain/LanguageDropdown';
 
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
-import {fileUploadStatus} from '../../actions/fileUpload';
+import {fileUploadStatus, SAMPLE_UPLOAD_STATE} from '../../actions/fileUpload';
 import {entityType} from '../../utils/entityTypes';
+import * as PropTypes from 'react/lib/ReactPropTypes';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 
 class NavbarMain extends Component {
@@ -20,7 +23,8 @@ class NavbarMain extends Component {
             dispatch,
             variantsTable: {selectedRowIndices, searchInResultsParams: {topSearch: {search}}},
             samplesList,
-            fileUpload: {filesProcesses}
+            fileUpload: {filesProcesses},
+            ui: {languages}
         } = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
@@ -47,8 +51,8 @@ class NavbarMain extends Component {
                 if (sample &&
                     upload &&
                     sample.type !== entityType.HISTORY &&
-                    _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus)
-                ) {
+                    _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus) &&
+                    sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
                     return count + 1;
                 } else {
                     return count;
@@ -58,40 +62,54 @@ class NavbarMain extends Component {
         );
 
         return (
-
             <nav className='navbar navbar-inverse navbar-fixed-top navbar-main'>
                 <div className='navbar-inner'>
                     <div className='dropdown'>
                         <a role='button' className='btn navbar-btn brand dropdown-toggle'>
-                            AGx </a>
+                            {this.props.p.t('common.agx')}
+                        </a>
                     </div>
                     <SamplesButton
                         openSamplesModal={() => this.props.openSamplesModal()}
                         badge={newSamplesCount || null}
+                        p={this.props.p}
                     />
                     <AnalysisButton
                         openAnalysisModal={() => this.props.openAnalysisModal()}
+                        p={this.props.p}
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
                         search={search}
+                        p={this.props.p}
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}
+                                    p={this.props.p}
                     />
-                    <SavedFiles dispatch={this.props.dispatch}/>
+                    <SavedFiles
+                        dispatch={this.props.dispatch}
+                        p={this.props.p}
+                    />
+                    {languages && languages.length &&
+                    <LanguageDropdown
+                        dispatch={this.props.dispatch}
+                        languages={languages}
+                        languageId={this.props.ui.languageId}
+                        p={this.props.p}
+                    />
+                    }
                     <Auth {...this.props} />
                 </div>
             </nav>
-
-
         );
     }
+
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ws, variantsTable, samplesList, fileUpload} = state;
+    const {auth, userData, ws, variantsTable, samplesList, fileUpload, ui} = state;
 
     return {
         auth,
@@ -99,9 +117,15 @@ function mapStateToProps(state) {
         ws,
         variantsTable,
         samplesList,
-        fileUpload
+        fileUpload,
+        ui,
+        p: getP(state)
     };
 }
+
+NavbarMain.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
 export default connect(mapStateToProps)(NavbarMain);
 

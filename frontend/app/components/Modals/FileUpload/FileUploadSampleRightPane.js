@@ -8,7 +8,8 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {
     uploadFiles,
-    fileUploadStatus
+    fileUploadStatus,
+    SAMPLE_UPLOAD_STATE
 } from '../../../actions/fileUpload';
 import {formatDate} from './../../../utils/dateUtil';
 import {
@@ -20,6 +21,7 @@ import {
 } from '../../../actions/samplesList';
 import config from '../../../../config';
 import {modalName} from '../../../actions/modalWindows';
+import * as i18n from '../../../utils/i18n';
 
 
 function cancelDOMEvent(e) {
@@ -31,12 +33,9 @@ function cancelDOMEvent(e) {
 // and must re-render only if props are changed to prevent clearing the name and description.
 class SampleHeader extends React.Component {
 
-    shouldComponentUpdate(nextProps) {
-        return this.props.samplesList.editingSample !== nextProps.samplesList.editingSample;
-    }
 
     render() {
-        const {samplesList: {editingSample}, fileUpload: {filesProcesses}} = this.props;
+        const {editingSample, fileUpload: {filesProcesses}} = this.props;
         const isProcessing = _.some(
             filesProcesses,
             (fileProcess) => fileProcess.operationId === editingSample.vcfFileId && fileProcess.progressStatus !== fileUploadStatus.READY
@@ -53,15 +52,16 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDescription() {
-        const {auth: {isDemo}, samplesList: {editingSample: {description, id, type}}} = this.props;
+        const {auth: {isDemo}, editingSample, languageId, p} = this.props;
+        const {id, type} = editingSample;
+        const description = i18n.getEntityText(editingSample, languageId).description;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={description || ''}
-                        placeholder='Sample description (optional)'
+                        placeholder={p.t('samples.editingSample.descriptionPlaceholder')}
                         className='form-control material-input-sm'
-                        data-localize='query.settings.description'
                         maxLength={config.UPLOADS.MAX_DESCRIPTION_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, null, e)}
                         disabled={!entityTypeIsEditable(type) || isDemo}
@@ -72,27 +72,29 @@ class SampleHeader extends React.Component {
     }
 
     renderSampleDates(createdDate) {
+        const {p} = this.props;
         return (
             <div className='label-group-date'>
                 {createdDate ? (
-                        <label>Uploaded: {formatDate(createdDate)}</label>
+                        <label>{p.t('samples.editingSample.uploaded')}: {formatDate(createdDate)}</label>
                     ) : (
-                        <label><span className='text-primary'><i className='md-i'>schedule</i>Wait. Saving</span></label>
+                        <label><span className='text-primary'><i className='md-i'>schedule</i>{p.t('samples.editingSample.wait')}</span></label>
                     )}
             </div>
         );
     }
 
     renderSampleFileName() {
-        const {auth: {isDemo}, samplesList: {editingSample: {name, id, type}}} = this.props;
+        const {auth: {isDemo}, editingSample, languageId, p} = this.props;
+        const {id, type} = editingSample;
+        const name = i18n.getEntityText(editingSample, languageId).name;
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={name}
                         className='form-control material-input-sm material-input-heading text-primary'
-                        placeholder="Sample name (it can't be empty)"
-                        data-localize='query.settings.name'
+                        placeholder={p.t('samples.editingSample.namePlaceholder')}
                         maxLength={config.UPLOADS.MAX_NAME_LENGTH}
                         onChange={(e) => this.onSampleTextChange(id, e, null)}
                         disabled={!entityTypeIsEditable(type) || isDemo}
@@ -103,10 +105,11 @@ class SampleHeader extends React.Component {
     }
 
     onSampleTextChange(sampleId, sampleName, sampleDescription) {
-        const {dispatch, samplesList: {editingSample: {name, description}}} = this.props;
+        const {dispatch, editingSample, languageId} = this.props;
+        const {name, description} = i18n.getEntityText(editingSample, languageId);
         const newName = sampleName || name;
         const newDescription = sampleDescription || description;
-        dispatch(updateSampleText(sampleId, newName, newDescription));
+        dispatch(updateSampleText(sampleId, newName, newDescription, languageId));
         dispatch(requestUpdateSampleTextAsync(sampleId))
             .then((newSample) => {
                 dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
@@ -115,21 +118,31 @@ class SampleHeader extends React.Component {
     }
 
     renderDeleteSampleButton() {
-        const {samplesList: {editingSample}} = this.props;
+        const {editingSample, p} = this.props;
         if (entityTypeIsEditable(editingSample.type)) {
             return (
                 <button
                     className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                     onClick={() => this.onSampleItemDelete(editingSample.id)}
                 >
-                    <span data-localize='query.delete_sample'>Delete sample</span>
+                    <span>{p.t('samples.editingSample.deleteSample')}</span>
                 </button>
             );
         }
     }
+
+    onSampleItemDelete(id) {
+        const {dispatch} = this.props;
+        dispatch(samplesListServerRemoveSample(id));
+    }
 }
 
 export default class FileUploadSampleRightPane extends React.Component {
+
+    RENDER_MODE = {
+        UPLOAD: {labelPath: 'samples.rightPaneError.description.file'},
+        SAMPLE: {labelPath: 'samples.rightPaneError.description.sample'}
+    };
 
     constructor(props) {
         super(props);
@@ -137,147 +150,152 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     render() {
-        const {samplesList, auth, dispatch, fileUpload, isBringToFront} = this.props;
-        const {editingSample} = samplesList;
+        const {samplesList, auth, dispatch, fileUpload, isBringToFront, currentSampleId, languageId, p} = this.props;
+        const {isDemo} = auth;
+        const {currentUploadId} = fileUpload;
+        const {editingSample, hashedArray: {hash: samplesHash}} = samplesList;
+        const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
+        const isSelectedSampleValid = selectedSample && (selectedSample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED ||
+            selectedSample.uploadState === SAMPLE_UPLOAD_STATE.UNCONFIRMED);
+
+        let content = null;
+        if (selectedSample) {
+            content = this.renderSample(selectedSample);
+        } else if (currentUploadId) {
+            content = this.renderUpload(currentUploadId);
+        } else {
+            content = this.renderNewUploadArea(isDemo);
+        }
+
         return (
             <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
                 <div className='split-top'>
-                    {editingSample && <SampleHeader samplesList={samplesList}
-                                                    auth={auth}
-                                                    fileUpload={fileUpload}
-                                                    dispatch={dispatch}
+                    {editingSample && isSelectedSampleValid &&
+                    <SampleHeader editingSample={editingSample}
+                                  auth={auth}
+                                  fileUpload={fileUpload}
+                                  languageId={languageId}
+                                  dispatch={dispatch}
+                                  p={p}
                     />}
                 </div>
-                {this.renderSample()}
+                <div className='split-scroll'>
+                    <div className='form-horizontal form-padding'>
+                        {content}
+                    </div>
+                </div>
             </div>
         );
     }
 
-    renderSample() {
-        const {
-            currentSampleId,
-            auth: {isDemo},
-            fileUpload: {currentUploadId, filesProcesses},
-            samplesList: {hashedArray: {hash: samplesHash}}
-        } = this.props;
-        const selectedSample = currentSampleId ? samplesHash[currentSampleId] : null;
-        if (selectedSample) {
-            return (
-                <div className='split-scroll'>
-                    <div className='form-padding'>
-                        {this.renderSampleContent(selectedSample)}
-                    </div>
-                </div>
-            );
+    renderSample(sample) {
+        switch (sample.uploadState) {
+            case SAMPLE_UPLOAD_STATE.COMPLETED:
+            case SAMPLE_UPLOAD_STATE.UNCONFIRMED:
+                return this.renderSampleContent(sample);
+            case SAMPLE_UPLOAD_STATE.NOT_FOUND:
+            case SAMPLE_UPLOAD_STATE.ERROR:
+            default:
+                return this.renderLoadError(this.RENDER_MODE.SAMPLE);
         }
-        if (currentUploadId == null) {
-            return this.renderUpload(isDemo);
-        }
-        const fileProcess = _.find(
-            filesProcesses,
-            fp => fp.id === currentUploadId || fp.operationId === currentUploadId
-        );
+    }
+
+    renderUpload(uploadId) {
+        const {fileUpload: {filesProcesses}} = this.props;
+        const fileProcess = _.find(filesProcesses, fp => fp.id === uploadId || fp.operationId === uploadId);
         if (fileProcess && fileProcess.error) {
-            return this.renderLoadError();
+            return this.renderLoadError(this.RENDER_MODE.UPLOAD);
         } else {
             return this.renderLoad();
         }
     }
 
     renderLoad() {
+        const {p} = this.props;
         return (
-            <div className='split-scroll'>
-                <div className='form-horizontal form-padding'>
-                    <div className='alert alert-help'>
-                        <p>
-                            <strong>Wait. </strong><span>File is loading</span>
-                        </p>
-                    </div>
-                </div>
+            <div className='alert alert-help'>
+                <p>
+                    <strong>{p.t('samples.rightPaneWait.title')}</strong><span>{p.t('samples.rightPaneWait.description')}</span>
+                </p>
             </div>
         );
     }
 
-    renderLoadError() {
+    renderLoadError(renderMode) {
+        const {p} = this.props;
         return (
-            <div className='split-scroll'>
-                <div className='form-horizontal form-padding'>
-                    <div className='alert alert-danger'>
-                        <p>
-                            <strong>Error!</strong><span>File not loaded or damaged</span>
-                        </p>
-                    </div>
-                </div>
+            <div className='alert alert-danger'>
+                <p>
+                    <strong>{p.t('samples.rightPaneError.title')}</strong><span>{p.t(renderMode.labelPath)}</span>
+                </p>
             </div>
         );
     }
 
-    renderUpload(isDemo) {
+    renderNewUploadArea(isDemo) {
+        const {p} = this.props;
         const {isDragoverState} = this.state;
         return (
-            <div className='split-scroll'>
-                <div className='form-horizontal form-padding'>
-                    <div className={classNames('empty', {'empty-upload': !isDemo})}>
-                        <div className='btn-group btn-group-xlg'>
-                            {!isDemo &&
-                            <button className={classNames('btn btn-link-default', {'drop-zone': isDragoverState})}
-                                    onClick={this.onUploadClick.bind(this)}
-                                    onDragOver={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (!isDragoverState) {
-                                            this.setDndState(true);
-                                        }
-                                    }}
-                                    onDragEnter={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (!isDragoverState) {
-                                            this.setDndState(true);
-                                        }
-                                    }}
-                                    onDragLeave={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (isDragoverState) {
-                                            this.setDndState(false);
-                                        }
-                                    }}
-                                    onDragExit={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (isDragoverState) {
-                                            this.setDndState(false);
-                                        }
-                                    }}
-                                    onDrop={(e) => {
-                                        cancelDOMEvent(e);
-                                        if (isDragoverState) {
-                                            this.setDndState(false);
-                                        }
-                                        this.onFilesDrop(e.dataTransfer.files);
-                                    }}
-                            >
-                                <input
-                                    onChange={ (e) => {
-                                        this.onUploadChanged(e.target.files);
-                                        e.target.value = null;
-                                    }}
-                                    style={{display: 'none'}}
-                                    ref='fileInput'
-                                    id='file-select'
-                                    type='file'
-                                    accept='.vcf,.gz'
-                                    name='files[]'
-                                    defaultValue=''
-                                    multiple='multiple'
-                                />
-                                <h3>Drop vcf files here or <span
-                                    className='text-underline'>click here</span> to
-                                    select</h3>
-                            </button>
-                            }
-                            {isDemo &&
-                            <h3><i className='md-i'>perm_identity</i>Please login or
-                                register to upload new samples</h3>}
-                        </div>
-                    </div>
+            <div className={classNames('empty', {'empty-upload': !isDemo})}>
+                <div className='btn-group btn-group-xlg'>
+                    {!isDemo &&
+                    <button className={classNames('btn btn-link-default', {'drop-zone': isDragoverState})}
+                            onClick={this.onUploadClick.bind(this)}
+                            onDragOver={(e) => {
+                                cancelDOMEvent(e);
+                                if (!isDragoverState) {
+                                    this.setDndState(true);
+                                }
+                            }}
+                            onDragEnter={(e) => {
+                                cancelDOMEvent(e);
+                                if (!isDragoverState) {
+                                    this.setDndState(true);
+                                }
+                            }}
+                            onDragLeave={(e) => {
+                                cancelDOMEvent(e);
+                                if (isDragoverState) {
+                                    this.setDndState(false);
+                                }
+                            }}
+                            onDragExit={(e) => {
+                                cancelDOMEvent(e);
+                                if (isDragoverState) {
+                                    this.setDndState(false);
+                                }
+                            }}
+                            onDrop={(e) => {
+                                cancelDOMEvent(e);
+                                if (isDragoverState) {
+                                    this.setDndState(false);
+                                }
+                                this.onFilesDrop(e.dataTransfer.files);
+                            }}
+                    >
+                        <input
+                            onChange={ (e) => {
+                                this.onUploadChanged(e.target.files);
+                                e.target.value = null;
+                            }}
+                            style={{display: 'none'}}
+                            ref='fileInput'
+                            id='file-select'
+                            type='file'
+                            accept='.vcf,.gz'
+                            name='files[]'
+                            defaultValue=''
+                            multiple='multiple'
+                        />
+                        <h3>
+                            {p.t('samples.dropAreaText.dropVcfFileHereOr')}
+                            <span className='text-underline'>{p.t('samples.dropAreaText.clickHere')}</span>
+                            {p.t('samples.dropAreaText.toSelect')}
+                        </h3>
+                    </button>
+                    }
+                    {isDemo &&
+                    <h3><i className='md-i'>perm_identity</i>{p.t('samples.loginOrRegister')}</h3>}
                 </div>
             </div>
         );
@@ -303,19 +321,19 @@ export default class FileUploadSampleRightPane extends React.Component {
         this.refs.fileInput.click();
     }
 
-    static makeFieldIdToValuesHash(sample) {
+    static makeFieldIdToValuesHash(sample, languageId) {
         return _(sample.sampleMetadata)
             .keyBy((value) => value.metadataId)
-            .mapValues((values) => values.value)
+            .mapValues((values) => i18n.getEntityText(values, languageId).value)
             .value();
     }
 
     renderCurrentValues(sample) {
-        const {fields} = this.props;
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample);
+        const {fields, languageId} = this.props;
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(sample, languageId);
         const fieldsRenders = fields
             .filter(field => !field.isInvisible)
-            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash));
+            .map(field => this.renderReadOnlyField(field, fieldIdToValuesHash, languageId));
         return (
             <div className='dl-group-view-mode'>
                 {fieldsRenders}
@@ -337,10 +355,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderSelectButton(isDemoSession, sample) {
+        const {p} = this.props;
         if (entityTypeIsDemoDisabled(sample.type, isDemoSession)) {
             return (
                 <span>
-                    Please register to analyze this sample.
+                    {p.t('samples.editingSample.registerToAnalyze')}
                 </span>
             );
         }
@@ -350,17 +369,18 @@ export default class FileUploadSampleRightPane extends React.Component {
                className='btn btn-link btn-uppercase'
                type='button'
             >
-                <span>Select for analysis</span>
+                <span>{p.t('samples.editingSample.selectForAnalysis')}</span>
             </a>
         );
     }
 
     renderEditButton(sampleType) {
+        const {p} = this.props;
         if (entityTypeIsEditable(sampleType)) {
             return (
                 <a onClick={() => this.onShowValuesClick()}
                    className='btn btn-link btn-uppercase' role='button'
-                   href='#'>Edit
+                   href='#'>{p.t('samples.editingSample.edit')}
                 </a>
             );
         }
@@ -373,18 +393,19 @@ export default class FileUploadSampleRightPane extends React.Component {
         changeShowValues(!edited);
     }
 
-    renderReadOnlyField(field, fieldIdToValuesHash) {
+    renderReadOnlyField(field, fieldIdToValuesHash, languageId) {
         let fieldValue = fieldIdToValuesHash[field.id];
         // If field has available values, then the value is id of the actual option.
         // We then need to retrieve the actual value corresponding to the option.
         if (!_.isEmpty(field.availableValues)) {
             const option = _.find(field.availableValues,
                 availableValue => availableValue.id === fieldValue);
-            fieldValue = option && option.value || '';
+            const valueText = option && i18n.getEntityText(option, languageId);
+            fieldValue = valueText && valueText.value || '';
         }
         return (
             <dl key={field.id}>
-                <dt>{field.label}</dt>
+                <dt>{i18n.getEntityText(field, languageId).label}</dt>
                 <dd>{fieldValue}</dd>
             </dl>
         );
@@ -402,11 +423,11 @@ export default class FileUploadSampleRightPane extends React.Component {
     }
 
     renderEditableValues(sampleId) {
-        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}} = this.props;
+        const {dispatch, changeShowValues, fields, samplesList: {editingSample, editingSampleDisabled}, languageId, p} = this.props;
         if (!editingSample || editingSample.id !== sampleId) {
             return null;
         }
-        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(editingSample);
+        const fieldIdToValuesHash = FileUploadSampleRightPane.makeFieldIdToValuesHash(editingSample, languageId);
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
@@ -414,6 +435,8 @@ export default class FileUploadSampleRightPane extends React.Component {
                                        fieldIdToValuesHash={fieldIdToValuesHash}
                                        changeShowValues={changeShowValues}
                                        disabled={editingSampleDisabled}
+                                       languageId={languageId}
+                                       p={p}
             />
         );
     }
@@ -423,10 +446,5 @@ export default class FileUploadSampleRightPane extends React.Component {
         const {dispatch, closeModal} = this.props;
         dispatch(sampleSaveCurrent(sampleId));
         closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
-    }
-
-    onSampleItemDelete(id) {
-        const {dispatch} = this.props;
-        dispatch(samplesListServerRemoveSample(id));
     }
 }

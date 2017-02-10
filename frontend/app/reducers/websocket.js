@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {assign} from '../utils/immutable';
 import immutableArray from '../utils/immutableArray';
 import * as ActionTypes from '../actions/websocket';
+import * as i18n from '../utils/i18n';
 
 function reduceDeleteComment(action, state) {
     const {variants} = state;
@@ -20,14 +21,13 @@ function reduceDeleteComment(action, state) {
 
 function reduceUpdateComment(action, state) {
     const {variants} = state;
-    const {commentData:{searchKey, comment}} = action;
-
+    const {commentData} = action;
+    const {searchKey} = commentData;
+    const comment = i18n.getEntityText(commentData, null).comment;
     const newVariants = _.map(variants, variant => {
         return variant.searchKey === searchKey ? {
             ...variant,
-            comments: immutableArray.assign(variant.comments, 0, {
-                comment
-            })
+            comments: immutableArray.assign(variant.comments, 0, i18n.changeEntityText({}, null, {comment}))
         } : variant;
     });
     return assign(state, {
@@ -37,14 +37,13 @@ function reduceUpdateComment(action, state) {
 
 function reduceAddComment(action, state) {
     const {variants} = state;
-    const {commentData:{searchKey, comment, id}} = action;
+    const {commentData} = action;
+    const {searchKey, id} = commentData;
+    const comment = i18n.getEntityText(commentData, null).comment;
     const newVariants = _.map(variants, variant => {
         return variant.searchKey === searchKey ? {
             ...variant,
-            comments: immutableArray.append(variant.comments, {
-                id,
-                comment
-            })
+            comments: immutableArray.append(variant.comments, i18n.changeEntityText({id}, null, {comment}))
         } : variant;
     });
     return assign(state, {
@@ -135,7 +134,7 @@ export default function websocket(state = {
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
                 variantsView: action.view, // unused
-                variantsSamples: action.samples, // used variantsSample.name at exportToFile
+                variantsSamples: action.samples, // used variantsSample name at exportToFile and renderFieldHeader
                 variantsFilter: action.filter, // unused
                 variantsModel: action.model, // unused
                 variantsAnalysis: action.analysis // used variantsAnalysis.id and .samples at saveExportedFileToServer, used !!variantsAnalysis and .samples in variants table

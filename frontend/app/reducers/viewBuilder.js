@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/viewBuilder';
 import {entityType} from '../utils/entityTypes';
+import * as i18n from '../utils/i18n';
 
 function getNextDirection(direction) {
     if (!direction) {
@@ -23,18 +24,24 @@ function createViewItem(fieldId) {
 }
 
 function reduceVBuilderStartEdit(state, action) {
-    const {view, makeNew, allowedFields} = action;
-    const editingView = makeNew ?
-        Object.assign({}, view, {
-            type: entityType.USER,
-            name: `Copy of ${view.name}`,
-            id: null
-        }) :
+    const {view, newViewInfo, allowedFields, languageId} = action;
+    const editingView = newViewInfo ?
+        i18n.changeEntityText(
+            {
+                ...view,
+                type: entityType.USER,
+                id: null
+            },
+            languageId,
+            {
+                name: newViewInfo.name
+            }
+        ) :
         view;
     return Object.assign({}, state, {
         editingView: editingView,
         originalView: editingView,
-        editingViewIsNew: makeNew,
+        editingViewIsNew: !!newViewInfo,
         editingViewParentId: view.id,
         allowedFields
     });
@@ -94,10 +101,14 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_CHANGE_ATTR: {
             return Object.assign({}, state, {
-                editingView: Object.assign({}, state.editingView, {
-                    name: action.name,
-                    description: action.description
-                })
+                editingView: i18n.changeEntityText(
+                    state.editingView,
+                    action.languageId,
+                    {
+                        name: action.name,
+                        description: action.description
+                    }
+                )
             });
         }
         case ActionTypes.VBUILDER_CHANGE_COLUMN: {

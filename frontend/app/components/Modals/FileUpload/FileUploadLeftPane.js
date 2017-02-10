@@ -9,6 +9,7 @@ import {
 } from '../../../actions/samplesList';
 import {setCurrentUploadId} from '../../../actions/fileUpload';
 import {entityType} from '../../../utils/entityTypes';
+import * as i18n from '../../../utils/i18n';
 
 export default class FileUploadLeftPane extends React.Component {
 
@@ -30,18 +31,20 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     extractSamplesSearchValues(props) {
-        const {samplesList, editableFields} = props;
+        const {samplesList, editableFields, languageId} = props;
         const {hashedArray: {array: samplesArray}} = samplesList;
 
         // Calculates search value for the specified editable field.
-        function getSearchValue(editableField, sampleEditableFieldValue) {
-            if (_.isNull(sampleEditableFieldValue.value)) {
+        function getSearchValue(editableField, sampleEditableFieldValue, languageId) {
+            if (_.isNull(sampleEditableFieldValue)) {
                 return '';
             }
             if (_.isEmpty(editableField.availableValues)) {
-                return sampleEditableFieldValue.value;
+                return sampleEditableFieldValue;
+            } else {
+                const selectedAvailableValue = _.find(editableField.availableValues, {'id': sampleEditableFieldValue});
+                return i18n.getEntityText(selectedAvailableValue, languageId).value;
             }
-            return _.find(editableField.availableValues, {'id': sampleEditableFieldValue.value}).value;
         }
 
         const nonHistorySamples = _.filter(samplesArray, sample => sample.type !== entityType.HISTORY);
@@ -49,11 +52,11 @@ export default class FileUploadLeftPane extends React.Component {
             const metadataHash = _.keyBy(sample.sampleMetadata, 'metadataId');
             const sampleSearchValues = _.map(editableFields, editableField => {
                 const sampleEditableField = metadataHash[editableField.id];
-                return getSearchValue(editableField, sampleEditableField)
+                return getSearchValue(editableField, i18n.getEntityText(sampleEditableField, languageId).value, languageId)
                     .toLocaleLowerCase();
             });
-            sampleSearchValues.push(sample.name.toLocaleLowerCase());
-            const sampleDescription = sample.description;
+            sampleSearchValues.push(i18n.getEntityText(sample, languageId).name.toLocaleLowerCase());
+            const sampleDescription = i18n.getEntityText(sample, languageId).description;
             if (sampleDescription) {
                 sampleSearchValues.push(sampleDescription.toLocaleLowerCase());
             }
@@ -66,7 +69,7 @@ export default class FileUploadLeftPane extends React.Component {
     }
 
     render() {
-        const {dispatch, samplesList, fileUpload, currentSampleId, currentHistorySamplesIds, closeModal} = this.props;
+        const {dispatch, samplesList, fileUpload, currentSampleId, currentHistorySamplesIds, closeModal, languageId, p} = this.props;
         const {searchWord, samplesSearchHash} = this.state;
 
         return (
@@ -86,6 +89,8 @@ export default class FileUploadLeftPane extends React.Component {
                     samplesSearchHash={samplesSearchHash}
                     currentHistorySamplesIds={currentHistorySamplesIds}
                     closeModal={closeModal}
+                    languageId={languageId}
+                    p={p}
                 />
             </div>
         );

@@ -141,4 +141,8 @@ export default class Urls {
     sampleUploadsUrls() {
         return new UploadableEntityUrls('/uploads', this.httpScheme, this.host, this.port);
     }
+
+    users() {
+        return this._constructApiUrl('/users');
+    }
 }

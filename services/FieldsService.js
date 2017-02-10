@@ -73,13 +73,18 @@ class FieldsService extends ServiceBase {
     static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
         return {
             id: Uuid.v4(),
-            name: appServerFieldMetadata.name,
-            label: appServerFieldMetadata.name, // Set label to name by default.
+            name: appServerFieldMetadata.name, // Set label to name by default.
             sourceName: isSample ? 'sample' : sourceName,
             isMandatory: appServerFieldMetadata.isMandatory,
             valueType: appServerFieldMetadata.type,
-            description: appServerFieldMetadata.desc,
-            dimension: appServerFieldMetadata.num
+            dimension: appServerFieldMetadata.num,
+            text:[
+                {
+                    label: appServerFieldMetadata.name,
+                    description: appServerFieldMetadata.desc,
+                    languageId: isSample ? null : this.config.defaultLanguId,
+                }
+            ]
         };
     }
 }

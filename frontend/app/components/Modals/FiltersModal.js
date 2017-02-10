@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import _ from 'lodash';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import config from '../../../config';
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
@@ -12,34 +13,37 @@ import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 import {modalName} from '../../actions/modalWindows';
-
-
-// Texts that differs filter builder from model builder
-export const filterBuilderTexts = {
-    [filterBuilderStrategyName.FILTER]: {
-        filter: 'filter',
-        filters: 'filters',
-        Filter: 'Filter',
-        Filters: 'Filters',
-        getStrategyValidationMessage(/*filter, strategyData*/) {
-            return '';
-        }
-    },
-    [filterBuilderStrategyName.MODEL]: {
-        filter: 'model',
-        filters: 'models',
-        Filter: 'Model',
-        Filters: 'Models',
-        getStrategyValidationMessage(model, strategyData) {
-            return model.analysisType === strategyData.analysisType ?
-                '' :
-                'Model analysis type mismatch';
-        }
-    }
-};
+import * as i18n from '../../utils/i18n';
 
 
 class FiltersModal extends Component {
+
+    // Texts that differs filter builder from model builder
+    getFilterBuilderTexts(strategyName) {
+        const {p} = this.props;
+        switch (strategyName) {
+            case filterBuilderStrategyName.FILTER:
+                return {
+                    getStrategyValidationMessage(/*filter, strategyData*/) {
+                        return '';
+                    },
+                    p(path) {
+                        return p.t(`filterAndModel.texts.filters.${path}`);
+                    }
+                };
+            case filterBuilderStrategyName.MODEL:
+                return {
+                    getStrategyValidationMessage(model, strategyData) {
+                        return model.analysisType === strategyData.analysisType ?
+                            '' :
+                            p.t('filterAndModel.modelMismatch');
+                    },
+                    p(path) {
+                        return p.t(`filterAndModel.texts.models.${path}`);
+                    }
+                };
+        }
+    }
 
     onClose() {
         const {dispatch, closeModal} = this.props;
@@ -48,15 +52,15 @@ class FiltersModal extends Component {
     }
 
     render() {
-        const {dispatch, auth: {isDemo}, filterBuilder, showModal} = this.props;
+        const {dispatch, auth: {isDemo}, filterBuilder, showModal, p} = this.props;
         const filters = filterBuilder.filtersList && filterBuilder.filtersList.hashedArray.array;
         const editingFilterObject = filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
-        const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
-        const texts = filterBuilder.filtersStrategy ? filterBuilderTexts[filterBuilder.filtersStrategy.name] : {};
+        const editingFilterNameTrimmed = editingFilter && this.getTrimmedFilterName(editingFilter);
+        const texts = filterBuilder.filtersStrategy ? this.getFilterBuilderTexts(filterBuilder.filtersStrategy.name) : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
@@ -71,11 +75,11 @@ class FiltersModal extends Component {
             '';
 
         const title = isLoginRequired ?
-            `Login or register to select advanced ${texts.filters}` :
+            texts.p('loginRequiredMsg') :
             strategyValidationMessage;
 
         const confirmButtonParams = {
-            caption: isFilterEditable ? 'Save and Select' : 'Select',
+            caption: isFilterEditable ? p.t('filterAndModel.saveAndSelect') : p.t('filterAndModel.select'),
             title: title,
             disabled: !!title || !!titleValidationMessage
         };
@@ -96,6 +100,7 @@ class FiltersModal extends Component {
                 <div>
                     <FilterBuilderHeader
                         texts={texts}
+                        p={p}
                     />
                     <form>
                         <Modal.Body>
@@ -110,6 +115,7 @@ class FiltersModal extends Component {
                                     <FilterBuilder
                                         {...this.props}
                                         texts={texts}
+                                        p={p}
                                     />
                                 </div>
                                 }
@@ -131,6 +137,7 @@ class FiltersModal extends Component {
                             dispatch={dispatch}
                             confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
+                            p={p}
                         />
                     </form>
                 </div>
@@ -138,6 +145,11 @@ class FiltersModal extends Component {
             </Modal>
 
         );
+    }
+
+    getTrimmedFilterName(filter) {
+        const {ui: {languageId}} = this.props;
+        return i18n.getEntityText(filter, languageId).name.trim();
     }
 
     /**
@@ -153,19 +165,19 @@ class FiltersModal extends Component {
                 .filter(filter => filter.type !== entityType.HISTORY
                 // Next line is done to work with models. Filters have no analysis type.
                 && filter.analysisType === editingFilter.analysisType)
-                .some(filter => filter.name.trim() === editingFilterName
+                .some(filter => this.getTrimmedFilterName(filter) === editingFilterName
                     && filter.id != editingFilter.id
                 );
         if (filterNameExists) {
-            return `${texts.Filter} with this name is already exists.`;
+            return texts.p('validationMessage.nameAlreadyExists');
         }
 
         if (!editingFilterName) {
-            return 'Name cannot be empty';
+            return texts.p('validationMessage.empty');
         }
 
         if (editingFilterName && editingFilterName.length > config.FILTERS.MAX_NAME_LENGTH) {
-            return `Name length should be less than ${config.FILTERS.MAX_NAME_LENGTH}`;
+            return texts.p('validationMessage.lengthExceeded', {maxLength: config.FILTERS.MAX_NAME_LENGTH});
         }
 
         return '';
@@ -174,14 +186,20 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const {filterBuilder, auth, fields} = state;
+    const {filterBuilder, ui, auth, fields} = state;
 
     return {
         fields,
+        ui,
         filterBuilder,
-        auth
+        auth,
+        p: getP(state)
     };
 }
+
+FiltersModal.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
 export default connect(mapStateToProps)(FiltersModal);
 

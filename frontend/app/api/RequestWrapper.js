@@ -107,14 +107,24 @@ export default class RequestWrapper {
         formData.append('sample', file);
         formData.append('fileName', file.name);
         const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
-        request.on('progress', (p) => onProgress(p.percent));
+        request.on('progress', (p) => {
+            if (p.percent) {
+                onProgress(p.percent);
+            }
+        });
         request.send(formData);
         RequestWrapper._sendRequest(request, (err, res) => {
             if (err) {
                 onComplete(err);
             } else {
-                if (res && res.body && res.body.upload) {
-                    onComplete(null, res.body.upload);
+                if (res && res.body) {
+                    if (res.body.upload) {
+                        onComplete(null, res.body.upload);
+                    } else if (res.body.message) {
+                        onComplete(res.body.message);
+                    } else {
+                        onComplete(new Error('Invalid upload response'));
+                    }
                 } else {
                     onComplete(new Error('Invalid upload response'));
                 }

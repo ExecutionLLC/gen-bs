@@ -1,3 +1,5 @@
+import {getP} from 'redux-polyglot/dist/selectors';
+
 import apiFacade from '../api/ApiFacade';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
 import {
@@ -7,6 +9,7 @@ import {
     receiveMetadata
 } from './metadata';
 import {receiveSavedFilesList} from './savedFiles';
+import * as HistoryItemUtils from '../utils/HistoryItemUtils';
 import {
     receiveInitialAnalysesHistory,
     setCurrentAnalysesHistoryIdLoadDataAsync,
@@ -23,18 +26,15 @@ import {
     modelsListReceive
 } from './modelsList';
 import {getDefaultOrStandardItem} from '../utils/entityTypes';
-import {analyze} from './ui';
+import {analyze, setCurrentLanguageId, storeAvailableLanguages} from './ui';
 import {uploadsListReceive} from './fileUpload';
+import * as i18n from '../utils/i18n';
 
 /*
  * action types
  */
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA';
 export const REQUEST_USERDATA = 'REQUEST_USERDATA';
-
-const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot load user data. You can reload page and try again.';
-const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' +
-                                        'You can try to set sample, filter, view by hand or try to reload page.';
 
 const dataClient = apiFacade.dataClient;
 
@@ -64,7 +64,10 @@ export function fetchUserDataAsync() {
             languageId,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(FETCH_USER_DATA_NETWORK_ERROR, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('errors.fetchUserDataNetworkError'), error, response));
+            }
         ).then((response) => {
             const userData = response.body;
             const {
@@ -76,10 +79,14 @@ export function fetchUserDataAsync() {
                 totalFields,
                 savedFiles,
                 analyses,
-                uploads
+                uploads,
+                languages
             } = userData;
 
             dispatch(receiveUserData(userData));
+            dispatch(storeAvailableLanguages(languages));
+            dispatch(setCurrentLanguageId(userData.profileMetadata.defaultLanguageId));
+            const p = getP(getState()); // get new state because of its changing in 'setCurrentLanguageId' action
             dispatch(filtersListReceive(filters));
             dispatch(viewsListReceive(views));
             dispatch(modelsListReceive(models));
@@ -95,26 +102,40 @@ export function fetchUserDataAsync() {
             const filter = getDefaultOrStandardItem(filters);
             const view = getDefaultOrStandardItem(views);
             if (!sample || !filter || !view) {
-                dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                dispatch(handleError(null, p.t('errors.cannotFindDefaultItemsError')));
                 return;
             }
             const lastHistoryAnalysis = analyses[0];
-            dispatch(createNewHistoryItem(sample, filter, view));
+            const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
+            const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
+            dispatch(createNewHistoryItem(
+                sample, filter, view,
+                {name: newAnalysisName, description: newAnalysisDescription},
+                languageId
+            ));
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(lastHistoryAnalysis ? lastHistoryAnalysis.id : null))
                 .then(() => {
+                    const currentAnalysis = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
                     const {
-                        name, description, type, samples, viewId, filterId, modelId
-                    } = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
-                    dispatch(analyze({
-                        id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
-                        name,
-                        description,
-                        type,
-                        samples,
-                        viewId,
-                        filterId,
-                        modelId
-                    }));
+                        type, samples, viewId, filterId, modelId
+                    } = currentAnalysis;
+                    const {name, description} = i18n.getEntityText(currentAnalysis, languageId);
+                    const searchParams = i18n.changeEntityText(
+                        {
+                            id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
+                            type,
+                            samples,
+                            viewId,
+                            filterId,
+                            modelId
+                        },
+                        languageId,
+                        {
+                            name,
+                            description
+                        }
+                    );
+                    dispatch(analyze(searchParams));
                 });
         });
     };

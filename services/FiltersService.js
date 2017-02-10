@@ -78,13 +78,17 @@ class FiltersService extends UserEntityServiceBase {
     }
 
     _checkFilterNameExists(filter, filters, callback) {
-        if (!_.isString(filter.name)) {
+        const filterText = _.find(filter.text, textData => _.isNull(textData.languageId));
+
+        if (!_.isString(filterText.name)) {
             callback(new Error('Filter name should be a string.'));
             return;
         }
-        const filterName = filter.name.trim();
+        const filterName = filterText.name.trim();
         const filterExists = _.some(
-            filters, f => f.name.trim() == filterName
+            filters, f => _.some(f.text, textData => {
+                return textData.name.trim() == filterName;
+            })
         );
         if (filterExists) {
             callback(new Error('Filter with this name already exists.'));

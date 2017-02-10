@@ -4,12 +4,14 @@ import React, {Component} from 'react';
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
-import * as SamplesUtils from '../../utils/samplesUtils';
+import * as i18n from '../../utils/i18n';
+import FieldUtils from '../../utils/fieldUtils';
+
 
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples} = this.props;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}, p} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
@@ -21,9 +23,10 @@ export default class VariantsTableHead extends Component {
             );
         }
 
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
         const samplesTypesHash = _(variantsAnalysis.samples).map((sampleInfo) =>
             variantsAnalysis.samples.length > 1 ?
-                ({id: sampleInfo.id, type: SamplesUtils.typeLabels[sampleInfo.type]}) :
+                ({id: sampleInfo.id, type: typeLabels[sampleInfo.type]}) :
                 ({id: sampleInfo.id, type: ''})
         ).keyBy(sampleInfo => sampleInfo.id).value();
         return (
@@ -42,7 +45,7 @@ export default class VariantsTableHead extends Component {
                     <div>
                         <div className='variants-table-header-label'>
                             <a type='button' className='btn-link-default'>
-                                Comment
+                                {p.t('variantsTable.headComment')}
                             </a>
 
                         </div>
@@ -61,14 +64,14 @@ export default class VariantsTableHead extends Component {
                 {_.map(variantsHeader, (fieldSampleExist) =>
                     this.renderFieldHeader(
                         fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
-                        samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch)
                 )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist,isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = {
             ...totalFieldsHash[fieldId],
@@ -83,7 +86,7 @@ export default class VariantsTableHead extends Component {
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
         const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
-        const sampleName = currentSample ? currentSample.name : null;
+        const sampleName = currentSample ? i18n.getEntityText(currentSample, languageId).name : null;
         return (
             <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
                          fieldMetadata={fieldMetadata}
@@ -96,6 +99,7 @@ export default class VariantsTableHead extends Component {
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
                          currentVariants={this.props.ws.currentVariants}
+                         languageId={languageId}
                          disabled={isFetching}
             />
         );

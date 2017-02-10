@@ -12,6 +12,7 @@ import {
     fireOnSaveAction
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
+import * as i18n from '../../../utils/i18n';
 
 
 export default class ExistentViewSelect extends React.Component {
@@ -37,30 +38,32 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderTitle() {
+        const {p} = this.props;
         return (
-            <h5 data-localize='views.setup.selector.label'>Available Views</h5>
+            <h5>{p.t('view.existentViewSelect.title')}</h5>
         );
     }
 
     renderWarning(isDemoSession, selectedViewType) {
-        const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
+        const {p} = this.props;
+        const warningText = getReadonlyReasonForSessionAndType(isDemoSession, selectedViewType, (path) => p.t(`view.readOnlyReason.${path}`));
 
         if (!warningText) {
             return null;
         }
         return (
             <div className='alert alert-help'>
-                <span data-localize='views.setup.selector.description'>
-                    {warningText}
-                </span>
+                <span>{warningText}</span>
             </div>
         );
     }
 
     renderViewSelector(views) {
+        const {ui: {languageId}, p} = this.props;
+
         const selectorItems = views.map( viewItem => ({
             value: viewItem.id,
-            label: getItemLabelByNameAndType(viewItem.name, viewItem.type)
+            label: getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type, p)
         }));
 
         return (
@@ -85,7 +88,8 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderDuplicateViewButton(isDemoSession) {
-        const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
+        const {p} = this.props;
+        const duplicateButtonTooltip = isDemoSession ? p.t('view.loginToWork') : p.t('view.makeCopy');
         return (
             <button type='button'
                     className='btn btn-default'
@@ -94,31 +98,33 @@ export default class ExistentViewSelect extends React.Component {
                     disabled={isDemoSession}
                     title={duplicateButtonTooltip}
             >
-                <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
+                <span className='hidden-xs'>{p.t('view.existentViewSelect.duplicate')}</span>
                 <span className='visible-xs'><i className='md-i'>content_copy</i></span>
             </button>
         );
     }
 
     renderResetViewButton() {
+        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onResetViewClick()}
             >
-                <span data-localize='views.setup.reset.title' className='hidden-xs'>Reset View</span>
+                <span className='hidden-xs'>{p.t('view.existentViewSelect.reset')}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
         );
     }
 
     renderDeleteViewButton() {
+        const {p} = this.props;
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onDeleteViewClick()}
             >
-                <span data-localize='views.setup.delete.title' className='hidden-xs'>Delete View</span>
+                <span className='hidden-xs'>{p.t('view.existentViewSelect.deleteItem')}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
         );
@@ -133,26 +139,28 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onSelectedViewChanged(viewId) {
-        const {dispatch} = this.props;
-        dispatch(viewBuilderRestartEdit(false, this.getViewForId(viewId)));
+        const {dispatch, ui: {languageId}} = this.props;
+        dispatch(viewBuilderRestartEdit(null, this.getViewForId(viewId), languageId));
     }
 
     onDuplicateViewClick() {
-        const {dispatch, viewBuilder} = this.props;
+        const {dispatch, viewBuilder, ui: {languageId}, p} = this.props;
         const editingView = viewBuilder.editingView;
-        dispatch(viewBuilderRestartEdit(true, editingView));
+        const editingViewName = i18n.getEntityText(editingView, languageId).name;
+        const newViewName = p.t('view.copyOf', {name: editingViewName});
+        dispatch(viewBuilderRestartEdit({name: newViewName}, editingView, languageId));
     }
 
     onResetViewClick() {
-        const {dispatch} = this.props;
+        const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderRestartEdit(false, this.getViewForId(editingViewId)));
+        dispatch(viewBuilderRestartEdit(null, this.getViewForId(editingViewId), languageId));
     }
 
     onDeleteViewClick() {
-        const {dispatch} = this.props;
+        const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderDeleteView(editingViewId)).then((newView) => {
+        dispatch(viewBuilderDeleteView(editingViewId, languageId)).then((newView) => {
             dispatch(fireOnSaveAction(newView));
         });
     }

@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import * as SamplesUtils from './samplesUtils';
 import {isMainSample} from './samplesUtils';
+import * as i18n from './i18n';
 
 export default class FieldUtils {
     static find(fieldId, fields) {
@@ -16,41 +17,56 @@ export default class FieldUtils {
         return field.sourceName !== 'sample';
     }
 
+    static getFieldLabel(field, languageId) {
+        const fieldText = i18n.getEntityText(field, languageId);
+        if (!fieldText || !fieldText.label) {
+            return field.name; // long time ago there was no labels, so there were this check, I left it for stability
+        } else {
+            return fieldText.label;
+        }
+    }
+
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
      * @param {string=} sourceName
+     * @param {string} languageId
+     * @param {Object.<string, string>} typeLabels
      * @returns {{id: string, label: string, type: string}}
      */
-    static makeFieldSourceCaption(field, sourceName) {
+    static makeFieldSourceCaption(field, sourceName, languageId, typeLabels) {
+        const fieldLabel = this.getFieldLabel(field, languageId);
         var label;
 
         if (field.sampleType) {
-            label = `(${SamplesUtils.typeLabels[field.sampleType]}) ${field.label}`;
+            label = `(${typeLabels[field.sampleType]}) ${fieldLabel}`;
         } else {
             if (sourceName) {
-                label = `${field.label} -- ${sourceName}`;
+                label = `${fieldLabel} -- ${sourceName}`;
             } else {
-                label = `${field.label} -- ${field.sourceName}`;
+                label = `${fieldLabel} -- ${field.sourceName}`;
             }
         }
 
         return label;
     }
 
-    static makeFieldSavedCaption(field, sampleType) {
-        return field.label + (field.sourceName && this.isSourceField(field) ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+    static makeFieldSavedCaption(field, sampleType, languageId) {
+        const fieldLabel = this.getFieldLabel(field, languageId);
+        return fieldLabel + (field.sourceName && this.isSourceField(field) ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
     }
 
-    static makeFieldViewsCaption(field) {
-        return `${field.label} -- ${field.sourceName}`;
+    static makeFieldViewsCaption(field, languageId) {
+        const fieldLabel = this.getFieldLabel(field, languageId);
+        return `${fieldLabel} -- ${field.sourceName}`;
     }
 
-    static makeFieldVariantsLabelTitle(field, sampleName, sampleType) {
-        const {sourceName, label, isUnique} = field;
+    static makeFieldVariantsLabelTitle(field, sampleName, sampleType, languageId) {
+        const fieldLabel = this.getFieldLabel(field, languageId);
+        const {sourceName, isUnique} = field;
         const isSource = sourceName && this.isSourceField(field);
         return {
-            label: `${(!isSource && sampleType && !isUnique ? `(${sampleType})` : '')}${label}`,
+            label: `${(!isSource && sampleType && !isUnique ? `(${sampleType})` : '')}${fieldLabel}`,
             title: isSource ? sourceName : sampleName
         };
     }
@@ -58,12 +74,27 @@ export default class FieldUtils {
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
-     * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
      */
-    static makeFieldSelectItemValue(field, sourceName) {
+    static makeFieldTyped(field) {
+        return {
+            id: field.id,
+            sampleType: field.sampleType,
+            type: field.valueType === 'float' ? 'double' : field.valueType
+        };
+    }
 
-        var label = this.makeFieldSourceCaption(field, sourceName);
+    /**
+     * Make field structure usable for filters dialog purposes
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
+     * @param {string=} sourceName
+     * @param {string} languageId
+     * @param {Object.<string, string>} typeLabels
+     * @returns {{id: string, label: string, type: string}}
+     */
+    static makeFieldSelectItemValue(field, sourceName, languageId, typeLabels) {
+
+        var label = this.makeFieldSourceCaption(field, sourceName, languageId, typeLabels);
 
         return {
             id: field.id,
@@ -71,6 +102,14 @@ export default class FieldUtils {
             sampleType: field.sampleType,
             type: field.valueType === 'float' ? 'double' : field.valueType
         };
+    }
+
+    static makeFieldTypeLabels(p) {
+        const abbrPath = 'analysis.rightPane.sampleTypeAbbr.';
+        return _(SamplesUtils.sampleType)
+            .mapKeys(type => type)
+            .mapValues(type => p.t(`${abbrPath}${type}`))
+            .value();
     }
 
     /**
@@ -154,32 +193,26 @@ export default class FieldUtils {
         return _.filter(fields, (field) => !field.name.startsWith('VEP_') || field.name === 'VEP_Zygosity' || field.name === 'VEP_Genotype');
     }
 
-    static sortAndAddLabels(fields) {
-        // Patch field label because it may not exist
-        function updateFieldLabelIfNeeded(field) {
-            return Object.assign({}, field, {
-                label: field.label ? field.label : field.name
-            });
-        }
-
-        return fields.map(updateFieldLabelIfNeeded)
-            .sort((a, b) => {
-                if (a.label > b.label) {return 1;}
-                if (a.label < b.label) {return -1;}
-                return 0;
-            });
+    static sortByLabels(fields, languageId) {
+        return fields.slice().sort((a, b) => {
+            const fieldLabelA = this.getFieldLabel(a, languageId);
+            const fieldLabelB = this.getFieldLabel(b, languageId);
+            if (fieldLabelA > fieldLabelB) {return 1;}
+            if (fieldLabelA < fieldLabelB) {return -1;}
+            return 0;
+        });
     }
 
-    static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
+    static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList, languageId) {
         const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
-        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList).filter((field) => !field.isInvisible);
+        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList, languageId).filter((field) => !field.isInvisible);
     }
 
-    static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList) {
+    static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList, languageId) {
         const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
-        const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
+        const sortedFields = FieldUtils.sortByLabels(allSamplesFields, languageId);
         return [
-            ...sortedLabelledFields,
+            ...sortedFields,
             ...sourceFieldsList
         ];
     }
@@ -188,9 +221,10 @@ export default class FieldUtils {
      * @param {{id: string, values: {fieldId: string}[]}[]} samples
      * @param {Object.<string, string>} samplesTypes hash {sampleId: sampleType}
      * @param {Object} totalFieldsHash hash {fieldId: field}
+     * @param {string} languageId
      * @returns {Array}
      */
-    static makeModelAllowedFields(samples, samplesTypes, totalFieldsHash) {
+    static makeModelAllowedFields(samples, samplesTypes, totalFieldsHash, languageId) {
         function addSampleTypeFields(fields, sampleType) {
             return _.map(fields, (field) => ({
                 ...field,
@@ -204,7 +238,7 @@ export default class FieldUtils {
             return addSampleTypeFields(FieldUtils.excludeVepFieldsButZygocityGenotype(sampleFields, sampleType), sampleType);
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
-        const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
-        return _.filter(sortedLabelledFields, (field) => !field.isInvisible);
+        const sortedFields = FieldUtils.sortByLabels(allSamplesFields, languageId);
+        return _.filter(sortedFields, (field) => !field.isInvisible);
     }
 }

@@ -25,8 +25,9 @@ const TestUser = {
 const UnknownFilterId = Uuid.v4();
 
 const checkFilter = (filter) => {
+    const filterText = filter.text[0];
     assert.ok(filter.id);
-    assert.ok(filter.name);
+    assert.ok(filterText.name);
     assert.ok(
         _.includes(ENTITY_TYPES.allValues, filter.type)
     );
@@ -82,25 +83,36 @@ describe('Filters', () => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
                 const filter = filters[0];
-                filter.name = 'Test Filter ' + Uuid.v4();
+                filter.text = [
+                    {
+                        languageId: null,
+                        name: 'Test filter' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
 
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     const addedFilter = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(addedFilter);
                     assert.notEqual(addedFilter.id, filter.id, 'Filter id is not changed.');
-                    assert.equal(addedFilter.name, filter.name);
+                    assert.equal(addedFilter.text[0].name, filter.text[0].name);
                     assert.equal(addedFilter.type, ENTITY_TYPES.USER);
 
                     // Update created filter.
                     const filterToUpdate = _.cloneDeep(addedFilter);
-                    filterToUpdate.name = 'Test Filter ' + Uuid.v4();
+                    filterToUpdate.text = [
+                        {
+                            languageId: null,
+                            name: 'Test filter' + Uuid.v4(),
+                            description: ''
+                        }
+                    ];
                     filterToUpdate.type = ENTITY_TYPES.ADVANCED;
 
                     filtersClient.update(sessionId, filterToUpdate, (error, response) => {
                         const updatedFilter = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedFilter);
                         assert.notEqual(updatedFilter.id, filterToUpdate.id);
-                        assert.equal(updatedFilter.name, filterToUpdate.name);
                         assert.equal(updatedFilter.type, ENTITY_TYPES.USER, 'Filter type change should not be allowed by update.');
                         done();
                     });
@@ -137,16 +149,20 @@ describe('Filters', () => {
                 const filters = response.body;
                 assert.ok(filters);
                 const filter = filters[0];
-                filter.name = 'Test Filter ' + Uuid.v4();
-                filter.description = Uuid.v4();
-
+                filter.text = [
+                    {
+                        languageId: null,
+                        name: 'Test filter' + Uuid.v4(),
+                        description: Uuid.v4()
+                    }
+                ];
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const addedFilter = response.body;
                     assert.ok(addedFilter);
-                    assert.equal(addedFilter.name, filter.name);
-                    assert.equal(addedFilter.description, filter.description);
+                    assert.equal(addedFilter.text[0].name, filter.text[0].name);
+                    assert.equal(addedFilter.text[0].description, filter.text[0].description);
 
                     // Delete created filter
                     filtersClient.remove(sessionId, addedFilter.id, (error, response) => {
@@ -184,7 +200,13 @@ describe('Filters', () => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
                 const filter = filters[0];
-                filter.name = '';
+                filter.text = [
+                    {
+                        languageId: null,
+                        name: '',
+                        description: ''
+                    }
+                ];
 
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
@@ -199,7 +221,13 @@ describe('Filters', () => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
                 const filter = filters[0];
-
+                filter.text = [
+                    {
+                        languageId: null,
+                        name: filter.text[0].name,
+                        description: ''
+                    }
+                ];
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -213,8 +241,13 @@ describe('Filters', () => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
                 const filter = filters[0];
-                filter.name = ' ' + filter.name + ' ';
-
+                filter.text = [
+                    {
+                        languageId: null,
+                        name: ' ' + filter.text[0].name + ' ',
+                        description: ''
+                    }
+                ];
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -237,17 +270,20 @@ describe('Filters', () => {
                 const filters = response.body;
                 assert.ok(filters);
                 const filter = filters[0];
-                filter.name = 'Test Filter ' + Uuid.v4();
-                // Will search the filter by description below.
-                filter.description = Uuid.v4();
-
+                filter.text = [
+                    {
+                        languageId: null,
+                        name: 'Test Filter ' + Uuid.v4(),
+                        description: Uuid.v4()
+                    }
+                ];
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const addedFilter = response.body;
                     assert.ok(addedFilter);
-                    assert.equal(addedFilter.name, filter.name);
-                    assert.equal(addedFilter.description, filter.description);
+                    assert.equal(addedFilter.text[0].name, filter.text[0].name);
+                    assert.equal(addedFilter.text[0].description, filter.text[0].description);
 
                     // Now it should return.
                     filtersClient.getAll(sessionId, (error, response) => {
@@ -256,7 +292,13 @@ describe('Filters', () => {
                         assert.ok(_.some(filters, f => f.description === filter.description));
 
                         const filterToUpdate = Object.assign({}, addedFilter, {
-                            name: Uuid.v4()
+                            text: [
+                                {
+                                    languageId: null,
+                                    name: Uuid.v4(),
+                                    description: addedFilter.text[0].description
+                                }
+                            ]
                         });
 
                         // Make new version.
@@ -270,7 +312,7 @@ describe('Filters', () => {
                                 filtersClient.getAll(sessionId, (error, response) => {
                                     // Now filters list should not return the filter.
                                     const filters = ClientBase.readBodyWithCheck(error, response);
-                                    assert.ok(!_.some(filters, f => f.description === filter.description));
+                                    assert.ok(!_.some(filters, f => f.text[0].description === filter.text[0].description));
 
                                     done();
                                 });

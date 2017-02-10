@@ -70,7 +70,8 @@ export default class QueryBuilder extends Component {
             /** @type {function(number[], {}, boolean): Component} */
             makeItemComponent,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers
+            handlers,
+            p
         } = this.props;
 
         return (rules &&
@@ -84,6 +85,7 @@ export default class QueryBuilder extends Component {
                         disabled={disabled}
                         handlers={handlers}
                         allowDelete={false}
+                        p={p}
                     />
                 </div>
             </div>
@@ -108,7 +110,8 @@ class RulesGroupContainer extends Component {
             /** @type {boolean} */
             allowDelete,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers
+            handlers,
+            p
         } = this.props;
 
         return (
@@ -120,6 +123,7 @@ class RulesGroupContainer extends Component {
                     onSwitch={ (isAnd) => { handlers.onSwitch(indexPath, isAnd); }  }
                     onAdd={ (isGroup) => { handlers.onAdd(indexPath, isGroup); } }
                     onDelete={ allowDelete && ( () => { handlers.onDeleteGroup(indexPath); } ) }
+                    p={p}
                 />
                 <RulesGroupBody
                     indexPath={indexPath}
@@ -127,6 +131,7 @@ class RulesGroupContainer extends Component {
                     disabled={disabled}
                     makeItemComponent={makeItemComponent}
                     handlers={handlers}
+                    p={p}
                 />
             </dl>
         );
@@ -187,7 +192,8 @@ class RulesGroupHeader extends Component {
             /** @type {function(boolean)} */
             onAdd,
             /** @type {?function()} */
-            onDelete
+            onDelete,
+            p
         } = this.props;
 
         const groupName = 'builder-basic-react_group_' + indexPath.join('-') + '_cond';
@@ -195,20 +201,20 @@ class RulesGroupHeader extends Component {
         return (
             <dt className='rules-group-header'>
                 <div className='btn-group pull-right group-actions'>
-                    {RulesGroupHeader.renderAddButton('Add rule', disabled, () => {
+                    {RulesGroupHeader.renderAddButton(p.t('filterAndModel.rulesGroupHeader.addButton.addRule'), disabled, () => {
                         onAdd(false);
                     })}
-                    {RulesGroupHeader.renderAddButton('Add group', disabled, () => {
+                    {RulesGroupHeader.renderAddButton(p.t('filterAndModel.rulesGroupHeader.addButton.addGroup'), disabled, () => {
                         onAdd(true);
                     })}
                     <button type='button' className='btn btn-xs btn-danger' onClick={onDelete}
                             disabled={disabled || !onDelete}>
-                        <i className='glyphicon glyphicon-remove'/> Delete
+                        <i className='glyphicon glyphicon-remove'/>{p.t('filterAndModel.rulesGroupHeader.addButton.deleteItem')}
                     </button>
                 </div>
                 <div className='btn-group group-conditions'>
-                    {RulesGroupHeader.renderRadioButton('AND', true, groupName, isAnd, disabled, onSwitch)}
-                    {RulesGroupHeader.renderRadioButton('OR', false, groupName, !isAnd, disabled, onSwitch)}
+                    {RulesGroupHeader.renderRadioButton(p.t('filterAndModel.rulesGroupHeader.radioButton.and'), true, groupName, isAnd, disabled, onSwitch)}
+                    {RulesGroupHeader.renderRadioButton(p.t('filterAndModel.rulesGroupHeader.radioButton.or'), false, groupName, !isAnd, disabled, onSwitch)}
                 </div>
                 <div className='error-container'><i className='glyphicon glyphicon-warning-sign'/></div>
             </dt>
@@ -228,7 +234,8 @@ class RuleContainer extends Component {
             /** @type {?function()} */
             onDelete,
             /** @type {function(number[], {field: string, operator: string, value: *}, boolean): Component} */
-            makeItemComponent
+            makeItemComponent,
+            p
         } = this.props;
 
         return (
@@ -241,7 +248,7 @@ class RuleContainer extends Component {
                             onClick={onDelete}
                             disabled={disabled || !onDelete}
                         >
-                            <i className='glyphicon glyphicon-remove'/> Delete
+                            <i className='glyphicon glyphicon-remove'/>{p.t('filterAndModel.ruleContainer.deleteItem')}
                         </button>
                     </div>
                 </div>
@@ -263,7 +270,7 @@ class RulesGroupBody extends Component {
      * @param {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} handlers
      * @returns {Component[]}
      */
-    static renderItems(items, indexPath, disabled, makeItemComponent, handlers) {
+    static renderItems(items, indexPath, disabled, makeItemComponent, handlers, p) {
 
         const allowDelete = items.length > 1;
 
@@ -281,6 +288,7 @@ class RulesGroupBody extends Component {
                             makeItemComponent={makeItemComponent}
                             handlers={handlers}
                             allowDelete={allowDelete}
+                            p={p}
                         />
                     );
                 } else {
@@ -292,6 +300,7 @@ class RulesGroupBody extends Component {
                             disabled={disabled}
                             makeItemComponent={makeItemComponent}
                             onDelete={ allowDelete && ( () => handlers.onDeleteItem(indexPath, itemIndex) ) }
+                            p={p}
                         />
                     );
                 }
@@ -312,13 +321,14 @@ class RulesGroupBody extends Component {
             /** @type {boolean} */
             disabled,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers
+            handlers,
+            p
         } = this.props;
 
         return (
             <dd className='rules-group-body'>
                 <ul className='rules-list'>
-                    {RulesGroupBody.renderItems(items, indexPath, disabled, makeItemComponent, handlers)}
+                    {RulesGroupBody.renderItems(items, indexPath, disabled, makeItemComponent, handlers, p)}
                 </ul>
             </dd>
         );

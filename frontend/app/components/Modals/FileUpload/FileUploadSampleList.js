@@ -12,9 +12,12 @@ import {
 } from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
 import {modalName} from '../../../actions/modalWindows';
+import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
+import * as i18n from '../../../utils/i18n';
 
-function fileUploadStatusErrorOrReady(status) {
-    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
+
+function fileUploadStatusErrorOrReady(upload) {
+    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus);
 }
 
 export default class FileUploadSampleList extends React.Component {
@@ -37,32 +40,42 @@ export default class FileUploadSampleList extends React.Component {
 
     render() {
         const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
+        const uploadedData = this.getUploadedData();
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
                     className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
-                    {this.renderUploadedData(true)}
+                    {this.renderUploadedData(uploadedData[0], true)}
                     {this.renderCurrentUploadData()}
-                    {this.renderUploadedData(false)}
+                    {this.renderUploadedData(uploadedData[1], false)}
                 </ul>
             </div>
         );
     }
 
     renderCurrentUploadData() {
-        const {fileUpload: {filesProcesses}, sampleList} = this.props;
+        const {fileUpload: {filesProcesses}, sampleList, languageId} = this.props;
+        const {currentSampleId} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
             return upload.progressStatus !== fileUploadStatus.READY;
         });
         return _.map(currentUploads, upload => {
+            const uploadSamples = _.filter(sampleList.hashedArray.array, {vcfFileId: upload.operationId});
             const isError = upload.progressStatus === fileUploadStatus.ERROR;
-            if (isError) {
-                return this._renderUploadedDataFileError(upload, upload.file.name);
-            } else {
-                const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
-                if (uploadSamples.length) {
+
+            if (uploadSamples.length) {
+                if (isError) {
+                    return _.map(uploadSamples, (sample) => {
+                        const sampleName = i18n.getEntityText(sample, languageId).name;
+                        return this._renderSampleError(sample, sampleName, sample.id === currentSampleId);
+                    });
+                } else {
                     return this.renderProgressUploadSamples(uploadSamples, upload);
+                }
+            } else {
+                if (isError) {
+                    return this._renderUploadedDataFileError(upload, upload.file.name);
                 } else {
                     return this.renderProgressUploadFile(upload);
                 }
@@ -70,12 +83,13 @@ export default class FileUploadSampleList extends React.Component {
         });
     }
 
-    renderUploadedData(showNew) {
-        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
+    getUploadedData() {
+        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}, languageId} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields) && sample.type !== entityType.HISTORY);
         const samplesData = _.map(uploadedSamples, sample => {
-            const {vcfFileId, name: sampleName, created: sampleCreated} = sample;
+            const {vcfFileId, created: sampleCreated} = sample;
+            const sampleName = i18n.getEntityText(sample, languageId).name;
             const currentUpload = uploadHash[vcfFileId];
             return {
                 label: sampleName,
@@ -97,63 +111,62 @@ export default class FileUploadSampleList extends React.Component {
                 return label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
             }
         });
-        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples, ['date']).reverse();
-        return (
-            sortedFilteredUploads.map((item) => this._renderUploadedDataSample(item, showNew))
-        );
+        const sortedFilteredUploads = _.orderBy(filteredUploadedSamples, ['date'], ['desc']);
+
+        return _.partition(sortedFilteredUploads, (item) => {
+            return !_.isNil(item.upload) && fileUploadStatusErrorOrReady(item.upload);
+        });
     }
 
-    _createSampleLabel(sample) {
+    _createSampleLabel(sample, languageId, p) {
         const {type} = sample;
-        const sampleName = sample.name;
-        return getItemLabelByNameAndType(sampleName, type);
+        const sampleName = i18n.getEntityText(sample, languageId).name;
+        return getItemLabelByNameAndType(sampleName, type, p);
     }
 
-    _renderSampleOld(sample, label, isActive) {
+    _renderSample(sample, label, isActive, isNew, languageId) {
         const isDeletable = sample.type === entityType.USER;
+        const description = i18n.getEntityText(sample, languageId).description;
         return this.renderListItem(
             sample.id,
             isActive,
-            null,
+            isNew ? true : null,
             (id) => this.onSampleItemClick(id),
             (id) => this.onSampleItemSelectForAnalysis(id),
             isDeletable ? (id) => this.onSampleItemDelete(id) : null,
             label,
-            sample.description,
+            description,
             sample.created
         );
     }
 
-    _renderSampleNew(sample, label, isActive) {
+    renderUploadedData(uploadedItems, isNew) {
+        const {currentSampleId, languageId} = this.props;
+        return _.map(uploadedItems, (item) => {
+            if (item.sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
+                return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew, languageId);
+            } else {
+                return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
+            }
+        });
+    }
+
+    _renderSampleError(sample, label, isActive) {
+        const {p} = this.props;
+        const message = sample.error || (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
+                ? p.t('samples.error.sampleNotFound')
+                : p.t('samples.error.unknown'));
         return this.renderListItem(
             sample.id,
             isActive,
-            true,
+            false,
             (id) => this.onSampleItemClick(id),
-            (id) => this.onSampleItemSelectForAnalysis(id),
+            null,
             (id) => this.onSampleItemDelete(id),
             label,
-            sample.description,
-            sample.created
+            message,
+            null
         );
-    }
-
-    _renderUploadedDataSample(uploadData, showNew) {
-        const {currentHistorySamplesIds, currentSampleId} = this.props;
-        const {label, upload, sample} = uploadData;
-        if (upload) {
-            if (showNew && (sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
-                return this._renderSampleNew(sample, label, sample.id === currentSampleId);
-            } else {
-                return null;
-            }
-        } else {
-            if (showNew) {
-                return null;
-            } else {
-                return this._renderSampleOld(sample, label, sample.id === currentSampleId);
-            }
-        }
     }
 
     _renderUploadedDataFileError(upload, label) {
@@ -180,6 +193,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
+        const {p} = this.props;
         return (
             <li key={id}
                 className={classNames({
@@ -201,7 +215,7 @@ export default class FileUploadSampleList extends React.Component {
                         {description}
                     </span>
                     {uploadedTimeOrNull && <span className='small link-desc'>
-                       Uploaded: {formatDate(uploadedTimeOrNull)}
+                        {p.t('samples.uploaded')}: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
                 {onDelete && !onSelectForAnalysis ?
@@ -222,7 +236,7 @@ export default class FileUploadSampleList extends React.Component {
 
     renderDropdown(id, onSelectForAnalysis, onDelete) {
         const isOpen = this.state.showPopup === id;
-        const {sampleList:{onSaveAction}} = this.props;
+        const {sampleList:{onSaveAction}, p} = this.props;
         const isRenderDropDown = (onSaveAction && onSelectForAnalysis) || onDelete;
         const className = classNames({'dropdown': true, 'right-menu': true, 'open': isOpen});
         return (
@@ -241,13 +255,13 @@ export default class FileUploadSampleList extends React.Component {
                             href='#'
                             className='selectForAnalysisBtn'
                             onClick={() => onSelectForAnalysis(id)}
-                        > Select for analysis</a>
+                        >{p.t('samples.selectForAnalysis')}</a>
                     </li>}
                     {onDelete && <li>
                         <a
                             href='#'
                             onClick={() => onDelete(id)}
-                        >Delete</a>
+                        >{p.t('samples.deleteSample')}</a>
                     </li>}
                 </ul>
             </div>
@@ -262,26 +276,27 @@ export default class FileUploadSampleList extends React.Component {
         }
     }
 
-    static renderProgressBar(uploadItem) {
+    renderProgressBar(uploadItem) {
+        const {p} = this.props;
         const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
             [fileUploadStatus.AJAX]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
                 }),
-                renderMessage: 'Loading..'
+                renderMessage: p.t('samples.loading')
             },
             [fileUploadStatus.TASK_RUNNING]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                renderMessage: <span className='text-primary'>Saving...</span>
+                renderMessage: <span className='text-primary'>{p.t('samples.saving')}</span>
             },
             [fileUploadStatus.IN_PROGRESS]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                renderMessage: <span className='text-primary'>Saving...</span>
+                renderMessage: <span className='text-primary'>{p.t('samples.saving')}</span>
             }
         };
         const currentStage = STAGES[progressStatus] || STAGES[fileUploadStatus.AJAX];
@@ -311,7 +326,7 @@ export default class FileUploadSampleList extends React.Component {
             progressStatus === fileUploadStatus.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
     }
 
-    static renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
+    renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
         return (
             <li key={key}
                 className={classNames({
@@ -325,7 +340,7 @@ export default class FileUploadSampleList extends React.Component {
                         <input type='radio' name='viewsRadios'/>
                         <i />
                     </label>
-                    {this.renderRefreshIcon(upload)}
+                    {FileUploadSampleList.renderRefreshIcon(upload)}
                     <span className='link-label'>
                         {name}
                     </span>
@@ -364,7 +379,7 @@ export default class FileUploadSampleList extends React.Component {
         const isActive = upload.id === currentUploadId;
         const name = upload.file.name;
 
-        return FileUploadSampleList.renderProgressUploadListItem(
+        return this.renderProgressUploadListItem(
             key,
             name,
             upload,
@@ -380,7 +395,7 @@ export default class FileUploadSampleList extends React.Component {
         const isActive = upload.id === currentUploadId;
         const name = upload.file.name;
 
-        return FileUploadSampleList.renderProgressUploadListItem(
+        return this.renderProgressUploadListItem(
             key,
             name,
             upload,
@@ -391,11 +406,11 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderProgressUploadSampleSample(upload, sample) {
-        const {currentSampleId} = this.props;
+        const {currentSampleId, languageId, p} = this.props;
         const key = sample.id;
         const isActive = sample.id === currentSampleId;
-        const name = this._createSampleLabel(sample);
-        return FileUploadSampleList.renderProgressUploadListItem(
+        const name = this._createSampleLabel(sample, languageId, p);
+        return this.renderProgressUploadListItem(
             key,
             name,
             upload,
@@ -406,6 +421,7 @@ export default class FileUploadSampleList extends React.Component {
     }
 
     renderNewListItem(isActive) {
+        const {p} = this.props;
         return (
             <li className={classNames({
                 'active': isActive
@@ -417,10 +433,10 @@ export default class FileUploadSampleList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        New sample
+                        {p.t('samples.newSample')}
                     </span>
                     <span className='link-desc'>
-                        Upload vcf file
+                        {p.t('samples.newSampleDescription')}
                     </span>
                 </a>
             </li>
@@ -514,5 +530,6 @@ export default class FileUploadSampleList extends React.Component {
 FileUploadSampleList.propTypes = {
     onSelectSample: React.PropTypes.func.isRequired,
     onSelectUpload: React.PropTypes.func.isRequired,
-    closeModal: React.PropTypes.func.isRequired
+    closeModal: React.PropTypes.func.isRequired,
+    languageId: React.PropTypes.string.isRequired
 };

@@ -27,7 +27,9 @@ export default class VariantsTableRow extends ComponentBase {
             rowIndex,
             variantsHeader,
             sortState,
-            isSelected
+            isSelected,
+            ui,
+            p
         } = this.props;
         const rowFields = row.fields;
         const mandatoryFields = row.mandatoryFields;
@@ -71,6 +73,8 @@ export default class VariantsTableRow extends ComponentBase {
                                       comments={comments}
                                       tableElement={this.props.tableElement}
                                       onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
+                                      ui={ui}
+                                      p={p}
                 />
                 {_.map(rowFields, (value, index) =>
                     this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
@@ -207,6 +211,7 @@ export default class VariantsTableRow extends ComponentBase {
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.row !== nextProps.row
             || this.props.isSelected !== nextProps.isSelected
+            || this.props.p !== nextProps.p
             || this.state !== nextState;
     }
 }

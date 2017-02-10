@@ -1,5 +1,6 @@
 import HttpStatus from 'http-status';
 import _ from 'lodash';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError, handleApiResponseErrorAsync} from './errorHandler';
@@ -22,15 +23,6 @@ export const EDIT_EXISTENT_HISTORY_ITEM = 'EDIT_EXISTENT_HISTORY_ITEM';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
-const HISTORY_ERROR_MESSAGE = 'Cannot update analyses history. Please try again.';
-
-const GET_SAMPLE_NETWORK_ERROR = 'Cannot get sample (network error). Please try again.';
-const GET_SAMPLE_SERVER_ERROR = 'Cannot get sample (server error). Please try again.';
-
-const GET_VIEW_ERROR_MESSAGE = 'Cannot get view. Please try again.';
-const GET_FILTER_ERROR_MESSAGE = 'Cannot get filter. Please try again.';
-const GET_MODEL_ERROR_MESSAGE = 'Cannot get model. Please try again.';
-
 const analysesHistoryClient = apiFacade.analysesHistoryClient;
 
 const DEFAULT_OFFSET = 0;
@@ -43,12 +35,14 @@ export function setCurrentAnalysesHistoryId(id) {
     };
 }
 
-export function createNewHistoryItem(sample, filter, view) {
+export function createNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
     return {
         type: CREATE_NEW_HISTORY_ITEM,
         sample,
         filter,
-        view
+        view,
+        newHistoryItemInfo,
+        languageId
     };
 }
 
@@ -95,20 +89,23 @@ export function prepareAnalysesHistoryToSearch(search) {
     };
 }
 
-export function duplicateAnalysesHistoryItem(historyItem) {
+export function duplicateAnalysesHistoryItem(historyItem, newHistoryItemInfo, languageId) {
     return {
         type: DUPLICATE_ANALYSES_HISTORY_ITEM,
-        historyItem
+        historyItem,
+        newHistoryItemInfo,
+        languageId
     };
 }
 
-export function editAnalysesHistoryItem(samplesList, modelsList, isDemo, changeItem) {
+export function editAnalysesHistoryItem(samplesList, modelsList, isDemo, changeItem, languageId) {
     return {
         type: EDIT_ANALYSES_HISTORY_ITEM,
         samplesList,
         modelsList,
         isDemo,
-        changeItem
+        changeItem,
+        languageId
     };
 }
 
@@ -136,10 +133,11 @@ export function setEditedHistoryItem(newHistoryItem) {
 export function requestAppendAnalysesHistoryAsync(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {languageId}} = getState();
+        const p = getP(getState());
         dispatch(requestAnalysesHistory());
         return new Promise((resolve) => analysesHistoryClient.getAnalysesHistory(languageId, search, limit, offset,
             (error, response) => resolve({error, response})
-        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
+        )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(p.t('analysis.error.historyError'), error, response))
         ).then((response) => {
             const result = response.body.result;
             dispatch(appendAnalysesHistory(search, offset, result, limit > result.length));
@@ -157,7 +155,10 @@ export function updateAnalysesHistoryItemAsync(historyItemId) {
         });
         return new Promise(
             (resolve) => analysesHistoryClient.update(historyItem, (error, response) => resolve({error, response}))
-        ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response)));
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('analysis.error.historyError'), error, response));
+        }).then((response) => response.body);
     };
 }
 
@@ -168,11 +169,13 @@ export function deleteServerAnalysesHistoryItemAsync(historyItemId) {
                 error,
                 response
             }))
-        ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(HISTORY_ERROR_MESSAGE, error, response))
-        ).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId))
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('analysis.error.historyError'), error, response));
+        }).then(() => dispatch(deleteAnalysesHistoryItem(historyItemId))
         ).then(() => {
-            const {analysesHistory:{currentHistoryId}} = getState();
-            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
+            const {analysesHistory: {currentHistoryId}} = getState();
+            dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId)); // TODO: add return
         });
     };
 }
@@ -194,9 +197,9 @@ function getSamples(samplesIds, samplesHash, callback) {
         } else {
             apiFacade.samplesClient.get(sampleId, (error, response) => {
                 if (error) {
-                    callback(GET_SAMPLE_NETWORK_ERROR);
+                    callback('analysis.error.getSampleNetworkError');
                 } else if (response.status !== HttpStatus.OK) {
-                    callback(GET_SAMPLE_SERVER_ERROR);
+                    callback('analysis.error.getSampleServerError');
                 } else {
                     callback(null, response.body);
                 }
@@ -256,9 +259,10 @@ export function setCurrentAnalysesHistoryIdLoadDataAsync(id) {
                 return new Promise((resolve) => apiFacade.viewsClient.get(
                     viewId,
                     (error, response) => resolve({error, response})
-                )).then(
-                    ({error, response}) => dispatch(handleApiResponseErrorAsync(GET_VIEW_ERROR_MESSAGE, error, response))
-                ).then((response) => response.body);
+                )).then(({error, response}) => {
+                    const p = getP(getState());
+                    return dispatch(handleApiResponseErrorAsync(p.t('analysis.error.getViewError'), error, response));
+                }).then((response) => response.body);
             }
         }).then((view) => {
             // TODO it is unclear that ...SetHistoryView can receive non-history item,
@@ -272,8 +276,10 @@ export function setCurrentAnalysesHistoryIdLoadDataAsync(id) {
                 return new Promise((resolve) => apiFacade.filtersClient.get(
                     filterId,
                     (error, response) => resolve({error, response})
-                )).then(({error, response}) => dispatch(handleApiResponseErrorAsync(GET_FILTER_ERROR_MESSAGE, error, response))
-                ).then((response) => response.body);
+                )).then(({error, response}) => {
+                    const p = getP(getState());
+                    return dispatch(handleApiResponseErrorAsync(p.t('analysis.error.getFilterError'), error, response));
+                }).then((response) => response.body);
             }
         }).then((filter) => {
             dispatch(filtersListSetHistoryFilter(filter));
@@ -287,15 +293,18 @@ export function setCurrentAnalysesHistoryIdLoadDataAsync(id) {
                 return new Promise((resolve) => apiFacade.modelsClient.get(
                     modelId,
                     (error, response) => resolve({error, response}))
-                ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(GET_MODEL_ERROR_MESSAGE, error, response))
-                ).then((response) => response.body);
+                ).then(({error, response}) => {
+                    const p = getP(getState());
+                    return dispatch(handleApiResponseErrorAsync(p.t('analysis.error.getModelError'), error, response));
+                }).then((response) => response.body);
             }
         }).then((model) => {
             dispatch(modelsListSetHistoryModel(model));
             return new Promise((resolve, reject) => {
                 getSamples(samplesIds, samplesHash, (error, samples) => {
                     if (error) {
-                        dispatch(handleError(null, error));
+                        const p = getP(getState());
+                        dispatch(handleError(null, p.t(error)));
                         reject(error);
                     } else {
                         resolve(samples);

@@ -7,9 +7,6 @@ import LoginForm from './LoginForm';
 import { logout } from '../../../actions/auth';
 import config from '../../../../config';
 
-const AUTHORIZED_USER_TITLE = '';
-const DEMO_USER_TITLE = 'Register or login for access additional features';
-const GOOGLE_ACCOUNT_TITLE = 'Login using Google Account';
 import DemoModeMessage from '../../Errors/DemoModeMessage';
 
 class Auth extends Component {
@@ -40,7 +37,7 @@ class Auth extends Component {
     }
 
     _renderForAuthorizedUser(dropdownClasses) {
-        const {profileMetadata} = this.props.userData;
+        const {userData: {profileMetadata}, p} = this.props;
         return (
             <div>
                 <div className={dropdownClasses}>
@@ -48,8 +45,10 @@ class Auth extends Component {
                        onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
                     >
-                        <span title={AUTHORIZED_USER_TITLE}
-                              className='hidden-xs'>
+                        <span
+                            title={p.t('navBar.auth.authorizedUserTitle')}
+                            className='hidden-xs'
+                        >
                             { profileMetadata.email }
                         </span>
                         <span className='visible-xs'>
@@ -59,23 +58,24 @@ class Auth extends Component {
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
                         <li className='form-inline'>
-                            <a onClick={ () => { this.props.dispatch(logout()); } }
-                               href='#'
-                               type='button'
-                               className='btn btn-primary btn-uppercase'
-                               id='logout'>
-                                <span>Logout</span>
+                            <a
+                                onClick={ () => { this.props.dispatch(logout()); } }
+                                href='#'
+                                type='button'
+                                className='btn btn-primary btn-uppercase'
+                                id='logout'
+                            >
+                                <span>{p.t('navBar.auth.logout')}</span>
                             </a>
                         </li>
-                                
-                      </ul>
+                    </ul>
                 </div>
             </div>
         );
     }
 
     _renderForDemoUser(dropdownClasses) {
-        const {dispatch, auth: {isDemo, errorMessage}} = this.props;
+        const {dispatch, auth: {isDemo, errorMessage}, p} = this.props;
         return (
             <div>
 
@@ -85,35 +85,39 @@ class Auth extends Component {
                         errorMessage={errorMessage}
                         dispatch={dispatch}
                         onLoginClick={() => this.onLoginDropdownClick()}
+                        p={p}
                     />
                     }
                     <a href='#'
                        onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
                     >
-                        <span title={DEMO_USER_TITLE}
-                              className='hidden-xs'>
-                            Login
+                        <span
+                            title={p.t('navBar.auth.demoUserTitle')}
+                            className='hidden-xs'
+                        >
+                            {p.t('navBar.auth.login')}
                         </span>
                         <span className='visible-xs'>
-                          <span className='dropdown-menu-header'>Login</span>
+                          <span className='dropdown-menu-header'>{p.t('navBar.auth.login')}</span>
                           <i className='md-i md-person md-replace-to-close'></i>
                         </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
-                       <li className='dropdown-header'>Login with</li>
+                        <li className='dropdown-header'>{p.t('navBar.auth.dropdownHeader')}</li>
                         <li className='form-inline'>
                             <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
-                                <span title={GOOGLE_ACCOUNT_TITLE}>
-                                    Google Account
+                                <span title={p.t('navBar.auth.googleAccountTitle')}>
+                                    {p.t('navBar.auth.googleAccountCaption')}
                                 </span>
                             </a>
                         </li>
-                        <li className='dropdown-header'>OR login</li>
+                        <li className='dropdown-header'>{p.t('navBar.auth.loginPasswordCaption')}</li>
                         <li>
                             <LoginForm
-                                dispatch={this.props.dispatch}
+                                dispatch={dispatch}
                                 closeLoginForm={() => this.handleClickOutside()}
+                                p={p}
                             />
                         </li>
                     </ul>

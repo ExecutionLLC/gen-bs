@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import VariantsTableHead from './VariantsTableHead';
 import VariantsTableRows from './VariantsTableRows';
 import VariantsTableEmpty from './VariantsTableEmpty';
-
-
 import VariantsTableLoadError from '../Errors/VariantsTableLoadError';
 
 
@@ -22,9 +21,8 @@ class VariantsTableReact extends Component {
     }
 
     render() {
-        const {fields} = this.props;
+        const {fields, p} = this.props;
         const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.ws;
-
         return (
 
             <div className='table-variants-wrapper'>
@@ -34,7 +32,7 @@ class VariantsTableReact extends Component {
 
                 { !isVariantsLoading && !isVariantsValid &&
                 <div className='col-xs-6 col-xs-offset-3' id='unexpected_variants_error'>
-                    <VariantsTableLoadError error={variantsError}/>
+                    <VariantsTableLoadError error={variantsError} p={p}/>
                 </div>
                 }
                 { !isVariantsLoading && isVariantsValid &&
@@ -44,16 +42,18 @@ class VariantsTableReact extends Component {
                         <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
                                            ref={(ref) => ref && this.onAppear(true, ref)}
+                                           p={p}
                         />
                         { !isVariantsEmpty &&
                         <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props}
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
                                            ref={(ref) => ref && this.onAppear(false, ref)}
+                                           p={p}
                         />
                         }
                     </table>
                     { isVariantsEmpty &&
-                    <VariantsTableEmpty />
+                    <VariantsTableEmpty p={p} />
                     }
                 </div>
                 }
@@ -99,7 +99,8 @@ function mapStateToProps(state) {
         auth,
         ws: websocket,
         ui,
-        variantsTable
+        variantsTable,
+        p: getP(state)
     };
 }
 

@@ -1,21 +1,24 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
+import {getP} from 'redux-polyglot/dist/selectors';
+
 
 class ErrorModal extends Component {
     renderHeader() {
+        const {p} = this.props;
         return (
             <Modal.Header>
-                <Modal.Title data-localize='error.heading'>
-                    Error
+                <Modal.Title>
+                    {p.t('errors.errorTitle')}
                 </Modal.Title>
             </Modal.Header>
         );
     }
 
     renderBody() {
-        const {lastError} = this.props;
-        var errorMessage = 'Unknown error';
+        const {lastError, p} = this.props;
+        var errorMessage = p.t('errors.unknownError');
         if (lastError && lastError.errorMessage) {
             errorMessage = lastError.errorMessage;
         }
@@ -27,7 +30,7 @@ class ErrorModal extends Component {
     }
 
     renderFooter() {
-        const {closeModal} = this.props;
+        const {closeModal, p} = this.props;
         return (
             <Modal.Footer>
                 <button
@@ -35,9 +38,8 @@ class ErrorModal extends Component {
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
-                    localize-data='action.close'
                 >
-                    <span>Close</span>
+                    <span>{p.t('errors.buttonClose')}</span>
                 </button>
             </Modal.Footer>
         );
@@ -64,7 +66,8 @@ class ErrorModal extends Component {
 function mapStateToProps(state) {
     const {errorHandler: {lastError}} = state;
     return {
-        lastError
+        lastError,
+        p: getP(state)
     };
 }
 

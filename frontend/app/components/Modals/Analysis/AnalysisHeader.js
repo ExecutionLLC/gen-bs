@@ -4,7 +4,7 @@ import {Modal} from 'react-bootstrap';
 
 export default class AnalysisHeader extends React.Component {
     render() {
-        const {showAnalysisHide, onAnalysisHide} = this.props;
+        const {showAnalysisHide, onAnalysisHide, p} = this.props;
 
         return (
             <Modal.Header closeButton>
@@ -16,8 +16,7 @@ export default class AnalysisHeader extends React.Component {
                         onClick={onAnalysisHide}
                     ><i className='md-i'>keyboard_backspace</i></button>
                     }
-                    <span className='modal-title-text'
-                          data-localize='query.title'>Analyses</span>
+                    <span className='modal-title-text'>{p.t('analysis.title')}</span>
                 </Modal.Title>
             </Modal.Header>
         );

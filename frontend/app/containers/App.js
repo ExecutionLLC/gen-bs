@@ -25,6 +25,10 @@ import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem} from '../actions/analysesHistory';
+import {setCurrentLanguageId} from '../actions/ui';
+import * as PropTypes from 'react/lib/ReactPropTypes';
+import {getP} from 'redux-polyglot/dist/selectors';
+import * as i18n from '../utils/i18n';
 
 
 class App extends Component {
@@ -32,12 +36,13 @@ class App extends Component {
     componentWillMount() {
         // preload the font, wait for 30 seconds.
         const observer = new FontFaceObserver('Roboto-Medium');
-        observer.load(null, 30);
+        observer.load(null, 30000);
     }
 
     componentDidMount() {
         const {dispatch} = this.props;
         const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
+        dispatch(setCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
         dispatch(loginWithGoogle());
 
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
@@ -51,7 +56,7 @@ class App extends Component {
     render() {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
-            samplesList, modelsList, auth: {isDemo}} = this.props;
+            samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         const currentHistoryId = analysesHistory.currentHistoryId;
         const historyList = analysesHistory.history;
         const newHistoryItem = analysesHistory.newHistoryItem;
@@ -60,7 +65,7 @@ class App extends Component {
                 historyList.find((historyItem) => historyItem.id === currentHistoryId) :
                 newHistoryItem;
         const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
-        const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}});
+        const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId);
 
         return (
             <div className='main subnav-closed' id='main'>
@@ -69,7 +74,9 @@ class App extends Component {
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain
-                        openAnalysisModal={() => dispatch(openModal(modalName.ANALYSIS))}
+                        openAnalysisModal={() => {
+                            dispatch(openModal(modalName.ANALYSIS));
+                        }}
                         openSamplesModal={() => {
                             dispatch(samplesOnSave(selectedSamplesIds, null, 'changeItem.sample.index', 'changeItem.sample.id', action));
                             dispatch(openModal(modalName.UPLOAD));
@@ -151,8 +158,12 @@ function mapStateToProps(state) {
         viewsList,
         modelsList,
         analysesHistory,
-        showErrorWindow
+        showErrorWindow,
+        p: getP(state)
     };
 }
 
+App.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 export default connect(mapStateToProps)(App);

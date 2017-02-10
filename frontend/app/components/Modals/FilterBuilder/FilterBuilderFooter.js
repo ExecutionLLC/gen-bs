@@ -6,7 +6,7 @@ import {filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
 export default class FilterBuilderFooter extends Component {
 
     render() {
-        const {confirmButtonParams} = this.props;
+        const {confirmButtonParams, p} = this.props;
 
         return (
             <Modal.Footer>
@@ -16,7 +16,7 @@ export default class FilterBuilderFooter extends Component {
                     className='btn btn-default'
                     data-dismiss='modal'
                 >
-                    <span data-localize='actions.cancel'>Cancel</span>
+                    <span>{p.t('filterAndModel.cancel')}</span>
                 </button>
 
                 <button
@@ -26,7 +26,7 @@ export default class FilterBuilderFooter extends Component {
                     disabled={confirmButtonParams.disabled}
                     title={confirmButtonParams.title}
                 >
-                    <span data-localize='actions.save_select.title'>{confirmButtonParams.caption}</span>
+                    <span>{confirmButtonParams.caption}</span>
                 </button>
             </Modal.Footer>
         );
