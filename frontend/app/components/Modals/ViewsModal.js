@@ -17,7 +17,7 @@ import * as i18n from '../../utils/i18n';
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth, showModal, viewBuilder, viewsList, ui, p, dispatch} = this.props;
+        const {auth, showModal, viewBuilder, viewsList, fields, ui, p, dispatch} = this.props;
         const {isDemo} = auth;
         const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
@@ -71,7 +71,11 @@ class ViewsModal extends React.Component {
                                             p={p}
                                         />
                                         <ViewBuilder
-                                            {...this.props}
+                                            fields={fields}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                     </div>   
                                 }
@@ -86,7 +90,11 @@ class ViewsModal extends React.Component {
                                             p={p}
                                         />
                                         <ViewBuilder
-                                            {...this.props}
+                                            fields={fields}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                     </div>
                                 }
@@ -147,12 +155,11 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder, userData, fields, viewsList, ui} = state;
+    const {auth, viewBuilder, fields, viewsList, ui} = state;
 
     return {
         auth,
         viewBuilder,
-        userData,
         fields,
         viewsList,
         ui,
