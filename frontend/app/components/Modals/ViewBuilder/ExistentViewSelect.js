@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import 'react-select/dist/react-select.css';
 
 import Select from '../../shared/Select';
@@ -165,3 +165,13 @@ export default class ExistentViewSelect extends React.Component {
         });
     }
 }
+
+
+ExistentViewSelect.propTypes = {
+    auth: PropTypes.object.isRequired,
+    viewsList: PropTypes.object.isRequired,
+    viewBuilder: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    ui: PropTypes.object.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};

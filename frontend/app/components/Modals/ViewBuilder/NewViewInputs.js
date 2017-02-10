@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {viewBuilderChangeAttr, viewBuilderRestartEdit} from '../../../actions/viewBuilder';
 import config from '../../../../config';
 import * as i18n from '../../../utils/i18n';
@@ -84,3 +84,12 @@ export default class NewViewInputs extends React.Component {
     }
 
 }
+
+
+NewViewInputs.propTypes = {
+    validationMessage: PropTypes.string.isRequired,
+    viewsList: PropTypes.object.isRequired,
+    viewBuilder: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
