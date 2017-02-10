@@ -168,7 +168,9 @@ function mapStateToProps(state) {
 }
 
 ViewsModal.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(ViewsModal);
