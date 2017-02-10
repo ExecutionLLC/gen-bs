@@ -30,7 +30,8 @@ class ViewsModal extends React.Component {
             editingView,
             editedViewNameTrimmed,
             isViewEditable,
-            views
+            views,
+            p
         ) : '';
 
         const confirmButtonParams = {
@@ -130,24 +131,25 @@ class ViewsModal extends React.Component {
      * @param {string}editedViewName
      * @param {boolean}isViewEditable
      * @param {Array<Object>}views
+     * @param {Object}p
      * @return {string}
      */
-    getValidationMessage(editingView, editedViewName, isViewEditable, views) {
+    getValidationMessage(editingView, editedViewName, isViewEditable, views, p) {
         const viewNameExists = isViewEditable && _(views)
                 .filter(view => view.type !== entityType.HISTORY)
                 .some(view => this.getTrimmedViewName(view) === editedViewName
                     && view.id != editingView.id
                 );
         if (viewNameExists) {
-            return 'View with this name is already exists.';
+            return p.t('view.validationMessage.nameAlreadyExists');
         }
 
         if (!editedViewName) {
-            return 'Name cannot be empty';
+            return p.t('view.validationMessage.empty');
         }
 
         if (editedViewName && editedViewName.length > config.VIEWS.MAX_NAME_LENGTH) {
-            return `Name length should be less than ${config.VIEWS.MAX_NAME_LENGTH}.`;
+            return p.t('view.validationMessage.lengthExceeded', {maxLength: config.VIEWS.MAX_NAME_LENGTH});
         }
 
         return '';

@@ -6,7 +6,8 @@ export default function ui(state = {
     currentLimit: 100,
     currentOffset: 0,
     isAnalyzeTooltipVisible: false,
-    languageId: 'en'
+    languageId: 'en',
+    languages: null
 }, action) {
 
     switch (action.type) {
@@ -29,6 +30,11 @@ export default function ui(state = {
         case ActionTypes.STORE_CURRENT_LANGUAGE_ID:
             return Object.assign({}, state, {
                 languageId: action.languageId
+            });
+
+        case ActionTypes.STORE_AVAILABLE_LANGUAGES:
+            return Object.assign({}, state, {
+                languages: action.languages
             });
 
         default:

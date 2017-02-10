@@ -22,13 +22,13 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
     }
 
     isValid() {
-        const {historyItem: {samples}, fields, samplesList, languageId} = this.props;
+        const {historyItem: {samples}, fields, samplesList, languageId, p} = this.props;
         const analysesSamples = _.map(samples, sample => samplesList.hashedArray.hash[sample.id]);
         const invalidGenotypeSample = _.find(analysesSamples, sample => _.isNull(sample.genotypeName));
         if (invalidGenotypeSample) {
             return {
                 isValid: false,
-                errorMessage: `Sample '${i18n.getEntityText(invalidGenotypeSample, languageId).name}' doesn't have any genotype.`
+                errorMessage: p.t('filterAndModel.errors.compHeterModelNoGenotypes', {name: i18n.getEntityText(invalidGenotypeSample, languageId).name})
             };
         }
         const invalidGtFieldSample = _.find(analysesSamples, sample => {
@@ -40,7 +40,7 @@ export default class CompoundHeterozygousModelRule extends BaseRule {
         if (invalidGtFieldSample) {
             return {
                 isValid: false,
-                errorMessage: `Sample '${i18n.getEntityText(invalidGenotypeSample, languageId).name}' doesn't have ${gtGtField} field.`
+                errorMessage: p.t('filterAndModel.errors.compHeterModelNoField', {name: i18n.getEntityText(invalidGtFieldSample, languageId).name, field: gtGtField})
             };
         }
         return {

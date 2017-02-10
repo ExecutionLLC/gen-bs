@@ -10,16 +10,32 @@ const UsersClient = require('./utils/UsersClient');
 const urls = new Urls('localhost', Config.port);
 const usersClient = new UsersClient(urls);
 
+const ClientBase = require('./utils/ClientBase');
+const SessionsClient = require('./utils/SessionsClient');
+const TestUser = require('./mocks/mock-users.json')[1];
+
+const sessionsClient = new SessionsClient(urls);
+const languId = Config.defaultLanguId;
+
 describe('Users', () => {
+
+    let sessionId = null;
 
     before((done) => {
         webServer.restoreModelsMocks();
-        done();
+        sessionsClient.openSession(TestUser.email, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            sessionId = SessionsClient.getSessionFromResponse(response);
+            done();
+        });
     });
 
     after((done) => {
         webServer.setModelsMocks();
-        done();
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+            done();
+        });
     });
 
     function makeUser(isPassword, password) {
@@ -117,7 +133,7 @@ describe('Users', () => {
             assert.equal(result.status, 200);
             const addedUser = result.body;
             const user2 = Object.assign({}, makeUser(), {id: addedUser.id});
-            usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+            usersClient.update(sessionId, languId, {key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
                 assert.equal(err, null);
                 assert.equal(result.status, 200);
                 const updatedUser = result.body;
@@ -134,7 +150,7 @@ describe('Users', () => {
             assert.equal(result.status, 200);
             const addedUser = result.body;
             const user2 = Object.assign({}, makeUser(), {id: addedUser.id, email: addedUser.email});
-            usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
+            usersClient.update(sessionId, languId, {key: Config.regserver.ADD_USER_KEY, user: user2}, (err, result) => {
                 assert.equal(err, null);
                 assert.equal(result.status, 200);
                 const updatedUser = result.body;
@@ -155,7 +171,7 @@ describe('Users', () => {
                 assert.equal(result.status, 200);
                 const addeduser2 = result.body;
                 const user2WithEmailOf1 = Object.assign({}, makeUser(), {id: addeduser2.id, email: user1.email});
-                usersClient.update({key: Config.regserver.ADD_USER_KEY, user: user2WithEmailOf1}, (err, result) => {
+                usersClient.update(sessionId, languId, {key: Config.regserver.ADD_USER_KEY, user: user2WithEmailOf1}, (err, result) => {
                     assert.equal(err, null);
                     assert.equal(result.status, 500);
                     done();

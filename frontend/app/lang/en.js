@@ -39,7 +39,10 @@ export default {
         },
         rightPaneError: {
             title: 'Error! ',
-            description: '%{label} not loaded or damaged'
+            description: {
+                file: 'File not loaded or damaged',
+                sample: 'Sample not loaded or damaged'
+            }
         },
         rightPaneWait: {
             title: 'Wait. ',
@@ -51,7 +54,9 @@ export default {
             fetchSamplesError: 'We are really sorry, but there is an error while getting the list of samples' +
                 ' from our server. Be sure we are working on resolving the issue. You can also try to reload page and try again.',
             deleteSampleError: 'We are really sorry, but there is an error while deleting sample.' +
-                ' Be sure we are working on resolving the issue. You can also try to reload page and try again.'
+                ' Be sure we are working on resolving the issue. You can also try to reload page and try again.',
+            unsupportedFileFormat: 'Unsupported file type: must be Variant Call Format' +
+                ' (VCF) 4.1 or higher or VCF compressed with gzip'
         }
     },
     demoPopup: {
@@ -133,6 +138,7 @@ export default {
                 view: 'View',
                 views: 'Views',
                 analyze: 'Analyze',
+                analyzeTitle: 'Click for analyze with analysis initial versions of filter and view',
                 restoreToDefault: 'Restore to default',
                 analysisType: 'Analysis type',
                 duplicate: 'Duplicate',
@@ -274,7 +280,7 @@ export default {
                     deleteItem: 'Delete Model'
                 },
                 validationMessage: {
-                    nameAlreadyExists: 'Filter with this name is already exists.',
+                    nameAlreadyExists: 'Model with this name is already exists.',
                     empty: 'Name cannot be empty',
                     lengthExceeded: 'Name length should be less than %{maxLength}'
                 },
@@ -340,7 +346,9 @@ export default {
             deleteFilterError: 'Cannot delete filter. Please try again.',
             createModelError: 'Cannot create new model. Please try again.',
             updateModelError: 'Cannot update model. Please try again.',
-            deleteModelError: 'Cannot delete model. Please try again.'
+            deleteModelError: 'Cannot delete model. Please try again.',
+            compHeterModelNoGenotypes: `Sample '%{name}' doesn't have any genotype.`,
+            compHeterModelNoField: `Sample '%{name}' doesn't have %{field} field.`
         }
     },
     view: {
@@ -390,6 +398,11 @@ export default {
             updateViewServerError: 'Cannot update view (server error). Please try again.',
             deleteViewNetworkError: 'Cannot delete view (network error). Please try again.',
             deleteViewServerError: 'Cannot delete view (server error). Please try again.'
+        },
+        validationMessage: {
+            nameAlreadyExists: 'View with this name is already exists.',
+            empty: 'Name cannot be empty',
+            lengthExceeded: 'Name length should be less than %{maxLength}'
         }
     },
     historyEntity: '%{name} (from history)'

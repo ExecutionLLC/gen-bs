@@ -32,6 +32,7 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
 export class TooManyWebSocketsError extends Error {
     constructor(message) {
+        // This text must not be shown so it is not translated
         super(message || 'It seems you have another tab opened. Please close it and reload this page to continue.');
         this.code = TooManyWebSocketsError.CODE;
     }
