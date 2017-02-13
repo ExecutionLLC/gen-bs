@@ -466,7 +466,7 @@ function buildHistoryState() {
             hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1)),
             selectedFilterId: filters[1].id
         },
-        queryHistory: Object.assign({}, MOCK_APP_STATE.queryHistory, {
+        analysesHistory: Object.assign({}, MOCK_APP_STATE.analysesHistory, {
             history: [historyEntry, nonHistoryEntry]
         })
     };
@@ -494,7 +494,7 @@ function mapStateToCollections(globalState) {
         viewsList: {hashedArray:{array:views}, selectedViewId},
         filtersList: {hashedArray:{array:filters}, selectedFilterId},
         samplesList: {hashedArray:{array:samples}, selectedSampleId},
-        queryHistory: {history}
+        analysesHistory: {history}
     } = globalState;
     return {
         views,
