@@ -1,4 +1,4 @@
-import {addFilesForUpload} from '../app/actions/fileUpload';
+import {uploadFiles} from '../app/actions/fileUpload';
 
 import storeTestUtils from './storeTestUtils';
 import {installMocks, expectCountByPredicate} from './jestUtils';
@@ -21,7 +21,7 @@ xdescribe('Sample Upload', () => {
             createFile('file3.vcf.gz', 'application/binary')
         ];
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
+            applyActions: (dispatch) => dispatch(uploadFiles(files))
         }, (globalState) => {
             const {
                 filesProcesses,
@@ -41,7 +41,7 @@ xdescribe('Sample Upload', () => {
             createFile('file3.vcf', 'application/binary')
         ];
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
+            applyActions: (dispatch) => dispatch(uploadFiles(files))
         }, (globalState) => {
             const {
                 filesProcesses,
@@ -62,7 +62,7 @@ xdescribe('Sample Upload', () => {
             createFile('file4.txt', 'text/plain')
         ];
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
+            applyActions: (dispatch) => dispatch(uploadFiles(files))
         }, (globalState) => {
             const {
                 filesProcesses,
@@ -83,7 +83,7 @@ xdescribe('Sample Upload', () => {
             createFile('file4.txt', 'text/plain')
         ];
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
+            applyActions: (dispatch) => dispatch(uploadFiles(files))
         }, (globalState) => {
             const {filesProcesses, processesWithError} = mapState(globalState);
             expect(filesProcesses.length).toBe(4);
