@@ -249,25 +249,28 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     return this.services.samples.update(user, sample, callback);
                 }, (error, result) => callback(error, result));
             },
-            (items, callback) => this.toggleNextOperation(operation.getId(), callback),
-            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
-                (error, existingSamples) => callback(error, existingSamples)),
-            (existingSamples, callback) => this._createOperationResult(
-                session,
-                operation,
-                null,
-                operation.getUserId(),
-                EVENTS.onOperationResultReceived,
-                true,
-                {
-                    status: SAMPLE_UPLOAD_STATUS.ERROR,
-                    progress: 0,
-                    metadata: existingSamples
-                },
-                error,
-                callback
-            )
-        ], callback);
+        ], () => {
+            async.waterfall([
+                (callback) => this.toggleNextOperation(operation.getId(), callback),
+                (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                    (error, existingSamples) => callback(error, existingSamples)),
+                (existingSamples, callback) => this._createOperationResult(
+                    session,
+                    operation,
+                    null,
+                    operation.getUserId(),
+                    EVENTS.onOperationResultReceived,
+                    true,
+                    {
+                        status: SAMPLE_UPLOAD_STATUS.ERROR,
+                        progress: 0,
+                        metadata: existingSamples
+                    },
+                    error,
+                    callback
+                )
+            ], callback);
+        });
     }
 
     _handleUploadProgress(user, session, operation, message, callback) {
