@@ -5,7 +5,7 @@ import {installMocks, expectCountByPredicate} from './jestUtils';
 
 const testDate = new Date('2016-06-15T12:28:27.272Z');
 
-describe('Sample Upload', () => {
+xdescribe('Sample Upload', () => {
     beforeAll(() => {
         installMocks(console, {log: jest.fn()});
     });

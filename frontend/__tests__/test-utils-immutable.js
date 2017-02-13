@@ -1,7 +1,7 @@
 import immutableArray from '../app/utils/immutableArray';
 import {ImmutableHashedArray} from '../app/utils/immutable';
 
-describe('Immutable array', () => {
+xdescribe('Immutable array', () => {
     it('should replace item', () => {
         expect(() => immutableArray.replace(null, 3, 123)).toThrow();
         expect(() => immutableArray.replace([], 3, 123)).toThrow();
@@ -30,7 +30,7 @@ describe('Immutable array', () => {
     });
 });
 
-describe('Immutable hashed array', () => {
+xdescribe('Immutable hashed array', () => {
 
     const item11 = {id: 11, content: 111};
     const item22 = {id: 22, message: 222};
