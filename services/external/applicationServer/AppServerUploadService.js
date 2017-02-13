@@ -340,36 +340,31 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 error: null
             }, (error) => callback(error, samplesMetadata))
         ], (error, samplesMetadata) => {
-            async.waterfall([
-                (callback) => {
-                    if (error) {
-                        this.logger.error(`Error inserting new sample into database: ${error}`);
-                        const serverError = ErrorUtils.createInternalError(error.message);
-                        this._handleError(user, operation, serverError, session, callback);
-                    } else {
-                        // The upload operation is already completed on the app server.
-                        operation.setSendCloseToAppServer(false);
-                        async.waterfall([
-                            (callback) => this.toggleNextOperation(operation.getId(), callback),
-                            (callback) => this._createOperationResult(session,
-                                operation,
-                                null,
-                                operation.getUserId(),
-                                EVENTS.onOperationResultReceived,
-                                true,
-                                {
-                                    status: SESSION_STATUS.READY,
-                                    progress: 100,
-                                    metadata: samplesMetadata
-                                },
-                                null,
-                                callback
-                            )
-                        ], callback);
-                    }
-                }
-            ], callback);
-
+            if (error) {
+                this.logger.error(`Error inserting new sample into database: ${error}`);
+                const serverError = ErrorUtils.createInternalError(error.message);
+                this._handleError(user, operation, serverError, session, callback);
+            } else {
+                // The upload operation is already completed on the app server.
+                operation.setSendCloseToAppServer(false);
+                async.waterfall([
+                    (callback) => this.toggleNextOperation(operation.getId(), callback),
+                    (callback) => this._createOperationResult(session,
+                        operation,
+                        null,
+                        operation.getUserId(),
+                        EVENTS.onOperationResultReceived,
+                        true,
+                        {
+                            status: SESSION_STATUS.READY,
+                            progress: 100,
+                            metadata: samplesMetadata
+                        },
+                        null,
+                        callback
+                    )
+                ], callback);
+            }
         });
     }
 
