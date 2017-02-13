@@ -5,7 +5,7 @@ function stateMapperFunc(globalState) {
     return globalState.errorHandler;
 }
 
-xdescribe('error handling', () => {
+describe('error handling', () => {
     it('should properly init state', (done) => {
         storeTestUtils.runTest({
             expectedState: {
