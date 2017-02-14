@@ -44,7 +44,7 @@ class HashedArrayDataUtils {
             };
         });
 
-        xdescribe(describeName, () => {
+        describe(describeName, () => {
             var testIndex = 0;
 
             beforeEach(() => {
@@ -63,7 +63,7 @@ class HashedArrayDataUtils {
 
 export function runListedObjectTests(params) {
 
-    xdescribe(`${params.listName} mocked state`, () => {
+    describe(`${params.listName} mocked state`, () => {
         const {list, createdItemId} = params.buildInitState();
         it('should contain no create item', () => {
             const absentItemIndex = list.findIndex((filter) => filter.id === createdItemId);
@@ -71,7 +71,7 @@ export function runListedObjectTests(params) {
         });
     });
 
-    xdescribe(`${params.listName} delete tests`, () => {
+    describe(`${params.listName} delete tests`, () => {
         const {initialAppState, list, createdItemId} = params.buildInitState();
         const {sessionId} = initialAppState.auth;
 
@@ -128,7 +128,7 @@ export function runListedObjectTests(params) {
         HashedArrayDataUtils.doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: true});
     });
 
-    xdescribe(`${params.listName} update tests`, () => {
+    describe(`${params.listName} update tests`, () => {
         const {initialAppState, list, createdItemId} = params.buildInitState();
         const {sessionId} = initialAppState.auth;
 
@@ -179,7 +179,7 @@ export function runListedObjectTests(params) {
         HashedArrayDataUtils.doTests('run updating error', testCases, makeTest, resetMocks, {mustError: true});
     });
 
-    xdescribe(`${params.listName} create tests`, () => {
+    describe(`${params.listName} create tests`, () => {
         const {initialAppState, list, createdItemId} = params.buildInitState();
         const {sessionId} = initialAppState.auth;
         const languageId = initialAppState.ui.language;
