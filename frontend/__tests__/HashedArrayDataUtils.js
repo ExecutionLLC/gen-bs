@@ -81,13 +81,13 @@ export function runListedObjectTests(params) {
             testCases.push({
                 description: 'should delete item #' + i,
                 itemId: list[i].id,
-                actualDelete:true
+                actualDelete: true
             });
         }
         testCases.push({
             description: 'should not delete',
             itemId: createdItemId,
-            actualDelete:false
+            actualDelete: false
         });
 
         function makeTest(testCase, testParams) {
@@ -96,8 +96,8 @@ export function runListedObjectTests(params) {
 
             const reallyDelete = actualDelete && !mustError;
 
-            const filtersCount = list.length;
-            const expectedItemsCount = reallyDelete ? filtersCount - 1 : filtersCount;
+            const itemsCount = list.length;
+            const expectedItemsCount = reallyDelete ? itemsCount - 1 : itemsCount;
             const expectedItems = reallyDelete ? list.filter((item) => item.id !== itemId) : list;
             const expectedItemsHash = list.reduce((hash, item) => {
                 if (!reallyDelete || item.id !== itemId) {
