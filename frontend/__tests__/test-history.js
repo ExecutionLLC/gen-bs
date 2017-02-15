@@ -299,7 +299,8 @@ xdescribe('History Tests', () => {
                 done();
             });
         });
-
+*/
+/* no renewHistoryItem
         it('should keep history items when updating view', (done) => {
             expect(userView).toBeTruthy();
             storeTestUtils.runTest({
