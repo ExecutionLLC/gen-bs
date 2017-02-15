@@ -1,8 +1,9 @@
-import {renewHistoryItem, detachHistoryItem} from '../app/actions/analysesHistory';
+import {setCurrentAnalysesHistoryIdLoadDataAsync} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 //import {analyze} from '../app/actions/ui';
 
+import {entityType} from '../app/utils/entityTypes';
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
@@ -76,10 +77,10 @@ describe('Mocked History State', () => {
 
 });
 
-xdescribe('History Tests', () => {
+describe('History Tests', () => {
     const {
         initialAppState: {
-            ui:{languageId},
+            ui: {languageId},
             auth: {sessionId},
             viewsList,
             filtersList
@@ -96,24 +97,30 @@ xdescribe('History Tests', () => {
 
     beforeAll(() => {
         installMocks(console, {log: jest.fn()});
-        const {samplesClient, viewsClient, filtersClient, searchClient} = apiFacade;
+        const {samplesClient, viewsClient, filtersClient, modelsClient, searchClient} = apiFacade;
         installMocks(searchClient, {
             sendSearchRequest: apiMocks.createSendSearchRequestMock(sessionId, languageId,
                 historySample.id, historyView.id, historyFilter.id, searchOperationId)
         });
         installMocks(samplesClient, {
+            get: apiMocks.createGetMock(historySample.id, historySample),
             getFields: apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList),
             getAllFields: apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList)
         });
         installMocks(viewsClient, {
+            get: apiMocks.createGetMock(historyView.id, historyView),
             add: apiMocks.createAddMock(),
             update: apiMocks.createUpdateMock(userView.id),
             remove: apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash)
         });
         installMocks(filtersClient, {
+            get: apiMocks.createGetMock(historyFilter.id, historyFilter),
             add: apiMocks.createAddMock(),
             update: apiMocks.createUpdateMock(userFilter.id),
             remove: apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash)
+        });
+        installMocks(modelsClient, {
+            get: apiMocks.createGetMock('models-id', {}),
         });
     });
 
@@ -139,15 +146,14 @@ xdescribe('History Tests', () => {
         });
     });
 
-    xdescribe('Renew History: history items', () => {
+    describe('Select history item', () => {
         let renewGlobalState = null;
         beforeAll((done) => {
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
-                applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
+                applyActions: (dispatch) => dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(historyEntry.id))
             }, (globalState) => {
                 renewGlobalState = globalState;
-
                 done();
             });
         });
@@ -445,27 +451,28 @@ xdescribe('History Tests', () => {
 function buildHistoryState() {
     const {
         auth,
-        viewsList: {hashedArray:{array: views}},
-        samplesList: {hashedArray:{array: samples}},
-        filtersList: {hashedArray:{array: filters}},
+        viewsList: {hashedArray: {array: views}},
+        samplesList: {hashedArray: {array: samples}},
+        filtersList: {hashedArray: {array: filters}},
+        analysesHistory: {newHistoryItem},
         fields
     } = MOCK_APP_STATE;
-    const historyView = Object.assign({}, views[0], {id: TestIds.historyViewId});
-    const historyFilter = Object.assign({}, filters[0], {id: TestIds.historyFilterId});
-    const historySample = Object.assign({}, samples[0], {id: TestIds.historySampleId});
+    const historyView = Object.assign({}, views[0], {id: TestIds.historyViewId, type: entityType.HISTORY});
+    const historyFilter = Object.assign({}, filters[0], {id: TestIds.historyFilterId, type: entityType.HISTORY});
+    const historySample = Object.assign({}, samples[0], {id: TestIds.historySampleId, type: entityType.HISTORY});
     const historyEntry = {
         id: TestIds.historyEntryId,
         timestamp: '2016-05-31T10:52:17.813Z',
-        view: historyView,
-        filters: [historyFilter],
-        sample: historySample
+        viewId: historyView.id,
+        filterId: historyFilter.id,
+        samples: [{id: historySample.id, type: historySample.type}]
     };
     const nonHistoryEntry = {
         id: TestIds.nonHistoryEntryId,
         timestamp: '2016-05-31T10:53:17.813Z',
-        view: views[2],
-        filters: [filters[2]],
-        sample: samples[2]
+        viewId: views[2].id,
+        filterId: filters[2].id,
+        samples: [{id: samples[2].id, type: samples[2].type}]
     };
 
     const initialAppState = {
@@ -473,19 +480,19 @@ function buildHistoryState() {
         auth: {sessionId: auth.sessionId},
         fields,
         viewsList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1)),
-            selectedViewId: views[1].id
+            hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1))
         },
         samplesList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(samples.slice(1)),
-            selectedSampleId: samples[1].id
+            hashedArray: ImmutableHashedArray.makeFromArray(samples.slice(1))
         },
         filtersList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1)),
-            selectedFilterId: filters[1].id
+            hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1))
         },
         analysesHistory: Object.assign({}, MOCK_APP_STATE.analysesHistory, {
-            history: [historyEntry, nonHistoryEntry]
+            initialHistory: [historyEntry, nonHistoryEntry],
+            history: [historyEntry, nonHistoryEntry],
+            newHistoryItem,
+            currentHistoryId: null
         })
     };
     return {
