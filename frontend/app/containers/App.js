@@ -57,7 +57,7 @@ class App extends Component {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
-        const currentHistoryId = analysesHistory.currentHistoryId;
+        const {history: historyList, newHistoryItem, currentHistoryId} = analysesHistory;
 
         let samplesOnSaveParams;
         if (currentHistoryId) {
@@ -68,8 +68,6 @@ class App extends Component {
                 sampleIds: null
             };
         } else {
-            const historyList = analysesHistory.history;
-            const newHistoryItem = analysesHistory.newHistoryItem;
             const currentHistoryItem =
                 currentHistoryId ?
                     historyList.find((historyItem) => historyItem.id === currentHistoryId) :
