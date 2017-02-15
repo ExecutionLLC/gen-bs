@@ -168,20 +168,21 @@ describe('History Tests', () => {
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
             expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
         });
-/*
-        it('should select history items in lists', () => {
-            const {
-                selectedFilterId, selectedViewId, selectedSampleId
-            } = mapStateToCollections(renewGlobalState);
-            expect(selectedFilterId).toBe(historyFilter.id);
-            expect(selectedViewId).toBe(historyView.id);
-            expect(selectedSampleId).toBe(historySample.id);
+
+        it('should select history analysis', () => {
+            const {currentHistoryId} = mapStateToCollections(renewGlobalState);
+            expect(currentHistoryId).toBe(historyEntry.id);
         });
 
-        it('should call analyze with proper arguments', () => {
-            expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
+
+        it('should select history items in lists', () => {
+            const {history} = mapStateToCollections(renewGlobalState);
+            const currentHistoryItem = _.find(history, {id: historyEntry.id});
+            expect(currentHistoryItem.viewId).toBe(historyView.id);
+            expect(currentHistoryItem.filterId).toBe(historyFilter.id);
+            expect(currentHistoryItem.samples).toEqual([{id: historySample.id, type: entityType.HISTORY}]);
         });
-*/
+
     });
 
 // no renewHistoryItem, also reanalyse must be used
@@ -516,13 +517,14 @@ function mapStateToCollections(globalState) {
         viewsList: {hashedArray: {array: views}},
         filtersList: {hashedArray: {array: filters}},
         samplesList: {hashedArray: {array: samples}},
-        analysesHistory: {history, newHistoryItem}
+        analysesHistory: {history, newHistoryItem, currentHistoryId}
     } = globalState;
     return {
         views,
         filters,
         samples,
         history,
-        newHistoryItem
+        newHistoryItem,
+        currentHistoryId
     };
 }
