@@ -298,6 +298,10 @@ export function samplesListServerRemoveSample(sampleId) {
                         dispatch(makeReplaceSampleInSaveAction(samplesList, deletedSampleIndex, newSample.id));
                     }
                 }
+            } else {
+                if (onSaveActionDelete) {
+                    dispatch(onSaveActionDelete())
+                }
             }
             dispatch(samplesListRemoveSample(sampleId));
         });

@@ -318,3 +318,10 @@ export function setCurrentAnalysesHistoryIdLoadDataAsync(id) {
         ]));
     };
 }
+
+export function resetCurrentAnalysesHistoryIdLoadDataAsync() {
+    return (dispatch, getState) => {
+        const {analysesHistory: {currentHistoryId}} = getState();
+        dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
+    };
+}
