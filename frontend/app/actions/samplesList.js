@@ -300,7 +300,7 @@ export function samplesListServerRemoveSample(sampleId) {
                 }
             } else {
                 if (onSaveActionDelete) {
-                    dispatch(onSaveActionDelete())
+                    dispatch(onSaveActionDelete());
                 }
             }
             dispatch(samplesListRemoveSample(sampleId));
