@@ -155,7 +155,7 @@ xdescribe('History Tests', () => {
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
             expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
         });
-
+/*
         it('should select history items in lists', () => {
             const {
                 selectedFilterId, selectedViewId, selectedSampleId
@@ -168,58 +168,61 @@ xdescribe('History Tests', () => {
         it('should call analyze with proper arguments', () => {
             expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
         });
+*/
     });
 
-    xdescribe('History Items Removal', () => {
-        const {sample, view, filters} = nonHistoryEntry;
-        const filter = filters[0];
-        const {searchClient} = apiFacade;
-        beforeEach(() => {
-            installMocks(searchClient, {
-                sendSearchRequest: apiMocks.createSendSearchRequestSimpleMock(searchOperationId)
-            });
-        });
+// no renewHistoryItem, also reanalyse must be used
+//     describe('History Items Removal', () => {
+//         const {sample, view, filters} = nonHistoryEntry;
+//         const filter = filters[0];
+//         const {searchClient} = apiFacade;
+//         beforeEach(() => {
+//             installMocks(searchClient, {
+//                 sendSearchRequest: apiMocks.createSendSearchRequestSimpleMock(searchOperationId)
+//             });
+//         });
+//
+//         afterEach(() => {
+//             installMocks(searchClient, {
+//                 sendSearchRequest: null
+//             });
+//         });
+//
+//         it('should remove history items when a normal analyze is done', (done) => {
+//             storeTestUtils.runTest({
+//                 globalInitialState: initialAppState,
+//                 applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
+//             }, (globalState) => {
+//                 const {
+//                     views, samples, filters
+//                 } = mapStateToCollections(globalState);
+//
+//                 // now they are here.
+//                 expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+//                 expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+//                 expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
+// /*
+//                 storeTestUtils.runTest({
+//                     globalInitialState: globalState,
+//                     applyActions: (dispatch) => dispatch(analyze(sample.id, view.id, filter.id))
+//                 }, (globalState) => {
+//                     const {
+//                         views, samples, filters
+//                     } = mapStateToCollections(globalState);
+//
+//                     // And now they should be removed.
+//                     expectItemByPredicate(views, item => item.id === historyView.id).toBeFalsy();
+//                     expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeFalsy();
+//                     expectItemByPredicate(samples, item => item.id === historySample.id).toBeFalsy();
+//
+//                     done();
+//                 });
+//                 FIXME analyze: replace by reanalyze */
+//             });
+//         });
+//     });
 
-        afterEach(() => {
-            installMocks(searchClient, {
-                sendSearchRequest: null
-            });
-        });
-
-        it('should remove history items when a normal analyze is done', (done) => {
-            storeTestUtils.runTest({
-                globalInitialState: initialAppState,
-                applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
-            }, (globalState) => {
-                const {
-                    views, samples, filters
-                } = mapStateToCollections(globalState);
-
-                // now they are here.
-                expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
-                expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
-                expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
-/*
-                storeTestUtils.runTest({
-                    globalInitialState: globalState,
-                    applyActions: (dispatch) => dispatch(analyze(sample.id, view.id, filter.id))
-                }, (globalState) => {
-                    const {
-                        views, samples, filters
-                    } = mapStateToCollections(globalState);
-
-                    // And now they should be removed.
-                    expectItemByPredicate(views, item => item.id === historyView.id).toBeFalsy();
-                    expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeFalsy();
-                    expectItemByPredicate(samples, item => item.id === historySample.id).toBeFalsy();
-
-                    done();
-                });
-                FIXME analyze: replace by reanalyze */
-            });
-        });
-    });
-
+/* no selected items, no renewHistoryItem
     xdescribe('Renew History: non-history items', () => {
         let renewGlobalState = null;
         const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
@@ -275,8 +278,9 @@ xdescribe('History Tests', () => {
             expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
         });
     });
-
+*/
     xdescribe('History Items in Collections', () => {
+/* no renewHistoryItem
         it('should keep history items when creating view', (done) => {
             expect(userView).toBeTruthy();
             storeTestUtils.runTest({
@@ -312,7 +316,8 @@ xdescribe('History Tests', () => {
                 done();
             });
         });
-
+*/
+/* no renewHistoryItem
         it('should keep history items when deleting view', (done) => {
             expect(userView).toBeTruthy();
             storeTestUtils.runTest({
@@ -329,7 +334,8 @@ xdescribe('History Tests', () => {
                 done();
             });
         });
-
+*/
+/* no renewHistoryItem
         it('should keep history items when creating filter', (done) => {
             expect(userFilter).toBeTruthy();
             storeTestUtils.runTest({
@@ -346,7 +352,8 @@ xdescribe('History Tests', () => {
                 done();
             });
         });
-
+*/
+/* no renewHistoryItem
         it('should keep history items when updating filter', (done) => {
             expect(userFilter).toBeTruthy();
             storeTestUtils.runTest({
@@ -363,7 +370,8 @@ xdescribe('History Tests', () => {
                 done();
             });
         });
-
+*/
+/* no renewHistoryItem
         it('should keep history items when deleting filter', (done) => {
             expect(userFilter).toBeTruthy();
             storeTestUtils.runTest({
@@ -380,8 +388,9 @@ xdescribe('History Tests', () => {
                 done();
             });
         });
+*/
     });
-
+/* no selected item, no renewHistoryItem
     xdescribe('Handle history items', () => {
         it('should select sample after history', (done) => {
 
@@ -412,6 +421,7 @@ xdescribe('History Tests', () => {
             });
         });
     });
+*/
 });
 
 /**
