@@ -58,25 +58,30 @@ class App extends Component {
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         const currentHistoryId = analysesHistory.currentHistoryId;
-        const historyList = analysesHistory.history;
-        const newHistoryItem = analysesHistory.newHistoryItem;
-        const currentHistoryItem =
-            currentHistoryId ?
-                historyList.find((historyItem) => historyItem.id === currentHistoryId) :
-                newHistoryItem;
-        const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
-        const samplesOnSaveParams = !currentHistoryId ?
-            {
-                action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
-                propertyIndex: 'changeItem.sample.index',
-                propertyId: 'changeItem.sample.id',
-                sampleIds: selectedSamplesIds
-            } : {
+
+        let samplesOnSaveParams;
+        if (currentHistoryId) {
+            samplesOnSaveParams = {
                 action: resetCurrentAnalysesHistoryIdLoadDataAsync,
                 propertyIndex: null,
                 propertyId: null,
                 sampleIds: null
             };
+        } else {
+            const historyList = analysesHistory.history;
+            const newHistoryItem = analysesHistory.newHistoryItem;
+            const currentHistoryItem =
+                currentHistoryId ?
+                    historyList.find((historyItem) => historyItem.id === currentHistoryId) :
+                    newHistoryItem;
+            const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
+            samplesOnSaveParams = {
+                action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
+                propertyIndex: 'changeItem.sample.index',
+                propertyId: 'changeItem.sample.id',
+                sampleIds: selectedSamplesIds
+            };
+        }
 
         return (
             <div className='main subnav-closed' id='main'>
