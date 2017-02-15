@@ -68,10 +68,7 @@ class App extends Component {
                 sampleIds: null
             };
         } else {
-            const currentHistoryItem =
-                currentHistoryId ?
-                    historyList.find((historyItem) => historyItem.id === currentHistoryId) :
-                    newHistoryItem;
+            const currentHistoryItem = newHistoryItem;
             const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
             samplesOnSaveParams = {
                 action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
