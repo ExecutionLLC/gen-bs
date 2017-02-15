@@ -20,8 +20,8 @@ const createStoreWithMiddleware = compose(
     applyMiddleware(
         thunkMiddleware,
         reduxMulti,
-        timeoutMiddleware,
-        loggerMiddleware
+        timeoutMiddleware/*,
+        loggerMiddleware*/
     ),
     batchedSubscribe(notify => notify())
 )(createStore);

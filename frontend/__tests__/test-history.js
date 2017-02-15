@@ -16,7 +16,7 @@ import {
 } from './jestUtils';
 
 // Remove to get bunch of test logs
-console.log = jest.genMockFunction();
+//console.log = jest.genMockFunction();
 
 const TestIds = {
     historyViewId: 'historyViewId',
@@ -96,7 +96,7 @@ describe('History Tests', () => {
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeAll(() => {
-        installMocks(console, {log: jest.fn()});
+        //installMocks(console, {log: jest.fn()});
         const {samplesClient, viewsClient, filtersClient, modelsClient, searchClient} = apiFacade;
         installMocks(searchClient, {
             sendSearchRequest: apiMocks.createSendSearchRequestMock(sessionId, languageId,
@@ -125,7 +125,7 @@ describe('History Tests', () => {
     });
 
     afterAll(() => {
-        installMocks(console, {log: null});
+        //installMocks(console, {log: null});
         const {samplesClient, viewsClient, filtersClient} = apiFacade;
         installMocks(searchClient, {
             sendSearchRequest: null
