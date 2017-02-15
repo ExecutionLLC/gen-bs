@@ -22,6 +22,7 @@ class apiMocks {
 
     static createGetFieldsMock(expectedSessionId, expectedSampleId, resultFields) {
         return jest.fn((sessionId, sampleId, callback) => {
+            console.log('GetFieldsMock', sessionId, sampleId);
             expect(sessionId).toBe(expectedSessionId);
             expect(sampleId).toBe(expectedSampleId);
             callback(null, mockResponse(resultFields));
@@ -30,6 +31,7 @@ class apiMocks {
     
     static createGetAllFieldsMock(expectedSessionId, resultFields) {
         return jest.fn((sessionId, callback) => {
+            console.log('GetAllFieldsMock', sessionId, resultFields);
             expect(sessionId).toBe(expectedSessionId);
             callback(null, mockResponse(resultFields));
         });
@@ -37,6 +39,7 @@ class apiMocks {
 
     static createAddMock() {
         return jest.fn((sessionId, languageId, item, callback) => {
+            console.log('AddMock', languageId, item);
             expect(item).toBeTruthy();
             expect(sessionId).toBeTruthy();
             expect(languageId).toBeTruthy();
@@ -48,6 +51,7 @@ class apiMocks {
 
     static createUpdateMock(expectedItemId) {
         return jest.fn((sessionId, item, callback) => {
+            console.log('UpdateMock', sessionId, item);
             expect(item).toBeTruthy();
             expect(item.id).toBe(expectedItemId);
             expect(sessionId).toBeTruthy();
@@ -59,10 +63,20 @@ class apiMocks {
 
     static createDeleteMock(expectedItemId, itemsHash) {
         return jest.fn((sessionId, itemId, callback) => {
+            console.log('DeleteMock', sessionId, itemId);
             const item = itemsHash[itemId];
             expect(item).toBeTruthy();
             expect(item.id).toBe(expectedItemId);
             expect(sessionId).toBeTruthy();
+            expect(callback).toBeTruthy();
+            callback(null, mockResponse(item));
+        });
+    }
+
+    static createGetMock(expectedItemId, item) {
+        return jest.fn((itemId, callback) => {
+            console.log('GetMock', itemId);
+            expect(itemId).toBe(expectedItemId);
             expect(callback).toBeTruthy();
             callback(null, mockResponse(item));
         });
