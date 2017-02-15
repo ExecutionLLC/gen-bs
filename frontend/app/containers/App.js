@@ -59,22 +59,20 @@ class App extends Component {
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         const {history: historyList, newHistoryItem, currentHistoryId} = analysesHistory;
 
-        let samplesOnSaveParams;
-        if (currentHistoryId) {
-            samplesOnSaveParams = {
-                action: resetCurrentAnalysesHistoryIdLoadDataAsync,
-                propertyIndex: null,
-                propertyId: null,
-                sampleIds: null
-            };
-        } else {
-            samplesOnSaveParams = {
-                action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
-                propertyIndex: 'changeItem.sample.index',
-                propertyId: 'changeItem.sample.id',
-                sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
-            };
-        }
+        const samplesOnSaveParams =
+            currentHistoryId ?
+                {
+                    action: resetCurrentAnalysesHistoryIdLoadDataAsync,
+                    propertyIndex: null,
+                    propertyId: null,
+                    sampleIds: null
+                } :
+                {
+                    action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
+                    propertyIndex: 'changeItem.sample.index',
+                    propertyId: 'changeItem.sample.id',
+                    sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
+                };
 
         return (
             <div className='main subnav-closed' id='main'>
