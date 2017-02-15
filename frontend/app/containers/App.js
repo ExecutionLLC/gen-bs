@@ -68,8 +68,7 @@ class App extends Component {
                 sampleIds: null
             };
         } else {
-            const currentHistoryItem = newHistoryItem;
-            const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
+            const selectedSamplesIds = newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null;
             samplesOnSaveParams = {
                 action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
                 propertyIndex: 'changeItem.sample.index',
