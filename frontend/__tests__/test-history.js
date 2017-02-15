@@ -31,7 +31,7 @@ const TestIds = {
 const {sampleFieldsList, totalFieldsList} = MOCK_APP_STATE.fields;
 const searchOperationId = 'searchOperationId';
 
-xdescribe('Mocked History State', () => {
+describe('Mocked History State', () => {
     const state = buildHistoryState();
     const {
         initialAppState,
@@ -42,9 +42,14 @@ xdescribe('Mocked History State', () => {
         nonHistoryEntry
     } = state;
     const {
-        filters, views, samples, history,
-        selectedFilterId, selectedViewId, selectedSampleId
+        filters, views, samples, history, newHistoryItem
     } = mapStateToCollections(initialAppState);
+
+    it('should have truly history items', () => {
+        expect(historyView.type).toBe(entityType.HISTORY);
+        expect(historyFilter.type).toBe(entityType.HISTORY);
+        expect(historySample.type).toBe(entityType.HISTORY);
+    });
 
     it('should not contain history items', () => {
         expectItemByPredicate(views, view => view.id === historyView.id).toBeFalsy();
@@ -58,15 +63,17 @@ xdescribe('Mocked History State', () => {
     });
 
     it('should have selected items, and they should not be history items', () => {
+        const {viewId: selectedViewId, filterId: selectedFilterId, samples} = newHistoryItem;
+        const selectedSampleId = samples[0].id;
         function checkSelectionCorrect(selectedId, historyItem) {
             expect(selectedId).toBeTruthy();
             expect(selectedId).not.toBe(historyItem.id);
         }
-
         checkSelectionCorrect(selectedFilterId, historyFilter);
         checkSelectionCorrect(selectedViewId, historyView);
         checkSelectionCorrect(selectedSampleId, historySample);
-    })
+    });
+
 });
 
 xdescribe('History Tests', () => {
