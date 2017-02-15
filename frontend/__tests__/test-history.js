@@ -491,28 +491,23 @@ function buildHistoryState() {
 }
 
 /**@returns {{
-* views:Array, 
-* filters:Array, 
-* samples:Array, 
-* history:Array,
-* selectedViewId:string,
-* selectedFilterId:string,
-* selectedSampleId:string
+* views: Array,
+* filters: Array,
+* samples: Array,
+* history: Array
 * }}*/
 function mapStateToCollections(globalState) {
     const {
-        viewsList: {hashedArray:{array:views}, selectedViewId},
-        filtersList: {hashedArray:{array:filters}, selectedFilterId},
-        samplesList: {hashedArray:{array:samples}, selectedSampleId},
-        analysesHistory: {history}
+        viewsList: {hashedArray: {array: views}},
+        filtersList: {hashedArray: {array: filters}},
+        samplesList: {hashedArray: {array: samples}},
+        analysesHistory: {history, newHistoryItem}
     } = globalState;
     return {
         views,
         filters,
         samples,
         history,
-        selectedViewId,
-        selectedFilterId,
-        selectedSampleId
+        newHistoryItem
     };
 }
