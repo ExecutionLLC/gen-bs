@@ -1,10 +1,13 @@
-import {setCurrentAnalysesHistoryIdLoadDataAsync} from '../app/actions/analysesHistory';
+import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewHistoryItem} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 //import {analyze} from '../app/actions/ui';
 
 import {entityType} from '../app/utils/entityTypes';
+import {analysisType} from '../app/utils/analyseUtils';
+import {sampleType} from '../app/utils/samplesUtils';
 import {ImmutableHashedArray} from '../app/utils/immutable';
+import * as i18n from '../app/utils/i18n';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
@@ -143,6 +146,38 @@ describe('History Tests', () => {
             add: null,
             update: null,
             remove: null
+        });
+    });
+
+    describe('Create history item', () => {
+        const state = buildHistoryState();
+        const {initialAppState} = state;
+        const {filters, views, samples, history, newHistoryItem} = mapStateToCollections(initialAppState);
+
+        const initialHistory = history.slice();
+
+        let newState;
+        beforeAll((done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(createNewHistoryItem(samples[0], filters[0], views[0], {name: 'newAnalysisName', description: 'newAnalysisDescription'}, 'en'))
+            }, (globalState) => {
+                newState = globalState;
+                done();
+            });
+        });
+
+        it('should make new history item', () => {
+            const {history: newHistory, newHistoryItem: newNewHistoryItem} = mapStateToCollections(newState);
+            expect(newHistory).toEqual(initialHistory);
+            expect(newNewHistoryItem).not.toBe(newHistoryItem);
+            expect(newNewHistoryItem.id).toBe(null);
+            expect(newNewHistoryItem.type).toBe(analysisType.SINGLE);
+            expect(newNewHistoryItem.viewId).toBe(views[0].id);
+            expect(newNewHistoryItem.filterId).toBe(filters[0].id);
+            expect(newNewHistoryItem.samples).toEqual([{id: samples[0].id, type: sampleType.SINGLE}]);
+            expect(i18n.getEntityText(newNewHistoryItem).name).toBe('newAnalysisName');
+            expect(i18n.getEntityText(newNewHistoryItem).description).toBe('newAnalysisDescription');
         });
     });
 
