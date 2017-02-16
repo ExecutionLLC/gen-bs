@@ -92,8 +92,8 @@ describe('History Tests', () => {
         historyEntry,
         nonHistoryEntry
     } = buildHistoryState();
-    const userView = viewsList.hashedArray.array.find(item => item.type === 'user');
-    const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
+    const userView = viewsList.hashedArray.array.find(item => item.type === entityType.USER);
+    const userFilter = filtersList.hashedArray.array.find(item => item.type === entityType.USER);
 
     beforeAll(() => {
         //installMocks(console, {log: jest.fn()});
