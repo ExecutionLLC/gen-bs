@@ -212,5 +212,95 @@ describe('Variants table', () => {
             });
         });
 
+        it('should change direction', (done) => {
+            const SORT1 = {
+                fieldId: 'field1',
+                sampleId: 'sample1',
+                order: 1,
+                direction: 'asc'
+            };
+            const SORT2 = {
+                fieldId: 'field2',
+                sampleId: 'sample3',
+                order: 2,
+                direction: 'asc'
+            };
+            const initialSort = [SORT1, SORT2];
+            const FIELD_ID = SORT1.fieldId;
+            const SAMPLE_ID = SORT1.sampleId;
+            const SORT_ORDER = SORT1.order;
+            const SORT_DIRECTION = 'desc';
+            storeTestUtils.runTest({
+                applyActions: (dispatch) => dispatch([
+                    setVariantsSort(initialSort),
+                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                ]),
+                stateMapperFunc
+            }, (newState) => {
+                expect(newState.searchInResultsParams.sort).not.toBe(initialSort);
+                expect(newState.searchInResultsParams.sort).toEqual([
+                    {...initialSort[0], direction: 'desc'},
+                    initialSort[1]
+                ]);
+                done();
+            });
+        });
+
+        it('should remove sorting', (done) => {
+            const SORT1 = {
+                fieldId: 'field1',
+                sampleId: 'sample1',
+                order: 1,
+                direction: 'asc'
+            };
+            const SORT2 = {
+                fieldId: 'field2',
+                sampleId: 'sample3',
+                order: 2,
+                direction: 'asc'
+            };
+            const initialSort = [SORT1, SORT2];
+            const FIELD_ID = SORT1.fieldId;
+            const SAMPLE_ID = SORT1.sampleId;
+            const SORT_ORDER = SORT1.order;
+            const SORT_DIRECTION = SORT1.direction;
+            storeTestUtils.runTest({
+                applyActions: (dispatch) => dispatch([
+                    setVariantsSort(initialSort),
+                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                ]),
+                stateMapperFunc
+            }, (newState) => {
+                expect(newState.searchInResultsParams.sort).not.toBe(initialSort);
+                expect(newState.searchInResultsParams.sort).toEqual([
+                    initialSort[1]
+                ]);
+                done();
+            });
+        });
+
+        it('should not remove last sorting', (done) => {
+            const SORT1 = {
+                fieldId: 'field1',
+                sampleId: 'sample1',
+                order: 1,
+                direction: 'asc'
+            };
+            const initialSort = [SORT1];
+            const FIELD_ID = SORT1.fieldId;
+            const SAMPLE_ID = SORT1.sampleId;
+            const SORT_ORDER = SORT1.order;
+            const SORT_DIRECTION = SORT1.direction;
+            storeTestUtils.runTest({
+                applyActions: (dispatch) => dispatch([
+                    setVariantsSort(initialSort),
+                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                ]),
+                stateMapperFunc
+            }, (newState) => {
+                expect(newState.searchInResultsParams.sort).toBe(initialSort);
+                done();
+            });
+        });
     });
 });
