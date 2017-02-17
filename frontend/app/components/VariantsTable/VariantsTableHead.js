@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 
-import FieldHeader from './FieldHeader';
+import FieldHeaderControls from './FieldHeaderControls';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
 import * as i18n from '../../utils/i18n';
@@ -62,7 +62,7 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
-                    this.renderFieldHeader(
+                    this.renderFieldHeaderControls(
                         fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
                         samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch)
                 )}
@@ -71,7 +71,7 @@ export default class VariantsTableHead extends Component {
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist, isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId) {
+    renderFieldHeaderControls(fieldId, sampleId, isExist, isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = {
             ...totalFieldsHash[fieldId],
@@ -81,25 +81,25 @@ export default class VariantsTableHead extends Component {
         const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
         const sampleName = currentSample ? i18n.getEntityText(currentSample, languageId).name : null;
         return (
-            <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
-                         fieldMetadata={fieldMetadata}
-                         sampleName={sampleName}
-                         sampleType={sampleId ? samplesTypesHash[sampleId].type : ''}
-                         sampleId={sampleId}
-                         areControlsEnabled={areControlsEnabled}
-                         sortState={sortState}
-                         onSortRequested={(direction, isControlKeyPressed) => {
+            <FieldHeaderControls key={fieldId + (sampleId ? '-' + sampleId : '')}
+                                 fieldMetadata={fieldMetadata}
+                                 sampleName={sampleName}
+                                 sampleType={sampleId ? samplesTypesHash[sampleId].type : ''}
+                                 sampleId={sampleId}
+                                 areControlsEnabled={areControlsEnabled}
+                                 sortState={sortState}
+                                 onSortRequested={(direction, isControlKeyPressed) => {
                              this.onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed);
                          }}
-                         onSearchRequested={(searchValue) => {
+                                 onSearchRequested={(searchValue) => {
                              this.onSendSearchRequest(fieldId, sampleId, searchValue);
                          }}
-                         onSearchValueChanged={(searchValue) => {
+                                 onSearchValueChanged={(searchValue) => {
                              this.onSearchValueChanged(fieldId, sampleId, searchValue);
                          }}
-                         currentVariants={this.props.ws.currentVariants}
-                         languageId={languageId}
-                         disabled={isFetching}
+                                 currentVariants={this.props.ws.currentVariants}
+                                 languageId={languageId}
+                                 disabled={isFetching}
             />
         );
     }
