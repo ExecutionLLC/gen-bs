@@ -81,25 +81,26 @@ export default class VariantsTableHead extends Component {
         const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
         const sampleName = currentSample ? i18n.getEntityText(currentSample, languageId).name : null;
         return (
-            <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
-                         fieldMetadata={fieldMetadata}
-                         sampleName={sampleName}
-                         sampleType={sampleId ? samplesTypesHash[sampleId].type : ''}
-                         sampleId={sampleId}
-                         areControlsEnabled={areControlsEnabled}
-                         sortState={sortState}
-                         onSortRequested={(direction, isControlKeyPressed) => {
-                             this.onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed);
-                         }}
-                         onSearchRequested={(searchValue) => {
-                             this.onSendSearchRequest(fieldId, sampleId, searchValue);
-                         }}
-                         onSearchValueChanged={(searchValue) => {
-                             this.onSearchValueChanged(fieldId, sampleId, searchValue);
-                         }}
-                         currentVariants={this.props.ws.currentVariants}
-                         languageId={languageId}
-                         disabled={isFetching}
+            <FieldHeader
+                key={fieldId + (sampleId ? '-' + sampleId : '')}
+                fieldMetadata={fieldMetadata}
+                sampleName={sampleName}
+                sampleType={sampleId ? samplesTypesHash[sampleId].type : ''}
+                sampleId={sampleId}
+                areControlsEnabled={areControlsEnabled}
+                sortState={sortState}
+                onSortRequested={(direction, isControlKeyPressed) => {
+                    this.onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed);
+                }}
+                onSearchRequested={(searchValue) => {
+                    this.onSendSearchRequest(fieldId, sampleId, searchValue);
+                }}
+                onSearchValueChanged={(searchValue) => {
+                    this.onSearchValueChanged(fieldId, sampleId, searchValue);
+                }}
+                currentVariants={this.props.ws.currentVariants}
+                languageId={languageId}
+                disabled={isFetching}
             />
         );
     }
