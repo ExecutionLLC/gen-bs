@@ -142,6 +142,16 @@ describe('ChangeCaseUtil', () => {
             assert(resultSnake.f === f1);
         });
 
+        it('should keep dates intact', () => {
+            const d1 = new Date();
+            d1.q = 789;
+            const sampleObj = {d: d1};
+            const resultCamel = convertToCamelCase(sampleObj);
+            assert(resultCamel.d === d1);
+            const resultSnake = convertCaseToSnakeCase(sampleObj);
+            assert(resultSnake.d === d1);
+        });
+
         it('should convert simple keys', () => {
             checkConvertResult(
                 convertToCamelTestSuit,
