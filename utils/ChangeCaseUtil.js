@@ -4,13 +4,13 @@ const changeCase = require('change-case');
 const _ = require('lodash');
 
 class ChangeCaseUtil {
-  static convertKeysToCamelCase(obj) {
-      return ChangeCaseUtil._processObjectKeys(obj, changeCase.camelCase);
-  }
+    static convertKeysToCamelCase(obj) {
+        return ChangeCaseUtil._processObjectKeys(obj, changeCase.camelCase);
+    }
 
-  static convertKeysToSnakeCase(obj) {
-      return ChangeCaseUtil._processObjectKeys(obj, changeCase.snakeCase);
-  }
+    static convertKeysToSnakeCase(obj) {
+        return ChangeCaseUtil._processObjectKeys(obj, changeCase.snakeCase);
+    }
 
     static _processObjectKeys(obj, mutatorFunc) {
         if (!obj) {
@@ -19,7 +19,7 @@ class ChangeCaseUtil {
 
         if (_.isArray(obj)) {
             return _.map(obj, item => ChangeCaseUtil._processObjectKeys(item, mutatorFunc));
-        } else  if (_.isObject(obj) && !_.isFunction(obj) && !(obj instanceof Date)) {
+        } else if (_.isObject(obj) && !_.isFunction(obj) && !(obj instanceof Date)) {
             const result = {};
             _.keys(obj)
                 .forEach(key => {
