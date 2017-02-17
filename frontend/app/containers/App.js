@@ -46,7 +46,11 @@ class App extends Component {
         dispatch(loginWithGoogle());
 
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
-        const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
+
+        function autoLogoutFn() {
+            dispatch(startAutoLogoutTimer());
+        }
+
         dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
 
         const keepAliveTask = new KeepAliveTask(KEEP_ALIVE_TIMEOUT * 1000);
