@@ -3,18 +3,43 @@
 const fs = require('fs');
 const _ = require('lodash');
 
-const FIELD_NAME_PREFIX = 'INFO';
-const sourceName = 'dbsnp_20160601_v01';
-const outputFile = `out__${sourceName}.json`;
-
-// const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.txt';
-// const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.txt';
-// const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.txt';
-// const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.txt';
-// const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.txt';
-// const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.txt';
-const inputFile = '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.txt';
-
+const sources = [
+    {
+        sourceName: 'clinvar_20160705_v01',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.json'
+    },
+    {
+        sourceName: 'dbsnp_20160601_v01',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.json'
+    },
+    {
+        sourceName: 'ESP6500_v01',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.json'
+    },
+    {
+        sourceName: 'ExAC_r0_3_1_sites_v01',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.json'
+    },
+    {
+        sourceName: 'one_thousand_genome_v01',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.json'
+    },
+    {
+        sourceName: 'sample',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.json'
+    },
+    {
+        sourceName: 'sample',
+        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.txt',
+        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.json'
+    }
+];
 
 function getAllIndexes(str, subStr) {
     let indexes = [];
@@ -54,6 +79,17 @@ function  assertRange(left, right) {
     if (left > right) {
         throw `Bad range {${left} - ${right}}`;
     }
+}
+
+function cutQuotes(strOrArray) {
+    if (_.isArray(strOrArray)) {
+        return strOrArray.map(cutQuotes);
+    }
+    const quotedMatch = strOrArray.match(/^"(.*)"$/);
+    if (quotedMatch) {
+        return quotedMatch[1];
+    }
+    return strOrArray;
 }
 
 // range1 inside of range2
@@ -104,6 +140,30 @@ function parseFlag(col, text) {
     }
 }
 
+function  getArrayOfSubcolumnTexts(text) {
+    let result = [];
+    while (text !== '') {
+        text.trim();
+
+        // skip commas
+        let left = 0;
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === '{') {
+                left = i;
+                break;
+            } else if (text[i] !== ',') {
+                exitWithError(`Can't parse  ${text}`);
+            }
+        }
+        const right = findClosingChar(text, left);
+
+        result.push(text.substring(left + 1, right).trim());
+
+        text = text.slice(right + 1);
+    }
+    return result;
+}
+
 function parseMultilineField(col, text) {
     const sepInd = text.indexOf(':');
     if (sepInd === -1) {
@@ -116,19 +176,10 @@ function parseMultilineField(col, text) {
         } else if (key in col) {
             exitWithError(`Field ${key} already exists in column ${col.name}`);
         } else {
-            const spl = value.split(/,\s*(?={)/);
-            const colArr = _.map(spl, (item) => {
-                const found = item.match(/{\s*([^{}]*?)\s*}/);
-                if (!found || found.length < 2) {
-                    exitWithError(`Can't parse  ${text}`);
-                }
-                return parseBody({}, found[1], true);
-            });
-            col[key] = colArr;
+            col[key] = _.map(getArrayOfSubcolumnTexts(value), (item) => parseBody({}, item, true));
             return true;
         }
     }
-
 }
 
 function parseBody(col, text, subcolumn = false) {
@@ -200,7 +251,7 @@ function getRawColumnData(inputFile) {
                 if ('prefix' in c) {
                     exitWithError(`Column ${c.name} has two or more parents`);
                 }
-                c.prefix = col.name;
+                c.prefix = col.column_name;
                 if (!_.includes(prefixes, col)) {
                     prefixes.push(col);
                 }
@@ -211,93 +262,146 @@ function getRawColumnData(inputFile) {
     return sortedColumnData;
 }
 
-const rawColumnData = getRawColumnData(inputFile);
-// console.log(JSON.stringify(rawColumnData, null, 2));
-console.log('First stage completed');
+function isBlank(string) {
+    return (_.isUndefined(string) || _.isNull(string) || !_.isString(string) || string.trim().length === 0);
+}
 
-// Process column bodies
-const parsedColumnData = _.map(rawColumnData, (col) => parseBody(col, col.text));
-console.log('Second stage completed');
-// console.log(JSON.stringify(parsedColumnData, null, 2));
+const validTypes = [
+    'string',
+    'integer',
+    'float',
+    'flag',
+    'hyperlink'
+];
 
-// Skip columns with the 'hidden' property
-const totalCount = parsedColumnData.length;
-_.remove(parsedColumnData, 'hidden');
-_.remove(parsedColumnData, 'skip');
-// console.log(JSON.stringify(parsedColumnData, null, 2));
-console.log(`Skip hidden columns... ${totalCount - parsedColumnData.length} were skipped;`);
-
-// Process data about sub columns
-const processedColumnData = _.reduce(parsedColumnData, (result, col) => {
-    if ('columns' in col) {
-
-        _.forEach(col.columns, (subColumn) => {
-            result.push({
-                column_name: col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref,
-                name: subColumn.name,
-                comment: subColumn.comment
-            })
-        });
+function validateColumn(col) {
+    if (isBlank(col.column_name)) {
+        console.error(`Invalid column ${JSON.stringify(col)}`);
     } else {
-        if (col.prefix) {
-            col.column_name = `${col.prefix}_${subColumn.column_name}`
+        if (isBlank(col.source_name)) {
+            console.warn(`Unknown source_name in column ${JSON.stringify(col)}`);
         }
-        result.push(_.pick(col, ['column_name', 'name', 'comment']));
+        if (isBlank(col.value_type)) {
+            console.warn(`Unknown value_type in column ${JSON.stringify(col)}`);
+        } else if (!_.includes(validTypes, col.value_type)) {
+            console.warn(`Invalid value_type in column ${JSON.stringify(col)}`);
+        }
+
+        if (isBlank(col.dimension)) {
+            console.warn(`Unknown dimension in column ${JSON.stringify(col)}`);
+        } else if (isNaN(col.dimension)) {
+            console.warn(`Invalid dimension in column ${JSON.stringify(col)}`);
+        }
+
+        if (isBlank(col.en.label)) {
+            console.warn(`Unknown en.label in column ${JSON.stringify(col)}`);
+        }
+        if (isBlank(col.en.description)) {
+            console.warn(`Unknown en.description in column ${JSON.stringify(col)}`);
+        }
     }
-    return result;
-}, []);
-
-
-console.log('Third stage completed');
-console.log(JSON.stringify(processedColumnData, null, 2));
-
-process.exit(0);
-
-
-
-function cutQuotes(strOrArray) {
-    if (_.isArray(strOrArray)) {
-        return strOrArray.map(cutQuotes);
-    }
-    const quotedMatch = strOrArray.match(/^"(.*)"$/);
-    if (quotedMatch) {
-        return quotedMatch[1];
-    }
-    return strOrArray;
 }
 
-function createColumnObject(fieldName, label) {
-    if (!label) {
-        throw new Error(`Field ${fieldName} has no label.`);
+function mapDimension(dimensionRawValue) {
+    if (isNaN(dimensionRawValue)) {
+        switch (dimensionRawValue) {
+            case '.':
+            case 'CLN':
+                return '0';
+            case 'R':
+                return '-2';
+            default:
+                exitWithError(`Unknown dimension value: ${dimensionRawValue}`);
+        }
+    } else {
+        return dimensionRawValue;
     }
-    const name = FIELD_NAME_PREFIX ? `${FIELD_NAME_PREFIX}_${fieldName}` : fieldName;
-    return {
-        field: {
-            name,
-            source_name: sourceName
-        },
-        label: cutQuotes(label)
-    };
 }
 
-const labels = columns.reduce((result, col) => {
-    const {fieldName, params: { name: label }} = col;
-    if (_.isArray(label)) {
-        // TODO: Now MAF fields are not split, but the labels are written as if they are.
-        // Therefore get only the first value for MEF fields
-        if (fieldName.endsWith('MAF')) {
-            const columnObject = createColumnObject(fieldName, label[0]);
-            return [...result, columnObject];
+function processRulesFile(inputFilePath, outputFilePath, source_name) {
+    const rawColumnData = getRawColumnData(inputFilePath);
+    // console.log(JSON.stringify(rawColumnData, null, 2));
+    console.log('First stage completed');
+
+    // Process column bodies
+    const parsedColumnData = _.map(rawColumnData, (col) => parseBody(col, col.text));
+    console.log('Second stage completed');
+    // console.log(JSON.stringify(parsedColumnData, null, 2));
+
+    // Skip columns with the 'hidden' property
+    const totalCount = parsedColumnData.length;
+    _.remove(parsedColumnData, 'hidden');
+    _.remove(parsedColumnData, 'skip');
+    _.remove(parsedColumnData, 'hide');
+    // console.log(JSON.stringify(parsedColumnData, null, 2));
+    console.log(`Skip hidden columns... ${totalCount - parsedColumnData.length} were skipped;`);
+
+    // Process data about sub columns
+    const processedColumnData = _.reduce(parsedColumnData, (result, col) => {
+
+        const data = {
+            column_name: col.prefix ? `${col.prefix}_${col.column_name}` : col.column_name,
+            source_name,
+            value_type: col.type || 'string',
+            dimension:  mapDimension(col.number || '0'),
+            en: {
+                label: col.name,
+                description: col.description || col.comment
+            },
+            ru: {
+                label: col.name_ru,
+                description: col.description_ru || col.comment_ru
+            }
+        };
+
+        if ('columns' in col) {
+            _.forEach(col.columns, (subColumn) => {
+
+                // data from sub column has a higher priority
+                data.column_name = col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref;
+
+                if (subColumn.type) {
+                    data.value_type = subColumn.type;
+                }
+
+                if (subColumn.number) {
+                    data.dimension = mapDimension(subColumn.number);
+                }
+
+                if (subColumn.name) {
+                    data.en.label = subColumn.name;
+                }
+
+                if (subColumn.comment) {
+                    data.en.description = subColumn.comment;
+                }
+
+                if (subColumn.description) {
+                    data.en.description = subColumn.description;
+                }
+
+                result.push(data);
+            });
         } else {
-            return [...result, label.map((l, index) => createColumnObject(`${fieldName}_${index}`, l))];
+            result.push(data);
         }
-    } else {
-        const columnObject = createColumnObject(fieldName, label);
-        return [...result, columnObject];
-    }
-}, []);
+        return result;
+    }, []);
 
-fs.writeFileSync(__dirname + `/${outputFile}`, JSON.stringify(labels, null, 2));
+
+    _.forEach(processedColumnData, validateColumn);
+
+    console.log('Third stage completed');
+
+    console.log(`Count: ${processedColumnData.length}`);
+    // console.log(JSON.stringify(processedColumnData, null, 2));
+
+    fs.writeFileSync(outputFilePath, JSON.stringify(processedColumnData, null, 2));
+}
+
+_.map(sources, (item) => {
+    processRulesFile(item.inputPath, item.outputPath, item.sourceName);
+});
 
 console.log('Parsing completed.');
 process.exit(0);
