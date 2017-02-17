@@ -88,9 +88,15 @@ export default class VariantsTableHead extends Component {
                          sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
-                         onSortRequested={(fieldId, direction, isControlKeyPressed) => this.onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed)} // TODO we have fieldId too
-                         onSearchRequested={(fieldId, searchValue) => this.onSendSearchRequest(fieldId, sampleId, searchValue)} // TODO we have fieldId too
-                         onSearchValueChanged={(fieldId, searchValue) => this.onSearchValueChanged(fieldId, searchValue)} // TODO we have fieldId too
+                         onSortRequested={(direction, isControlKeyPressed) => {
+                             this.onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed);
+                         }}
+                         onSearchRequested={(searchValue) => {
+                             this.onSendSearchRequest(fieldId, sampleId, searchValue);
+                         }}
+                         onSearchValueChanged={(searchValue) => {
+                             this.onSearchValueChanged(fieldId, sampleId, searchValue);
+                         }}
                          currentVariants={this.props.ws.currentVariants}
                          languageId={languageId}
                          disabled={isFetching}
