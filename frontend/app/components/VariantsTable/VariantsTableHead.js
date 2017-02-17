@@ -71,20 +71,13 @@ export default class VariantsTableHead extends Component {
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist, isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, isUnique, samplesTypesHash, variantsSamples, fields, isFetching, sortState, languageId) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = {
             ...totalFieldsHash[fieldId],
             isUnique
         };
         const areControlsEnabled = !!isExist;
-        const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
-            dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));
-        const sendSearchRequest = (fieldId, searchValue) => {
-            dispatch(setFieldFilter(fieldId, sampleId, searchValue));
-            dispatch(searchInResultsSortFilter());
-        };
-        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
         const currentSample = _.keyBy(variantsSamples, sample => sample.id)[sampleId];
         const sampleName = currentSample ? i18n.getEntityText(currentSample, languageId).name : null;
         return (
@@ -95,14 +88,30 @@ export default class VariantsTableHead extends Component {
                          sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
-                         onSortRequested={sendSortRequestedAction}
-                         onSearchRequested={sendSearchRequest}
-                         onSearchValueChanged={onSearchValueChanged}
+                         onSortRequested={(fieldId, direction, isControlKeyPressed) => this.onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed)} // TODO we have fieldId too
+                         onSearchRequested={(fieldId, searchValue) => this.onSendSearchRequest(fieldId, sampleId, searchValue)} // TODO we have fieldId too
+                         onSearchValueChanged={(fieldId, searchValue) => this.onSearchValueChanged(fieldId, searchValue)} // TODO we have fieldId too
                          currentVariants={this.props.ws.currentVariants}
                          languageId={languageId}
                          disabled={isFetching}
             />
         );
+    }
+
+    onSearchValueChanged(fieldId, sampleId, searchValue) {
+        const {dispatch} = this.props;
+        dispatch(setFieldFilter(fieldId, sampleId, searchValue));
+    }
+
+    onSendSearchRequest(fieldId, sampleId, searchValue) {
+        const {dispatch} = this.props;
+        dispatch(setFieldFilter(fieldId, sampleId, searchValue));
+        dispatch(searchInResultsSortFilter());
+    };
+
+    onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed) {
+        const {dispatch} = this.props;
+        dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));
     }
 
     componentDidMount() {
