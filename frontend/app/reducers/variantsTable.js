@@ -28,19 +28,22 @@ const initialState = {
 };
 
 function reduceClearSearchParams(state) {
-    return Object.assign({}, state, {
+    return {
+        ...state,
         searchInResultsParams: DEFAULT_SEARCH_PARAMS
-    });
+    };
 }
 
 function reduceChangeVariantsLimit(state) {
-    return Object.assign({}, state, {
-        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+    return {
+        ...state,
+        searchInResultsParams: {
+            ...state.searchInResultsParams,
             offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-        }),
+        },
         isNextDataLoading: true,
         isFetching: true
-    });
+    };
 }
 
 function reduceChangeVariantsGlobalFilter(state, action) {
@@ -48,15 +51,17 @@ function reduceChangeVariantsGlobalFilter(state, action) {
     if (currentGlobalSearchString === action.globalSearchString) {
         return state;
     }
-    return Object.assign({}, state, {
-        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+    return {
+        ...state,
+        searchInResultsParams: {
+            ...state.searchInResultsParams,
             topSearch: {
                 search: action.globalSearchString
             },
             ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
-        }),
+        },
         needUpdate: true
-    });
+    };
 }
 
 function reduceSetFieldFilter(state, action) {
@@ -84,21 +89,25 @@ function reduceSetFieldFilter(state, action) {
         }
     }
 
-    return Object.assign({}, state, {
-        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+    return {
+        ...state,
+        searchInResultsParams: {
+            ...state.searchInResultsParams,
             search: searchArray,
             ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
-        }),
+        },
         needUpdate: true
-    });
+    };
 }
 
 function reduceSetVariantsSort(state, action) {
-    return Object.assign({}, state, {
-        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+    return {
+        ...state,
+        searchInResultsParams: {
+            ...state.searchInResultsParams,
             sort: action.sortOrder
-        })
-    });
+        }
+    };
 }
 
 function reduceChangeVariantsSort(state, action) {
@@ -144,46 +153,52 @@ function reduceChangeVariantsSort(state, action) {
         sortArray[i].order = i + 1;
     }
 
-    return Object.assign({}, state, {
-        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+    return {
+        ...state,
+        searchInResultsParams: {
+            ...state.searchInResultsParams,
             sort: sortArray,
             ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
-        }),
+        },
         needUpdate: true
-    });
+    };
 }
 
 function reduceRequestVariants(state) {
-    return Object.assign({}, state, {
+    return {
+        ...state,
         isFetching: true
-    });
+    };
 }
 
 function reduceReceiveAnalysisOperationId(state, action) {
-    return Object.assign({}, state, {
+    return {
+        ...state,
         isFetching: false,
         operationId: action.operationId,
         lastUpdated: action.receivedAt
-    });
+    };
 }
 
 function reduceRequestSearchedResults(state, action) {
-    return Object.assign({}, state, {
+    return {
+        ...state,
         isNextDataLoading: action.isNextDataLoading,
         isFilteringOrSorting: action.isFilteringOrSorting,
         isFetching: true,
         needUpdate: false
-    });
+    };
 }
 
 function reduceReceiveSearchedResults(state, action) {
-    return Object.assign({}, state, {
+    return {
+        ...state,
         isNextDataLoading: false,
         isFilteringOrSorting: false,
         isFetching: false,
         lastUpdated: action.receivedAt,
         isReceivedAll: action.isReceivedAll
-    });
+    };
 }
 
 function reduceSelectVariantsRow(state, action) {
@@ -196,15 +211,17 @@ function reduceSelectVariantsRow(state, action) {
         newSelectedRowIndices = _.filter(selectedRowIndices, item => item !== rowIndex);
     }
 
-    return Object.assign({}, state, {
+    return {
+        ...state,
         selectedRowIndices: newSelectedRowIndices
-    });
+    };
 }
 
 function reduceClearVariantsRowSelection(state) {
-    return Object.assign({}, state, {
+    return {
+        ...state,
         selectedRowIndices: initialState.selectedRowIndices
-    });
+    };
 }
 
 export default function variantsTable(state = initialState, action) {
