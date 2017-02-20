@@ -273,7 +273,10 @@ describe('Variants table', () => {
             }, (newState) => {
                 expect(newState.searchInResultsParams.sort).not.toBe(initialSort);
                 expect(newState.searchInResultsParams.sort).toEqual([
-                    initialSort[1]
+                    {
+                        ...initialSort[1],
+                        order: 1
+                    }
                 ]);
                 done();
             });
