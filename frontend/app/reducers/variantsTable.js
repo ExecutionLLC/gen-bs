@@ -1,5 +1,6 @@
 import _ from 'lodash';
 
+import immutableArray from '../utils/immutableArray';
 import * as ActionTypes from '../actions/variantsTable';
 
 const DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET = {
@@ -110,54 +111,42 @@ function reduceSetVariantsSort(state, action) {
     };
 }
 
-function reduceChangeVariantsSort(state, action) {
-    // copy sort array
-    var sortArray = [...state.searchInResultsParams.sort];
-    var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId, sampleId: action.sampleId});
-
-    if (fieldIndex === -1) {
-        // it is new column for sorting
+function makeNewSort(sort, action) {
+    const fieldIndex = _.findIndex(sort, {fieldId: action.fieldId, sampleId: action.sampleId});
+    if (fieldIndex < 0) {
         const newItem = {fieldId: action.fieldId, sampleId: action.sampleId, direction: action.sortDirection};
-        if (sortArray.length < action.sortOrder) {
-            // put new item to the end of array
-            fieldIndex = sortArray.length; // FIXME will be pushed?
-        } else {
-            // replace existent item, which has the same order
-            fieldIndex = action.sortOrder - 1;
-            // remove sorting with higher order
-            // NOTE: if you want to save state of the sorting with higher order, then
-            // just remove next line
-            sortArray = sortArray.slice(0, fieldIndex);
-        }
-        sortArray[fieldIndex] = newItem;
-    } else {
-        // user clicked on the column and want to remove sorting or change direction
-        // NOTE: we do not allow to change order of the existent items, because it
-        // is clashed with change direction, remove sorting logic
-        if (sortArray[fieldIndex].direction !== action.sortDirection) {
-            // user want to change sort direction
-            sortArray[fieldIndex].direction = action.sortDirection;
-        } else {
-            // user want to remove sorting
-            if (sortArray.length === 1) {
-                // we do not allow remove all sorting
-                return state;
-            }
-            sortArray.splice(fieldIndex, 1);
-        }
+        const trimmedSort = sort.slice(0, action.sortOrder - 1);
+        return [
+            ...trimmedSort,
+            newItem
+        ];
     }
-    // update sort order parameter
-    // NOTE: actually I don't understand why we hold order in attribute of the obj
-    // (our array already hold order as index)
-    for (var i = 0; i < sortArray.length; i++) {
-        sortArray[i].order = i + 1;
+    const field = sort[fieldIndex];
+    if (field.direction !== action.sortDirection) {
+        return immutableArray.assign(sort, fieldIndex, {direction: action.sortDirection});
     }
+    if (sort.length > 1) {
+        return immutableArray.remove(sort, fieldIndex);
+    }
+    return sort;
+}
 
+function makeSortOrders(sort) {
+    return _.map(sort, (sortItem, index) => ({...sortItem, order: index + 1}));
+}
+
+function reduceChangeVariantsSort(state, action) {
+    const sort = state.searchInResultsParams.sort;
+    const newSort = makeNewSort(sort, action);
+    if (newSort === sort) {
+        return state;
+    }
+    const newOrderedSort = makeSortOrders(newSort);
     return {
         ...state,
         searchInResultsParams: {
             ...state.searchInResultsParams,
-            sort: sortArray,
+            sort: newOrderedSort,
             ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
         },
         needUpdate: true
