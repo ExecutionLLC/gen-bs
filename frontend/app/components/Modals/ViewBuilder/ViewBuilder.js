@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -208,3 +208,12 @@ export default class ViewBuilder extends React.Component {
         );
     }
 }
+
+
+ViewBuilder.propTypes = {
+    fields: PropTypes.object.isRequired,
+    viewBuilder: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    ui: PropTypes.object.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};

@@ -17,9 +17,7 @@ export default function userData(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 isValid: true,
-
-                profileMetadata: action.userData.profileMetadata,
-
+                profileMetadata: action.profileMetadata,
                 lastUpdated: action.receivedAt
             });
 

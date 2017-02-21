@@ -186,11 +186,10 @@ export default class FieldUtils {
     }
 
     static excludeVepFieldsButZygocityGenotype(fields, sampleType) {
-        // TODO remove VEP exceptions when there fields will be renamed
         if ( isMainSample(sampleType)){
             return fields;
         }
-        return _.filter(fields, (field) => !field.name.startsWith('VEP_') || field.name === 'VEP_Zygosity' || field.name === 'VEP_Genotype');
+        return _.filter(fields, (field) => !field.name.startsWith('VEP_'));
     }
 
     static sortByLabels(fields, languageId) {

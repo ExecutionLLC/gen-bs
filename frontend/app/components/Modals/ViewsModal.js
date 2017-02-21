@@ -17,7 +17,8 @@ import * as i18n from '../../utils/i18n';
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth: {isDemo}, showModal, viewBuilder, viewsList, p} = this.props;
+        const {auth, showModal, viewBuilder, viewsList, fields, ui, p, dispatch} = this.props;
+        const {isDemo} = auth;
         const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
@@ -63,30 +64,48 @@ class ViewsModal extends React.Component {
                                 { isNew &&
                                     <div className='modal-padding'>
                                         <NewViewInputs
-                                            {...this.props}
                                             validationMessage={validationMessage}
+                                            viewsList={viewsList}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                         <ViewBuilder
-                                            {...this.props}
+                                            fields={fields}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                     </div>   
                                 }
                                 { !isNew &&
                                     <div className='modal-padding'>
                                         <ExistentViewSelect
-                                            {...this.props}
+                                            auth={auth}
+                                            viewsList={viewsList}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                         <ViewBuilder
-                                            {...this.props}
+                                            fields={fields}
+                                            viewBuilder={viewBuilder}
+                                            ui={ui}
+                                            dispatch={dispatch}
+                                            p={p}
                                         />
                                     </div>
                                 }
                             </div>
                         </Modal.Body>
                         <ViewBuilderFooter
-                            {...this.props}
                             closeModal={() => this.onClose()}
                             confirmButtonParams={confirmButtonParams}
+                            p={p}
+                            dispatch={dispatch}
                         />
                     </form>
                 </div>
@@ -138,12 +157,11 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder, userData, fields, viewsList, ui} = state;
+    const {auth, viewBuilder, fields, viewsList, ui} = state;
 
     return {
         auth,
         viewBuilder,
-        userData,
         fields,
         viewsList,
         ui,
@@ -152,7 +170,9 @@ function mapStateToProps(state) {
 }
 
 ViewsModal.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(ViewsModal);

@@ -242,7 +242,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 const sampleUploadStates = _.map(existingSamples, (sample) => {
                     return Object.assign({}, sample, {
                         uploadState: WS_SAMPLE_UPLOAD_STATE.ERROR,
-                        error: error.message
+                        error
                     });
                 });
                 async.map(sampleUploadStates, (sample, callback) => {
