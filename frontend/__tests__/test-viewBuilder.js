@@ -1,14 +1,11 @@
-// import HttpStatus from 'http-status';
-// import _ from 'lodash';
-//
-// import {ImmutableHashedArray} from '../app/utils/immutable';
 import StoreTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
-// import apiFacade from '../app/api/ApiFacade';
-// import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
-// import {runListedObjectTests} from './HashedArrayDataUtils';
+
 import FieldUtils from '../app/utils/fieldUtils';
 import {viewBuilderStartEdit} from '../app/actions/viewBuilder';
+import {entityType} from '../app/utils/entityTypes';
+import * as i18n from '../app/utils/i18n';
+
 
 function stateMapperFunc(globalState) {
     const fields = globalState.fields;
@@ -30,9 +27,8 @@ function stateMapperFunc(globalState) {
 describe('View builder', () => {
     const initStore = stateMapperFunc(MOCK_APP_STATE);
 
-    it('should start edit', (done) => {
+    it('should start edit with existent view', (done) => {
         const newView = initStore.newView;
-        //const newViewName = 'new view name';
         const allowedFields = initStore.allowedFields;
         const languageId = 'en';
 
@@ -44,10 +40,47 @@ describe('View builder', () => {
             stateMapperFunc
         }, (newState) => {
             const expectingEditingView = newView;
+            expect(newState.vbuilder.editingView).toEqual(expectingEditingView);
             expect(newState.vbuilder).toEqual({
                 editingView: expectingEditingView,
                 originalView: expectingEditingView,
                 editingViewIsNew: false,
+                editingViewParentId: newView.id,
+                allowedFields,
+                isFetching: false
+            });
+            done();
+        });
+    });
+
+    it('should start edit with new view', (done) => {
+        const newView = initStore.newView;
+        const newViewName = 'new view name';
+        const allowedFields = initStore.allowedFields;
+        const languageId = 'en';
+
+        expect(!!newView).toBe(true);
+        expect(!!allowedFields).toBe(true);
+        StoreTestUtils.runTest({
+            globalInitialState: MOCK_APP_STATE,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit({name: newViewName}, newView, allowedFields, languageId)),
+            stateMapperFunc
+        }, (newState) => {
+            const expectingEditingView = {
+                ...newView,
+                type: entityType.USER,
+                id: null,
+                text: [{
+                    ...i18n.getEntityText(newView, languageId),
+                    languageId: null,
+                    name: newViewName
+                }]
+            };
+            expect(newState.vbuilder.editingView).toEqual(expectingEditingView);
+            expect(newState.vbuilder).toEqual({
+                editingView: expectingEditingView,
+                originalView: expectingEditingView,
+                editingViewIsNew: true,
                 editingViewParentId: newView.id,
                 allowedFields,
                 isFetching: false
