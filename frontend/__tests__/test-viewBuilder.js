@@ -1,10 +1,11 @@
+import _ from 'lodash';
 import StoreTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 
 import FieldUtils from '../app/utils/fieldUtils';
 import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
-    viewBuilderChangeAttr
+    viewBuilderChangeAttr, viewBuilderChangeColumn
 } from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
@@ -174,6 +175,41 @@ describe('View builder', () => {
                     expect(editedDescriptionState.vbuilder.editingView).toEqual(expectingView);
                     done();
                 });
+            });
+        });
+    });
+
+    it('should change column', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+            const COLUMN_INDEX = 0;
+            const currentFieldId = newState.vbuilder.editingView.viewListItems[COLUMN_INDEX].fieldId;
+            const targetFieldId = _.find(allowedFields, listItem => listItem.fieldId !== currentFieldId);
+
+            StoreTestUtils.runTest({
+                globalInitialState: newState.initialAppState,
+                applyActions: (dispatch) => dispatch(viewBuilderChangeColumn(COLUMN_INDEX, targetFieldId)),
+                stateMapperFunc
+            }, (editedColumnState) => {
+                const expectingView = {
+                    ...editedColumnState.vbuilder.editingView,
+                    viewListItems: [
+                        {
+                            ...newView.viewListItems[0],
+                            fieldId: targetFieldId,
+                            keywords: []
+                        },
+                        ...newView.viewListItems.slice(1)
+                    ]
+                };
+                expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
+                expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
+                done();
             });
         });
     });
