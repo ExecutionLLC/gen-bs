@@ -161,7 +161,7 @@ export default class ExistentViewSelect extends React.Component {
         const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
         dispatch(viewBuilderDeleteView(editingViewId, languageId)).then((newView) => {
-            dispatch(fireOnSaveAction(newView));
+            dispatch(fireOnSaveAction(newView)); // TODO call in viewBuilderDeleteView
         });
     }
 }
