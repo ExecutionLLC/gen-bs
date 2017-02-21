@@ -2,7 +2,10 @@ import StoreTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 
 import FieldUtils from '../app/utils/fieldUtils';
-import {viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit} from '../app/actions/viewBuilder';
+import {
+    viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
+    viewBuilderChangeAttr
+} from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
 
@@ -139,6 +142,39 @@ describe('View builder', () => {
         }, (newState) => {
             expect(newState.vbuilder).toEqual(makeExpectingNewViewState(null, '', false, null));
             done();
+        });
+    });
+
+    it('should change name and description', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        const EDITED_NAME = 'edited view name';
+        const EDITED_DESCRIPTION = 'edited view description';
+
+        expect(EDITED_NAME).not.toBe(NEW_VIEW_NAME);
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+            StoreTestUtils.runTest({
+                globalInitialState: newState.initialAppState,
+                applyActions: (dispatch) => dispatch(viewBuilderChangeAttr({name: EDITED_NAME}, LANGUAGE_ID)),
+                stateMapperFunc
+            }, (editedNameState) => {
+                const expectingView = i18n.changeEntityText(newView, LANGUAGE_ID, {name: EDITED_NAME, description: undefined});
+                expect(editedNameState.vbuilder.editingView).toEqual(expectingView);
+                StoreTestUtils.runTest({
+                    globalInitialState: editedNameState.initialAppState,
+                    applyActions: (dispatch) => dispatch(viewBuilderChangeAttr({name: EDITED_NAME, description: EDITED_DESCRIPTION}, LANGUAGE_ID)),
+                    stateMapperFunc
+                }, (editedDescriptionState) => {
+                    const expectingView = i18n.changeEntityText(newView, LANGUAGE_ID, {name: EDITED_NAME, description: EDITED_DESCRIPTION});
+                    expect(editedDescriptionState.vbuilder.editingView).toEqual(expectingView);
+                    done();
+                });
+            });
         });
     });
 });
