@@ -2,7 +2,7 @@ import StoreTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 
 import FieldUtils from '../app/utils/fieldUtils';
-import {viewBuilderStartEdit, viewBuilderRestartEdit} from '../app/actions/viewBuilder';
+import {viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit} from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
 
@@ -122,6 +122,22 @@ describe('View builder', () => {
             const expectingView = makeExpectedViewWithName(newView, NEW_VIEW_NAME);
             expect(newState.vbuilder.editingView).toEqual(expectingView);
             expect(newState.vbuilder).toEqual(makeExpectingNewViewState(expectingView, newView.id, true, allowedFields));
+            done();
+        });
+    });
+
+    it('should end edit', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch([
+                viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID),
+                viewBuilderEndEdit()
+            ]),
+            stateMapperFunc
+        }, (newState) => {
+            expect(newState.vbuilder).toEqual(makeExpectingNewViewState(null, '', false, null));
             done();
         });
     });
