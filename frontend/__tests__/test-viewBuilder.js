@@ -18,6 +18,7 @@ function stateMapperFunc(globalState) {
 
     const allowedFields = FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, fields.sourceFieldsList, languageId).filter((field) => !field.isInvisible);
     return {
+        initialAppState: globalState,
         vbuilder: globalState.viewBuilder,
         newView: globalState.viewsList.hashedArray.array[0],
         allowedFields: allowedFields
@@ -35,7 +36,7 @@ describe('View builder', () => {
         expect(!!newView).toBe(true);
         expect(!!allowedFields).toBe(true);
         StoreTestUtils.runTest({
-            globalInitialState: MOCK_APP_STATE,
+            globalInitialState: initStore.initialAppState,
             applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, languageId)),
             stateMapperFunc
         }, (newState) => {
@@ -62,7 +63,7 @@ describe('View builder', () => {
         expect(!!newView).toBe(true);
         expect(!!allowedFields).toBe(true);
         StoreTestUtils.runTest({
-            globalInitialState: MOCK_APP_STATE,
+            globalInitialState: initStore.initialAppState,
             applyActions: (dispatch) => dispatch(viewBuilderStartEdit({name: newViewName}, newView, allowedFields, languageId)),
             stateMapperFunc
         }, (newState) => {
