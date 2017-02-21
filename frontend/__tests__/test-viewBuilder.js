@@ -66,16 +66,17 @@ describe('View builder', () => {
             applyActions: (dispatch) => dispatch(viewBuilderStartEdit({name: newViewName}, newView, allowedFields, languageId)),
             stateMapperFunc
         }, (newState) => {
-            const expectingEditingView = {
-                ...newView,
-                type: entityType.USER,
-                id: null,
-                text: [{
+            const expectingEditingView = i18n.setEntityText(
+                {
+                    ...newView,
+                    type: entityType.USER,
+                    id: null
+                },
+                {
                     ...i18n.getEntityText(newView, languageId),
-                    languageId: null,
                     name: newViewName
-                }]
-            };
+                }
+            );
             expect(newState.vbuilder.editingView).toEqual(expectingEditingView);
             expect(newState.vbuilder).toEqual({
                 editingView: expectingEditingView,
