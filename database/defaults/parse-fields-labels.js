@@ -3,43 +3,6 @@
 const fs = require('fs');
 const _ = require('lodash');
 
-const sources = [
-    {
-        sourceName: 'clinvar_20160705_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.json'
-    },
-    {
-        sourceName: 'dbsnp_20160601_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.json'
-    },
-    {
-        sourceName: 'ESP6500_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.json'
-    },
-    {
-        sourceName: 'ExAC_r0_3_1_sites_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.json'
-    },
-    {
-        sourceName: 'one_thousand_genome_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.json'
-    },
-    {
-        sourceName: 'sample',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.json'
-    },
-    {
-        sourceName: 'sample',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.json'
-    }
-];
 
 function getAllIndexes(str, subStr) {
     let indexes = [];
@@ -107,26 +70,22 @@ function insideOf(r1, r2)
 }
 
 function parseSingleField(col, text) {
-    const a = text.split(':');
-    if (!a || a.length < 2) {
+    const colonInd = text.indexOf(':');
+    let key = text.slice(0, colonInd).trim();
+    const value = cutQuotes(text.slice(colonInd + 1).trim());
+    const exclamInd = key.indexOf('!');
+    if (exclamInd === 0) {
+        key = key.slice(1);
+    } else if (exclamInd > 0) {
+        exitWithError(`Error in key {${key}} in column ${col.name}`);
+    }
+    if (key === '' || value === '') {
         exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
+    } else if (key in col) {
+        exitWithError(`Field ${key} already exists in column ${col.name}`);
     } else {
-        let key = a[0].trim();
-        const value = cutQuotes(a[1].trim());
-        const exclamInd = key.indexOf('!');
-        if (exclamInd === 0) {
-            key = key.slice(1);
-        } else if (exclamInd > 0) {
-            exitWithError(`Error in key {${key}} in column ${col.name}`);
-        }
-        if (key === '' || value === '') {
-            exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
-        } else if (key in col) {
-            exitWithError(`Field ${key} already exists in column ${col.name}`);
-        } else {
-            col[key] = value;
-            return true;
-        }
+        col[key] = value;
+        return true;
     }
 }
 
@@ -270,34 +229,40 @@ const validTypes = [
     'string',
     'integer',
     'float',
-    'flag',
+    'boolean',
     'hyperlink'
 ];
 
+function fixDimensionForBoolean(col) {
+    if (col.value_type === 'boolean' && col.dimension === '0') {
+        col.dimension = '1';
+    }
+}
+
 function validateColumn(col) {
     if (isBlank(col.column_name)) {
-        console.error(`Invalid column ${JSON.stringify(col)}`);
+        console.log(`Invalid column ${JSON.stringify(col)}`);
     } else {
         if (isBlank(col.source_name)) {
-            console.warn(`Unknown source_name in column ${JSON.stringify(col)}`);
+            console.log(`Unknown source_name in column ${JSON.stringify(col)}`);
         }
         if (isBlank(col.value_type)) {
-            console.warn(`Unknown value_type in column ${JSON.stringify(col)}`);
+            console.log(`Unknown value_type in column ${JSON.stringify(col)}`);
         } else if (!_.includes(validTypes, col.value_type)) {
-            console.warn(`Invalid value_type in column ${JSON.stringify(col)}`);
+            console.log(`Invalid value_type in column ${JSON.stringify(col)}`);
         }
 
         if (isBlank(col.dimension)) {
-            console.warn(`Unknown dimension in column ${JSON.stringify(col)}`);
-        } else if (isNaN(col.dimension)) {
-            console.warn(`Invalid dimension in column ${JSON.stringify(col)}`);
+            console.log(`Unknown dimension in column ${JSON.stringify(col)}`);
+        } else if (isNaN(+col.dimension)) {
+            console.log(`Invalid dimension in column ${JSON.stringify(col)}`);
         }
 
         if (isBlank(col.en.label)) {
-            console.warn(`Unknown en.label in column ${JSON.stringify(col)}`);
+            console.log(`Unknown en.label in column ${JSON.stringify(col)}`);
         }
         if (isBlank(col.en.description)) {
-            console.warn(`Unknown en.description in column ${JSON.stringify(col)}`);
+            console.log(`Unknown en.description in column ${JSON.stringify(col)}`);
         }
     }
 }
@@ -318,23 +283,25 @@ function mapDimension(dimensionRawValue) {
     }
 }
 
+function mapType(type) {
+    return type === 'flag' ? 'boolean' : type;
+}
+
 function processRulesFile(inputFilePath, outputFilePath, source_name) {
+    console.log(`\n# ---------- Process ${source_name} ---------- #`);
+
+    // Find all column entries in the text
     const rawColumnData = getRawColumnData(inputFilePath);
-    // console.log(JSON.stringify(rawColumnData, null, 2));
-    console.log('First stage completed');
 
     // Process column bodies
     const parsedColumnData = _.map(rawColumnData, (col) => parseBody(col, col.text));
-    console.log('Second stage completed');
-    // console.log(JSON.stringify(parsedColumnData, null, 2));
 
     // Skip columns with the 'hidden' property
-    const totalCount = parsedColumnData.length;
+    const beforeSkip = parsedColumnData.length;
     _.remove(parsedColumnData, 'hidden');
     _.remove(parsedColumnData, 'skip');
     _.remove(parsedColumnData, 'hide');
-    // console.log(JSON.stringify(parsedColumnData, null, 2));
-    console.log(`Skip hidden columns... ${totalCount - parsedColumnData.length} were skipped;`);
+    const skipped = beforeSkip - parsedColumnData.length;
 
     // Process data about sub columns
     const processedColumnData = _.reduce(parsedColumnData, (result, col) => {
@@ -342,7 +309,7 @@ function processRulesFile(inputFilePath, outputFilePath, source_name) {
         const data = {
             column_name: col.prefix ? `${col.prefix}_${col.column_name}` : col.column_name,
             source_name,
-            value_type: col.type || 'string',
+            value_type: mapType(col.type || 'string'),
             dimension:  mapDimension(col.number || '0'),
             en: {
                 label: col.name,
@@ -357,30 +324,34 @@ function processRulesFile(inputFilePath, outputFilePath, source_name) {
         if ('columns' in col) {
             _.forEach(col.columns, (subColumn) => {
 
+                let scdata = Object.assign({}, data);
+
                 // data from sub column has a higher priority
-                data.column_name = col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref;
+                if (subColumn.ref) {
+                    scdata.column_name = col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref;
+                }
 
                 if (subColumn.type) {
-                    data.value_type = subColumn.type;
+                    scdata.value_type = mapType(subColumn.type);
                 }
 
                 if (subColumn.number) {
-                    data.dimension = mapDimension(subColumn.number);
+                    scdata.dimension = mapDimension(subColumn.number);
                 }
 
                 if (subColumn.name) {
-                    data.en.label = subColumn.name;
+                    scdata.en.label = subColumn.name;
                 }
 
                 if (subColumn.comment) {
-                    data.en.description = subColumn.comment;
+                    scdata.en.description = subColumn.comment;
                 }
 
                 if (subColumn.description) {
-                    data.en.description = subColumn.description;
+                    scdata.en.description = subColumn.description;
                 }
 
-                result.push(data);
+                result.push(scdata);
             });
         } else {
             result.push(data);
@@ -388,20 +359,20 @@ function processRulesFile(inputFilePath, outputFilePath, source_name) {
         return result;
     }, []);
 
+    _.forEach(processedColumnData, fixDimensionForBoolean);
 
     _.forEach(processedColumnData, validateColumn);
 
-    console.log('Third stage completed');
+    console.log(`Final count: ${processedColumnData.length}. (Skipped: ${skipped})`);
 
-    console.log(`Count: ${processedColumnData.length}`);
-    // console.log(JSON.stringify(processedColumnData, null, 2));
-
-    fs.writeFileSync(outputFilePath, JSON.stringify(processedColumnData, null, 2));
+    // fs.writeFileSync(outputFilePath, JSON.stringify(processedColumnData, null, 2));
+    return processedColumnData;
 }
 
-_.map(sources, (item) => {
+/* _.map(sources, (item) => {
     processRulesFile(item.inputPath, item.outputPath, item.sourceName);
 });
+process.exit(0); */
 
-console.log('Parsing completed.');
-process.exit(0);
+
+module.exports = processRulesFile;
