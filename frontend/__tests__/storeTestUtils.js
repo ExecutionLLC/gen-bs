@@ -145,7 +145,7 @@ export default class StoreTestUtils {
                 applyActions(store.dispatch);
             } catch(e) {
                 if (expectedError) {
-                    onCompleted();
+                    expect(() => onCompleted()).not.toThrow();
                 } else {
                     throw e;
                 }
@@ -160,7 +160,7 @@ export default class StoreTestUtils {
             if (expectedState) {
                 expect(mappedState).toEqual(expectedState);
             }
-            onCompleted(mappedState);
+            expect(() => onCompleted(mappedState)).not.toThrow();
         });
     }
 
