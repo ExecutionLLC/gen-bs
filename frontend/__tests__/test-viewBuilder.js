@@ -5,7 +5,7 @@ import MOCK_APP_STATE from './__data__/appState.json';
 import FieldUtils from '../app/utils/fieldUtils';
 import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
-    viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn
+    viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn
 } from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
@@ -232,6 +232,39 @@ describe('View builder', () => {
                 const expectingView = {
                     ...editedColumnState.vbuilder.editingView,
                     viewListItems: newView.viewListItems.slice(1)
+                };
+                expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
+                expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
+                done();
+            });
+        });
+    });
+
+    it('should add column', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+            const COLUMN_INDEX = 0;
+            const targetFieldId = allowedFields[0];
+
+            StoreTestUtils.runTest({
+                globalInitialState: newState.initialAppState,
+                applyActions: (dispatch) => dispatch(viewBuilderAddColumn(COLUMN_INDEX, targetFieldId)),
+                stateMapperFunc
+            }, (editedColumnState) => {
+                const expectingView = {
+                    ...editedColumnState.vbuilder.editingView,
+                    viewListItems: [
+                        {
+                            fieldId: targetFieldId,
+                            keywords: []
+                        },
+                        ...newView.viewListItems
+                    ]
                 };
                 expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
                 expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
