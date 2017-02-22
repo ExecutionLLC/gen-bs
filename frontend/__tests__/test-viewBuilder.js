@@ -5,7 +5,7 @@ import MOCK_APP_STATE from './__data__/appState.json';
 import FieldUtils from '../app/utils/fieldUtils';
 import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
-    viewBuilderChangeAttr, viewBuilderChangeColumn
+    viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn
 } from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
@@ -206,6 +206,32 @@ describe('View builder', () => {
                         },
                         ...newView.viewListItems.slice(1)
                     ]
+                };
+                expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
+                expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
+                done();
+            });
+        });
+    });
+
+    it('should delete column', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+            const COLUMN_INDEX = 0;
+
+            StoreTestUtils.runTest({
+                globalInitialState: newState.initialAppState,
+                applyActions: (dispatch) => dispatch(viewBuilderDeleteColumn(COLUMN_INDEX)),
+                stateMapperFunc
+            }, (editedColumnState) => {
+                const expectingView = {
+                    ...editedColumnState.vbuilder.editingView,
+                    viewListItems: newView.viewListItems.slice(1)
                 };
                 expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
                 expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
