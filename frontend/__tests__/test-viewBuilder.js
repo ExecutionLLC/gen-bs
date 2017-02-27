@@ -1,3 +1,4 @@
+import HttpStatus from 'http-status';
 import _ from 'lodash';
 import StoreTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
@@ -6,10 +7,16 @@ import FieldUtils from '../app/utils/fieldUtils';
 import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
     viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn,
-    viewBuilderChangeSortColumn, viewBuilderChangeKeywords
+    viewBuilderChangeSortColumn, viewBuilderChangeKeywords,
+    viewBuilderDeleteView
 } from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
+import apiFacade from '../app/api/ApiFacade';
+import immutableArray from '../app/utils/immutableArray';
+
+
+const {viewsClient} = apiFacade;
 
 
 function stateMapperFunc(globalState) {
@@ -26,6 +33,8 @@ function stateMapperFunc(globalState) {
         initialAppState: globalState,
         vbuilder: globalState.viewBuilder,
         newView: globalState.viewsList.hashedArray.array[0],
+        deletingView: globalState.viewsList.hashedArray.array[1],
+        viewsList: globalState.viewsList.hashedArray.array,
         allowedFields: allowedFields
     };
 }
@@ -62,9 +71,10 @@ describe('View builder', () => {
     }
 
     it('shoult proper mock tests', () => {
-        const {newView, allowedFields} = initStore;
+        const {newView, allowedFields, deletingView} = initStore;
         expect(!!newView).toBe(true);
         expect(!!allowedFields).toBe(true);
+        expect(!!deletingView).toBe(true);
     });
 
     it('should start edit with existent view', (done) => {
@@ -516,6 +526,27 @@ describe('View builder', () => {
                 expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
                 done();
             });
+        });
+    });
+
+    it('should delete view', (done) => {
+        const {deletingView} = initStore;
+
+        viewsClient.remove = (viewId, callback) => {
+            return callback(null, {status: HttpStatus.OK, body: {id: viewId}});
+        };
+
+        const deletingViewIndex = _.findIndex(initStore.viewsList, {id: deletingView.id});
+        expect(deletingViewIndex).not.toBe(-1);
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+            expect(newState.viewsList).toEqual(immutableArray.remove(initStore.viewsList, deletingViewIndex));
+            delete viewsClient.remove;
+            done();
         });
     });
 });
