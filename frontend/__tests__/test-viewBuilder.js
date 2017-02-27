@@ -6,7 +6,7 @@ import FieldUtils from '../app/utils/fieldUtils';
 import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
     viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn,
-    viewBuilderChangeSortColumn
+    viewBuilderChangeSortColumn, viewBuilderChangeKeywords
 } from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
@@ -482,6 +482,39 @@ describe('View builder', () => {
                         });
                     });
                 });
+            });
+        });
+    });
+
+    it('should change keywords', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+            const COLUMN_INDEX = 0;
+            const KEYWOORDS_IDS = ['keyword1', 'keyword2'];
+
+            StoreTestUtils.runTest({
+                globalInitialState: newState.initialAppState,
+                applyActions: (dispatch) => dispatch(viewBuilderChangeKeywords(COLUMN_INDEX, KEYWOORDS_IDS)),
+                stateMapperFunc
+            }, (editedColumnState) => {
+                const expectingView = {
+                    ...editedColumnState.vbuilder.editingView,
+                    viewListItems: [
+                        {
+                            ...newView.viewListItems[0],
+                            keywords: KEYWOORDS_IDS
+                        },
+                        ...newView.viewListItems.slice(1)
+                    ]
+                };
+                expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
+                expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
+                done();
             });
         });
     });
