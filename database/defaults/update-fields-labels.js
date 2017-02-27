@@ -8,7 +8,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const async = require('async');
 const assert = require('assert');
-const processRulesFile = require('./parse-fields-labels');
+const {processRulesFile, isBlank} = require('./parse-fields-labels');
 
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 const Config = require('../../utils/Config');
@@ -53,54 +53,59 @@ const sources = [
     }
 ];
 
-// 'ExAC_r0_3_1_sites_v01'
-
-// Need to:
-// 1. find the field id by name and source name from the 'field_metadata' table.
-// 2. update corresponding label in the 'field_text' table.
 
 function hasTranslation(obj, language) {
     return obj[language] && (obj[language].label || obj[language].description);
 }
-/**
- *
- * @param fieldDb
- * @param fieldTxt
- * @param language
- */
-/*function compareFields(fieldDb, fieldTxt, language) {
 
-    if (hasTranslation(existingField, language)) {
-        if (prField[language].label !== existingField[language].label ||
-            prField[language].description !== existingField[language].description) {
+function compareFields(fieldDb, fieldTxt, language) {
 
-            const f = _.find(updateTranslations, {id: existingField.id});
-            if (f) {
-                f[language] = {
-                    label_new: prField[language].label,
-                    label: existingField[language].label,
-                    description_new: prField[language].description,
-                    description: existingField[language].description
-                };
-            } else {
-                const updateTranslationInfo = {
-                    id: existingField.id,
-                    column_name: existingField.name,
-                };
-                updateTranslationInfo[language] = {
-                    label_new: prField[language].label,
-                    label: existingField[language].label,
-                    description_new: prField[language].description,
-                    description: existingField[language].description
-                };
-                updateTranslations.push(updateTranslationInfo);
-            }
+    if (!fieldTxt[language] || (!fieldTxt[language].label && !fieldTxt[language].description)) {
+        console.log(`Warning: field ${JSON.stringify(fieldTxt)} doesn't contain translation for '${language}'`);
+        return null;
+    }
 
-        } else {
-            // no dif
+    let newLabel = '';
+    let newDescription = '';
+    if (isBlank(fieldTxt[language].label)) {
+        console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty label for '${language}'`);
+    } else {
+        newLabel = fieldTxt[language].label;
+    }
+    if (isBlank(fieldTxt[language].description)) {
+        console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty description for '${language}'`);
+    } else {
+        newDescription = fieldTxt[language].description;
+    }
+
+    let oldLabel = '';
+    let oldDescription = '';
+    if (fieldDb[language]) {
+        if (!isBlank(fieldDb[language].label)) {
+            oldLabel = fieldDb[language].label;
+        }
+        if (!isBlank(fieldDb[language].description)) {
+            oldDescription = fieldDb[language].description;
         }
     }
-}*/
+
+    if (newLabel === oldLabel && newDescription === oldDescription) {
+        return null;
+    } else {
+        let result = {};
+
+        if (newLabel !== oldLabel) {
+            result.newLabel = newLabel;
+            result.oldLabel = oldLabel;
+        }
+
+        if (newDescription !== oldDescription) {
+            result.newDescription = newDescription;
+            result.oldDescription = oldDescription;
+        }
+        return result;
+    }
+}
 
 async.waterfall([
     // 1. Parse txt files
@@ -167,15 +172,15 @@ async.waterfall([
         _.forEach(fieldsParRules, (fileData) => {
 
             let newFields = [];
-            let updateTranslations = [];
+            let newTranslations = [];
 
             _.forEach(fileData.fields, (prField) => {
 
-                const existingField = _.find(exstFields[prField.source_name], {
-                    'name': prField.column_name,
-                    'source_name': prField.source_name/*,
-                    'value_type': prField.value_type,
-                    'dimension': +prField.dimension*/
+                const existingField = _.remove(exstFields[prField.source_name], (item) => {
+                    return (item.name === prField.column_name &&
+                        item.source_name === prField.source_name);
+                    /* 'value_type': prField.value_type,
+                     'dimension': +prField.dimension*/
                 });
                 if (!existingField) {
                     // console.warn(`${JSON.stringify(prField)} is not found in database.`);
@@ -185,88 +190,43 @@ async.waterfall([
                 } else {
                     _.forEach(languages, (language) => {
 
-                        if (hasTranslation(prField, language)) {
-
-
-
-                            if (hasTranslation(existingField, language)) {
-                                if (prField[language].label !== existingField[language].label ||
-                                    prField[language].description !== existingField[language].description) {
-
-                                    const f = _.find(updateTranslations, {id: existingField.id});
-                                    if (f) {
-                                        f[language] = {
-                                            label_new: prField[language].label,
-                                            label: existingField[language].label,
-                                            description_new: prField[language].description,
-                                            description: existingField[language].description
-                                        };
-                                    } else {
-                                        const updateTranslationInfo = {
-                                            id: existingField.id,
-                                            column_name: existingField.name,
-                                        };
-                                        updateTranslationInfo[language] = {
-                                            label_new: prField[language].label,
-                                            label: existingField[language].label,
-                                            description_new: prField[language].description,
-                                            description: existingField[language].description
-                                        };
-                                        updateTranslations.push(updateTranslationInfo);
-                                    }
-
-                                } else {
-                                    // no dif
-                                }
+                        const translation = compareFields(existingField, prField, language);
+                        if (translation) {
+                            const f = _.find(newTranslations, {id: existingField.id});
+                            if (f) {
+                                f[language] = translation;
                             } else {
-                                // updateTranslations.push({});
-                                const f = _.find(updateTranslations, {id: existingField.id});
-                                if (f) {
-                                    f[language] = {
-                                        label_new: prField[language].label,
-                                        // label: existingField[language].label,
-                                        description_new: prField[language].description //,
-                                        // description: existingField[language].description
-                                    };
-                                } else {
-                                    const updateTranslationInfo = {
-                                        id: existingField.id,
-                                        column_name: existingField.column_name,
-                                    };
-                                    updateTranslationInfo[language] = {
-                                        label_new: prField[language].label,
-                                        // label: existingField[language].label,
-                                        description_new: prField[language].description // ,
-                                        // description: existingField[language].description
-                                    };
-                                    updateTranslations.push(updateTranslationInfo);
-                                }
-                            }
-
-                        } else {
-                            if (hasTranslation(existingField, language)) {
-                                console.warn(`Translation for language "${language}" not found for field ${JSON.stringify(prField)}`);
-                            } else {
-                                // existing field has no translations and no entry in parsing rule files.
+                                const updateTranslationInfo = {
+                                    id: existingField.id,
+                                    column_name: existingField.name,
+                                };
+                                updateTranslationInfo[language] = translation;
+                                newTranslations.push(updateTranslationInfo);
                             }
                         }
-
                     });
-
-                    // TODO: remove from exstFields[prField.source_name] after iteration.
-                    // TODO: The rest of the existing should be logged, because they haven't entries in the parsing rule files.
                 }
             });
 
             fs.writeFileSync(`${fileData.inputPath}.dif.json`, JSON.stringify({
                 generated: new Date(),
                 newFieldsCount: newFields.length,
-                updateTranslationsCount: updateTranslations.length,
+                newTranslationsCount: newTranslations.length,
                 newFields,
-                updateTranslations
+                newTranslations
             }, null, 2));
+        });
 
-        }, (error) => callback(error, context));
+        // 5. The rest of the existing fields should be logged, because they haven't entries in the parsing rule files.
+        _.forEach(exstFields, (fields) => {
+            if (!_.isEmpty(fields)) {
+                console.log(`Warning: database contains ${fields.length} unknown fields for '${fields[0].source_name}':`);
+                _.forEach(fields, (field) => {
+                    console.log(`==> ${JSON.stringify(field)}`);
+                });
+            }
+        });
+        callback(null, context);
     }
 ], (error) => {
     if (error) {

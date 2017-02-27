@@ -44,15 +44,17 @@ function  assertRange(left, right) {
     }
 }
 
-function cutQuotes(strOrArray) {
-    if (_.isArray(strOrArray)) {
-        return strOrArray.map(cutQuotes);
+function cutQuotes(str) {
+    const firstCh = str.charAt(0);
+    const lastCh = str.slice(-1);
+    if (firstCh === '"' && lastCh === '"') {
+        return str.slice(1, -1);
+    } else {
+        if (firstCh === '"' || lastCh === '"') {
+            console.log(`Warning: double quote mismatch in '${str}'`);
+        }
+        return str;
     }
-    const quotedMatch = strOrArray.match(/^"(.*)"$/);
-    if (quotedMatch) {
-        return quotedMatch[1];
-    }
-    return strOrArray;
 }
 
 // range1 inside of range2
@@ -375,4 +377,7 @@ function processRulesFile(inputFilePath, outputFilePath, source_name) {
 process.exit(0); */
 
 
-module.exports = processRulesFile;
+module.exports = {
+    processRulesFile,
+    isBlank
+};
