@@ -5,7 +5,8 @@ import MOCK_APP_STATE from './__data__/appState.json';
 import FieldUtils from '../app/utils/fieldUtils';
 import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
-    viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn
+    viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn,
+    viewBuilderChangeSortColumn
 } from '../app/actions/viewBuilder';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
@@ -269,6 +270,218 @@ describe('View builder', () => {
                 expect(editedColumnState.vbuilder.editingView).toEqual(expectingView);
                 expect(editedColumnState.vbuilder.editingView.viewListItems).not.toEqual(newState.vbuilder.editingView.viewListItems);
                 done();
+            });
+        });
+    });
+
+    it('should make column sorting', (done) => {
+        const {newView, allowedFields} = initStore;
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch(viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID)),
+            stateMapperFunc
+        }, (newState) => {
+
+            function removeAllSortedColumns(state, done) {
+                const view = state.vbuilder.editingView;
+                const sortedColumnIndex = _.findIndex(view.viewListItems, item => item.sortOrder || item.sortDirection);
+                if (sortedColumnIndex < 0) {
+                    done(state);
+                } else {
+                    StoreTestUtils.runTest({
+                        globalInitialState: state.initialAppState,
+                        applyActions: (dispatch) => dispatch(viewBuilderDeleteColumn(sortedColumnIndex)),
+                        stateMapperFunc
+                    }, (newState) => {
+                        removeAllSortedColumns(newState, done);
+                    });
+                }
+            }
+
+            removeAllSortedColumns(newState, (notSortedState) => {
+                const view = notSortedState.vbuilder.editingView;
+                const sortedFieldByOrder = _.find(view.viewListItems, item => item.sortOrder);
+                const sortedFieldByDirection = _.find(view.viewListItems, item => item.sortDirection);
+                expect(sortedFieldByOrder).toBe(undefined);
+                expect(sortedFieldByDirection).toBe(undefined);
+
+                const fieldToAdd1 = _.find(allowedFields, (field) => !_.find(view.viewListItems, {fieldId: field.id}));
+                const fieldToAdd2 = _.find(allowedFields, (field) => field.id !== fieldToAdd1.id && !_.find(view.viewListItems, {fieldId: field.id}));
+                expect(fieldToAdd1).not.toBe(undefined);
+                expect(fieldToAdd2).not.toBe(undefined);
+                expect(fieldToAdd1.id).not.toBe(fieldToAdd2.id);
+
+                StoreTestUtils.runTest({
+                    globalInitialState: notSortedState.initialAppState,
+                    applyActions: (dispatch) => dispatch([
+                        viewBuilderAddColumn(0, fieldToAdd1.id),
+                        viewBuilderAddColumn(1, fieldToAdd2.id)
+                    ]),
+                    stateMapperFunc
+                }, (newState) => {
+
+                    const initialColumns = [...newState.vbuilder.editingView.viewListItems];
+
+                    /**
+                     * Test cases:
+                     * 1. Field is not sorted
+                     * 1.1. Sorting order does not exist
+                     * > 1.1.1. Sorting order 1 exist - (desired sorting order is not 1) make new sorting with desired sorting order (what is not 1, 1 exist)
+                     * > 1.1.2. Sorting order 1 does not exist - make new sorting with sorting order 1
+                     * 1.2. Sorting order exist
+                     * > 1.2.1. Sorting order 1 exist - deleting existent sorting with desired order, make new sorting with desired sorting order
+                     * > 1.2.2. Sorting order 1 does not exist - (desired sorting order is not 1) deleting existent sorting with desired order, make new sorting with desired sorting order
+                     * 2. Field is sorted
+                     * 2.1. Desired direction is null
+                     * > 2.1.1. Field has sorting order 1 and there is field with sorting order 2 - remove field direction and sorting order, make field with sorting order 2 sorting order 1
+                     * > 2.1.2. Field has no sorting order 1 or there is no field with sorting order 2 - remove field direction and sorting order
+                     * > 2.2. Desired sorting order is not null - set field desired sorting direction (leave order intact)
+                     *
+                     * Checking order:
+                     * not sorted
+                     * 1.1.2
+                     * sorted some field order 1
+                     * 1.2.1
+                     * sorted other field order 1
+                     * 2.2
+                     * changed direction order 1
+                     * 1.1.1
+                     * sorted two fields
+                     * 2.1.1
+                     * sorted only order 1 field that was with order 2
+                     * 2.1.2
+                     * not sorted
+                     */
+
+                    StoreTestUtils.runTest({
+                        globalInitialState: newState.initialAppState,
+                        applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, null, false)),
+                        stateMapperFunc
+                    }, (newState) => {
+                        const expectingViewListItems = [
+                            {
+                                fieldId: fieldToAdd1.id,
+                                keywords: [],
+                                sortDirection: 'asc',
+                                sortOrder: 1
+                            },
+                            ...initialColumns.slice(1)
+                        ];
+                        expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
+                        StoreTestUtils.runTest({
+                            globalInitialState: newState.initialAppState,
+                            applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, null, false)),
+                            stateMapperFunc
+                        }, (newState) => {
+                            const expectingViewListItems = [
+                                {
+                                    fieldId: fieldToAdd1.id,
+                                    keywords: [],
+                                    sortDirection: null,
+                                    sortOrder: null
+                                },
+                                {
+                                    fieldId: fieldToAdd2.id,
+                                    keywords: [],
+                                    sortDirection: 'asc',
+                                    sortOrder: 1
+                                },
+                                ...initialColumns.slice(2)
+                            ];
+                            expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
+                            StoreTestUtils.runTest({
+                                globalInitialState: newState.initialAppState,
+                                applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, 'asc', false)),
+                                stateMapperFunc
+                            }, (newState) => {
+                                const expectingViewListItems = [
+                                    {
+                                        fieldId: fieldToAdd1.id,
+                                        keywords: [],
+                                        sortDirection: null,
+                                        sortOrder: null
+                                    },
+                                    {
+                                        fieldId: fieldToAdd2.id,
+                                        keywords: [],
+                                        sortDirection: 'desc',
+                                        sortOrder: 1
+                                    },
+                                    ...initialColumns.slice(2)
+                                ];
+                                expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
+                                StoreTestUtils.runTest({
+                                    globalInitialState: newState.initialAppState,
+                                    applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, null, true)),
+                                    stateMapperFunc
+                                }, (newState) => {
+                                    const expectingViewListItems = [
+                                        {
+                                            fieldId: fieldToAdd1.id,
+                                            keywords: [],
+                                            sortDirection: 'asc',
+                                            sortOrder: 2
+                                        },
+                                        {
+                                            fieldId: fieldToAdd2.id,
+                                            keywords: [],
+                                            sortDirection: 'desc',
+                                            sortOrder: 1
+                                        },
+                                        ...initialColumns.slice(2)
+                                    ];
+                                    expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
+                                    StoreTestUtils.runTest({
+                                        globalInitialState: newState.initialAppState,
+                                        applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, 'desc', false)),
+                                        stateMapperFunc
+                                    }, (newState) => {
+                                        const expectingViewListItems = [
+                                            {
+                                                fieldId: fieldToAdd1.id,
+                                                keywords: [],
+                                                sortDirection: 'asc',
+                                                sortOrder: 1
+                                            },
+                                            {
+                                                fieldId: fieldToAdd2.id,
+                                                keywords: [],
+                                                sortDirection: null,
+                                                sortOrder: null
+                                            },
+                                            ...initialColumns.slice(2)
+                                        ];
+                                        expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
+                                        StoreTestUtils.runTest({
+                                            globalInitialState: newState.initialAppState,
+                                            applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, 'desc', false)),
+                                            stateMapperFunc
+                                        }, (newState) => {
+                                            const expectingViewListItems = [
+                                                {
+                                                    fieldId: fieldToAdd1.id,
+                                                    keywords: [],
+                                                    sortDirection: null,
+                                                    sortOrder: null
+                                                },
+                                                {
+                                                    fieldId: fieldToAdd2.id,
+                                                    keywords: [],
+                                                    sortDirection: null,
+                                                    sortOrder: null
+                                                },
+                                                ...initialColumns.slice(2)
+                                            ];
+                                            expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
+                                            done();
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
             });
         });
     });
