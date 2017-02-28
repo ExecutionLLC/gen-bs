@@ -530,7 +530,7 @@ describe('View builder', () => {
     });
 
     it('should delete view', (done) => {
-        const {deletingView} = initStore;
+        const {deletingView, allowedFields} = initStore;
 
         viewsClient.remove = (viewId, callback) => {
             return callback(null, {status: HttpStatus.OK, body: {id: viewId}});
@@ -541,10 +541,16 @@ describe('View builder', () => {
 
         StoreTestUtils.runTest({
             globalInitialState: initStore.initialAppState,
-            applyActions: (dispatch) => dispatch(viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)),
+            applyActions: (dispatch) => dispatch([
+                viewBuilderStartEdit(null, deletingView, allowedFields, LANGUAGE_ID),
+                viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)
+            ]),
             stateMapperFunc
         }, (newState) => {
             expect(newState.viewsList).toEqual(immutableArray.remove(initStore.viewsList, deletingViewIndex));
+            expect(!!newState.vbuilder.editingView).toBe(true);
+            expect(newState.vbuilder.editingView).not.toBe(deletingView);
+            expect(newState.vbuilder.editingView.id).not.toBe(deletingView.id);
             delete viewsClient.remove;
             done();
         });
