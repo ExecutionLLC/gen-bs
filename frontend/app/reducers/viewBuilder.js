@@ -159,7 +159,7 @@ function reduceVBuilderSetItemKeywords(state, action) {
         ...state,
         editingView: {
             ...state.editingView,
-            viewListItems: immutableArray(state.editingView.viewListItems, action.viewItemIndex, {keywords: action.keywordsIds})
+            viewListItems: immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, {keywords: action.keywordsIds})
         }
     };
 }
