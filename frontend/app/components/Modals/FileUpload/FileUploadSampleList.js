@@ -153,7 +153,7 @@ export default class FileUploadSampleList extends React.Component {
 
     _renderSampleError(sample, label, isActive) {
         const {p} = this.props;
-        const message = sample.error || (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
+        const message = sample.error ? sample.error.message : (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
                 ? p.t('samples.error.sampleNotFound')
                 : p.t('samples.error.unknown'));
         return this.renderListItem(

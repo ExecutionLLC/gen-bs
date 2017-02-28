@@ -9,8 +9,7 @@ import {
 } from '../../../utils/stringUtils';
 import {
     filterBuilderRestartEdit,
-    filterBuilderDeleteFilter,
-    fireOnSaveAction
+    filterBuilderDeleteFilter
 } from '../../../actions/filterBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import {isFilterComplexModel} from '../../../utils/filterUtils';
@@ -162,9 +161,7 @@ export default class ExistentFilterSelect extends Component {
     onDeleteFilterClick() {
         const {dispatch, ui: {languageId}} = this.props;
         const filterId = this.getSelectedFilter().id;
-        dispatch(filterBuilderDeleteFilter(filterId, languageId)).then((newFilter) => {
-            dispatch(fireOnSaveAction(newFilter));
-        });
+        dispatch(filterBuilderDeleteFilter(filterId, languageId));
     }
 
 }

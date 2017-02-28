@@ -110,7 +110,7 @@ export function viewBuilderChangeKeywords(viewItemIndex, keywordsIds) {
     };
 }
 
-export function fireOnSaveAction(view) {
+function fireOnSaveAction(view) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().viewBuilder;
         dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view.id));
@@ -177,6 +177,7 @@ export function viewBuilderDeleteView(viewId, languageId) {
                     const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                     const newView = viewIdToViewHash[newViewId];
                     dispatch(viewBuilderRestartEdit(null, newView, languageId));
+                    dispatch(fireOnSaveAction(newView));
                     resolve(newView);
                 });
         });

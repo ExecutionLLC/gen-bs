@@ -145,7 +145,7 @@ export default class StoreTestUtils {
                 applyActions(store.dispatch);
             } catch(e) {
                 if (expectedError) {
-                    onCompleted();
+                    expect(() => onCompleted()).not.toThrow();
                 } else {
                     throw e;
                 }
@@ -153,11 +153,14 @@ export default class StoreTestUtils {
         }
         this.waitForFreezing(store, timeout || 10, () => {
             const state = store.getState();
-            const mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
+            let mappedState;
+            expect(() => {
+                mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
+            }).not.toThrow();
             if (expectedState) {
                 expect(mappedState).toEqual(expectedState);
             }
-            onCompleted(mappedState);
+            expect(() => onCompleted(mappedState)).not.toThrow();
         });
     }
 
