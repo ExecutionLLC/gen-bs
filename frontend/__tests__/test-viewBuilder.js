@@ -8,7 +8,7 @@ import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
     viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn,
     viewBuilderChangeSortColumn, viewBuilderChangeKeywords,
-    viewBuilderDeleteView, viewBuilderOnSave
+    viewBuilderSaveAndSelectView, viewBuilderDeleteView, viewBuilderOnSave
 } from '../app/actions/viewBuilder';
 import {RECEIVE_USERDATA} from '../app/actions/userData';
 import {entityType} from '../app/utils/entityTypes';
@@ -34,10 +34,12 @@ function stateMapperFunc(globalState) {
         initialAppState: globalState,
         vbuilder: globalState.viewBuilder,
         newView: globalState.viewsList.hashedArray.array[0],
+        userView: _.find(globalState.viewsList.hashedArray.array, {type: entityType.USER}),
         deletingView: globalState.viewsList.hashedArray.array[1],
         viewsList: globalState.viewsList.hashedArray.array,
         allowedFields: allowedFields,
-        userProfileMetadata: globalState.userData.profileMetadata
+        userProfileMetadata: globalState.userData.profileMetadata,
+        createdViewId: 'createdv-iewi-dent-ifie-r00000000000'
     };
 }
 
@@ -73,10 +75,11 @@ describe('View builder', () => {
     }
 
     it('shoult proper mock tests', () => {
-        const {newView, allowedFields, deletingView} = initStore;
+        const {newView, userView, allowedFields, deletingView} = initStore;
         expect(!!newView).toBe(true);
         expect(!!allowedFields).toBe(true);
         expect(!!deletingView).toBe(true);
+        expect(!!userView).toBe(true);
     });
 
     it('should start edit with existent view', (done) => {
@@ -565,5 +568,73 @@ describe('View builder', () => {
             delete viewsClient.remove;
             done();
         });
+    });
+
+    describe('save and select view', () => {
+
+        function testSaveAndSelect(name, isNewView, isEditing, view) {
+
+            it(name, (done) => {
+
+                viewsClient.update = jest.fn((view, callback) => {
+                    return callback(null, {status: HttpStatus.OK, body: view});
+                });
+
+                viewsClient.add = jest.fn((languageId, view, callback) => {
+                    expect(languageId).toBe(LANGUAGE_ID);
+                    return callback(null, {status: HttpStatus.OK, body: {...view, id: initStore.createdViewId}});
+                });
+
+                const startEditViewParams = isNewView ?
+                    {
+                        name: 'sample name',
+                        description: 'sample description'
+                    } :
+                    null;
+
+                // some action that we know how to see it it executed and did not affect testing cases
+                const onSaveAction = {
+                    type: RECEIVE_USERDATA,
+                    profileMetadata: {fakeMetadata: {view: null}},
+                    receivedAt: Date.now()
+                };
+
+                const actions = isEditing ? [
+                    viewBuilderOnSave(onSaveAction, 'profileMetadata.fakeMetadata.view'),
+                    viewBuilderStartEdit(startEditViewParams, view, initStore.allowedFields, LANGUAGE_ID),
+                    viewBuilderChangeAttr({name: 'edited name', description: 'edited description'}, LANGUAGE_ID),
+                    viewBuilderSaveAndSelectView()
+                ] :
+                    [
+                        viewBuilderOnSave(onSaveAction, 'profileMetadata.fakeMetadata.view'),
+                        viewBuilderStartEdit(startEditViewParams, view, initStore.allowedFields, LANGUAGE_ID),
+                        viewBuilderSaveAndSelectView()
+                    ];
+
+                StoreTestUtils.runTest({
+                    globalInitialState: initStore.initialAppState,
+                    applyActions: (dispatch) => dispatch(actions),
+                    stateMapperFunc
+                }, (newState) => {
+                    expect(newState.vbuilder).toEqual({
+                        ...makeExpectingNewViewState(null, '', false, null),
+                        onSaveAction,
+                        onSaveActionProperty: 'profileMetadata.fakeMetadata.view'
+                    });
+                    expect(viewsClient.update.mock.calls.length).toBe(!isNewView && isEditing ? 1 : 0);
+                    expect(viewsClient.add.mock.calls.length).toBe(isNewView ? 1 : 0);
+                    expect(newState.userProfileMetadata.fakeMetadata.view).toBe(isNewView ? initStore.createdViewId : view.id);
+                    delete viewsClient.remove;
+                    delete viewsClient.add;
+                    done();
+                });
+            });
+        }
+
+        testSaveAndSelect('should save and select new not edited view', true, false, initStore.newView);
+        testSaveAndSelect('should save and select existent not edited view', false, false, initStore.newView);
+        testSaveAndSelect('should save and select new edited view', true, true, initStore.newView);
+        testSaveAndSelect('should save and select existent edited view', false, true, initStore.userView);
+
     });
 });
