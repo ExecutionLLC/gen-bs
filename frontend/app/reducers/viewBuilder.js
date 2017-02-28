@@ -83,7 +83,7 @@ function reduceVBuilderAddColumn(state, action) {
         ...state,
         editingView: {
             ...state.editingView,
-            viewListItems: immutableArray.replace(state.editingView.viewListItems, action.viewItemIndex, newViewItem)
+            viewListItems: immutableArray.insertBefore(state.editingView.viewListItems, action.viewItemIndex, newViewItem)
         }
     };
 }
