@@ -44,7 +44,7 @@ describe('Immutable array', () => {
         expect(immutableArray.concat([1, 2, 3], [])).toEqual([1, 2, 3]);
         expect(immutableArray.concat([], [4, 5])).toEqual([4, 5]);
         expect(immutableArray.concat([6, 7], [8, 9, 0])).toEqual([6, 7, 8, 9, 0]);
-    })
+    });
 });
 
 describe('immutable utils', () => {
