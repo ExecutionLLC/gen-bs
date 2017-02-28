@@ -8,8 +8,9 @@ import {
     viewBuilderStartEdit, viewBuilderRestartEdit, viewBuilderEndEdit,
     viewBuilderChangeAttr, viewBuilderChangeColumn, viewBuilderDeleteColumn, viewBuilderAddColumn,
     viewBuilderChangeSortColumn, viewBuilderChangeKeywords,
-    viewBuilderDeleteView
+    viewBuilderDeleteView, viewBuilderOnSave
 } from '../app/actions/viewBuilder';
+import {RECEIVE_USERDATA} from '../app/actions/userData';
 import {entityType} from '../app/utils/entityTypes';
 import * as i18n from '../app/utils/i18n';
 import apiFacade from '../app/api/ApiFacade';
@@ -35,7 +36,8 @@ function stateMapperFunc(globalState) {
         newView: globalState.viewsList.hashedArray.array[0],
         deletingView: globalState.viewsList.hashedArray.array[1],
         viewsList: globalState.viewsList.hashedArray.array,
-        allowedFields: allowedFields
+        allowedFields: allowedFields,
+        userProfileMetadata: globalState.userData.profileMetadata
     };
 }
 
@@ -539,9 +541,17 @@ describe('View builder', () => {
         const deletingViewIndex = _.findIndex(initStore.viewsList, {id: deletingView.id});
         expect(deletingViewIndex).not.toBe(-1);
 
+        // some action that we know how to see it it executed and did not affect testing cases
+        const onSaveAction = {
+            type: RECEIVE_USERDATA,
+            profileMetadata: {fakeMetadata: {view: null}},
+            receivedAt: Date.now()
+        };
+
         StoreTestUtils.runTest({
             globalInitialState: initStore.initialAppState,
             applyActions: (dispatch) => dispatch([
+                viewBuilderOnSave(onSaveAction, 'profileMetadata.fakeMetadata.view'),
                 viewBuilderStartEdit(null, deletingView, allowedFields, LANGUAGE_ID),
                 viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)
             ]),
@@ -551,6 +561,7 @@ describe('View builder', () => {
             expect(!!newState.vbuilder.editingView).toBe(true);
             expect(newState.vbuilder.editingView).not.toBe(deletingView);
             expect(newState.vbuilder.editingView.id).not.toBe(deletingView.id);
+            expect(newState.userProfileMetadata.fakeMetadata.view).toBe(newState.vbuilder.editingView.id);
             delete viewsClient.remove;
             done();
         });
