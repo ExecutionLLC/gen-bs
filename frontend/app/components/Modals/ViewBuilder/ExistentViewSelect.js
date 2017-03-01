@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import 'react-select/dist/react-select.css';
 
 import Select from '../../shared/Select';
@@ -8,8 +8,7 @@ import {
 } from '../../../utils/stringUtils';
 import {
     viewBuilderRestartEdit,
-    viewBuilderDeleteView,
-    fireOnSaveAction
+    viewBuilderDeleteView
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import * as i18n from '../../../utils/i18n';
@@ -160,8 +159,16 @@ export default class ExistentViewSelect extends React.Component {
     onDeleteViewClick() {
         const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderDeleteView(editingViewId, languageId)).then((newView) => {
-            dispatch(fireOnSaveAction(newView));
-        });
+        dispatch(viewBuilderDeleteView(editingViewId, languageId));
     }
 }
+
+
+ExistentViewSelect.propTypes = {
+    auth: PropTypes.object.isRequired,
+    viewsList: PropTypes.object.isRequired,
+    viewBuilder: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    ui: PropTypes.object.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
