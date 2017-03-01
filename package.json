@@ -19,7 +19,8 @@
     "update": "cd scripts; bash amazon-update.sh",
     "build:webserver": "cd scripts/build; ./build.sh",
     "build:frontend": "cd frontend/; npm run build",
-    "build": "npm run build:frontend; npm run build:webserver"
+    "build": "npm run build:frontend; npm run build:webserver",
+    "db:migrate:update_fields": "node $NODE_DEBUG_OPTION ./database/defaults/run_npm_cmd.js"
   },
   "repository": {
     "type": "git",
