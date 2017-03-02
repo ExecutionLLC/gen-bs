@@ -74,16 +74,18 @@ function insideOf(r1, r2)
 function parseSingleField(col, text) {
     const colonInd = text.indexOf(':');
     let key = text.slice(0, colonInd).trim();
-    const value = cutQuotes(text.slice(colonInd + 1).trim());
+    const rawValue = text.slice(colonInd + 1).trim();
+    if (key === '' || rawValue === '') {
+        exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
+    }
+    const value = cutQuotes(rawValue);
     const exclamInd = key.indexOf('!');
     if (exclamInd === 0) {
         key = key.slice(1);
     } else if (exclamInd > 0) {
         exitWithError(`Error in key {${key}} in column ${col.name}`);
     }
-    if (key === '' || value === '') {
-        exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
-    } else if (key in col) {
+    if (key in col) {
         exitWithError(`Field ${key} already exists in column ${col.name}`);
     } else {
         col[key] = value;
@@ -289,7 +291,7 @@ function mapType(type) {
     return type === 'flag' ? 'boolean' : type;
 }
 
-function processRulesFile(inputFilePath, outputFilePath, source_name) {
+function processRulesFile(inputFilePath, source_name) {
     console.log(`\n# ---------- Process ${source_name} ---------- #`);
 
     // Find all column entries in the text
@@ -367,15 +369,8 @@ function processRulesFile(inputFilePath, outputFilePath, source_name) {
 
     console.log(`Final count: ${processedColumnData.length}. (Skipped: ${skipped})`);
 
-    // fs.writeFileSync(outputFilePath, JSON.stringify(processedColumnData, null, 2));
     return processedColumnData;
 }
-
-/* _.map(sources, (item) => {
-    processRulesFile(item.inputPath, item.outputPath, item.sourceName);
-});
-process.exit(0); */
-
 
 module.exports = {
     processRulesFile,

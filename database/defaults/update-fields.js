@@ -15,41 +15,36 @@ const Config = require('../../utils/Config');
 
 const languages = ['en', 'ru'];
 
+const parsingRulesPath = path.join(__dirname, '../../../VCFUtils/docs/parsing-rules-translate');
+
 const sources = [
     {
         sourceName: 'clinvar_20160705_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ClinVar.json'
+        fileName: 'ClinVar.txt'
     },
     {
         sourceName: 'dbsnp_20160601_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/dbSNP.json'
+        fileName: 'dbSNP.txt'
     },
     {
         sourceName: 'ESP6500_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ESP6500.json'
+        fileName: 'ESP6500.txt'
     },
     {
         sourceName: 'ExAC_r0_3_1_sites_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/ExAC.json'
+        fileName: 'ExAC.txt'
     },
     {
         sourceName: 'one_thousand_genome_v01',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/1000genomes.json'
+        fileName: '1000genomes.txt'
     },
     {
         sourceName: 'sample',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vcf.json'
+        fileName: 'vcf.txt'
     },
     {
         sourceName: 'sample',
-        inputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.txt',
-        outputPath: '/home/andrey/work/sources/VCFUtils/docs/parsing-rules-translate/vep.json'
+        fileName: 'vep.txt'
     }
 ];
 
@@ -117,65 +112,65 @@ function compareFields(fieldDb, fieldTxt, language) {
 
 function generateMigration(callback) {
     async.waterfall([
-            (callback) => {
-                const ufMigrationsBefore = getUpdateFieldsMigrations();
-                npm.load({}, (error) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        npm.commands.run(['db:migrate:make', 'update-fields'], (error) => {
-                            if (error) {
-                                callback(error);
-                            } else { // command succeeded
-                                const ufMigrationsAfter = getUpdateFieldsMigrations();
-                                const diffArr = _.difference(ufMigrationsAfter, ufMigrationsBefore);
-                                if (diffArr.length) {
-                                    callback(null, diffArr[0]);
-                                } else {
-                                    callback(new Error('Cannot create database migration.'));
-                                }
-                            }
-                        });
-                    }
-                });
-            },
-            (migrationFileName, callback) => {
-                console.log(migrationFileName);
-                const migrationFilePath = `${migrationsFolder}/${migrationFileName}`;
-
-                // 1. create folder for migration files
-                const migrationDataFolder = migrationFilePath.slice(0, -3);
-                if (!fs.existsSync(migrationDataFolder)){
-                    fs.mkdirSync(migrationDataFolder);
-                }
-
-                // 2. generate migration
-                fs.readFile(migrationTemplateFilePath, 'utf8', (error, data) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        const migrationText = data.replace(/AUTO_GENERATED_DATA_FOLDER_PATH/g,
-                            path.basename(migrationFilePath, path.extname(migrationFilePath)));
-
-                        fs.writeFile(migrationFilePath, migrationText, 'utf8', (error) => {
-                            if (error) {
-                                callback(error);
+        (callback) => {
+            const ufMigrationsBefore = getUpdateFieldsMigrations();
+            npm.load({}, (error) => {
+                if (error) {
+                    callback(error);
+                } else {
+                    npm.commands.run(['db:migrate:make', 'update-fields'], (error) => {
+                        if (error) {
+                            callback(error);
+                        } else { // command succeeded
+                            const ufMigrationsAfter = getUpdateFieldsMigrations();
+                            const diffArr = _.difference(ufMigrationsAfter, ufMigrationsBefore);
+                            if (diffArr.length) {
+                                callback(null, diffArr[0]);
                             } else {
-                                callback(null, migrationDataFolder);
+                                callback(new Error('Cannot create database migration.'));
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
+            });
+        },
+        (migrationFileName, callback) => {
+            console.log(migrationFileName);
+            const migrationFilePath = `${migrationsFolder}/${migrationFileName}`;
+
+            // 1. create folder for migration files
+            const migrationDataFolder = migrationFilePath.slice(0, -3);
+            if (!fs.existsSync(migrationDataFolder)){
+                fs.mkdirSync(migrationDataFolder);
             }
-        ],
-        (error, migrationDataFolder) => {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log(`Success ${migrationDataFolder}`);
-                callback(migrationDataFolder);
-            }
-        });
+
+            // 2. generate migration
+            fs.readFile(migrationTemplateFilePath, 'utf8', (error, data) => {
+                if (error) {
+                    callback(error);
+                } else {
+                    const migrationText = data.replace(/AUTO_GENERATED_DATA_FOLDER_PATH/g,
+                        path.basename(migrationFilePath, path.extname(migrationFilePath)));
+
+                    fs.writeFile(migrationFilePath, migrationText, 'utf8', (error) => {
+                        if (error) {
+                            callback(error);
+                        } else {
+                            callback(null, migrationDataFolder);
+                        }
+                    });
+                }
+            });
+        }
+    ],
+    (error, migrationDataFolder) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(`Success ${migrationDataFolder}`);
+            callback(migrationDataFolder);
+        }
+    });
 }
 
 async.waterfall([
@@ -183,8 +178,8 @@ async.waterfall([
     (callback) => {
         const fieldsParRules = _.map(sources, (item) => {
             return {
-                inputPath: item.inputPath,
-                fields: processRulesFile(item.inputPath, item.outputPath, item.sourceName),
+                fileName: item.fileName,
+                fields: processRulesFile(`${parsingRulesPath}/${item.fileName}`, item.sourceName),
                 sourceName: item.sourceName
             }
         });
@@ -284,22 +279,28 @@ async.waterfall([
             });
             if (newFields.length || newTranslations.length) {
                 newData.push({
-                    inputPath: fileData.inputPath,
+                    fileName: fileData.fileName,
                     newFields,
                     newTranslations
                 });
             }
-
-            // 5. The rest of the existing fields should be logged, because they haven't entries in the parsing rule files.
-            if (!_.isEmpty(exstFields[fileData.source_name])) {
-                console.log(`Warning: database contains ${exstFields[fileData.source_name].length} unknown fields for '${fileData.source_name}':`);
-                _.forEach(exstFields[fileData.source_name], (field) => {
+        });
+        callback(null, Object.assign({}, context, {newData, exstFields}));
+    },
+    // 5. The rest of the existing fields should be logged, because they haven't entries in the parsing rule files.
+    (context, callback) => {
+        const {exstFields} = context;
+        _.forEach(exstFields, (fields, sourceName) => {
+            if (!_.isEmpty(fields)) {
+                console.log(`Warning: database contains ${fields.length} unknown fields for '${sourceName}':`);
+                _.forEach(fields, (field) => {
                     console.log(`==> ${JSON.stringify(field)}`);
                 });
             }
         });
-        callback(null, Object.assign({}, context, {newData}));
+        callback(null, context);
     },
+    // 6. Generate migration
     (context, callback) => {
         const {newData} = context;
         if (newData.length) {
@@ -308,10 +309,11 @@ async.waterfall([
             callback(new Error('No new updates found'));
         }
     },
+    // 7. Write JSON files with the data
     (context, callback) => {
         const {newData, migrationDataFolder} = context;
         _.forEach(newData, (item) => {
-            const fileName = path.basename(item.inputPath, path.extname(item.inputPath));
+            const fileName = path.basename(item.fileName, path.extname(item.fileName));
             fs.writeFileSync(`${migrationDataFolder}/${fileName}.dif.json`, JSON.stringify({
                 generated: new Date(),
                 newFieldsCount: item.newFields.length,
