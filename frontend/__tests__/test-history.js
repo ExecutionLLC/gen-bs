@@ -1,4 +1,4 @@
-import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewHistoryItem} from '../app/actions/analysesHistory';
+import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewHistoryItem, receiveAnalysesHistory} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 //import {analyze} from '../app/actions/ui';
@@ -181,7 +181,66 @@ describe('History Tests', () => {
         });
     });
 
+    describe('Set current analysis', () => {
+        //TODO setCurrentAnalysesHistoryId
+    });
+
+    describe('Set history list', () => {
+        // check:
+        // - current id is null
+        // - new list have the current id
+        // - new list have no current id and have new analysis
+        // - new list have no current id and have no new analysis
+
+        // it('should be mocked correctly', () => {
+        //     expect(initialAppState.analysesHistory.newHistoryItem).not.toBe(null);
+        // });
+
+        it('should set history list without current item', (done) => {
+            const state = buildHistoryState();
+            const {initialAppState} = state;
+
+            const originalNewHistoryItem = initialAppState.analysesHistory.newHistoryItem;
+            expect(originalNewHistoryItem).not.toBe(null);
+
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(receiveAnalysesHistory([]))
+            }, (newState) => {
+                const {history, currentHistoryId, newHistoryItem} = mapStateToCollections(newState);
+                expect(history).toEqual([]);
+                expect(currentHistoryId).toBe(null);
+                expect(newHistoryItem).toEqual(originalNewHistoryItem); // seems lite it has toBe, but it is not, idk why
+                done();
+            });
+        });
+
+        it('should set history list with current item', (done) => {
+            const state = buildHistoryState();
+            const {initialAppState} = state;
+
+            const originalNewHistoryItem = initialAppState.analysesHistory.newHistoryItem;
+            expect(originalNewHistoryItem).not.toBe(null);
+            console.error(initialAppState.analysesHistory.history);
+
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                //TODO setCurrentAnalysesHistoryId, then check it
+                applyActions: (dispatch) => dispatch(receiveAnalysesHistory([initialAppState.currentHistoryId]))
+            }, (newState) => {
+                const {history, currentHistoryId, newHistoryItem} = mapStateToCollections(newState);
+                expect(history).toEqual([]);
+                expect(currentHistoryId).toBe(null);
+                expect(newHistoryItem).toEqual(originalNewHistoryItem);
+                expect(newHistoryItem).toBe(originalNewHistoryItem);
+                done();
+            });
+        });
+    });
+
     describe('Select history item', () => {
+        const state = buildHistoryState();
+        const {initialAppState} = state;
         let renewGlobalState = null;
         beforeAll((done) => {
             storeTestUtils.runTest({
