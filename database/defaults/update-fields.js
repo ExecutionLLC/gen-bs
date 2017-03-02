@@ -1,13 +1,13 @@
 'use strict';
 
-// This script updates labels for existing fields in the database.
-// Labels are loaded from templates/metadata/labels/*
-
 const Knex = require('knex');
 const _ = require('lodash');
 const fs = require('fs');
 const async = require('async');
 const assert = require('assert');
+const npm = require('npm');
+const path = require('path');
+
 const {processRulesFile, isBlank} = require('./parse-fields-labels');
 
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
@@ -53,6 +53,14 @@ const sources = [
     }
 ];
 
+const migrationsFolder = './database/migrations';
+const migrationTemplateFilePath = './database/defaults/update-fields-migration-template.js';
+
+function getUpdateFieldsMigrations() {
+    return _.filter(fs.readdirSync(migrationsFolder), (filename) => {
+        return (filename.match(/^\d+_update-fields\.js$/) !== null);
+    });
+}
 
 function hasTranslation(obj, language) {
     return obj[language] && (obj[language].label || obj[language].description);
@@ -107,13 +115,77 @@ function compareFields(fieldDb, fieldTxt, language) {
     }
 }
 
+function generateMigration(callback) {
+    async.waterfall([
+            (callback) => {
+                const ufMigrationsBefore = getUpdateFieldsMigrations();
+                npm.load({}, (error) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        npm.commands.run(['db:migrate:make', 'update-fields'], (error) => {
+                            if (error) {
+                                callback(error);
+                            } else { // command succeeded
+                                const ufMigrationsAfter = getUpdateFieldsMigrations();
+                                const diffArr = _.difference(ufMigrationsAfter, ufMigrationsBefore);
+                                if (diffArr.length) {
+                                    callback(null, diffArr[0]);
+                                } else {
+                                    callback(new Error('Cannot create database migration.'));
+                                }
+                            }
+                        });
+                    }
+                });
+            },
+            (migrationFileName, callback) => {
+                console.log(migrationFileName);
+                const migrationFilePath = `${migrationsFolder}/${migrationFileName}`;
+
+                // 1. create folder for migration files
+                const migrationDataFolder = migrationFilePath.slice(0, -3);
+                if (!fs.existsSync(migrationDataFolder)){
+                    fs.mkdirSync(migrationDataFolder);
+                }
+
+                // 2. generate migration
+                fs.readFile(migrationTemplateFilePath, 'utf8', (error, data) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        const migrationText = data.replace(/AUTO_GENERATED_DATA_FOLDER_PATH/g,
+                            path.basename(migrationFilePath, path.extname(migrationFilePath)));
+
+                        fs.writeFile(migrationFilePath, migrationText, 'utf8', (error) => {
+                            if (error) {
+                                callback(error);
+                            } else {
+                                callback(null, migrationDataFolder);
+                            }
+                        });
+                    }
+                });
+            }
+        ],
+        (error, migrationDataFolder) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(`Success ${migrationDataFolder}`);
+                callback(migrationDataFolder);
+            }
+        });
+}
+
 async.waterfall([
     // 1. Parse txt files
     (callback) => {
         const fieldsParRules = _.map(sources, (item) => {
             return {
                 inputPath: item.inputPath,
-                fields: processRulesFile(item.inputPath, item.outputPath, item.sourceName)
+                fields: processRulesFile(item.inputPath, item.outputPath, item.sourceName),
+                sourceName: item.sourceName
             }
         });
         callback(null, {fieldsParRules});
@@ -169,6 +241,8 @@ async.waterfall([
         const standartColumns = ['CHROM', 'POS', 'REF', 'ALT', 'ID', 'FILTER'];
         const exstFields = _.groupBy(fieldsProcessed, 'source_name');
 
+        let newData = [];
+
         _.forEach(fieldsParRules, (fileData) => {
 
             let newFields = [];
@@ -208,33 +282,52 @@ async.waterfall([
                     });
                 }
             });
+            if (newFields.length || newTranslations.length) {
+                newData.push({
+                    inputPath: fileData.inputPath,
+                    newFields,
+                    newTranslations
+                });
+            }
 
-            fs.writeFileSync(`${fileData.inputPath}.dif.json`, JSON.stringify({
-                generated: new Date(),
-                newFieldsCount: newFields.length,
-                newTranslationsCount: newTranslations.length,
-                newFields,
-                newTranslations
-            }, null, 2));
-        });
-
-        // 5. The rest of the existing fields should be logged, because they haven't entries in the parsing rule files.
-        _.forEach(exstFields, (fields) => {
-            if (!_.isEmpty(fields)) {
-                console.log(`Warning: database contains ${fields.length} unknown fields for '${fields[0].source_name}':`);
-                _.forEach(fields, (field) => {
+            // 5. The rest of the existing fields should be logged, because they haven't entries in the parsing rule files.
+            if (!_.isEmpty(exstFields[fileData.source_name])) {
+                console.log(`Warning: database contains ${exstFields[fileData.source_name].length} unknown fields for '${fileData.source_name}':`);
+                _.forEach(exstFields[fileData.source_name], (field) => {
                     console.log(`==> ${JSON.stringify(field)}`);
                 });
             }
         });
-        callback(null, context);
+        callback(null, Object.assign({}, context, {newData}));
+    },
+    (context, callback) => {
+        const {newData} = context;
+        if (newData.length) {
+            generateMigration((migrationDataFolder) => callback(null, Object.assign({}, context, {migrationDataFolder})));
+        } else {
+            callback(new Error('No new updates found'));
+        }
+    },
+    (context, callback) => {
+        const {newData, migrationDataFolder} = context;
+        _.forEach(newData, (item) => {
+            const fileName = path.basename(item.inputPath, path.extname(item.inputPath));
+            fs.writeFileSync(`${migrationDataFolder}/${fileName}.dif.json`, JSON.stringify({
+                generated: new Date(),
+                newFieldsCount: item.newFields.length,
+                newTranslationsCount: item.newTranslations.length,
+                newFields: item.newFields,
+                newTranslations: item.newTranslations
+            }, null, 2));
+        });
+        callback(null);
     }
 ], (error) => {
     if (error) {
-        console.error(`Failed to update labels: ${error}`);
+        console.error(`Failed: ${error}`);
         process.exit(1);
     } else {
-        console.log('Labels and migration are successfully generated.');
-
+        console.log('Migration was successfully generated.');
+        process.exit(0);
     }
 });

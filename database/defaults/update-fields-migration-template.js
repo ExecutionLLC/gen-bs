@@ -3,10 +3,9 @@ const BluebirdPromise = require('bluebird');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 const Uuid = require('node-uuid');
 
-// const jsonFiles = require('./20170227163220_update-fields/1000genomes.txt.dif.json');
 console.log(__dirname);
 const jsonFiles = [];
-const jsonDir = 'MIGRATION_DATA_FOLDER_PATH'; //'20170227163220_update-fields';
+const jsonDir = 'AUTO_GENERATED_DATA_FOLDER_PATH';
 
 require('fs').readdirSync(`${__dirname}/${jsonDir}`).forEach(function(file) {
     if (file.match(/\.json$/) !== null) {

@@ -20,7 +20,7 @@
     "build:webserver": "cd scripts/build; ./build.sh",
     "build:frontend": "cd frontend/; npm run build",
     "build": "npm run build:frontend; npm run build:webserver",
-    "db:migrate:update_fields": "node $NODE_DEBUG_OPTION ./database/defaults/run_npm_cmd.js"
+    "db:migrate:update_fields": "node $NODE_DEBUG_OPTION ./database/defaults/update-fields.js"
   },
   "repository": {
     "type": "git",
@@ -73,7 +73,8 @@
     "superagent": "2.2.0",
     "uglify-js": "github:mishoo/UglifyJS2#6eaeb19",
     "webpack": "1.13.1",
-    "ws": "1.0.1"
+    "ws": "1.0.1",
+    "npm": "^4.3.0"
   },
   "devDependencies": {
     "fakeredis": "1.0.3",
