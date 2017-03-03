@@ -105,7 +105,7 @@ class App extends Component {
                 />
                 <ViewsModal
                     showModal={modalWindows.views.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    closeModal={ () => { dispatch(closeModal(modalName.VIEWS)); } }
                     dispatch={dispatch}
                 />
                 <FiltersModal

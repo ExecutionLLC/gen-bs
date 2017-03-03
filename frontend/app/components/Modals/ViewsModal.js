@@ -122,7 +122,7 @@ class ViewsModal extends React.Component {
 
     onClose() {
         const {dispatch, closeModal} = this.props;
-        closeModal(modalName.VIEWS); // TODO: closeModal must have no params (it's obvious that we close views)
+        closeModal();
         dispatch(viewBuilderEndEdit());
     }
 
