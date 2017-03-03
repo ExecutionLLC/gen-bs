@@ -333,10 +333,6 @@ function processRulesFile(inputFilePath, source_name, languages) {
             };
         });
 
-        if (col.column_name === 'AFR_MAF') {
-            console.log(JSON.stringify(col));
-        }
-
         if ('columns' in col) {
             _.remove(col.columns, 'hidden');
             _.remove(col.columns, 'skip');
