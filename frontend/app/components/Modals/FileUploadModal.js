@@ -51,7 +51,7 @@ class FileUploadModal extends Component {
     }
 
     onClose() {
-        this.props.closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
+        this.props.closeModal();
     }
 
     onUploadShow() {
@@ -81,7 +81,8 @@ function mapStateToProps(state) {
 }
 
 FileUploadModal.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(FileUploadModal);

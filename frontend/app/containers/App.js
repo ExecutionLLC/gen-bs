@@ -115,7 +115,7 @@ class App extends Component {
                 />
                 <FileUploadModal
                     showModal={modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    closeModal={ () => { dispatch(closeModal(modalName.UPLOAD)); } }
                 />
                 <SavedFilesModal
                     showModal={savedFiles.showSavedFilesModal}
