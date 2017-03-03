@@ -96,8 +96,7 @@ function mapStateToProps(state) {
 
 AnalysisModal.propTypes = {
     showModal: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired
+    closeModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(AnalysisModal);

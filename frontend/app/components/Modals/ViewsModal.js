@@ -11,7 +11,6 @@ import {viewBuilderEndEdit} from '../../actions/viewBuilder';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
-import {modalName} from '../../actions/modalWindows';
 import * as i18n from '../../utils/i18n';
 
 class ViewsModal extends React.Component {
@@ -171,8 +170,7 @@ function mapStateToProps(state) {
 
 ViewsModal.propTypes = {
     showModal: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired
+    closeModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(ViewsModal);

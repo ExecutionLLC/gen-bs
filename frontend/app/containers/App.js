@@ -94,7 +94,6 @@ class App extends Component {
                 <AnalysisModal
                     showModal={modalWindows.analysis.showModal}
                     closeModal={ () => { dispatch(closeModal(modalName.ANALYSIS)); } }
-                    dispatch={dispatch}
                 />
                 <ErrorModal
                     showModal={showErrorWindow}
@@ -107,12 +106,10 @@ class App extends Component {
                 <ViewsModal
                     showModal={modalWindows.views.showModal}
                     closeModal={ () => { dispatch(closeModal(modalName.VIEWS)); } }
-                    dispatch={dispatch}
                 />
                 <FiltersModal
                     showModal={modalWindows.filters.showModal}
                     closeModal={ () => { dispatch(closeModal(modalName.FILTERS)); } }
-                    dispatch={dispatch}
                 />
                 <FileUploadModal
                     showModal={modalWindows.upload.showModal}

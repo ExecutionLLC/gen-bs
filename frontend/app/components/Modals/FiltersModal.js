@@ -12,7 +12,6 @@ import {filterBuilderEndEdit, filterBuilderStrategyName} from '../../actions/fil
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
-import {modalName} from '../../actions/modalWindows';
 import * as i18n from '../../utils/i18n';
 
 
@@ -199,8 +198,7 @@ function mapStateToProps(state) {
 
 FiltersModal.propTypes = {
     showModal: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired
+    closeModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(FiltersModal);
