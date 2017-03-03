@@ -47,7 +47,7 @@ class FiltersModal extends Component {
 
     onClose() {
         const {dispatch, closeModal} = this.props;
-        closeModal(modalName.FILTERS); // TODO: closeModal must have no params (it's obvious that we close upload)
+        closeModal();
         dispatch(filterBuilderEndEdit());
     }
 
@@ -198,7 +198,9 @@ function mapStateToProps(state) {
 }
 
 FiltersModal.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(FiltersModal);

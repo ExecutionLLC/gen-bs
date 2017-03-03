@@ -110,7 +110,7 @@ class App extends Component {
                 />
                 <FiltersModal
                     showModal={modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    closeModal={ () => { dispatch(closeModal(modalName.FILTERS)); } }
                     dispatch={dispatch}
                 />
                 <FileUploadModal
