@@ -64,19 +64,19 @@ function hasTranslation(obj, language) {
 function compareFields(fieldDb, fieldTxt, language) {
 
     if (!fieldTxt[language] || (!fieldTxt[language].label && !fieldTxt[language].description)) {
-        console.log(`Warning: field ${JSON.stringify(fieldTxt)} doesn't contain translation for '${language}'`);
+        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} doesn't contain translation for '${language}'`);
         return null;
     }
 
     let newLabel = '';
     let newDescription = '';
     if (isBlank(fieldTxt[language].label)) {
-        console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty label for '${language}'`);
+        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty label for '${language}'`);
     } else {
         newLabel = fieldTxt[language].label;
     }
     if (isBlank(fieldTxt[language].description)) {
-        console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty description for '${language}'`);
+        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty description for '${language}'`);
     } else {
         newDescription = fieldTxt[language].description;
     }
@@ -179,7 +179,7 @@ async.waterfall([
         const fieldsParRules = _.map(sources, (item) => {
             return {
                 fileName: item.fileName,
-                fields: processRulesFile(`${parsingRulesPath}/${item.fileName}`, item.sourceName),
+                fields: processRulesFile(`${parsingRulesPath}/${item.fileName}`, item.sourceName, languages),
                 sourceName: item.sourceName
             }
         });
@@ -187,6 +187,7 @@ async.waterfall([
     },
     // 2. Create and configure Knex, get fields from DB
     (context, callback) => {
+        const {fieldsParRules} = context;
         const databaseSettings = Config.database;
         const knex = new Knex({
             client: databaseSettings.client,
@@ -198,7 +199,11 @@ async.waterfall([
                 database: databaseSettings.databaseName
             }
         });
-        let query = knex.select('*').from('field').leftJoin('field_text', 'field.id', 'field_text.field_id');
+        let query = knex
+            .select('*')
+            .from('field')
+            .leftJoin('field_text', 'field.id', 'field_text.field_id')
+            .whereIn('source_name', _.uniq(_.map(fieldsParRules, item => item.sourceName)));
         query.asCallback((error, fields) => callback(error, Object.assign({}, context, {fields})));
     },
     // 3. prepare fields from DB for comparing
@@ -292,9 +297,9 @@ async.waterfall([
         const {exstFields} = context;
         _.forEach(exstFields, (fields, sourceName) => {
             if (!_.isEmpty(fields)) {
-                console.log(`Warning: database contains ${fields.length} unknown fields for '${sourceName}':`);
+                // console.log(`Warning: database contains ${fields.length} unknown fields for '${sourceName}':`);
                 _.forEach(fields, (field) => {
-                    console.log(`==> ${JSON.stringify(field)}`);
+                    // console.log(`==> ${JSON.stringify(field)}`);
                 });
             }
         });

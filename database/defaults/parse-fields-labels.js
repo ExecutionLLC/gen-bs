@@ -202,7 +202,7 @@ function getRawColumnData(inputFile) {
         };
     });
 
-    const sortedColumnData = _.sortBy(columnData, ['left']);
+    const sortedColumnData = _.sortBy(columnData, ['left']); // sort by position in the file
 
     // 2. Process prefixes
     let prefixes = [];
@@ -243,7 +243,7 @@ function fixDimensionForBoolean(col) {
     }
 }
 
-function validateColumn(col) {
+function validateColumn(col, languages) {
     if (isBlank(col.column_name)) {
         console.log(`Invalid column ${JSON.stringify(col)}`);
     } else {
@@ -262,12 +262,14 @@ function validateColumn(col) {
             console.log(`Invalid dimension in column ${JSON.stringify(col)}`);
         }
 
-        if (isBlank(col.en.label)) {
-            console.log(`Unknown en.label in column ${JSON.stringify(col)}`);
-        }
-        if (isBlank(col.en.description)) {
-            console.log(`Unknown en.description in column ${JSON.stringify(col)}`);
-        }
+        _.forEach(languages, (language) => {
+            if (isBlank(col[language].label)) {
+                console.log(`Unknown ${language}.label in column ${JSON.stringify(col)}`);
+            }
+            if (isBlank(col[language].description)) {
+                console.log(`Unknown ${language}.description in column ${JSON.stringify(col)}`);
+            }
+        });
     }
 }
 
@@ -291,8 +293,8 @@ function mapType(type) {
     return type === 'flag' ? 'boolean' : type;
 }
 
-function processRulesFile(inputFilePath, source_name) {
-    console.log(`\n# ---------- Process ${source_name} ---------- #`);
+function processRulesFile(inputFilePath, source_name, languages) {
+    console.log(`\n# ---------- Process ${source_name} [${inputFilePath}] ---------- #`);
 
     // Find all column entries in the text
     const rawColumnData = getRawColumnData(inputFilePath);
@@ -314,18 +316,32 @@ function processRulesFile(inputFilePath, source_name) {
             column_name: col.prefix ? `${col.prefix}_${col.column_name}` : col.column_name,
             source_name,
             value_type: mapType(col.type || 'string'),
-            dimension:  mapDimension(col.number || '0'),
-            en: {
-                label: col.name,
-                description: col.description || col.comment
-            },
-            ru: {
-                label: col.name_ru,
-                description: col.description_ru || col.comment_ru
-            }
+            dimension:  mapDimension(col.number || '0')
         };
 
+        const genLangProp = function (propName, language) {
+            if (language === 'en') {
+                return propName;
+            } else {
+                return `${propName}_${language}`;
+            }
+        };
+        _.forEach(languages, (language) => {
+            data[language] = {
+                label: col[genLangProp('name', language)],
+                description: col[genLangProp('description', language)] || col[genLangProp('comment', language)]
+            };
+        });
+
+        if (col.column_name === 'AFR_MAF') {
+            console.log(JSON.stringify(col));
+        }
+
         if ('columns' in col) {
+            _.remove(col.columns, 'hidden');
+            _.remove(col.columns, 'skip');
+            _.remove(col.columns, 'hide');
+
             _.forEach(col.columns, (subColumn) => {
 
                 let scdata = Object.assign({}, data);
@@ -333,6 +349,8 @@ function processRulesFile(inputFilePath, source_name) {
                 // data from sub column has a higher priority
                 if (subColumn.ref) {
                     scdata.column_name = col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref;
+                } else if (col.columns.length > 1) {
+                    exitWithError(`Cannot find ref for sub column ${JSON.stringify(col)}`);
                 }
 
                 if (subColumn.type) {
@@ -343,17 +361,20 @@ function processRulesFile(inputFilePath, source_name) {
                     scdata.dimension = mapDimension(subColumn.number);
                 }
 
-                if (subColumn.name) {
-                    scdata.en.label = subColumn.name;
-                }
+                _.forEach(languages, (language) => {
 
-                if (subColumn.comment) {
-                    scdata.en.description = subColumn.comment;
-                }
+                    if (!isBlank(subColumn.name)) {
+                        scdata[language].label = subColumn[genLangProp('name', language)];
+                    }
 
-                if (subColumn.description) {
-                    scdata.en.description = subColumn.description;
-                }
+                    if (!isBlank(subColumn.comment)) {
+                        scdata[language].description = subColumn[genLangProp('comment', language)];
+                    }
+
+                    if (!isBlank(subColumn.description)) {
+                        scdata[language].description = subColumn[genLangProp('description', language)];
+                    }
+                });
 
                 result.push(scdata);
             });
@@ -365,7 +386,7 @@ function processRulesFile(inputFilePath, source_name) {
 
     _.forEach(processedColumnData, fixDimensionForBoolean);
 
-    _.forEach(processedColumnData, validateColumn);
+    _.forEach(processedColumnData, (col) => validateColumn(col, languages));
 
     console.log(`Final count: ${processedColumnData.length}. (Skipped: ${skipped})`);
 
