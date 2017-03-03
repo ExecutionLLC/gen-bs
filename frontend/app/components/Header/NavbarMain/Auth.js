@@ -78,7 +78,6 @@ class Auth extends Component {
         const {dispatch, auth: {errorMessage}, p} = this.props;
         return (
             <div>
-
                 <div className={dropdownClasses}>
                     <DemoModeMessage
                         errorMessage={errorMessage}
@@ -98,7 +97,7 @@ class Auth extends Component {
                         <span className='visible-xs'>
                           <span className='dropdown-menu-header'>{p.t('navBar.auth.login')}</span>
                           <i className='md-i md-person md-replace-to-close' />
-                        </span>                          
+                        </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
                         <li className='dropdown-header'>{p.t('navBar.auth.dropdownHeader')}</li>
