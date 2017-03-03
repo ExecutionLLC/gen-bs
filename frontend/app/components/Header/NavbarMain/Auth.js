@@ -82,7 +82,6 @@ class Auth extends Component {
                 <div className={dropdownClasses}>
                     <DemoModeMessage
                         errorMessage={errorMessage}
-                        dispatch={dispatch}
                         onLoginClick={() => this.onLoginDropdownClick()}
                         p={p}
                     />
