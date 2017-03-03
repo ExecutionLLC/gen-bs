@@ -53,7 +53,7 @@ class Auth extends Component {
                         </span>
                         <span className='visible-xs'>
                             <span className='dropdown-menu-header'>{ profileMetadata.email }</span>
-                            <i className='md-i md-person md-replace-to-close'></i>
+                            <i className='md-i md-person md-replace-to-close' />
                         </span>
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
@@ -98,7 +98,7 @@ class Auth extends Component {
                         </span>
                         <span className='visible-xs'>
                           <span className='dropdown-menu-header'>{p.t('navBar.auth.login')}</span>
-                          <i className='md-i md-person md-replace-to-close'></i>
+                          <i className='md-i md-person md-replace-to-close' />
                         </span>                          
                     </a>
                     <ul className='dropdown-menu dropdown-menu-right'>
