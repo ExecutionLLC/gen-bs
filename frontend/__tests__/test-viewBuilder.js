@@ -74,7 +74,7 @@ describe('View builder', () => {
         };
     }
 
-    it('shoult proper mock tests', () => {
+    it('should proper mock tests', () => {
         const {newView, userView, allowedFields, deletingView} = initStore;
         expect(!!newView).toBe(true);
         expect(!!allowedFields).toBe(true);
