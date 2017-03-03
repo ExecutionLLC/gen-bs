@@ -75,19 +75,17 @@ class Auth extends Component {
     }
 
     _renderForDemoUser(dropdownClasses) {
-        const {dispatch, auth: {isDemo, errorMessage}, p} = this.props;
+        const {dispatch, auth: {errorMessage}, p} = this.props;
         return (
             <div>
 
                 <div className={dropdownClasses}>
-                    { isDemo &&
                     <DemoModeMessage
                         errorMessage={errorMessage}
                         dispatch={dispatch}
                         onLoginClick={() => this.onLoginDropdownClick()}
                         p={p}
                     />
-                    }
                     <a href='#'
                        onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
