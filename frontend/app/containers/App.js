@@ -26,6 +26,7 @@ import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem} from '../actions/analysesHistory';
 import {setCurrentLanguageId} from '../actions/ui';
+import {closeSavedFilesDialog} from '../actions/savedFiles';
 import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
 import * as i18n from '../utils/i18n';
@@ -119,6 +120,7 @@ class App extends Component {
                 />
                 <SavedFilesModal
                     showModal={savedFiles.showSavedFilesModal}
+                    closeModal={ () => { dispatch(closeSavedFilesDialog()); } }
                 />
                 <CloseAllUserSessionsModal
                     showModal={auth.showCloseAllUserSessionsDialog}
