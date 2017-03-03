@@ -26,14 +26,43 @@ class Auth extends Component {
         });
         if (isDemo) {
             return this._renderForDemoUser(dropdownClasses);
+        } else {
+            return this._renderForAuthorizedUser(dropdownClasses);
         }
-        return this._renderForAuthorizedUser(dropdownClasses);
     }
 
     handleClickOutside() {
         this.setState({
             isDropdownOpened: false
         });
+    }
+
+    _renderForAuthorizedUser(dropdownClasses) {
+        const {userData: {profileMetadata}, p} = this.props;
+
+        return this._renderCommon(
+            dropdownClasses,
+            p.t('navBar.auth.authorizedUserTitle'),
+            profileMetadata.email,
+            null,
+            () => this._renderForAuthorizedUserList()
+        );
+    }
+
+    _renderForDemoUser(dropdownClasses) {
+        const {auth: {errorMessage}, p} = this.props;
+
+        return this._renderCommon(
+            dropdownClasses,
+            p.t('navBar.auth.demoUserTitle'),
+            p.t('navBar.auth.login'),
+            <DemoModeMessage
+                errorMessage={errorMessage}
+                onLoginClick={() => this.onLoginDropdownClick()}
+                p={p}
+            />,
+            () => this._renderForDemoUserList()
+        );
     }
 
     _renderForAuthorizedUserList() {
@@ -56,46 +85,24 @@ class Auth extends Component {
         );
     }
 
-    _renderForAuthorizedUser(dropdownClasses) {
-        const {userData: {profileMetadata}, p} = this.props;
-        return (
-            <div>
-                <div className={dropdownClasses}>
-                    <a href='#'
-                       onClick={() => this.onLoginDropdownClick()}
-                       className='btn navbar-btn dropdown-toggle'
-                    >
-                        <span
-                            title={p.t('navBar.auth.authorizedUserTitle')}
-                            className='hidden-xs'
-                        >
-                            { profileMetadata.email }
-                        </span>
-                        <span className='visible-xs'>
-                            <span className='dropdown-menu-header'>{ profileMetadata.email }</span>
-                            <i className='md-i md-person md-replace-to-close' />
-                        </span>
-                    </a>
-                    {this._renderForAuthorizedUserList()}
-                </div>
-            </div>
-        );
-    }
-
     _renderForDemoUserList() {
         const {dispatch, p} = this.props;
 
         return (
             <ul className='dropdown-menu dropdown-menu-right'>
-                <li className='dropdown-header'>{p.t('navBar.auth.dropdownHeader')}</li>
+                <li className='dropdown-header'>
+                    {p.t('navBar.auth.dropdownHeader')}
+                </li>
                 <li className='form-inline'>
                     <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
-                                <span title={p.t('navBar.auth.googleAccountTitle')}>
-                                    {p.t('navBar.auth.googleAccountCaption')}
-                                </span>
+                        <span title={p.t('navBar.auth.googleAccountTitle')}>
+                            {p.t('navBar.auth.googleAccountCaption')}
+                        </span>
                     </a>
                 </li>
-                <li className='dropdown-header'>{p.t('navBar.auth.loginPasswordCaption')}</li>
+                <li className='dropdown-header'>
+                    {p.t('navBar.auth.loginPasswordCaption')}
+                </li>
                 <li>
                     <LoginForm
                         dispatch={dispatch}
@@ -107,32 +114,29 @@ class Auth extends Component {
         );
     }
 
-    _renderForDemoUser(dropdownClasses) {
-        const {auth: {errorMessage}, p} = this.props;
+    _renderCommon(dropdownClasses, title, emailOrLogin, demoModeMessage, renderList) {
         return (
             <div>
                 <div className={dropdownClasses}>
-                    <DemoModeMessage
-                        errorMessage={errorMessage}
-                        onLoginClick={() => this.onLoginDropdownClick()}
-                        p={p}
-                    />
+                    {demoModeMessage}
                     <a href='#'
                        onClick={() => this.onLoginDropdownClick()}
                        className='btn navbar-btn dropdown-toggle'
                     >
                         <span
-                            title={p.t('navBar.auth.demoUserTitle')}
+                            title={title}
                             className='hidden-xs'
                         >
-                            {p.t('navBar.auth.login')}
+                            {emailOrLogin}
                         </span>
                         <span className='visible-xs'>
-                          <span className='dropdown-menu-header'>{p.t('navBar.auth.login')}</span>
-                          <i className='md-i md-person md-replace-to-close' />
+                            <span className='dropdown-menu-header'>
+                                {emailOrLogin}
+                            </span>
+                            <i className='md-i md-person md-replace-to-close' />
                         </span>
                     </a>
-                    {this._renderForDemoUserList()}
+                    {renderList()}
                 </div>
             </div>
         );
