@@ -36,6 +36,26 @@ class Auth extends Component {
         });
     }
 
+    _renderForAuthorizedUserList() {
+        const {p} = this.props;
+
+        return (
+            <ul className='dropdown-menu dropdown-menu-right'>
+                <li className='form-inline'>
+                    <a
+                        onClick={ () => { this.props.dispatch(logout()); } }
+                        href='#'
+                        type='button'
+                        className='btn btn-primary btn-uppercase'
+                        id='logout'
+                    >
+                        <span>{p.t('navBar.auth.logout')}</span>
+                    </a>
+                </li>
+            </ul>
+        );
+    }
+
     _renderForAuthorizedUser(dropdownClasses) {
         const {userData: {profileMetadata}, p} = this.props;
         return (
@@ -56,26 +76,39 @@ class Auth extends Component {
                             <i className='md-i md-person md-replace-to-close' />
                         </span>
                     </a>
-                    <ul className='dropdown-menu dropdown-menu-right'>
-                        <li className='form-inline'>
-                            <a
-                                onClick={ () => { this.props.dispatch(logout()); } }
-                                href='#'
-                                type='button'
-                                className='btn btn-primary btn-uppercase'
-                                id='logout'
-                            >
-                                <span>{p.t('navBar.auth.logout')}</span>
-                            </a>
-                        </li>
-                    </ul>
+                    {this._renderForAuthorizedUserList()}
                 </div>
             </div>
         );
     }
 
+    _renderForDemoUserList() {
+        const {dispatch, p} = this.props;
+
+        return (
+            <ul className='dropdown-menu dropdown-menu-right'>
+                <li className='dropdown-header'>{p.t('navBar.auth.dropdownHeader')}</li>
+                <li className='form-inline'>
+                    <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
+                                <span title={p.t('navBar.auth.googleAccountTitle')}>
+                                    {p.t('navBar.auth.googleAccountCaption')}
+                                </span>
+                    </a>
+                </li>
+                <li className='dropdown-header'>{p.t('navBar.auth.loginPasswordCaption')}</li>
+                <li>
+                    <LoginForm
+                        dispatch={dispatch}
+                        closeLoginForm={() => this.handleClickOutside()}
+                        p={p}
+                    />
+                </li>
+            </ul>
+        );
+    }
+
     _renderForDemoUser(dropdownClasses) {
-        const {dispatch, auth: {errorMessage}, p} = this.props;
+        const {auth: {errorMessage}, p} = this.props;
         return (
             <div>
                 <div className={dropdownClasses}>
@@ -99,24 +132,7 @@ class Auth extends Component {
                           <i className='md-i md-person md-replace-to-close' />
                         </span>
                     </a>
-                    <ul className='dropdown-menu dropdown-menu-right'>
-                        <li className='dropdown-header'>{p.t('navBar.auth.dropdownHeader')}</li>
-                        <li className='form-inline'>
-                            <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
-                                <span title={p.t('navBar.auth.googleAccountTitle')}>
-                                    {p.t('navBar.auth.googleAccountCaption')}
-                                </span>
-                            </a>
-                        </li>
-                        <li className='dropdown-header'>{p.t('navBar.auth.loginPasswordCaption')}</li>
-                        <li>
-                            <LoginForm
-                                dispatch={dispatch}
-                                closeLoginForm={() => this.handleClickOutside()}
-                                p={p}
-                            />
-                        </li>
-                    </ul>
+                    {this._renderForDemoUserList()}
                 </div>
             </div>
         );
