@@ -327,10 +327,10 @@ async.waterfall([
     (context, callback) => {
         const {exstFields} = context;
         _.forEach(exstFields, (fields, sourceName) => {
-            if (!_.isEmpty(fields)) {
-                // console.log(`Warning: database contains ${fields.length} unknown fields for '${sourceName}':`);
+            if (sourceName !== 'sample' && !_.isEmpty(fields)) {
+                 console.log(`Warning: database contains ${fields.length} unknown fields for '${sourceName}':`);
                 _.forEach(fields, (field) => {
-                    // console.log(`==> ${JSON.stringify(field)}`);
+                    console.log(`==> ${JSON.stringify(field)}`);
                 });
             }
         });
