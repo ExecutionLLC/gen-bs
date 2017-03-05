@@ -61,7 +61,7 @@ function hasTranslation(obj, language) {
     return obj[language] && (obj[language].label || obj[language].description);
 }
 
-function compareFields(fieldDb, fieldTxt, language) {
+function createTranslation(fieldDb, fieldTxt, language) {
 
     if (!fieldTxt[language] || (!fieldTxt[language].label && !fieldTxt[language].description)) {
         // console.log(`Warning: field ${JSON.stringify(fieldTxt)} doesn't contain translation for '${language}'`);
@@ -248,38 +248,69 @@ async.waterfall([
             let newFields = [];
             let newTranslations = [];
 
+            let generateTranslationsForField = function (existingField, prField) {
+                _.forEach(languages, (language) => {
+                    const translation = createTranslation(existingField, prField, language);
+                    if (translation) {
+                        const f = _.find(newTranslations, {id: existingField.id});
+                        if (f) {
+                            f[language] = translation;
+                        } else {
+                            const updateTranslationInfo = {
+                                id: existingField.id,
+                                column_name: existingField.name,
+                            };
+                            updateTranslationInfo[language] = translation;
+                            newTranslations.push(updateTranslationInfo);
+                        }
+                    }
+                });
+            };
+
             _.forEach(fileData.fields, (prField) => {
 
                 const existingFieldArr = _.remove(exstFields[prField.source_name], (item) => {
-                    return (item.name === prField.column_name &&
-                    item.source_name === prField.source_name);
-                    /* 'value_type': prField.value_type,
-                     'dimension': +prField.dimension*/
+                    return (item.name === prField.column_name && item.source_name === prField.source_name);
                 });
                 if (_.isEmpty(existingFieldArr)) {
-                    // console.warn(`${JSON.stringify(prField)} is not found in database.`);
                     if (!_.includes(standartColumns, prField.column_name)) {
-                        newFields.push(prField); // add new field to diff.json
-                    }
-                } else {
-                    const existingField = existingFieldArr[0];
-                    _.forEach(languages, (language) => {
-
-                        const translation = compareFields(existingField, prField, language);
-                        if (translation) {
-                            const f = _.find(newTranslations, {id: existingField.id});
-                            if (f) {
-                                f[language] = translation;
-                            } else {
-                                const updateTranslationInfo = {
-                                    id: existingField.id,
-                                    column_name: existingField.name,
-                                };
-                                updateTranslationInfo[language] = translation;
-                                newTranslations.push(updateTranslationInfo);
-                            }
+                        if (fileData.sourceName !== 'sample') {
+                            console.log(`ERROR: found new field ${JSON.stringify(prField)} in ${fileData.fileName}`);
+                        } else {
+                            console.log(`INFO: found new field ${JSON.stringify(prField)} in ${fileData.fileName}`);
+                            newFields.push(prField);
                         }
-                    });
+                    }
+                } else if (existingFieldArr.length === 1) {
+                    const dbField = existingFieldArr[0];
+                    const valueTypeEquals = dbField.value_type === prField.value_type;
+                    const dimensionEquals = dbField.dimension !== prField.dimension;
+
+                    if (!valueTypeEquals || !dimensionEquals) {
+
+                        const msg = `value type and/or dimension mismatch between \n\tDB: ${JSON.stringify(dbField)} \n\tTXT: ${JSON.stringify(prField)}`;
+
+                        if (fileData.sourceName === 'sample') {
+                            console.log(`WARNING: ${msg}`); // and not update translation
+                            console.log(`WARNING: cannot update translation for ${prField.column_name}`);
+                        } else {
+                            console.log(`WARNING: ${msg}`);
+                            generateTranslationsForField(dbField, prField);
+                        }
+                    } else {
+                        generateTranslationsForField(dbField, prField);
+                    }
+
+                } else {
+                    const dbField = _.find(existingFieldArr, {value_type: prField.value_type, dimension: +prField.dimension});
+                    if (dbField) {
+                        generateTranslationsForField(dbField, prField);
+                    } else {
+                        console.log(`ERROR: cannot update translation for ${prField.column_name}. Found ${existingFieldArr.length} ambiguous variants:`);
+                        _.forEach(existingFieldArr, (variant) => {
+                            console.log(`${JSON.stringify(variant)}`);
+                        });
+                    }
                 }
             });
             if (newFields.length || newTranslations.length) {
