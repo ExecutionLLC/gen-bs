@@ -12,6 +12,7 @@ import DemoModeMessage from '../../Errors/DemoModeMessage';
 class Auth extends Component {
     constructor(...args) {
         super(...args);
+        this.onKeyDownBinded = this.onKeyDownBinded.bind(this);
         this.state = {
             isDropdownOpened: false
         };
@@ -19,7 +20,6 @@ class Auth extends Component {
 
     render() {
         const {auth: {isDemo}} = this.props;
-        // TODO: Close form on Esc
         const dropdownClasses = classNames({
             dropdown: true,
             open: this.state.isDropdownOpened
@@ -145,6 +145,26 @@ class Auth extends Component {
     onLoginDropdownClick() {
         this.setState({
             isDropdownOpened: !this.state.isDropdownOpened
+        });
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.onKeyDownBinded);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.onKeyDownBinded);
+    }
+
+    onKeyDownBinded({keyCode}) {
+        if (keyCode === 27) {
+            this.onEscape();
+        }
+    }
+
+    onEscape() {
+        this.setState({
+            isDropdownOpened: false
         });
     }
 }
