@@ -135,7 +135,6 @@ function generateMigration(callback) {
             });
         },
         (migrationFileName, callback) => {
-            console.log(migrationFileName);
             const migrationFilePath = `${migrationsFolder}/${migrationFileName}`;
 
             // 1. create folder for migration files
@@ -167,7 +166,6 @@ function generateMigration(callback) {
         if (error) {
             console.log(error);
         } else {
-            console.log(`Success ${migrationDataFolder}`);
             callback(migrationDataFolder);
         }
     });
