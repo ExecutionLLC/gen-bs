@@ -72,7 +72,7 @@ class NavbarMain extends Component {
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => this.onSendSearchRequest(globalSearchString) }
-                        onGlobalSearchStringChanged={ (globalSearchString) => this.onChangeGlobasSearchValue(globalSearchString) }
+                        onGlobalSearchStringChanged={ (globalSearchString) => this.onChangeGlobalSearchValue(globalSearchString) }
                         search={search}
                         p={this.props.p}
                     />
@@ -100,11 +100,11 @@ class NavbarMain extends Component {
 
     onSendSearchRequest(searchString) {
         const {dispatch} = this.props;
-        this.onChangeGlobasSearchValue(searchString);
+        this.onChangeGlobalSearchValue(searchString);
         dispatch(searchInResultsSortFilter());
     }
 
-    onChangeGlobasSearchValue(searchString) {
+    onChangeGlobalSearchValue(searchString) {
         const {dispatch} = this.props;
         dispatch(changeVariantsGlobalFilter(searchString));
     }
