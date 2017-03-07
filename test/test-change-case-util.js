@@ -105,7 +105,7 @@ describe('ChangeCaseUtil', () => {
             checkConvertResultTheSame(convertToSnakeTestSuit, 1);
         });
 
-        it('should convert ampty array and object', () => {
+        it('should convert empty array and object', () => {
             checkConvertResult(convertToCamelTestSuit, [], []);
             checkConvertResult(convertToCamelTestSuit, {}, {});
             checkConvertResult(convertToSnakeTestSuit, [], []);
