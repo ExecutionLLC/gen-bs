@@ -59,20 +59,20 @@ const generateAndCheckHash = (objectGenerator, converterFunc, objectChecker) => 
 
 function checkConvertResultTheSame(converts, source) {
     const result = converts.forward(source);
-    assert.equal(result, source);
+    assert.strictEqual(result, source);
     const resultBack = converts.backward(result);
-    assert.equal(resultBack, source);
+    assert.strictEqual(resultBack, source);
 }
 
 function checkConvertResult(testSuite, source, wantedResult, dontConvertBack) {
     const result = testSuite.forward(source);
     assert.notEqual(result, source);
-    assert.deepEqual(result, wantedResult);
+    assert.deepStrictEqual(result, wantedResult);
     const resultBack = testSuite.backward(result);
     assert.notEqual(resultBack, result);
     assert.notEqual(resultBack, source);
     if (!dontConvertBack) {
-        assert.deepEqual(resultBack, source);
+        assert.deepStrictEqual(resultBack, source);
     }
 }
 
