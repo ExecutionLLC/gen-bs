@@ -24,7 +24,7 @@ import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
-import {editAnalysesHistoryItem} from '../actions/analysesHistory';
+import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
 import {setCurrentLanguageId} from '../actions/ui';
 import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
@@ -57,15 +57,22 @@ class App extends Component {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
-        const currentHistoryId = analysesHistory.currentHistoryId;
-        const historyList = analysesHistory.history;
-        const newHistoryItem = analysesHistory.newHistoryItem;
-        const currentHistoryItem =
+        const {history: historyList, newHistoryItem, currentHistoryId} = analysesHistory;
+
+        const samplesOnSaveParams =
             currentHistoryId ?
-                historyList.find((historyItem) => historyItem.id === currentHistoryId) :
-                newHistoryItem;
-        const selectedSamplesIds = currentHistoryItem ? _.map(currentHistoryItem.samples, sample => sample.id) : null;
-        const action = editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId);
+                {
+                    action: resetCurrentAnalysesHistoryIdLoadDataAsync,
+                    propertyIndex: null,
+                    propertyId: null,
+                    sampleIds: null
+                } :
+                {
+                    action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
+                    propertyIndex: 'changeItem.sample.index',
+                    propertyId: 'changeItem.sample.id',
+                    sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
+                };
 
         return (
             <div className='main subnav-closed' id='main'>
@@ -78,7 +85,7 @@ class App extends Component {
                             dispatch(openModal(modalName.ANALYSIS));
                         }}
                         openSamplesModal={() => {
-                            dispatch(samplesOnSave(selectedSamplesIds, null, 'changeItem.sample.index', 'changeItem.sample.id', action));
+                            dispatch(samplesOnSave(samplesOnSaveParams.sampleIds, null, samplesOnSaveParams.propertyIndex, samplesOnSaveParams.propertyId, samplesOnSaveParams.action));
                             dispatch(openModal(modalName.UPLOAD));
                         }}
                     />
