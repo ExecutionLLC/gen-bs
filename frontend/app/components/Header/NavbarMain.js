@@ -20,19 +20,11 @@ class NavbarMain extends Component {
 
     render() {
         const {
-            dispatch,
             variantsTable: {selectedRowIndices, searchInResultsParams: {topSearch: {search}}},
             samplesList,
             fileUpload: {filesProcesses},
             ui: {languages}
         } = this.props;
-        const changeGlobalSearchValue = (globalSearchString) => {
-            dispatch(changeVariantsGlobalFilter(globalSearchString));
-        };
-        const sendSearchRequest = (globalSearchString) => {
-            dispatch(changeVariantsGlobalFilter(globalSearchString));
-            dispatch(searchInResultsSortFilter());
-        };
 
         // count the same way as they displaying in FileUploadLeftPane
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
@@ -79,8 +71,8 @@ class NavbarMain extends Component {
                         p={this.props.p}
                     />
                     <NavbarSearch
-                        onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
-                        onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
+                        onGlobalSearchRequested={ (globalSearchString) => this.onSendSearchRequest(globalSearchString) }
+                        onGlobalSearchStringChanged={ (globalSearchString) => this.onChangeGlobalSearchValue(globalSearchString) }
                         search={search}
                         p={this.props.p}
                     />
@@ -106,6 +98,16 @@ class NavbarMain extends Component {
         );
     }
 
+    onSendSearchRequest(searchString) {
+        const {dispatch} = this.props;
+        this.onChangeGlobalSearchValue(searchString);
+        dispatch(searchInResultsSortFilter());
+    }
+
+    onChangeGlobalSearchValue(searchString) {
+        const {dispatch} = this.props;
+        dispatch(changeVariantsGlobalFilter(searchString));
+    }
 }
 
 function mapStateToProps(state) {
