@@ -73,7 +73,7 @@ export default class AnalysisRightPane extends React.Component {
                     {this.renderAnalysisDates(historyItem.createdDate)}
                     {this.renderAnalysisDescription(i18n.getEntityText(historyItem, languageId).description, isDemo)}
                 </div>
-                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
+                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type)}
             </div>
         );
     }
@@ -577,8 +577,8 @@ export default class AnalysisRightPane extends React.Component {
         }[type] || '';
     }
 
-    renderAnalysisHeaderTabs(historyItemType, disabled) {
-        const {dispatch, p} = this.props;
+    renderAnalysisHeaderTabs(historyItemType) {
+        const {dispatch} = this.props;
         const tabs = [
             {
                 isActive: historyItemType === analysisType.SINGLE,
@@ -601,8 +601,7 @@ export default class AnalysisRightPane extends React.Component {
         ];
         return (
             <ul role='tablist' className='nav nav-tabs'>
-                {disabled && <li className='pull-right text-muted'>{p.t('analysis.rightPane.duplicate')}</li>}
-                {tabs.filter((tab) => tab.isActive || !disabled).map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
+                {tabs.map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
             </ul>
         );
     }
