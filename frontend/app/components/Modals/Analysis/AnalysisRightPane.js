@@ -44,7 +44,7 @@ export default class AnalysisRightPane extends React.Component {
         const {historyItem, disabled, auth: {isDemo}, isBringToFront} = this.props;
 
         return (
-            <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
+            <div className={classNames('split-right', {'bring-to-front': isBringToFront})}>
                 {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
                 <div className='split-scroll'>
                     <div className='form-padding'>
