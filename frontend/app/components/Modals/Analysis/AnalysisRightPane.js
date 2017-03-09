@@ -527,6 +527,34 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderAnalysisDescription(description, disabled) {
+        const {p} = this.props;
+        return (
+            <div className='form-group'>
+                <div className='col-md-12 col-xs-12'>
+                    <Input
+                        value={description}
+                        disabled={disabled}
+                        placeholder={p.t('analysis.rightPane.analysisDescriptionPlaceHolder')}
+                        className='form-control material-input-sm'
+                        onChange={(str) => this.onAnalysisDescriptionChange(str)}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    renderAnalysisDates(createdDate) {
+        const {p} = this.props;
+        return (
+            <div className='label-group-date'>
+                <label>
+                    <span>{p.t('analysis.rightPane.created')}</span>: <span>{formatDate(createdDate)}</span>
+                </label>
+            </div>
+        );
+    }
+
     analysisTypeCaption(type) {
         const {p} = this.props;
         return {
@@ -578,34 +606,6 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderAnalysisDates(createdDate) {
-        const {p} = this.props;
-        return (
-            <div className='label-group-date'>
-                <label>
-                    <span>{p.t('analysis.rightPane.created')}</span>: <span>{formatDate(createdDate)}</span>
-                </label>
-            </div>
-        );
-    }
-
-    renderAnalysisDescription(description, disabled) {
-        const {p} = this.props;
-        return (
-            <div className='form-group'>
-                <div className='col-md-12 col-xs-12'>
-                    <Input
-                        value={description}
-                        disabled={disabled}
-                        placeholder={p.t('analysis.rightPane.analysisDescriptionPlaceHolder')}
-                        className='form-control material-input-sm'
-                        onChange={(str) => this.onAnalysisDescriptionChange(str)}
-                    />
-                </div>
-            </div>
-        );
-    }
-
     renderAnalysisHeaderTab(isActive, tabClassName, tabCaption, onClick) {
         return (
             <li
