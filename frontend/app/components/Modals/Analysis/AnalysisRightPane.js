@@ -941,6 +941,7 @@ const hashedArrayPropTypeShape = PropTypes.shape({
 }).isRequired;
 
 AnalysisRightPane.propTypes = {
+    dispatch: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired,
     isBringToFront: PropTypes.bool.isRequired,
     auth: PropTypes.shape({isDemo: PropTypes.bool.isRequired}).isRequired,
