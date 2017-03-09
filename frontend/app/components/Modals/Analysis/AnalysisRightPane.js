@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import classNames from 'classnames';
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
@@ -930,3 +930,25 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 }
+
+const hashedArrayPropTypeShape = PropTypes.shape({
+    hashedArray: {
+        hash: PropTypes.object.isRequired,
+        array: PropTypes.array.isRequired
+    }
+}).isRequired;
+
+AnalysisRightPane.propTypes = {
+    disabled: PropTypes.bool.isRequired,
+    isBringToFront: PropTypes.bool.isRequired,
+    auth: PropTypes.shape({isDemo: PropTypes.bool.isRequired}).isRequired,
+    ui: PropTypes.shape({languageId: PropTypes.string.isRequired}).isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    fields: PropTypes.object.isRequired,
+    samplesList: hashedArrayPropTypeShape,
+    filtersList: hashedArrayPropTypeShape,
+    modelsList: hashedArrayPropTypeShape,
+    viewsList: hashedArrayPropTypeShape,
+    historyItem: PropTypes.shape({id: PropTypes.string.isRequired}),
+    currentItemId: PropTypes.string.isRequired
+};
