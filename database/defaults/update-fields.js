@@ -57,10 +57,6 @@ function getUpdateFieldsMigrations() {
     });
 }
 
-function hasTranslation(obj, language) {
-    return obj[language] && (obj[language].label || obj[language].description);
-}
-
 function createTranslation(fieldDb, fieldTxt, language) {
 
     if (!fieldTxt[language] || (!fieldTxt[language].label && !fieldTxt[language].description)) {
@@ -70,15 +66,15 @@ function createTranslation(fieldDb, fieldTxt, language) {
 
     let newLabel = '';
     let newDescription = '';
-    if (isBlank(fieldTxt[language].label)) {
-        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty label for '${language}'`);
-    } else {
+    if (!isBlank(fieldTxt[language].label)) {
         newLabel = fieldTxt[language].label;
-    }
-    if (isBlank(fieldTxt[language].description)) {
-        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty description for '${language}'`);
     } else {
+        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty label for '${language}'`);
+    }
+    if (!isBlank(fieldTxt[language].description)) {
         newDescription = fieldTxt[language].description;
+    } else {
+        // console.log(`Warning: field ${JSON.stringify(fieldTxt)} contains empty description for '${language}'`);
     }
 
     let oldLabel = '';
@@ -95,7 +91,7 @@ function createTranslation(fieldDb, fieldTxt, language) {
     if (newLabel === oldLabel && newDescription === oldDescription) {
         return null;
     } else {
-        let result = {};
+        const result = {};
 
         if (newLabel !== oldLabel) {
             result.newLabel = newLabel;
@@ -162,26 +158,28 @@ function generateMigration(callback) {
             });
         }
     ],
-    (error, migrationDataFolder) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback(migrationDataFolder);
-        }
-    });
+    callback);
 }
 
 async.waterfall([
     // 1. Parse txt files
     (callback) => {
-        const fieldsParRules = _.map(sources, (item) => {
-            return {
-                fileName: item.fileName,
-                fields: processRulesFile(`${parsingRulesPath}/${item.fileName}`, item.sourceName, languages),
-                sourceName: item.sourceName
-            }
+        async.mapSeries(sources, (item, callback) => {
+            fs.readFile(`${parsingRulesPath}/${item.fileName}`, (err, content) => {
+                if (err) {
+                    callback(err);
+                } else {
+                    console.log(`\n# ---------- Process ${item.sourceName} [${item.fileName}] ---------- #`);
+                    callback(null, {
+                        fileName: item.fileName,
+                        fields: processRulesFile(content.toString(), item.sourceName, languages),
+                        sourceName: item.sourceName
+                    });
+                }
+            });
+        }, (err, fieldsParRules) => {
+            callback(null, {fieldsParRules});
         });
-        callback(null, {fieldsParRules});
     },
     // 2. Create and configure Knex, get fields from DB
     (context, callback) => {
@@ -217,8 +215,8 @@ async.waterfall([
                     result[fieldRow.id] = {
                         id: fieldRow.id,
                         name: fieldRow.name,
-                        source_name: fieldRow.source_name,
-                        value_type: fieldRow.value_type,
+                        sourceName: fieldRow.source_name,
+                        valueType: fieldRow.value_type,
                         dimension: fieldRow.dimension,
                     };
                 }
@@ -237,7 +235,7 @@ async.waterfall([
     (context, callback) => {
         const {fieldsProcessed, fieldsParRules} = context;
         const standartColumns = ['CHROM', 'POS', 'REF', 'ALT', 'ID', 'FILTER'];
-        const exstFields = _.groupBy(fieldsProcessed, 'source_name');
+        const exstFields = _.groupBy(fieldsProcessed, 'sourceName');
 
         let newData = [];
 
@@ -256,7 +254,7 @@ async.waterfall([
                         } else {
                             const updateTranslationInfo = {
                                 id: existingField.id,
-                                column_name: existingField.name,
+                                columnName: existingField.name,
                             };
                             updateTranslationInfo[language] = translation;
                             newTranslations.push(updateTranslationInfo);
@@ -267,11 +265,11 @@ async.waterfall([
 
             _.forEach(fileData.fields, (prField) => {
 
-                const existingFieldArr = _.remove(exstFields[prField.source_name], (item) => {
-                    return (item.name === prField.column_name && item.source_name === prField.source_name);
+                const existingFieldArr = _.remove(exstFields[prField.sourceName], (item) => {
+                    return (item.name === prField.columnName && item.sourceName === prField.sourceName);
                 });
                 if (_.isEmpty(existingFieldArr)) {
-                    if (!_.includes(standartColumns, prField.column_name)) {
+                    if (!_.includes(standartColumns, prField.columnName)) {
                         if (fileData.sourceName !== 'sample') {
                             console.log(`ERROR: found new field ${JSON.stringify(prField)} in ${fileData.fileName}`);
                         } else {
@@ -281,7 +279,7 @@ async.waterfall([
                     }
                 } else if (existingFieldArr.length === 1) {
                     const dbField = existingFieldArr[0];
-                    const valueTypeEquals = dbField.value_type === prField.value_type;
+                    const valueTypeEquals = dbField.valueType === prField.valueType;
                     const dimensionEquals = dbField.dimension !== prField.dimension;
 
                     if (!valueTypeEquals || !dimensionEquals) {
@@ -290,7 +288,7 @@ async.waterfall([
 
                         if (fileData.sourceName === 'sample') {
                             console.log(`WARNING: ${msg}`); // and not update translation
-                            console.log(`WARNING: cannot update translation for ${prField.column_name}`);
+                            console.log(`WARNING: cannot update translation for ${prField.columnName}`);
                         } else {
                             console.log(`WARNING: ${msg}`);
                             generateTranslationsForField(dbField, prField);
@@ -300,11 +298,11 @@ async.waterfall([
                     }
 
                 } else {
-                    const dbField = _.find(existingFieldArr, {value_type: prField.value_type, dimension: +prField.dimension});
+                    const dbField = _.find(existingFieldArr, {valueType: prField.valueType, dimension: +prField.dimension});
                     if (dbField) {
                         generateTranslationsForField(dbField, prField);
                     } else {
-                        console.log(`ERROR: cannot update translation for ${prField.column_name}. Found ${existingFieldArr.length} ambiguous variants:`);
+                        console.log(`ERROR: cannot update translation for ${prField.columnName}. Found ${existingFieldArr.length} ambiguous variants:`);
                         _.forEach(existingFieldArr, (variant) => {
                             console.log(`${JSON.stringify(variant)}`);
                         });
@@ -338,9 +336,10 @@ async.waterfall([
     (context, callback) => {
         const {newData} = context;
         if (newData.length) {
-            generateMigration((migrationDataFolder) => callback(null, Object.assign({}, context, {migrationDataFolder})));
+            generateMigration((error, migrationDataFolder) => callback(error, Object.assign({}, context, {migrationDataFolder})));
         } else {
-            callback(new Error('No new updates found'));
+            console.log('No new updates found');
+            callback(null, context);
         }
     },
     // 7. Write JSON files with the data

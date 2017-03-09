@@ -6,9 +6,9 @@ const _ = require('lodash');
 
 function getAllIndexes(str, subStr) {
     let indexes = [];
-    let i = 0;
+    let i = -1;
     while (true) {
-        i = str.indexOf(subStr, i+1);
+        i = str.indexOf(subStr, i + subStr.length);
         if (i === -1) {
             break;
         } else {
@@ -22,12 +22,15 @@ function findClosingChar(str, openPos, openChar = '{', closeChar = '}') {
     let closePos = openPos;
     let counter = 1;
     while (counter > 0) {
-        const char = str[++closePos];
+        const char = str[++closePos]; // skip position of opening character
         if (char === openChar) {
             counter++;
-        }
-        else if (char === closeChar) {
+        } else if (char === closeChar) {
             counter--;
+        }
+        if (closePos > str.length) {
+            closePos = -1;
+            break;
         }
     }
     return closePos;
@@ -45,6 +48,12 @@ function  assertRange(left, right) {
 }
 
 function cutQuotes(str) {
+    if (str.length < 2) {
+        if (str.length === 1 && str.charAt(0) === '"') {
+            console.log(`Warning: double quote mismatch in '${str}'`);
+        }
+        return str;
+    }
     const firstCh = str.charAt(0);
     const lastCh = str.slice(-1);
     if (firstCh === '"' && lastCh === '"') {
@@ -58,27 +67,34 @@ function cutQuotes(str) {
 }
 
 // range1 inside of range2
-function insideOf(r1, r2)
-{
+function insideOf(r1, r2) {
     assertRange(r1.left, r1.right);
     assertRange(r2.left, r2.right);
-    if (r1.left < r2.left && r1.right >= r2.left && r1.right <= r2.right) {
-        throw `Intersection detected for ranges {${r1.left} - ${r1.right}} and {${r2.left} - ${r2.right}}`;
-    } else if (r1.left >= r2.left && r1.left <= r2.right && r1.right > r2.right) {
+    if ((r1.left < r2.left && r1.right >= r2.left && r1.right <= r2.right) ||
+        (r1.left >= r2.left && r1.left <= r2.right && r1.right > r2.right)) {
         throw `Intersection detected for ranges {${r1.left} - ${r1.right}} and {${r2.left} - ${r2.right}}`;
     } else {
-        return (r1.left > r2.left && r1.left < r2.right && r1.right > r2.left && r1.right < r2.right);
+        return (r1.left > r2.left && r1.left < r2.right);
+    }
+}
+
+function parseKeyValue(col, text) {
+    const sepInd = text.indexOf(':');
+    if (sepInd === -1) {
+        exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
+    } else {
+        const rawKey = text.slice(0, sepInd).trim();
+        const rawValue = text.slice(sepInd + 1).trim();
+        if (rawKey === '' || rawValue === '') {
+            exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
+        }
+        return {rawKey, rawValue};
     }
 }
 
 function parseSingleField(col, text) {
-    const colonInd = text.indexOf(':');
-    let key = text.slice(0, colonInd).trim();
-    const rawValue = text.slice(colonInd + 1).trim();
-    if (key === '' || rawValue === '') {
-        exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
-    }
-    const value = cutQuotes(rawValue);
+    const res = parseKeyValue(col, text);
+    let key = res.rawKey;
     const exclamInd = key.indexOf('!');
     if (exclamInd === 0) {
         key = key.slice(1);
@@ -88,7 +104,7 @@ function parseSingleField(col, text) {
     if (key in col) {
         exitWithError(`Field ${key} already exists in column ${col.name}`);
     } else {
-        col[key] = value;
+        col[key] = cutQuotes(res.rawValue);
         return true;
     }
 }
@@ -127,21 +143,18 @@ function  getArrayOfSubcolumnTexts(text) {
     return result;
 }
 
+/* precondition: text must contain '[' and ']' characters */
 function parseMultilineField(col, text) {
-    const sepInd = text.indexOf(':');
-    if (sepInd === -1) {
+    const res = parseKeyValue(col, text);
+    const key = res.rawKey;
+    const value = res.rawValue.slice(1, -1); // remove '[' and ']' characters
+    if (value === '') {
         exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
+    } else if (key in col) {
+        exitWithError(`Field ${key} already exists in column ${col.name}`);
     } else {
-        const key = text.slice(0, text.indexOf(':')).trim();
-        const value = text.slice(text.indexOf(':') + 1).trim().slice(1, -1);
-        if (key === '' || value === '') {
-            exitWithError(`Error while parsing text {${text}} in column ${col.name}`);
-        } else if (key in col) {
-            exitWithError(`Field ${key} already exists in column ${col.name}`);
-        } else {
-            col[key] = _.map(getArrayOfSubcolumnTexts(value), (item) => parseBody({}, item, true));
-            return true;
-        }
+        col[key] = _.map(getArrayOfSubcolumnTexts(value), (item) => parseBody(Object.create(null), item, true));
+        return true;
     }
 }
 
@@ -174,30 +187,30 @@ function parseBody(col, text, subcolumn = false) {
     return col;
 }
 
-function getRawColumnData(inputFile) {
-    const content = fs.readFileSync(inputFile).toString();
+function getRawColumnData(content) {
     const columnText = content.substring(content.indexOf('parsing')); // start from 'parsing'
 
     const indexes1 = getAllIndexes(columnText, 'column name'); // TODO: /\W(column name)\W/g
     const indexes2 = getAllIndexes(columnText, 'Generate new column');
-    const indexes = indexes1.concat(indexes2).sort();
+    const indexes = indexes1.concat(indexes2).sort((a, b) => (a - b)); // sort as array of numeric
 
     // 1. Get raw data (parse column names and get ranges with textual raw data)
 
     const columnData = indexes.map((i) => {
         const left = columnText.indexOf('{', i);
-        const rightLimitForSearchName = (left || columnText.indexOf('\n', i)) - 1;
-        const found = columnText.substring(i, rightLimitForSearchName).match(/"(.*)"/);
-        if (!found || found.length < 2) {
-            exitWithError(`Can't find column name in ${columnText.substring(i, rightLimitForSearchName)}`);
+        const rightLimitForSearchName = (left !== -1 ? left : columnText.indexOf('\n', i)) - 1;
+        const text = columnText.substring(i, rightLimitForSearchName);
+        const found = text.match(/"(.*)"/);
+        if (!found) {
+            exitWithError(`Can't find column name in ${text}`);
         }
-        const column_name = found[1];
+        const columnName = found[1];
         const right = findClosingChar(columnText, left);
 
         return {
             left: left,
             right: right,
-            column_name,
+            columnName,
             text: columnText.substring(left + 1, right)
         };
     });
@@ -211,10 +224,10 @@ function getRawColumnData(inputFile) {
             if (c === col)
                 return;
             if (insideOf(c, col)) {
-                if ('prefix' in c) {
+                if (c.prefix) {
                     exitWithError(`Column ${c.name} has two or more parents`);
                 }
-                c.prefix = col.column_name;
+                c.prefix = col.columnName;
                 if (!_.includes(prefixes, col)) {
                     prefixes.push(col);
                 }
@@ -238,22 +251,23 @@ const validTypes = [
 ];
 
 function fixDimensionForBoolean(col) {
-    if (col.value_type === 'boolean' && col.dimension === '0') {
+    if (col.valueType === 'boolean' && col.dimension === '0') {
         col.dimension = '1';
     }
 }
 
+/* Precondition: col[language] must be initialized for each language from languages. */
 function validateColumn(col, languages) {
-    if (isBlank(col.column_name)) {
+    if (isBlank(col.columnName)) {
         console.log(`Invalid column ${JSON.stringify(col)}`);
     } else {
-        if (isBlank(col.source_name)) {
-            console.log(`Unknown source_name in column ${JSON.stringify(col)}`);
+        if (isBlank(col.sourceName)) {
+            console.log(`Unknown sourceName in column ${JSON.stringify(col)}`);
         }
-        if (isBlank(col.value_type)) {
-            console.log(`Unknown value_type in column ${JSON.stringify(col)}`);
-        } else if (!_.includes(validTypes, col.value_type)) {
-            console.log(`Invalid value_type in column ${JSON.stringify(col)}`);
+        if (isBlank(col.valueType)) {
+            console.log(`Unknown valueType in column ${JSON.stringify(col)}`);
+        } else if (!_.includes(validTypes, col.valueType)) {
+            console.log(`Invalid valueType in column ${JSON.stringify(col)}`);
         }
 
         if (isBlank(col.dimension)) {
@@ -293,11 +307,10 @@ function mapType(type) {
     return type === 'flag' ? 'boolean' : type;
 }
 
-function processRulesFile(inputFilePath, source_name, languages) {
-    console.log(`\n# ---------- Process ${source_name} [${inputFilePath}] ---------- #`);
+function processRulesFile(content, sourceName, languages) {
 
     // Find all column entries in the text
-    const rawColumnData = getRawColumnData(inputFilePath);
+    const rawColumnData = getRawColumnData(content);
 
     // Process column bodies
     const parsedColumnData = _.map(rawColumnData, (col) => parseBody(col, col.text));
@@ -313,9 +326,9 @@ function processRulesFile(inputFilePath, source_name, languages) {
     const processedColumnData = _.reduce(parsedColumnData, (result, col) => {
 
         const data = {
-            column_name: col.prefix ? `${col.prefix}_${col.column_name}` : col.column_name,
-            source_name,
-            value_type: mapType(col.type || 'string'),
+            columnName: col.prefix ? `${col.prefix}_${col.columnName}` : col.columnName,
+            sourceName,
+            valueType: mapType(col.type || 'string'),
             dimension:  mapDimension(col.number || '0')
         };
 
@@ -333,7 +346,7 @@ function processRulesFile(inputFilePath, source_name, languages) {
             };
         });
 
-        if ('columns' in col) {
+        if (col.columns) {
             _.remove(col.columns, 'hidden');
             _.remove(col.columns, 'skip');
             _.remove(col.columns, 'hide');
@@ -344,13 +357,13 @@ function processRulesFile(inputFilePath, source_name, languages) {
 
                 // data from sub column has a higher priority
                 if (subColumn.ref) {
-                    scdata.column_name = col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref;
+                    scdata.columnName = col.prefix ? `${col.prefix}_${subColumn.ref}` : subColumn.ref;
                 } else if (col.columns.length > 1) {
                     exitWithError(`Cannot find ref for sub column ${JSON.stringify(col)}`);
                 }
 
                 if (subColumn.type) {
-                    scdata.value_type = mapType(subColumn.type);
+                    scdata.valueType = mapType(subColumn.type);
                 }
 
                 if (subColumn.number) {
