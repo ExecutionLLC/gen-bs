@@ -693,12 +693,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isViewDisabled(view) {
-        return entityTypeIsDemoDisabled(view.type, this.props.auth.isDemo);
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(view.type, isDemo);
     }
 
     getViewOptions() {
-        const {ui: {languageId}, p} = this.props;
-        const views = this.props.viewsList.hashedArray.array;
+        const {viewsList: {hashedArray: {array: views}}, ui: {languageId}, p} = this.props;
         return views.map(
             (viewItem) => {
                 const isDisabled = this.isViewDisabled(viewItem);
@@ -711,12 +711,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isFilterDisabled(filter) {
-        return entityTypeIsDemoDisabled(filter.type, this.props.auth.isDemo);
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(filter.type, isDemo);
     }
 
     getFilterOptions() {
-        const {ui: {languageId}, p} = this.props;
-        const filters = this.props.filtersList.hashedArray.array;
+        const {filtersList: {hashedArray: {array: filters}}, ui: {languageId}, p} = this.props;
         return filters.map((filterItem) => {
             const isDisabled = this.isFilterDisabled(filterItem);
             const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type, p);
@@ -727,7 +727,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isModelDisabled(model) {
-        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(model.type, isDemo);
     }
 
     getModelOptions() {
@@ -743,7 +744,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isSampleDisabled(sample) {
-        return entityTypeIsDemoDisabled(sample.type, this.props.auth.isDemo);
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(sample.type, isDemo);
     }
 
     getSampleOptions(value, selectedSamplesHash) {
