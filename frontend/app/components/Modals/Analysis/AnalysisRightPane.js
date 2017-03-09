@@ -41,11 +41,11 @@ import * as i18n from '../../../utils/i18n';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, auth: {isDemo}, isBringToFront} = this.props;
+        const {historyItem, disabled, isBringToFront} = this.props;
 
         return (
             <div className={classNames('split-right', {'bring-to-front': isBringToFront})}>
-                {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
+                {historyItem && this.renderAnalysisHeader(historyItem, disabled)}
                 <div className='split-scroll'>
                     <div className='form-padding'>
                         {!disabled ?
@@ -62,8 +62,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
 
-    renderAnalysisHeader(historyItem, disabled, isDemo) {
-        const {ui: {languageId}} = this.props;
+    renderAnalysisHeader(historyItem, disabled) {
+        const {auth: {isDemo}, ui: {languageId}} = this.props;
 
         return (
             <div className='split-top'>
