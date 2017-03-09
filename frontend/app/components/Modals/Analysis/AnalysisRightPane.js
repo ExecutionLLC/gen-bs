@@ -49,7 +49,7 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='split-scroll'>
                     <div className='form-padding'>
                         {!disabled ?
-                            <div className='form-rows  form-rows-xsicons'>
+                            <div className='form-rows form-rows-xsicons'>
                                 {historyItem && this.renderAnalysisContent(historyItem)}
                             </div>
                             :
