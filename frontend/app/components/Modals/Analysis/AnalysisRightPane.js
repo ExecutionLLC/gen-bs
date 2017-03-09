@@ -580,28 +580,20 @@ export default class AnalysisRightPane extends React.Component {
     renderAnalysisHeaderTabs(historyItemType) {
         const {dispatch} = this.props;
         const tabs = [
-            {
-                isActive: historyItemType === analysisType.SINGLE,
-                className: 'single-tab',
-                caption: this.analysisTypeCaption(analysisType.SINGLE),
-                onSelect: () => dispatch(this.actionEdit({type: analysisType.SINGLE}))
-            },
-            {
-                isActive: historyItemType === analysisType.TUMOR,
-                className: 'tumor-normal-tab',
-                caption: this.analysisTypeCaption(analysisType.TUMOR),
-                onSelect: () => dispatch(this.actionEdit({type: analysisType.TUMOR}))
-            },
-            {
-                isActive: historyItemType === analysisType.FAMILY,
-                className: 'family-tab',
-                caption: this.analysisTypeCaption(analysisType.FAMILY),
-                onSelect: () => dispatch(this.actionEdit({type: analysisType.FAMILY}))
-            }
+            {type: analysisType.SINGLE, className: 'single-tab'},
+            {type: analysisType.TUMOR, className: 'tumor-normal-tab'},
+            {type: analysisType.FAMILY, className: 'family-tab'}
         ];
         return (
             <ul role='tablist' className='nav nav-tabs'>
-                {tabs.map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
+                {tabs.map((tab) => {
+                    return this.renderAnalysisHeaderTab(
+                        historyItemType === tab.type,
+                        tab.className,
+                        this.analysisTypeCaption(tab.type),
+                        () => dispatch(this.actionEdit({type: tab.type}))
+                    );
+                })}
             </ul>
         );
     }
