@@ -479,7 +479,7 @@ export default class AnalysisRightPane extends React.Component {
         const error = _.find(validationResults, {isValid: false});
         const buttonParams = {
             title: error ? error.errorMessage : p.t('analysis.rightPane.content.analyzeTitle'),
-            disabled: error ? true : false
+            disabled: !!error
         };
         return (
             <div className='btn-toolbar btn-toolbar-form-actions'>
