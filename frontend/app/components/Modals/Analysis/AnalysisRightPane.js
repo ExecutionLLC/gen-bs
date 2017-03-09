@@ -517,8 +517,8 @@ export default class AnalysisRightPane extends React.Component {
                     <Input
                         value={name}
                         disabled={disabled}
-                        className='form-control material-input-sm material-input-heading text-primary'
                         placeholder={p.t('analysis.rightPane.analysisNamePlaceHolder')}
+                        className='form-control material-input-sm material-input-heading text-primary'
                         maxLength={config.ANALYSIS.MAX_NAME_LENGTH}
                         onChange={(str) => this.onAnalysisNameChange(str)}
                     />
