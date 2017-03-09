@@ -603,10 +603,8 @@ export default class AnalysisRightPane extends React.Component {
             <li
                 key={tabClassName}
                 className={classNames(tabClassName, {'active': isActive})}
-                role='presentation'
             >
                 <a
-                    role='tab'
                     onClick={onClick}
                 >
                     <span>
