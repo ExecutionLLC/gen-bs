@@ -54,8 +54,6 @@ class SavedFilesModal extends DialogBase {
             return this.renderEmptyContents();
         }
         const {savedFiles, p} = this.props;
-        // Now just take last ten elements.
-        // TODO: Add pagination for saved files.
         const sortedFiles = _(savedFiles)
             .sortBy(file => -Moment(file.timestamp).valueOf())
             .take(10)
