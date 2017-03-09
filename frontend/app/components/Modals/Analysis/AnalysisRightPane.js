@@ -114,7 +114,6 @@ export default class AnalysisRightPane extends React.Component {
                             <Select
                                 tabIndex='-1'
                                 className='select2-search'
-                                id='filterSelect'
                                 disabled={disabled}
                                 options={this.getFilterOptions()}
                                 value={filterId}
@@ -129,7 +128,7 @@ export default class AnalysisRightPane extends React.Component {
     
     renderFamilyModelSelector(modelId, disabled) {
         return (
-            <div id='familyModelDiv'>
+            <div>
                 {this.renderModelSelector(modelId, disabled)}
             </div>
         );
@@ -137,7 +136,7 @@ export default class AnalysisRightPane extends React.Component {
 
     renderTumorModelSelector(modelId, disabled) {
         return (
-            <div id='tumorModelDiv'>
+            <div>
                 {this.renderModelSelector(modelId, disabled)}
             </div>
         );
@@ -163,7 +162,6 @@ export default class AnalysisRightPane extends React.Component {
                         </div>
                         <div className='btn-group btn-group-select-group-max'>
                             <Select
-                                id='modelSelect'
                                 className='select2'
                                 tabIndex='-1'
                                 disabled={disabled}
@@ -201,7 +199,6 @@ export default class AnalysisRightPane extends React.Component {
                             <Select
                                 tabIndex='-1'
                                 className='select2'
-                                id='viewSelect'
                                 disabled={disabled}
                                 options={this.getViewOptions()}
                                 value={viewId}
@@ -220,12 +217,12 @@ export default class AnalysisRightPane extends React.Component {
 
         const rendersForType = {
             [analysisType.SINGLE]: (historyItem, disabled) => (
-                <div className='tab-pane active' id='single'>
+                <div className='tab-pane active'>
                      {this.renderSampleSelectSingle(historyItem.samples[0], disabled, selectedSamplesHash)}
                 </div>
             ),
             [analysisType.TUMOR]: (historyItem, disabled) => (
-                <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
+                <div className='tab-pane active' role='tabpanel'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
                      {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled, selectedSamplesHash)}
                      {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], disabled, selectedSamplesHash)}
@@ -233,7 +230,7 @@ export default class AnalysisRightPane extends React.Component {
                 </div>
             ),
             [analysisType.FAMILY]: (historyItem, disabled) => (
-                <div className='tab-pane active' role='tabpanel' id='family'>
+                <div className='tab-pane active' role='tabpanel'>
                      {this.renderSamplesSelectsFamilyHeader()}
                      {historyItem.samples.map( (sample, i) =>
                          sample.type === sampleType.PROBAND ?
@@ -574,7 +571,7 @@ export default class AnalysisRightPane extends React.Component {
             }
         ];
         return (
-            <ul role='tablist' className='nav nav-tabs' id='analisisTypes'>
+            <ul role='tablist' className='nav nav-tabs'>
                 {disabled && <li className='pull-right text-muted'>{p.t('analysis.rightPane.duplicate')}</li>}
                 {tabs.filter((tab) => tab.isActive || !disabled).map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
             </ul>
