@@ -770,29 +770,29 @@ export default class AnalysisRightPane extends React.Component {
         }
     }
 
-    onAnalysisNameChange(name) {
+    /**
+     * @param {Object} propertyObject
+     */
+    editAnalysisProperty(propertyObject) {
         const {dispatch, historyItem, ui: {languageId}} = this.props;
-        if (!name) {
-            return;
-        }
         if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {name})));
+            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, propertyObject)));
             dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
                 .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
         } else {
-            dispatch(this.actionEdit({name}));
+            dispatch(this.actionEdit(propertyObject));
         }
     }
 
-    onAnalysisDescriptionChange(description) {
-        const {dispatch, historyItem, ui: {languageId}} = this.props;
-        if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {description})));
-            dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
-                .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
-        } else {
-            dispatch(this.actionEdit({description}));
+    onAnalysisNameChange(name) {
+        if (!name) {
+            return;
         }
+        this.editAnalysisProperty({name});
+    }
+
+    onAnalysisDescriptionChange(description) {
+        this.editAnalysisProperty({description});
     }
 
     onDuplicateButtonClick() {
