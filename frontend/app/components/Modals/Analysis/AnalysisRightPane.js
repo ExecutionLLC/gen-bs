@@ -537,6 +537,7 @@ export default class AnalysisRightPane extends React.Component {
                         disabled={disabled}
                         placeholder={p.t('analysis.rightPane.analysisDescriptionPlaceHolder')}
                         className='form-control material-input-sm'
+                        maxLength={config.ANALYSIS.MAX_DESCRIPTION_LENGTH}
                         onChange={(str) => this.onAnalysisDescriptionChange(str)}
                     />
                 </div>
