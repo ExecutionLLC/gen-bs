@@ -121,7 +121,9 @@ function  getArrayOfSubcolumnTexts(text) {
             }
         }
         const right = findClosingChar(text, left);
-
+        if (right === -1) {
+            exitWithError(`Can't parse  ${text}`);
+        }
         result.push(text.substring(left + 1, right).trim());
 
         text = text.slice(right + 1);
@@ -159,6 +161,9 @@ function parseBody(col, text, subcolumn = false) {
         } else if (!subcolumn && chunk.includes('[') && chunk.indexOf('columns') === 0) {
             const left = text.indexOf('[');
             right = findClosingChar(text, left, '[', ']');
+            if (right === -1) {
+                exitWithError(`Can't parse  ${text}`);
+            }
             res = parseMultilineField(col, text.substring(0, right + 1));
         } else if (chunk.includes(':')) {
             res = parseSingleField(col, chunk);
@@ -189,12 +194,18 @@ function getRawColumnData(content) {
         const left = columnText.indexOf('{', i);
         const rightLimitForSearchName = (left !== -1 ? left : columnText.indexOf('\n', i)) - 1;
         const text = columnText.substring(i, rightLimitForSearchName);
-        const found = text.match(/"(.*)"/);
+        const found = text.match(/"(.*?)"/);
         if (!found) {
+            exitWithError(`Can't find column name in ${text}`);
+        }
+        if (cutQuotes(text.trim()) !== found[1]) {
             exitWithError(`Can't find column name in ${text}`);
         }
         const columnName = found[1];
         const right = findClosingChar(columnText, left);
+        if (right === -1) {
+            exitWithError(`Can't parse  ${columnText}`);
+        }
 
         return {
             left: left,
