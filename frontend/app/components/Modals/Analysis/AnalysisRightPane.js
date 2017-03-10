@@ -93,22 +93,28 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderFormGroupSelectorButton(title, onClick) {
+        return (
+            <div className='btn-group btn-group-icon'>
+                <button
+                    className='btn btn-default btn-fix-width'
+                    type='button'
+                    onClick={onClick}
+                >
+                            <span className='text-muted'>
+                                {title}
+                            </span>
+                    <span className='visible-xxs'><i className='md-i'>tune</i></span>
+                </button>
+            </div>
+        );
+    }
+
     renderFormGroupSelector(title, options, value, onClick, onSelect) {
         return (
             <div className='form-group'>
                 <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            type='button'
-                            onClick={onClick}
-                        >
-                            <span className='text-muted'>
-                                {title}
-                            </span>
-                            <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
+                    {this.renderFormGroupSelectorButton(title, onClick)}
                     <div className='btn-group btn-group-select-group-max'>
                         <Select
                             tabIndex='-1'
@@ -231,15 +237,10 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='form-group' key={sampleIndex}>
                 <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            onClick={() => this.onSamplesClick(sampleIndex)}
-                        >
-                            <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                            <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
+                    {this.renderFormGroupSelectorButton(
+                        p.t('analysis.rightPane.content.samples'),
+                        () => this.onSamplesClick(sampleIndex)
+                    )}
                     <div className='btn-group btn-group-select-group-max'>
                         <Select
                             className='select2-search'
