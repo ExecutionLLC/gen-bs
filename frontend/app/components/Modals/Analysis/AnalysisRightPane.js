@@ -305,7 +305,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             value={value}
                             options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(0, item.value)}
+                            onChange={(item) => this.onSampleSelect(sampleIndex, item.value)}
                         />
                     </div>
                     {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
