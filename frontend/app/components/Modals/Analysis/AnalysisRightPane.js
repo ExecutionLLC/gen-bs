@@ -97,7 +97,7 @@ export default class AnalysisRightPane extends React.Component {
         const {p} = this.props;
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.filter')}</span></h5>
+                {this.renderFormGroupHeader('analysis.rightPane.content.filter')}
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group'>
                         <div className='btn-group btn-group-icon'>
@@ -131,7 +131,7 @@ export default class AnalysisRightPane extends React.Component {
         const {p} = this.props;
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.model')}</span></h5>
+                {this.renderFormGroupHeader('analysis.rightPane.content.model')}
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group '>
                         <div className='btn-group btn-group-icon'>
@@ -166,7 +166,7 @@ export default class AnalysisRightPane extends React.Component {
         const {p} = this.props;
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.view')}</span></h5>
+                {this.renderFormGroupHeader('analysis.rightPane.content.view')}
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group '>
                         <div className='btn-group btn-group-icon'>
@@ -213,18 +213,23 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesHeader(isManySamples) {
+    renderFormGroupHeader(template) {
         const {p} = this.props;
         return (
             <h5>
                 <span>
-                    {p.t(
-                        isManySamples ?
-                            'analysis.rightPane.content.samples' :
-                            'analysis.rightPane.content.sample'
-                    )}
+                    {p.t(template)}
                 </span>
             </h5>
+        );
+    }
+
+    renderSamplesHeader(isManySamples) {
+        const {p} = this.props;
+        return this.renderFormGroupHeader(
+            isManySamples ?
+                'analysis.rightPane.content.samples' :
+                'analysis.rightPane.content.sample'
         );
     }
 
