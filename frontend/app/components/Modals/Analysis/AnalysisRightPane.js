@@ -218,26 +218,26 @@ export default class AnalysisRightPane extends React.Component {
         const rendersForType = {
             [analysisType.SINGLE]: (historyItem) => (
                 <div className='tab-pane active'>
-                     {this.renderSampleSelectSingle(historyItem.samples[0], selectedSamplesHash)}
+                    {this.renderSampleSelectSingle(historyItem.samples[0], selectedSamplesHash)}
                 </div>
             ),
             [analysisType.TUMOR]: (historyItem) => (
                 <div className='tab-pane active'>
-                     {this.renderSamplesHeader(true)}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], selectedSamplesHash)}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], selectedSamplesHash)}
-                     <hr className='invisible' />
+                    {this.renderSamplesHeader(true)}
+                    {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], selectedSamplesHash)}
+                    {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], selectedSamplesHash)}
+                    <hr className='invisible' />
                 </div>
             ),
             [analysisType.FAMILY]: (historyItem) => (
                 <div className='tab-pane active'>
-                     {this.renderSamplesHeader(true)}
-                     {historyItem.samples.map( (sample, i) =>
-                         sample.type === sampleType.PROBAND ?
-                             this.renderSamplesSelectsFamilyProband(sample, i, selectedSamplesHash) :
-                             this.renderSamplesSelectsFamilyMember(sample, i, selectedSamplesHash)
-                     )}
-                     <hr className='invisible' />
+                    {this.renderSamplesHeader(true)}
+                    {historyItem.samples.map( (sample, i) =>
+                        sample.type === sampleType.PROBAND ?
+                            this.renderSamplesSelectsFamilyProband(sample, i, selectedSamplesHash) :
+                            this.renderSamplesSelectsFamilyMember(sample, i, selectedSamplesHash)
+                    )}
+                    <hr className='invisible' />
                 </div>
             )
         };
