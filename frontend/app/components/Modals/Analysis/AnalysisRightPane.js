@@ -233,11 +233,9 @@ export default class AnalysisRightPane extends React.Component {
             [analysisType.FAMILY]: (historyItem) => (
                 <div className='tab-pane active'>
                     {this.renderSamplesHeader(true)}
-                    {historyItem.samples.map( (sample, i) =>
-                        sample.type === sampleType.PROBAND ?
-                            this.renderSampleSelect(sample, selectedSamplesHash, i, sampleType.PROBAND) :
-                            this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type)
-                    )}
+                    {historyItem.samples.map( (sample, i) => {
+                        return this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type)
+                    })}
                     <hr className='invisible' />
                 </div>
             )
