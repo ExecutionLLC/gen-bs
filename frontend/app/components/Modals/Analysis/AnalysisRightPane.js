@@ -236,7 +236,7 @@ export default class AnalysisRightPane extends React.Component {
                     {historyItem.samples.map( (sample, i) =>
                         sample.type === sampleType.PROBAND ?
                             this.renderSampleSelect(sample, selectedSamplesHash, i, sampleType.PROBAND) :
-                            this.renderSamplesSelectsFamilyMember(sample, i, selectedSamplesHash)
+                            this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type)
                     )}
                     <hr className='invisible' />
                 </div>
@@ -309,39 +309,6 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsFamilyMember(sample, i, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-
-        return (
-            <div className='form-group' key={i}>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            onClick={() => this.onSamplesClick(i)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max btn-group-right'>
-                        <Select
-                            aria-hidden='true'
-                            tabindex='-1'
-                            className='select2-search select-right'
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(i, item.value)}
-                        />
-                    </div>
-                    {this.renderSelectSampleTypeLabel(false, sample.type)}
-
                 </div>
             </div>
         );
