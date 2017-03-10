@@ -4,20 +4,6 @@ const fs = require('fs');
 const _ = require('lodash');
 
 
-function getAllIndexes(str, subStr) {
-    let indexes = [];
-    let i = -1;
-    while (true) {
-        i = str.indexOf(subStr, i + subStr.length);
-        if (i === -1) {
-            break;
-        } else {
-            indexes.push(i);
-        }
-    }
-    return indexes;
-}
-
 function findClosingChar(str, openPos, openChar = '{', closeChar = '}') {
     let closePos = openPos;
     let counter = 1;
@@ -190,13 +176,16 @@ function parseBody(col, text, subcolumn = false) {
 function getRawColumnData(content) {
     const columnText = content.substring(content.indexOf('parsing')); // start from 'parsing'
 
-    const indexes1 = getAllIndexes(columnText, 'column name'); // TODO: /\W(column name)\W/g
-    const indexes2 = getAllIndexes(columnText, 'Generate new column');
-    const indexes = indexes1.concat(indexes2).sort((a, b) => (a - b)); // sort as array of numeric
+    const indexes = [];
+    const re = /column name|Generate new column/g;
+    while (re.exec(columnText)) {
+        indexes.push(re.lastIndex);
+    }
+    const indexesSorted = indexes.sort((a, b) => (a - b)); // sort as array of numeric
 
     // 1. Get raw data (parse column names and get ranges with textual raw data)
 
-    const columnData = indexes.map((i) => {
+    const columnData = indexesSorted.map((i) => {
         const left = columnText.indexOf('{', i);
         const rightLimitForSearchName = (left !== -1 ? left : columnText.indexOf('\n', i)) - 1;
         const text = columnText.substring(i, rightLimitForSearchName);
