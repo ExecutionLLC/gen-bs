@@ -219,7 +219,6 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesHeader(isManySamples) {
-        const {p} = this.props;
         return this.renderFormGroupHeader(
             isManySamples ?
                 'analysis.rightPane.content.samples' :
