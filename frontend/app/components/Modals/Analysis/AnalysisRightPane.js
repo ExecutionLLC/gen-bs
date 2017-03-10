@@ -222,7 +222,7 @@ export default class AnalysisRightPane extends React.Component {
                 </div>
             ),
             [analysisType.TUMOR]: (historyItem) => (
-                <div className='tab-pane active' role='tabpanel'>
+                <div className='tab-pane active'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
                      {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], selectedSamplesHash)}
                      {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], selectedSamplesHash)}
@@ -230,7 +230,7 @@ export default class AnalysisRightPane extends React.Component {
                 </div>
             ),
             [analysisType.FAMILY]: (historyItem) => (
-                <div className='tab-pane active' role='tabpanel'>
+                <div className='tab-pane active'>
                      {this.renderSamplesSelectsFamilyHeader()}
                      {historyItem.samples.map( (sample, i) =>
                          sample.type === sampleType.PROBAND ?
