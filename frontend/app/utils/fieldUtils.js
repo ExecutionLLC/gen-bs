@@ -104,11 +104,15 @@ export default class FieldUtils {
         };
     }
 
-    static makeFieldTypeLabels(p) {
+    static makeFieldTypeLabel(p, sampleType) {
         const abbrPath = 'analysis.rightPane.sampleTypeAbbr.';
+        return p.t(`${abbrPath}${sampleType}`);
+    }
+
+    static makeFieldTypeLabels(p) {
         return _(SamplesUtils.sampleType)
             .mapKeys(type => type)
-            .mapValues(type => p.t(`${abbrPath}${type}`))
+            .mapValues(type => this.makeFieldTypeLabel(p, type))
             .value();
     }
 

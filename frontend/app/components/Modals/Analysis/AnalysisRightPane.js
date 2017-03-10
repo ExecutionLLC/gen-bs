@@ -272,11 +272,11 @@ export default class AnalysisRightPane extends React.Component {
             'label-round',
             isPrimary ? 'label-dark-default' : 'label-default'
         );
-        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
+        const typeLabel = FieldUtils.makeFieldTypeLabel(p, sampleType);
         return (
             <div className='btn-group-prefix'>
                 <label className={labelClassNames}>
-                    <span>{typeLabels[sampleType]}</span>
+                    <span>{typeLabel}</span>
                 </label>
             </div>
         );
