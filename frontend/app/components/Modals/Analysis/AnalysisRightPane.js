@@ -218,6 +218,7 @@ export default class AnalysisRightPane extends React.Component {
         const rendersForType = {
             [analysisType.SINGLE]: (historyItem) => (
                 <div className='tab-pane active'>
+                    {this.renderSamplesHeader(false)}
                     {this.renderSampleSelectSingle(historyItem.samples[0], selectedSamplesHash)}
                 </div>
             ),
@@ -287,31 +288,28 @@ export default class AnalysisRightPane extends React.Component {
         const value = sample ? sample.id : null;
 
         return (
-            <div>
-                {this.renderSamplesHeader(false)}
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                className='btn btn-default btn-fix-width'
-                                onClick={() => this.onSamplesClick(0)}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                className='select2-search select-right'
-                                tabindex='-1'
-                                value={value}
-                                options={this.getSampleOptions(value, selectedSamplesHash)}
-                                onChange={(item) => this.onSampleSelect(0, item.value)}
-                            />
-                        </div>
-                        {this.renderSelectSampleTypeLabel(true, sampleType.SINGLE)}
+            <div className='form-group'>
+                <div className='col-xs-12 col-md-10 btn-group-select-group'>
+                    <div className='btn-group btn-group-icon'>
+                        <button
+                            className='btn btn-default btn-fix-width'
+                            onClick={() => this.onSamplesClick(0)}
+                        >
+                            <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
+                            <span className='visible-xxs'><i className='md-i'>tune</i></span>
+                        </button>
                     </div>
+
+                    <div className='btn-group btn-group-select-group-max'>
+                        <Select
+                            className='select2-search select-right'
+                            tabindex='-1'
+                            value={value}
+                            options={this.getSampleOptions(value, selectedSamplesHash)}
+                            onChange={(item) => this.onSampleSelect(0, item.value)}
+                        />
+                    </div>
+                    {this.renderSelectSampleTypeLabel(true, sampleType.SINGLE)}
                 </div>
             </div>
         );
