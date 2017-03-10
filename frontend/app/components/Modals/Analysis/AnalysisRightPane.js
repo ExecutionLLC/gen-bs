@@ -219,14 +219,14 @@ export default class AnalysisRightPane extends React.Component {
             [analysisType.SINGLE]: (historyItem) => (
                 <div className='tab-pane active'>
                     {this.renderSamplesHeader(false)}
-                    {this.renderSampleSelectSingle(historyItem.samples[0], selectedSamplesHash)}
+                    {this.renderSampleSelect(historyItem.samples[0], selectedSamplesHash, 0, sampleType.SINGLE)}
                 </div>
             ),
             [analysisType.TUMOR]: (historyItem) => (
                 <div className='tab-pane active'>
                     {this.renderSamplesHeader(true)}
-                    {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], selectedSamplesHash)}
-                    {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], selectedSamplesHash)}
+                    {this.renderSampleSelect(historyItem.samples[0], selectedSamplesHash, 0, sampleType.TUMOR)}
+                    {this.renderSampleSelect(historyItem.samples[1], selectedSamplesHash, 1, sampleType.NORMAL)}
                     <hr className='invisible' />
                 </div>
             ),
@@ -283,7 +283,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSampleSelectSingle(sample, selectedSamplesHash) {
+    renderSampleSelect(sample, selectedSamplesHash, sampleIndex, sampleType) {
         const {p} = this.props;
         const value = sample ? sample.id : null;
 
@@ -293,42 +293,10 @@ export default class AnalysisRightPane extends React.Component {
                     <div className='btn-group btn-group-icon'>
                         <button
                             className='btn btn-default btn-fix-width'
-                            onClick={() => this.onSamplesClick(0)}
+                            onClick={() => this.onSamplesClick(sampleIndex)}
                         >
                             <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
                             <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-
-                    <div className='btn-group btn-group-select-group-max'>
-                        <Select
-                            className='select2-search select-right'
-                            tabindex='-1'
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(0, item.value)}
-                        />
-                    </div>
-                    {this.renderSelectSampleTypeLabel(true, sampleType.SINGLE)}
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsTumorNormalSampleTumor(sample, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-
-        return (
-            <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            onClick={() => this.onSamplesClick(0)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
                         </button>
                     </div>
                     <div className='btn-group btn-group-select-group-max'>
@@ -340,38 +308,7 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
-                    {this.renderSelectSampleTypeLabel(true, sampleType.TUMOR)}
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsTumorNormalSampleNormal(sample, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-
-        return (
-            <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            onClick={() => this.onSamplesClick(1)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max'>
-                        <Select
-                            tabindex='-1'
-                            className='select2-search select-right'
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(1, item.value)}
-                        />
-                    </div>
-                    {this.renderSelectSampleTypeLabel(false, sampleType.NORMAL)}
+                    {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
                 </div>
             </div>
         );
