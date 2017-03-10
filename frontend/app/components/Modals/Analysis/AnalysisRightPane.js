@@ -212,39 +212,18 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelects(historyItem) {
-
         const selectedSamplesHash = _.keyBy(historyItem.samples, (sample) => sample.id);
+        const isManySamples = historyItem.samples.length > 1;
 
-        const rendersForType = {
-            [analysisType.SINGLE]: (historyItem) => (
+        return (
+            <div className='tab-content'>
                 <div className='tab-pane active'>
-                    {this.renderSamplesHeader(false)}
-                    {this.renderSampleSelect(historyItem.samples[0], selectedSamplesHash, 0, sampleType.SINGLE)}
-                </div>
-            ),
-            [analysisType.TUMOR]: (historyItem) => (
-                <div className='tab-pane active'>
-                    {this.renderSamplesHeader(true)}
-                    {this.renderSampleSelect(historyItem.samples[0], selectedSamplesHash, 0, sampleType.TUMOR)}
-                    {this.renderSampleSelect(historyItem.samples[1], selectedSamplesHash, 1, sampleType.NORMAL)}
-                    <hr className='invisible' />
-                </div>
-            ),
-            [analysisType.FAMILY]: (historyItem) => (
-                <div className='tab-pane active'>
-                    {this.renderSamplesHeader(true)}
+                    {this.renderSamplesHeader(isManySamples)}
                     {historyItem.samples.map( (sample, i) => {
                         return this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type)
                     })}
-                    <hr className='invisible' />
+                    {isManySamples && <hr className='invisible' />}
                 </div>
-            )
-        };
-
-        const typeRender = rendersForType[historyItem.type];
-        return (
-            <div className='tab-content'>
-                {typeRender && typeRender(historyItem)}
             </div>
         );
     }
