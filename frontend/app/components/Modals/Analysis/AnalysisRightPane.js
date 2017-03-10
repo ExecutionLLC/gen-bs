@@ -110,20 +110,26 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderFormGroupSelectorSelect(options, value, onSelect) {
+        return (
+            <div className='btn-group btn-group-select-group-max'>
+                <Select
+                    tabIndex='-1'
+                    className='select2-search'
+                    options={options}
+                    value={value}
+                    onChange={(item) => onSelect(item.value)}
+                />
+            </div>
+        );
+    }
+
     renderFormGroupSelector(title, options, value, onClick, onSelect) {
         return (
             <div className='form-group'>
                 <div className='col-xs-12 col-md-10 btn-group-select-group'>
                     {this.renderFormGroupSelectorButton(title, onClick)}
-                    <div className='btn-group btn-group-select-group-max'>
-                        <Select
-                            tabIndex='-1'
-                            className='select2-search'
-                            options={options}
-                            value={value}
-                            onChange={(item) => onSelect(item.value)}
-                        />
-                    </div>
+                    {this.renderFormGroupSelectorSelect(options, value, onSelect)}
                 </div>
             </div>
         );
@@ -241,15 +247,11 @@ export default class AnalysisRightPane extends React.Component {
                         p.t('analysis.rightPane.content.samples'),
                         () => this.onSamplesClick(sampleIndex)
                     )}
-                    <div className='btn-group btn-group-select-group-max'>
-                        <Select
-                            className='select2-search'
-                            tabindex='-1'
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(sampleIndex, item.value)}
-                        />
-                    </div>
+                    {this.renderFormGroupSelectorSelect(
+                        this.getSampleOptions(value, selectedSamplesHash),
+                        value,
+                        (value) => this.onSampleSelect(sampleIndex, value)
+                    )}
                     {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
                 </div>
             </div>
