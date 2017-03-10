@@ -710,10 +710,10 @@ export default class AnalysisRightPane extends React.Component {
 }
 
 const hashedArrayPropTypeShape = PropTypes.shape({
-    hashedArray: {
+    hashedArray: PropTypes.shape({
         hash: PropTypes.object.isRequired,
         array: PropTypes.array.isRequired
-    }
+    }).isRequired
 }).isRequired;
 
 AnalysisRightPane.propTypes = {
