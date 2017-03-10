@@ -144,30 +144,13 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div>
                 {this.renderFormGroupHeader('analysis.rightPane.content.model')}
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                type='button'
-                                className='btn btn-default btn-fix-width'
-                                onClick={() => this.onModelClick()}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.models')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                className='select2'
-                                tabIndex='-1'
-                                value={modelId}
-                                options={this.getModelOptions()}
-                                onChange={(item) => this.onModelSelect(item.value)}
-                            />
-                        </div>
-                    </div>
-
-                </div>
+                {this.renderFormGroupSelector(
+                    p.t('analysis.rightPane.content.models'),
+                    this.getModelOptions(),
+                    modelId,
+                    () => this.onModelClick(),
+                    (value) => this.onModelSelect(value)
+                )}
             </div>
         );
     }
@@ -177,29 +160,13 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div>
                 {this.renderFormGroupHeader('analysis.rightPane.content.view')}
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                className='btn btn-default btn-fix-width'
-                                type='button'
-                                onClick={() => this.onViewsClick()}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.views')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                tabIndex='-1'
-                                className='select2'
-                                options={this.getViewOptions()}
-                                value={viewId}
-                                onChange={(item) => this.onViewSelect(item.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
+                {this.renderFormGroupSelector(
+                    p.t('analysis.rightPane.content.views'),
+                    this.getViewOptions(),
+                    viewId,
+                    () => this.onViewsClick(),
+                    (value) => this.onViewSelect(value)
+                )}
             </div>
         );
     }
