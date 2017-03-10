@@ -84,16 +84,16 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div>
                 {this.renderSamplesSelects(historyItem)}
-                {this.renderFilterSelector(historyItem.filterId, false)}
-                {showModelSelect && this.renderModelSelector(historyItem.modelId, false)}
-                {this.renderViewSelector(historyItem.viewId, false)}
+                {this.renderFilterSelector(historyItem.filterId)}
+                {showModelSelect && this.renderModelSelector(historyItem.modelId)}
+                {this.renderViewSelector(historyItem.viewId)}
                 <hr className='invisible' />
                 {this.renderAnalyzeButton()}
             </div>
         );
     }
 
-    renderFilterSelector(filterId, disabled) {
+    renderFilterSelector(filterId) {
         const {p} = this.props;
         return (
             <div>
@@ -104,7 +104,6 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-default btn-fix-width'
                                 type='button'
-                                disabled={disabled}
                                 onClick={() => this.onFiltersClick()}
                             >
                                 <span className='text-muted'>{p.t('analysis.rightPane.content.filters')}</span>
@@ -115,7 +114,6 @@ export default class AnalysisRightPane extends React.Component {
                             <Select
                                 tabIndex='-1'
                                 className='select2-search'
-                                disabled={disabled}
                                 options={this.getFilterOptions()}
                                 value={filterId}
                                 onChange={(item) => this.onFilterSelect(item.value)}
@@ -127,7 +125,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderModelSelector(modelId, disabled) {
+    renderModelSelector(modelId) {
         const {p} = this.props;
         return (
             <div>
@@ -138,7 +136,6 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 type='button'
                                 className='btn btn-default btn-fix-width'
-                                disabled={disabled}
                                 onClick={() => this.onModelClick()}
                             >
                                 <span className='text-muted'>{p.t('analysis.rightPane.content.models')}</span>
@@ -149,7 +146,6 @@ export default class AnalysisRightPane extends React.Component {
                             <Select
                                 className='select2'
                                 tabIndex='-1'
-                                disabled={disabled}
                                 value={modelId}
                                 options={this.getModelOptions()}
                                 onChange={(item) => this.onModelSelect(item.value)}
@@ -162,7 +158,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderViewSelector(viewId, disabled) {
+    renderViewSelector(viewId) {
         const {p} = this.props;
         return (
             <div>
@@ -173,7 +169,6 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-default btn-fix-width'
                                 type='button'
-                                disabled={disabled}
                                 onClick={() => this.onViewsClick()}
                             >
                                 <span className='text-muted'>{p.t('analysis.rightPane.content.views')}</span>
@@ -184,7 +179,6 @@ export default class AnalysisRightPane extends React.Component {
                             <Select
                                 tabIndex='-1'
                                 className='select2'
-                                disabled={disabled}
                                 options={this.getViewOptions()}
                                 value={viewId}
                                 onChange={(item) => this.onViewSelect(item.value)}
