@@ -223,7 +223,7 @@ export default class AnalysisRightPane extends React.Component {
             ),
             [analysisType.TUMOR]: (historyItem) => (
                 <div className='tab-pane active'>
-                     {this.renderSamplesSelectsTumorNormalHeader()}
+                     {this.renderSamplesHeader(true)}
                      {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], selectedSamplesHash)}
                      {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], selectedSamplesHash)}
                      <hr className='invisible' />
@@ -231,7 +231,7 @@ export default class AnalysisRightPane extends React.Component {
             ),
             [analysisType.FAMILY]: (historyItem) => (
                 <div className='tab-pane active'>
-                     {this.renderSamplesSelectsFamilyHeader()}
+                     {this.renderSamplesHeader(true)}
                      {historyItem.samples.map( (sample, i) =>
                          sample.type === sampleType.PROBAND ?
                              this.renderSamplesSelectsFamilyProband(sample, i, selectedSamplesHash) :
@@ -250,13 +250,28 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderSamplesHeader(isManySamples) {
+        const {p} = this.props;
+        return (
+            <h5>
+                <span>
+                    {p.t(
+                        isManySamples ?
+                            'analysis.rightPane.content.samples' :
+                            'analysis.rightPane.content.sample'
+                    )}
+                </span>
+            </h5>
+        );
+    }
+
     renderSampleSelectSingle(sample, selectedSamplesHash) {
         const {p} = this.props;
         const value = sample ? sample.id : null;
 
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.sample')}</span></h5>
+                {this.renderSamplesHeader(false)}
                 <div className='form-group'>
                     <div className='col-xs-12 col-md-10 btn-group-select-group'>
                         <div className='btn-group btn-group-icon'>
@@ -287,13 +302,6 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                 </div>
             </div>
-        );
-    }
-
-    renderSamplesSelectsTumorNormalHeader() {
-        const {p} = this.props;
-        return (
-            <h5><span>{p.t('analysis.rightPane.content.samples')}</span></h5>
         );
     }
 
@@ -366,13 +374,6 @@ export default class AnalysisRightPane extends React.Component {
                     
                 </div>
             </div>
-        );
-    }
-
-    renderSamplesSelectsFamilyHeader() {
-        const {p} = this.props;
-        return (
-            <h5><span>{p.t('analysis.rightPane.content.samples')}</span></h5>
         );
     }
 
