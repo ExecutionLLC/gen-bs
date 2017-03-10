@@ -93,34 +93,48 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderFormGroupSelector(title, options, value, onClick, onSelect) {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-12 col-md-10 btn-group-select-group'>
+                    <div className='btn-group btn-group-icon'>
+                        <button
+                            className='btn btn-default btn-fix-width'
+                            type='button'
+                            onClick={onClick}
+                        >
+                            <span className='text-muted'>
+                                {title}
+                            </span>
+                            <span className='visible-xxs'><i className='md-i'>tune</i></span>
+                        </button>
+                    </div>
+                    <div className='btn-group btn-group-select-group-max'>
+                        <Select
+                            tabIndex='-1'
+                            className='select2-search'
+                            options={options}
+                            value={value}
+                            onChange={(item) => onSelect(item.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     renderFilterSelector(filterId) {
         const {p} = this.props;
         return (
             <div>
                 {this.renderFormGroupHeader('analysis.rightPane.content.filter')}
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                className='btn btn-default btn-fix-width'
-                                type='button'
-                                onClick={() => this.onFiltersClick()}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.filters')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                tabIndex='-1'
-                                className='select2-search'
-                                options={this.getFilterOptions()}
-                                value={filterId}
-                                onChange={(item) => this.onFilterSelect(item.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
+                {this.renderFormGroupSelector(
+                    p.t('analysis.rightPane.content.filters'),
+                    this.getFilterOptions(),
+                    filterId,
+                    () => this.onFiltersClick(),
+                    (value) => this.onFilterSelect(value)
+                )}
             </div>
         );
     }
