@@ -216,26 +216,26 @@ export default class AnalysisRightPane extends React.Component {
         const selectedSamplesHash = _.keyBy(historyItem.samples, (sample) => sample.id);
 
         const rendersForType = {
-            [analysisType.SINGLE]: (historyItem, disabled) => (
+            [analysisType.SINGLE]: (historyItem) => (
                 <div className='tab-pane active'>
-                     {this.renderSampleSelectSingle(historyItem.samples[0], disabled, selectedSamplesHash)}
+                     {this.renderSampleSelectSingle(historyItem.samples[0], false, selectedSamplesHash)}
                 </div>
             ),
-            [analysisType.TUMOR]: (historyItem, disabled) => (
+            [analysisType.TUMOR]: (historyItem) => (
                 <div className='tab-pane active' role='tabpanel'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled, selectedSamplesHash)}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], disabled, selectedSamplesHash)}
+                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], false, selectedSamplesHash)}
+                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], false, selectedSamplesHash)}
                      <hr className='invisible' />
                 </div>
             ),
-            [analysisType.FAMILY]: (historyItem, disabled) => (
+            [analysisType.FAMILY]: (historyItem) => (
                 <div className='tab-pane active' role='tabpanel'>
                      {this.renderSamplesSelectsFamilyHeader()}
                      {historyItem.samples.map( (sample, i) =>
                          sample.type === sampleType.PROBAND ?
-                             this.renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) :
-                             this.renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash)
+                             this.renderSamplesSelectsFamilyProband(sample, false, i, selectedSamplesHash) :
+                             this.renderSamplesSelectsFamilyMember(sample, false, i, selectedSamplesHash)
                      )}
                      <hr className='invisible' />
                 </div>
@@ -245,7 +245,7 @@ export default class AnalysisRightPane extends React.Component {
         const typeRender = rendersForType[historyItem.type];
         return (
             <div className='tab-content'>
-                {typeRender && typeRender(historyItem, false)}
+                {typeRender && typeRender(historyItem)}
             </div>
         );
     }
