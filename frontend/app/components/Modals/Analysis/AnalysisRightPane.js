@@ -148,7 +148,7 @@ export default class AnalysisRightPane extends React.Component {
                     p.t('analysis.rightPane.content.models'),
                     this.getModelOptions(),
                     modelId,
-                    () => this.onModelClick(),
+                    () => this.onModelsClick(),
                     (value) => this.onModelSelect(value)
                 )}
             </div>
@@ -666,7 +666,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(this.actionEdit({filterId: filterId}));
     }
 
-    onModelClick() {
+    onModelsClick() {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const samplesTypes = _.reduce(
