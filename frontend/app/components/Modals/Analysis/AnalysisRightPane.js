@@ -235,7 +235,7 @@ export default class AnalysisRightPane extends React.Component {
                     {this.renderSamplesHeader(true)}
                     {historyItem.samples.map( (sample, i) =>
                         sample.type === sampleType.PROBAND ?
-                            this.renderSamplesSelectsFamilyProband(sample, i, selectedSamplesHash) :
+                            this.renderSampleSelect(sample, selectedSamplesHash, i, sampleType.PROBAND) :
                             this.renderSamplesSelectsFamilyMember(sample, i, selectedSamplesHash)
                     )}
                     <hr className='invisible' />
@@ -288,7 +288,7 @@ export default class AnalysisRightPane extends React.Component {
         const value = sample ? sample.id : null;
 
         return (
-            <div className='form-group'>
+            <div className='form-group' key={sampleIndex}>
                 <div className='col-xs-12 col-md-10 btn-group-select-group'>
                     <div className='btn-group btn-group-icon'>
                         <button
@@ -309,37 +309,6 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsFamilyProband(sample, i, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-
-        return (
-            <div className='form-group' key={i}>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            onClick={() => this.onSamplesClick(0)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max btn-group-right'>
-                        <Select
-                            className='select2-search select-right'
-                            tabindex='-1'
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(0, item.value)}
-                        />
-                    </div>
-                    {this.renderSelectSampleTypeLabel(true, sampleType.PROBAND)}
                 </div>
             </div>
         );
