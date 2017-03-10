@@ -597,6 +597,7 @@ export default class AnalysisRightPane extends React.Component {
             >
                 <a
                     onClick={onClick}
+                    href='#'
                 >
                     <span>
                         {tabCaption}
