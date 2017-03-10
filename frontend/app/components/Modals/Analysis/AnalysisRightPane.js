@@ -38,6 +38,16 @@ import * as i18n from '../../../utils/i18n';
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
 
+function FormGroupSelectorWrapper(props) {
+    return (
+        <div className='form-group'>
+            <div className='col-xs-12 col-md-10 btn-group-select-group'>
+                {props.children}
+            </div>
+        </div>
+    );
+}
+
 export default class AnalysisRightPane extends React.Component {
 
     render() {
@@ -126,13 +136,11 @@ export default class AnalysisRightPane extends React.Component {
 
     renderFormGroupSelector(title, options, value, onClick, onSelect) {
         return (
-            <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                    {this.renderFormGroupSelectorButton(title, onClick)}
-                    {this.renderFormGroupSelectorSelect(options, value, onSelect)}
-                </div>
-            </div>
-        );
+            <FormGroupSelectorWrapper>
+                {this.renderFormGroupSelectorButton(title, onClick)}
+                {this.renderFormGroupSelectorSelect(options, value, onSelect)}
+            </FormGroupSelectorWrapper>
+       );
     }
 
     renderFilterSelector(filterId) {
@@ -241,20 +249,18 @@ export default class AnalysisRightPane extends React.Component {
         const value = sample ? sample.id : null;
 
         return (
-            <div className='form-group' key={sampleIndex}>
-                <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                    {this.renderFormGroupSelectorButton(
-                        p.t('analysis.rightPane.content.samples'),
-                        () => this.onSamplesClick(sampleIndex)
-                    )}
-                    {this.renderFormGroupSelectorSelect(
-                        this.getSampleOptions(value, selectedSamplesHash),
-                        value,
-                        (value) => this.onSampleSelect(sampleIndex, value)
-                    )}
-                    {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
-                </div>
-            </div>
+            <FormGroupSelectorWrapper key={sampleIndex}>
+                {this.renderFormGroupSelectorButton(
+                    p.t('analysis.rightPane.content.samples'),
+                    () => this.onSamplesClick(sampleIndex)
+                )}
+                {this.renderFormGroupSelectorSelect(
+                    this.getSampleOptions(value, selectedSamplesHash),
+                    value,
+                    (value) => this.onSampleSelect(sampleIndex, value)
+                )}
+                {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
+            </FormGroupSelectorWrapper>
         );
     }
 
