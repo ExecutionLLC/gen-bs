@@ -81,7 +81,7 @@ export default class AnalysisRightPane extends React.Component {
     renderAnalysisContent(historyItem) {
         return (
             <div>
-                {this.renderSamplesSelects(historyItem, false)}
+                {this.renderSamplesSelects(historyItem)}
                 {this.renderFilterSelector(historyItem.filterId, false)}
                 {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, false)}
                 {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, false)}
@@ -211,7 +211,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelects(historyItem, disabled) {
+    renderSamplesSelects(historyItem) {
 
         const selectedSamplesHash = _.keyBy(historyItem.samples, (sample) => sample.id);
 
@@ -245,7 +245,7 @@ export default class AnalysisRightPane extends React.Component {
         const typeRender = rendersForType[historyItem.type];
         return (
             <div className='tab-content'>
-                {typeRender && typeRender(historyItem, disabled)}
+                {typeRender && typeRender(historyItem, false)}
             </div>
         );
     }
