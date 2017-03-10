@@ -79,12 +79,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalysisContent(historyItem) {
+        const showModelSelect = historyItem.type === analysisType.FAMILY || historyItem.type === analysisType.TUMOR;
+
         return (
             <div>
                 {this.renderSamplesSelects(historyItem)}
                 {this.renderFilterSelector(historyItem.filterId, false)}
-                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, false)}
-                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, false)}
+                {showModelSelect && this.renderModelSelector(historyItem.modelId, false)}
                 {this.renderViewSelector(historyItem.viewId, false)}
                 <hr className='invisible' />
                 {this.renderAnalyzeButton()}
@@ -126,22 +127,6 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderFamilyModelSelector(modelId, disabled) {
-        return (
-            <div>
-                {this.renderModelSelector(modelId, disabled)}
-            </div>
-        );
-    }
-
-    renderTumorModelSelector(modelId, disabled) {
-        return (
-            <div>
-                {this.renderModelSelector(modelId, disabled)}
-            </div>
-        );
-    }
-
     renderModelSelector(modelId, disabled) {
         const {p} = this.props;
         return (
