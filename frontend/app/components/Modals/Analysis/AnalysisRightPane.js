@@ -265,6 +265,23 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderSelectSampleTypeLabel(isPrimary, sampleType) {
+        const {p} = this.props;
+        const labelClassNames = classNames(
+            'label',
+            'label-round',
+            isPrimary ? 'label-dark-default' : 'label-default'
+        );
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
+        return (
+            <div className='btn-group-prefix'>
+                <label className={labelClassNames}>
+                    <span>{typeLabels[sampleType]}</span>
+                </label>
+            </div>
+        );
+    }
+
     renderSampleSelectSingle(sample, selectedSamplesHash) {
         const {p} = this.props;
         const value = sample ? sample.id : null;
@@ -293,12 +310,7 @@ export default class AnalysisRightPane extends React.Component {
                                 onChange={(item) => this.onSampleSelect(0, item.value)}
                             />
                         </div>
-                        <div className='btn-group-prefix'>
-                            <label className='label label-dark-default label-round'>
-                                <span>{p.t('analysis.rightPane.sampleTypeAbbr.single')}</span>
-                            </label>
-                        </div>
-                        
+                        {this.renderSelectSampleTypeLabel(true, sampleType.SINGLE)}
                     </div>
                 </div>
             </div>
@@ -330,12 +342,7 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-dark-default label-round'>
-                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.tumor')}</span>
-                        </label>
-                    </div>
-                    
+                    {this.renderSelectSampleTypeLabel(true, sampleType.TUMOR)}
                 </div>
             </div>
         );
@@ -366,12 +373,7 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(1, item.value)}
                         />
                     </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-default label-round'>
-                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.normal')}</span>
-                        </label>
-                    </div>
-                    
+                    {this.renderSelectSampleTypeLabel(false, sampleType.NORMAL)}
                 </div>
             </div>
         );
@@ -402,12 +404,7 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-dark-default label-round'>
-                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.proband')}</span>
-                        </label>
-                    </div>
-                    
+                    {this.renderSelectSampleTypeLabel(true, sampleType.PROBAND)}
                 </div>
             </div>
         );
