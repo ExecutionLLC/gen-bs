@@ -131,10 +131,11 @@ function generateMigration(callback) {
             });
         },
         (migrationFileName, callback) => {
-            const migrationFilePath = `${migrationsFolder}/${migrationFileName}`;
+            const migrationFilePath = path.join(migrationsFolder, migrationFileName);
 
             // 1. create folder for migration files
-            const migrationDataFolder = migrationFilePath.slice(0, -3);
+            const migrationDataFolder = path.join(migrationsFolder,
+                path.basename(migrationFileName, path.extname(migrationFileName)));
             if (!fs.existsSync(migrationDataFolder)){
                 fs.mkdirSync(migrationDataFolder);
             }
@@ -165,7 +166,7 @@ async.waterfall([
     // 1. Parse txt files
     (callback) => {
         async.mapSeries(sources, (item, callback) => {
-            fs.readFile(`${parsingRulesPath}/${item.fileName}`, (err, content) => {
+            fs.readFile(path.join(parsingRulesPath, item.fileName), (err, content) => {
                 if (err) {
                     callback(err);
                 } else {
@@ -347,13 +348,19 @@ async.waterfall([
         const {newData, migrationDataFolder} = context;
         _.forEach(newData, (item) => {
             const fileName = path.basename(item.fileName, path.extname(item.fileName));
-            fs.writeFileSync(`${migrationDataFolder}/${fileName}.dif.json`, JSON.stringify({
-                generated: new Date(),
-                newFieldsCount: item.newFields.length,
-                newTranslationsCount: item.newTranslations.length,
-                newFields: item.newFields,
-                newTranslations: item.newTranslations
-            }, null, 2));
+            fs.writeFileSync(
+                path.format({
+                    dir: migrationDataFolder,
+                    name: `${fileName}.dif`,
+                    ext: '.json'
+                }),
+                JSON.stringify({
+                    generated: new Date(),
+                    newFieldsCount: item.newFields.length,
+                    newTranslationsCount: item.newTranslations.length,
+                    newFields: item.newFields,
+                    newTranslations: item.newTranslations
+                }, null, 2));
         });
         callback(null);
     }
