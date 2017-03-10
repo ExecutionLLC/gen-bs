@@ -317,7 +317,6 @@ export default class AnalysisRightPane extends React.Component {
     renderSamplesSelectsFamilyMember(sample, i, selectedSamplesHash) {
         const {p} = this.props;
         const value = sample ? sample.id : null;
-        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
 
         return (
             <div className='form-group' key={i}>
@@ -341,12 +340,8 @@ export default class AnalysisRightPane extends React.Component {
                             onChange={(item) => this.onSampleSelect(i, item.value)}
                         />
                     </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-default label-round'>
-                            <span>{sample ? typeLabels[sample.type] : ''}</span>
-                        </label>
-                    </div>
-                    
+                    {this.renderSelectSampleTypeLabel(false, sample.type)}
+
                 </div>
             </div>
         );
