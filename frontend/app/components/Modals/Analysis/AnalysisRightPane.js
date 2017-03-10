@@ -199,7 +199,7 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='tab-pane active'>
                     {this.renderSamplesHeader(isManySamples)}
                     {historyItem.samples.map( (sample, i) => {
-                        return this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type)
+                        return this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type);
                     })}
                     {isManySamples && <hr className='invisible' />}
                 </div>
