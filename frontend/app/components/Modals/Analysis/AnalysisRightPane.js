@@ -296,7 +296,11 @@ export default class AnalysisRightPane extends React.Component {
                     type='button'
                     className='btn btn-link btn-uppercase'
                     onClick={() => this.onCancelButtonClick()}
-                ><span>{p.t('analysis.rightPane.content.restoreToDefault')}</span></a>
+                >
+                    <span>
+                        {p.t('analysis.rightPane.content.restoreToDefault')}
+                    </span>
+                </a>
             </div>
         );
     }
@@ -308,7 +312,9 @@ export default class AnalysisRightPane extends React.Component {
                 className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                 onClick={() => this.onDeleteAnalysisClick()}
             >
-                <span>{p.t('analysis.rightPane.deleteAnalysis')}</span>
+                <span>
+                    {p.t('analysis.rightPane.deleteAnalysis')}
+                </span>
             </button>
         );
     }
