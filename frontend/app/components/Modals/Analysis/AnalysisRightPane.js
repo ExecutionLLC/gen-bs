@@ -493,55 +493,30 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    isViewDisabled(view) {
-        const {auth: {isDemo}} = this.props;
-        return entityTypeIsDemoDisabled(view.type, isDemo);
-    }
-
-    getViewOptions() {
-        const {viewsList: {hashedArray: {array: views}}, ui: {languageId}, p} = this.props;
-        return views.map(
-            (viewItem) => {
-                const isDisabled = this.isViewDisabled(viewItem);
-                const label = getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type, p);
-                return {
-                    value: viewItem.id, label, disabled: isDisabled
-                };
-            }
+    getEntityOptions(entityArray) {
+        const {auth: {isDemo}, ui: {languageId}, p} = this.props;
+        return entityArray.map(
+            (item) => ({
+                value: item.id,
+                label: getItemLabelByNameAndType(i18n.getEntityText(item, languageId).name, item.type, p),
+                disabled: entityTypeIsDemoDisabled(item.type, isDemo)
+            })
         );
     }
 
-    isFilterDisabled(filter) {
-        const {auth: {isDemo}} = this.props;
-        return entityTypeIsDemoDisabled(filter.type, isDemo);
+    getViewOptions() {
+        const {viewsList: {hashedArray: {array: views}}} = this.props;
+        return this.getEntityOptions(views);
     }
 
     getFilterOptions() {
-        const {filtersList: {hashedArray: {array: filters}}, ui: {languageId}, p} = this.props;
-        return filters.map((filterItem) => {
-            const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type, p);
-            return {
-                value: filterItem.id, label, disabled: isDisabled
-            };
-        });
-    }
-
-    isModelDisabled(model) {
-        const {auth: {isDemo}} = this.props;
-        return entityTypeIsDemoDisabled(model.type, isDemo);
+        const {filtersList: {hashedArray: {array: filters}}} = this.props;
+        return this.getEntityOptions(filters);
     }
 
     getModelOptions() {
-        const {modelsList, historyItem, ui: {languageId}, p} = this.props;
-        const models = modelsList.hashedArray.array;
-        return models
-            .filter((model) => model.analysisType === historyItem.type)
-            .map((model) => {
-                const isDisabled = this.isModelDisabled(model);
-                const label = getItemLabelByNameAndType(i18n.getEntityText(model, languageId).name, model.type, p);
-                return {value: model.id, label, disabled: isDisabled};
-            });
+        const {modelsList: {hashedArray: {array: models}}, historyItem} = this.props;
+        return this.getEntityOptions(models.filter((model) => model.analysisType === historyItem.type));
     }
 
     isSampleDisabled(sample) {
