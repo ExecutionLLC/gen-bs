@@ -403,7 +403,7 @@ export default class AnalysisRightPane extends React.Component {
                         />
                     </div>
                     <div className='btn-group-prefix'>
-                        <label className='label label-default label-round'>
+                        <label className='label label-dark-default label-round'>
                             <span>{p.t('analysis.rightPane.sampleTypeAbbr.proband')}</span>
                         </label>
                     </div>
