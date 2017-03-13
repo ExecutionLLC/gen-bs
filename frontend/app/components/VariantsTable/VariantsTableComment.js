@@ -11,7 +11,7 @@ export default class VariantsTableComment extends Component {
         super(props);
         const {comments, ui: {languageId}} = this.props;
         this.state = {
-            comment: (_.isEmpty(comments)) ? '' : this.getCommentText(comments, languageId)
+            comment: this.getCommentTextOrDefault(comments, languageId, '')
         };
     }
 
@@ -19,11 +19,15 @@ export default class VariantsTableComment extends Component {
         return i18n.getEntityText(comments[0], languageId).comment;
     }
 
+    getCommentTextOrDefault(comments, languageId, deafult) {
+        return _.isEmpty(comments) ? deafult : this.getCommentText(comments, languageId);
+    }
+
     renderReadonlyComment() {
         const {comments, ui: {languageId}} = this.props;
         return (
             <div>
-                {(_.isEmpty(comments)) ? ' ' : this.getCommentText(comments, languageId)}
+                {this.getCommentTextOrDefault(comments, languageId, ' ')}
             </div>
         );
     }
@@ -47,7 +51,7 @@ export default class VariantsTableComment extends Component {
             >
                 <div>
                     <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                        {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : this.getCommentText(comments, languageId)}
+                        {this.getCommentTextOrDefault(comments, languageId, p.t('variantsTable.addComment'))}
                     </a>
                 </div>
             </OverlayTrigger>
@@ -112,7 +116,7 @@ export default class VariantsTableComment extends Component {
                                     placeholder={p.t('variantsTable.commentPlaceholder')}
                                     className='form-control material-input input-large'
                                     onChange={(e) => this.onCommentChanged(e)}
-                                    defaultValue={(_.isEmpty(comments)) ? '' : this.getCommentText(comments, languageId)}
+                                    defaultValue={this.getCommentTextOrDefault(comments, languageId, '')}
                                     maxLength={config.ANALYSIS.MAX_COMMENT_LENGTH}
                                 />
                             </div>
