@@ -245,7 +245,7 @@ async.waterfall([
             let newFields = [];
             let newTranslations = [];
 
-            let generateTranslationsForField = function (existingField, prField) {
+            function generateTranslationsForField (existingField, prField) {
                 _.forEach(languages, (language) => {
                     const translation = createTranslation(existingField, prField, language);
                     if (translation) {
@@ -262,7 +262,7 @@ async.waterfall([
                         }
                     }
                 });
-            };
+            }
 
             _.forEach(fileData.fields, (prField) => {
 

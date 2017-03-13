@@ -186,19 +186,15 @@ function getRawColumnData(content) {
     while (re.exec(columnText)) {
         indexes.push(re.lastIndex);
     }
-    const indexesSorted = indexes.sort((a, b) => (a - b)); // sort as array of numeric
 
     // 1. Get raw data (parse column names and get ranges with textual raw data)
 
-    const columnData = indexesSorted.map((i) => {
+    const columnData = indexes.map((i) => {
         const left = columnText.indexOf('{', i);
         const rightLimitForSearchName = (left !== -1 ? left : columnText.indexOf('\n', i)) - 1;
         const text = columnText.substring(i, rightLimitForSearchName);
         const found = text.match(/"(.*?)"/);
         if (!found) {
-            exitWithError(`Can't find column name in ${text}`);
-        }
-        if (cutQuotes(text.trim()) !== found[1]) {
             exitWithError(`Can't find column name in ${text}`);
         }
         const columnName = found[1];
