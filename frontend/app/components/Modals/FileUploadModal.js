@@ -4,7 +4,6 @@ import {Modal} from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
-import {modalName} from '../../actions/modalWindows';
 import {getP} from 'redux-polyglot/dist/selectors';
 
 class FileUploadModal extends Component {
@@ -51,7 +50,7 @@ class FileUploadModal extends Component {
     }
 
     onClose() {
-        this.props.closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
+        this.props.closeModal();
     }
 
     onUploadShow() {
@@ -81,7 +80,8 @@ function mapStateToProps(state) {
 }
 
 FileUploadModal.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(FileUploadModal);

@@ -26,6 +26,7 @@ import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
 import {setCurrentLanguageId} from '../actions/ui';
+import {closeSavedFilesDialog} from '../actions/savedFiles';
 import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
 import * as i18n from '../utils/i18n';
@@ -104,7 +105,6 @@ class App extends Component {
                 <AnalysisModal
                     showModal={modalWindows.analysis.showModal}
                     closeModal={ () => { dispatch(closeModal(modalName.ANALYSIS)); } }
-                    dispatch={dispatch}
                 />
                 <ErrorModal
                     showModal={showErrorWindow}
@@ -116,20 +116,19 @@ class App extends Component {
                 />
                 <ViewsModal
                     showModal={modalWindows.views.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
-                    dispatch={dispatch}
+                    closeModal={ () => { dispatch(closeModal(modalName.VIEWS)); } }
                 />
                 <FiltersModal
                     showModal={modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
-                    dispatch={dispatch}
+                    closeModal={ () => { dispatch(closeModal(modalName.FILTERS)); } }
                 />
                 <FileUploadModal
                     showModal={modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    closeModal={ () => { dispatch(closeModal(modalName.UPLOAD)); } }
                 />
                 <SavedFilesModal
                     showModal={savedFiles.showSavedFilesModal}
+                    closeModal={ () => { dispatch(closeSavedFilesDialog()); } }
                 />
                 <CloseAllUserSessionsModal
                     showModal={auth.showCloseAllUserSessionsDialog}

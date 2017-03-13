@@ -126,7 +126,8 @@ function mapStateToProps(state) {
 }
 
 NavbarMain.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    openAnalysisModal: PropTypes.func.isRequired,
+    openSamplesModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(NavbarMain);
