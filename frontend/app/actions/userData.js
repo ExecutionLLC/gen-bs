@@ -106,7 +106,6 @@ export function fetchUserDataAsync() {
                 dispatch(handleError(null, p.t('errors.cannotFindDefaultItemsError')));
                 return;
             }
-            const lastHistoryAnalysis = analyses[0];
             const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
             const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
             dispatch(createNewHistoryItem(
@@ -114,6 +113,7 @@ export function fetchUserDataAsync() {
                 {name: newAnalysisName, description: newAnalysisDescription},
                 languageId
             ));
+            const lastHistoryAnalysis = analyses[0];
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(lastHistoryAnalysis ? lastHistoryAnalysis.id : null))
                 .then(() => {
                     const currentAnalysis = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
