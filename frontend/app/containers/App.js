@@ -62,7 +62,7 @@ class App extends Component {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
-        const {history: historyList, newHistoryItem, currentHistoryId} = analysesHistory;
+        const {newHistoryItem, currentHistoryId} = analysesHistory;
 
         const samplesOnSaveParams =
             currentHistoryId ?
