@@ -33,7 +33,7 @@ export default class VariantsTableComment extends Component {
     }
 
     renderEditableComment() {
-        const {comments, searchKey, ui: {languageId}, p, tableElement, onPopupTriggered} = this.props;
+        const {comments, searchKey, rowIndex, ui: {languageId}, p, tableElement, onPopupTriggered} = this.props;
         return (
             <OverlayTrigger
                 trigger='click'
@@ -42,7 +42,7 @@ export default class VariantsTableComment extends Component {
                 placement='right'
                 container={tableElement}
                 overlay={
-                    <Popover id={searchKey}>
+                    <Popover id={`${rowIndex}-${searchKey}`}>
                         {this.renderCommentPopover()}
                     </Popover>
                 }
@@ -151,6 +151,7 @@ VariantsTableComment.propTypes = {
     alt: PropTypes.string.isRequired,
     chrom: PropTypes.string.isRequired,
     searchKey: PropTypes.string.isRequired,
+    rowIndex: PropTypes.number.isRequired,
     tableElement: PropTypes.instanceOf(Component).isRequired,
     ui: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,

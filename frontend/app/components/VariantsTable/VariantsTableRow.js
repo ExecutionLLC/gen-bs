@@ -68,6 +68,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       reference={ref}
                                       chrom={chrom}
                                       searchKey={searchKey}
+                                      rowIndex={rowIndex}
                                       dispatch={dispatch}
                                       auth={auth}
                                       comments={comments}
