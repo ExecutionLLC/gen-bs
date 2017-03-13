@@ -63,21 +63,19 @@ class App extends Component {
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
         const {newHistoryItem, currentHistoryId} = analysesHistory;
-
-        const samplesOnSaveParams =
-            currentHistoryId ?
-                {
-                    action: resetCurrentAnalysesHistoryIdLoadDataAsync,
-                    propertyIndex: null,
-                    propertyId: null,
-                    sampleIds: null
-                } :
-                {
-                    action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
-                    propertyIndex: 'changeItem.sample.index',
-                    propertyId: 'changeItem.sample.id',
-                    sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
-                };
+        const samplesOnSaveParamsReset = {
+            action: resetCurrentAnalysesHistoryIdLoadDataAsync,
+            propertyIndex: null,
+            propertyId: null,
+            sampleIds: null
+        };
+        const samplesOnSaveParamsChange = {
+            action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
+            propertyIndex: 'changeItem.sample.index',
+            propertyId: 'changeItem.sample.id',
+            sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
+        };
+        const samplesOnSaveParams = currentHistoryId ? samplesOnSaveParamsReset : samplesOnSaveParamsChange;
 
         return (
             <div className='main subnav-closed' id='main'>
