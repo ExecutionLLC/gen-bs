@@ -136,8 +136,10 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     renderPopupValue(ref, value, field, isValuedHyperlink, isChromosome) {
+        const {rowIndex} = this.props;
+        const id = `${rowIndex}-${ref}`; // unique id, 'ref' is unique for row, add rowIndex for full-table unique
         const popover = (
-            <Popover
+            <Popover id={id}
                 onClick={() => this.refs[ref].hide()}
             >
                 {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
