@@ -5,10 +5,9 @@ import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {formatDate} from './../../../utils/dateUtil';
-import * as HistoryItemUtils from '../../../utils/HistoryItemUtils';
 import {
     duplicateAnalysesHistoryItem,
-    createNewHistoryItem,
+    createNewDefaultHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -28,7 +27,6 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
-import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 import config from '../../../../config';
@@ -578,24 +576,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {
-            dispatch,
-            samplesList: {hashedArray: {array: samples}},
-            viewsList: {hashedArray: {array: views}},
-            filtersList: {hashedArray: {array: filters}},
-            ui: {languageId},
-            p
-        } = this.props;
-        const sample = getDefaultOrStandardItem(samples);
-        const filter = getDefaultOrStandardItem(filters);
-        const view = getDefaultOrStandardItem(views);
-        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
-        const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
-        dispatch(createNewHistoryItem(
-            sample, filter, view,
-            {name: newAnalysisName, description: newAnalysisDescription},
-            languageId
-        ));
+        const {dispatch} = this.props;
+        dispatch(createNewDefaultHistoryItem());
     }
 
     onAnalyzeButtonClick(isEditing) {

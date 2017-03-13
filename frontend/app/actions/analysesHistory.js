@@ -8,6 +8,8 @@ import {viewsListSetHistoryView} from './viewsList';
 import {filtersListSetHistoryFilter} from './filtersList';
 import {modelsListSetHistoryModel} from './modelsList';
 import {samplesListSetHistorySamples} from './samplesList';
+import {getDefaultOrStandardItem} from '../utils/entityTypes';
+import * as HistoryItemUtils from '../utils/HistoryItemUtils';
 
 export const SET_CURRENT_ANALYSES_HISTORY_ID = 'SET_CURRENT_ANALYSES_HISTORY_ID';
 export const RECEIVE_ANALYSES_HISTORY = 'RECEIVE_ANALYSES_HISTORY';
@@ -35,7 +37,7 @@ export function setCurrentAnalysesHistoryId(id) {
     };
 }
 
-export function createNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
+function createNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
     return {
         type: CREATE_NEW_HISTORY_ITEM,
         sample,
@@ -323,5 +325,31 @@ export function resetCurrentAnalysesHistoryIdLoadDataAsync() {
     return (dispatch, getState) => {
         const {analysesHistory: {currentHistoryId}} = getState();
         dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(currentHistoryId));
+    };
+}
+
+export function createNewDefaultHistoryItem() {
+    return (dispatch, getState) => {
+        const {
+            samplesList: {hashedArray: {array: samples}},
+            viewsList: {hashedArray: {array: views}},
+            filtersList: {hashedArray: {array: filters}},
+            ui: {languageId},
+        } = getState();
+        const p = getP(getState());
+        const sample = getDefaultOrStandardItem(samples);
+        const filter = getDefaultOrStandardItem(filters);
+        const view = getDefaultOrStandardItem(views);
+        if (!sample || !filter || !view) {
+            dispatch(handleError(null, p.t('errors.cannotFindDefaultItemsError')));
+            return;
+        }
+        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
+        const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
+        dispatch(createNewHistoryItem(
+            sample, filter, view,
+            {name: newAnalysisName, description: newAnalysisDescription},
+            languageId
+        ));
     };
 }
