@@ -118,7 +118,7 @@ export default class VariantsTableRows extends Component {
         const {variantsHeader} = this.props;
         return [
             this.renderLoadingItem(),
-            <tr style={{visibility: 'hidden'}}>
+            <tr key='temp-row-tr' style={{visibility: 'hidden'}}>
                 <td className='btntd row_checkbox'>
                     <div>{1}</div>
                 </td>
@@ -156,7 +156,7 @@ export default class VariantsTableRows extends Component {
         const {p} = this.props;
 
         return (
-            <tr ref={REFS.LOADING}>
+            <tr key='loading-table-row' ref={REFS.LOADING}>
                 <td colSpan='100'>
                     <div className='table-loader'>{p.t('variantsTable.loading')}<i className='md-i'>autorenew</i>
                     </div>
