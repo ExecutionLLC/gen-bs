@@ -123,7 +123,8 @@ export default class VariantsTableRows extends Component {
                     <div>{1}</div>
                 </td>
                 <td className='btntd row_checkbox'
-                    key='row_checkbox'>
+                    key='row_checkbox'
+                >
                     <div>
                         <label className='checkbox'>
                             <input type='checkbox'/>
