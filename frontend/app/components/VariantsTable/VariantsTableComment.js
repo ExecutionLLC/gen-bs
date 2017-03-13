@@ -76,8 +76,16 @@ export default class VariantsTableComment extends Component {
         });
     }
 
-    onSaveClick(alt, pos, reference, chrom, searchKey, comment, comments) {
-        const {dispatch} = this.props;
+    onSaveClick(comment) {
+        const {
+            alt,
+            pos,
+            reference,
+            chrom,
+            searchKey,
+            comments,
+            dispatch
+        } = this.props;
         if (_.isEmpty(comments)) {
             if (comment) {
                 dispatch(createCommentAsync(alt, pos, reference, chrom, searchKey, comment));
@@ -92,16 +100,7 @@ export default class VariantsTableComment extends Component {
     }
 
     renderCommentPopover() {
-        const {
-            alt,
-            pos,
-            reference,
-            chrom,
-            searchKey,
-            comments,
-            ui: {languageId},
-            p
-        } = this.props;
+        const {comments, ui: {languageId}, p} = this.props;
 
         const comment = this.state.comment;
 
@@ -124,7 +123,7 @@ export default class VariantsTableComment extends Component {
                                 <button
                                     type='button'
                                     className='btn btn-uppercase btn-link editable-submit'
-                                    onClick={() => this.onSaveClick(alt, pos, reference, chrom, searchKey, comment, comments)}
+                                    onClick={() => this.onSaveClick(comment)}
                                 >
                                     {p.t('variantsTable.saveComment')}
                                 </button>
