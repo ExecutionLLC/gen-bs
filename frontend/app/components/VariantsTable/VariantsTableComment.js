@@ -47,8 +47,8 @@ export default class VariantsTableComment extends Component {
             >
                 <div>
                     <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                        {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : this.getCommentText(comments, languageId)}</a>
-
+                        {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : this.getCommentText(comments, languageId)}
+                    </a>
                 </div>
             </OverlayTrigger>
         );
@@ -106,24 +106,28 @@ export default class VariantsTableComment extends Component {
                     <div className='control-group form-group'>
                         <div>
                             <div className=''>
-                                    <textarea rows='7'
-                                              placeholder={p.t('variantsTable.commentPlaceholder')}
-                                              className='form-control material-input input-large'
-                                              onChange={(e) => this.onCommentChanged(e)}
-                                              defaultValue={(_.isEmpty(comments)) ? '' : this.getCommentText(comments, languageId)}
-                                              maxLength={config.ANALYSIS.MAX_COMMENT_LENGTH}
-                                    />
+                                <textarea
+                                    rows='7'
+                                    placeholder={p.t('variantsTable.commentPlaceholder')}
+                                    className='form-control material-input input-large'
+                                    onChange={(e) => this.onCommentChanged(e)}
+                                    defaultValue={(_.isEmpty(comments)) ? '' : this.getCommentText(comments, languageId)}
+                                    maxLength={config.ANALYSIS.MAX_COMMENT_LENGTH}
+                                />
                             </div>
                             <div className='editable-buttons editable-buttons-bottom'>
-                                <button type='button'
-                                        className='btn btn-uppercase btn-link editable-submit'
-                                        onClick={() => this.onSaveClick(alt, pos,
-                                            reference, chrom, searchKey, comment, comments)}
-                                >{p.t('variantsTable.saveComment')}
+                                <button
+                                    type='button'
+                                    className='btn btn-uppercase btn-link editable-submit'
+                                    onClick={() => this.onSaveClick(alt, pos, reference, chrom, searchKey, comment, comments)}
+                                >
+                                    {p.t('variantsTable.saveComment')}
                                 </button>
-                                <button type='button'
-                                        onClick={() => this.refs.overlay.toggle()}
-                                        className='btn btn-uppercase btn-link editable-cancel'>
+                                <button
+                                    type='button'
+                                    onClick={() => this.refs.overlay.toggle()}
+                                    className='btn btn-uppercase btn-link editable-cancel'
+                                >
                                     {p.t('variantsTable.cancelComment')}
                                 </button>
                             </div>
