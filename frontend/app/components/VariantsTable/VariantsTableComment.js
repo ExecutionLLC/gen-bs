@@ -19,7 +19,7 @@ export default class VariantsTableComment extends Component {
         return i18n.getEntityText(comments[0], languageId).comment;
     }
 
-    renderComment() {
+    renderReadonlyComment() {
         const {comments, ui: {languageId}} = this.props;
         return (
             <div>
@@ -59,7 +59,7 @@ export default class VariantsTableComment extends Component {
         return (
             <td className='comment'>
                 {isDemo ?
-                    this.renderComment() :
+                    this.renderReadonlyComment() :
                     this.renderEditableComment()
                 }
             </td>
