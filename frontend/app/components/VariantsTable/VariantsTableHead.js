@@ -114,7 +114,7 @@ export default class VariantsTableHead extends Component {
         const {dispatch} = this.props;
         dispatch(setFieldFilter(fieldId, sampleId, searchValue));
         dispatch(searchInResultsSortFilter());
-    };
+    }
 
     onSendSortRequestedAction(fieldId, sampleId, direction, isControlKeyPressed) {
         const {dispatch} = this.props;
