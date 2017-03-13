@@ -347,8 +347,8 @@ export default {
             createModelError: 'Не удалось создать новую модель. Пожлауйста попробуйте снова.',
             updateModelError: 'Не удалось обновить модель. Пожлауйста попробуйте снова.',
             deleteModelError: 'Невозможно удалить модель. Пожлауйста попробуйте снова.',
-            compHeterModelNoGenotypes: `Сэмпл '%{name}' не содержит генотипов.`,
-            compHeterModelNoField: `Сэмпл '%{name}' не содержит поля %{field}.`
+            compHeterModelNoGenotypes: "Сэмпл '%{name}' не содержит генотипов.",
+            compHeterModelNoField: "Сэмпл '%{name}' не содержит поля %{field}."
         }
     },
     view: {

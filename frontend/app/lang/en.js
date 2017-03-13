@@ -347,8 +347,8 @@ export default {
             createModelError: 'Cannot create new model. Please try again.',
             updateModelError: 'Cannot update model. Please try again.',
             deleteModelError: 'Cannot delete model. Please try again.',
-            compHeterModelNoGenotypes: `Sample '%{name}' doesn't have any genotype.`,
-            compHeterModelNoField: `Sample '%{name}' doesn't have %{field} field.`
+            compHeterModelNoGenotypes: "Sample '%{name}' doesn't have any genotype.",
+            compHeterModelNoField: "Sample '%{name}' doesn't have %{field} field."
         }
     },
     view: {
