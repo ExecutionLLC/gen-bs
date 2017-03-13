@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import {getP} from 'redux-polyglot/dist/selectors';
@@ -59,6 +59,11 @@ class AutoLogoutModal extends Component {
         );
     }
 }
+
+AutoLogoutModal.propTypes = {
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
     const {auth: {secondsToAutoLogout}} = state;
