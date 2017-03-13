@@ -109,7 +109,7 @@ export default class VariantsTableComment extends Component {
                 <form className='form-inline editableform'>
                     <div className='control-group form-group'>
                         <div>
-                            <div className=''>
+                            <div>
                                 <textarea
                                     rows='7'
                                     placeholder={p.t('variantsTable.commentPlaceholder')}
