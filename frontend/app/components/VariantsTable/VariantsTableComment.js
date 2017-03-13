@@ -25,41 +25,40 @@ export default class VariantsTableComment extends Component {
             </td>);
     }
 
-    render() {
-        const {auth, comments, searchKey, ui: {languageId}, p} = this.props;
-        if (auth.isDemo) {
-            return (
-                this.renderComment()
-            );
-        } else {
-            return (
-                <td className='comment'>
-                    <OverlayTrigger
-                        trigger='click'
-                        ref='overlay'
-                        rootClose={true}
-                        placement='right'
-                        container={this.props.tableElement}
-                        overlay={
-                            <Popover id={searchKey}>
-                                {this.renderCommentPopover()}
-                            </Popover>
-                        }
-                        onEnter={() => {
-                            this.props.onPopupTriggered(true);
-                        }}
-                        onExiting={() => {
-                            this.props.onPopupTriggered(false);
-                        }}
-                    >
-                        <div>
-                            <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : i18n.getEntityText(comments[0], languageId).comment}</a>
+    renderEditableComment() {
+        const {comments, searchKey, ui: {languageId}, p, tableElement, onPopupTriggered} = this.props;
+        return (
+            <td className='comment'>
+                <OverlayTrigger
+                    trigger='click'
+                    ref='overlay'
+                    rootClose={true}
+                    placement='right'
+                    container={tableElement}
+                    overlay={
+                        <Popover id={searchKey}>
+                            {this.renderCommentPopover()}
+                        </Popover>
+                    }
+                    onEnter={() => onPopupTriggered(true)}
+                    onExiting={() => onPopupTriggered(false)}
+                >
+                    <div>
+                        <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
+                            {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : i18n.getEntityText(comments[0], languageId).comment}</a>
 
-                        </div>
-                    </OverlayTrigger>
-                </td>
-            );
+                    </div>
+                </OverlayTrigger>
+            </td>
+        );
+    }
+
+    render() {
+        const {auth: {isDemo}} = this.props;
+        if (isDemo) {
+            return this.renderComment();
+        } else {
+            return this.renderEditableComment();
         }
     }
 
