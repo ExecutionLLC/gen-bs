@@ -19,9 +19,10 @@ export default class LanguageDropdown extends ComponentBase {
         return (
             <div>
                 <Nav>
-                    <NavDropdown id='languages-dropdown'
-                                 title={this.renderLanguageButtonTitle()}
-                                 onSelect={(e, item) => this.onLanguageSelected(e, item)}
+                    <NavDropdown
+                        id='languages-dropdown'
+                        title={this.renderLanguageButtonTitle()}
+                        onSelect={(e, item) => this.onLanguageSelected(e, item)}
                     >
                         {_.map(languages, (languageInfo) => {
                             return (
