@@ -1,6 +1,5 @@
-import React, {Component}  from 'react';
+import React, {Component, PropTypes}  from 'react';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
-
 
 import {createCommentAsync, updateCommentAsync, removeCommentAsync} from '../../actions/variantsTable';
 import config from '../../../config';
@@ -135,9 +134,15 @@ export default class VariantsTableComment extends Component {
 }
 
 VariantsTableComment.propTypes = {
-    comments: React.PropTypes.array.isRequired,
-    reference: React.PropTypes.string.isRequired,
-    pos: React.PropTypes.string.isRequired,
-    alt: React.PropTypes.string.isRequired,
-    searchKey: React.PropTypes.string.isRequired
+    comments: PropTypes.array.isRequired,
+    reference: PropTypes.string.isRequired,
+    pos: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    chrom: PropTypes.string.isRequired,
+    searchKey: PropTypes.string.isRequired,
+    tableElement: PropTypes.instanceOf(Component).isRequired,
+    ui: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    onPopupTriggered: PropTypes.func.isRequired
 };
