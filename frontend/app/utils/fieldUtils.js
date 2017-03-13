@@ -185,7 +185,7 @@ export default class FieldUtils {
         return sampleFields;
     }
 
-    static excludeVepFieldsButZygocityGenotype(fields, sampleType) {
+    static excludeVepFields(fields, sampleType) {
         if ( isMainSample(sampleType)){
             return fields;
         }
@@ -234,7 +234,7 @@ export default class FieldUtils {
         const samplesFields = samples.map((sample) => {
             const sampleType = samplesTypes[sample.id];
             const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
-            return addSampleTypeFields(FieldUtils.excludeVepFieldsButZygocityGenotype(sampleFields, sampleType), sampleType);
+            return addSampleTypeFields(FieldUtils.excludeVepFields(sampleFields, sampleType), sampleType);
         });
         const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedFields = FieldUtils.sortByLabels(allSamplesFields, languageId);
