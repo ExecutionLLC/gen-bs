@@ -73,14 +73,15 @@ export default class VariantsTableComment extends Component {
     }
 
     onSaveClick(alt, pos, reference, chrom, searchKey, comment, comments) {
+        const {dispatch} = this.props;
         if (_.isEmpty(comments)) {
             if (comment) {
-                this.props.dispatch(createCommentAsync(alt, pos, reference, chrom, searchKey, comment));
+                dispatch(createCommentAsync(alt, pos, reference, chrom, searchKey, comment));
             }
         } else if (comment) {
-            this.props.dispatch(updateCommentAsync(comments[0], alt, pos, reference, chrom, searchKey, comment));
+            dispatch(updateCommentAsync(comments[0], alt, pos, reference, chrom, searchKey, comment));
         } else {
-            this.props.dispatch(removeCommentAsync(comments[0].id, searchKey));
+            dispatch(removeCommentAsync(comments[0].id, searchKey));
         }
 
         this.refs.overlay.toggle();
