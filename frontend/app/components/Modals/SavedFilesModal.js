@@ -109,8 +109,8 @@ class SavedFilesModal extends DialogBase {
     }
 
     onCloseModal() {
-        const {dispatch, closeModal} = this.props;
-        dispatch(closeModal());
+        const {closeModal} = this.props;
+        closeModal();
     }
 }
 
