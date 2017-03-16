@@ -334,7 +334,7 @@ export function createNewDefaultHistoryItem() {
             samplesList: {hashedArray: {array: samples}},
             viewsList: {hashedArray: {array: views}},
             filtersList: {hashedArray: {array: filters}},
-            ui: {languageId},
+            ui: {languageId}
         } = getState();
         const p = getP(getState());
         const sample = getDefaultOrStandardItem(samples);
