@@ -275,7 +275,7 @@ export default class AnalysisRightPane extends React.Component {
 
                         <div className='btn-group btn-group-select-group-max'>
                             <Select
-                                className='select2-search select-right'
+                                className='select2-search select-right select-with-icon'
                                 tabindex='-1'
                                 disabled={disabled}
                                 value={value}
@@ -321,7 +321,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group btn-group-select-group-max'>
                         <Select
-                            className='select2-search'
+                            className='select2-search select-with-icon'
                             tabindex='-1'
                             disabled={disabled}
                             value={value}
@@ -360,7 +360,7 @@ export default class AnalysisRightPane extends React.Component {
                     <div className='btn-group btn-group-select-group-max'>
                         <Select
                             tabindex='-1'
-                            className='select2-search select-right'
+                            className='select2-search select-right select-with-icon'
                             disabled={disabled}
                             value={value}
                             options={this.getSampleOptions(value, selectedSamplesHash)}
@@ -404,7 +404,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group btn-group-select-group-max btn-group-right'>
                         <Select
-                            className='select2-search select-right'
+                            className='select2-search select-right select-with-icon'
                             tabindex='-1'
                             disabled={disabled}
                             value={value}
@@ -445,7 +445,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             aria-hidden='true'
                             tabindex='-1'
-                            className='select2-search select-right'
+                            className='select2-search select-right select-with-icon'
                             disabled={disabled}
                             value={value}
                             options={this.getSampleOptions(value, selectedSamplesHash)}
