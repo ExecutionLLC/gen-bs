@@ -446,7 +446,7 @@ export default class AnalysisRightPane extends React.Component {
                     return (
                         <dl key={sampleId}>
                             <dt><span>{p.t('analysis.rightPane.content.sample')}</span>
-                                ({this.sampleTypeCaption(sampleInfo.type)})
+                                {this.sampleTypeCaption(sampleInfo.type)}
                             </dt>
                             <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type, p)}</dd>
                         </dl>
