@@ -106,7 +106,6 @@ export default {
             analysisNamePlaceHolder: 'Analysis name (it can\'t be empty)',
             created: 'Created',
             analysisDescriptionPlaceHolder: 'Analysis description (optional)',
-            duplicate: 'Duplicate to make changes',
             analysisType: {
                 single: 'Single',
                 tumor: 'Tumor/Normal',
