@@ -34,6 +34,21 @@ import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
 import * as i18n from '../../../utils/i18n';
 
 
+const analysisTypeCaptionTranslation = {
+    [analysisType.SINGLE]: 'analysis.rightPane.analysisType.single',
+    [analysisType.TUMOR]: 'analysis.rightPane.analysisType.tumor',
+    [analysisType.FAMILY]: 'analysis.rightPane.analysisType.family'
+};
+
+const sampleTypeCaptionTranslation = {
+    [sampleType.SINGLE]: 'analysis.rightPane.sampleType.single',
+    [sampleType.TUMOR]: 'analysis.rightPane.sampleType.tumor',
+    [sampleType.NORMAL]: 'analysis.rightPane.sampleType.normal',
+    [sampleType.PROBAND]: 'analysis.rightPane.sampleType.proband',
+    [sampleType.MOTHER]: 'analysis.rightPane.sampleType.mother',
+    [sampleType.FATHER]: 'analysis.rightPane.sampleType.father'
+};
+
 // TODO class contains many similar and unused functions, refactor there with updated layout
 
 function FormGroupSelectorWrapper(props) {
@@ -364,23 +379,12 @@ export default class AnalysisRightPane extends React.Component {
 
     analysisTypeCaption(type) {
         const {p} = this.props;
-        return {
-            [analysisType.SINGLE]: p.t('analysis.rightPane.analysisType.single'),
-            [analysisType.TUMOR]: p.t('analysis.rightPane.analysisType.tumor'),
-            [analysisType.FAMILY]: p.t('analysis.rightPane.analysisType.family')
-        }[type] || '';
+        return p.t(analysisTypeCaptionTranslation[type]);
     }
 
     sampleTypeCaption(type) {
         const {p} = this.props;
-        return {
-            [sampleType.SINGLE]: p.t('analysis.rightPane.sampleType.single'),
-            [sampleType.TUMOR]: p.t('analysis.rightPane.sampleType.tumor'),
-            [sampleType.NORMAL]: p.t('analysis.rightPane.sampleType.normal'),
-            [sampleType.PROBAND]: p.t('analysis.rightPane.sampleType.proband'),
-            [sampleType.MOTHER]: p.t('analysis.rightPane.sampleType.mother'),
-            [sampleType.FATHER]: p.t('analysis.rightPane.sampleType.father')
-        }[type] || '';
+        return p.t(sampleTypeCaptionTranslation[type]);
     }
 
     renderAnalysisHeaderTabs(historyItemType) {
