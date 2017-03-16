@@ -4,6 +4,17 @@ import * as SamplesUtils from './samplesUtils';
 import {isMainSample} from './samplesUtils';
 import * as i18n from './i18n';
 
+
+const sampleTypeAbbrTranslation = {
+    [SamplesUtils.sampleType.SINGLE]: 'analysis.rightPane.sampleTypeAbbr.single',
+    [SamplesUtils.sampleType.TUMOR]: 'analysis.rightPane.sampleTypeAbbr.tumor',
+    [SamplesUtils.sampleType.NORMAL]: 'analysis.rightPane.sampleTypeAbbr.normal',
+    [SamplesUtils.sampleType.PROBAND]: 'analysis.rightPane.sampleTypeAbbr.proband',
+    [SamplesUtils.sampleType.MOTHER]: 'analysis.rightPane.sampleTypeAbbr.mother',
+    [SamplesUtils.sampleType.FATHER]: 'analysis.rightPane.sampleTypeAbbr.father'
+};
+
+
 export default class FieldUtils {
     static find(fieldId, fields) {
         return fields.totalFieldsHashedArray.hash[fieldId];
@@ -104,11 +115,14 @@ export default class FieldUtils {
         };
     }
 
+    static makeFieldTypeLabel(p, sampleType) {
+        return p.t(sampleTypeAbbrTranslation[sampleType]);
+    }
+
     static makeFieldTypeLabels(p) {
-        const abbrPath = 'analysis.rightPane.sampleTypeAbbr.';
         return _(SamplesUtils.sampleType)
             .mapKeys(type => type)
-            .mapValues(type => p.t(`${abbrPath}${type}`))
+            .mapValues(type => this.makeFieldTypeLabel(p, type))
             .value();
     }
 
