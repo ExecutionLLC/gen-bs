@@ -162,7 +162,6 @@
 
 	> input {
 		height: @select-input-internal-height;
-		//padding-top: 0; relayout, moved to the top
 	}
 }
 
@@ -357,81 +356,21 @@
 
 ////
 
-.btn-group-select-group-max {
-
-/* implicitly it is
-  div.Select {
-    width: 100%!important;
-  }
-*/
-/* already it is
-  .Select-control {
-     width: 100%!important;
-  }
-*/
-/* relayout
-  :not(.Select--multi)>.Select-control .Select-input {
-    left: 0;
-    position: absolute;
-    right: 16px;
-     > input {
-    max-width: 100%;
-   }
-}
-*/
-/* relayout
-  .Select-arrow-zone {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 8px;
-  }
-*/
-}
-.btn-group-select-group-max {
-  .Select--multi {
-/* relayout
-    .Select-clear-zone {
-    display: block;
-    position: absolute;
-    right: 24px;
-    top: 8px;
-   }
-*/
-     @media (max-width: @screen-xs-max){
-/* relayout
-      .Select-control {
-        display: block;
-        white-space: normal;
-        height: auto;
-      }
-*/
-      /*.Select-arrow-zone, relayout*/
-/* relayout
-      .Select-clear-zone {
-        float: right;
-      }
-*/
-/* relayout
-      .Select-value {
-        position: relative;
-        padding-left: 17px;
-        line-height: 1.2;  
-      }
-*/
-/* relayout
-      .Select-value-icon {
-        position: absolute;
-        border-bottom: 1px solid rgba(66,165,245,.24);
-        left: 0;
-        }
-*/
-    }
-   }
-  }
-
 .select2-search__field { 
   outline: none;
 }
 
+@media (min-width: @screen-sm) {
+  .btn-group-select-group-max {
+    div.Select.select-with-icon {
+      .Select-input {
+        padding-right: 16px;
+      }
+    }
+  }
+}
 
+.Select--multi .Select-input {
+  display: inline-block;
+  margin-left: 8px;
+}
