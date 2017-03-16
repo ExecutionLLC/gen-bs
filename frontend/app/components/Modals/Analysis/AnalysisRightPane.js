@@ -275,16 +275,13 @@ export default class AnalysisRightPane extends React.Component {
         ];
         const validationResults = _.map(validationRules, rule => rule.validate());
         const error = _.find(validationResults, {isValid: false});
-        const buttonParams = {
-            title: error ? error.errorMessage : p.t('analysis.rightPane.content.analyzeTitle'),
-            disabled: !!error
-        };
+        const buttonTitle = error ? error.errorMessage : p.t('analysis.rightPane.content.analyzeTitle');
         return (
             <div className='btn-toolbar btn-toolbar-form-actions'>
                 <button
                     className='btn btn-primary'
-                    disabled={buttonParams.disabled}
-                    title={buttonParams.title}
+                    disabled={!!error}
+                    title={buttonTitle}
                     onClick={() => this.onAnalyzeButtonClick(true)}
                 >
                     <span>{p.t('analysis.rightPane.content.analyze')}</span>
