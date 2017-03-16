@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {openUserSession} from '../../../actions/auth';
 
-class LoginForm extends Component {
+export default class LoginForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -56,11 +56,15 @@ class LoginForm extends Component {
 
     onLoginClick() {
         const {login, password} = this.state;
-        const {closeLoginForm} = this.props;
+        const {closeLoginForm, dispatch} = this.props;
 
         closeLoginForm();
-        this.props.dispatch(openUserSession(login, password));
+        dispatch(openUserSession(login, password));
     }
 }
 
-export default LoginForm;
+LoginForm.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    closeLoginForm: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired
+};
