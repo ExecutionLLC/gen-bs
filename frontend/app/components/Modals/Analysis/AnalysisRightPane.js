@@ -284,7 +284,9 @@ export default class AnalysisRightPane extends React.Component {
                     title={buttonTitle}
                     onClick={() => this.onAnalyzeButtonClick(true)}
                 >
-                    <span>{p.t('analysis.rightPane.content.analyze')}</span>
+                    <span>
+                        {p.t('analysis.rightPane.content.analyze')}
+                    </span>
                 </button>
                 <a
                     type='button'
@@ -436,8 +438,12 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='dl-group-view-mode'>
                 <dl>
-                    <dt>{p.t('analysis.rightPane.content.analysisType')}</dt>
-                    <dd>{this.analysisTypeCaption(historyItem.type)}</dd>
+                    <dt>
+                        {p.t('analysis.rightPane.content.analysisType')}
+                    </dt>
+                    <dd>
+                        {this.analysisTypeCaption(historyItem.type)}
+                    </dd>
                 </dl>
                 {historyItem.samples.map((sampleInfo) => {
                     const sampleId = sampleInfo.id;
@@ -445,26 +451,43 @@ export default class AnalysisRightPane extends React.Component {
 
                     return (
                         <dl key={sampleId}>
-                            <dt><span>{p.t('analysis.rightPane.content.sample')}</span>
+                            <dt>
+                                <span>
+                                    {p.t('analysis.rightPane.content.sample')}
+                                </span>
                                 {this.sampleTypeCaption(sampleInfo.type)}
                             </dt>
-                            <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type, p)}</dd>
+                            <dd>
+                                {sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type, p)}
+                            </dd>
                         </dl>
                     );
                 })}
                 <dl>
-                    <dt>{p.t('analysis.rightPane.content.filter')}</dt>
-                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type, p)}</dd>
+                    <dt>
+                        {p.t('analysis.rightPane.content.filter')}
+                    </dt>
+                    <dd>
+                        {selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type, p)}
+                    </dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
-                        <dt>{p.t('analysis.rightPane.content.model')}</dt>
-                        <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type, p)}</dd>
+                        <dt>
+                            {p.t('analysis.rightPane.content.model')}
+                        </dt>
+                        <dd>
+                            {selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type, p)}
+                        </dd>
                     </dl>
                 }
                 <dl>
-                    <dt>{p.t('analysis.rightPane.content.view')}</dt>
-                    <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type, p)}</dd>
+                    <dt>
+                        {p.t('analysis.rightPane.content.view')}
+                    </dt>
+                    <dd>
+                        {selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type, p)}
+                    </dd>
                 </dl>
 
                 <hr />
@@ -473,13 +496,18 @@ export default class AnalysisRightPane extends React.Component {
                        type='button'
                        className='btn btn-link btn-uppercase'
                        onClick={() => this.onDuplicateButtonClick()}
-                    ><span>{p.t('analysis.rightPane.content.duplicate')}</span></a>
-
+                    >
+                        <span>
+                            {p.t('analysis.rightPane.content.duplicate')}
+                        </span>
+                    </a>
                     <a
                         className='btn btn-link btn-uppercase'
                         onClick={() => this.onAnalyzeButtonClick(false)}
                     >
-                        <span>{p.t('analysis.rightPane.content.viewResults')}</span>
+                        <span>
+                            {p.t('analysis.rightPane.content.viewResults')}
+                        </span>
                     </a>
                 </div>
             </div>
