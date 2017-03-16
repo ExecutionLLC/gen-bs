@@ -69,7 +69,6 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-
     renderAnalysisHeader(historyItem, disabled) {
         const {auth: {isDemo}, ui: {languageId}} = this.props;
 
