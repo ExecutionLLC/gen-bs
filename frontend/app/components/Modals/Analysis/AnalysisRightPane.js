@@ -389,7 +389,7 @@ export default class AnalysisRightPane extends React.Component {
             {type: analysisType.FAMILY, className: 'family-tab'}
         ];
         return (
-            <ul role='tablist' className='nav nav-tabs'>
+            <ul className='nav nav-tabs'>
                 {tabs.map((tab) => {
                     return this.renderAnalysisHeaderTab(
                         historyItemType === tab.type,
@@ -477,7 +477,6 @@ export default class AnalysisRightPane extends React.Component {
 
                     <a
                         className='btn btn-link btn-uppercase'
-                        role='button'
                         onClick={() => this.onAnalyzeButtonClick(false)}
                     >
                         <span>{p.t('analysis.rightPane.content.viewResults')}</span>
