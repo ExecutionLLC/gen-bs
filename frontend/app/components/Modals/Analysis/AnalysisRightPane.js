@@ -488,13 +488,11 @@ export default class AnalysisRightPane extends React.Component {
 
     getEntityOptions(entityArray) {
         const {auth: {isDemo}, ui: {languageId}, p} = this.props;
-        return entityArray.map(
-            (item) => ({
-                value: item.id,
-                label: getItemLabelByNameAndType(i18n.getEntityText(item, languageId).name, item.type, p),
-                disabled: entityTypeIsDemoDisabled(item.type, isDemo)
-            })
-        );
+        return entityArray.map((item) => ({
+            value: item.id,
+            label: getItemLabelByNameAndType(i18n.getEntityText(item, languageId).name, item.type, p),
+            disabled: entityTypeIsDemoDisabled(item.type, isDemo)
+        }));
     }
 
     getViewOptions() {
