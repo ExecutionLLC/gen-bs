@@ -21,6 +21,22 @@ describe('Variants table', () => {
         const initStore = stateMapperFunc(MOCK_APP_STATE);
         const {appState, sortingFields} = initStore;
 
+        /**
+         * @param {number} index in sortingFields array
+         * @param {number} order 1 or 2
+         * @param {string} direction 'asc' or 'desc'
+         * @returns {{fieldId: string, sampleId: string, order: number, direction: string}}
+         */
+        function makeSortObj(index, order, direction) {
+            const {fieldId, sampleId} = sortingFields[index];
+            return {
+                fieldId,
+                sampleId,
+                order,
+                direction
+            };
+        }
+
         it('should set sort', (done) => {
             const initSort = appState.searchInResultsParams.sort;
             const newSort = ['some', 'sort', 'params'];
@@ -35,219 +51,132 @@ describe('Variants table', () => {
         });
 
         it('should store sort to empty array', (done) => {
-            const FIELD_ID = sortingFields[0].fieldId;
-            const SAMPLE_ID = sortingFields[0].sampleId;
-            const SORT_ORDER = 1; // or 2
-            const SORT_DIRECTION = 'asc'; // or 'desc'
+            const sortObj = makeSortObj(0, 1, 'asc');
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort([]),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
-                expect(newState.appState.searchInResultsParams.sort).toEqual([{
-                    fieldId: FIELD_ID,
-                    sampleId: SAMPLE_ID,
-                    order: SORT_ORDER,
-                    direction: SORT_DIRECTION
-                }]);
+                expect(newState.appState.searchInResultsParams.sort).toEqual([sortObj]);
                 done();
             });
         });
 
         it('should store 2nd sort to empty array', (done) => {
-            const FIELD_ID = sortingFields[0].fieldId;
-            const SAMPLE_ID = sortingFields[0].sampleId;
-            const SORT_ORDER = 2; // try to set 2 as first sort
-            const SORT_DIRECTION = 'asc';
+            const sortObj = makeSortObj(0, 2, 'asc'); // try to set 2 as first sort
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort([]),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
                 expect(newState.appState.searchInResultsParams.sort).toEqual([{
-                    fieldId: FIELD_ID,
-                    sampleId: SAMPLE_ID,
-                    order: 1, // always 1 if single sort
-                    direction: SORT_DIRECTION
+                    ...sortObj,
+                    order: 1 // always 1 if single sort
                 }]);
                 done();
             });
         });
 
         it('should add sort', (done) => {
-            const initialSort = [{
-                fieldId: sortingFields[0].fieldId,
-                sampleId: sortingFields[0].sampleId,
-                order: 1,
-                direction: 'asc'
-            }];
-            const FIELD_ID = sortingFields[1].fieldId;
-            const SAMPLE_ID = sortingFields[1].sampleId;
-            const SORT_ORDER = 2; // try with 'sortArray.length < action.sortOrder'
-            const SORT_DIRECTION = 'desc';
+            const initialSort = [makeSortObj(0, 1, 'asc')];
+            const sortObj = makeSortObj(1, 2, 'desc'); // try with 'sortArray.length < action.sortOrder'
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
                 expect(newState.appState.searchInResultsParams.sort).not.toBe(initialSort);
                 expect(newState.appState.searchInResultsParams.sort).toEqual([
                     ...initialSort,
-                    {
-                        fieldId: FIELD_ID,
-                        sampleId: SAMPLE_ID,
-                        order: SORT_ORDER,
-                        direction: SORT_DIRECTION
-                    }
+                    sortObj
                 ]);
                 done();
             });
         });
 
         it('should replace less-order sort', (done) => {
-            const initialSort = [{
-                fieldId: sortingFields[0].fieldId,
-                sampleId: sortingFields[0].sampleId,
-                order: 1,
-                direction: 'asc'
-            }];
-            const FIELD_ID = sortingFields[1].fieldId;
-            const SAMPLE_ID = sortingFields[1].sampleId;
-            const SORT_ORDER = 1; // try with not 'sortArray.length < action.sortOrder'
-            const SORT_DIRECTION = 'desc';
+            const initialSort = [makeSortObj(0, 1, 'asc')];
+            const sortObj = makeSortObj(1, 1, 'desc'); // try with not 'sortArray.length < action.sortOrder'
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
                 expect(newState.appState.searchInResultsParams.sort).not.toBe(initialSort);
-                expect(newState.appState.searchInResultsParams.sort).toEqual([
-                    {
-                        fieldId: FIELD_ID,
-                        sampleId: SAMPLE_ID,
-                        order: SORT_ORDER,
-                        direction: SORT_DIRECTION
-                    }
-                ]);
+                expect(newState.appState.searchInResultsParams.sort).toEqual([sortObj]);
                 done();
             });
         });
 
         it('should set 1 sort with two sorts', (done) => {
             const initialSort = [
-                {
-                    fieldId: sortingFields[0].fieldId,
-                    sampleId: sortingFields[0].sampleId,
-                    order: 1,
-                    direction: 'asc'
-                },
-                {
-                    fieldId: sortingFields[1].fieldId,
-                    sampleId: sortingFields[1].sampleId,
-                    order: 2,
-                    direction: 'asc'
-                },
+                makeSortObj(0, 1, 'asc'),
+                makeSortObj(1, 2, 'asc')
             ];
-            const FIELD_ID = sortingFields[2].fieldId;
-            const SAMPLE_ID = sortingFields[2].sampleId;
-            const SORT_ORDER = 1;
-            const SORT_DIRECTION = 'desc';
+            const sortObj = makeSortObj(2, 1, 'desc');
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
                 expect(newState.appState.searchInResultsParams.sort).not.toBe(initialSort);
-                expect(newState.appState.searchInResultsParams.sort).toEqual([
-                    {
-                        fieldId: FIELD_ID,
-                        sampleId: SAMPLE_ID,
-                        order: SORT_ORDER,
-                        direction: SORT_DIRECTION
-                    }
-                ]);
+                expect(newState.appState.searchInResultsParams.sort).toEqual([sortObj]);
                 done();
             });
         });
 
         it('should set 2 sort with two sorts', (done) => {
             const initialSort = [
-                {
-                    fieldId: sortingFields[0].fieldId,
-                    sampleId: sortingFields[0].sampleId,
-                    order: 1,
-                    direction: 'asc'
-                },
-                {
-                    fieldId: sortingFields[1].fieldId,
-                    sampleId: sortingFields[1].sampleId,
-                    order: 2,
-                    direction: 'asc'
-                },
+                makeSortObj(0, 1, 'asc'),
+                makeSortObj(1, 2, 'asc')
             ];
-            const FIELD_ID = sortingFields[2].fieldId;
-            const SAMPLE_ID = sortingFields[2].sampleId;
-            const SORT_ORDER = 2;
-            const SORT_DIRECTION = 'desc';
+            const sortObj = makeSortObj(2, 2, 'desc');
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
                 expect(newState.appState.searchInResultsParams.sort).not.toBe(initialSort);
                 expect(newState.appState.searchInResultsParams.sort).toEqual([
                     initialSort[0],
-                    {
-                        fieldId: FIELD_ID,
-                        sampleId: SAMPLE_ID,
-                        order: SORT_ORDER,
-                        direction: SORT_DIRECTION
-                    }
+                    sortObj
                 ]);
                 done();
             });
         });
 
         it('should change direction', (done) => {
-            const SORT1 = {
-                fieldId: sortingFields[0].fieldId,
-                sampleId: sortingFields[0].sampleId,
-                order: 1,
-                direction: 'asc'
+            const initialSort = [
+                makeSortObj(0, 1, 'asc'),
+                makeSortObj(1, 2, 'asc')
+            ];
+            /** @type {{fieldId: string, sampleId: string, order: number, direction: string}} */
+            const sortObj = {
+                ...initialSort[0],
+                direction: 'desc'
             };
-            const SORT2 = {
-                fieldId: sortingFields[1].fieldId,
-                sampleId: sortingFields[1].sampleId,
-                order: 2,
-                direction: 'asc'
-            };
-            const initialSort = [SORT1, SORT2];
-            const FIELD_ID = SORT1.fieldId;
-            const SAMPLE_ID = SORT1.sampleId;
-            const SORT_ORDER = SORT1.order;
-            const SORT_DIRECTION = 'desc';
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
                 expect(newState.appState.searchInResultsParams.sort).not.toBe(initialSort);
                 expect(newState.appState.searchInResultsParams.sort).toEqual([
-                    {...initialSort[0], direction: 'desc'},
+                    sortObj,
                     initialSort[1]
                 ]);
                 done();
@@ -255,27 +184,15 @@ describe('Variants table', () => {
         });
 
         it('should remove sorting', (done) => {
-            const SORT1 = {
-                fieldId: sortingFields[0].fieldId,
-                sampleId: sortingFields[0].sampleId,
-                order: 1,
-                direction: 'asc'
-            };
-            const SORT2 = {
-                fieldId: sortingFields[1].fieldId,
-                sampleId: sortingFields[1].sampleId,
-                order: 2,
-                direction: 'asc'
-            };
-            const initialSort = [SORT1, SORT2];
-            const FIELD_ID = SORT1.fieldId;
-            const SAMPLE_ID = SORT1.sampleId;
-            const SORT_ORDER = SORT1.order;
-            const SORT_DIRECTION = SORT1.direction;
+            const initialSort = [
+                makeSortObj(0, 1, 'asc'),
+                makeSortObj(1, 2, 'asc')
+            ];
+            const sortObj = initialSort[0];
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
@@ -291,21 +208,12 @@ describe('Variants table', () => {
         });
 
         it('should not remove last sorting', (done) => {
-            const SORT1 = {
-                fieldId: sortingFields[0].fieldId,
-                sampleId: sortingFields[0].sampleId,
-                order: 1,
-                direction: 'asc'
-            };
-            const initialSort = [SORT1];
-            const FIELD_ID = SORT1.fieldId;
-            const SAMPLE_ID = SORT1.sampleId;
-            const SORT_ORDER = SORT1.order;
-            const SORT_DIRECTION = SORT1.direction;
+            const initialSort = [makeSortObj(0, 1, 'asc')];
+            const sortObj = initialSort[0];
             storeTestUtils.runTest({
                 applyActions: (dispatch) => dispatch([
                     setVariantsSort(initialSort),
-                    changeVariantsSort(FIELD_ID, SAMPLE_ID, SORT_ORDER, SORT_DIRECTION)
+                    changeVariantsSort(sortObj.fieldId, sortObj.sampleId, sortObj.order, sortObj.direction)
                 ]),
                 stateMapperFunc
             }, (newState) => {
