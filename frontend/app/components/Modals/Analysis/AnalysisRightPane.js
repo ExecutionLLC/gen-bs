@@ -736,6 +736,6 @@ AnalysisRightPane.propTypes = {
     filtersList: hashedArrayPropTypeShape,
     modelsList: hashedArrayPropTypeShape,
     viewsList: hashedArrayPropTypeShape,
-    historyItem: PropTypes.shape({id: PropTypes.string.isRequired}),
-    currentItemId: PropTypes.string.isRequired
+    historyItem: PropTypes.shape({id: PropTypes.string}),
+    currentItemId: PropTypes.string
 };
