@@ -1,14 +1,13 @@
 import _ from 'lodash';
 import classNames from 'classnames';
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {formatDate} from './../../../utils/dateUtil';
-import * as HistoryItemUtils from '../../../utils/HistoryItemUtils';
 import {
     duplicateAnalysesHistoryItem,
-    createNewHistoryItem,
+    createNewDefaultHistoryItem,
     editAnalysesHistoryItem,
     editExistentAnalysesHistoryItem,
     updateAnalysesHistoryItemAsync,
@@ -28,7 +27,6 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypesForAnalysisType} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
-import {getDefaultOrStandardItem} from '../../../utils/entityTypes';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 import config from '../../../../config';
@@ -36,20 +34,45 @@ import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
 import * as i18n from '../../../utils/i18n';
 
 
+const analysisTypeCaptionTranslation = {
+    [analysisType.SINGLE]: 'analysis.rightPane.analysisType.single',
+    [analysisType.TUMOR]: 'analysis.rightPane.analysisType.tumor',
+    [analysisType.FAMILY]: 'analysis.rightPane.analysisType.family'
+};
+
+const sampleTypeCaptionTranslation = {
+    [sampleType.SINGLE]: 'analysis.rightPane.sampleType.single',
+    [sampleType.TUMOR]: 'analysis.rightPane.sampleType.tumor',
+    [sampleType.NORMAL]: 'analysis.rightPane.sampleType.normal',
+    [sampleType.PROBAND]: 'analysis.rightPane.sampleType.proband',
+    [sampleType.MOTHER]: 'analysis.rightPane.sampleType.mother',
+    [sampleType.FATHER]: 'analysis.rightPane.sampleType.father'
+};
+
 // TODO class contains many similar and unused functions, refactor there with updated layout
+
+function FormGroupSelectorWrapper(props) {
+    return (
+        <div className='form-group'>
+            <div className='col-xs-12 col-md-10 btn-group-select-group'>
+                {props.children}
+            </div>
+        </div>
+    );
+}
 
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, auth: {isDemo}, isBringToFront} = this.props;
+        const {historyItem, disabled, isBringToFront} = this.props;
 
         return (
-            <div className={classNames({'split-right': true, 'bring-to-front': isBringToFront})}>
-                {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
+            <div className={classNames('split-right', {'bring-to-front': isBringToFront})}>
+                {historyItem && this.renderAnalysisHeader(historyItem, disabled)}
                 <div className='split-scroll'>
                     <div className='form-padding'>
                         {!disabled ?
-                            <div className='form-rows  form-rows-xsicons'>
+                            <div className='form-rows form-rows-xsicons'>
                                 {historyItem && this.renderAnalysisContent(historyItem)}
                             </div>
                             :
@@ -61,9 +84,8 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-
-    renderAnalysisHeader(historyItem, disabled, isDemo) {
-        const {ui: {languageId}} = this.props;
+    renderAnalysisHeader(historyItem, disabled) {
+        const {auth: {isDemo}, ui: {languageId}} = this.props;
 
         return (
             <div className='split-top'>
@@ -73,393 +95,184 @@ export default class AnalysisRightPane extends React.Component {
                     {this.renderAnalysisDates(historyItem.createdDate)}
                     {this.renderAnalysisDescription(i18n.getEntityText(historyItem, languageId).description, isDemo)}
                 </div>
-                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
+                {!disabled && this.renderAnalysisHeaderTabs(historyItem.type)}
             </div>
         );
     }
 
     renderAnalysisContent(historyItem) {
+        const showModelSelect = historyItem.type === analysisType.FAMILY || historyItem.type === analysisType.TUMOR;
+
         return (
             <div>
-                {this.renderSamplesSelects(historyItem, false)}
-                {this.renderFilterSelector(historyItem.filterId, false)}
-                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, false)}
-                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, false)}
-                {this.renderViewSelector(historyItem.viewId, false)}
+                {this.renderSamplesSelects(historyItem)}
+                {this.renderFilterSelector(historyItem.filterId)}
+                {showModelSelect && this.renderModelSelector(historyItem.modelId)}
+                {this.renderViewSelector(historyItem.viewId)}
                 <hr className='invisible' />
                 {this.renderAnalyzeButton()}
             </div>
         );
     }
 
-    renderFilterSelector(filterId, disabled) {
+    renderFormGroupSelectorButton(title, onClick) {
+        return (
+            <div className='btn-group btn-group-icon'>
+                <button
+                    className='btn btn-default btn-fix-width'
+                    type='button'
+                    onClick={onClick}
+                >
+                            <span className='text-muted'>
+                                {title}
+                            </span>
+                    <span className='visible-xxs'><i className='md-i'>tune</i></span>
+                </button>
+            </div>
+        );
+    }
+
+    renderFormGroupSelectorSelect(options, value, onSelect) {
+        return (
+            <div className='btn-group btn-group-select-group-max'>
+                <Select
+                    tabIndex='-1'
+                    className='select2-search'
+                    options={options}
+                    value={value}
+                    onChange={(item) => onSelect(item.value)}
+                />
+            </div>
+        );
+    }
+
+    renderFormGroupSelector(title, options, value, onClick, onSelect) {
+        return (
+            <FormGroupSelectorWrapper>
+                {this.renderFormGroupSelectorButton(title, onClick)}
+                {this.renderFormGroupSelectorSelect(options, value, onSelect)}
+            </FormGroupSelectorWrapper>
+       );
+    }
+
+    renderFilterSelector(filterId) {
         const {p} = this.props;
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.filter')}</span></h5>
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                className='btn btn-default btn-fix-width'
-                                type='button'
-                                disabled={disabled}
-                                onClick={() => this.onFiltersClick()}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.filters')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                tabIndex='-1'
-                                className='select2-search'
-                                id='filterSelect'
-                                disabled={disabled}
-                                options={this.getFilterOptions()}
-                                value={filterId}
-                                onChange={(item) => this.onFilterSelect(item.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
+                {this.renderFormGroupHeader('analysis.rightPane.content.filter')}
+                {this.renderFormGroupSelector(
+                    p.t('analysis.rightPane.content.filters'),
+                    this.getFilterOptions(),
+                    filterId,
+                    () => this.onFiltersClick(),
+                    (value) => this.onFilterSelect(value)
+                )}
             </div>
         );
     }
     
-    renderFamilyModelSelector(modelId, disabled) {
-        return (
-            <div id='familyModelDiv'>
-                {this.renderModelSelector(modelId, disabled)}
-            </div>
-        );
-    }
-
-    renderTumorModelSelector(modelId, disabled) {
-        return (
-            <div id='tumorModelDiv'>
-                {this.renderModelSelector(modelId, disabled)}
-            </div>
-        );
-    }
-
-    renderModelSelector(modelId, disabled) {
+    renderModelSelector(modelId) {
         const {p} = this.props;
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.model')}</span></h5>
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                type='button'
-                                className='btn btn-default btn-fix-width'
-                                disabled={disabled}
-                                onClick={() => this.onModelClick()}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.models')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                id='modelSelect'
-                                className='select2'
-                                tabIndex='-1'
-                                disabled={disabled}
-                                value={modelId}
-                                options={this.getModelOptions()}
-                                onChange={(item) => this.onModelSelect(item.value)}
-                            />
-                        </div>
-                    </div>
-
-                </div>
+                {this.renderFormGroupHeader('analysis.rightPane.content.model')}
+                {this.renderFormGroupSelector(
+                    p.t('analysis.rightPane.content.models'),
+                    this.getModelOptions(),
+                    modelId,
+                    () => this.onModelsClick(),
+                    (value) => this.onModelSelect(value)
+                )}
             </div>
         );
     }
 
-    renderViewSelector(viewId, disabled) {
+    renderViewSelector(viewId) {
         const {p} = this.props;
         return (
             <div>
-                <h5><span>{p.t('analysis.rightPane.content.view')}</span></h5>
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                className='btn btn-default btn-fix-width'
-                                type='button'
-                                disabled={disabled}
-                                onClick={() => this.onViewsClick()}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.views')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                tabIndex='-1'
-                                className='select2'
-                                id='viewSelect'
-                                disabled={disabled}
-                                options={this.getViewOptions()}
-                                value={viewId}
-                                onChange={(item) => this.onViewSelect(item.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
+                {this.renderFormGroupHeader('analysis.rightPane.content.view')}
+                {this.renderFormGroupSelector(
+                    p.t('analysis.rightPane.content.views'),
+                    this.getViewOptions(),
+                    viewId,
+                    () => this.onViewsClick(),
+                    (value) => this.onViewSelect(value)
+                )}
             </div>
         );
     }
 
-    renderSamplesSelects(historyItem, disabled) {
-
+    renderSamplesSelects(historyItem) {
         const selectedSamplesHash = _.keyBy(historyItem.samples, (sample) => sample.id);
+        const isManySamples = historyItem.samples.length > 1;
 
-        const rendersForType = {
-            [analysisType.SINGLE]: (historyItem, disabled) => (
-                <div className='tab-pane active' id='single'>
-                     {this.renderSampleSelectSingle(historyItem.samples[0], disabled, selectedSamplesHash)}
-                </div>
-            ),
-            [analysisType.TUMOR]: (historyItem, disabled) => (
-                <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
-                     {this.renderSamplesSelectsTumorNormalHeader()}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled, selectedSamplesHash)}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], disabled, selectedSamplesHash)}
-                     <hr className='invisible' />
-                </div>
-            ),
-            [analysisType.FAMILY]: (historyItem, disabled) => (
-                <div className='tab-pane active' role='tabpanel' id='family'>
-                     {this.renderSamplesSelectsFamilyHeader()}
-                     {historyItem.samples.map( (sample, i) =>
-                         sample.type === sampleType.PROBAND ?
-                             this.renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) :
-                             this.renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash)
-                     )}
-                     <hr className='invisible' />
-                </div>
-            )
-        };
-
-        const typeRender = rendersForType[historyItem.type];
         return (
             <div className='tab-content'>
-                {typeRender && typeRender(historyItem, disabled)}
-            </div>
-        );
-    }
-
-    renderSampleSelectSingle(sample, disabled, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-
-        return (
-            <div>
-                <h5><span>{p.t('analysis.rightPane.content.sample')}</span></h5>
-                <div className='form-group'>
-                    <div className='col-xs-12 col-md-10 btn-group-select-group'>
-                        <div className='btn-group btn-group-icon'>
-                            <button
-                                className='btn btn-default btn-fix-width'
-                                disabled={disabled}
-                                onClick={() => this.onSamplesClick(0)}
-                            >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                            </button>
-                        </div>
-
-                        <div className='btn-group btn-group-select-group-max'>
-                            <Select
-                                className='select2-search select-right'
-                                tabindex='-1'
-                                disabled={disabled}
-                                value={value}
-                                options={this.getSampleOptions(value, selectedSamplesHash)}
-                                onChange={(item) => this.onSampleSelect(0, item.value)}
-                            />
-                        </div>
-                        <div className='btn-group-prefix'>
-                            <label className='label label-dark-default label-round'>
-                                <span>{p.t('analysis.rightPane.sampleTypeAbbr.single')}</span>
-                            </label>
-                        </div>
-                        
-                    </div>
+                <div className='tab-pane active'>
+                    {this.renderSamplesHeader(isManySamples)}
+                    {historyItem.samples.map((sample, i) => {
+                        return this.renderSampleSelect(sample, selectedSamplesHash, i, sample.type);
+                    })}
+                    {isManySamples && <hr className='invisible' />}
                 </div>
             </div>
         );
     }
 
-    renderSamplesSelectsTumorNormalHeader() {
+    renderFormGroupHeader(template) {
         const {p} = this.props;
         return (
-            <h5><span>{p.t('analysis.rightPane.content.samples')}</span></h5>
+            <h5>
+                <span>
+                    {p.t(template)}
+                </span>
+            </h5>
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleTumor(sample, disabled, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
+    renderSamplesHeader(isManySamples) {
+        return this.renderFormGroupHeader(
+            isManySamples ?
+                'analysis.rightPane.content.samples' :
+                'analysis.rightPane.content.sample'
+        );
+    }
 
+    renderSelectSampleTypeLabel(isPrimary, sampleType) {
+        const {p} = this.props;
+        const labelClassNames = classNames(
+            'label',
+            'label-round',
+            isPrimary ? 'label-dark-default' : 'label-default'
+        );
+        const typeLabel = FieldUtils.makeFieldTypeLabel(p, sampleType);
         return (
-            <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            disabled={disabled}
-                            onClick={() => this.onSamplesClick(0)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max'>
-                        <Select
-                            className='select2-search'
-                            tabindex='-1'
-                            disabled={disabled}
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(0, item.value)}
-                        />
-                    </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-dark-default label-round'>
-                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.tumor')}</span>
-                        </label>
-                    </div>
-                    
-                </div>
+            <div className='btn-group-prefix'>
+                <label className={labelClassNames}>
+                    <span>{typeLabel}</span>
+                </label>
             </div>
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleNormal(sample, disabled, selectedSamplesHash) {
+    renderSampleSelect(sample, selectedSamplesHash, sampleIndex, sampleType) {
         const {p} = this.props;
         const value = sample ? sample.id : null;
 
         return (
-            <div className='form-group'>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            disabled={disabled}
-                            onClick={() => this.onSamplesClick(1)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max'>
-                        <Select
-                            tabindex='-1'
-                            className='select2-search select-right'
-                            disabled={disabled}
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(1, item.value)}
-                        />
-                    </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-default label-round'>
-                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.normal')}</span>
-                        </label>
-                    </div>
-                    
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsFamilyHeader() {
-        const {p} = this.props;
-        return (
-            <h5><span>{p.t('analysis.rightPane.content.samples')}</span></h5>
-        );
-    }
-
-    renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-
-        return (
-            <div className='form-group' key={i}>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            disabled={disabled}
-                            onClick={() => this.onSamplesClick(0)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max btn-group-right'>
-                        <Select
-                            className='select2-search select-right'
-                            tabindex='-1'
-                            disabled={disabled}
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(0, item.value)}
-                        />
-                    </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-default label-round'>
-                            <span>{p.t('analysis.rightPane.sampleTypeAbbr.proband')}</span>
-                        </label>
-                    </div>
-                    
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash) {
-        const {p} = this.props;
-        const value = sample ? sample.id : null;
-        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
-
-        return (
-            <div className='form-group' key={i}>
-                <div className='col-xs-12 col-md-10 btn-group-select-group '>
-                    <div className='btn-group btn-group-icon'>
-                        <button
-                            className='btn btn-default btn-fix-width'
-                            disabled={disabled}
-                            onClick={() => this.onSamplesClick(i)}
-                        >
-                                <span className='text-muted'>{p.t('analysis.rightPane.content.samples')}</span>
-                                <span className='visible-xxs'><i className='md-i'>tune</i></span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-select-group-max btn-group-right'>
-                        <Select
-                            aria-hidden='true'
-                            tabindex='-1'
-                            className='select2-search select-right'
-                            disabled={disabled}
-                            value={value}
-                            options={this.getSampleOptions(value, selectedSamplesHash)}
-                            onChange={(item) => this.onSampleSelect(i, item.value)}
-                        />
-                    </div>
-                    <div className='btn-group-prefix'>
-                        <label className='label label-default label-round'>
-                            <span>{sample ? typeLabels[sample.type] : ''}</span>
-                        </label>
-                    </div>
-                    
-                </div>
-            </div>
+            <FormGroupSelectorWrapper key={sampleIndex}>
+                {this.renderFormGroupSelectorButton(
+                    p.t('analysis.rightPane.content.samples'),
+                    () => this.onSamplesClick(sampleIndex)
+                )}
+                {this.renderFormGroupSelectorSelect(
+                    this.getSampleOptions(value, selectedSamplesHash),
+                    value,
+                    (value) => this.onSampleSelect(sampleIndex, value)
+                )}
+                {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
+            </FormGroupSelectorWrapper>
         );
     }
 
@@ -477,25 +290,28 @@ export default class AnalysisRightPane extends React.Component {
         ];
         const validationResults = _.map(validationRules, rule => rule.validate());
         const error = _.find(validationResults, {isValid: false});
-        const buttonParams = {
-            title: error ? error.errorMessage : p.t('analysis.rightPane.content.analyzeTitle'),
-            disabled: error ? true : false
-        };
+        const buttonTitle = error ? error.errorMessage : p.t('analysis.rightPane.content.analyzeTitle');
         return (
             <div className='btn-toolbar btn-toolbar-form-actions'>
                 <button
                     className='btn btn-primary'
-                    disabled={buttonParams.disabled}
-                    title={buttonParams.title}
+                    disabled={!!error}
+                    title={buttonTitle}
                     onClick={() => this.onAnalyzeButtonClick(true)}
                 >
-                    <span>{p.t('analysis.rightPane.content.analyze')}</span>
+                    <span>
+                        {p.t('analysis.rightPane.content.analyze')}
+                    </span>
                 </button>
                 <a
                     type='button'
                     className='btn btn-link btn-uppercase'
                     onClick={() => this.onCancelButtonClick()}
-                ><span>{p.t('analysis.rightPane.content.restoreToDefault')}</span></a>
+                >
+                    <span>
+                        {p.t('analysis.rightPane.content.restoreToDefault')}
+                    </span>
+                </a>
             </div>
         );
     }
@@ -507,7 +323,9 @@ export default class AnalysisRightPane extends React.Component {
                 className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                 onClick={() => this.onDeleteAnalysisClick()}
             >
-                <span>{p.t('analysis.rightPane.deleteAnalysis')}</span>
+                <span>
+                    {p.t('analysis.rightPane.deleteAnalysis')}
+                </span>
             </button>
         );
     }
@@ -520,74 +338,12 @@ export default class AnalysisRightPane extends React.Component {
                     <Input
                         value={name}
                         disabled={disabled}
-                        className='form-control material-input-sm material-input-heading text-primary'
                         placeholder={p.t('analysis.rightPane.analysisNamePlaceHolder')}
+                        className='form-control material-input-sm material-input-heading text-primary'
                         maxLength={config.ANALYSIS.MAX_NAME_LENGTH}
                         onChange={(str) => this.onAnalysisNameChange(str)}
                     />
                 </div>
-            </div>
-        );
-    }
-
-    analysisTypeCaption(type) {
-        const {p} = this.props;
-        return {
-            [analysisType.SINGLE]: p.t('analysis.rightPane.analysisType.single'),
-            [analysisType.TUMOR]: p.t('analysis.rightPane.analysisType.tumor'),
-            [analysisType.FAMILY]: p.t('analysis.rightPane.analysisType.family')
-        }[type] || '';
-    }
-
-    sampleTypeCaption(type) {
-        const {p} = this.props;
-        return {
-            [sampleType.SINGLE]: p.t('analysis.rightPane.sampleType.single'),
-            [sampleType.TUMOR]: p.t('analysis.rightPane.sampleType.tumor'),
-            [sampleType.NORMAL]: p.t('analysis.rightPane.sampleType.normal'),
-            [sampleType.PROBAND]: p.t('analysis.rightPane.sampleType.proband'),
-            [sampleType.MOTHER]: p.t('analysis.rightPane.sampleType.mother'),
-            [sampleType.FATHER]: p.t('analysis.rightPane.sampleType.father')
-        }[type] || '';
-    }
-
-    renderAnalysisHeaderTabs(historyItemType, disabled) {
-        const {dispatch, p} = this.props;
-        const tabs = [
-            {
-                isActive: historyItemType === analysisType.SINGLE,
-                className: 'single-tab',
-                caption: this.analysisTypeCaption(analysisType.SINGLE),
-                onSelect: () => dispatch(this.actionEdit({type: analysisType.SINGLE}))
-            },
-            {
-                isActive: historyItemType === analysisType.TUMOR,
-                className: 'tumor-normal-tab',
-                caption: this.analysisTypeCaption(analysisType.TUMOR),
-                onSelect: () => dispatch(this.actionEdit({type: analysisType.TUMOR}))
-            },
-            {
-                isActive: historyItemType === analysisType.FAMILY,
-                className: 'family-tab',
-                caption: this.analysisTypeCaption(analysisType.FAMILY),
-                onSelect: () => dispatch(this.actionEdit({type: analysisType.FAMILY}))
-            }
-        ];
-        return (
-            <ul role='tablist' className='nav nav-tabs' id='analisisTypes'>
-                {disabled && <li className='pull-right text-muted'>{p.t('analysis.rightPane.duplicate')}</li>}
-                {tabs.filter((tab) => tab.isActive || !disabled).map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
-            </ul>
-        );
-    }
-    
-    renderAnalysisDates(createdDate) {
-        const {p} = this.props;
-        return (
-            <div className='label-group-date'>
-                <label>
-                    <span>{p.t('analysis.rightPane.created')}</span>: <span>{formatDate(createdDate)}</span>
-                </label>
             </div>
         );
     }
@@ -602,6 +358,7 @@ export default class AnalysisRightPane extends React.Component {
                         disabled={disabled}
                         placeholder={p.t('analysis.rightPane.analysisDescriptionPlaceHolder')}
                         className='form-control material-input-sm'
+                        maxLength={config.ANALYSIS.MAX_DESCRIPTION_LENGTH}
                         onChange={(str) => this.onAnalysisDescriptionChange(str)}
                     />
                 </div>
@@ -609,16 +366,57 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    renderAnalysisDates(createdDate) {
+        const {p} = this.props;
+        return (
+            <div className='label-group-date'>
+                <label>
+                    <span>{p.t('analysis.rightPane.created')}</span>: <span>{formatDate(createdDate)}</span>
+                </label>
+            </div>
+        );
+    }
+
+    analysisTypeCaption(type) {
+        const {p} = this.props;
+        return p.t(analysisTypeCaptionTranslation[type]);
+    }
+
+    sampleTypeCaption(type) {
+        const {p} = this.props;
+        return p.t(sampleTypeCaptionTranslation[type]);
+    }
+
+    renderAnalysisHeaderTabs(historyItemType) {
+        const {dispatch} = this.props;
+        const tabs = [
+            {type: analysisType.SINGLE, className: 'single-tab'},
+            {type: analysisType.TUMOR, className: 'tumor-normal-tab'},
+            {type: analysisType.FAMILY, className: 'family-tab'}
+        ];
+        return (
+            <ul className='nav nav-tabs'>
+                {tabs.map((tab) => {
+                    return this.renderAnalysisHeaderTab(
+                        historyItemType === tab.type,
+                        tab.className,
+                        this.analysisTypeCaption(tab.type),
+                        () => dispatch(this.actionEdit({type: tab.type}))
+                    );
+                })}
+            </ul>
+        );
+    }
+    
     renderAnalysisHeaderTab(isActive, tabClassName, tabCaption, onClick) {
         return (
             <li
                 key={tabClassName}
-                className={tabClassName + ' ' + (isActive ? 'active' : '')}
-                role='presentation'
+                className={classNames(tabClassName, {'active': isActive})}
             >
                 <a
-                    role='tab'
                     onClick={onClick}
+                    href='#'
                 >
                     <span>
                         {tabCaption}
@@ -644,8 +442,12 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='dl-group-view-mode'>
                 <dl>
-                    <dt>{p.t('analysis.rightPane.content.analysisType')}</dt>
-                    <dd>{this.analysisTypeCaption(historyItem.type)}</dd>
+                    <dt>
+                        {p.t('analysis.rightPane.content.analysisType')}
+                    </dt>
+                    <dd>
+                        {this.analysisTypeCaption(historyItem.type)}
+                    </dd>
                 </dl>
                 {historyItem.samples.map((sampleInfo) => {
                     const sampleId = sampleInfo.id;
@@ -653,26 +455,43 @@ export default class AnalysisRightPane extends React.Component {
 
                     return (
                         <dl key={sampleId}>
-                            <dt><span>{p.t('analysis.rightPane.content.sample')}</span>
-                                ({this.sampleTypeCaption(sampleInfo.type)})
+                            <dt>
+                                <span>
+                                    {p.t('analysis.rightPane.content.sample')}
+                                </span>
+                                {this.sampleTypeCaption(sampleInfo.type)}
                             </dt>
-                            <dd>{sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type, p)}</dd>
+                            <dd>
+                                {sample && getItemLabelByNameAndType(i18n.getEntityText(sample, languageId).name, sample.type, p)}
+                            </dd>
                         </dl>
                     );
                 })}
                 <dl>
-                    <dt>{p.t('analysis.rightPane.content.filter')}</dt>
-                    <dd>{selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type, p)}</dd>
+                    <dt>
+                        {p.t('analysis.rightPane.content.filter')}
+                    </dt>
+                    <dd>
+                        {selectedFilter && getItemLabelByNameAndType(i18n.getEntityText(selectedFilter, languageId).name, selectedFilter.type, p)}
+                    </dd>
                 </dl>
                 {historyItem.modelId &&
                     <dl>
-                        <dt>{p.t('analysis.rightPane.content.model')}</dt>
-                        <dd>{selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type, p)}</dd>
+                        <dt>
+                            {p.t('analysis.rightPane.content.model')}
+                        </dt>
+                        <dd>
+                            {selectedModel && getItemLabelByNameAndType(i18n.getEntityText(selectedModel, languageId).name, selectedModel.type, p)}
+                        </dd>
                     </dl>
                 }
                 <dl>
-                    <dt>{p.t('analysis.rightPane.content.view')}</dt>
-                    <dd>{selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type, p)}</dd>
+                    <dt>
+                        {p.t('analysis.rightPane.content.view')}
+                    </dt>
+                    <dd>
+                        {selectedView && getItemLabelByNameAndType(i18n.getEntityText(selectedView, languageId).name, selectedView.type, p)}
+                    </dd>
                 </dl>
 
                 <hr />
@@ -681,72 +500,51 @@ export default class AnalysisRightPane extends React.Component {
                        type='button'
                        className='btn btn-link btn-uppercase'
                        onClick={() => this.onDuplicateButtonClick()}
-                    ><span>{p.t('analysis.rightPane.content.duplicate')}</span></a>
-
+                    >
+                        <span>
+                            {p.t('analysis.rightPane.content.duplicate')}
+                        </span>
+                    </a>
                     <a
                         className='btn btn-link btn-uppercase'
-                        role='button'
                         onClick={() => this.onAnalyzeButtonClick(false)}
                     >
-                        <span>{p.t('analysis.rightPane.content.viewResults')}</span>
+                        <span>
+                            {p.t('analysis.rightPane.content.viewResults')}
+                        </span>
                     </a>
                 </div>
             </div>
         );
     }
 
-    isViewDisabled(view) {
-        return entityTypeIsDemoDisabled(view.type, this.props.auth.isDemo);
+    getEntityOptions(entityArray) {
+        const {auth: {isDemo}, ui: {languageId}, p} = this.props;
+        return entityArray.map((item) => ({
+            value: item.id,
+            label: getItemLabelByNameAndType(i18n.getEntityText(item, languageId).name, item.type, p),
+            disabled: entityTypeIsDemoDisabled(item.type, isDemo)
+        }));
     }
 
     getViewOptions() {
-        const {ui: {languageId}, p} = this.props;
-        const views = this.props.viewsList.hashedArray.array;
-        return views.map(
-            (viewItem) => {
-                const isDisabled = this.isViewDisabled(viewItem);
-                const label = getItemLabelByNameAndType(i18n.getEntityText(viewItem, languageId).name, viewItem.type, p);
-                return {
-                    value: viewItem.id, label, disabled: isDisabled
-                };
-            }
-        );
-    }
-
-    isFilterDisabled(filter) {
-        return entityTypeIsDemoDisabled(filter.type, this.props.auth.isDemo);
+        const {viewsList: {hashedArray: {array: views}}} = this.props;
+        return this.getEntityOptions(views);
     }
 
     getFilterOptions() {
-        const {ui: {languageId}, p} = this.props;
-        const filters = this.props.filtersList.hashedArray.array;
-        return filters.map((filterItem) => {
-            const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(i18n.getEntityText(filterItem, languageId).name, filterItem.type, p);
-            return {
-                value: filterItem.id, label, disabled: isDisabled
-            };
-        });
-    }
-
-    isModelDisabled(model) {
-        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
+        const {filtersList: {hashedArray: {array: filters}}} = this.props;
+        return this.getEntityOptions(filters);
     }
 
     getModelOptions() {
-        const {modelsList, historyItem, ui: {languageId}, p} = this.props;
-        const models = modelsList.hashedArray.array;
-        return models
-            .filter((model) => model.analysisType === historyItem.type)
-            .map((model) => {
-                const isDisabled = this.isModelDisabled(model);
-                const label = getItemLabelByNameAndType(i18n.getEntityText(model, languageId).name, model.type, p);
-                return {value: model.id, label, disabled: isDisabled};
-            });
+        const {modelsList: {hashedArray: {array: models}}, historyItem} = this.props;
+        return this.getEntityOptions(models.filter((model) => model.analysisType === historyItem.type));
     }
 
     isSampleDisabled(sample) {
-        return entityTypeIsDemoDisabled(sample.type, this.props.auth.isDemo);
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(sample.type, isDemo);
     }
 
     getSampleOptions(value, selectedSamplesHash) {
@@ -770,29 +568,29 @@ export default class AnalysisRightPane extends React.Component {
         }
     }
 
-    onAnalysisNameChange(name) {
+    /**
+     * @param {Object} propertyObject
+     */
+    editAnalysisProperty(propertyObject) {
         const {dispatch, historyItem, ui: {languageId}} = this.props;
-        if (!name) {
-            return;
-        }
         if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {name})));
+            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, propertyObject)));
             dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
                 .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
         } else {
-            dispatch(this.actionEdit({name}));
+            dispatch(this.actionEdit(propertyObject));
         }
     }
 
-    onAnalysisDescriptionChange(description) {
-        const {dispatch, historyItem, ui: {languageId}} = this.props;
-        if (historyItem.id) {
-            dispatch(editExistentAnalysesHistoryItem(i18n.changeEntityText(historyItem, languageId, {description})));
-            dispatch(updateAnalysesHistoryItemAsync(historyItem.id))
-                .then(updatedAnalysis => dispatch(editExistentAnalysesHistoryItem(updatedAnalysis)));
-        } else {
-            dispatch(this.actionEdit({description}));
+    onAnalysisNameChange(name) {
+        if (!name) {
+            return;
         }
+        this.editAnalysisProperty({name});
+    }
+
+    onAnalysisDescriptionChange(description) {
+        this.editAnalysisProperty({description});
     }
 
     onDuplicateButtonClick() {
@@ -803,24 +601,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onCancelButtonClick() {
-        const {
-            dispatch,
-            samplesList: {hashedArray: {array: samples}},
-            viewsList: {hashedArray: {array: views}},
-            filtersList: {hashedArray: {array: filters}},
-            ui: {languageId},
-            p
-        } = this.props;
-        const sample = getDefaultOrStandardItem(samples);
-        const filter = getDefaultOrStandardItem(filters);
-        const view = getDefaultOrStandardItem(views);
-        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
-        const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
-        dispatch(createNewHistoryItem(
-            sample, filter, view,
-            {name: newAnalysisName, description: newAnalysisDescription},
-            languageId
-        ));
+        const {dispatch} = this.props;
+        dispatch(createNewDefaultHistoryItem());
     }
 
     onAnalyzeButtonClick(isEditing) {
@@ -881,7 +663,7 @@ export default class AnalysisRightPane extends React.Component {
         dispatch(this.actionEdit({filterId: filterId}));
     }
 
-    onModelClick() {
+    onModelsClick() {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields, ui: {languageId}} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const samplesTypes = _.reduce(
@@ -933,3 +715,26 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 }
+
+const hashedArrayPropTypeShape = PropTypes.shape({
+    hashedArray: PropTypes.shape({
+        hash: PropTypes.object.isRequired,
+        array: PropTypes.array.isRequired
+    }).isRequired
+}).isRequired;
+
+AnalysisRightPane.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    isBringToFront: PropTypes.bool.isRequired,
+    auth: PropTypes.shape({isDemo: PropTypes.bool.isRequired}).isRequired,
+    ui: PropTypes.shape({languageId: PropTypes.string.isRequired}).isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    fields: PropTypes.object.isRequired,
+    samplesList: hashedArrayPropTypeShape,
+    filtersList: hashedArrayPropTypeShape,
+    modelsList: hashedArrayPropTypeShape,
+    viewsList: hashedArrayPropTypeShape,
+    historyItem: PropTypes.shape({id: PropTypes.string.isRequired}),
+    currentItemId: PropTypes.string.isRequired
+};

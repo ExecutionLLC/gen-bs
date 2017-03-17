@@ -150,8 +150,8 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputBlur() {
-        const {fieldMetadata, onSearchValueChanged} = this.props;
-        onSearchValueChanged(fieldMetadata.id, this.state.searchString);
+        const {onSearchValueChanged} = this.props;
+        onSearchValueChanged(this.state.searchString);
         this.setFilterOpened(false);
     }
 
@@ -168,15 +168,15 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputKeyPressed(e) {
-        const {fieldMetadata, onSearchRequested} = this.props;
+        const {onSearchRequested} = this.props;
         if (e.charCode === 13) {
-            onSearchRequested(fieldMetadata.id, this.state.searchString);
+            onSearchRequested(this.state.searchString);
         }
     }
 
     onSearchClick(direction, isControlKeyPressed) {
-        const {fieldMetadata, onSortRequested} = this.props;
-        onSortRequested(fieldMetadata.id, direction, isControlKeyPressed);
+        const {onSortRequested} = this.props;
+        onSortRequested(direction, isControlKeyPressed);
     }
 }
 
