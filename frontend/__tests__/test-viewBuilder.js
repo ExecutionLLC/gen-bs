@@ -510,11 +510,11 @@ describe('View builder', () => {
             stateMapperFunc
         }, (newState) => {
             const COLUMN_INDEX = 0;
-            const KEYWOORDS_IDS = ['keyword1', 'keyword2'];
+            const KEYWORDS_IDS = ['keyword1', 'keyword2'];
 
             StoreTestUtils.runTest({
                 globalInitialState: newState.initialAppState,
-                applyActions: (dispatch) => dispatch(viewBuilderChangeKeywords(COLUMN_INDEX, KEYWOORDS_IDS)),
+                applyActions: (dispatch) => dispatch(viewBuilderChangeKeywords(COLUMN_INDEX, KEYWORDS_IDS)),
                 stateMapperFunc
             }, (editedColumnState) => {
                 const expectingView = {
@@ -522,7 +522,7 @@ describe('View builder', () => {
                     viewListItems: [
                         {
                             ...newView.viewListItems[0],
-                            keywords: KEYWOORDS_IDS
+                            keywords: KEYWORDS_IDS
                         },
                         ...newView.viewListItems.slice(1)
                     ]
