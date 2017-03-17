@@ -8,8 +8,7 @@ import {
 } from '../../../utils/stringUtils';
 import {
     viewBuilderRestartEdit,
-    viewBuilderDeleteView,
-    fireOnSaveAction
+    viewBuilderDeleteView
 } from '../../../actions/viewBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
 import * as i18n from '../../../utils/i18n';
@@ -160,9 +159,7 @@ export default class ExistentViewSelect extends React.Component {
     onDeleteViewClick() {
         const {dispatch, ui: {languageId}} = this.props;
         const editingViewId = this.getEditingViewId();
-        dispatch(viewBuilderDeleteView(editingViewId, languageId)).then((newView) => {
-            dispatch(fireOnSaveAction(newView));
-        });
+        dispatch(viewBuilderDeleteView(editingViewId, languageId));
     }
 }
 
