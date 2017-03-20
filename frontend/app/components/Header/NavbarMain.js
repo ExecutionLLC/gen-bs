@@ -72,7 +72,6 @@ class NavbarMain extends Component {
                     />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => this.onSendSearchRequest(globalSearchString) }
-                        onGlobalSearchStringChanged={ (globalSearchString) => this.onChangeGlobalSearchValue(globalSearchString) }
                         search={search}
                         p={this.props.p}
                     />

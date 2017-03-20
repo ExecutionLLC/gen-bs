@@ -9,6 +9,7 @@ class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            initialSearch: this.props.search,
             search: this.props.search,
             showPopup: false
         };
@@ -16,6 +17,7 @@ class NavbarSearch extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
+            initialSearch: newProps.search,
             search: newProps.search
         });
     }
@@ -75,9 +77,9 @@ class NavbarSearch extends Component {
     }
 
     onGlobalSearchInputBlur() {
-        const {search} = this.state;
-        const {onGlobalSearchStringChanged} = this.props;
-        onGlobalSearchStringChanged(search);
+        this.setState({
+            search: this.state.initialSearch
+        });
     }
 
     onSearchPopupToggle(show) {
@@ -100,8 +102,6 @@ NavbarSearch.propTypes = {
     isVariantsValid: React.PropTypes.bool.isRequired,
     // callback(globalSearchString)
     onGlobalSearchRequested: React.PropTypes.func.isRequired,
-    // callback(globalSearchString)
-    onGlobalSearchStringChanged: React.PropTypes.func.isRequired,
     search: React.PropTypes.string.isRequired,
     p: React.PropTypes.shape({t: React.PropTypes.func.isRequired}).isRequired,
     isFetching: React.PropTypes.bool.isRequired,
