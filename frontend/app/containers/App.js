@@ -104,7 +104,10 @@ class App extends Component {
                 />
                 <AutoLogoutModal
                     showModal={auth.showAutoLogoutDialog}
-                    closeModal={ () => { dispatch(stopAutoLogoutCountdownTimer()); } }
+                    closeModal={ () => {
+                        dispatch(stopAutoLogoutCountdownTimer());
+                        dispatch(startAutoLogoutTimer());
+                    } }
                 />
                 <ViewsModal
                     showModal={modalWindows.views.showModal}
