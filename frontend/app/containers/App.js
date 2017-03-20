@@ -25,7 +25,7 @@ import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
-import {storeCurrentLanguageId} from '../actions/ui';
+import {applyCurrentLanguageId} from '../actions/ui';
 import {closeSavedFilesDialog} from '../actions/savedFiles';
 import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
@@ -43,7 +43,7 @@ class App extends Component {
     componentDidMount() {
         const {dispatch} = this.props;
         const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
-        dispatch(storeCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
+        dispatch(applyCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
         dispatch(loginWithGoogle());
 
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;

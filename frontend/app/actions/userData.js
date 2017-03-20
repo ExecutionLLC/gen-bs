@@ -26,7 +26,7 @@ import {
     modelsListReceive
 } from './modelsList';
 import {getDefaultOrStandardItem} from '../utils/entityTypes';
-import {analyze, storeCurrentLanguageId, storeAvailableLanguages} from './ui';
+import {analyze, applyCurrentLanguageId, storeAvailableLanguages} from './ui';
 import {uploadsListReceive} from './fileUpload';
 import * as i18n from '../utils/i18n';
 
@@ -86,8 +86,8 @@ export function fetchUserDataAsync() {
 
             dispatch(receiveUserData(profileMetadata));
             dispatch(storeAvailableLanguages(languages));
-            dispatch(storeCurrentLanguageId(profileMetadata.defaultLanguageId));
-            const p = getP(getState()); // get new state because of its changing in 'storeCurrentLanguageId' action
+            dispatch(applyCurrentLanguageId(profileMetadata.defaultLanguageId));
+            const p = getP(getState()); // get new state because of its changing in 'applyCurrentLanguageId' action
             dispatch(filtersListReceive(filters));
             dispatch(viewsListReceive(views));
             dispatch(modelsListReceive(models));
