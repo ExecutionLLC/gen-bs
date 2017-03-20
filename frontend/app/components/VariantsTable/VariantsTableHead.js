@@ -41,7 +41,7 @@ export default class VariantsTableHead extends Component {
                 <td className='btntd'>
                     <div></div>
                 </td>
-                <td data-label='comment' key='comment' className='comment'>
+                <td key='comment' className='comment'>
                     <div>
                         <div className='variants-table-header-label'>
                             <a type='button' className='btn-link-default'>
