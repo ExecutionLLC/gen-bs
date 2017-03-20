@@ -94,7 +94,7 @@ export function analyze(searchParams) {
     };
 }
 
-function storeCurrentLanguageId(languageId) {
+export function storeCurrentLanguageId(languageId) {
     return {
         type: STORE_CURRENT_LANGUAGE_ID,
         languageId
