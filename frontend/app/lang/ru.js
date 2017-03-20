@@ -246,7 +246,7 @@ export default {
                 existentSelect: {
                     title: 'Доступные фильтры',
                     duplicate: 'Создать копию',
-                    reset: 'Сбросить фиьлтр',
+                    reset: 'Сбросить фильтр',
                     deleteItem: 'Удалить фильтр'
                 },
                 validationMessage: {
