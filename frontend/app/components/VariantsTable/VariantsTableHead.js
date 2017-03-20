@@ -18,7 +18,7 @@ export default class VariantsTableHead extends Component {
         if (!variantsAnalysis) {
             return (
                 <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
-                <tr />
+                    <tr />
                 </tbody>
             );
         }
@@ -47,24 +47,26 @@ export default class VariantsTableHead extends Component {
                             <a type='button' className='btn-link-default'>
                                 {p.t('variantsTable.headComment')}
                             </a>
-
                         </div>
                     </div>
                     <div className='variants-table-search-field input-group invisible'>
-                       <span className='input-group-btn'>
-                           <button className='btn btn-link-light-default'>
-                               <i className='md-i'>search</i>
-                           </button>
-                       </span>
-                        <input type='text' className='form-control material-input'
-                               value=''
+                        <span className='input-group-btn'>
+                            <button className='btn btn-link-light-default'>
+                                <i className='md-i'>search</i>
+                            </button>
+                        </span>
+                        <input
+                            type='text'
+                            className='form-control material-input'
+                            value=''
                         />
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
                     this.renderFieldHeaderControls(
                         fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
-                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch)
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch
+                    )
                 )}
             </tr>
             </tbody>
