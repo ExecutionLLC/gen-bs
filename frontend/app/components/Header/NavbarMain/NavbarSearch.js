@@ -21,8 +21,8 @@ class NavbarSearch extends Component {
     }
 
     render() {
-        const {p} = this.props;
-        const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
+        const {p, isVariantsLoading, isVariantsValid, isFetching, isFilteringOrSorting} = this.props;
+        const isEnabled = !isVariantsLoading && isVariantsValid && !isFetching && !isFilteringOrSorting;
         return (
             <div className='navbar-search'>
                 <a
@@ -82,8 +82,9 @@ class NavbarSearch extends Component {
 }
 
 function mapStateToProps(state) {
-    const { websocket: {isVariantsLoading, isVariantsValid} } = state;
-    return { isVariantsLoading, isVariantsValid };
+    const { websocket: {isVariantsLoading, isVariantsValid},
+        variantsTable: {isFetching, isFilteringOrSorting} } = state;
+    return { isVariantsLoading, isVariantsValid, isFetching, isFilteringOrSorting };
 }
 
 NavbarSearch.propTypes = {
@@ -94,7 +95,9 @@ NavbarSearch.propTypes = {
     // callback(globalSearchString)
     onGlobalSearchStringChanged: React.PropTypes.func.isRequired,
     search: React.PropTypes.string.isRequired,
-    p: React.PropTypes.shape({t: React.PropTypes.func.isRequired}).isRequired
+    p: React.PropTypes.shape({t: React.PropTypes.func.isRequired}).isRequired,
+    isFetching: React.PropTypes.bool.isRequired,
+    isFilteringOrSorting: React.PropTypes.bool.isRequired
 };
 
 export default connect(mapStateToProps)(NavbarSearch);

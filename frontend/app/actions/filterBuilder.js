@@ -104,7 +104,7 @@ export function filterBuilderChangeAttr(attr, languageId) {
     };
 }
 
-export function fireOnSaveAction(filter) {
+function fireOnSaveAction(filter) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().filterBuilder;
         dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, filter.id));
@@ -178,6 +178,7 @@ export function filterBuilderDeleteFilter(filterId, languageId) {
                     const newFilterId = (filterId == editingFilterId) ? hashedArray.array[0].id : editingFilterId;
                     const newFilter = hashedArray.hash[newFilterId];
                     dispatch(filterBuilderRestartEdit(null, newFilter, languageId));
+                    dispatch(fireOnSaveAction(newFilter));
                     resolve(newFilter);
                 });
         });

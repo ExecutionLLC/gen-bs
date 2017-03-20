@@ -106,7 +106,6 @@ export default {
             analysisNamePlaceHolder: 'Имя анализа (обязательно)',
             created: 'Создан',
             analysisDescriptionPlaceHolder: 'Описание анализа (опционально)',
-            duplicate: 'Добавить копию чтобы внести изменения',
             analysisType: {
                 single: 'Стандартный',
                 tumor: 'Рак/Норма',

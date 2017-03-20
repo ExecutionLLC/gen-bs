@@ -130,7 +130,7 @@ export default class VariantsTableRow extends ComponentBase {
         const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
         return (
             <div>
-                <a href={valueUrl} target='_blank'>{value}</a>
+                <a className='table-hyperlink' href={valueUrl} target='_blank'>{value}</a>
             </div>
         );
     }
