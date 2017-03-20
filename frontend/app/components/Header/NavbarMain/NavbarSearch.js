@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 
 import config from '../../../../config';
@@ -29,25 +29,31 @@ class NavbarSearch extends Component {
                     className='btn navbar-btn btn-block visible-xs'
                     type='button'
                     onClick={() => this.onSearchPopupToggle(true)}
-                ><i className='md-i'>search</i></a>
-                <div className={classNames('navbar-search-field navbar-search-xs', {'hidden-xs': !this.state.showPopup})}>
+                >
+                    <i className='md-i'>search</i>
+                </a>
+                <div
+                    className={classNames('navbar-search-field navbar-search-xs', {'hidden-xs': !this.state.showPopup})}
+                >
                     <input
-                     type='text'
-                     className='form-control placeholder-inverse'
-                     placeholder={p.t('navBar.searchPlaceholder')}
-                     onChange={(e) => this.onGlobalSearchInputChanged(e)}
-                     onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
-                     onBlur={() => this.onGlobalSearchInputBlur()}
-                     disabled={!isEnabled}
-                     value={this.state.search}
-                     maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
+                        type='text'
+                        className='form-control placeholder-inverse'
+                        placeholder={p.t('navBar.searchPlaceholder')}
+                        onChange={(e) => this.onGlobalSearchInputChanged(e)}
+                        onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
+                        onBlur={() => this.onGlobalSearchInputBlur()}
+                        disabled={!isEnabled}
+                        value={this.state.search}
+                        maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
                     />
                     <a
                         type='button'
                         className='btn btn-link-inverse btn-field-clean visible-xs'
                         id='closeMobileSearch'
                         onClick={() => this.onSearchPopupToggle(false)}
-                    ><i className='md-i'>close</i></a>
+                    >
+                        <i className='md-i'>close</i>
+                    </a>
                 </div>
             </div>
         );
@@ -62,15 +68,15 @@ class NavbarSearch extends Component {
     onGlobalSearchInputKeyPressed(e) {
         // user pressed "enter"
         if (e.charCode === 13) {
-            const { search } = this.state;
-            const { onGlobalSearchRequested } = this.props;
+            const {search} = this.state;
+            const {onGlobalSearchRequested} = this.props;
             onGlobalSearchRequested(search);
         }
     }
 
     onGlobalSearchInputBlur() {
-        const { search } = this.state;
-        const { onGlobalSearchStringChanged } = this.props;
+        const {search} = this.state;
+        const {onGlobalSearchStringChanged} = this.props;
         onGlobalSearchStringChanged(search);
     }
 
@@ -82,9 +88,11 @@ class NavbarSearch extends Component {
 }
 
 function mapStateToProps(state) {
-    const { websocket: {isVariantsLoading, isVariantsValid},
-        variantsTable: {isFetching, isFilteringOrSorting} } = state;
-    return { isVariantsLoading, isVariantsValid, isFetching, isFilteringOrSorting };
+    const {
+        websocket: {isVariantsLoading, isVariantsValid},
+        variantsTable: {isFetching, isFilteringOrSorting}
+    } = state;
+    return {isVariantsLoading, isVariantsValid, isFetching, isFilteringOrSorting};
 }
 
 NavbarSearch.propTypes = {
