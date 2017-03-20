@@ -19,7 +19,7 @@ import AnalysisModal from '../components/Modals/AnalysisModal';
 import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessionsModal';
 import AnotherPageOpenedErrorModal from '../components/Modals/AnotherPageOpenedErrorModal';
 
-import { KeepAliveTask, loginWithGoogle, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
+import { KeepAliveTask, loginWithGoogle, startAutoLogoutCountdownTimer, stopAutoLogoutCountdownTimer } from '../actions/auth';
 import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
@@ -49,7 +49,7 @@ class App extends Component {
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
 
         function autoLogoutFn() {
-            dispatch(startAutoLogoutTimer());
+            dispatch(startAutoLogoutCountdownTimer());
         }
 
         dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
@@ -112,7 +112,7 @@ class App extends Component {
                 />
                 <AutoLogoutModal
                     showModal={auth.showAutoLogoutDialog}
-                    closeModal={ () => { dispatch(stopAutoLogoutTimer()); } }
+                    closeModal={ () => { dispatch(stopAutoLogoutCountdownTimer()); } }
                 />
                 <ViewsModal
                     showModal={modalWindows.views.showModal}
