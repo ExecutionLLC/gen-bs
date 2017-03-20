@@ -331,7 +331,7 @@ export function startAutoLogoutTimer() {
     };
 }
 
-export function startAutoLogoutCountdownTimer() {
+function startAutoLogoutCountdownTimer() {
     return (dispatch, getState) => {
         // auto logout works only with authorized users
         if (getState().auth.isDemo) {
