@@ -11,6 +11,7 @@ export default class FieldHeaderControls extends Component {
 
         this.state = {
             searchString: '',
+            appliedSearchString: '',
             isFilterOpened: false
         };
     }
@@ -156,8 +157,9 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputBlur() {
-        const {onSearchValueChanged} = this.props;
-        onSearchValueChanged(this.state.searchString);
+        this.setState({
+            searchString: this.state.appliedSearchString
+        });
         this.setFilterOpened(false);
     }
 
@@ -176,6 +178,9 @@ export default class FieldHeaderControls extends Component {
     onSearchInputKeyPressed(e) {
         const {onSearchRequested} = this.props;
         if (e.charCode === 13) {
+            this.setState({
+                appliedSearchString: this.state.searchString
+            });
             onSearchRequested(this.state.searchString);
         }
     }
@@ -190,8 +195,6 @@ FieldHeaderControls.propTypes = {
     fieldMetadata: PropTypes.object.isRequired,
     areControlsEnabled: PropTypes.bool.isRequired,
     sortState: PropTypes.array.isRequired,
-    // callback(fieldId, searchString)
-    onSearchValueChanged: PropTypes.func.isRequired,
     // callback(fieldId, searchString)
     onSearchRequested: PropTypes.func.isRequired,
     /**

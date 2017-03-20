@@ -97,19 +97,11 @@ export default class VariantsTableHead extends Component {
                 onSearchRequested={(searchValue) => {
                     this.onSendSearchRequest(fieldId, sampleId, searchValue);
                 }}
-                onSearchValueChanged={(searchValue) => {
-                    this.onSearchValueChanged(fieldId, sampleId, searchValue);
-                }}
                 currentVariants={this.props.ws.currentVariants}
                 languageId={languageId}
                 disabled={isFetching}
             />
         );
-    }
-
-    onSearchValueChanged(fieldId, sampleId, searchValue) {
-        const {dispatch} = this.props;
-        dispatch(setFieldFilter(fieldId, sampleId, searchValue));
     }
 
     onSendSearchRequest(fieldId, sampleId, searchValue) {
