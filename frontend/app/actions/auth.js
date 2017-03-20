@@ -17,6 +17,7 @@ import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient';
 
 import {closeWs, TooManyWebSocketsError} from './websocket';
+import UserActions from './userActions';
 
 /*
  * action types
@@ -314,6 +315,19 @@ export function closeOtherSocketsAsync() {
             const p = getP(getState());
             return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.closeOtherSocketsError'), error, response));
         }).then(() => dispatch(loginWithGoogle()));
+    };
+}
+
+export function startAutoLogoutTimer() {
+    return (dispatch) => {
+        const {SESSION: {LOGOUT_TIMEOUT}} = config;
+        const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
+
+        function autoLogoutFn() {
+            dispatch(startAutoLogoutCountdownTimer());
+        }
+
+        dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
     };
 }
 
