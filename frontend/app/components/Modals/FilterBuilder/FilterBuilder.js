@@ -275,6 +275,7 @@ class FieldFilterItem extends React.Component {
      * @param {string} valueType
      * @param {boolean} disabled
      * @param {function(string[])} onChange
+     * @param {string} validationRegex
      * @returns {React.Component}
      */
     static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange,  validationRegex) {
