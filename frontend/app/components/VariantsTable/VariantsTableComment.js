@@ -55,8 +55,11 @@ export default class VariantsTableComment extends Component {
                     >
                         <div>
                             <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
-                                {(_.isEmpty(comments)) ? p.t('variantsTable.addComment') : i18n.getEntityText(comments[0], languageId).comment}</a>
-
+                                {(_.isEmpty(comments)) ?
+                                    p.t('variantsTable.addComment') :
+                                    i18n.getEntityText(comments[0], languageId).comment
+                                }
+                            </a>
                         </div>
                     </OverlayTrigger>
                 </td>
