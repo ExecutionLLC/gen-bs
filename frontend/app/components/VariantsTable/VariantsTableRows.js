@@ -141,9 +141,9 @@ export default class VariantsTableRows extends Component {
                     <div>
                     </div>
                 </td>
-                {_.map(variantsHeader, () => {
+                {_.map(variantsHeader, (variantsHeader) => {
                     return (
-                        <td>
+                        <td key={`${variantsHeader.fieldId}-${variantsHeader.sampleId}`}>
                             <div>
                             </div>
                         </td>
