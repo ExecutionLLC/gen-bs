@@ -91,6 +91,7 @@ export default class ViewBuilder extends React.Component {
                                 clearable={true}
                                 backspaceRemoves={true}
                                 disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
+                                searcheable={false}
                             />
                         </div>
                         <div className='btn-group'>

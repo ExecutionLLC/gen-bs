@@ -81,7 +81,7 @@ export default class VariantsTableComment extends Component {
             this.props.dispatch(removeCommentAsync(comments[0].id, searchKey));
         }
 
-        this.refs.overlay.toggle();
+        this.refs.overlay.hide();
     }
 
     renderCommentPopover() {
@@ -120,7 +120,7 @@ export default class VariantsTableComment extends Component {
                                 >{p.t('variantsTable.saveComment')}
                                 </button>
                                 <button type='button'
-                                        onClick={() => this.refs.overlay.toggle()}
+                                        onClick={() => this.refs.overlay.hide()}
                                         className='btn btn-uppercase btn-link editable-cancel'>
                                     {p.t('variantsTable.cancelComment')}
                                 </button>

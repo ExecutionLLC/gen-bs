@@ -106,7 +106,6 @@ export default {
             analysisNamePlaceHolder: 'Имя анализа (обязательно)',
             created: 'Создан',
             analysisDescriptionPlaceHolder: 'Описание анализа (опционально)',
-            duplicate: 'Добавить копию чтобы внести изменения',
             analysisType: {
                 single: 'Стандартный',
                 tumor: 'Рак/Норма',
@@ -247,7 +246,7 @@ export default {
                 existentSelect: {
                     title: 'Доступные фильтры',
                     duplicate: 'Создать копию',
-                    reset: 'Сбросить фиьлтр',
+                    reset: 'Сбросить фильтр',
                     deleteItem: 'Удалить фильтр'
                 },
                 validationMessage: {

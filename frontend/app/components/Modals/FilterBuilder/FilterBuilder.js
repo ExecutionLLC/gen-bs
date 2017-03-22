@@ -414,7 +414,7 @@ class FieldFilterItem extends React.Component {
         }
     }
 
-    render() { // TODO fields with sampleType?
+    render() {
         const {
             /** @type {{field: string, sampleType: string=, operator: string, value: *}} */
             item,

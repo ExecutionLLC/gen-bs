@@ -17,35 +17,25 @@ export default class ChangeCaseUtil {
             return obj;
         }
 
-        if (_.isObject(obj)) {
-            const clone = _.cloneDeep(obj);
-            _.keys(clone).forEach(key => {
-                if (_.every(key, ChangeCaseUtil._isAlphanumericOrDash)) {
-                    const mutatedKey = mutatorFunc(key);
-                    const value = clone[key];
-                    delete clone[key];
-                    clone[mutatedKey] = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
-                } else {
-                    // keep the old key and process it's values
-                    const value = clone[key];
-                    clone[key] = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
-                }
-            });
-            return clone;
-        } else if (_.isArray(obj)) {
-            const arr = obj;
-            return _.map(arr, item => ChangeCaseUtil._processObjectKeys(item, mutatorFunc));
+        if (_.isArray(obj)) {
+            return _.map(obj, item => ChangeCaseUtil._processObjectKeys(item, mutatorFunc));
+        } else if (_.isObject(obj) && !_.isFunction(obj) && !(obj instanceof Date)) {
+            const result = {};
+            _.keys(obj)
+                .forEach(key => {
+                    const value = obj[key];
+                    const newValue = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
+                    if (/[^a-zA-Z\d_]/.test(key)) {
+                        // keep the old key and process it's values
+                        result[key] = newValue;
+                    } else {
+                        const mutatedKey = mutatorFunc(key);
+                        result[mutatedKey] = newValue;
+                    }
+                });
+            return result;
         } else {
             return obj;
         }
-    }
-
-    static _isAlphanumericOrDash(char) {
-        const code = (char) => char.charCodeAt(0);
-        const charCode = code(char);
-        return char === '_'
-            || (charCode >= code('a') && charCode <= code('z'))
-            || (charCode >= code('A') && charCode <= code('Z'))
-            || (charCode >= code('0') && charCode <= code('9'));
     }
 }
