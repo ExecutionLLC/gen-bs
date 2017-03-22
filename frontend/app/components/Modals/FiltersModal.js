@@ -12,7 +12,6 @@ import {filterBuilderEndEdit, filterBuilderStrategyName} from '../../actions/fil
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
-import {modalName} from '../../actions/modalWindows';
 import * as i18n from '../../utils/i18n';
 
 
@@ -47,7 +46,7 @@ class FiltersModal extends Component {
 
     onClose() {
         const {dispatch, closeModal} = this.props;
-        closeModal(modalName.FILTERS); // TODO: closeModal must have no params (it's obvious that we close upload)
+        closeModal();
         dispatch(filterBuilderEndEdit());
     }
 
@@ -198,7 +197,8 @@ function mapStateToProps(state) {
 }
 
 FiltersModal.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(FiltersModal);

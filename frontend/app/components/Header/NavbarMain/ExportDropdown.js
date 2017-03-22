@@ -58,9 +58,7 @@ export default class ExportDropdown extends ComponentBase {
         );
     }
 
-    onExportItemSelected(event, selectedKey) {
-        event.preventDefault();
-
+    onExportItemSelected(selectedKey) {
         const {
             dispatch,
             selectedRowIndices
