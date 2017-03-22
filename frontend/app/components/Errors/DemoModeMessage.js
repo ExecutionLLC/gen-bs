@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 export default class DemoModeMessage extends Component {
 
     render() {
-        const {p} = this.props;
+        const {p, errorMessage} = this.props;
 
         return (
             <div className='alert alert-inverse alert-fixed demomode-alert'
                  role='alert'>
-                { this.props.errorMessage &&
-                <p>{this.props.errorMessage}</p>
+                { errorMessage &&
+                <p>{errorMessage}</p>
                 }
                 <p>{p.t('demoPopup.caption')}</p>
                 <p>
@@ -28,3 +28,9 @@ export default class DemoModeMessage extends Component {
         onLoginClick();
     }
 }
+
+DemoModeMessage.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    errorMessage: PropTypes.string,
+    onLoginClick: PropTypes.func.isRequired
+};

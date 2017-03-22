@@ -20,7 +20,6 @@ import {
     samplesListServerRemoveSample
 } from '../../../actions/samplesList';
 import config from '../../../../config';
-import {modalName} from '../../../actions/modalWindows';
 import * as i18n from '../../../utils/i18n';
 
 
@@ -445,6 +444,6 @@ export default class FileUploadSampleRightPane extends React.Component {
         e.preventDefault();
         const {dispatch, closeModal} = this.props;
         dispatch(sampleSaveCurrent(sampleId));
-        closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
+        closeModal();
     }
 }

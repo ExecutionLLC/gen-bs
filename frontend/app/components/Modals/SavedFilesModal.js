@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Moment from 'moment';
 import { connect } from 'react-redux';
 import {getP} from 'redux-polyglot/dist/selectors';
 
 import DialogBase from './DialogBase';
-import {closeSavedFilesDialog, downloadSavedFileAsync} from '../../actions/savedFiles';
+import {downloadSavedFileAsync} from '../../actions/savedFiles';
 import * as i18n from '../../utils/i18n';
 
 class SavedFilesModal extends DialogBase {
@@ -54,8 +54,6 @@ class SavedFilesModal extends DialogBase {
             return this.renderEmptyContents();
         }
         const {savedFiles, p} = this.props;
-        // Now just take last ten elements.
-        // TODO: Add pagination for saved files.
         const sortedFiles = _(savedFiles)
             .sortBy(file => -Moment(file.timestamp).valueOf())
             .take(10)
@@ -111,14 +109,14 @@ class SavedFilesModal extends DialogBase {
     }
 
     onCloseModal() {
-        const {dispatch} = this.props;
-        dispatch(closeSavedFilesDialog());
+        const {closeModal} = this.props;
+        closeModal();
     }
 }
 
 SavedFilesModal.propTypes = {
-    savedFiles: React.PropTypes.array.isRequired,
-    showModal: React.PropTypes.bool.isRequired
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

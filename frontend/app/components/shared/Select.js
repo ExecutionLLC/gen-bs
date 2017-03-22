@@ -13,6 +13,7 @@ export default class Select extends Component {
             <OriginalSelect
                 {...selectProperties}
                 matchProp='label'
+                autosize={false}
             />
         );
     }

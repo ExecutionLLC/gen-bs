@@ -134,7 +134,7 @@ export default function websocket(state = {
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
                 variantsView: action.view, // unused
-                variantsSamples: action.samples, // used variantsSample name at exportToFile and renderFieldHeader
+                variantsSamples: action.samples, // used variantsSample name at exportToFile and renderFieldHeaderControls
                 variantsFilter: action.filter, // unused
                 variantsModel: action.model, // unused
                 variantsAnalysis: action.analysis // used variantsAnalysis.id and .samples at saveExportedFileToServer, used !!variantsAnalysis and .samples in variants table

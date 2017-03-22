@@ -94,6 +94,13 @@ function makeAsyncQueue() {
     };
 }
 
+function callbackErrorHandler(fn, callback) {
+    try {
+        fn()
+    } catch (err) {
+        callback(err);
+    }
+}
 
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
@@ -224,50 +231,64 @@ class AppServerUploadService extends ApplicationServerServiceBase {
 
     _handleError(user, operation, error, session, callback) {
         async.waterfall([
-            (callback) => this.services.sampleUploadHistory.update(user, {
-                id: operation.getId(),
-                status: SAMPLE_UPLOAD_STATUS.ERROR,
-                error
-            }, (error) => callback(error)),
             (callback) => {
-                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const vcfFileId = operation.getId();
-                this.services.objectStorage.deleteObject(newSamplesBucket, vcfFileId,
-                    (error, result) => callback(error)
-                );
-            },
-            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
-                (error, existingSamples) => callback(error, existingSamples)),
-            (existingSamples, callback) => {
-                const sampleUploadStates = _.map(existingSamples, (sample) => {
-                    return Object.assign({}, sample, {
-                        uploadState: WS_SAMPLE_UPLOAD_STATE.ERROR,
+                callbackErrorHandler(() => {
+                    this.services.sampleUploadHistory.update(user, {
+                        id: operation.getId(),
+                        status: SAMPLE_UPLOAD_STATUS.ERROR,
                         error
-                    });
-                });
-                async.map(sampleUploadStates, (sample, callback) => {
-                    return this.services.samples.update(user, sample, callback);
-                }, (error, result) => callback(error, result));
+                    }, (error) => callback(error));
+                }, callback);
             },
-            (items, callback) => this.toggleNextOperation(operation.getId(), callback),
-            (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
-                (error, existingSamples) => callback(error, existingSamples)),
-            (existingSamples, callback) => this._createOperationResult(
-                session,
-                operation,
-                null,
-                operation.getUserId(),
-                EVENTS.onOperationResultReceived,
-                true,
-                {
-                    status: SAMPLE_UPLOAD_STATUS.ERROR,
-                    progress: 0,
-                    metadata: existingSamples
-                },
-                error,
-                callback
-            )
-        ], callback);
+            (callback) => {
+                callbackErrorHandler(() => {
+                    const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
+                    const vcfFileId = operation.getId();
+                    this.services.objectStorage.deleteObject(newSamplesBucket, vcfFileId,
+                        (error, result) => callback(error));
+                }, callback);
+            },
+            (callback) => {
+                callbackErrorHandler(() => {
+                    this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                        (error, existingSamples) => callback(error, existingSamples));
+                }, callback);
+            },
+            (existingSamples, callback) => {
+                callbackErrorHandler(() => {
+                    const sampleUploadStates = _.map(existingSamples, (sample) => {
+                        return Object.assign({}, sample, {
+                            uploadState: WS_SAMPLE_UPLOAD_STATE.ERROR,
+                            error
+                        });
+                    });
+                    async.map(sampleUploadStates, (sample, callback) => {
+                        return this.services.samples.update(user, sample, callback);
+                    }, (error, result) => callback(error, result));
+                }, callback);
+            }
+        ], () => {
+            async.waterfall([
+                (callback) => this.toggleNextOperation(operation.getId(), callback),
+                (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                    (error, existingSamples) => callback(error, existingSamples)),
+                (existingSamples, callback) => this._createOperationResult(
+                    session,
+                    operation,
+                    null,
+                    operation.getUserId(),
+                    EVENTS.onOperationResultReceived,
+                    true,
+                    {
+                        status: SAMPLE_UPLOAD_STATUS.ERROR,
+                        progress: 0,
+                        metadata: existingSamples
+                    },
+                    error,
+                    callback
+                )
+            ], callback);
+        });
     }
 
     _handleUploadProgress(user, session, operation, message, callback) {
@@ -326,47 +347,53 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const commonFieldsMetadata = sampleMetadata.columns;
 
         async.waterfall([
-            (callback) => this.services.samples.createMetadataForUploadedSample(user, vcfFileId, commonFieldsMetadata,
-                (error, sampleVersionIds) => callback(error, sampleVersionIds)
-            ),
-            (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
-            (samplesMetadata, callback) => this.services.sampleUploadHistory.update(user, {
-                id: operation.getId(),
-                status: SAMPLE_UPLOAD_STATUS.READY,
-                progress: 100,
-                error: null
-            }, (error) => callback(error, samplesMetadata))
+            (callback) => {
+                callbackErrorHandler(() => {
+                    this.services.samples.createMetadataForUploadedSample(user, vcfFileId, commonFieldsMetadata,
+                        (error, sampleVersionIds) => callback(error, sampleVersionIds));
+                }, callback);
+            },
+            (sampleIds, callback) => {
+                callbackErrorHandler(() => {
+                    this.services.samples.findMany(user, sampleIds, callback);
+                }, callback);
+            },
+            (samplesMetadata, callback) => {
+                callbackErrorHandler(() => {
+                    this.services.sampleUploadHistory.update(user, {
+                        id: operation.getId(),
+                        status: SAMPLE_UPLOAD_STATUS.READY,
+                        progress: 100,
+                        error: null
+                    }, (error) => callback(error, samplesMetadata));
+                }, callback);
+            }
         ], (error, samplesMetadata) => {
-            async.waterfall([
-                (callback) => {
-                    if (error) {
-                        this.logger.error(`Error inserting new sample into database: ${error}`);
-                        const serverError = ErrorUtils.createInternalError(error.message);
-                        this._handleError(user, operation, serverError, session, callback);
-                    } else {
-                        // The upload operation is already completed on the app server.
-                        operation.setSendCloseToAppServer(false);
-                        async.waterfall([
-                            (callback) => this.toggleNextOperation(operation.getId(), callback),
-                            (callback) => this._createOperationResult(session,
-                                operation,
-                                null,
-                                operation.getUserId(),
-                                EVENTS.onOperationResultReceived,
-                                true,
-                                {
-                                    status: SESSION_STATUS.READY,
-                                    progress: 100,
-                                    metadata: samplesMetadata
-                                },
-                                null,
-                                callback
-                            )
-                        ], callback);
-                    }
-                }
-            ], callback);
-
+            if (error) {
+                this.logger.error(`Error inserting new sample into database: ${error}`);
+                const serverError = ErrorUtils.createInternalError(error.message);
+                this._handleError(user, operation, serverError, session, callback);
+            } else {
+                // The upload operation is already completed on the app server.
+                operation.setSendCloseToAppServer(false);
+                async.waterfall([
+                    (callback) => this.toggleNextOperation(operation.getId(), callback),
+                    (callback) => this._createOperationResult(session,
+                        operation,
+                        null,
+                        operation.getUserId(),
+                        EVENTS.onOperationResultReceived,
+                        true,
+                        {
+                            status: SESSION_STATUS.READY,
+                            progress: 100,
+                            metadata: samplesMetadata
+                        },
+                        null,
+                        callback
+                    )
+                ], callback);
+            }
         });
     }
 

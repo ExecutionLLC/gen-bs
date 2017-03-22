@@ -51,9 +51,8 @@ export default class LanguageDropdown extends ComponentBase {
         );
     }
 
-    onLanguageSelected(event, languageId) {
+    onLanguageSelected(languageId) {
         const {dispatch} = this.props;
-        event.preventDefault();
         dispatch(setCurrentLanguageId(languageId));
     }
 }

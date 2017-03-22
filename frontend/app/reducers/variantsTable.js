@@ -66,8 +66,7 @@ function reduceChangeVariantsGlobalFilter(state, action) {
 }
 
 function reduceSetFieldFilter(state, action) {
-    // copy search array
-    var searchArray = [...state.searchInResultsParams.search];
+    const searchArray = [...state.searchInResultsParams.search];
     const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId, sampleId: action.sampleId});
 
     if (action.filterValue !== '') {
