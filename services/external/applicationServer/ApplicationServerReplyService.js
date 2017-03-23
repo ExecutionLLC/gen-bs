@@ -61,6 +61,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
             (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
                 (error) => callback(error, session, operation)
             ),
+            (session, operation, callback) => setTimeout(() => callback(null, session, operation), 10000), // FIXME debug code, remove
             (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
             (operationResult, callback) => {
                 // Store client message in the operation for active uploads.
