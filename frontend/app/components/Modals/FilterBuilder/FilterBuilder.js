@@ -113,7 +113,6 @@ class FilterQueryBuilder extends React.Component {
         const fieldFromSample = item.sampleType ?
             _.find(allowedFields, {id: item.field, sampleType: item.sampleType}) :
             _.find(allowedFields, {id: item.field});
-        console.log(fieldFromSample);
         const itemRestrictions = fieldFromSample ?
             FilterQueryBuilder.getFieldFilterItemRestrictions(item, fieldFromSample, allowedFields) :
             FilterQueryBuilder.getDisabledFieldFilterItemRestrictions(item, FieldUtils.getFieldById(totalFields, item.field));
@@ -275,6 +274,7 @@ class FieldFilterItem extends React.Component {
      * @param {string} valueType
      * @param {boolean} disabled
      * @param {function(string[])} onChange
+     * @param {string} validationRegex
      * @returns {React.Component}
      */
     static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange,  validationRegex) {

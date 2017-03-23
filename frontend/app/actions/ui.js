@@ -101,12 +101,18 @@ function storeCurrentLanguageId(languageId) {
     };
 }
 
+export function applyCurrentLanguageId(languageId) {
+    return (dispatch) => {
+        dispatch(storeCurrentLanguageId(languageId));
+        dispatch(setLanguage(languageId, languages[languageId]));
+    };
+}
+
 export function setCurrentLanguageId(languageId) {
     return (dispatch, getState) => {
         const {userData: {profileMetadata}, auth: {isDemo}} = getState();
 
-        dispatch(storeCurrentLanguageId(languageId));
-        dispatch(setLanguage(languageId, languages[languageId]));
+        dispatch(applyCurrentLanguageId(languageId));
 
         if (profileMetadata.defaultLanguageId === languageId || isDemo) {
             return Promise.resolve();

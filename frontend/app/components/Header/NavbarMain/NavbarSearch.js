@@ -82,8 +82,10 @@ class NavbarSearch extends Component {
 }
 
 function mapStateToProps(state) {
-    const { websocket: {isVariantsLoading, isVariantsValid},
-        variantsTable: {isFetching, isFilteringOrSorting} } = state;
+    const {
+        websocket: {isVariantsLoading, isVariantsValid},
+        variantsTable: {isFetching, isFilteringOrSorting}
+    } = state;
     return { isVariantsLoading, isVariantsValid, isFetching, isFilteringOrSorting };
 }
 
