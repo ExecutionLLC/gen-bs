@@ -138,15 +138,19 @@ function otherMessage(wsData) {
 
 function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
-        if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
-            dispatch(tableMessage(wsData));
-            const {variantsTable, variantsTable: {searchInResultsParams: {limit}}} = getState();
-            if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
-                const isReceivedAll = wsData.result.data && wsData.result.data.length < limit;
-                dispatch(receiveSearchedResults(isReceivedAll));
+        const {variantsTable, variantsTable: {searchInResultsParams: {limit}}} = getState();
+        if (wsData.operationId === variantsTable.operationId) {
+            if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
+                dispatch(tableMessage(wsData));
+                if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
+                    const isReceivedAll = wsData.result.data && wsData.result.data.length < limit;
+                    dispatch(receiveSearchedResults(isReceivedAll));
+                }
+            } else {
+                dispatch(progressMessage(wsData));
             }
         } else {
-            dispatch(progressMessage(wsData));
+            console.log('Outdated WS message');
         }
     };
 }
