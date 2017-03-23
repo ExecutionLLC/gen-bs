@@ -176,7 +176,8 @@ function receiveClosedByUserMessage() {
 }
 
 function receiveErrorMessage(wsData) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const {variantsTable} = getState();
         if (wsData.result && wsData.result.metadata && wsData.result.metadata.samples) {
             dispatch(samplesListAddOrUpdateSamples(
                 _.map(wsData.result.metadata.samples, (sample) => {
@@ -191,6 +192,10 @@ function receiveErrorMessage(wsData) {
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
             dispatch(fileUploadErrorForOperationId(error, wsData.operationId));
+        } else if (wsData.operationType === WS_OPERATION_TYPES.SEARCH) {
+            if (wsData.operationId === variantsTable.operationId) {
+                dispatch(asError(error));
+            }
         } else {
             dispatch(asError(error));
         }
