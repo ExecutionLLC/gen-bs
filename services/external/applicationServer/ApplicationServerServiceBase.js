@@ -92,7 +92,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     _rpcReply(rpcMessage) {
         this.logger.info(`RPC REPLY:\n\t${JSON.stringify(rpcMessage, null, 2)}`);
         const parts = (rpcMessage.id || '').split('_');
-        if (!rpcMessage.id || !parts || parts.length != 2) {
+        if (parts.length !== 2) {
             this.logger.error(`Message id is of an incorrect format, message will be ignored. Id: ${rpcMessage.id}`);
         } else {
             const sessionId = parts[0];
