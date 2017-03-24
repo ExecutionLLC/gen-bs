@@ -90,7 +90,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     }
 
     _rpcReply(rpcMessage) {
-        this.logger.info('RPC REPLY:\n' + JSON.stringify(rpcMessage, null, 2));
+        this.logger.info(`RPC REPLY:\n\t${JSON.stringify(rpcMessage, null, 2)}`);
         const parts = (rpcMessage.id || '').split('_');
         if (!rpcMessage.id || !parts || parts.length != 2) {
             this.logger.error(`Message id is of an incorrect format, message will be ignored. Id: ${rpcMessage.id}`);
@@ -99,7 +99,7 @@ class ApplicationServerServiceBase extends ServiceBase {
             const operationId = parts[1];
             this.services.applicationServerReply.onRpcReplyReceived(sessionId, operationId, rpcMessage, (error) => {
                 if (error) {
-                    this.logger.error('Error processing RPC reply: ' + ErrorUtils.createErrorMessage(error));
+                    this.logger.error(`Error processing RPC reply: ${ErrorUtils.createErrorMessage(error)}`);
                 }
             });
         }
