@@ -149,8 +149,6 @@ function receiveSearchMessage(wsData) {
             } else {
                 dispatch(progressMessage(wsData));
             }
-        } else {
-            console.log('Outdated WS message');
         }
     };
 }
