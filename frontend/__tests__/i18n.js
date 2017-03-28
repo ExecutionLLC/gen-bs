@@ -17,11 +17,11 @@ describe('i18n', () => {
         const INITIAL_TEXTS_WITH_USERDATA = INITIAL_TEXTS.concat([USER_TEXT]);
         const INITIAL_TEXTS_WITH_DEFAULT_AND_USERDATA = INITIAL_TEXTS.concat([DEFAULT_LANGUAGE_TEXT, USER_TEXT]);
 
-        it('shoult be correct test data', () => {
+        it('should be correct test data', () => {
             // there must be no default and absent languages
             expect(INITIAL_TEXTS[i18n.DEFAULT_LANGUAGE_ID]).toBe(undefined);
             expect(INITIAL_TEXTS[ABSENT_LANGUAGE]).toBe(undefined);
-            // there must be at leaset 2 languages
+            // there must be at least 2 languages
             expect(INITIAL_TEXTS.length >= 2).toBe(true);
             // there must not be initial texts
             expect(i18n.getEntityLanguageTexts(INITIAL_ENTITY)).not.toEqual(INITIAL_TEXTS);
