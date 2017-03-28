@@ -9,7 +9,7 @@ describe('i18n', () => {
         const ABSENT_LANGUAGE = 'nolanguage';
         const INITIAL_TEXTS = [
             {languageId: 'lang1', text1: 'text1_lang1', text2: 'text2_lang1'},
-            {languageId: 'lang2', text1: 'text1_lang2', text2: 'text2_lang2'},
+            {languageId: 'lang2', text1: 'text1_lang2', text2: 'text2_lang2'}
         ];
         const DEFAULT_LANGUAGE_TEXT = {languageId: i18n.DEFAULT_LANGUAGE_ID, text1: 'text1_langDefault', text2: 'text2_langDefault'};
         const INITIAL_TEXTS_WITH_DEFAULT = INITIAL_TEXTS.concat([DEFAULT_LANGUAGE_TEXT]);
