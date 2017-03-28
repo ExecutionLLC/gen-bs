@@ -58,7 +58,7 @@ describe('fields', () => {
     });
 
     it('should receive total fields', (done) => {
-        // same as above in the hash
+        // same as fieldsTotal in the hash
         const totalFieldsHash = _.keyBy(fieldsTotal, 'id');
         // fields with 'sourceName' !== 'sample', labelled
         const sourceFieldsList = _.filter(fieldsTotal, (field) => field.sourceName !== 'sample');
