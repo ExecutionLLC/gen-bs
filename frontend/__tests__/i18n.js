@@ -44,7 +44,7 @@ describe('i18n', () => {
             // no deafults, no userdata - get exact texts or undefined
             expect(i18n.getEntityText(entity, INITIAL_TEXTS[0].languageId)).toEqual(INITIAL_TEXTS[0]);
             expect(i18n.getEntityText(entity, INITIAL_TEXTS[1].languageId)).toEqual(INITIAL_TEXTS[1]);
-            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toEqual(undefined);
+            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toBe(undefined);
 
             // userdata - always return it
             expect(i18n.getEntityText(entityUserdata, INITIAL_TEXTS[0].languageId)).toEqual(USER_TEXT);
@@ -68,8 +68,8 @@ describe('i18n', () => {
             const newEntity = i18n.setEntityText(entity, NEW_USER_TEXTS);
             // initial entity must be intact
             expect(i18n.getEntityText(entity, INITIAL_TEXTS[0].languageId)).toEqual(INITIAL_TEXTS[0]);
-            expect(i18n.getEntityText(entity, i18n.DEFAULT_LANGUAGE_ID)).toEqual(undefined);
-            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toEqual(undefined);
+            expect(i18n.getEntityText(entity, i18n.DEFAULT_LANGUAGE_ID)).toBe(undefined);
+            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toBe(undefined);
             // new entity must contain user texts with language identifier
             const newUserTextsWLanguageId = {...NEW_USER_TEXTS, languageId: null};
             expect(i18n.getEntityText(newEntity, INITIAL_TEXTS[0].languageId)).toEqual(newUserTextsWLanguageId);
