@@ -570,6 +570,108 @@ describe('View builder', () => {
         });
     });
 
+    it('should delete other view', (done) => {
+        const {newView, deletingView, allowedFields} = initStore;
+
+        viewsClient.remove = (viewId, callback) => {
+            return callback(null, {status: HttpStatus.OK, body: {id: viewId}});
+        };
+
+        const deletingViewIndex = _.findIndex(initStore.viewsList, {id: deletingView.id});
+        expect(deletingViewIndex).not.toBe(-1);
+
+        // some action that we know how to see it it executed and did not affect testing cases
+        const onSaveAction = {
+            type: RECEIVE_USERDATA,
+            profileMetadata: {fakeMetadata: {view: null}},
+            receivedAt: Date.now()
+        };
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch([
+                viewBuilderOnSave(onSaveAction, 'profileMetadata.fakeMetadata.view'),
+                viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID),
+                viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)
+            ]),
+            stateMapperFunc
+        }, (newState) => {
+            expect(newState.viewsList).toEqual(immutableArray.remove(initStore.viewsList, deletingViewIndex));
+            expect(newState.vbuilder.editingView).toEqual(initStore.newView);
+            expect(newState.userProfileMetadata.fakeMetadata.view).toBe(newState.vbuilder.editingView.id);
+            delete viewsClient.remove;
+            done();
+        });
+    });
+
+    it('should unsuccessfull delete view', (done) => {
+        const {deletingView, allowedFields} = initStore;
+
+        viewsClient.remove = (viewId, callback) => {
+            return callback(null, {status: 500, body: null});
+        };
+
+        const deletingViewIndex = _.findIndex(initStore.viewsList, {id: deletingView.id});
+        expect(deletingViewIndex).not.toBe(-1);
+
+        // some action that we know how to see it it executed and did not affect testing cases
+        const onSaveAction = {
+            type: RECEIVE_USERDATA,
+            profileMetadata: {fakeMetadata: {view: null}},
+            receivedAt: Date.now()
+        };
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch([
+                viewBuilderOnSave(onSaveAction, 'profileMetadata.fakeMetadata.view'),
+                viewBuilderStartEdit(null, deletingView, allowedFields, LANGUAGE_ID),
+                viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)
+            ]),
+            stateMapperFunc
+        }, (newState) => {
+            expect(newState.viewsList).toEqual(initStore.viewsList);
+            expect(newState.vbuilder.editingView).toBe(initStore.deletingView);
+            expect(newState.userProfileMetadata.fakeMetadata).toBe(undefined);
+            delete viewsClient.remove;
+            done();
+        });
+    });
+
+    it('should unsuccessfull delete other view', (done) => {
+        const {newView, deletingView, allowedFields} = initStore;
+
+        viewsClient.remove = (viewId, callback) => {
+            return callback(null, {status: 500, body: null});
+        };
+
+        const deletingViewIndex = _.findIndex(initStore.viewsList, {id: deletingView.id});
+        expect(deletingViewIndex).not.toBe(-1);
+
+        // some action that we know how to see it it executed and did not affect testing cases
+        const onSaveAction = {
+            type: RECEIVE_USERDATA,
+            profileMetadata: {fakeMetadata: {view: null}},
+            receivedAt: Date.now()
+        };
+
+        StoreTestUtils.runTest({
+            globalInitialState: initStore.initialAppState,
+            applyActions: (dispatch) => dispatch([
+                viewBuilderOnSave(onSaveAction, 'profileMetadata.fakeMetadata.view'),
+                viewBuilderStartEdit(null, newView, allowedFields, LANGUAGE_ID),
+                viewBuilderDeleteView(deletingView.id, LANGUAGE_ID)
+            ]),
+            stateMapperFunc
+        }, (newState) => {
+            expect(newState.viewsList).toEqual(initStore.viewsList);
+            expect(newState.vbuilder.editingView).toBe(initStore.newView);
+            expect(newState.userProfileMetadata.fakeMetadata).toBe(undefined);
+            delete viewsClient.remove;
+            done();
+        });
+    });
+
     describe('save and select view', () => {
 
         function testSaveAndSelect(name, isNewView, isEditing, view) {
