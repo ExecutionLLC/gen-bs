@@ -59,7 +59,7 @@ describe('fields', () => {
 
     it('should receive total fields', (done) => {
         // all fields with 'label' properties
-        const totalFieldsList = fieldsTotal;//_.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
+        const totalFieldsList = fieldsTotal;
         // same as above in the hash
         const totalFieldsHash = _.keyBy(totalFieldsList, 'id');
         // fields with 'sourceName' !== 'sample', labelled
