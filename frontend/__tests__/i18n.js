@@ -1,5 +1,3 @@
-//import {renewHistoryItem, detachHistoryItem} from '../app/actions/analysesHistory';
-
 import * as i18n from '../app/utils/i18n';
 
 // Remove to get bunch of test logs
