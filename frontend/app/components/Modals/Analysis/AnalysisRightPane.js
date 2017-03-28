@@ -132,12 +132,12 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderFormGroupSelectorSelect(options, value, onSelect) {
+    renderFormGroupSelectorSelect(options, value, className, onSelect) {
         return (
             <div className='btn-group btn-group-select-group-max'>
                 <Select
                     tabIndex='-1'
-                    className='select2-search'
+                    className={classNames('select2-search', className)}
                     options={options}
                     value={value}
                     onChange={(item) => onSelect(item.value)}
@@ -150,7 +150,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <FormGroupSelectorWrapper>
                 {this.renderFormGroupSelectorButton(title, onClick)}
-                {this.renderFormGroupSelectorSelect(options, value, onSelect)}
+                {this.renderFormGroupSelectorSelect(options, value, null, onSelect)}
             </FormGroupSelectorWrapper>
        );
     }
@@ -170,7 +170,7 @@ export default class AnalysisRightPane extends React.Component {
             </div>
         );
     }
-    
+
     renderModelSelector(modelId) {
         const {p} = this.props;
         return (
@@ -269,6 +269,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderFormGroupSelectorSelect(
                     this.getSampleOptions(value, selectedSamplesHash),
                     value,
+                    'select-with-icon',
                     (value) => this.onSampleSelect(sampleIndex, value)
                 )}
                 {this.renderSelectSampleTypeLabel(!sampleIndex, sampleType)}
@@ -407,7 +408,7 @@ export default class AnalysisRightPane extends React.Component {
             </ul>
         );
     }
-    
+
     renderAnalysisHeaderTab(isActive, tabClassName, tabCaption, onClick) {
         return (
             <li
@@ -735,6 +736,6 @@ AnalysisRightPane.propTypes = {
     filtersList: hashedArrayPropTypeShape,
     modelsList: hashedArrayPropTypeShape,
     viewsList: hashedArrayPropTypeShape,
-    historyItem: PropTypes.shape({id: PropTypes.string.isRequired}),
-    currentItemId: PropTypes.string.isRequired
+    historyItem: PropTypes.shape({id: PropTypes.string}),
+    currentItemId: PropTypes.string
 };

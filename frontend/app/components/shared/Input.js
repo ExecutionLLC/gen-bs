@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import _ from 'lodash';
+
 
 /**
  * Input field component with on blur and on enter firing onChange
@@ -23,9 +25,10 @@ export default class Input extends Component {
 
     render() {
         const value = this.state.value;
+        const inputProps = _.omit(this.props, ['onChange', 'onChanging', 'validationRegex']);
         return (
             <input
-                {...this.props}
+                {...inputProps}
                 value={value}
                 onChange={ (evt) => this.onInputChanged(evt) }
                 onBlur={ (evt) => this.onInputBlur(evt) }
