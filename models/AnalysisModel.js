@@ -24,7 +24,7 @@ const mappedColumns = [
     'description',
     'languageId',
     'sampleVersionId',
-    'sampleType',
+    'sampleType'
 ];
 
 class AnalysisModel extends SecureModelBase {
@@ -165,7 +165,7 @@ class AnalysisModel extends SecureModelBase {
                 this._insert(analysisDataToInsert, trx, callback);
             },
             (analysisId, callback) => {
-                const {languageId, name, description} = analysisText
+                const {languageId, name, description} = analysisText;
                 const analysisTextDataToInsert = {
                     analysisId: analysisId,
                     languageId,
@@ -189,7 +189,7 @@ class AnalysisModel extends SecureModelBase {
                     }
                 );
                 callback(null, analysisId);
-            },
+            }
         ], callback);
     }
 

@@ -218,7 +218,7 @@ async.waterfall([
                         name: fieldRow.name,
                         sourceName: fieldRow.source_name,
                         valueType: fieldRow.value_type,
-                        dimension: fieldRow.dimension,
+                        dimension: fieldRow.dimension
                     };
                 }
                 if (!(fieldRow.language_id in result[fieldRow.id])) {
@@ -255,7 +255,7 @@ async.waterfall([
                         } else {
                             const updateTranslationInfo = {
                                 id: existingField.id,
-                                columnName: existingField.name,
+                                columnName: existingField.name
                             };
                             updateTranslationInfo[language] = translation;
                             newTranslations.push(updateTranslationInfo);

@@ -78,11 +78,11 @@ class FieldsService extends ServiceBase {
             isMandatory: appServerFieldMetadata.isMandatory,
             valueType: appServerFieldMetadata.type,
             dimension: appServerFieldMetadata.num,
-            text:[
+            text: [
                 {
                     label: appServerFieldMetadata.name,
                     description: appServerFieldMetadata.desc,
-                    languageId: isSample ? null : this.config.defaultLanguId,
+                    languageId: isSample ? null : this.config.defaultLanguId
                 }
             ]
         };
