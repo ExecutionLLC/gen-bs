@@ -1,5 +1,6 @@
 import React, {Component, PropTypes}  from 'react';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
+import _ from 'lodash';
 
 import {createCommentAsync, updateCommentAsync, removeCommentAsync} from '../../actions/variantsTable';
 import config from '../../../config';
@@ -136,7 +137,7 @@ export default class VariantsTableComment extends Component {
                                 </button>
                             </div>
                         </div>
-                        <div className='editable-error-block help-block'></div>
+                        <div className='editable-error-block help-block' />
                     </div>
                 </form>
             </div>
