@@ -323,11 +323,11 @@ export function startAutoLogoutTimer() {
         const {SESSION: {LOGOUT_TIMEOUT}} = config;
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
 
-        function autoLogoutFn() {
-            dispatch(startAutoLogoutCountdownTimer());
-        }
-
-        dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
+        dispatch(addTimeout(
+            autoLogoutTimeout,
+            UserActions,
+            () => dispatch(startAutoLogoutCountdownTimer())
+        ));
     };
 }
 
