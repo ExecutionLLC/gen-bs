@@ -25,7 +25,8 @@ const initialState = {
     isNextDataLoading: false,
     isFilteringOrSorting: false,
     isReceivedAll: false,
-    selectedRowIndices: []
+    selectedRowIndices: [],
+    isFetching: false
 };
 
 function reduceClearSearchParams(state) {

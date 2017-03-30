@@ -198,7 +198,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                                 _.map(view.viewListItems, item => item.fieldId),
                                 callback
                             ),
-                            samplesFields: (callback) => this.services.fields.findByUserAndSampleIds(user, sampleIds, callback),
+                            samplesFields: (callback) => this.services.fields.findByUserAndSampleIds(user, sampleIds, callback)
                         },
                         (error, {samples, viewFields, samplesFields}) => callback(error, {
                             rowData,
@@ -208,7 +208,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                             samplesFields,
                             viewFields
                         })
-                    ),
+                    )
                 ], callback
             ),
             ({rowData, user, samples, view, viewFields, samplesFields}, callback) => {
@@ -218,7 +218,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 const mainSample = _.find(samples, sample => sample.id == mainSampleId);
                 async.parallel({
                     data: (callback) => this._convertFields(rowData, user, samples, mainSample, viewFields, searchKeyFields, callback),
-                    header: (callback) => this._createDataHeader(view, viewFields, samples, callback),
+                    header: (callback) => this._createDataHeader(view, viewFields, samples, callback)
                 }, callback)
             }
         ], (error, tableData) => {
