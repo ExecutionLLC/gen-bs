@@ -137,7 +137,7 @@ export default class VariantsTableComment extends Component {
                                 </button>
                             </div>
                         </div>
-                        <div className='editable-error-block help-block'></div>
+                        <div className='editable-error-block help-block' />
                     </div>
                 </form>
             </div>
