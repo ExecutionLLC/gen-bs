@@ -1,17 +1,17 @@
 [
   {
     "gene": "A1BG",
-    "chromosome": 19,
+    "chromosome": 19
   },
   {
-    "gene": "A1CF",
-  },
-  {
-    "gene": "A2ML1",
-    "chromosome": 12,
+    "gene": "A1CF"
   },
   {
     "gene": "A2ML1",
-    "chromosome": 19,
+    "chromosome": 12
+  },
+  {
+    "gene": "A2ML1",
+    "chromosome": 19
   }
 ]

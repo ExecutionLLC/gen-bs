@@ -23,7 +23,7 @@ import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
-import {setCurrentLanguageId} from '../actions/ui';
+import {applyCurrentLanguageId} from '../actions/ui';
 import {closeSavedFilesDialog} from '../actions/savedFiles';
 import * as PropTypes from 'react/lib/ReactPropTypes';
 import {getP} from 'redux-polyglot/dist/selectors';
@@ -41,7 +41,7 @@ class App extends Component {
     componentDidMount() {
         const {dispatch} = this.props;
         const {SESSION: {KEEP_ALIVE_TIMEOUT}} = config;
-        dispatch(setCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
+        dispatch(applyCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
         dispatch(loginWithGoogle());
 
         dispatch(startAutoLogoutTimer());
@@ -54,22 +54,20 @@ class App extends Component {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
             modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
             samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
-        const {history: historyList, newHistoryItem, currentHistoryId} = analysesHistory;
-
-        const samplesOnSaveParams =
-            currentHistoryId ?
-                {
-                    action: resetCurrentAnalysesHistoryIdLoadDataAsync,
-                    propertyIndex: null,
-                    propertyId: null,
-                    sampleIds: null
-                } :
-                {
-                    action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
-                    propertyIndex: 'changeItem.sample.index',
-                    propertyId: 'changeItem.sample.id',
-                    sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
-                };
+        const {newHistoryItem, currentHistoryId} = analysesHistory;
+        const samplesOnSaveParamsReset = {
+            action: resetCurrentAnalysesHistoryIdLoadDataAsync,
+            propertyIndex: null,
+            propertyId: null,
+            sampleIds: null
+        };
+        const samplesOnSaveParamsChange = {
+            action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
+            propertyIndex: 'changeItem.sample.index',
+            propertyId: 'changeItem.sample.id',
+            sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
+        };
+        const samplesOnSaveParams = currentHistoryId ? samplesOnSaveParamsReset : samplesOnSaveParamsChange;
 
         return (
             <div className='main subnav-closed' id='main'>

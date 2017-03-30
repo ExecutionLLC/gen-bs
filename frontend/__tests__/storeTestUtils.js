@@ -145,7 +145,7 @@ export default class StoreTestUtils {
                 applyActions(store.dispatch);
             } catch(e) {
                 if (expectedError) {
-                    onCompleted();
+                    expect(() => onCompleted()).not.toThrow();
                 } else {
                     throw e;
                 }
@@ -153,12 +153,14 @@ export default class StoreTestUtils {
         }
         this.waitForFreezing(store, timeout || 10, () => {
             const state = store.getState();
-            const mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
-            if (expectedState && !_.isEqual(mappedState, expectedState)) {
-                this._gracefulFail(test, mappedState);
-            } else {
-                onCompleted(mappedState);
+            let mappedState;
+            expect(() => {
+                mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
+            }).not.toThrow();
+            if (expectedState) {
+                expect(mappedState).toEqual(expectedState);
             }
+            expect(() => onCompleted(mappedState)).not.toThrow();
         });
     }
 
@@ -196,19 +198,6 @@ export default class StoreTestUtils {
             return configureStore(initialState);
         }
         return configureStore();
-    }
-
-    /**
-     * @param {TestCase}test
-     * @param {Object}state
-     * */
-    static _gracefulFail(test, state) {
-        const difference = deepDiffMapper.map(test.expectedState, state);
-        const testNameString = test.name ? `[${test.name}] ` : '';
-        throw new Error(`${testNameString}States are different: ${JSON.stringify(test.expectedState, null, 2)}, `
-            + `\n\nstate: ${JSON.stringify(state, null, 2)}`
-            + `\n\ndiff: ${JSON.stringify(difference, null, 2)}`
-        );
     }
 
     static _debug(msg, ...args) {

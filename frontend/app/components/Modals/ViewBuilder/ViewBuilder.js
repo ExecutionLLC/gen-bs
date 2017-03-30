@@ -100,7 +100,7 @@ export default class ViewBuilder extends React.Component {
                                     type='button'>
                                 <i className='md-i'>close</i></button>
                             <button className='btn-link-default' disabled={plusDisabled}
-                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
+                                    onClick={ () => dispatch(viewBuilderAddColumn(index + 1, nextDefaultField.id)) }
                                     type='button'>
                                 <i className='md-i'>add</i></button>
                         </div>
