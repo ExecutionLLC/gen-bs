@@ -73,7 +73,6 @@ export function runListedObjectTests(params) {
 
     describe(`${params.listName} delete tests`, () => {
         const {initialAppState, list, createdItemId} = params.buildInitState();
-        const {sessionId} = initialAppState.auth;
 
         const testCases = [];
         var i;
@@ -81,13 +80,13 @@ export function runListedObjectTests(params) {
             testCases.push({
                 description: 'should delete item #' + i,
                 itemId: list[i].id,
-                actualDelete:true
+                actualDelete: true
             });
         }
         testCases.push({
             description: 'should not delete',
             itemId: createdItemId,
-            actualDelete:false
+            actualDelete: false
         });
 
         function makeTest(testCase, testParams) {
@@ -96,8 +95,8 @@ export function runListedObjectTests(params) {
 
             const reallyDelete = actualDelete && !mustError;
 
-            const filtersCount = list.length;
-            const expectedItemsCount = reallyDelete ? filtersCount - 1 : filtersCount;
+            const itemsCount = list.length;
+            const expectedItemsCount = reallyDelete ? itemsCount - 1 : itemsCount;
             const expectedItems = reallyDelete ? list.filter((item) => item.id !== itemId) : list;
             const expectedItemsHash = list.reduce((hash, item) => {
                 if (!reallyDelete || item.id !== itemId) {
@@ -109,7 +108,7 @@ export function runListedObjectTests(params) {
 
             return {
                 initialAppState,
-                actions: params.makeActions.remove(itemId, sessionId),
+                actions: params.makeActions.remove(itemId),
                 checkState: (globalState) => {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArrayLength(stateHashedArray, expectedItemsCount);
@@ -130,7 +129,6 @@ export function runListedObjectTests(params) {
 
     describe(`${params.listName} update tests`, () => {
         const {initialAppState, list, createdItemId} = params.buildInitState();
-        const {sessionId} = initialAppState.auth;
 
         const updatedItem = _.cloneDeep(list[0]);
         const initialHashedArray = ImmutableHashedArray.makeFromArray(list);
@@ -162,7 +160,7 @@ export function runListedObjectTests(params) {
 
             return {
                 initialAppState,
-                actions: params.makeActions.update(newItem, sessionId),
+                actions: params.makeActions.update(newItem),
                 checkState: (globalState) => {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
@@ -181,7 +179,6 @@ export function runListedObjectTests(params) {
 
     describe(`${params.listName} create tests`, () => {
         const {initialAppState, list, createdItemId} = params.buildInitState();
-        const {sessionId} = initialAppState.auth;
         const languageId = initialAppState.ui.language;
 
         const createdItem = {..._.cloneDeep(list[0]), id: null};
@@ -200,7 +197,7 @@ export function runListedObjectTests(params) {
 
             return {
                 initialAppState: initialAppState,
-                actions: params.makeActions.create(newItem, sessionId, languageId),
+                actions: params.makeActions.create(newItem, languageId),
                 checkState: (globalState) => {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);

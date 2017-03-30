@@ -52,7 +52,7 @@ function reduceVBuilderSaveEdit(state) {
 }
 
 function reduceVBuilderEndEdit(state) {
-    return Object.assign({} ,state, {
+    return Object.assign({}, state, {
         editingView: null,
         originalView: null,
         editingViewIsNew: false,

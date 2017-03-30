@@ -70,7 +70,7 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
                         }
                     }
                 ],(error) => callback(error, item));
-            },
+            }
         ], callback);
     }
 

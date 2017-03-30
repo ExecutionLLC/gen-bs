@@ -235,7 +235,7 @@ class SearchService extends ServiceBase {
                     (view, callback) => this.services.fields.findMany(
                         _.map(view.viewListItems, item => item.fieldId),
                         callback
-                    ),
+                    )
                 ], callback
             ),
             samples: (callback) => {

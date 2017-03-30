@@ -22,8 +22,7 @@ function buildViewsState(appState) {
         auth,
         ui,
         viewsList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(views),
-            selectedViewId: views[0].id
+            hashedArray: ImmutableHashedArray.makeFromArray(views)
         }
     };
 
@@ -46,34 +45,34 @@ runListedObjectTests({
         };
     },
     makeActions: {
-        remove(viewId, sessionId) {
+        remove(viewId) {
             return (dispatch) => {
-                dispatch(viewsListServerDeleteView(viewId, sessionId));
+                dispatch(viewsListServerDeleteView(viewId));
             };
         },
-        update(newView, sessionId) {
+        update(newView) {
             return (dispatch) => {
-                dispatch(viewsListServerUpdateView(newView, sessionId));
+                dispatch(viewsListServerUpdateView(newView));
             };
         },
-        create(newView, sessionId, languageId) {
+        create(newView, languageId) {
             return (dispatch) => {
-                return dispatch(viewsListServerCreateView(newView, sessionId, languageId));
+                return dispatch(viewsListServerCreateView(newView, languageId));
             }
         }
     },
     makeMocks: {
         remove(mustError) {
-            viewsClient.remove = (sessionId, viewId, callback) => {
+            viewsClient.remove = (viewId, callback) => {
                 if (mustError) {
                     return callback({message: 'mockedError'}, {status: 500});
                 } else {
-                    return callback(null, {status: HttpStatus.OK});
+                    return callback(null, {status: HttpStatus.OK, body: {id: viewId}});
                 }
             };
         },
         update(mustError) {
-            viewsClient.update = (sessionId, view, callback) => {
+            viewsClient.update = (view, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});
                 } else {
@@ -82,7 +81,7 @@ runListedObjectTests({
             };
         },
         create(mustError, newViewId) {
-            viewsClient.add = (sessionId, languageId, view, callback) => {
+            viewsClient.add = (languageId, view, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});
                 } else {
