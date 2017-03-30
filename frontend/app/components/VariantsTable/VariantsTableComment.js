@@ -1,5 +1,6 @@
 import React, {Component, PropTypes}  from 'react';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
+import _ from 'lodash';
 
 import {createCommentAsync, updateCommentAsync, removeCommentAsync} from '../../actions/variantsTable';
 import config from '../../../config';
