@@ -1,49 +1,48 @@
 <div id="userinfo">
     <div class="flex-row">
         <div class="flex-left">
-            <label> First Name *
-                [text* reg-first-name id:reg-first-name maxlength:256]</label>
+            <label> Email *
+                [email* reg-e-mail id:reg-e-mail maxlength:256]</label>
         </div>
+
         <div class="flex-right">
-            <label> Last Name *
-                [text* reg-last-name id:reg-last-name maxlength:256]</label>
-        </div>
-    </div>
-
-    <div class="form-inline"> Gender * [radio reg-gender id:reg-gender label_first default:1 "Male" "Female"]</div>
-
-    <div class="flex-row">
-        <div class="flex-left">
             <label> Phone
                 [text reg-user-name id:reg-telephone maxlength:256]</label>
         </div>
-
-        <div class="flex-right">
-            <label> E-Mail *
-                [email* reg-e-mail id:reg-e-mail maxlength:256]</label>
-        </div>
     </div>
 
     <div class="flex-row">
         <div class="flex-left">
-            <label> Company *
-                [text* reg-company id:reg-company maxlength:256]</label>
+            <label> First Name
+                [text reg-first-name id:reg-first-name maxlength:256]</label>
+        </div>
+        <div class="flex-right">
+            <label> Last Name
+                [text reg-last-name id:reg-last-name maxlength:256]</label>
+        </div>
+    </div>
+    <div class="form-inline"> Gender [radio reg-gender id:reg-gender label_first default:1 "Male" "Female"]</div>
+
+    <div class="flex-row">
+        <div class="flex-left">
+            <label> Company
+                [text reg-company id:reg-company maxlength:256]</label>
         </div>
 
         <div class="flex-right">
-            <label> Occupation *
-                [text* reg-speciality id:reg-speciality maxlength:256]</label>
+            <label> Occupation
+                [text reg-speciality id:reg-speciality maxlength:256]</label>
             <div class="warning" id="warning-userdata">Please correct errors above</div>
         </div>
     </div>
 
     <div class="form-inline" id="Disclaimer-container">
         <label>
-            [acceptance Disclaimer id:accept-disclaimer class:acceptance] * I have read and agree to the <a href="/terms-of-service" target="_blank">Terms of Service</a>
+            [acceptance Disclaimer id:accept-disclaimer class:acceptance] * I have read and agree to the <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>
         </label>
     </div>
 
-    <div class="flex-row" id="regcode-container">
+    <div class="flex-row" id="regcode-container" style="display: none;">
         <div class="flex-left">
             <label> Invitation Code
                 [text reg-company id:reg-code maxlength:8] </label>
