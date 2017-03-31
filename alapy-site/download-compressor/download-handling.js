@@ -4,23 +4,35 @@ var elDownloadMacContainer = document.getElementById('download-mac-container');
 var elDisclaimerContainer = document.getElementById('Disclaimer-container');
 var elAcceptCheck = document.getElementById('accept-disclaimer');
 
-elDownloadWindowsContainer.style.display = 'none';
-elDownloadLinuxContainer.style.display = 'none';
-elDownloadMacContainer.style.display = 'none';
-elDisclaimerContainer.style.display = 'none';
-
 var status1 = {
+    selectedOSButtonPrev: null,
+    selectedOSButton: null,
     downloadButton: null,
     accepted: false
 };
 
 function showStatus() {
-    elDisclaimerContainer.style.display = status1.downloadButton ? '' : 'none';
-    elDownloadWindowsContainer.style.display = 'none';
-    elDownloadLinuxContainer.style.display = 'none';
-    elDownloadMacContainer.style.display = 'none';
+    if (elDisclaimerContainer) {
+        elDisclaimerContainer.style.display = status1.downloadButton ? '' : 'none';
+    }
+    if (elDownloadWindowsContainer) {
+        elDownloadWindowsContainer.style.display = 'none';
+    }
+    if (elDownloadLinuxContainer) {
+        elDownloadLinuxContainer.style.display = 'none';
+    }
+    if (elDownloadMacContainer) {
+        elDownloadMacContainer.style.display = 'none';
+    }
     if (status1.accepted && status1.downloadButton) {
         status1.downloadButton.style.display = '';
+    }
+    if (status1.selectedOSButtonPrev) {
+        status1.selectedOSButtonPrev.classList.remove('active');
+    }
+    if (status1.selectedOSButton) {
+        status1.selectedOSButton.classList.add('active');
+        status1.selectedOSButtonPrev = status1.selectedOSButton;
     }
 }
 
@@ -47,6 +59,7 @@ document.addEventListener('click', function(e) {
                 'linux': elDownloadLinuxContainer,
                 'mac': elDownloadMacContainer
             })[os[1]];
+            status1.selectedOSButton = el;
             status1.downloadButton = btn;
             showStatus();
         }

@@ -3,6 +3,19 @@
     border-radius: 3px;
 }
 
+.scheme_original a.vc_single_image-wrapper.vc_box_border_grey > img {
+    filter: grayscale(100%) brightness(75%) contrast(200%)
+}
+
 .scheme_original a.vc_single_image-wrapper.vc_box_border_grey:hover {
     border-color: #34b8dd;
 }
+
+.scheme_original a.vc_single_image-wrapper.vc_box_border_grey:hover > img {
+    filter: grayscale(0%) brightness(100%) contrast(100%);
+}
+
+.download-button.active a.vc_single_image-wrapper.vc_box_border_grey > img {
+    filter: grayscale(0%) brightness(100%) contrast(100%);
+}
+
