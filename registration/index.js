@@ -125,9 +125,15 @@ app.post('/user_request', (request, response) => {
                 throw new Error('reCaptcha check fails')
             }
             return userRequests.createAsync(userInfo)
-                .then((insertedUser) =>
-                    mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
-                        .then(() => userRequests.emailConfirmSentAsync(insertedUser.id)))
+                .then((insertedUser) => {
+                    if (userInfo.loginType === 'password') {
+                        return mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
+                            .then(() => userRequests.emailConfirmSentAsync(insertedUser.id));
+                    } else {
+                        return userRequests.activateAsync(insertedUser.emailConfirmUuid)
+                            .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user));
+                    }
+                })
                 .then(() => response.send(userInfo))
                 .catch((err) => response.status(400).send(err.message));
         })
@@ -144,7 +150,7 @@ app.get('/approve', (request, response) => {
     logger.info(id);
     userRequests.activateAsync(id)
         .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)
-            .then(() => mailService.sendAdminRegisterApproveMailAsync(user)))
+            /*.then(() => mailService.sendAdminRegisterApproveMailAsync(user))*/)
         .then(() => response.send({}))
         .catch((error) =>
             response.status(400).send(error.message)
@@ -157,11 +163,10 @@ app.get('/confirm', (request, response) => {
     logger.info(confirmUUID);
     userRequests.emailConfirmReceivedAsync(confirmUUID)
         .then((requestInfo) =>
-            mailService.sendAdminRegisterMailAsync(
-                Object.assign({}, requestInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${requestInfo.id}`})
-            )
-        ).then(() =>
-        response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
+            userRequests.activateAsync(confirmUUID)
+                .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)))
+        .then(() =>
+            response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
     );
 });
 
