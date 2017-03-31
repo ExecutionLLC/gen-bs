@@ -1,0 +1,8 @@
+.scheme_original a.vc_single_image-wrapper.vc_box_border_grey {
+    border: 2px solid transparent;
+    border-radius: 3px;
+}
+
+.scheme_original a.vc_single_image-wrapper.vc_box_border_grey:hover {
+    border-color: #34b8dd;
+}
