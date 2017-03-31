@@ -16,16 +16,16 @@ class UsersClient {
                     key: this.ADD_USER_KEY,
                     languId: 'en',
                     user: {
-                        firstName: user.firstName,
-                        lastName: user.lastName,
+                        firstName: user.firstName || '',
+                        lastName: user.lastName || '',
                         email: user.email,
-                        speciality: user.speciality,
+                        speciality: user.speciality || '',
                         numberPaidSamples: user.numberOfPaidSamples,
-                        gender: user.gender,
+                        gender: user.gender || '',
                         phone: user.telephone,
                         loginType: user.loginType,
                         password: user.password,
-                        company: user.company
+                        company: user.company || ''
                     }
                 })
                 .then(({body}) => resolve(body))

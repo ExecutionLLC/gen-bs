@@ -125,15 +125,9 @@ app.post('/user_request', (request, response) => {
                 throw new Error('reCaptcha check fails')
             }
             return userRequests.createAsync(userInfo)
-                .then((insertedUser) => {
-                    if (userInfo.loginType === 'password') {
-                        return mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
-                            .then(() => userRequests.emailConfirmSentAsync(insertedUser.id));
-                    } else {
-                        return userRequests.activateAsync(insertedUser.emailConfirmUuid)
-                            .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user));
-                    }
-                })
+                .then((insertedUser) =>
+                    mailService.sendRegisterMailAsync(userInfo.email, Object.assign({}, userInfo, {confirmUrl: `${Config.baseUrl}/confirm/?id=${insertedUser.emailConfirmUuid}`}))
+                        .then(() => userRequests.emailConfirmSentAsync(insertedUser.id)))
                 .then(() => response.send(userInfo))
                 .catch((err) => response.status(400).send(err.message));
         })
@@ -162,9 +156,14 @@ app.get('/confirm', (request, response) => {
     const {id: confirmUUID} = request.query;
     logger.info(confirmUUID);
     userRequests.emailConfirmReceivedAsync(confirmUUID)
-        .then((requestInfo) =>
-            userRequests.activateAsync(confirmUUID)
-                .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)))
+        .then((requestInfo) => {
+            logger.info(requestInfo.id);
+            return userRequests.activateAsync(requestInfo.id)
+                .then((user) => {
+                    logger.info(JSON.stringify(user));
+                    return mailService.sendRegisterApproveMailAsync(user.email, user);
+                });
+        })
         .then(() =>
             response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
     );
