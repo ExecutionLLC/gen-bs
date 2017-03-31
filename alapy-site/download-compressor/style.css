@@ -19,3 +19,7 @@
     filter: grayscale(0%) brightness(100%) contrast(100%);
 }
 
+.download-container .wpdm-link-tpl.link-btn {
+    width: 380px !important;
+    border: none !important;
+}
