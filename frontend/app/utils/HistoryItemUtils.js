@@ -44,8 +44,8 @@ export function makeNewHistoryItemName(sample, filter, view, languageId) {
     return `${formatDate(new Date())}_${makeOptionalEntityName(sample)}_${makeOptionalEntityName(filter)}_${makeOptionalEntityName(view)}`;
 }
 
-export function makeNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
-    return i18n.changeEntityText(
+export function makeNewHistoryItem(sample, filter, view, newHistoryItemInfo) {
+    return i18n.setEntityText(
         {
             id: null,
             createdDate: new Date(),
@@ -93,7 +93,6 @@ export function makeNewHistoryItem(sample, filter, view, newHistoryItemInfo, lan
             ]
  */
         },
-        languageId,
         {
             name: trimName(newHistoryItemInfo.name),
             description: trimDescription(newHistoryItemInfo.description)
