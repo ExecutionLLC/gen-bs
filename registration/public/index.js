@@ -75,19 +75,23 @@ const USER_INFO_SCHEME = [
     },
     {
         id: 'firstName',
-        elementId: 'reg-first-name'
+        elementId: 'reg-first-name',
+        isOptional: true
     },
     {
         id: 'lastName',
-        elementId: 'reg-last-name'
+        elementId: 'reg-last-name',
+        isOptional: true
     },
     {
         id: 'speciality',
-        elementId: 'reg-speciality'
+        elementId: 'reg-speciality',
+        isOptional: true
     },
     {
         id: 'company',
-        elementId: 'reg-company'
+        elementId: 'reg-company',
+        isOptional: true
     },
     {
         id: 'telephone',
@@ -97,7 +101,8 @@ const USER_INFO_SCHEME = [
     {
         id: 'gender',
         radioName: 'reg-gender',
-        containerId: 'reg-gender'
+        containerId: 'reg-gender',
+        isOptional: true
     }
 ];
 
