@@ -157,7 +157,7 @@ app.get('/confirm', (request, response) => {
     userRequests.emailConfirmReceivedAsync(confirmUUID)
         .then((requestInfo) => {
             return userRequests.activateAsync(requestInfo.id)
-                .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user))
+                .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user));
         })
         .then(() =>
             response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
