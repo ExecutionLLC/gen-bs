@@ -608,18 +608,22 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalyzeButtonClick(isEditing) {
         const {dispatch, historyItem, currentItemId, ui: {languageId}} = this.props;
+        const {
+            type, samples, viewId, filterId, modelId
+        } = historyItem;
+        const {name, description} = i18n.getEntityText(historyItem, languageId);
         const searchParams = i18n.setEntityText( // TODO looks like making new analysis, see userData
             {
                 id: isEditing ? null : currentItemId,
-                type: historyItem.type,
-                samples: historyItem.samples,
-                viewId: historyItem.viewId,
-                filterId: historyItem.filterId,
-                modelId: historyItem.modelId
+                type,
+                samples,
+                viewId,
+                filterId,
+                modelId
             },
             {
-                name: i18n.getEntityText(historyItem, languageId).name,
-                description: i18n.getEntityText(historyItem, languageId).description
+                name,
+                description
             }
         );
         dispatch(analyze(searchParams)).then((analysis) => {
