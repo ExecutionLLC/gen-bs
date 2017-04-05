@@ -274,7 +274,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                     >
                         <input
                             onChange={ (e) => {
-                                this.onUploadChanged(e.target.files);
+                                this.onUploadChanged([...e.target.files]);
                                 e.target.value = null;
                             }}
                             style={{display: 'none'}}

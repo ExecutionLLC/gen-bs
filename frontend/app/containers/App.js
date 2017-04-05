@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTimeout } from 'redux-timeout';
 import FontFaceObserver from 'fontfaceobserver';
 import _ from 'lodash';
 
@@ -19,11 +18,10 @@ import AnalysisModal from '../components/Modals/AnalysisModal';
 import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessionsModal';
 import AnotherPageOpenedErrorModal from '../components/Modals/AnotherPageOpenedErrorModal';
 
-import { KeepAliveTask, loginWithGoogle, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
+import { KeepAliveTask, loginWithGoogle, startAutoLogoutTimer, stopAutoLogoutCountdownTimer} from '../actions/auth';
 import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
-import UserActions from '../actions/userActions';
 import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
 import {applyCurrentLanguageId} from '../actions/ui';
 import {closeSavedFilesDialog} from '../actions/savedFiles';
@@ -42,17 +40,11 @@ class App extends Component {
 
     componentDidMount() {
         const {dispatch} = this.props;
-        const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
+        const {SESSION: {KEEP_ALIVE_TIMEOUT}} = config;
         dispatch(applyCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
         dispatch(loginWithGoogle());
 
-        const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
-
-        function autoLogoutFn() {
-            dispatch(startAutoLogoutTimer());
-        }
-
-        dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
+        dispatch(startAutoLogoutTimer());
 
         const keepAliveTask = new KeepAliveTask(KEEP_ALIVE_TIMEOUT * 1000);
         keepAliveTask.start();
@@ -110,7 +102,10 @@ class App extends Component {
                 />
                 <AutoLogoutModal
                     showModal={auth.showAutoLogoutDialog}
-                    closeModal={ () => { dispatch(stopAutoLogoutTimer()); } }
+                    closeModal={ () => {
+                        dispatch(stopAutoLogoutCountdownTimer());
+                        dispatch(startAutoLogoutTimer());
+                    } }
                 />
                 <ViewsModal
                     showModal={modalWindows.views.showModal}

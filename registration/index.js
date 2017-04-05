@@ -143,8 +143,7 @@ app.get('/approve', (request, response) => {
     const {id} = request.query;
     logger.info(id);
     userRequests.activateAsync(id)
-        .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user)
-            .then(() => mailService.sendAdminRegisterApproveMailAsync(user)))
+        .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user))
         .then(() => response.send({}))
         .catch((error) =>
             response.status(400).send(error.message)
@@ -156,12 +155,12 @@ app.get('/confirm', (request, response) => {
     const {id: confirmUUID} = request.query;
     logger.info(confirmUUID);
     userRequests.emailConfirmReceivedAsync(confirmUUID)
-        .then((requestInfo) =>
-            mailService.sendAdminRegisterMailAsync(
-                Object.assign({}, requestInfo, {approveUrl: `${Config.baseUrl}/approve/?id=${requestInfo.id}`})
-            )
-        ).then(() =>
-        response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
+        .then((requestInfo) => {
+            return userRequests.activateAsync(requestInfo.id)
+                .then((user) => mailService.sendRegisterApproveMailAsync(user.email, user));
+        })
+        .then(() =>
+            response.redirect(301, `${Config.registrationFrontend.site}${Config.registrationFrontend.emailConfirmedPath}`)
     );
 });
 
