@@ -45,17 +45,17 @@ runListedObjectTests({
         };
     },
     makeActions: {
-        remove(modelId, sessionId) {
+        remove(modelId) {
             return (dispatch) => {
                 dispatch(modelsListServerDeleteModel(modelId));
             };
         },
-        update(newModel, sessionId) {
+        update(newModel) {
             return (dispatch) => {
                 dispatch(modelsListServerUpdateModel(newModel));
             };
         },
-        create(newModel, sessionId, languageId) {
+        create(newModel, languageId) {
             return (dispatch) => {
                 return dispatch(modelsListServerCreateModel(newModel, languageId));
             }

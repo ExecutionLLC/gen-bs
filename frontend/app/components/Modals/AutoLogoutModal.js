@@ -20,7 +20,7 @@ class AutoLogoutModal extends Component {
         const {secondsToAutoLogout, p} = this.props;
         return (
             <Modal.Body>
-                {p.t('autoLogout.text', {secs: secondsToAutoLogout})}
+                {p.t('autoLogout.text', {secs: secondsToAutoLogout || 0})}
             </Modal.Body>
         );
     }

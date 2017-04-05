@@ -160,7 +160,7 @@ function addField(knex, field) {
             isInvisible,
             dimension,
             isHyperlink: isHyperlink || false,
-            hyperlinkTemplate: hyperlinkTemplate || null,
+            hyperlinkTemplate: hyperlinkTemplate || null
         }))
         .then(() => knex(fieldsTableNames.Text
         ).insert(ChangeCaseUtil.convertKeysToSnakeCase({

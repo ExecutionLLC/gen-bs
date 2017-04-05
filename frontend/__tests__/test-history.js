@@ -1,7 +1,6 @@
 import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewHistoryItem, receiveAnalysesHistory} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
-//import {analyze} from '../app/actions/ui';
 
 import {entityType} from '../app/utils/entityTypes';
 import {analysisType} from '../app/utils/analyseUtils';

@@ -236,7 +236,7 @@ export function uploadFile(fileUploadId) {
                 delete requestAbortFunctions[fp.id];
                 dispatch(fileUploadError(fp.id, {
                     code: null,
-                    message: err
+                    message: '' + err
                 }));
             }
         );
