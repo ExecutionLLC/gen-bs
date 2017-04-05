@@ -11,6 +11,7 @@ export default class FieldHeaderControls extends Component {
 
         this.state = {
             searchString: '',
+            appliedSearchString: '',
             isFilterOpened: false
         };
     }
@@ -87,21 +88,24 @@ export default class FieldHeaderControls extends Component {
             return (
                 <div className={inputGroupClasses}>
                     <span className='input-group-btn'>
-                        <button className='btn btn-link-light-default'
-                                onClick={() => this.setFilterOpened(true)}
-                                disabled={disabled}>
-                            <i></i>
+                        <button
+                            className='btn btn-link-light-default'
+                            onClick={() => this.setFilterOpened(true)}
+                            disabled={disabled}
+                        >
+                            <i />
                         </button>
                     </span>
-                    <input type='text'
-                           className='form-control material-input'
-                           value={searchString}
-                           ref={(input) => this.focusInput(input)}
-                           onChange={(e) => this.onSearchInputChanged(e)}
-                           onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
-                           onBlur={() => this.onSearchInputBlur()}
-                           disabled={disabled}
-                           maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
+                    <input
+                        type='text'
+                        className='form-control material-input'
+                        value={searchString}
+                        ref={(input) => this.focusInput(input)}
+                        onChange={(e) => this.onSearchInputChanged(e)}
+                        onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
+                        onBlur={() => this.onSearchInputBlur()}
+                        disabled={disabled}
+                        maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
                     />
                 </div>
             );
@@ -110,13 +114,14 @@ export default class FieldHeaderControls extends Component {
                 <div className={inputGroupClasses}>
                     <span className='input-group-btn'>
                         <button className='btn btn-link-light-default'>
-                            <i></i>
+                            <i />
                         </button>
                     </span>
-                    <input type='text'
-                           className='form-control material-input'
-                           value='Non-filtered type'
-                           disabled='true'
+                    <input
+                        type='text'
+                        className='form-control material-input'
+                        value='Non-filtered type'
+                        disabled='true'
                     />
                 </div>
             );
@@ -125,10 +130,12 @@ export default class FieldHeaderControls extends Component {
 
     renderSortButton(direction, currentDirection, sortButtonClass, order, disabled) {
         return (
-            <button className={sortButtonClass}
-                    key={direction}
-                    onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
-                    disabled={disabled}>
+            <button
+                className={sortButtonClass}
+                key={direction}
+                onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
+                disabled={disabled}
+            >
                 {direction === currentDirection &&
                 <span className='text-info'>{order}</span>
                 }
@@ -150,8 +157,9 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputBlur() {
-        const {onSearchValueChanged} = this.props;
-        onSearchValueChanged(this.state.searchString);
+        this.setState({
+            searchString: this.state.appliedSearchString
+        });
         this.setFilterOpened(false);
     }
 
@@ -170,6 +178,9 @@ export default class FieldHeaderControls extends Component {
     onSearchInputKeyPressed(e) {
         const {onSearchRequested} = this.props;
         if (e.charCode === 13) {
+            this.setState({
+                appliedSearchString: this.state.searchString
+            });
             onSearchRequested(this.state.searchString);
         }
     }
@@ -185,11 +196,9 @@ FieldHeaderControls.propTypes = {
     areControlsEnabled: PropTypes.bool.isRequired,
     sortState: PropTypes.array.isRequired,
     // callback(fieldId, searchString)
-    onSearchValueChanged: PropTypes.func.isRequired,
-    // callback(fieldId, searchString)
     onSearchRequested: PropTypes.func.isRequired,
     /**
-     * @type {function(fieldId, direction, isControlKeyPressed)}, where direction in ['asc', 'desc']
+     * @type {function(direction: number, isControlKeyPressed: boolean)}, where direction in ['asc', 'desc']
      * */
     onSortRequested: PropTypes.func.isRequired
 };

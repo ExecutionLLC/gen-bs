@@ -45,19 +45,19 @@ runListedObjectTests({
         };
     },
     makeActions: {
-        remove(filterId, sessionId) {
+        remove(filterId) {
             return (dispatch) => {
-                dispatch(filtersListServerDeleteFilterAsync(filterId, sessionId));
+                dispatch(filtersListServerDeleteFilterAsync(filterId));
             };
         },
-        update(newFilter, sessionId) {
+        update(newFilter) {
             return (dispatch) => {
-                dispatch(filtersListServerUpdateFilterAsync(newFilter, sessionId));
+                dispatch(filtersListServerUpdateFilterAsync(newFilter));
             };
         },
-        create(newFilter, sessionId, languageId) {
+        create(newFilter, languageId) {
             return (dispatch) => {
-                return dispatch(filtersListServerCreateFilterAsync(newFilter, sessionId, languageId));
+                return dispatch(filtersListServerCreateFilterAsync(newFilter, languageId));
             }
         }
     },

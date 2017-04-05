@@ -1,5 +1,3 @@
-//import {renewHistoryItem, detachHistoryItem} from '../app/actions/analysesHistory';
-
 import * as i18n from '../app/utils/i18n';
 
 // Remove to get bunch of test logs
@@ -11,7 +9,7 @@ describe('i18n', () => {
         const ABSENT_LANGUAGE = 'nolanguage';
         const INITIAL_TEXTS = [
             {languageId: 'lang1', text1: 'text1_lang1', text2: 'text2_lang1'},
-            {languageId: 'lang2', text1: 'text1_lang2', text2: 'text2_lang2'},
+            {languageId: 'lang2', text1: 'text1_lang2', text2: 'text2_lang2'}
         ];
         const DEFAULT_LANGUAGE_TEXT = {languageId: i18n.DEFAULT_LANGUAGE_ID, text1: 'text1_langDefault', text2: 'text2_langDefault'};
         const INITIAL_TEXTS_WITH_DEFAULT = INITIAL_TEXTS.concat([DEFAULT_LANGUAGE_TEXT]);
@@ -19,11 +17,11 @@ describe('i18n', () => {
         const INITIAL_TEXTS_WITH_USERDATA = INITIAL_TEXTS.concat([USER_TEXT]);
         const INITIAL_TEXTS_WITH_DEFAULT_AND_USERDATA = INITIAL_TEXTS.concat([DEFAULT_LANGUAGE_TEXT, USER_TEXT]);
 
-        it('shoult be correct test data', () => {
+        it('should be correct test data', () => {
             // there must be no default and absent languages
             expect(INITIAL_TEXTS[i18n.DEFAULT_LANGUAGE_ID]).toBe(undefined);
             expect(INITIAL_TEXTS[ABSENT_LANGUAGE]).toBe(undefined);
-            // there must be at leaset 2 languages
+            // there must be at least 2 languages
             expect(INITIAL_TEXTS.length >= 2).toBe(true);
             // there must not be initial texts
             expect(i18n.getEntityLanguageTexts(INITIAL_ENTITY)).not.toEqual(INITIAL_TEXTS);
@@ -46,7 +44,7 @@ describe('i18n', () => {
             // no deafults, no userdata - get exact texts or undefined
             expect(i18n.getEntityText(entity, INITIAL_TEXTS[0].languageId)).toEqual(INITIAL_TEXTS[0]);
             expect(i18n.getEntityText(entity, INITIAL_TEXTS[1].languageId)).toEqual(INITIAL_TEXTS[1]);
-            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toEqual(undefined);
+            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toBe(undefined);
 
             // userdata - always return it
             expect(i18n.getEntityText(entityUserdata, INITIAL_TEXTS[0].languageId)).toEqual(USER_TEXT);
@@ -70,8 +68,8 @@ describe('i18n', () => {
             const newEntity = i18n.setEntityText(entity, NEW_USER_TEXTS);
             // initial entity must be intact
             expect(i18n.getEntityText(entity, INITIAL_TEXTS[0].languageId)).toEqual(INITIAL_TEXTS[0]);
-            expect(i18n.getEntityText(entity, i18n.DEFAULT_LANGUAGE_ID)).toEqual(undefined);
-            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toEqual(undefined);
+            expect(i18n.getEntityText(entity, i18n.DEFAULT_LANGUAGE_ID)).toBe(undefined);
+            expect(i18n.getEntityText(entity, ABSENT_LANGUAGE)).toBe(undefined);
             // new entity must contain user texts with language identifier
             const newUserTextsWLanguageId = {...NEW_USER_TEXTS, languageId: null};
             expect(i18n.getEntityText(newEntity, INITIAL_TEXTS[0].languageId)).toEqual(newUserTextsWLanguageId);

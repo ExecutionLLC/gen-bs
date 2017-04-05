@@ -23,6 +23,10 @@ export default class InputResizingArray extends Component {
         return vals.filter((v) => v.val !== '');
     }
 
+    static makeInputProps(props) {
+        return _.omit(props, ['value', 'InputComponent', 'onChange']);
+    }
+
     static DefaultInput(props) {
         return (
             <Input {...props} />
@@ -71,7 +75,7 @@ export default class InputResizingArray extends Component {
                     return (
                         <InputComponent
                             key={val.key}
-                            {...this.props}
+                            {...InputResizingArray.makeInputProps(this.props)}
                             value={val.val}
                             onChange={ (val) => this.onEditIndex(val, i, true) }
                             onChanging={ (val) => this.onEditIndex(val, i, false) }

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import InputResizingArray from './InputResizingArray';
 
+import immutableArray from '../../utils/immutableArray';
+
+
 export default class InputArray extends Component {
 
     constructor(props) {
@@ -22,8 +25,7 @@ export default class InputArray extends Component {
         const self = this;
 
         function onEditIndex(val, index) {
-            var arr = self.state.value.slice();
-            arr[index].val = val;
+            const arr = immutableArray.assign(self.state.value, index, {val});
             self.setState({value: arr});
             self.props.onChange(InputResizingArray.fromKeyed(arr));
         }
@@ -32,8 +34,12 @@ export default class InputArray extends Component {
             <div>
                 {this.state.value.map((val, i) => {
                     return (
-                        <InputComponent key={val.key} {...this.props} value={val.val}
-                                        onChange={(val) => onEditIndex(val, i)}/>
+                        <InputComponent
+                            key={val.key}
+                            {...InputResizingArray.makeInputProps(this.props)}
+                            value={val.val}
+                            onChange={(val) => onEditIndex(val, i)}
+                        />
                     );
                 })}
             </div>

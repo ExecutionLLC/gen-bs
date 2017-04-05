@@ -140,7 +140,7 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const {session: {userId}, result: {tableData:{header, data}}} = message;
+        const {session: {userId}, result: {tableData: {header, data}}} = message;
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
@@ -235,7 +235,7 @@ class SearchService extends ServiceBase {
                     (view, callback) => this.services.fields.findMany(
                         _.map(view.viewListItems, item => item.fieldId),
                         callback
-                    ),
+                    )
                 ], callback
             ),
             samples: (callback) => {
