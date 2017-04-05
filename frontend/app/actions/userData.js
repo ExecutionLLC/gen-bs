@@ -105,7 +105,7 @@ export function fetchUserDataAsync() {
                         type, samples, viewId, filterId, modelId
                     } = currentAnalysis;
                     const {name, description} = i18n.getEntityText(currentAnalysis, languageId);
-                    const searchParams = i18n.changeEntityText(
+                    const searchParams = i18n.setEntityText( // TODO looks like making new analysis, see AnalysisRightPane
                         {
                             id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
                             type,
@@ -114,7 +114,6 @@ export function fetchUserDataAsync() {
                             filterId,
                             modelId
                         },
-                        languageId,
                         {
                             name,
                             description
