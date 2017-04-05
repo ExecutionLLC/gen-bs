@@ -32,6 +32,7 @@ import CompoundHeterozygousModelRule from './rules/CompHeterModelRule';
 import config from '../../../../config';
 import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
 import * as i18n from '../../../utils/i18n';
+import {makeNewSearchParams} from '../../../utils/HistoryItemUtils';
 
 
 const analysisTypeCaptionTranslation = {
@@ -608,23 +609,10 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalyzeButtonClick(isEditing) {
         const {dispatch, historyItem, currentItemId, ui: {languageId}} = this.props;
-        const {
-            type, samples, viewId, filterId, modelId
-        } = historyItem;
-        const {name, description} = i18n.getEntityText(historyItem, languageId);
-        const searchParams = i18n.setEntityText( // TODO looks like making new analysis, see userData
-            {
-                id: isEditing ? null : currentItemId,
-                type,
-                samples,
-                viewId,
-                filterId,
-                modelId
-            },
-            {
-                name,
-                description
-            }
+        const searchParams = makeNewSearchParams(
+            historyItem,
+            isEditing ? null : currentItemId,
+            languageId
         );
         dispatch(analyze(searchParams)).then((analysis) => {
             if (isEditing && analysis) {

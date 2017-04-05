@@ -27,6 +27,7 @@ import {
 import {analyze, applyCurrentLanguageId, storeAvailableLanguages} from './ui';
 import {uploadsListReceive} from './fileUpload';
 import * as i18n from '../utils/i18n';
+import {makeNewSearchParams} from '../utils/HistoryItemUtils';
 
 /*
  * action types
@@ -101,23 +102,10 @@ export function fetchUserDataAsync() {
             dispatch(setCurrentAnalysesHistoryIdLoadDataAsync(lastHistoryAnalysis ? lastHistoryAnalysis.id : null))
                 .then(() => {
                     const currentAnalysis = lastHistoryAnalysis || getState().analysesHistory.newHistoryItem;
-                    const {
-                        type, samples, viewId, filterId, modelId
-                    } = currentAnalysis;
-                    const {name, description} = i18n.getEntityText(currentAnalysis, languageId);
-                    const searchParams = i18n.setEntityText( // TODO looks like making new analysis, see AnalysisRightPane
-                        {
-                            id: lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
-                            type,
-                            samples,
-                            viewId,
-                            filterId,
-                            modelId
-                        },
-                        {
-                            name,
-                            description
-                        }
+                    const searchParams = makeNewSearchParams(
+                        currentAnalysis,
+                        lastHistoryAnalysis ? lastHistoryAnalysis.id : null,
+                        languageId
                     );
                     dispatch(analyze(searchParams));
                 });

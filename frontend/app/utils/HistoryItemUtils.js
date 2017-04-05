@@ -216,3 +216,25 @@ export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, 
     }
     return editingHistoryItem;
 }
+
+export function makeNewSearchParams(historyItem, newId, languageId) {
+    const {
+        type, samples, viewId, filterId, modelId
+    } = historyItem;
+    const {name, description} = i18n.getEntityText(historyItem, languageId);
+    const searchParams = i18n.setEntityText(
+        {
+            id: newId,
+            type,
+            samples,
+            viewId,
+            filterId,
+            modelId
+        },
+        {
+            name,
+            description
+        }
+    );
+    return searchParams;
+}
