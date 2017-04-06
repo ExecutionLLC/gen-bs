@@ -1,8 +1,8 @@
-import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewHistoryItem, receiveAnalysesHistory} from '../app/actions/analysesHistory';
+import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewDefaultHistoryItem, receiveAnalysesHistory} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 
-import {entityType} from '../app/utils/entityTypes';
+import {entityType, getDefaultOrStandardItem} from '../app/utils/entityTypes';
 import {analysisType} from '../app/utils/analyseUtils';
 import {sampleType} from '../app/utils/samplesUtils';
 import {ImmutableHashedArray} from '../app/utils/immutable';
@@ -159,7 +159,7 @@ describe('History Tests', () => {
         beforeAll((done) => {
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
-                applyActions: (dispatch) => dispatch(createNewHistoryItem(samples[0], filters[0], views[0], {name: 'newAnalysisName', description: 'newAnalysisDescription'}, 'en'))
+                applyActions: (dispatch) => dispatch(createNewDefaultHistoryItem())
             }, (globalState) => {
                 newState = globalState;
                 done();
@@ -172,11 +172,14 @@ describe('History Tests', () => {
             expect(newNewHistoryItem).not.toBe(newHistoryItem);
             expect(newNewHistoryItem.id).toBe(null);
             expect(newNewHistoryItem.type).toBe(analysisType.SINGLE);
-            expect(newNewHistoryItem.viewId).toBe(views[0].id);
-            expect(newNewHistoryItem.filterId).toBe(filters[0].id);
-            expect(newNewHistoryItem.samples).toEqual([{id: samples[0].id, type: sampleType.SINGLE}]);
-            expect(i18n.getEntityText(newNewHistoryItem).name).toBe('newAnalysisName');
-            expect(i18n.getEntityText(newNewHistoryItem).description).toBe('newAnalysisDescription');
+            const expectedView = getDefaultOrStandardItem(views);
+            const expectedFilter = getDefaultOrStandardItem(filters);
+            const expectedSample = getDefaultOrStandardItem(samples);
+            expect(newNewHistoryItem.viewId).toBe(expectedView.id);
+            expect(newNewHistoryItem.filterId).toBe(expectedFilter.id);
+            expect(newNewHistoryItem.samples).toEqual([{id: expectedSample.id, type: sampleType.SINGLE}]);
+            expect(i18n.getEntityText(newNewHistoryItem).name).toBeTruthy();
+            expect(i18n.getEntityText(newNewHistoryItem).description).toBeTruthy();
         });
     });
 
