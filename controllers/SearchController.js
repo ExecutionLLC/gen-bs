@@ -2,9 +2,7 @@
 
 const Express = require('express');
 const async = require('async');
-const AsyncLock = require('async-lock');
 
-const lock = new AsyncLock();
 const ControllerBase = require('./base/ControllerBase');
 
 class SearchController extends ControllerBase {
@@ -23,12 +21,10 @@ class SearchController extends ControllerBase {
             (body, callback) => {
                 const {user, session, languageId} = request;
                 const {analysis, limit, offset} = body;
-                lock.acquire(session.id, (callback) => {
-                    this.services.search
-                        .sendSearchRequest(
-                            user, session, languageId, analysis, limit, offset, callback
-                        );
-                }, callback);
+                this.services.search
+                    .sendSearchRequest(
+                        user, session, languageId, analysis, limit, offset, callback
+                    );
 
             }
         ], (error, result) => {
