@@ -10,6 +10,8 @@
   "GEN_WS_OSS_ACCESS_KEY_ID": "j1ZHzIFv65VdK42B",
   "GEN_WS_OSS_ACCESS_KEY_SECRET": "QkLzlvbROdqHmpGnNZAGlDUpy7Tr1i",
   "GEN_WS_OSS_REGION_NAME": "oss-cn-beijing",
+  "GEN_WS_FILE_SAVED_FILES_PATH": "saved_files",
+  "GEN_WS_FILE_NEW_SAMPLES_PATH": "new_samples",
   "GEN_WS_DATABASE_PASSWORD": "zxcasdqwe",
   "GEN_WS_GOOGLE_CLIENT_ID": "1089089804367-v7i00pe6v7v8aie58tr0n6m929h42u2v.apps.googleusercontent.com",
   "GEN_WS_GOOGLE_CLIENT_SECRET": "JpWX_adYyk_s_K10DN5lYxfH",
