@@ -45,7 +45,8 @@ describe('Mocked History State', () => {
         historyFilter,
         historySample,
         historyEntry,
-        nonHistoryEntry
+        nonHistoryEntry,
+        absentHistoryItemId
     } = state;
     const {
         filters, views, samples, history, newHistoryItem
@@ -80,6 +81,9 @@ describe('Mocked History State', () => {
         checkSelectionCorrect(selectedSampleId, historySample);
     });
 
+    it('should not contain absent id', () => {
+        expect(_.find(history, entry => entry.id === absentHistoryItemId)).toBe(undefined);
+    });
 });
 
 describe('History Tests', () => {
@@ -189,7 +193,7 @@ describe('History Tests', () => {
     describe('Set current analysis', () => {
         const state = buildHistoryState();
         const {initialAppState} = state;
-        const {filters, views, samples, history, newHistoryItem} = mapStateToCollections(initialAppState);
+        const {filters, views, samples, history, newHistoryItem, absentHistoryItemId} = mapStateToCollections(initialAppState);
 
         it('should set exist analysis', (done) => {
             storeTestUtils.runTest({
@@ -206,7 +210,7 @@ describe('History Tests', () => {
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch([
                     createNewDefaultHistoryItem(),
-                    setCurrentAnalysesHistoryId('absent id')
+                    setCurrentAnalysesHistoryId(absentHistoryItemId)
                 ])
             }, (globalState) => {
                 expect(globalState.analysesHistory.currentHistoryId).toBe(null);
@@ -217,7 +221,7 @@ describe('History Tests', () => {
         it('should set absent analysis having no new analysis', (done) => {
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
-                applyActions: (dispatch) => dispatch(setCurrentAnalysesHistoryId('absent id'))
+                applyActions: (dispatch) => dispatch(setCurrentAnalysesHistoryId(absentHistoryItemId))
             }, (globalState) => {
                 expect(globalState.analysesHistory.currentHistoryId).toBe(null);
                 done();
@@ -636,7 +640,8 @@ function buildHistoryState() {
         historyFilter,
         historySample,
         historyEntry,
-        nonHistoryEntry
+        nonHistoryEntry,
+        absentHistoryItemId: 'absentHistoryItemId'
     };
 }
 
