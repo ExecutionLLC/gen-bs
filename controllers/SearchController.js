@@ -25,7 +25,6 @@ class SearchController extends ControllerBase {
                     .sendSearchRequest(
                         user, session, languageId, analysis, limit, offset, callback
                     );
-
             }
         ], (error, result) => {
             this.sendErrorOrJson(response, error, result);

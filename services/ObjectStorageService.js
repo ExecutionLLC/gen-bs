@@ -1,6 +1,5 @@
 'use strict';
 
-
 const {OBJECT_STORAGE_TYPES} = require('../utils/Enums');
 const ServiceBase = require('./ServiceBase');
 const AmazonS3DataProvider = require('./storage/AmazonS3DataProvider');
