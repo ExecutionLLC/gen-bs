@@ -98,8 +98,7 @@ describe('History Tests', () => {
         historyView,
         historyFilter,
         historySample,
-        historyEntry,
-        nonHistoryEntry
+        historyEntry
     } = buildHistoryState();
     const userView = viewsList.hashedArray.array.find(item => item.type === entityType.USER);
     const userFilter = filtersList.hashedArray.array.find(item => item.type === entityType.USER);
@@ -193,7 +192,7 @@ describe('History Tests', () => {
     describe('Set current analysis', () => {
         const state = buildHistoryState();
         const {initialAppState} = state;
-        const {filters, views, samples, history, newHistoryItem, absentHistoryItemId} = mapStateToCollections(initialAppState);
+        const {history, absentHistoryItemId} = mapStateToCollections(initialAppState);
 
         it('should set exist analysis', (done) => {
             storeTestUtils.runTest({
