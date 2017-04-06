@@ -1,4 +1,7 @@
-import {setCurrentAnalysesHistoryIdLoadDataAsync, createNewDefaultHistoryItem, receiveAnalysesHistory} from '../app/actions/analysesHistory';
+import {
+    setCurrentAnalysesHistoryIdLoadDataAsync, createNewDefaultHistoryItem, receiveAnalysesHistory,
+    setCurrentAnalysesHistoryId
+} from '../app/actions/analysesHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
 import {filtersListServerCreateFilterAsync, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 
@@ -184,7 +187,42 @@ describe('History Tests', () => {
     });
 
     describe('Set current analysis', () => {
-        //TODO setCurrentAnalysesHistoryId
+        const state = buildHistoryState();
+        const {initialAppState} = state;
+        const {filters, views, samples, history, newHistoryItem} = mapStateToCollections(initialAppState);
+
+        it('should set exist analysis', (done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(setCurrentAnalysesHistoryId(history[0].id))
+            }, (globalState) => {
+                expect(globalState.analysesHistory.currentHistoryId).toBe(history[0].id);
+                done();
+            });
+        });
+
+        it('should set absent analysis having new analysis', (done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    createNewDefaultHistoryItem(),
+                    setCurrentAnalysesHistoryId('absent id')
+                ])
+            }, (globalState) => {
+                expect(globalState.analysesHistory.currentHistoryId).toBe(null);
+                done();
+            });
+        });
+
+        it('should set absent analysis having no new analysis', (done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(setCurrentAnalysesHistoryId('absent id'))
+            }, (globalState) => {
+                expect(globalState.analysesHistory.currentHistoryId).toBe(null);
+                done();
+            });
+        });
     });
 
     describe('Set history list', () => {
