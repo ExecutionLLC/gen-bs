@@ -253,7 +253,7 @@ describe('History Tests', () => {
                 const {history, currentHistoryId, newHistoryItem} = mapStateToCollections(newState);
                 expect(history).toEqual([]);
                 expect(currentHistoryId).toBe(null);
-                expect(newHistoryItem).toEqual(originalNewHistoryItem); // seems lite it has toBe, but it is not, idk why
+                expect(newHistoryItem).toEqual(originalNewHistoryItem); // seems like it has toBe, but it is not, idk why
                 done();
             });
         });
