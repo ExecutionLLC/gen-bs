@@ -1,41 +1,44 @@
 'use strict';
 
-const assert = require('assert');
 
 const {OBJECT_STORAGE_TYPES} = require('../utils/Enums');
 const ServiceBase = require('./ServiceBase');
+const AmazonS3DataProvider = require('./storage/AmazonS3DataProvider');
+const FileSystemDataProvider = require('./storage/FileSystemDataProvider');
 
 class ObjectStorageService extends ServiceBase {
     constructor(services) {
         super(services);
         const storageType = this.config.objectStorage.type;
-        const objectService = ObjectStorageService._getActualObjectService(storageType, services);
-        const storageSettings = this.config.objectStorage[storageType];
-        assert.ok(storageSettings);
-        Object.assign(this, {objectService, storageSettings});
+        this._dataProvider = ObjectStorageService._getActualDataProvider(storageType, services);
     }
 
-    uploadObject(bucketName, keyName, fileStream, callback) {
-        this.objectService.uploadObject(bucketName, keyName, fileStream, callback);
+    addSavedFile(fileName, fileStream, callback) {
+        this._dataProvider.addSavedFile(fileName, fileStream, callback);
     }
 
-    deleteObject(bucketName, keyName, callback) {
-        this.objectService.deleteObject(bucketName, keyName, callback);
+    removeSampleFile(fileName, callback) {
+        this._dataProvider.removeSampleFile(fileName, callback);
     }
 
-    createObjectStream(bucketName, keyName, callback) {
-        this.objectService.createObjectStream(bucketName, keyName, callback);
+    getSavedFile(fileName, callback) {
+        this._dataProvider.getSavedFile(fileName, callback);
     }
 
-    getStorageSettings() {
-        return this.storageSettings;
+    addSampleFile(fileName, fileStream, callback) {
+        this._dataProvider.addSampleFile(fileName, fileStream, callback);
     }
 
-    static _getActualObjectService(storageType, services) {
+    getSamplePath(fileName) {
+        return this._dataProvider.getSamplePath(fileName);
+    }
+
+    static _getActualDataProvider(storageType, services) {
+        const {config, logger} = services;
         if (storageType === OBJECT_STORAGE_TYPES.S3) {
-            return services.amazonS3;
-        } else if (storageType === OBJECT_STORAGE_TYPES.OSS) {
-            return services.oss;
+            return new AmazonS3DataProvider(config, logger);
+        } else if(storageType === OBJECT_STORAGE_TYPES.FILE) {
+            return new FileSystemDataProvider(config, logger);
         } else {
             throw new Error('Unsupported object storage type: ' + storageType);
         }
