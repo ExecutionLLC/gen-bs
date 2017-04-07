@@ -8,13 +8,13 @@ const partSize = 6 * 1024 * 1024;
 const queueSize = 1;
 const amazonS3Url = 'http://s3.amazonaws.com';
 
-class AmazonS3DataProvider extends BaseDataProvider{
+class AmazonS3DataProvider extends BaseDataProvider {
 
     constructor(config, logger) {
         super(config, logger);
         const {
             accessKeyId,
-            accessKeySecret:secretAccessKey,
+            accessKeySecret: secretAccessKey,
             regionName: region,
             savedFilesBucket,
             newSamplesBucket
@@ -46,7 +46,7 @@ class AmazonS3DataProvider extends BaseDataProvider{
     }
 
     getSamplePath(fileName) {
-        return `${amazonS3Url}/${this._newSamplesBucket}/${ QueryString.escape(fileName)}`;
+        return `${amazonS3Url}/${this._newSamplesBucket}/${QueryString.escape(fileName)}`;
     }
 
     _uploadObject(bucketName, keyName, fileStream, callback) {
@@ -74,7 +74,8 @@ class AmazonS3DataProvider extends BaseDataProvider{
             {
                 Bucket: bucketName,
                 Key: keyName
-            }, callback
+            },
+            callback
         );
     }
 

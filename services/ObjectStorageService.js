@@ -36,7 +36,7 @@ class ObjectStorageService extends ServiceBase {
         const {config, logger} = services;
         if (storageType === OBJECT_STORAGE_TYPES.S3) {
             return new AmazonS3DataProvider(config, logger);
-        } else if(storageType === OBJECT_STORAGE_TYPES.FILE) {
+        } else if (storageType === OBJECT_STORAGE_TYPES.FILE) {
             return new FileSystemDataProvider(config, logger);
         } else {
             throw new Error('Unsupported object storage type: ' + storageType);

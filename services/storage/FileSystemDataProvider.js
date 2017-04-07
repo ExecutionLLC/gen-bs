@@ -17,10 +17,12 @@ class FileSystemDataProvider extends BaseDataProvider{
     getSamplePath(fileName) {
         return path.resolve(this._newSamplesPath,fileName);
     }
+
     removeSampleFile(fileName, callback) {
         const filePath = path.resolve(this._newSamplesPath,fileName);
         fs.unlink(filePath, callback)
     }
+    
     addSampleFile(fileName, fileStream, callback) {
         const filePath = path.resolve(this._newSamplesPath,fileName);
         this._write_file(filePath, fileStream, callback);

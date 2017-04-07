@@ -8,6 +8,7 @@ class BaseDataProvider{
     get logger() {
         return this._logger;
     }
+
     get config() {
         return this._config;
     }
