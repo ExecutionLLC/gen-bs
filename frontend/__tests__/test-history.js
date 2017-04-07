@@ -264,18 +264,20 @@ describe('History Tests', () => {
 
             const originalNewHistoryItem = initialAppState.analysesHistory.newHistoryItem;
             expect(originalNewHistoryItem).not.toBe(null);
-            console.error(initialAppState.analysesHistory.history);
+            const historyIdCurrent = initialAppState.analysesHistory.history[0].id;
+            const historyItemCurrent = _.find(initialAppState.analysesHistory.history, {id: historyIdCurrent});
 
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
-                //TODO setCurrentAnalysesHistoryId, then check it
-                applyActions: (dispatch) => dispatch(receiveAnalysesHistory([initialAppState.currentHistoryId]))
+                applyActions: (dispatch) => dispatch([
+                    setCurrentAnalysesHistoryId(historyIdCurrent),
+                    receiveAnalysesHistory([historyItemCurrent])
+                ])
             }, (newState) => {
                 const {history, currentHistoryId, newHistoryItem} = mapStateToCollections(newState);
-                expect(history).toEqual([]);
-                expect(currentHistoryId).toBe(null);
+                expect(history).toEqual([historyItemCurrent]);
+                expect(currentHistoryId).toBe(historyIdCurrent);
                 expect(newHistoryItem).toEqual(originalNewHistoryItem);
-                expect(newHistoryItem).toBe(originalNewHistoryItem);
                 done();
             });
         });
