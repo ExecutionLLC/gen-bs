@@ -21,6 +21,7 @@ export const SAVE_FILE_OPERATION = 'SAVE_FILE_OPERATION';
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS';
 export const SAVE_UNKNOWN_UPLOAD_PROGRESS = 'SAVE_UNKNOWN_UPLOAD_PROGRESS';
 export const SAVE_UNKNOWN_UPLOAD_ERROR = 'SAVE_UNKNOWN_UPLOAD_ERROR';
+export const ERASE_UNKNOWN_UPLOAD_EVENT = 'ERASE_UNKNOWN_UPLOAD_EVENT';
 export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
@@ -185,10 +186,11 @@ function receiveFileOperation(upload, id) {
             const event = unknownEvents[upload.id];
             if (event.error) {
                 dispatch(fileUploadError(id, event.error));
+                dispatch(eraseUnknownUploadEvent(upload.id));
             } else if (event.progressValue && event.progressStatus) {
                 dispatch(changeFileUploadProgress(event.progressValue, event.progressStatus, id));
+                dispatch(eraseUnknownUploadEvent(upload.id));
             }
-            // TODO: dispatch(eraseUnknownEventFromState)
         }
     };
 }
@@ -229,6 +231,13 @@ export function saveUnknownUploadError(error, operationId) {
     return {
         type: SAVE_UNKNOWN_UPLOAD_ERROR,
         error,
+        operationId
+    };
+}
+
+export function eraseUnknownUploadEvent(operationId) {
+    return {
+        type: ERASE_UNKNOWN_UPLOAD_EVENT,
         operationId
     };
 }

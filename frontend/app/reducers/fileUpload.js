@@ -230,6 +230,15 @@ function reduceSaveUnknownUploadError(state, action) {
     };
 }
 
+function reduceEraseUnknownUploadEvent(state, action) {
+    const {operationId} = action;
+    const {unknownEvents} = state;
+    return {
+        ...state,
+        unknownEvents: _.omit(unknownEvents, [operationId])
+    };
+}
+
 function reduceSetCurrentUploadId(state, action) {
     return {
         ...state,
@@ -303,6 +312,9 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.SAVE_UNKNOWN_UPLOAD_ERROR:
             return reduceSaveUnknownUploadError(state, action);
+
+        case ActionTypes.ERASE_UNKNOWN_UPLOAD_EVENT:
+            return reduceEraseUnknownUploadEvent(state, action);
 
         case ActionTypes.UPLOADS_LIST_RECEIVE:
             return reduceUploadsListReceive(state, action);
