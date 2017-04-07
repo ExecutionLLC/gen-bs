@@ -233,7 +233,7 @@ describe('History Tests', () => {
         // - current id is null
         // - new list have the current id
         // - new list have no current id and have new analysis
-        // - new list have no current id and have no new analysis
+        // - new list have no current id and have no new analysis (impossible case)
 
         // it('should be mocked correctly', () => {
         //     expect(initialAppState.analysesHistory.newHistoryItem).not.toBe(null);
