@@ -5,6 +5,7 @@ export const LAST_ERROR_RESOLVED = 'LAST_ERROR_RESOLVED';
 
 export class NetworkError extends Error {
     constructor(message) {
+        // This text must not be shown so it is not translated
         super(message || 'Please kindly check your network connection. If it is okay, please be sure we are already' +
             ' working on your issue. Sorry for the inconvenience.');
     }
@@ -12,6 +13,7 @@ export class NetworkError extends Error {
 
 export class WebServerError extends Error {
     constructor(message) {
+        // This text must not be shown so it is not translated
         super(message || 'Our server has taken liberties to respond with error.' +
             ' Sorry for the inconvenience, we are working on fixing it.');
     }

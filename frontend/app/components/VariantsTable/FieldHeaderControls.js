@@ -11,12 +11,13 @@ export default class FieldHeaderControls extends Component {
 
         this.state = {
             searchString: '',
+            appliedSearchString: '',
             isFilterOpened: false
         };
     }
 
     render() {
-        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleType, sampleId, sampleName} = this.props;
+        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleType, sampleId, sampleName, languageId} = this.props;
         const columnSortParams = sortState ? _.find(sortState, {fieldId: fieldMetadata.id, sampleId})
             : null;
 
@@ -48,7 +49,7 @@ export default class FieldHeaderControls extends Component {
             }
         );
 
-        const {label, title} = FieldUtils.makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType);
+        const {label, title} = FieldUtils.makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType, languageId);
 
         return (
             <td>
@@ -87,21 +88,24 @@ export default class FieldHeaderControls extends Component {
             return (
                 <div className={inputGroupClasses}>
                     <span className='input-group-btn'>
-                        <button className='btn btn-link-light-default'
-                                onClick={() => this.setFilterOpened(true)}
-                                disabled={disabled}>
-                            <i></i>
+                        <button
+                            className='btn btn-link-light-default'
+                            onClick={() => this.setFilterOpened(true)}
+                            disabled={disabled}
+                        >
+                            <i />
                         </button>
                     </span>
-                    <input type='text'
-                           className='form-control material-input'
-                           value={searchString}
-                           ref={(input) => this.focusInput(input)}
-                           onChange={(e) => this.onSearchInputChanged(e)}
-                           onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
-                           onBlur={() => this.onSearchInputBlur()}
-                           disabled={disabled}
-                           maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
+                    <input
+                        type='text'
+                        className='form-control material-input'
+                        value={searchString}
+                        ref={(input) => this.focusInput(input)}
+                        onChange={(e) => this.onSearchInputChanged(e)}
+                        onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
+                        onBlur={() => this.onSearchInputBlur()}
+                        disabled={disabled}
+                        maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
                     />
                 </div>
             );
@@ -110,13 +114,14 @@ export default class FieldHeaderControls extends Component {
                 <div className={inputGroupClasses}>
                     <span className='input-group-btn'>
                         <button className='btn btn-link-light-default'>
-                            <i></i>
+                            <i />
                         </button>
                     </span>
-                    <input type='text'
-                           className='form-control material-input'
-                           value='Non-filtered type'
-                           disabled='true'
+                    <input
+                        type='text'
+                        className='form-control material-input'
+                        value='Non-filtered type'
+                        disabled='true'
                     />
                 </div>
             );
@@ -125,10 +130,12 @@ export default class FieldHeaderControls extends Component {
 
     renderSortButton(direction, currentDirection, sortButtonClass, order, disabled) {
         return (
-            <button className={sortButtonClass}
-                    key={direction}
-                    onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
-                    disabled={disabled}>
+            <button
+                className={sortButtonClass}
+                key={direction}
+                onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
+                disabled={disabled}
+            >
                 {direction === currentDirection &&
                 <span className='text-info'>{order}</span>
                 }
@@ -150,8 +157,9 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputBlur() {
-        const {fieldMetadata, onSearchValueChanged} = this.props;
-        onSearchValueChanged(fieldMetadata.id, this.state.searchString);
+        this.setState({
+            searchString: this.state.appliedSearchString
+        });
         this.setFilterOpened(false);
     }
 
@@ -168,15 +176,18 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputKeyPressed(e) {
-        const {fieldMetadata, onSearchRequested} = this.props;
+        const {onSearchRequested} = this.props;
         if (e.charCode === 13) {
-            onSearchRequested(fieldMetadata.id, this.state.searchString);
+            this.setState({
+                appliedSearchString: this.state.searchString
+            });
+            onSearchRequested(this.state.searchString);
         }
     }
 
     onSearchClick(direction, isControlKeyPressed) {
-        const {fieldMetadata, onSortRequested} = this.props;
-        onSortRequested(fieldMetadata.id, direction, isControlKeyPressed);
+        const {onSortRequested} = this.props;
+        onSortRequested(direction, isControlKeyPressed);
     }
 }
 
@@ -185,11 +196,9 @@ FieldHeaderControls.propTypes = {
     areControlsEnabled: PropTypes.bool.isRequired,
     sortState: PropTypes.array.isRequired,
     // callback(fieldId, searchString)
-    onSearchValueChanged: PropTypes.func.isRequired,
-    // callback(fieldId, searchString)
     onSearchRequested: PropTypes.func.isRequired,
     /**
-     * @type {function(fieldId, direction, isControlKeyPressed)}, where direction in ['asc', 'desc']
+     * @type {function(direction: number, isControlKeyPressed: boolean)}, where direction in ['asc', 'desc']
      * */
     onSortRequested: PropTypes.func.isRequired
 };

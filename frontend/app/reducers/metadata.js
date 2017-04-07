@@ -1,19 +1,15 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/metadata';
-import {ImmutableHashedArray} from '../utils/immutable';
-import FieldUtils from '../utils/fieldUtils';
 
 const initialState = {
-    editableMetadata: [],
-    allMetadata: []
+    editableMetadata: []
 };
 
 function reduceReceiveMetadata(action, state) {
-    const allMetadata = FieldUtils.sortAndAddLabels(action.fields);
+    const allMetadata = action.fields;
     const editableMetadata = _.filter(allMetadata, ['isEditable', true]);
     return Object.assign({}, state, {
-        allMetadata: ImmutableHashedArray.makeFromArray(allMetadata),
         editableMetadata
     });
 }

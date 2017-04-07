@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadBody from './FileUpload/FileUploadBody';
-import {modalName} from '../../actions/modalWindows';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 class FileUploadModal extends Component {
     constructor(props) {
@@ -13,7 +13,7 @@ class FileUploadModal extends Component {
     }
 
     render() {
-        const {showModal} = this.props;
+        const {showModal, ui: {languageId}} = this.props;
         return (
             <Modal
                 id='file-upload-modal'
@@ -26,9 +26,11 @@ class FileUploadModal extends Component {
                 <FileUploadHeader
                     showUploadHide={this.state.isUploadBringToFront}
                     onUploadHide={() => this.onUploadHide()}
+                    p={this.props.p}
                 />
                 <FileUploadBody
                     dispatch={this.props.dispatch}
+                    languageId={languageId}
                     fileUpload={this.props.fileUpload}
                     editableFieldsList={this.props.editableFieldsList}
                     samplesList={this.props.samplesList}
@@ -41,13 +43,14 @@ class FileUploadModal extends Component {
                     isUploadBringToFront={this.state.isUploadBringToFront}
                     onUploadShow={() => this.onUploadShow()}
                     onUploadHide={() => this.onUploadHide()}
+                    p={this.props.p}
                 />
             </Modal>
         );
     }
 
     onClose() {
-        this.props.closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
+        this.props.closeModal();
     }
 
     onUploadShow() {
@@ -60,19 +63,25 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, ui, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}} = state;
+    const {auth, fileUpload, analysesHistory: {newHistoryItem}, samplesList, metadata: {editableMetadata: editableFields}, ui} = state;
     const currentHistorySamplesIds = newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : [];
     return {
         auth,
-        ui,
         fileUpload,
         samplesList,
         currentHistorySamplesIds,
         editableFieldsList: editableFields,
         sampleSearch: samplesList.search,
         currentSampleId: samplesList.currentSampleId,
-        editingSample: samplesList.editingSample
+        editingSample: samplesList.editingSample,
+        ui,
+        p: getP(state)
     };
 }
+
+FileUploadModal.propTypes = {
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps)(FileUploadModal);

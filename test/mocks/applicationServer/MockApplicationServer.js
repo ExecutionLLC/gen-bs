@@ -65,10 +65,11 @@ class MockApplicationServer {
         );
     }
 
-    stop() {
+    stop(callback) {
         this.privateConsumer.stop();
         this.taskConsumer.stop();
         this.publisher.stop();
+        callback(null);
     }
 
     /**

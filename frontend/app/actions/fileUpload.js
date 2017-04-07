@@ -1,12 +1,15 @@
 import _ from 'lodash';
-import gzip from '../utils/gzip';
+import {
+    gzip,
+    isGzipFormat
+} from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 import Promise from 'bluebird';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
-import {uploadState} from '../utils/uploadUtils';
-
+import {samplesListAddOrUpdateSamples} from './samplesList';
 /*
  * action types
  */
@@ -17,24 +20,30 @@ export const RECEIVE_FILE_UPLOAD = 'RECEIVE_FILE_UPLOAD';
 export const RECEIVE_FILE_OPERATION = 'RECEIVE_FILE_OPERATION';
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS';
 export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR';
-export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export const UPLOADS_LIST_RECEIVE = 'UPLOADS_LIST_RECEIVE';
-export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_FILTER';
+export const UPLOADS_LIST_ADD_UPLOAD = 'UPLOADS_LIST_ADD_UPLOAD';
 export const SET_CURRENT_UPLOAD_ID = 'SET_CURRENT_UPLOAD_ID';
 export const INVALIDATE_CURRENT_UPLOAD_ID = 'INVALIDATE_CURRENT_UPLOAD_ID';
 export const UPLOADS_LIST_REMOVE_UPLOAD = 'UPLOADS_LIST_REMOVE_UPLOAD';
 
 export const fileUploadStatus = {
     ERROR: 'error',
-    READY: 'ready'
+    READY: 'ready', // equals to WS_PROGRESS_STATUSES.READY
+    AJAX: 'ajax',
+    TASK_RUNNING: 'task_running',
+    IN_PROGRESS: 'in_progress' // seems like did not received
+};
+
+export const SAMPLE_UPLOAD_STATE = { // equals to WS_SAMPLE_UPLOAD_STATE
+    UNCONFIRMED: 'unconfirmed', // the sample was created after header parsing on WS
+    NOT_FOUND: 'not_found', // the sample was not found during parsing on AS
+    COMPLETED: 'completed', // the sample was successfully parsed on AS
+    ERROR: 'error' // an error has occurred while parsing the file with this sample.
 };
 
 const {sampleUploadsClient} = apiFacade;
-
-const DELETE_UPLOAD_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting upload.' +
-    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 let idCounter = 0;
 const requestAbortFunctions = {};
@@ -75,11 +84,13 @@ export function uploadsListRemoveUpload(uploadId) {
 }
 
 export function uploadsListServerRemoveUpload(uploadId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise((resolve) => {
             sampleUploadsClient.remove(uploadId, (error, response) => resolve({error, response}));
-        }).then(({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_UPLOAD_ERROR_MESSAGE, error, response))
-        ).then(() => {
+        }).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('errors.deleteUploadError'), error, response));
+        }).then(() => {
             dispatch(uploadsListRemoveUpload(uploadId));
         });
     };
@@ -113,23 +124,24 @@ function addNoGZippedForUpload(files) {
 /**
  * Make gzipped file or return the input file if already gzipped
  * @param {File} file
+ * @param {Object} p
  * @param {function()} onGzipStart
  * @param {function(File)} onGzipped
  * @param {function(string)} onError
  */
-function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
-    if (file.type === 'application/gzip'
-        || file.type === 'application/x-gzip'
-        || file.name.split('.').pop() === 'gz') {
-        onGzipped(file);
-    } else if (file.type === 'text/vcard'
-        || file.type === 'text/directory'
-        || file.name.split('.').pop() === 'vcf') {
-        onGzipStart();
-        gzip(file).then(gzippedFile => onGzipped(gzippedFile));
+function ensureGzippedFile(file, p, onGzipStart, onGzipped, onError) {
+    if (!(file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') &&
+        !(file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz')) {
+        onError(p.t('samples.errors.unsupportedFileFormat'));
     } else {
-        onError('Unsupported file type: must be Variant Call Format'
-            + ' (VCF) 4.1 or higher or VCF compressed with gzip');
+        isGzipFormat(file).then(isGz => {
+            if (isGz) {
+                onGzipped(file);
+            } else {
+                onGzipStart();
+                gzip(file).then(gzippedFile => onGzipped(gzippedFile));
+            }
+        });
     }
 }
 
@@ -163,7 +175,7 @@ function receiveFileOperation(upload, id) {
     };
 }
 
-function sendFile(file, onOperationId, onProgress, onError) {
+function sendFile(file, onUploaded, onProgress, onError) {
     return sampleUploadsClient.upload(
         file,
         onProgress,
@@ -171,7 +183,7 @@ function sendFile(file, onOperationId, onProgress, onError) {
             if (err) {
                 onError(err);
             } else {
-                onOperationId(res);
+                onUploaded(res);
             }
         }
     );
@@ -207,23 +219,24 @@ export function uploadFile(fileUploadId) {
             return;
         }
         dispatch(requestFileUpload(fp.id));
-        dispatch(changeFileUploadProgress(0, uploadState.AJAX, fp.id));
+        dispatch(changeFileUploadProgress(0, fileUploadStatus.AJAX, fp.id));
         const abortRequest = sendFile(
             fp.file,
-            (operationId) => {
+            (upload) => {
                 delete requestAbortFunctions[fp.id];
-                dispatch(receiveFileOperation(operationId, fp.id));
+                dispatch(receiveFileOperation(upload, fp.id));
+                dispatch(samplesListAddOrUpdateSamples(upload.sampleList));
             },
             (percentage) => {
                 console.log('progress', percentage);
-                dispatch(changeFileUploadProgress(percentage, uploadState.AJAX, fp.id));
+                dispatch(changeFileUploadProgress(percentage, fileUploadStatus.AJAX, fp.id));
             },
             (err) => {
-                console.error('Upload FAILED: ', err.responseText);
+                console.error('Upload FAILED: ', err);
                 delete requestAbortFunctions[fp.id];
                 dispatch(fileUploadError(fp.id, {
                     code: null,
-                    message: err.responseText
+                    message: err
                 }));
             }
         );
@@ -271,12 +284,14 @@ export function fileUploadErrorForOperationId(error, operationId) {
 
 
 function addFileForUpload(file) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const p = getP(getState());
         return new Promise((resolve) => {
             const fileWithId = {id: idCounter++, file};
             dispatch(addNoGZippedForUpload([fileWithId]));
             ensureGzippedFile(
                 fileWithId.file,
+                p,
                 () => {
                     dispatch(requestGzip(fileWithId.id));
                 },
@@ -300,12 +315,6 @@ function addFileForUpload(file) {
     };
 }
 
-
-export function clearUploadState() {
-    return {
-        type: CLEAR_UPLOAD_STATE
-    };
-}
 
 function fileUploadError(id, error) {
     return {

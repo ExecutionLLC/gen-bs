@@ -16,24 +16,24 @@ class SecureModelBase extends RemovableModelBase {
         super(models, baseTableName, mappedColumns);
     }
 
-    add(userId, languId, item, callback) {
+    add(userId, languageId, item, callback) {
         item.type = ENTITY_TYPES.USER;
         async.waterfall([
-            (callback) => this._add(userId, languId, item, true, callback),
+            (callback) => this._add(userId, languageId, item, true, callback),
             (itemId, callback) => this.find(userId, itemId, callback)
         ], callback);
     }
 
-    addWithId(userId, languId, item, callback) {
+    addWithId(userId, languageId, item, callback) {
         item.type = ENTITY_TYPES.USER;
         async.waterfall([
-            (callback) => this._add(userId, languId, item, false, callback),
+            (callback) => this._add(userId, languageId, item, false, callback),
             (itemId, callback) => this.find(userId, itemId, callback)
         ], callback);
     }
 
-    internalAdd(userId, languId, filter, callback) {
-        this._add(userId, languId, filter, false, callback);
+    internalAdd(userId, languageId, filter, callback) {
+        this._add(userId, languageId, filter, false, callback);
     }
 
     update(userId, itemId, item, callback) {

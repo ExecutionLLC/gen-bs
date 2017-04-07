@@ -1,11 +1,12 @@
 import Moment from 'moment';
 import _ from 'lodash';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
-import {handleApiResponseErrorAsync} from './errorHandler';
-import * as SamplesUtils from '../utils/samplesUtils';
+import {handleApiBodylessResponseErrorAsync, handleApiResponseErrorAsync} from './errorHandler';
 import FieldUtils from '../utils/fieldUtils';
+import * as i18n from '../utils/i18n';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
@@ -13,9 +14,6 @@ export const SAVED_FILE_UPLOAD_RESULT_RECEIVED = 'SAVED_FILE_UPLOAD_RESULT_RECEI
 export const SAVED_FILE_DOWNLOAD_RESULT_RECEIVED = 'SAVED_FILE_DOWNLOAD_RESULT_RECEIVED';
 export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
-
-const UPLOAD_ERROR_MESSAGE = 'Error while uploading exported file';
-const DOWNLOAD_ERROR_MESSAGE = 'Error downloading exported file';
 
 const savedFilesClient = apiFacade.savedFilesClient;
 
@@ -31,7 +29,7 @@ function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
-                language
+                languageId
             },
             websocket: {
                 variantsAnalysis
@@ -43,13 +41,14 @@ function saveExportedFileToServerAsync(fileBlob, fileName, totalResults) {
             totalResults
         };
         return new Promise((resolve) => savedFilesClient.add(
-            language,
+            languageId,
             fileMetadata,
             fileBlob,
             (error, response) => resolve({error, response}))
-        ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPLOAD_ERROR_MESSAGE, error, response))
-        ).then(
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('savedFiles.errors.uploadError'), error, response));
+        }).then(
             (response) => response.body
         ).then((savedFile) => dispatch(savedFileUploadResultReceived(savedFile)));
     };
@@ -93,15 +92,18 @@ export function downloadSavedFileAsync(savedFile) {
     return (dispatch, getState) => {
         const {
             ui: {
-                language
+                languageId
             }
         } = getState();
         return new Promise((resolve) => savedFilesClient.download(
-            language,
+            languageId,
             savedFile.id,
             (error, response) => resolve({error, response})
         )).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(DOWNLOAD_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiBodylessResponseErrorAsync(p.t('savedFiles.errors.downloadError'), error, response));
+            }
         ).then((response) => dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name)));
     };
 }
@@ -123,24 +125,29 @@ export function exportToFile(exportType) {
             },
             fields: {
                 totalFieldsHashedArray: {hash: totalFieldsHash}
+            },
+            ui: {
+                languageId
             }
         } = getState();
+        const p = getP(getState());
 
         const variantsAnalysisSamplesHash = _.keyBy(variantsAnalysis.samples, (sample) => sample.id);
+        const typeLabels = FieldUtils.makeFieldTypeLabels(p);
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
             const sample = variantsAnalysisSamplesHash[listItem.sampleId];
-            const sampleType = sample && SamplesUtils.typeLabels[sample.type];
-            return FieldUtils.makeFieldSavedCaption(field, sampleType);
+            const sampleType = sample && typeLabels[sample.type];
+            return FieldUtils.makeFieldSavedCaption(field, sampleType, languageId);
         })
         .concat(['Comment']);
 
         const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
             .map(rowIndex => [
                 ...variants[rowIndex].fields,
-                ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]
+                ...[_.isEmpty(variants[rowIndex].comments) ? '' : i18n.getEntityText(variants[rowIndex].comments[0], languageId).comment]
             ])
             .value();
 
@@ -149,7 +156,7 @@ export function exportToFile(exportType) {
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
         const fileName = `${
             _.map(variantsSamples, (variantsSample) =>
-                variantsSample.name
+                i18n.getEntityText(variantsSample, languageId).name
             ).join('-')}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 

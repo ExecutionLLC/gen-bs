@@ -1,49 +1,55 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
+import {getP} from 'redux-polyglot/dist/selectors';
+
 
 class AutoLogoutModal extends Component {
     renderHeader() {
+        const {p} = this.props;
         return (
             <Modal.Header>
-                <Modal.Title data-localize='autoLogout.heading'>
-                    Auto Logout
+                <Modal.Title>
+                    {p.t('autoLogout.title')}
                 </Modal.Title>
             </Modal.Header>
         );
     }
 
     renderBody() {
+        const {secondsToAutoLogout, p} = this.props;
         return (
             <Modal.Body>
-                Your session will be automatically closed after {this.props.secondsToAutoLogout} seconds.
+                {p.t('autoLogout.text', {secs: secondsToAutoLogout})}
             </Modal.Body>
         );
     }
 
     renderFooter() {
+        const {closeModal, p}  = this.props;
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => this.props.closeModal() }
+                    onClick={closeModal}
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
-                    localize-data='action.extendSession'
                 >
-                    <span>Extend session</span>
+                    <span>{p.t('autoLogout.buttonExtend')}</span>
                 </button>
             </Modal.Footer>
         );
     }
 
     render() {
+        const {showModal, closeModal} = this.props;
+
         return (
             <Modal
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
-                show={this.props.showModal}
-                onHide={ () => this.props.closeModal() }
+                show={showModal}
+                onHide={closeModal}
                 backdrop='static'
             >
                 { this.renderHeader() }
@@ -54,10 +60,16 @@ class AutoLogoutModal extends Component {
     }
 }
 
+AutoLogoutModal.propTypes = {
+    showModal: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired
+};
+
 function mapStateToProps(state) {
     const {auth: {secondsToAutoLogout}} = state;
     return {
-        secondsToAutoLogout
+        secondsToAutoLogout,
+        p: getP(state)
     };
 }
 

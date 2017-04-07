@@ -70,10 +70,10 @@ function reducePrepareAnalysesHistoryToSearch(state, action) {
 }
 
 function reduceDuplicateAnalysesHistoryItem(state, action) {
-    const {historyItem} = action;
+    const {historyItem, newHistoryItemInfo, languageId} = action;
     return {
         ...state,
-        newHistoryItem: HistoryItemUtils.makeHistoryItem(historyItem),
+        newHistoryItem: HistoryItemUtils.makeHistoryItem(historyItem, newHistoryItemInfo, languageId),
         currentHistoryId: null
     };
 }
@@ -92,14 +92,14 @@ function reduceEditExistentHistoryItem(state, action) {
 }
 
 function reduceEditAnalysesHistoryItem(state, action) {
-    const {samplesList, modelsList, changeItem, isDemo} = action;
+    const {samplesList, modelsList, changeItem, isDemo, languageId} = action;
     const {newHistoryItem} = state;
     if (!newHistoryItem) {
         return state;
     } else {
         return {
             ...state,
-            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem, samplesList, modelsList, isDemo, changeItem)
+            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem, samplesList, modelsList, isDemo, changeItem, languageId)
         };
     }
 }
@@ -166,10 +166,10 @@ function reduceToggleLoadingHistoryData(state, action) {
 }
 
 function reduceCreateNewHistoryItem(state, action) {
-    const {sample, filter, view} = action;
+    const {sample, filter, view, newHistoryItemInfo, languageId} = action;
     return {
         ...state,
-        newHistoryItem: HistoryItemUtils.makeNewHistoryItem(sample, filter, view)
+        newHistoryItem: HistoryItemUtils.makeNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId)
     };
 }
 

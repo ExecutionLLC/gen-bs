@@ -3782,7 +3782,7 @@ QueryBuilder.defaults({
         $between: function(v) { return { 'val': v.$between, 'op': 'between' }; },
         $nbetween: function(v) { return { 'val': v.$nbetween, 'op': 'not_between' }; },
         $end_with: function(v) { return { 'val': v.$end_with, 'op': 'ends_with' }; },
-        $nend_with: function(v) { return { 'val': v.$nend_with, 'op': 'not_ends_with' }; },
+        $nend_with: function(v) { return { 'val': v.$nend_with, 'op': 'not_ends_with' }; }
     }
 });
 

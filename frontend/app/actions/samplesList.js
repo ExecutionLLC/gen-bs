@@ -8,6 +8,9 @@ import {
 } from '../utils/immutable';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
 import {changeFileUploadProgressState, fileUploadStatus} from './fileUpload';
+import {entityType} from '../utils/entityTypes';
+import * as i18n from '../utils/i18n';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -19,27 +22,21 @@ export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 export const DISABLE_SAMPLE_EDIT = 'DISABLE_SAMPLE_EDIT';
-export const SAMPLES_LIST_ADD_SAMPLES = 'SAMPLES_LIST_ADD_SAMPLES';
+export const SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES = 'SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES';
 export const SET_EDITING_SAMPLE_ID = 'SET_EDITING_SAMPLE_ID';
 export const SET_CURRENT_SAMPLE_ID = 'SET_CURRENT_SAMPLE_ID';
 export const SAMPLES_LIST_UPDATE_SAMPLES_FIELDS = 'SAMPLES_LIST_UPDATE_SAMPLES_FIELDS';
 export const SAMPLES_LIST_REMOVE_SAMPLE = 'SAMPLES_LIST_REMOVE_SAMPLE';
 
 const samplesClient = apiFacade.samplesClient;
-const UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE = 'We are really sorry, but there is an error while updating sample fields.' +
-    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
-const FETCH_SAMPLES_ERROR_MESSAGE = 'We are really sorry, but there is an error while getting the list of samples' +
-    ' from our server. Be sure we are working on resolving the issue. You can also try to reload page and try again.';
-const DELETE_SAMPLE_ERROR_MESSAGE = 'We are really sorry, but there is an error while deleting sample.' +
-    ' Be sure we are working on resolving the issue. You can also try to reload page and try again.';
 
 /*
  * Action Creators
  */
 
-export function samplesListAddSamples(samples) {
+export function samplesListAddOrUpdateSamples(samples) {
     return {
-        type: SAMPLES_LIST_ADD_SAMPLES,
+        type: SAMPLES_LIST_ADD_OR_UPDATE_SAMPLES,
         samples
     };
 }
@@ -58,13 +55,14 @@ export function setCurrentSampleId(sampleId) {
     };
 }
 
-export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
+export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionDelete) {
     return {
         type: SAMPLE_ON_SAVE,
         selectedSamplesIds,
         onSaveAction,
         onSaveActionPropertyIndex,
-        onSaveActionPropertyId
+        onSaveActionPropertyId,
+        onSaveActionDelete
     };
 }
 
@@ -74,27 +72,29 @@ function requestSamples() {
     };
 }
 
-export function updateSampleValue(sampleId, valueFieldId, value) {
+export function updateSampleValue(sampleId, valueFieldId, value, languageId) {
     return {
         type: UPDATE_SAMPLE_VALUE,
         sampleId,
         valueFieldId,
-        value
+        value,
+        languageId
     };
 }
 
-export function updateSampleText(sampleId, name, description) {
+export function updateSampleText(sampleId, name, description, languageId) {
     return {
         type: UPDATE_SAMPLE_TEXT,
         sampleId,
         name,
-        description
+        description,
+        languageId
     };
 }
 
 export function fetchSamplesAsync() {
 
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(requestSamples());
         return new Promise((resolve) => samplesClient.getAll((error, response) => resolve({
             error,
@@ -102,7 +102,8 @@ export function fetchSamplesAsync() {
         })))
             .then(
                 ({error, response}) => {
-                    return dispatch(handleApiResponseErrorAsync(FETCH_SAMPLES_ERROR_MESSAGE, error, response));
+                    const p = getP(getState());
+                    return dispatch(handleApiResponseErrorAsync(p.t('samples.errors.fetchSamplesError'), error, response));
                 }
             )
             .then((response) => response.body)
@@ -152,7 +153,8 @@ export function requestUpdateSampleFieldsAsync(sampleId) {
             (error, response) => resolve({error, response})
         )).then(
             ({error, response}) => {
-                return dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response));
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('samples.errors.updateSampleFieldsError'), error, response));
             }
         ).then((response) => response.body
         ).then((updatedSample) => {
@@ -183,20 +185,14 @@ export function requestUpdateSampleTextAsync(sampleId) {
             return Promise.resolve();
         }
         dispatch(disableSampleEdit(sampleId, true));
-        const {
-            name: editingSampleName, description: editingSampleDescription
-        } = editingSample;
-        const newEditingSample = {
-            ...currentEditedSample,
-            name: editingSampleName,
-            description: editingSampleDescription
-        };
+        const newEditingSample = i18n.setEntityLanguageTexts(currentEditedSample, i18n.getEntityLanguageTexts(editingSample));
         return new Promise((resolve) => samplesClient.update(
             newEditingSample,
             (error, response) => resolve({error, response})
         )).then(
             ({error, response}) => {
-                return dispatch(handleApiResponseErrorAsync(UPDATE_SAMPLE_FIELDS_ERROR_MESSAGE, error, response));
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('samples.errors.updateSampleFieldsError'), error, response));
             }
         ).then((response) => response.body
         ).then((updatedSample) => {
@@ -228,21 +224,25 @@ export function sampleSaveCurrent(sampleId) {
     };
 }
 
+function makeReplaceSampleInSaveAction(samplesList, index, sampleId) {
+    const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionDelete} = samplesList;
+    return immutableSetPathProperty(
+        immutableSetPathProperty(onSaveAction || onSaveActionDelete, onSaveActionPropertyId, sampleId),
+        onSaveActionPropertyIndex,
+        index
+    );
+}
+
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
-        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
+        const {samplesList} = getState();
+        const {onSaveAction, onSaveActionSelectedSamplesIds} = samplesList;
         if (!onSaveAction) {
             return;
         }
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
-            dispatch(
-                immutableSetPathProperty(
-                    immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSampleId),
-                    onSaveActionPropertyIndex,
-                    selectedSampleIndex
-                )
-            );
+            dispatch(makeReplaceSampleInSaveAction(samplesList, selectedSampleIndex, newSampleId));
         }
     };
 }
@@ -273,17 +273,34 @@ export function samplesListServerRemoveSample(sampleId) {
         return new Promise((resolve) => {
             samplesClient.remove(sampleId, (error, response) => resolve({error, response}));
         }).then(({error, response}) => {
-            dispatch(handleApiResponseErrorAsync(DELETE_SAMPLE_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('samples.errors.deleteSampleError'), error, response));
         }).then(() => {
-            const deletingSample = getState().samplesList.hashedArray.hash[sampleId];
+            const {samplesList, fileUpload: {filesProcesses}} = getState();
+            const {hash: samplesHash, array: samplesArray} = samplesList.hashedArray;
+            const deletingSample = samplesHash[sampleId];
             if (deletingSample) {
                 const fileSampleId = deletingSample.vcfFileId;
-                const isLastSample = !_.some(getState().samplesList.hashedArray.array, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
+                const isLastSample = !_.some(samplesArray, (s) => s.vcfFileId === fileSampleId && s.id !== sampleId);
                 if (isLastSample) {
-                    const fileProcess = _.find(getState().fileUpload.filesProcesses, {operationId: fileSampleId});
+                    const fileProcess = _.find(filesProcesses, {operationId: fileSampleId});
                     if (fileProcess) {
                         dispatch(changeFileUploadProgressState(100, fileUploadStatus.READY, fileProcess.id));
                     }
+                }
+            }
+            const {onSaveActionDelete, onSaveActionSelectedSamplesIds} = samplesList;
+            if (onSaveActionDelete && onSaveActionSelectedSamplesIds) {
+                const deletedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, analysisSampleId => analysisSampleId === sampleId);
+                if (deletedSampleIndex >= 0) {
+                    const newSample = _.find(samplesArray, availableSample => availableSample.type !== entityType.HISTORY && !_.includes(onSaveActionSelectedSamplesIds, availableSample.id));
+                    if (newSample) {
+                        dispatch(makeReplaceSampleInSaveAction(samplesList, deletedSampleIndex, newSample.id));
+                    }
+                }
+            } else {
+                if (onSaveActionDelete) {
+                    dispatch(onSaveActionDelete());
                 }
             }
             dispatch(samplesListRemoveSample(sampleId));

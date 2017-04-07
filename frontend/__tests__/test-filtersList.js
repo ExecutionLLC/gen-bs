@@ -22,8 +22,7 @@ function buildFiltersState(appState) {
         auth,
         ui,
         filtersList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(filters),
-            selectedFilterId: filters[0].id
+            hashedArray: ImmutableHashedArray.makeFromArray(filters)
         }
     };
 
@@ -46,34 +45,34 @@ runListedObjectTests({
         };
     },
     makeActions: {
-        remove(filterId, sessionId) {
+        remove(filterId) {
             return (dispatch) => {
-                dispatch(filtersListServerDeleteFilterAsync(filterId, sessionId));
+                dispatch(filtersListServerDeleteFilterAsync(filterId));
             };
         },
-        update(newFilter, sessionId) {
+        update(newFilter) {
             return (dispatch) => {
-                dispatch(filtersListServerUpdateFilterAsync(newFilter, sessionId));
+                dispatch(filtersListServerUpdateFilterAsync(newFilter));
             };
         },
-        create(newFilter, sessionId, languageId) {
+        create(newFilter, languageId) {
             return (dispatch) => {
-                return dispatch(filtersListServerCreateFilterAsync(newFilter, sessionId, languageId));
+                return dispatch(filtersListServerCreateFilterAsync(newFilter, languageId));
             }
         }
     },
     makeMocks: {
         remove(mustError) {
-            filtersClient.remove = (sessionId, filterId, callback) => {
+            filtersClient.remove = (filterId, callback) => {
                 if (mustError) {
                     return callback({message: 'mockedError'}, {status: 500});
                 } else {
-                    return callback(null, {status: HttpStatus.OK});
+                    return callback(null, {status: HttpStatus.OK, body: {id: filterId}});
                 }
             };
         },
         update(mustError) {
-            filtersClient.update = (sessionId, filter, callback) => {
+            filtersClient.update = (filter, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});
                 } else {
@@ -82,7 +81,7 @@ runListedObjectTests({
             };
         },
         create(mustError, newFilterId) {
-            filtersClient.add = (sessionId, languageId, filter, callback) => {
+            filtersClient.add = (languageId, filter, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});
                 } else {

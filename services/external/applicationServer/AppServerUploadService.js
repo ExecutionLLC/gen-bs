@@ -8,7 +8,10 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const METHODS = require('./AppServerMethods');
-const {SAMPLE_UPLOAD_STATUS} = require('../../../utils/Enums');
+const {
+    SAMPLE_UPLOAD_STATUS,
+    WS_SAMPLE_UPLOAD_STATE
+} = require('../../../utils/Enums');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
     CONVERTING: 'converting',
@@ -17,39 +20,101 @@ const SESSION_STATUS = {
 };
 const UploadOperation = require('../../operations/UploadOperation');
 
+
+/**
+ * Make queue for asynchronous functions.
+ * Execute the callbacks in the same order as the asynchronous functions executed.
+ * Example:
+ * const q = makeAsyncQueue(); // global queue
+ * // Function that sometimes callback will be called back quickly,
+ * // and sometimes later. We want to receive callbacks in the same order as
+ * // 'someAsyncFunction' called.
+ * function someAsyncFunction() {
+ *   const done = q(); // 'done' must be called before callback.
+ *   doStuff(..., (result) => { // this function can be called in any order depending on the 'doStuff' functionality
+ *     done(() => { // this function will be called in the same order as 'someAsyncFunction'
+ *       callback(result); // calling back
+ *     });
+ *   });
+ * }
+ * @returns {function()}
+ */
+function makeAsyncQueue() {
+    /**
+     * Pairs of [id, function()]
+     * When call id is called back then we must execute the function
+     * or set the function for further execution in desired order.
+     * @type {Array.<[*, function()]>}
+     */
+    const callsQueue = [];
+
+    /**
+     * Set callback for call id is ready, this call is called back.
+     * @param {*} callId
+     * @param {function()} callback
+     */
+    function setReady(callId, callback) {
+        /**
+         * this identifier must be there
+         * @type {number}
+         */
+        const queueIndex = callsQueue.findIndex(qr => callId === qr[0]);
+        callsQueue[queueIndex][1] = callback;
+    }
+
+    /**
+     * Check queue for executed callbacks and execute it in the order.
+     * Execute all consequent present callbacks, break when no next callback found.
+     */
+    function checkReady() {
+        while (callsQueue.length) {
+            const callback = callsQueue[0][1];
+            if (!callback) {
+                break;
+            }
+            callsQueue.shift();
+            callback();
+        }
+    }
+
+    /**
+     * Return the function that stores incoming call to the queue
+     * and returns the function that must be called before callback execution.
+     */
+    return () => {
+        const callIdentifier = {}; // we will compare by '===' so the empty object is appropriate here as unique identifier
+        callsQueue.push([callIdentifier, null]); // no function before callback is executed
+
+        function queueDone(callback) {
+            setReady(callIdentifier, callback);
+            checkReady();
+        }
+
+        return queueDone;
+    };
+}
+
+function callbackErrorHandler(fn, callback) {
+    try {
+        fn()
+    } catch (err) {
+        callback(err);
+    }
+}
+
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
         super(services, models);
+        this._uploadProgressAsyncQueue = makeAsyncQueue();
     }
 
-    uploadSample(session, user, sampleLocalPath, sampleFileName, callback) {
+    uploadSample(user, fileId, sampleFileName, callback) {
         async.waterfall([
-            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
+            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, fileId, callback),
             (operation, callback) => {
                 operation.setSampleFileName(sampleFileName);
                 operation.setUserId(user.id);
-                callback(null, operation);
-            },
-            (operation, callback) => {
-                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const fileStream = fs.createReadStream(sampleLocalPath);
-                this.services.objectStorage.uploadObject(newSamplesBucket, operation.getId(), fileStream,
-                    (error) => callback(null, error, operation)
-                );
-            },
-            (error, operation, callback) => {
-                if (error) {
-                    // We didn't start the upload session on app server yet.
-                    operation.setSendCloseToAppServer(false);
-
-                    // But started it locally, so remove it.
-                    async.waterfall([
-                        (callback) => this.services.sessions.findSystemSession(callback),
-                        (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
-                    ], () => callback(error));
-                } else {
-                    callback(null, operation.getId());
-                }
+                callback(null, operation.getId());
             }
         ], callback);
     }
@@ -131,6 +196,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     processUploadResult(session, operation, message, callback) {
+        const queueDone = this._uploadProgressAsyncQueue();
         this.logger.debug('Processing upload result for ' + operation);
         const result = message.result;
         /**@type {string}*/
@@ -138,13 +204,22 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.users.find(operation.getUserId(), callback),
             (user, callback) => {
-                if (this._isAsErrorMessage(message)) {
-                    this._handleUploadError(user, session, operation, message, callback);
-                } else if (status !== SESSION_STATUS.READY) {
-                    this._handleUploadProgress(user, session, operation, message, callback);
-                } else {
-                    this._completeUpload(user, session, operation, message, callback);
-                }
+
+                const doStuff = (callback) => {
+                    if (this._isAsErrorMessage(message)) {
+                        this._handleUploadError(user, session, operation, message, callback);
+                    } else if (status !== SESSION_STATUS.READY) {
+                        this._handleUploadProgress(user, session, operation, message, callback);
+                    } else {
+                        this._completeUpload(user, session, operation, message, callback);
+                    }
+                };
+
+                doStuff((err, res) => {
+                    queueDone(() => {
+                        callback(err, res);
+                    });
+                });
             }
         ], callback);
     }
@@ -156,35 +231,68 @@ class AppServerUploadService extends ApplicationServerServiceBase {
 
     _handleError(user, operation, error, session, callback) {
         async.waterfall([
-            (callback) => this.services.sampleUploadHistory.update(user, {
-                id: operation.getId(),
-                status: SAMPLE_UPLOAD_STATUS.ERROR,
-                error
-            }, (error) => callback(error)),
             (callback) => {
-                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
-                const sampleId = operation.getId();
-                this.services.objectStorage.deleteObject(newSamplesBucket, sampleId,
-                    (error, result) => callback(error)
-                );
+                callbackErrorHandler(() => {
+                    this.services.sampleUploadHistory.update(user, {
+                        id: operation.getId(),
+                        status: SAMPLE_UPLOAD_STATUS.ERROR,
+                        error
+                    }, (error) => callback(error));
+                }, callback);
             },
-            (callback) => this.toggleNextOperation(operation.getId(), callback),
-            (callback) => this._createOperationResult(
-                session,
-                operation,
-                null,
-                operation.getUserId(),
-                EVENTS.onOperationResultReceived,
-                true,
-                null,
-                error,
-                callback
-            )
-        ], callback);
+            (callback) => {
+                callbackErrorHandler(() => {
+                    const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
+                    const vcfFileId = operation.getId();
+                    this.services.objectStorage.deleteObject(newSamplesBucket, vcfFileId,
+                        (error, result) => callback(error));
+                }, callback);
+            },
+            (callback) => {
+                callbackErrorHandler(() => {
+                    this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                        (error, existingSamples) => callback(error, existingSamples));
+                }, callback);
+            },
+            (existingSamples, callback) => {
+                callbackErrorHandler(() => {
+                    const sampleUploadStates = _.map(existingSamples, (sample) => {
+                        return Object.assign({}, sample, {
+                            uploadState: WS_SAMPLE_UPLOAD_STATE.ERROR,
+                            error
+                        });
+                    });
+                    async.map(sampleUploadStates, (sample, callback) => {
+                        return this.services.samples.update(user, sample, callback);
+                    }, (error, result) => callback(error, result));
+                }, callback);
+            }
+        ], () => {
+            async.waterfall([
+                (callback) => this.toggleNextOperation(operation.getId(), callback),
+                (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                    (error, existingSamples) => callback(error, existingSamples)),
+                (existingSamples, callback) => this._createOperationResult(
+                    session,
+                    operation,
+                    null,
+                    operation.getUserId(),
+                    EVENTS.onOperationResultReceived,
+                    true,
+                    {
+                        status: SAMPLE_UPLOAD_STATUS.ERROR,
+                        progress: 0,
+                        metadata: existingSamples
+                    },
+                    error,
+                    callback
+                )
+            ], callback);
+        });
     }
 
     _handleUploadProgress(user, session, operation, message, callback) {
-        const {result: {status, progress}} = message;
+        const {result: {progress}} = message;
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.update(user, {
                 id: operation.getId(),
@@ -206,10 +314,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             const vcfFileId = operation.getId();
             const vcfFileName = operation.getSampleFileName();
             async.waterfall([
-                (callback) => this.services.samples.initMetadataForUploadedSample(
+                (callback) => this.services.samples.updateSamplesForVcfFile(
                     user, vcfFileId, vcfFileName, sampleGenotypes, callback
                 ),
-                (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
                 (samples, callback) => {
                     callback(null, {
                         status,
@@ -240,52 +347,58 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const commonFieldsMetadata = sampleMetadata.columns;
 
         async.waterfall([
-            (callback) => this.services.samples.createMetadataForUploadedSample(user, vcfFileId, commonFieldsMetadata,
-                (error, sampleVersionIds) => callback(error, sampleVersionIds)
-            ),
-            (sampleIds, callback) => this.services.samples.findMany(user, sampleIds, callback),
-            (samplesMetadata, callback) => this.services.sampleUploadHistory.update(user, {
-                id: operation.getId(),
-                status: SAMPLE_UPLOAD_STATUS.READY,
-                progress: 100,
-                error: null
-            }, (error) => callback(error, samplesMetadata))
+            (callback) => {
+                callbackErrorHandler(() => {
+                    this.services.samples.createMetadataForUploadedSample(user, vcfFileId, commonFieldsMetadata,
+                        (error, sampleVersionIds) => callback(error, sampleVersionIds));
+                }, callback);
+            },
+            (sampleIds, callback) => {
+                callbackErrorHandler(() => {
+                    this.services.samples.findMany(user, sampleIds, callback);
+                }, callback);
+            },
+            (samplesMetadata, callback) => {
+                callbackErrorHandler(() => {
+                    this.services.sampleUploadHistory.update(user, {
+                        id: operation.getId(),
+                        status: SAMPLE_UPLOAD_STATUS.READY,
+                        progress: 100,
+                        error: null
+                    }, (error) => callback(error, samplesMetadata));
+                }, callback);
+            }
         ], (error, samplesMetadata) => {
-            async.waterfall([
-                (callback) => {
-                    if (error) {
-                        this.logger.error(`Error inserting new sample into database: ${error}`);
-                        const serverError = ErrorUtils.createInternalError(error.message);
-                        this._handleError(user, operation, serverError, session, callback);
-                    } else {
-                        // The upload operation is already completed on the app server.
-                        operation.setSendCloseToAppServer(false);
-                        async.waterfall([
-                            (callback) => this.toggleNextOperation(operation.getId(), callback),
-                            (callback) => this._createOperationResult(session,
-                                operation,
-                                null,
-                                operation.getUserId(),
-                                EVENTS.onOperationResultReceived,
-                                true,
-                                {
-                                    status: SESSION_STATUS.READY,
-                                    progress: 100,
-                                    metadata: samplesMetadata
-                                },
-                                null,
-                                callback
-                            )
-                        ],callback);
-                    }
-                }
-            ], callback);
-
+            if (error) {
+                this.logger.error(`Error inserting new sample into database: ${error}`);
+                const serverError = ErrorUtils.createInternalError(error.message);
+                this._handleError(user, operation, serverError, session, callback);
+            } else {
+                // The upload operation is already completed on the app server.
+                operation.setSendCloseToAppServer(false);
+                async.waterfall([
+                    (callback) => this.toggleNextOperation(operation.getId(), callback),
+                    (callback) => this._createOperationResult(session,
+                        operation,
+                        null,
+                        operation.getUserId(),
+                        EVENTS.onOperationResultReceived,
+                        true,
+                        {
+                            status: SESSION_STATUS.READY,
+                            progress: 100,
+                            metadata: samplesMetadata
+                        },
+                        null,
+                        callback
+                    )
+                ], callback);
+            }
         });
     }
 
-    getUploadOperations(sesssion) {
-        return _.filter(sesssion.operations, operation => operation instanceof UploadOperation);
+    getUploadOperations(session) {
+        return _.filter(session.operations, operation => operation instanceof UploadOperation);
     }
 }
 

@@ -12,7 +12,6 @@ const ServicesFacade = require('../../services/ServicesFacade');
 const ControllersFacade = require('../../controllers/ControllersFacade');
 
 const MockUserModel = require('./MockUserModel');
-const MockUsersController = require('./MockUsersController');
 const MockSessionsService = require('./MockSessionsService');
 const MockSessionsController = require('./MockSessionsController');
 const MockWSController = require('./MockWSController');
@@ -73,7 +72,6 @@ class MockHost {
 
     _setControllersMocks(controllers, services) {
         controllers.sessionsController = new MockSessionsController(controllers.sessionsController);
-        controllers.usersController = new MockUsersController(controllers.usersController);
         controllers.wsController = new MockWSController(services);
     }
 
@@ -95,8 +93,10 @@ class MockHost {
     }
 
     stop(callback) {
-        this.applicationServer.stop();
-        this.server.stop(callback);
+        async.waterfall([
+            (callback) => this.applicationServer.stop((error) => callback(error)),
+            (callback) => this.server.stop((error) => callback(error))
+        ], callback);
     }
 }
 

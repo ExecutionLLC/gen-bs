@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import _ from 'lodash';
+
 
 /**
  * Input field component with on blur and on enter firing onChange
@@ -7,21 +9,26 @@ export default class Input extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: props.value
+            value: props.value,
+            changed: false
         };
     }
 
     componentWillReceiveProps(newProps) {
-        this.state = {
-            value: newProps.value
-        };
+        if (!this.state.changed) {
+            this.state = {
+                value: newProps.value,
+                changed: false
+            };
+        }
     }
 
     render() {
         const value = this.state.value;
+        const inputProps = _.omit(this.props, ['onChange', 'onChanging', 'validationRegex']);
         return (
             <input
-                {...this.props}
+                {...inputProps}
                 value={value}
                 onChange={ (evt) => this.onInputChanged(evt) }
                 onBlur={ (evt) => this.onInputBlur(evt) }
@@ -32,6 +39,7 @@ export default class Input extends Component {
 
     onInputBlur(evt) {
         const {onChange} = this.props;
+        this.setState({changed: false});
         onChange(evt.target.value);
     }
 
@@ -51,7 +59,7 @@ export default class Input extends Component {
         if (validationRegex && !new RegExp(validationRegex).test(value)){
             return;
         }
-        this.setState({value});
+        this.setState({value, changed: true});
 
         if (onChanging) {
             onChanging(value);

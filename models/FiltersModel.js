@@ -22,7 +22,7 @@ const mappedColumns = [
     'type',
     'isDeleted',
     'isCopyDisabled',
-    'languId',
+    'languageId',
     'description'
 ];
 
@@ -56,10 +56,11 @@ class FiltersModel extends SecureModelBase {
         }, callback);
     }
 
-    _add(userId, languId, filter, shouldGenerateId, callback) {
+    _add(userId, languageId, filter, shouldGenerateId, callback) {
+        const filterText = _.find(filter.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._ensureNameIsValid(filter.name, callback),
+                (callback) => this._ensureNameIsValid(filterText.name, callback),
                 (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
@@ -71,9 +72,9 @@ class FiltersModel extends SecureModelBase {
                 (filterId, callback) => {
                     const dataToInsert = {
                         filterId: filterId,
-                        languId: languId,
-                        name: filter.name.trim(),
-                        description: filter.description
+                        languageId: filterText.languageId,
+                        name: filterText.name.trim(),
+                        description: filterText.description
                     };
                     this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
                         callback(error, filterId);
@@ -144,11 +145,17 @@ class FiltersModel extends SecureModelBase {
             },
             (filterTexts, callback) => this._toCamelCase(filterTexts, callback),
             (filterTexts, callback) => {
-                const textsHash = CollectionUtils.createHashByKey(filterTexts, 'filterId');
+                const textsHash = _.groupBy(filterTexts, 'filterId');
                 const filtersWithDescription = _.map(filters, filter => {
                     return Object.assign({}, filter, {
-                        description: textsHash[filter.filterId].description,
-                        name: textsHash[filter.filterId].name
+                        text: _.map(textsHash[filter.filterId], text => {
+                            const {description, languageId, name} = text;
+                            return {
+                                description,
+                                languageId,
+                                name
+                            };
+                        })
                     });
                 });
                 callback(null, filtersWithDescription);

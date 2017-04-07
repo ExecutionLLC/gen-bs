@@ -11,11 +11,12 @@ import {
     abortRequest
 } from '../../../actions/fileUpload';
 import {samplesListServerRemoveSample, sampleSaveCurrent} from '../../../actions/samplesList';
-import {uploadState} from '../../../utils/uploadUtils';
-import {modalName} from '../../../actions/modalWindows';
+import {SAMPLE_UPLOAD_STATE} from '../../../actions/fileUpload';
+import * as i18n from '../../../utils/i18n';
 
-function fileUploadStatusErrorOrReady(status) {
-    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], status);
+
+function fileUploadStatusErrorOrReady(upload) {
+    return _.includes([fileUploadStatus.ERROR, fileUploadStatus.READY], upload.progressStatus);
 }
 
 export default class FileUploadSampleList extends React.Component {
@@ -38,58 +39,62 @@ export default class FileUploadSampleList extends React.Component {
 
     render() {
         const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
+        const uploadedData = this.getUploadedData();
         return (
             <div className='split-scroll'>
                 <ul id='samplesTabs'
                     className='nav nav-componentes nav-upload-items nav-with-right-menu'>
                     {this.renderNewListItem(currentSampleId === null && currentUploadId === null)}
-                    {this.renderUploadedData(true)}
+                    {this.renderUploadedData(uploadedData[0], true)}
                     {this.renderCurrentUploadData()}
-                    {this.renderUploadedData(false)}
+                    {this.renderUploadedData(uploadedData[1], false)}
                 </ul>
             </div>
         );
     }
 
     renderCurrentUploadData() {
-        const {fileUpload: {filesProcesses}, sampleList} = this.props;
+        const {fileUpload: {filesProcesses}, sampleList, languageId} = this.props;
+        const {currentSampleId} = this.props;
         const currentUploads = _.filter(filesProcesses, upload => {
             return upload.progressStatus !== fileUploadStatus.READY;
         });
-        const currentUploadsData = _.map(currentUploads, upload => {
-            const uploadSamples = _.filter(sampleList.hashedArray.array, sample => sample.vcfFileId === upload.operationId);
-            return {
-                upload,
-                samples: uploadSamples,
-                isError: upload.progressStatus === fileUploadStatus.ERROR
-            };
+        return _.map(currentUploads, upload => {
+            const uploadSamples = _.filter(sampleList.hashedArray.array, {vcfFileId: upload.operationId});
+            const isError = upload.progressStatus === fileUploadStatus.ERROR;
+
+            if (uploadSamples.length) {
+                if (isError) {
+                    return _.map(uploadSamples, (sample) => {
+                        const sampleName = i18n.getEntityText(sample, languageId).name;
+                        return this._renderSampleError(sample, sampleName, sample.id === currentSampleId);
+                    });
+                } else {
+                    return this.renderProgressUploadSamples(uploadSamples, upload);
+                }
+            } else {
+                if (isError) {
+                    return this._renderUploadedDataFileError(upload, upload.file.name);
+                } else {
+                    return this.renderProgressUploadFile(upload);
+                }
+            }
         });
-        return (
-            currentUploadsData.map((data) =>
-                data.isError ?
-                    this._renderUploadedData({
-                        label: data.upload.file.name,
-                        upload: data.upload,
-                        date: data.upload.created
-                    }) :
-                    this.renderProgressUploadSample(data)
-            )
-        );
     }
 
-    renderUploadedData(showNew) {
-        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}} = this.props;
+    getUploadedData() {
+        const {search, samplesSearchHash, sampleList, fileUpload: {filesProcesses}, languageId} = this.props;
         const uploadHash = _.keyBy(filesProcesses, 'operationId');
         const uploadedSamples = _.filter(sampleList.hashedArray.array, sample => !_.isEmpty(sample.sampleFields) && sample.type !== entityType.HISTORY);
         const samplesData = _.map(uploadedSamples, sample => {
-            const {vcfFileId} = sample;
-            const sampleName = sample.name;
+            const {vcfFileId, created: sampleCreated} = sample;
+            const sampleName = i18n.getEntityText(sample, languageId).name;
             const currentUpload = uploadHash[vcfFileId];
             return {
                 label: sampleName,
                 upload: currentUpload,
                 sample: sample,
-                date: currentUpload ? currentUpload.created : sample.created
+                date: currentUpload ? currentUpload.created : sampleCreated
             };
         });
         const filteredUploadedSamples = _.filter(samplesData, finishedUpload => {
@@ -105,125 +110,98 @@ export default class FileUploadSampleList extends React.Component {
                 return label.toLocaleLowerCase().indexOf(sampleSearch) >= 0;
             }
         });
-        const sortedFilteredUploads = _.sortBy(filteredUploadedSamples, ['date']).reverse();
-        return (
-            sortedFilteredUploads.map((item) => this._renderUploadedData(item, showNew))
+        const sortedFilteredUploads = _.orderBy(filteredUploadedSamples, ['date'], ['desc']);
+
+        return _.partition(sortedFilteredUploads, (item) => {
+            return !_.isNil(item.upload) && fileUploadStatusErrorOrReady(item.upload);
+        });
+    }
+
+    _createSampleLabel(sample, languageId, p) {
+        const {type} = sample;
+        const sampleName = i18n.getEntityText(sample, languageId).name;
+        return getItemLabelByNameAndType(sampleName, type, p);
+    }
+
+    _renderSample(sample, label, isActive, isNew, languageId) {
+        const isDeletable = sample.type === entityType.USER;
+        const description = i18n.getEntityText(sample, languageId).description;
+        return this.renderListItem(
+            sample.id,
+            isActive,
+            isNew ? true : null,
+            (id) => this.onSampleItemClick(id),
+            (id) => this.onSampleItemSelectForAnalysis(id),
+            isDeletable ? (id) => this.onSampleItemDelete(id) : null,
+            label,
+            description,
+            sample.created
         );
     }
 
-    _createSampleLabel(sample) {
-        const {type} = sample;
-        const sampleName = sample.name;
-        return getItemLabelByNameAndType(sampleName, type);
+    renderUploadedData(uploadedItems, isNew) {
+        const {currentSampleId, languageId} = this.props;
+        return _.map(uploadedItems, (item) => {
+            if (item.sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
+                return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew, languageId);
+            } else {
+                return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
+            }
+        });
     }
 
+    _renderSampleError(sample, label, isActive) {
+        const {p} = this.props;
+        const message = sample.error ? sample.error.message : (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
+                ? p.t('samples.error.sampleNotFound')
+                : p.t('samples.error.unknown'));
+        return this.renderListItem(
+            sample.id,
+            isActive,
+            false,
+            (id) => this.onSampleItemClick(id),
+            null,
+            (id) => this.onSampleItemDelete(id),
+            label,
+            message,
+            null
+        );
+    }
 
-    _renderUploadedData(uploadData, showNew) {
-        const {currentHistorySamplesIds, currentSampleId, fileUpload: {currentUploadId}, sampleList: {hashedArray: {hash: samplesHash}}} = this.props;
-        const {label, upload, sample} = uploadData;
-        if (sample) {
-            if (upload) {
-                if ((sample.type !== entityType.HISTORY || _.includes(currentHistorySamplesIds, sample.id)) && fileUploadStatusErrorOrReady(upload.progressStatus)) {
-                    if (!showNew) {
-                        return null;
-                    }
-                    return this.renderListItem(
-                        sample.id,
-                        sample.id === currentSampleId,
-                        true,
-                        (id) => this.onSampleItemClick(id),
-                        (id) => this.onSampleItemSelectForAnalysis(id),
-                        (id) => this.onSampleItemDelete(id),
-                        label,
-                        sample.description,
-                        sample.created
-                    );
-                }
-                return null;
-            } else {
-                if (showNew) {
-                    return null;
-                }
-                if (samplesHash[sample.id].type === entityType.USER) {
-                    return this.renderListItem(
-                        sample.id,
-                        sample.id === currentSampleId,
-                        null,
-                        (id) => this.onSampleItemClick(id),
-                        (id) => this.onSampleItemSelectForAnalysis(id),
-                        (id) => this.onSampleItemDelete(id),
-                        label,
-                        sample.description,
-                        sample.created
-                    );
-                } else {
-                    return this.renderListItem(
-                        sample.id,
-                        sample.id === currentSampleId,
-                        null,
-                        (id) => this.onSampleItemClick(id),
-                        (id) => this.onSampleItemSelectForAnalysis(id),
-                        null,
-                        label,
-                        sample.description,
-                        sample.created
-                    );
-                }
-            }
-        } else {
-            if (showNew) {
-                return null;
-            }
-            if (typeof upload.id === 'string') {
-                return this.renderListItem(
-                    upload.id,
-                    upload.id === currentUploadId,
-                    false,
-                    (id) => this.onUploadErrorItemClick(id),
-                    null,
-                    (id) => this.onUploadErrorDelete(id),
-                    label,
-                    upload.error.message,
-                    null
-                );
-            } else {
-                if (upload.operationId) {
-                    return this.renderListItem(
-                        upload.operationId,
-                        upload.operationId === currentUploadId,
-                        false,
-                        (id) => this.onNotUploadedErrorItemClick(id),
-                        null,
-                        (id) => this.onUploadErrorDelete(id),
-                        label,
-                        upload.error.message,
-                        null
-                    );
-                } else {
-                    return this.renderListItem(
-                        upload.id,
-                        upload.id === currentUploadId,
-                        false,
-                        (id) => this.onNotUploadedErrorItemClick(id),
-                        null,
-                        (id) => this.onNotUploadedErrorItemDelete(id),
-                        label,
-                        upload.error.message,
-                        null
-                    );
-                }
-            }
-        }
+    _renderUploadedDataFileError(upload, label) {
+        const {fileUpload: {currentUploadId}} = this.props;
+        const {id, operationId, error: {message}} = upload;
+        const isUploaded = typeof upload.id === 'string';
+        const isOperationId = !isUploaded && operationId;
+        const key = isOperationId ? operationId : id;
+        const isActive = key === currentUploadId;
+        const clickAsUploaded = isUploaded;
+        const deleteAsUploaded = isUploaded || isOperationId;
+
+        return this.renderListItem(
+            key,
+            isActive,
+            false,
+            () => clickAsUploaded ? this.onUploadErrorItemClick(key) : this.onNotUploadedErrorItemClick(key),
+            null,
+            () => deleteAsUploaded ? this.onUploadErrorDelete(key) : this.onNotUploadedErrorItemDelete(key),
+            label,
+            message,
+            null
+        );
     }
 
     renderListItem(id, isActive, isSuccessOrNull, onClick, onSelectForAnalysis, onDelete, label, description, uploadedTimeOrNull) {
+        const {p} = this.props;
         return (
             <li key={id}
                 className={classNames({
                     'active': isActive
                 })}>
-                <a type='button'
-                   onClick={() => onClick(id)}>
+                <a
+                    type='button'
+                    onClick={() => onClick(id)}
+                >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
                         <i />
@@ -236,7 +214,7 @@ export default class FileUploadSampleList extends React.Component {
                         {description}
                     </span>
                     {uploadedTimeOrNull && <span className='small link-desc'>
-                       Uploaded: {formatDate(uploadedTimeOrNull)}
+                        {p.t('samples.uploaded')}: {formatDate(uploadedTimeOrNull)}
                     </span>}
                 </a>
                 {onDelete && !onSelectForAnalysis ?
@@ -257,7 +235,7 @@ export default class FileUploadSampleList extends React.Component {
 
     renderDropdown(id, onSelectForAnalysis, onDelete) {
         const isOpen = this.state.showPopup === id;
-        const {sampleList:{onSaveAction}} = this.props;
+        const {sampleList:{onSaveAction}, p} = this.props;
         const isRenderDropDown = (onSaveAction && onSelectForAnalysis) || onDelete;
         const className = classNames({'dropdown': true, 'right-menu': true, 'open': isOpen});
         return (
@@ -276,53 +254,51 @@ export default class FileUploadSampleList extends React.Component {
                             href='#'
                             className='selectForAnalysisBtn'
                             onClick={() => onSelectForAnalysis(id)}
-                        > Select for analysis</a>
+                        >{p.t('samples.selectForAnalysis')}</a>
                     </li>}
                     {onDelete && <li>
                         <a
                             href='#'
                             onClick={() => onDelete(id)}
-                        >Delete</a>
+                        >{p.t('samples.deleteSample')}</a>
                     </li>}
                 </ul>
             </div>
         );
     }
 
-    renderIcon(isSuccessOrNull) {
-        if (isSuccessOrNull) {
-            return (
-                <i className='icon-state md-i text-success'>check_circle</i>
-            );
+    renderIcon(isSuccess) {
+        if (isSuccess) {
+            return <i className='icon-state md-i text-success'>check_circle</i>;
+        } else {
+            return <i className='icon-state md-i text-danger'>error_outline</i>;
         }
-        return (
-            <i className='icon-state md-i text-danger'>error_outline</i>
-        );
     }
 
-    static renderProgressBar(uploadItem) {
+    renderProgressBar(uploadItem) {
+        const {p} = this.props;
         const {progressStatus, progressValue} = uploadItem;
         const STAGES = {
-            [uploadState.AJAX]: {
+            [fileUploadStatus.AJAX]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-default': true
                 }),
-                renderMessage: 'Loading..'
+                renderMessage: p.t('samples.loading')
             },
-            [uploadState.TASK_RUNNING]: {
+            [fileUploadStatus.TASK_RUNNING]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                renderMessage: <span className='text-primary'>Saving...</span>
+                renderMessage: <span className='text-primary'>{p.t('samples.saving')}</span>
             },
-            [uploadState.IN_PROGRESS]: {
+            [fileUploadStatus.IN_PROGRESS]: {
                 classNames: classNames({
                     'progress-bar': true, 'progress-bar-primary': true
                 }),
-                renderMessage: <span className='text-primary'>Saving...</span>
+                renderMessage: <span className='text-primary'>{p.t('samples.saving')}</span>
             }
         };
-        const currentStage = STAGES[progressStatus] || STAGES[uploadState.AJAX];
+        const currentStage = STAGES[progressStatus] || STAGES[fileUploadStatus.AJAX];
         if (!currentStage) {
             return null;
         }
@@ -346,25 +322,10 @@ export default class FileUploadSampleList extends React.Component {
     static renderRefreshIcon(uploadItem) {
         const {progressStatus} = uploadItem;
         return <i className={classNames('icon-state md-i md-spin',
-            progressStatus === uploadState.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
+            progressStatus === fileUploadStatus.AJAX ? 'text-normal' : 'text-primary')}>refresh</i>;
     }
 
-    renderProgressUploadSample(uploadData) {
-        const {upload, samples} = uploadData;
-        if (!samples.length) {
-            return this.renderProgressUpload(upload, null);
-        } else {
-            return (
-                samples.map((sample) => this.renderProgressUpload(upload, sample))
-            );
-        }
-    }
-
-    renderProgressUpload(upload, sample) {
-        const {currentSampleId, fileUpload: {currentUploadId}} = this.props;
-        const key = sample ? sample.id : (upload.operationId || upload.id);
-        const isActive = sample ? sample.id === currentSampleId : upload.id === currentUploadId;
-        const name = sample ? this._createSampleLabel(sample) : upload.file.name;
+    renderProgressUploadListItem(key, name, upload, isActive, onClick, onDelete) {
         return (
             <li key={key}
                 className={classNames({
@@ -372,7 +333,7 @@ export default class FileUploadSampleList extends React.Component {
                 })}>
                 <a
                     type='button'
-                    onClick={() => this.onProgressUploadClick(upload, sample)}
+                    onClick={onClick}
                 >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios'/>
@@ -382,13 +343,13 @@ export default class FileUploadSampleList extends React.Component {
                     <span className='link-label'>
                         {name}
                     </span>
-                    {FileUploadSampleList.renderProgressBar(upload)}
+                    {this.renderProgressBar(upload)}
                 </a>
                 <div className='right-menu'>
                     <button
                         className='btn btn-link-light-default'
                         type='button'
-                        onClick={() => this.onProgressUploadDelete(upload, sample)}
+                        onClick={onDelete}
                     >
                         <i className='md-i'>highlight_off</i>
                     </button>
@@ -397,7 +358,69 @@ export default class FileUploadSampleList extends React.Component {
         );
     }
 
+    renderProgressUploadFile(upload) {
+        if (upload.operationId) {
+            return this.renderProgressUploadSampleOperation(upload);
+        } else {
+            return this.renderProgressUploadSampleAjax(upload);
+        }
+    }
+
+    renderProgressUploadSamples(samples, upload) {
+        return samples.map(
+            (sample) => this.renderProgressUploadSampleSample(upload, sample)
+        );
+    }
+
+    renderProgressUploadSampleAjax(upload) {
+        const {fileUpload: {currentUploadId}} = this.props;
+        const key = upload.id;
+        const isActive = upload.id === currentUploadId;
+        const name = upload.file.name;
+
+        return this.renderProgressUploadListItem(
+            key,
+            name,
+            upload,
+            isActive,
+            () => this.onUploadItemClick(upload.id),
+            () => this.onUploadAbort(upload.id)
+        );
+    }
+
+    renderProgressUploadSampleOperation(upload) {
+        const {fileUpload: {currentUploadId}} = this.props;
+        const key = upload.operationId;
+        const isActive = upload.id === currentUploadId;
+        const name = upload.file.name;
+
+        return this.renderProgressUploadListItem(
+            key,
+            name,
+            upload,
+            isActive,
+            () => this.onUploadItemClick(upload.id),
+            () => this.onUploadItemDelete(upload.operationId)
+        );
+    }
+
+    renderProgressUploadSampleSample(upload, sample) {
+        const {currentSampleId, languageId, p} = this.props;
+        const key = sample.id;
+        const isActive = sample.id === currentSampleId;
+        const name = this._createSampleLabel(sample, languageId, p);
+        return this.renderProgressUploadListItem(
+            key,
+            name,
+            upload,
+            isActive,
+            () => this.onSampleItemClick(sample.id),
+            () => this.onSampleItemDelete(sample.id)
+        );
+    }
+
     renderNewListItem(isActive) {
+        const {p} = this.props;
         return (
             <li className={classNames({
                 'active': isActive
@@ -409,34 +432,14 @@ export default class FileUploadSampleList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        New sample
+                        {p.t('samples.newSample')}
                     </span>
                     <span className='link-desc'>
-                        Upload vcf file
+                        {p.t('samples.newSampleDescription')}
                     </span>
                 </a>
             </li>
         );
-    }
-
-    onProgressUploadClick(upload, sample) {
-        if (sample) {
-            this.onSampleItemClick(sample.id);
-        } else {
-            this.onUploadItemClick(upload.id);
-        }
-    }
-
-    onProgressUploadDelete(upload, sample) {
-        if (sample) {
-            this.onSampleItemDelete(sample.id);
-        } else {
-            if (upload.operationId) {
-                this.onUploadItemDelete(upload.operationId);
-            } else {
-                this.onUploadAbort(upload.id);
-            }
-        }
     }
 
     onNotUploadedErrorItemClick(id) {
@@ -477,7 +480,7 @@ export default class FileUploadSampleList extends React.Component {
     onSampleItemSelectForAnalysis(id) {
         const {dispatch, closeModal} = this.props;
         dispatch(sampleSaveCurrent(id));
-        closeModal(modalName.UPLOAD); // TODO: closeModal must have no params (it's obvious that we close upload)
+        closeModal();
     }
 
     onSampleItemDelete(id) {
@@ -526,5 +529,6 @@ export default class FileUploadSampleList extends React.Component {
 FileUploadSampleList.propTypes = {
     onSelectSample: React.PropTypes.func.isRequired,
     onSelectUpload: React.PropTypes.func.isRequired,
-    closeModal: React.PropTypes.func.isRequired
+    closeModal: React.PropTypes.func.isRequired,
+    languageId: React.PropTypes.string.isRequired
 };

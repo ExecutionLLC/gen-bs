@@ -19,7 +19,7 @@ class SearchController extends ControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (body, callback) => {
-                const {user, session, languId: languageId} = request;
+                const {user, session, languageId} = request;
                 const {analysis, limit, offset} = body;
                 this.services.search
                     .sendSearchRequest(

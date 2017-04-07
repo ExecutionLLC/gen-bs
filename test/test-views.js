@@ -26,8 +26,9 @@ const UnknownViewId = Uuid.v4();
 const UnknownSessionId = Uuid.v4();
 
 const checkView = (view) => {
+    const text = view.text[0];
     assert.ok(view.id);
-    assert.ok(view.name);
+    assert.ok(text.name);
     assert.ok(
         _.includes(ENTITY_TYPES.allValues, view.type)
     );
@@ -83,7 +84,13 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     const addedView = ClientBase.readBodyWithCheck(error, response);
@@ -94,14 +101,12 @@ describe('Views', () => {
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
-                    viewToUpdate.name = 'Test View ' + Uuid.v4();
                     viewToUpdate.type = ENTITY_TYPES.ADVANCED;
 
                     viewsClient.update(sessionId, viewToUpdate, (error, response) => {
                         const updatedView = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedView);
                         assert.notEqual(updatedView.id, viewToUpdate.id);
-                        assert.equal(updatedView.name, viewToUpdate.name);
                         assert.equal(updatedView.type, ENTITY_TYPES.USER, 'View type change should not be allowed by update.');
                         done();
                     });
@@ -138,7 +143,13 @@ describe('Views', () => {
                 const views = response.body;
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     assert.ifError(error);
@@ -189,7 +200,13 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
                 const viewItem = view.viewListItems[0];
                 viewItem.fieldId = null;
                 view.viewListItems.push(viewItem);
@@ -206,7 +223,13 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = '';
+                view.text = [
+                    {
+                        languageId: null,
+                        name: '',
+                        description: ''
+                    }
+                ];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
@@ -221,7 +244,13 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-
+                view.text = [
+                    {
+                        languageId: null,
+                        name: view.text[0].name,
+                        description: ''
+                    }
+                ];
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -235,8 +264,13 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = ' ' + view.name + ' ';
-
+                view.text = [
+                    {
+                        languageId: null,
+                        name: ' ' + view.text[0].name + ' ',
+                        description: ''
+                    }
+                ];
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
@@ -250,7 +284,14 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
+
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
                 view.viewListItems = [];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
@@ -265,18 +306,29 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
-
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     const addedView = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(addedView);
                     assert.notEqual(addedView.id, view.id, 'View id is not changed.');
-                    assert.equal(addedView.name, view.name);
+                    assert.equal(addedView.text[0].name, view.text[0].name);
                     assert.equal(addedView.type, ENTITY_TYPES.USER);
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
-                    viewToUpdate.name = 'Test View ' + Uuid.v4();
+                    viewToUpdate.text = [
+                        {
+                            languageId: null,
+                            name: 'Test View ' + Uuid.v4(),
+                            description: ''
+                        }
+                    ];
                     viewToUpdate.type = ENTITY_TYPES.ADVANCED;
                     const viewItem = viewToUpdate.viewListItems[0];
                     viewItem.fieldId = null;
@@ -295,18 +347,30 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: ''
+                    }
+                ];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     const addedView = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(addedView);
                     assert.notEqual(addedView.id, view.id, 'View id is not changed.');
-                    assert.equal(addedView.name, view.name);
+                    assert.equal(addedView.text[0].name, view.text[0].name);
                     assert.equal(addedView.type, ENTITY_TYPES.USER);
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
-                    viewToUpdate.name = 'Test View ' + Uuid.v4();
+                    viewToUpdate.text = [
+                        {
+                            languageId: null,
+                            name: 'Test View ' + Uuid.v4(),
+                            description: ''
+                        }
+                    ];
                     viewToUpdate.type = ENTITY_TYPES.ADVANCED;
                     viewToUpdate.viewListItems = [];
 
@@ -323,24 +387,34 @@ describe('Views', () => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
-                view.name = 'Test View ' + Uuid.v4();
-                // Will search the view by description below.
-                view.description = Uuid.v4();
+                view.text = [
+                    {
+                        languageId: null,
+                        name: 'Test View ' + Uuid.v4(),
+                        description: Uuid.v4()
+                    }
+                ];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     const addedView = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(addedView);
-                    assert.equal(addedView.name, view.name);
-                    assert.equal(addedView.description, view.description);
+                    assert.equal(addedView.text[0].name, view.text[0].name);
+                    assert.equal(addedView.text[0].description, view.text[0].description);
 
                     // Now it should return.
                     viewsClient.getAll(sessionId, (error, response) => {
                         const views = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(_.some(views, f => f.id === addedView.id));
-                        assert.ok(_.some(views, f => f.description === view.description));
+                        assert.ok(_.some(views, f => f.text[0].description === view.text[0].description));
 
                         const viewToUpdate = Object.assign({}, addedView, {
-                            name: Uuid.v4()
+                            text: [
+                                {
+                                    languageId: null,
+                                    name: Uuid.v4(),
+                                    description: Uuid.v4()
+                                }
+                            ]
                         });
 
                         // Make new version.
@@ -354,7 +428,7 @@ describe('Views', () => {
                                 viewsClient.getAll(sessionId, (error, response) => {
                                     // Now list should not return the view.
                                     const views = ClientBase.readBodyWithCheck(error, response);
-                                    assert.ok(!_.some(views, f => f.description === view.description));
+                                    assert.ok(!_.some(views, f => f.text[0].description === view.text[0].description));
 
                                     done();
                                 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Modal} from 'react-bootstrap';
 
 import {viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
@@ -6,7 +6,7 @@ import {viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
 export default class ViewBuilderFooter extends React.Component {
 
     render() {
-        const {confirmButtonParams} = this.props;
+        const {confirmButtonParams, p} = this.props;
 
         return (
             <Modal.Footer>
@@ -14,9 +14,8 @@ export default class ViewBuilderFooter extends React.Component {
                     onClick={() => this.cancelOnClick()}
                     type='button'
                     className='btn btn-default'
-                    data-dismiss='modal'
                 >
-                    <span data-localize='actions.cancel'>Cancel</span>
+                    <span>{p.t('view.cancel')}</span>
                 </button>
 
                 <button
@@ -26,7 +25,7 @@ export default class ViewBuilderFooter extends React.Component {
                     disabled={confirmButtonParams.disabled}
                     title={confirmButtonParams.title}
                 >
-                    <span data-localize='actions.save_select.title'>{confirmButtonParams.caption}</span>
+                    <span>{confirmButtonParams.caption}</span>
                 </button>
             </Modal.Footer>
         );
@@ -42,3 +41,14 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
 }
+
+ViewBuilderFooter.propTypes = {
+    confirmButtonParams: PropTypes.shape({
+        caption: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        disabled: PropTypes.bool.isRequired
+    }).isRequired,
+    closeModal: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};

@@ -12,7 +12,7 @@ class ModelsService extends UserEntityServiceBase {
         super(services, models, models.models);
     }
 
-    add(user, languId, model, callback) {
+    add(user, languageId, model, callback) {
         async.waterfall([
             (callback) => {
                 this._checkModelRules(model, callback);
@@ -21,7 +21,7 @@ class ModelsService extends UserEntityServiceBase {
             (models, callback) => {
                 this._checkModelNameExists(model, models, callback)
             },
-            (callback) => super.add(user, languId, model, callback)
+            (callback) => super.add(user, languageId, model, callback)
         ], callback);
     }
 
@@ -95,13 +95,17 @@ class ModelsService extends UserEntityServiceBase {
     }
 
     _checkModelNameExists(model, models, callback) {
-        if (!_.isString(model.name)) {
+        const modelText = _.find(model.text, textData => _.isNull(textData.languageId));
+
+        if (!_.isString(modelText.name)) {
             callback(new Error('Model name should be a string.'));
             return;
         }
-        const modelName = model.name.trim();
+        const modelName = modelText.name.trim();
         const modelExists = _.some(
-            models, f => f.name.trim() === modelName && model.analysisType === f.analysisType
+            models, f => _.some(f.text, textData => {
+                return textData.name.trim() == modelName;
+            })
         );
         if (modelExists) {
             callback(new Error('Model with this name already exists.'));

@@ -3,6 +3,7 @@
 import Promise from 'bluebird';
 import HttpStatus from 'http-status';
 import {addTimeout, removeTimeout} from 'redux-timeout';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import config from '../../config';
 import {getUrlParameterByName} from '../utils/stringUtils';
@@ -40,15 +41,6 @@ export const SESSION_TYPE = {
 
 const TOO_MANY_USER_SESSIONS_ERROR = 'TooManyUserSessions';
 const PING_MESSAGE_CONTENTS = 'ping';
-
-/*
- * login errors
- */
-
-const LOGIN_ERROR_MESSAGE = 'Authorization failed. You can reload page and try again.';
-const LOGIN_GOOGLE_ERROR = 'Google authorization failed.';
-const CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE = 'Error while closing all user sessions.';
-const CLOSE_OTHER_SOCKETS_ERROR_MESSAGE = 'Error while closing other sockets. Please reload page and try again.';
 
 /*
  * Start keep alive task, which update session on the WS.
@@ -146,28 +138,39 @@ function restoreOldSessionAsync(isDemoSession) {
 }
 
 function openDemoSessionAsync() {
-    return (dispatch) => Promise.resolve(
+    return (dispatch, getState) => Promise.resolve(
     ).then(() => new Promise(
         (resolve) => sessionsClient.openDemoSession(
             (error, response) => resolve({error, response})
         ))
-    ).then(({error, response}) => dispatch(handleApiResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
-    ).then((response) => SessionsClient.getSessionFromResponse(response)
-    ).then((sessionId) => sessionId ? dispatch(restoreOldSessionAsync(true)) : dispatch([
-        loginError('Session id is empty'),
-        handleError(null, LOGIN_ERROR_MESSAGE)
-    ]));
+    ).then(({error, response}) => {
+        const p = getP(getState());
+        return dispatch(handleApiResponseErrorAsync(p.t('errors.loginError'), error, response));
+    }).then((response) => SessionsClient.getSessionFromResponse(response)
+    ).then((sessionId) => {
+        if (sessionId) {
+            dispatch(restoreOldSessionAsync(true));
+        } else {
+            const p = getP(getState());
+            dispatch([
+                loginError(p.t('errors.sessionIsEmpty')),
+                handleError(null, p.t('errors.loginError'))
+            ]);
+        }
+    });
 }
 
 export function openUserSession(login, password) {
-    return (dispatch) => Promise.resolve(
+    return (dispatch, getState) => Promise.resolve(
 
     ).then(() => new Promise(
         (resolve) => sessionsClient.openUserSession(
             login, password, (error, response) => resolve({error, response})
         ))
-    ).then(({error, response}) => dispatch(handleApiBodylessResponseErrorAsync(LOGIN_ERROR_MESSAGE, error, response))
-    ).then(() => location.replace(location.origin));
+    ).then(({error, response}) => {
+        const p = getP(getState());
+        return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.loginError'), error, response));
+    }).then(() => location.replace(location.origin));
 }
 
 
@@ -186,7 +189,7 @@ function getCookieSessionTypeAsync() {
         ).then((response) => {
             const {status, body} = response;
 
-            if (status !== HttpStatus.OK) {
+            if (status !== HttpStatus.OK || !body) {
                 return SESSION_TYPE.INVALID;
             }
             switch (body.sessionType) {
@@ -205,7 +208,7 @@ function getCookieSessionTypeAsync() {
 
 
 function displayErrorFromParamsAsync() {
-    return (dispatch) => Promise.resolve()
+    return (dispatch, getState) => Promise.resolve()
         .then(() => {
             const errorFromParams = getUrlParameterByName('error');
             if (errorFromParams) {
@@ -215,8 +218,9 @@ function displayErrorFromParamsAsync() {
                     dispatch(showCloseAllUserSessionsDialog(true));
                     return Promise.reject(new Error(TOO_MANY_USER_SESSIONS_ERROR));
                 } else {
+                    const p = getP(getState());
                     dispatch(loginError(errorFromParams));
-                    dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
+                    dispatch(handleError(null, p.t('errors.loginGoogleError')));
                 }
             }
             return Promise.resolve();
@@ -279,12 +283,13 @@ export function showCloseAllUserSessionsDialog(shouldShow) {
 }
 
 export function closeAllUserSessionsAsync() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise(
             (resolve) => sessionsClient.closeAllUserSessions((error, response) => resolve({error, response}))
-        ).then(({error, response}) => dispatch(
-            handleApiBodylessResponseErrorAsync(CLOSE_ALL_USER_SESSSIONS_ERROR_MESSAGE, error, response)
-        ));
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.closeAllUserSessionError'), error, response));
+        });
     };
 }
 
@@ -302,12 +307,13 @@ export function setWaitStateForModal() {
 }
 
 export function closeOtherSocketsAsync() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise((resolve) => sessionsClient.closeOtherSockets(
             (error, response) => resolve({error, response}))
-        ).then(({error, response}) => dispatch(
-            handleApiBodylessResponseErrorAsync(CLOSE_OTHER_SOCKETS_ERROR_MESSAGE, error, response))
-        ).then(() => dispatch(loginWithGoogle()));
+        ).then(({error, response}) => {
+            const p = getP(getState());
+            return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.closeOtherSocketsError'), error, response));
+        }).then(() => dispatch(loginWithGoogle()));
     };
 }
 

@@ -109,7 +109,7 @@ const USER_INFO_SCHEME = [
 const VALIDATION_MESSAGES = {
     REQUIRED: 'The field is required.',
     EMAIL_MALFORMED_AT: 'Email must contain "@".',
-    EMAIL_MALFORMED_GMAIL: 'Email must end with "@gmail.com".',
+    EMAIL_MALFORMED_GMAIL: 'Email must end with "@gmail.com".'
 };
 
 const DOMUtils = {

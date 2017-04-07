@@ -10,7 +10,7 @@ class ViewsService extends UserEntityServiceBase {
         super(services, models, models.views);
     }
 
-    add(user, languId, item, callback) {
+    add(user, languageId, item, callback) {
         async.waterfall([
             (callback) => {
                 this._viewItemsCheck(item, callback);
@@ -20,7 +20,7 @@ class ViewsService extends UserEntityServiceBase {
                 this._checkViewNameExists(item, views, callback);
             },
             (item, callback) => {
-                super.add(user, languId, item, callback);
+                super.add(user, languageId, item, callback);
             }
         ], callback);
     }
@@ -49,13 +49,16 @@ class ViewsService extends UserEntityServiceBase {
     }
 
     _checkViewNameExists(view, views, callback) {
-        if (!_.isString(view.name)) {
+        const viewText = _.find(view.text, textData => _.isNull(textData.languageId));
+        if (!_.isString(viewText.name)) {
             callback(new Error('View name should be a string.'));
             return;
         }
-        const viewName = view.name.trim();
+        const viewName = viewText.name.trim();
         const viewExists = _.some(
-            views, v => v.name.trim() == viewName
+            views, v => _.some(v.text, textData => {
+                return textData.name.trim() == viewName;
+            })
         );
         if (viewExists) {
             callback(new Error('View with this name already exists.'));

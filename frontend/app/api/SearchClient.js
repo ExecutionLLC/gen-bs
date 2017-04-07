@@ -8,12 +8,11 @@ export default class SearchClient extends ClientBase {
         super(urls);
     }
 
-    sendSearchRequest(languId, analysis, limit, offset, callback) {
+    sendSearchRequest(languageId, analysis, limit, offset, callback) {
         RequestWrapper.post(
             this.urls.startSearch(),
-            this._makeHeaders({languId}),
+            this._makeHeaders({languageId}),
             {
-                languId,
                 analysis,
                 limit,
                 offset
@@ -22,12 +21,11 @@ export default class SearchClient extends ClientBase {
         );
     }
 
-    sendSearchAgainRequest(languId, analysisId, limit, offset, callback) {
+    sendSearchAgainRequest(languageId, analysisId, limit, offset, callback) {
         RequestWrapper.post(
             this.urls.startSearch(),
-            this._makeHeaders({languId}),
+            this._makeHeaders({languageId}),
             {
-                languId,
                 analysis: {id: analysisId},
                 limit,
                 offset

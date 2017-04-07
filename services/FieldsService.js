@@ -58,10 +58,10 @@ class FieldsService extends ServiceBase {
         callback(null, this.availableSources);
     }
 
-    addSourceFields(languId, sourceFieldsMetadata, callback) {
+    addSourceFields(languageId, sourceFieldsMetadata, callback) {
         // Add all non-mandatory source fields without trying to match them to existing fields.
         const fieldsMetadataToAdd = _.filter(sourceFieldsMetadata, fieldMetadata => !fieldMetadata.isMandatory);
-        this.models.fields.addMany(languId, fieldsMetadataToAdd, callback);
+        this.models.fields.addMany(languageId, fieldsMetadataToAdd, callback);
     }
 
     _findSource(sourceName) {
@@ -73,13 +73,18 @@ class FieldsService extends ServiceBase {
     static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
         return {
             id: Uuid.v4(),
-            name: appServerFieldMetadata.name,
-            label: appServerFieldMetadata.name, // Set label to name by default.
+            name: appServerFieldMetadata.name, // Set label to name by default.
             sourceName: isSample ? 'sample' : sourceName,
             isMandatory: appServerFieldMetadata.isMandatory,
             valueType: appServerFieldMetadata.type,
-            description: appServerFieldMetadata.desc,
-            dimension: appServerFieldMetadata.num
+            dimension: appServerFieldMetadata.num,
+            text: [
+                {
+                    label: appServerFieldMetadata.name,
+                    description: appServerFieldMetadata.desc,
+                    languageId: isSample ? null : this.config.defaultLanguId
+                }
+            ]
         };
     }
 }

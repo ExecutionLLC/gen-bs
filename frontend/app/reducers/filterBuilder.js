@@ -5,13 +5,14 @@ import {filterUtils, genomicsParsedRulesValidate, opsUtils, isFilterComplexModel
 import FieldUtils from '../utils/fieldUtils';
 import {entityType} from '../utils/entityTypes';
 import {ImmutableHashedArray} from '../utils/immutable';
+import * as i18n from '../utils/i18n';
 
 
 /**
  * @param {boolean} isNew
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
- * @param {{id: string, label: string, type: string}[]} fields
  * @param {string} parentFilterId
+ * @param {{id: string, label: string, type: string}[]} fields
  * @param {{id: string, label: string, type: string, sampleType: string=}[]} allowedFields
  * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string, sampleDefaultType: string=}}
  */
@@ -86,18 +87,24 @@ function applyFilterChange(parsedFilter, fieldDefaultId, sampleDefaultType, inde
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersStrategy, filtersList} = action;
+    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, newFilterInfo, filtersStrategy, filtersList, languageId} = action;
     const editingFilter = parseFilterForEditing(
-        makeNew,
-        makeNew ?
-            Object.assign({}, filter, {
-                type: entityType.USER,
-                name: `Copy of ${filter.name}`,
-                id: null
-            }) :
+        newFilterInfo,
+        newFilterInfo ?
+            i18n.changeEntityText(
+                {
+                    ...filter,
+                    type: entityType.USER,
+                    id: null
+                },
+                languageId,
+                {
+                    name: newFilterInfo.name
+                }
+            ) :
             filter,
         filter.id,
-        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)), // need for type convert from 'valueType' to 'type'
+        totalFieldsList.map(f => FieldUtils.makeFieldTyped(f)),
         allowedFields
     );
     const newFiltersList = {
@@ -106,7 +113,7 @@ function reduceFBuilderStartEdit(state, action) {
 
     return Object.assign({}, state, {
         filtersStrategy,
-        filtersList:newFiltersList,
+        filtersList: newFiltersList,
         editingFilter: editingFilter,
         originalFilter: editingFilter,
         allowedFields
@@ -159,7 +166,9 @@ function reduceFBuilderChangeAttr(state, action) {
     return Object.assign({}, state, {
         editingFilter: state.editingFilter ?
             Object.assign({}, state.editingFilter, {
-                filter: Object.assign({}, state.editingFilter.filter,
+                filter: i18n.changeEntityText(
+                    state.editingFilter.filter,
+                    action.languageId,
                     {
                         name: action.name,
                         description: action.description

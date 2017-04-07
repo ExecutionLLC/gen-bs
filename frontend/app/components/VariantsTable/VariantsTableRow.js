@@ -12,6 +12,13 @@ import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
 export default class VariantsTableRow extends ComponentBase {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isHighlighted: false
+        };
+    }
+
     render() {
         const {
             dispatch,
@@ -20,7 +27,9 @@ export default class VariantsTableRow extends ComponentBase {
             rowIndex,
             variantsHeader,
             sortState,
-            isSelected
+            isSelected,
+            ui,
+            p
         } = this.props;
         const rowFields = row.fields;
         const mandatoryFields = row.mandatoryFields;
@@ -33,7 +42,7 @@ export default class VariantsTableRow extends ComponentBase {
         const searchKey = row.searchKey;
 
         return (
-            <tr>
+            <tr className={classNames({'highlighted': this.state.isHighlighted})}>
                 <td className='btntd row_checkbox'>
                     <div>{rowIndex + 1}</div>
                 </td>
@@ -59,15 +68,26 @@ export default class VariantsTableRow extends ComponentBase {
                                       reference={ref}
                                       chrom={chrom}
                                       searchKey={searchKey}
+                                      rowIndex={rowIndex}
                                       dispatch={dispatch}
                                       auth={auth}
                                       comments={comments}
+                                      tableElement={this.props.tableElement}
+                                      onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
+                                      ui={ui}
+                                      p={p}
                 />
                 {_.map(rowFields, (value, index) =>
                     this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
                 )}
             </tr>
         );
+    }
+
+    setHighlighted(isHighlighted) {
+        this.setState({
+            isHighlighted
+        });
     }
 
     onRowSelectionChanged() {
@@ -110,14 +130,16 @@ export default class VariantsTableRow extends ComponentBase {
         const valueUrl = hyperlinkTemplate.replace(FieldUtils.getDefaultLinkIdentity(), replacementValue);
         return (
             <div>
-                <a href={valueUrl} target='_blank'>{value}</a>
+                <a className='table-hyperlink' href={valueUrl} target='_blank'>{value}</a>
             </div>
         );
     }
 
     renderPopupValue(ref, value, field, isValuedHyperlink, isChromosome) {
+        const {rowIndex} = this.props;
+        const id = `${rowIndex}-${ref}`; // unique id, 'ref' is unique for row, add rowIndex for full-table unique
         const popover = (
-            <Popover
+            <Popover id={id}
                 onClick={() => this.refs[ref].hide()}
             >
                 {isValuedHyperlink ? this.renderHyperLinks(field.hyperlinkTemplate, value) :
@@ -189,9 +211,11 @@ export default class VariantsTableRow extends ComponentBase {
             && value !== '.';
     }
 
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate(nextProps, nextState) {
         return this.props.row !== nextProps.row
-            || this.props.isSelected !== nextProps.isSelected;
+            || this.props.isSelected !== nextProps.isSelected
+            || this.props.p !== nextProps.p
+            || this.state !== nextState;
     }
 }
 

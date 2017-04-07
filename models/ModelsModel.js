@@ -22,7 +22,7 @@ const mappedColumns = [
     'modelType',
     'analysisType',
     'isDeleted',
-    'languId',
+    'languageId',
     'name',
     'description'
 ];
@@ -57,10 +57,11 @@ class ModelsModel extends SecureModelBase {
         }, callback);
     }
 
-    _add(userId, languId, model, shouldGenerateId, callback) {
+    _add(userId, languageId, model, shouldGenerateId, callback) {
+        const modelText = _.find(model.text, text => _.isNull(text.languageId));
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._ensureNameIsValid(model.name, callback),
+                (callback) => this._ensureNameIsValid(modelText.name, callback),
                 (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
@@ -74,9 +75,9 @@ class ModelsModel extends SecureModelBase {
                 (modelId, callback) => {
                     const dataToInsert = {
                         modelId: modelId,
-                        languId: languId,
-                        name: model.name,
-                        description: model.description
+                        languageId: modelText.languageId,
+                        name: modelText.name,
+                        description: modelText.description
                     };
                     this._unsafeInsert(TableNames.ModelText, dataToInsert, trx, (error) => {
                         callback(error, modelId);
@@ -207,11 +208,17 @@ class ModelsModel extends SecureModelBase {
             },
             (modelTexts, callback) => this._toCamelCase(modelTexts, callback),
             (modelTexts, callback) => {
-                const textsHash = CollectionUtils.createHashByKey(modelTexts, 'modelId');
+                const textsHash = _.groupBy(modelTexts, 'modelId');
                 const modelsWithDescription = _.map(models, model => {
                     return Object.assign({}, model, {
-                        description: textsHash[model.modelId].description,
-                        name: textsHash[model.modelId].name
+                        text: _.map(textsHash[model.modelId], text => {
+                            const {description, languageId, name} = text;
+                            return {
+                                description,
+                                languageId,
+                                name
+                            };
+                        })
                     });
                 });
                 callback(null, modelsWithDescription);

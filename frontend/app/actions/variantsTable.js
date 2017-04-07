@@ -1,9 +1,11 @@
 import _ from 'lodash';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
 import {requestTableScrollPositionReset} from './ui';
+import * as i18n from '../utils/i18n';
 
 /*
  * action types
@@ -25,13 +27,6 @@ export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS';
 export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 
 export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
-
-const ANALYZE_SAMPLE_ERROR_MESSAGE = 'Cannot analyze data. Please try again.';
-const NEXT_DATA_ERROR_MESSAGE = 'Cannot get next part of data. Please try again.';
-const SEARCH_IN_RESULTS_ERROR_MESSAGE = 'Cannot analyze results. Please try again.';
-const ADD_COMMENT_ERROR_MESSAGE = 'Cannot add commentary. Please try again.';
-const UPDATE_COMMENT_ERROR_MESSAGE = 'Cannot update commentary. Please try again.';
-const DELETE_COMMENT_ERROR_MESSAGE = 'Cannot delete commentary. Please try again.';
 
 const commentsClient = apiFacade.commentsClient;
 const searchClient = apiFacade.searchClient;
@@ -159,43 +154,62 @@ function receiveAnalysisOperationId(operationId) {
 
 export function createCommentAsync(alt, pos, reference, chrom, searchKey, comment) {
     return (dispatch, getState) => {
-        const commentObject = {
-            alt,
-            pos,
-            reference,
-            chrom,
-            searchKey,
-            comment
-        };
+        const commentObject = i18n.setEntityText(
+            {
+                alt,
+                pos,
+                reference,
+                chrom,
+                searchKey
+            },
+            {
+                comment
+            }
+        );
         const {ui: {languageId}} = getState();
         return new Promise((resolve) => commentsClient.add(
             languageId,
             commentObject,
             (error, response) => resolve({error, response}))
         ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(ADD_COMMENT_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('variantsTable.errors.addCommentError'), error, response));
+            }
         ).then((response) => response.body
         ).then((comment) => dispatch(addComment(comment)));
     };
 }
 
-export function updateCommentAsync(id, alt, pos, ref, chrom, searchKey, comment) {
+export function updateCommentAsync(oldComment, alt, pos, ref, chrom, searchKey, newCommentText) {
 
-    return (dispatch) => {
-
-        const commentObject = {
-            id,
-            alt,
-            pos,
-            reference: ref,
-            chrom,
-            searchKey,
-            comment
-        };
+    return (dispatch, getState) => {
+        const oldCommentTexts = i18n.getEntityLanguageTexts(oldComment);
+        const {id} = oldComment;
+        const commentObject = i18n.changeEntityText(
+            i18n.setEntityLanguageTexts(
+                {
+                    id,
+                    alt,
+                    pos,
+                    reference: ref,
+                    chrom,
+                    searchKey
+                },
+                oldCommentTexts
+            ),
+            null,
+            {
+                comment: newCommentText
+            }
+        );
         return new Promise(
             (resolve) => commentsClient.update(commentObject, (error, response) => resolve({error, response}))
         ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(UPDATE_COMMENT_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('variantsTable.errors.updateCommentError'), error, response));
+            }
         ).then(
             (response) => response.body
         ).then((comment) => dispatch(changeComment(comment)));
@@ -203,11 +217,14 @@ export function updateCommentAsync(id, alt, pos, ref, chrom, searchKey, comment)
 }
 
 export function removeCommentAsync(id, searchKey) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         return new Promise(
             (resolve) => commentsClient.remove(id, (error, response) => resolve({error, response}))
         ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(DELETE_COMMENT_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('variantsTable.errors.deleteCommentError'), error, response));
+            }
         ).then(
             (response) => response.body
         ).then((comment) => dispatch(deleteComment(comment, searchKey)));
@@ -231,7 +248,10 @@ export function fetchVariantsAsync(searchParams) {
         return new Promise(
             (resolve) => sendAPI(limit, offset, (error, response) => resolve({error, response}))
         ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(ANALYZE_SAMPLE_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(getState());
+                return dispatch(handleApiResponseErrorAsync(p.t('variantsTable.errors.analyzeSampleError'), error, response));
+            }
         ).then(({body}) => {
             const {operationId} = body;
             dispatch(receiveAnalysisOperationId(operationId));
@@ -278,7 +298,10 @@ export function searchInResultsNextDataAsync() {
             limit,
             (error, response) => resolve({error, response})))
             .then(
-                ({error, response}) => dispatch(handleApiResponseErrorAsync(NEXT_DATA_ERROR_MESSAGE, error, response))
+                ({error, response}) => {
+                    const p = getP(state);
+                    return dispatch(handleApiResponseErrorAsync(p.t('variantsTable.errors.nextDataError'), error, response));
+                }
             );
     };
 }
@@ -303,7 +326,10 @@ export function searchInResultsAsync(flags) {
                 sort,
                 (error, response) => resolve({error, response}))
         ).then(
-            ({error, response}) => dispatch(handleApiResponseErrorAsync(SEARCH_IN_RESULTS_ERROR_MESSAGE, error, response))
+            ({error, response}) => {
+                const p = getP(state);
+                return dispatch(handleApiResponseErrorAsync(p.t('variantsTable.errors.searchInResultsError'), error, response));
+            }
         );
     };
 }

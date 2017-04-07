@@ -1,6 +1,7 @@
 import apiFacade from '../api/ApiFacade';
 import {handleApiResponseErrorAsync} from './errorHandler';
 import {setCurrentAnalysesHistoryIdLoadDataAsync} from './analysesHistory';
+import {getP} from 'redux-polyglot/dist/selectors';
 
 const modelsClient = apiFacade.modelsClient;
 
@@ -11,11 +12,6 @@ export const MODELS_LIST_ADD_MODEL = 'MODELS_LIST_ADD_MODEL';
 export const MODELS_LIST_DELETE_MODEL = 'MODELS_LIST_DELETE_MODEL';
 export const MODELS_LIST_EDIT_MODEL = 'MODELS_LIST_EDIT_MODEL';
 export const MODELS_LIST_SET_HISTORY_MODEL = 'MODELS_LIST_SET_HISTORY_MODEL';
-
-
-const CREATE_MODEL_ERROR_MESSAGE = 'Cannot create new model. Please try again.';
-const UPDATE_MODEL_ERROR_MESSAGE = 'Cannot update model. Please try again.';
-const DELETE_MODEL_ERROR_MESSAGE = 'Cannot delete model. Please try again.';
 
 
 export function modelsListStartServerOperation() {
@@ -60,13 +56,14 @@ export function modelsListEditModel(modelId, model) {
 }
 
 export function modelsListServerCreateModel(model, languageId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(modelsListStartServerOperation());
         return new Promise(
             (resolve) => modelsClient.add(languageId, model, (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
             dispatch(modelsListEndServerOperation());
-            return dispatch(handleApiResponseErrorAsync(CREATE_MODEL_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('filterAndModel.errors.createModelError'), error, response));
         }).then((response) => response.body
         ).then((newModel) => {
             dispatch(modelsListAddModel(newModel));
@@ -82,7 +79,8 @@ export function modelsListServerUpdateModel(model) {
             (resolve) => modelsClient.update(model, (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
             dispatch(modelsListEndServerOperation());
-            return dispatch(handleApiResponseErrorAsync(UPDATE_MODEL_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('filterAndModel.errors.updateModelError'), error, response));
         }).then((response) => response.body
         ).then((updatedModel) => {
             dispatch(modelsListEditModel(model.id, updatedModel));
@@ -94,13 +92,14 @@ export function modelsListServerUpdateModel(model) {
 }
 
 export function modelsListServerDeleteModel(modelId) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(modelsListStartServerOperation());
         return new Promise(
             (resolve) => modelsClient.remove(modelId, (error, response) => resolve({error, response}))
         ).then(({error, response}) => {
             dispatch(modelsListEndServerOperation());
-            return dispatch(handleApiResponseErrorAsync(DELETE_MODEL_ERROR_MESSAGE, error, response));
+            const p = getP(getState());
+            return dispatch(handleApiResponseErrorAsync(p.t('filterAndModel.errors.deleteModelError'), error, response));
         }).then(() => dispatch(modelsListDeleteModel(modelId)));
     };
 }

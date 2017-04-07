@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addTimeout } from 'redux-timeout';
 import FontFaceObserver from 'fontfaceobserver';
+import _ from 'lodash';
 
 import config from '../../config';
 
@@ -23,6 +24,12 @@ import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
 import UserActions from '../actions/userActions';
+import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
+import {applyCurrentLanguageId} from '../actions/ui';
+import {closeSavedFilesDialog} from '../actions/savedFiles';
+import * as PropTypes from 'react/lib/ReactPropTypes';
+import {getP} from 'redux-polyglot/dist/selectors';
+import * as i18n from '../utils/i18n';
 
 
 class App extends Component {
@@ -30,16 +37,21 @@ class App extends Component {
     componentWillMount() {
         // preload the font, wait for 30 seconds.
         const observer = new FontFaceObserver('Roboto-Medium');
-        observer.load(null, 30);
+        observer.load(null, 30000);
     }
 
     componentDidMount() {
         const {dispatch} = this.props;
         const {SESSION: {LOGOUT_TIMEOUT, KEEP_ALIVE_TIMEOUT}} = config;
+        dispatch(applyCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
         dispatch(loginWithGoogle());
 
         const autoLogoutTimeout = LOGOUT_TIMEOUT * 1000;
-        const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
+
+        function autoLogoutFn() {
+            dispatch(startAutoLogoutTimer());
+        }
+
         dispatch(addTimeout(autoLogoutTimeout, UserActions, autoLogoutFn));
 
         const keepAliveTask = new KeepAliveTask(KEEP_ALIVE_TIMEOUT * 1000);
@@ -48,7 +60,22 @@ class App extends Component {
 
     render() {
         const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
-            modalWindows, savedFiles, showErrorWindow, auth} = this.props;
+            modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
+            samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
+        const {newHistoryItem, currentHistoryId} = analysesHistory;
+        const samplesOnSaveParamsReset = {
+            action: resetCurrentAnalysesHistoryIdLoadDataAsync,
+            propertyIndex: null,
+            propertyId: null,
+            sampleIds: null
+        };
+        const samplesOnSaveParamsChange = {
+            action: editAnalysesHistoryItem(samplesList, modelsList, isDemo, {sample: {index: null, id: null}}, languageId),
+            propertyIndex: 'changeItem.sample.index',
+            propertyId: 'changeItem.sample.id',
+            sampleIds: newHistoryItem ? _.map(newHistoryItem.samples, sample => sample.id) : null
+        };
+        const samplesOnSaveParams = currentHistoryId ? samplesOnSaveParamsReset : samplesOnSaveParamsChange;
 
         return (
             <div className='main subnav-closed' id='main'>
@@ -57,9 +84,11 @@ class App extends Component {
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain
-                        openAnalysisModal={() => dispatch(openModal(modalName.ANALYSIS))}
+                        openAnalysisModal={() => {
+                            dispatch(openModal(modalName.ANALYSIS));
+                        }}
                         openSamplesModal={() => {
-                            dispatch(samplesOnSave(null, null, null, null));
+                            dispatch(samplesOnSave(samplesOnSaveParams.sampleIds, null, samplesOnSaveParams.propertyIndex, samplesOnSaveParams.propertyId, samplesOnSaveParams.action));
                             dispatch(openModal(modalName.UPLOAD));
                         }}
                     />
@@ -74,7 +103,6 @@ class App extends Component {
                 <AnalysisModal
                     showModal={modalWindows.analysis.showModal}
                     closeModal={ () => { dispatch(closeModal(modalName.ANALYSIS)); } }
-                    dispatch={dispatch}
                 />
                 <ErrorModal
                     showModal={showErrorWindow}
@@ -86,20 +114,19 @@ class App extends Component {
                 />
                 <ViewsModal
                     showModal={modalWindows.views.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
-                    dispatch={dispatch}
+                    closeModal={ () => { dispatch(closeModal(modalName.VIEWS)); } }
                 />
                 <FiltersModal
                     showModal={modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
-                    dispatch={dispatch}
+                    closeModal={ () => { dispatch(closeModal(modalName.FILTERS)); } }
                 />
                 <FileUploadModal
                     showModal={modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { dispatch(closeModal(modalName)); } }
+                    closeModal={ () => { dispatch(closeModal(modalName.UPLOAD)); } }
                 />
                 <SavedFilesModal
                     showModal={savedFiles.showSavedFilesModal}
+                    closeModal={ () => { dispatch(closeSavedFilesDialog()); } }
                 />
                 <CloseAllUserSessionsModal
                     showModal={auth.showCloseAllUserSessionsDialog}
@@ -124,6 +151,7 @@ function mapStateToProps(state) {
             filtersList,
             viewsList,
             modelsList,
+            analysesHistory,
             errorHandler: { showErrorWindow } } = state;
 
     return {
@@ -137,8 +165,13 @@ function mapStateToProps(state) {
         filtersList,
         viewsList,
         modelsList,
-        showErrorWindow
+        analysesHistory,
+        showErrorWindow,
+        p: getP(state)
     };
 }
 
+App.propTypes = {
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 export default connect(mapStateToProps)(App);
