@@ -595,6 +595,7 @@ function buildHistoryState() {
         samplesList: {hashedArray: {array: samples}},
         filtersList: {hashedArray: {array: filters}},
         analysesHistory: {newHistoryItem},
+        analysesHistory,
         fields
     } = MOCK_APP_STATE;
     const historyView = Object.assign({}, views[0], {id: TestIds.historyViewId, type: entityType.HISTORY});
@@ -628,7 +629,7 @@ function buildHistoryState() {
         filtersList: {
             hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1))
         },
-        analysesHistory: Object.assign({}, MOCK_APP_STATE.analysesHistory, {
+        analysesHistory: Object.assign({}, analysesHistory, {
             initialHistory: [historyEntry, nonHistoryEntry],
             history: [historyEntry, nonHistoryEntry],
             newHistoryItem,
