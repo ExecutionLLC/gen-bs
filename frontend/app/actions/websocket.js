@@ -168,7 +168,6 @@ function receiveUploadMessage(wsData) {
 }
 
 function receiveClosedByUserMessage() {
-    console.log('!!! receiveClosedByUserMessage');
     return (dispatch) => {
         dispatch(showAnotherPageOpenedModal());
     };

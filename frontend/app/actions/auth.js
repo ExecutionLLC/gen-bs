@@ -230,7 +230,6 @@ function displayErrorFromParamsAsync() {
 
 
 export function loginWithGoogle() {
-    console.log('!!! loginWithGoogle 1');
     return dispatch => Promise.resolve(
         // Display auth error from params if any
     ).then(() => dispatch(displayErrorFromParamsAsync())
@@ -247,7 +246,6 @@ export function loginWithGoogle() {
                         if (error.code !== TooManyWebSocketsError.CODE) {
                             dispatch(handleError(null, error.message));
                         } else {
-                            console.log('!!! loginWithGoogle 2');
                             dispatch(showAnotherPageOpenedModal());
                         }
                         return Promise.reject(error);
@@ -297,7 +295,6 @@ export function closeAllUserSessionsAsync() {
 }
 
 function toggleAnotherPageOpenedModal(shouldShow) {
-    console.log('!!! toggleAnotherPageOpenedModal ' + shouldShow);
     return {
         type: TOGGLE_ANOTHER_PAGE_OPENED_MODAL,
         shouldShow
@@ -305,17 +302,14 @@ function toggleAnotherPageOpenedModal(shouldShow) {
 }
 
 export function showAnotherPageOpenedModal() {
-    console.log('!!! showAnotherPageOpenedModal ');
     return (dispatch) => {
         dispatch(toggleAnotherPageOpenedModal(true));
     };
 }
 
 export function hideAnotherPageOpenedModal() {
-    console.log('!!! hideAnotherPageOpenedModal ');
     return (dispatch, getState) => {
         const {showAnotherPageOpenedModal: isShow, isWaitingForCloseAnotherPageOpenedModal: isWaiting} = getState().auth;
-        console.log('!!! hideAnotherPageOpenedModal >>', isShow, isWaiting);
         if (isShow) {
             if (isWaiting) {
                 dispatch(toggleAnotherPageOpenedModal(false));
@@ -329,7 +323,6 @@ export function hideAnotherPageOpenedModal() {
 }
 
 export function setWaitStateForModal() {
-    console.log('!!! setWaitStateForModal');
     return {
         type: SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL
     };

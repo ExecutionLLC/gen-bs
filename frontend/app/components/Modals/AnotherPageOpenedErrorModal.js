@@ -68,9 +68,8 @@ class AnotherPageOpenedErrorModal extends DialogBase {
     closeOtherSockets() {
         const {dispatch} = this.props;
         dispatch(setWaitStateForModal());
-        console.log('!!! closeOtherSockets 1');
         dispatch(closeOtherSocketsAsync())
-            .then(() => {console.log('!!! closeOtherSockets 2'); return dispatch(hideAnotherPageOpenedModal());});
+            .then(() => dispatch(hideAnotherPageOpenedModal()));
     }
 }
 
