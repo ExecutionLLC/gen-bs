@@ -200,13 +200,12 @@ function reduceFileUploadChangeProgress(state, action) {
 function reduceSaveUnknownUploadProgress(state, action) {
     const {progressValue, progressStatus, operationId} = action;
     const {unknownEvents} = state;
-    let newUnknownEvents = unknownEvents;
-    if (!newUnknownEvents) {
-        newUnknownEvents = {};
-    }
-    newUnknownEvents[operationId] = {
-        progressValue,
-        progressStatus
+    const newUnknownEvents = {
+        ...unknownEvents,
+        [operationId]: {
+            progressValue,
+            progressStatus
+        }
     };
     return {
         ...state,
@@ -217,12 +216,11 @@ function reduceSaveUnknownUploadProgress(state, action) {
 function reduceSaveUnknownUploadError(state, action) {
     const {error, operationId} = action;
     const {unknownEvents} = state;
-    let newUnknownEvents = unknownEvents;
-    if (!newUnknownEvents) {
-        newUnknownEvents = {};
-    }
-    newUnknownEvents[operationId] = {
-        error
+    const newUnknownEvents = {
+        ...unknownEvents,
+        [operationId]: {
+            error
+        }
     };
     return {
         ...state,
