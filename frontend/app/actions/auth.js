@@ -313,8 +313,18 @@ export function showAnotherPageOpenedModal() {
 
 export function hideAnotherPageOpenedModal() {
     console.log('!!! hideAnotherPageOpenedModal ');
-    return (dispatch) => {
-        dispatch(toggleAnotherPageOpenedModal(false));
+    return (dispatch, getState) => {
+        const {showAnotherPageOpenedModal: isShow, isWaitingForCloseAnotherPageOpenedModal: isWaiting} = getState().auth;
+        console.log('!!! hideAnotherPageOpenedModal >>', isShow, isWaiting);
+        if (isShow) {
+            if (isWaiting) {
+                dispatch(toggleAnotherPageOpenedModal(false));
+            } else {
+                // hide/show to reset 'waiting' flag
+                dispatch(toggleAnotherPageOpenedModal(false));
+                dispatch(toggleAnotherPageOpenedModal(true));
+            }
+        }
     };
 }
 
