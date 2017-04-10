@@ -305,6 +305,7 @@ export function showAnotherPageOpenedModal(shouldShow) {
 }
 
 export function setWaitStateForModal() {
+    console.log('!!! setWaitStateForModal');
     return {
         type: SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL
     };
