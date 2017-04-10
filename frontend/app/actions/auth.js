@@ -230,6 +230,7 @@ function displayErrorFromParamsAsync() {
 
 
 export function loginWithGoogle() {
+    console.log('!!! loginWithGoogle 1');
     return dispatch => Promise.resolve(
         // Display auth error from params if any
     ).then(() => dispatch(displayErrorFromParamsAsync())
@@ -246,6 +247,7 @@ export function loginWithGoogle() {
                         if (error.code !== TooManyWebSocketsError.CODE) {
                             dispatch(handleError(null, error.message));
                         } else {
+                            console.log('!!! loginWithGoogle 2');
                             dispatch(showAnotherPageOpenedModal(true));
                         }
                         return Promise.reject(error);
@@ -295,6 +297,7 @@ export function closeAllUserSessionsAsync() {
 }
 
 export function showAnotherPageOpenedModal(shouldShow) {
+    console.log('!!! showAnotherPageOpenedModal ' + shouldShow);
     return {
         type: SHOW_ANOTHER_PAGE_OPENED_MODAL,
         shouldShow
