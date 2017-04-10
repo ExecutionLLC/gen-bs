@@ -3,6 +3,7 @@ import MOCK_APP_STATE from './__data__/appState.json';
 
 
 import {
+    hideAnotherPageOpenedModal,
     setWaitStateForModal,
     showAnotherPageOpenedModal
 } from '../app/actions/auth';
@@ -31,7 +32,7 @@ describe('Another page opened', () => {
     it('should show "close another page" modal', (done) => {
         storeTestUtils.runTest({
             globalInitialState: MOCK_APP_STATE,
-            applyActions: (dispatch) => dispatch(showAnotherPageOpenedModal(true)),
+            applyActions: (dispatch) => dispatch(showAnotherPageOpenedModal()),
             stateMapperFunc
         }, (mappedState) => {
             openedModalState = mappedState;
@@ -71,7 +72,7 @@ describe('Another page opened', () => {
             globalInitialState: openedModalWaitingState.appState,
             applyActions: (dispatch) => dispatch([
                 closeOtherSocketsAsync(),
-                showAnotherPageOpenedModal(false)
+                hideAnotherPageOpenedModal()
             ]),
             stateMapperFunc
         }, (mappedState) => {
@@ -96,9 +97,9 @@ describe('Another page opened', () => {
         storeTestUtils.runTest({
             globalInitialState: openedModalWaitingState.appState,
             applyActions: (dispatch) => dispatch([
-                showAnotherPageOpenedModal(true), // received CLOSED_BY_USER while closeOtherSockets handling
+                showAnotherPageOpenedModal(), // received CLOSED_BY_USER while closeOtherSockets handling
                 closeOtherSocketsAsync(),
-                showAnotherPageOpenedModal(false)
+                hideAnotherPageOpenedModal()
             ]),
             stateMapperFunc
         }, (mappedState) => {
