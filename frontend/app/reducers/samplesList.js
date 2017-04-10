@@ -5,6 +5,7 @@ import immutableArray from '../utils/immutableArray';
 import {ImmutableHashedArray} from '../utils/immutable';
 import {entityType} from '../utils/entityTypes';
 import * as i18n from '../utils/i18n';
+import {SAMPLE_UPLOAD_STATE} from '../actions/fileUpload';
 
 
 function reduceRequestSamples(state) {
@@ -161,7 +162,7 @@ function reduceSamplesListAddOrUpdateSamples(state, action) {
     _.forEach(samples, sample => {
         if (!newHashedArray.hash[sample.id]) {
             newHashedArray = ImmutableHashedArray.appendItem(newHashedArray, sample);
-        } else if(newHashedArray.hash[sample.id].uploadState !== 'completed') {
+        } else if(newHashedArray.hash[sample.id].uploadState !== SAMPLE_UPLOAD_STATE.COMPLETED) {
             newHashedArray = ImmutableHashedArray.replaceItemId(newHashedArray, sample.id, sample);
         }
     });
