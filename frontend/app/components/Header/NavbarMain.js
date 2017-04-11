@@ -110,12 +110,11 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ws, variantsTable, samplesList, fileUpload, ui} = state;
+    const {auth, userData, variantsTable, samplesList, fileUpload, ui} = state;
 
     return {
         auth,
         userData,
-        ws,
         variantsTable,
         samplesList,
         fileUpload,
