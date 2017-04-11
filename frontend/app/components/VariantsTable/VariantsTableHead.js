@@ -11,7 +11,7 @@ import FieldUtils from '../../utils/fieldUtils';
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}, p} = this.props;
+        const {fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}, p} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
