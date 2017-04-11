@@ -33,13 +33,13 @@ export default class VariantsTableHead extends Component {
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
                 <td className='btntd'>
-                    <div></div>
+                    <div />
                 </td>
                 <td className='btntd row_checkbox' key='row_checkbox'>
-                    <div></div>
+                    <div />
                 </td>
                 <td className='btntd'>
-                    <div></div>
+                    <div />
                 </td>
                 <td key='comment' className='comment'>
                     <div>
