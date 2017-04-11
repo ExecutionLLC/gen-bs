@@ -233,7 +233,7 @@ function reduceEraseUnknownUploadEvent(state, action) {
     const {unknownEvents} = state;
     return {
         ...state,
-        unknownEvents: _.omit(unknownEvents, [operationId])
+        unknownEvents: _.omit(unknownEvents, operationId)
     };
 }
 
