@@ -51,9 +51,17 @@ class App extends Component {
     }
 
     render() {
-        const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
-            modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
-            samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samplesArray}},
+            modalWindows, savedFiles, showErrorWindow, analysesHistory,
+            samplesList, modelsList,
+            auth: {
+                isDemo, showAutoLogoutDialog, showCloseAllUserSessionsDialog,
+                showAnotherPageOpenedModal, isWaitingForCloseAnotherPageOpenedModal
+            },
+            ui: {languageId}
+        } = this.props;
         const {newHistoryItem, currentHistoryId} = analysesHistory;
         const samplesOnSaveParamsReset = {
             action: resetCurrentAnalysesHistoryIdLoadDataAsync,
@@ -101,7 +109,7 @@ class App extends Component {
                     closeModal={ () => { dispatch(lastErrorResolved()); } }
                 />
                 <AutoLogoutModal
-                    showModal={auth.showAutoLogoutDialog}
+                    showModal={showAutoLogoutDialog}
                     closeModal={ () => {
                         dispatch(stopAutoLogoutCountdownTimer());
                         dispatch(startAutoLogoutTimer());
@@ -124,11 +132,11 @@ class App extends Component {
                     closeModal={ () => { dispatch(closeSavedFilesDialog()); } }
                 />
                 <CloseAllUserSessionsModal
-                    showModal={auth.showCloseAllUserSessionsDialog}
+                    showModal={showCloseAllUserSessionsDialog}
                 />
                 <AnotherPageOpenedErrorModal
-                    showModal={auth.showAnotherPageOpenedModal}
-                    isWaitingForClose={auth.isWaitingForCloseAnotherPageOpenedModal}
+                    showModal={showAnotherPageOpenedModal}
+                    isWaitingForClose={isWaitingForCloseAnotherPageOpenedModal}
                 />
             </div>
         );
@@ -136,18 +144,20 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth,
-            userData,
-            modalWindows,
-            fields,
-            savedFiles,
-            ui,
-            samplesList,
-            filtersList,
-            viewsList,
-            modelsList,
-            analysesHistory,
-            errorHandler: { showErrorWindow } } = state;
+    const {
+        auth,
+        userData,
+        modalWindows,
+        fields,
+        savedFiles,
+        ui,
+        samplesList,
+        filtersList,
+        viewsList,
+        modelsList,
+        analysesHistory,
+        errorHandler: { showErrorWindow }
+    } = state;
 
     return {
         auth,
