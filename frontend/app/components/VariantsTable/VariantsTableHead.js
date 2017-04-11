@@ -97,7 +97,7 @@ export default class VariantsTableHead extends Component {
                 onSearchRequested={(searchValue) => {
                     this.onSendSearchRequest(fieldId, sampleId, searchValue);
                 }}
-                currentVariants={this.props.ws.currentVariants}
+                currentVariants={this.props.websocket.currentVariants}
                 languageId={languageId}
                 disabled={isFetching}
             />

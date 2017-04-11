@@ -22,7 +22,7 @@ class VariantsTableReact extends Component {
 
     render() {
         const {fields, p} = this.props;
-        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.ws;
+        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.websocket;
         return (
 
             <div className='table-variants-wrapper'>
@@ -97,7 +97,7 @@ function mapStateToProps(state) {
 
     return {
         auth,
-        ws: websocket,
+        websocket,
         ui,
         variantsTable,
         fields,

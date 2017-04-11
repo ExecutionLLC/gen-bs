@@ -88,7 +88,7 @@ export default class VariantsTableRows extends Component {
 
     // checks if the last results size (currentVariants.length) is greater or equal to the limit of single request
     canLoadMore() {
-        const {ws: {currentVariants}, variantsTable: {searchInResultsParams: {limit}}} = this.props;
+        const {websocket: {currentVariants}, variantsTable: {searchInResultsParams: {limit}}} = this.props;
         return currentVariants && currentVariants.length >= limit;
     }
 
