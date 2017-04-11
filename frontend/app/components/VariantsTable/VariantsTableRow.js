@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, {PropTypes} from 'react';
 import classNames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
@@ -220,13 +220,17 @@ export default class VariantsTableRow extends ComponentBase {
 }
 
 VariantsTableRow.propTypes = {
-    row: React.PropTypes.object.isRequired,
-    rowIndex: React.PropTypes.number.isRequired,
-    sortState: React.PropTypes.array.isRequired,
-    auth: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    isSelected: React.PropTypes.bool.isRequired,
+    row: PropTypes.object.isRequired,
+    rowIndex: PropTypes.number.isRequired,
+    sortState: PropTypes.array.isRequired,
+    variantsHeader: PropTypes.array,
+    auth: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    fields: PropTypes.object.isRequired,
+    ui: PropTypes.object.isRequired,
     // callback(rowIndex, isSelected)
-    onSelected: React.PropTypes.func.isRequired,
-    tableElement: React.PropTypes.instanceOf(React.Component).isRequired
+    onSelected: PropTypes.func.isRequired,
+    tableElement: PropTypes.instanceOf(React.Component).isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
 };
