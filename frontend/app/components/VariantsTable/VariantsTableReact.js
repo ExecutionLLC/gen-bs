@@ -21,8 +21,11 @@ class VariantsTableReact extends Component {
     }
 
     render() {
-        const {fields, p} = this.props;
-        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.websocket;
+        const {fields, variantsTable, ui, websocket, auth, p, dispatch} = this.props;
+        const {
+            variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid,
+            variantsError, variantsAnalysis, variantsSamples
+        } = websocket;
         return (
 
             <div className='table-variants-wrapper'>
@@ -39,16 +42,33 @@ class VariantsTableReact extends Component {
                 <div className='table-variants-container'>
                     <table className='table table-striped table-variants table-select-mode' id='variants_table'
                            ref='variantsTable'>
-                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
-                                           ref={(ref) => ref && this.onAppear(true, ref)}
-                                           p={p}
+                        <VariantsTableHead
+                            fields={fields}
+                            variantsHeader={variantsHeader}
+                            variantsTable={variantsTable}
+                            variantsAnalysis={variantsAnalysis}
+                            variantsSamples={variantsSamples}
+                            ui={ui}
+                            websocket={websocket}
+                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
+                            ref={(ref) => ref && this.onAppear(true, ref)}
+                            p={p}
+                            dispatch={dispatch}
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
-                                           ref={(ref) => ref && this.onAppear(false, ref)}
-                                           p={p}
+                        <VariantsTableRows
+                            ui={ui}
+                            auth={auth}
+                            fields={fields}
+                            variants={variants}
+                            variantsHeader={variantsHeader}
+                            variantsAnalysis={variantsAnalysis}
+                            websocket={websocket}
+                            variantsTable={variantsTable}
+                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
+                            ref={(ref) => ref && this.onAppear(false, ref)}
+                            p={p}
+                            dispatch={dispatch}
                         />
                         }
                     </table>

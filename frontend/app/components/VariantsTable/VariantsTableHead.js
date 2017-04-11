@@ -143,5 +143,6 @@ VariantsTableHead.propTypes = {
     ui: PropTypes.object.isRequired,
     websocket: PropTypes.object.isRequired,
     xScrollListener: PropTypes.func.isRequired,
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    dispatch: PropTypes.func.isRequired
 };
