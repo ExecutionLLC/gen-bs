@@ -65,7 +65,7 @@ export default class VariantsTableHead extends Component {
                 {_.map(variantsHeader, (fieldSampleExist) =>
                     this.renderFieldHeaderControls(
                         fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
-                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId
                     )
                 )}
             </tr>
