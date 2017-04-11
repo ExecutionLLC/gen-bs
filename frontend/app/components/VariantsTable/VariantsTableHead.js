@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import FieldHeaderControls from './FieldHeaderControls';
 
@@ -133,3 +133,15 @@ export default class VariantsTableHead extends Component {
     }
 
 }
+
+VariantsTableHead.propTypes = {
+    fields: PropTypes.object.isRequired,
+    variantsHeader: PropTypes.array,
+    variantsTable: PropTypes.object.isRequired,
+    variantsAnalysis: PropTypes.object,
+    variantsSamples: PropTypes.array,
+    ui: PropTypes.object.isRequired,
+    websocket: PropTypes.object.isRequired,
+    xScrollListener: PropTypes.func.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};

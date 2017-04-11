@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import VariantsTableRow from './VariantsTableRow';
 
@@ -171,3 +171,16 @@ export default class VariantsTableRows extends Component {
         dispatch(selectTableRow(rowIndex, isNowSelected));
     }
 }
+
+VariantsTableRows.propTypes = {
+    ui: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+    fields: PropTypes.object.isRequired,
+    variants: PropTypes.array,
+    variantsHeader: PropTypes.array,
+    variantsAnalysis: PropTypes.object,
+    websocket: PropTypes.object.isRequired,
+    variantsTable: PropTypes.object.isRequired,
+    xScrollListener: PropTypes.func.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
