@@ -146,14 +146,10 @@ class App extends Component {
 function mapStateToProps(state) {
     const {
         auth,
-        userData,
         modalWindows,
-        fields,
         savedFiles,
         ui,
         samplesList,
-        filtersList,
-        viewsList,
         modelsList,
         analysesHistory,
         errorHandler: { showErrorWindow }
@@ -161,22 +157,14 @@ function mapStateToProps(state) {
 
     return {
         auth,
-        userData,
         modalWindows,
-        fields,
         savedFiles,
         ui,
         samplesList,
-        filtersList,
-        viewsList,
         modelsList,
         analysesHistory,
-        showErrorWindow,
-        p: getP(state)
+        showErrorWindow
     };
 }
 
-App.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
-};
 export default connect(mapStateToProps)(App);
