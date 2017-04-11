@@ -94,7 +94,7 @@ class App extends Component {
                     />
                      <div className='collapse-subnav hidden' id='subnav'>
                      </div>
-                     <VariantsTableReact {...this.props} />
+                     <VariantsTableReact />
                      <div id='fav-message' className='hidden'>
                         You can export these items to file
                      </div>
