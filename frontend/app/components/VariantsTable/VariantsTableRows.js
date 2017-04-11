@@ -20,12 +20,16 @@ export default class VariantsTableRows extends Component {
         const {fields, variantsHeader, variantsAnalysis} = this.props;
 
         return (
-            <tbody className='table-variants-body'
-                   id='variants_table_body'
-                   ref={REFS.CONTAINER}>
-            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
-                !!variantsAnalysis, variantsHeader, fields, selectedRowIndices)}
-            {!isFilteringOrSorting && this.canLoadMore() && this.renderLoadingItem()}
+            <tbody
+                className='table-variants-body'
+                id='variants_table_body'
+                ref={REFS.CONTAINER}
+            >
+                {this.renderTableBody(
+                    sampleRows, sort, isFilteringOrSorting,
+                    !!variantsAnalysis, variantsHeader, fields, selectedRowIndices
+                )}
+                {!isFilteringOrSorting && this.canLoadMore() && this.renderLoadingItem()}
             </tbody>
         );
     }
@@ -34,7 +38,6 @@ export default class VariantsTableRows extends Component {
         const containerElement = document.getElementsByClassName('table-variants-container').item(0);
         const scrollElement = this.refs[REFS.CONTAINER];
         scrollElement.style.height = `${containerElement.clientHeight - 100}px`;
-
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
     }
 
@@ -95,21 +98,22 @@ export default class VariantsTableRows extends Component {
     renderRow(row, rowIndex, sortState, variantsHeader, fields, selectedRowIndices) {
         const isSelected = _.includes(selectedRowIndices, rowIndex);
         return (
-            <VariantsTableRow key={rowIndex}
-                              row={row}
-                              rowIndex={rowIndex}
-                              sortState={sortState}
-                              variantsHeader={variantsHeader}
-                              isSelected={isSelected}
-                              fields={fields}
-                              auth={this.props.auth}
-                              ui={this.props.ui}
-                              dispatch={this.props.dispatch}
-                              tableElement={this}
-                              onSelected={
-                                  (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
-                              }
-                              p={this.props.p}
+            <VariantsTableRow
+                key={rowIndex}
+                row={row}
+                rowIndex={rowIndex}
+                sortState={sortState}
+                variantsHeader={variantsHeader}
+                isSelected={isSelected}
+                fields={fields}
+                auth={this.props.auth}
+                ui={this.props.ui}
+                dispatch={this.props.dispatch}
+                tableElement={this}
+                onSelected={
+                    (rowIndex, isNowSelected) => this.onTableRowSelected(rowIndex, isNowSelected)
+                }
+                p={this.props.p}
             />
         );
     }
