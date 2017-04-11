@@ -63,19 +63,20 @@ export default class VariantsTableRow extends ComponentBase {
                     <div>
                     </div>
                 </td>
-                <VariantsTableComment alt={alt}
-                                      pos={pos}
-                                      reference={ref}
-                                      chrom={chrom}
-                                      searchKey={searchKey}
-                                      rowIndex={rowIndex}
-                                      dispatch={dispatch}
-                                      auth={auth}
-                                      comments={comments}
-                                      tableElement={this.props.tableElement}
-                                      onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
-                                      ui={ui}
-                                      p={p}
+                <VariantsTableComment
+                    alt={alt}
+                    pos={pos}
+                    reference={ref}
+                    chrom={chrom}
+                    searchKey={searchKey}
+                    rowIndex={rowIndex}
+                    dispatch={dispatch}
+                    auth={auth}
+                    comments={comments}
+                    tableElement={this.props.tableElement}
+                    onPopupTriggered={(isHighlighted) => this.setHighlighted(isHighlighted)}
+                    ui={ui}
+                    p={p}
                 />
                 {_.map(rowFields, (value, index) =>
                     this.renderFieldValue(index, variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
@@ -117,7 +118,7 @@ export default class VariantsTableRow extends ComponentBase {
                     (isValueHyperlink && !this.hasMultipleValues(value) ?
                         this.renderHyperLinkValue(value, field) :
                         this.renderPopupValue(ref, value, field, isValueHyperlink, isChromosome)) :
-                    <div></div>
+                    <div />
                 }
             </td>
         );
