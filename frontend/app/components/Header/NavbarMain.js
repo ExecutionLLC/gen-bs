@@ -91,7 +91,12 @@ class NavbarMain extends Component {
                         p={this.props.p}
                     />
                     }
-                    <Auth {...this.props} />
+                    <Auth
+                        dispatch={this.props.dispatch}
+                        auth={this.props.auth}
+                        userData={this.props.userData}
+                        p={this.props.p}
+                    />
                 </div>
             </nav>
         );
