@@ -21,13 +21,16 @@ class VariantsTableReact extends Component {
     }
 
     render() {
-        const {fields, p} = this.props;
-        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.ws;
+        const {fields, variantsTable, ui, websocket, auth, p, dispatch} = this.props;
+        const {
+            variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid,
+            variantsError, variantsAnalysis, variantsSamples
+        } = websocket;
         return (
 
             <div className='table-variants-wrapper'>
                 { isVariantsLoading &&
-                <div className='loader'></div>
+                <div className='loader' />
                 }
 
                 { !isVariantsLoading && !isVariantsValid &&
@@ -37,18 +40,38 @@ class VariantsTableReact extends Component {
                 }
                 { !isVariantsLoading && isVariantsValid &&
                 <div className='table-variants-container'>
-                    <table className='table table-striped table-variants table-select-mode' id='variants_table'
-                           ref='variantsTable'>
-                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
-                                           ref={(ref) => ref && this.onAppear(true, ref)}
-                                           p={p}
+                    <table
+                        className='table table-striped table-variants table-select-mode'
+                        id='variants_table'
+                        ref='variantsTable'
+                    >
+                        <VariantsTableHead
+                            fields={fields}
+                            variantsHeader={variantsHeader}
+                            variantsTable={variantsTable}
+                            variantsAnalysis={variantsAnalysis}
+                            variantsSamples={variantsSamples}
+                            ui={ui}
+                            websocket={websocket}
+                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
+                            ref={(ref) => ref && this.onAppear(true, ref)}
+                            p={p}
+                            dispatch={dispatch}
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
-                                           ref={(ref) => ref && this.onAppear(false, ref)}
-                                           p={p}
+                        <VariantsTableRows
+                            ui={ui}
+                            auth={auth}
+                            fields={fields}
+                            variants={variants}
+                            variantsHeader={variantsHeader}
+                            variantsAnalysis={variantsAnalysis}
+                            websocket={websocket}
+                            variantsTable={variantsTable}
+                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
+                            ref={(ref) => ref && this.onAppear(false, ref)}
+                            p={p}
+                            dispatch={dispatch}
                         />
                         }
                     </table>
@@ -72,7 +95,7 @@ class VariantsTableReact extends Component {
             this.variantsTableRows = el;
         }
         const {scrollTarget} = this.state;
-        if (scrollTarget != null && el.scrollLeft != scrollTarget) {
+        if (scrollTarget !== null && el.scrollLeft !== scrollTarget) {
             el.scrollLeft = scrollTarget;
         }
     }
@@ -81,11 +104,11 @@ class VariantsTableReact extends Component {
         // sync scroll position in body and header.
         const {scrollTarget} = this.state;
         // do nothing if we already there
-        if (scrollTarget !== null && scrollLeft == scrollTarget) {
+        if (scrollTarget !== null && scrollLeft === scrollTarget) {
             return;
         }
         const otherDOMNode = isHeader ? this.variantsTableRows : this.variantsTableHead;
-        if (otherDOMNode && otherDOMNode.scrollLeft != scrollLeft) {
+        if (otherDOMNode && otherDOMNode.scrollLeft !== scrollLeft) {
             this.setState({scrollTarget: scrollLeft});
             otherDOMNode.scrollLeft = scrollLeft;
         }
@@ -93,13 +116,14 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, websocket, ui, variantsTable} = state;
+    const {auth, websocket, ui, variantsTable, fields} = state;
 
     return {
         auth,
-        ws: websocket,
+        websocket,
         ui,
         variantsTable,
+        fields,
         p: getP(state)
     };
 }
