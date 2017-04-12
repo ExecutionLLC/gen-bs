@@ -20,6 +20,16 @@ class VariantsTableReact extends Component {
         this.variantsTableRows = null;
     }
 
+    shouldComponentUpdate(nextProps) {
+        return (
+            nextProps.auth !== this.props.auth ||
+            nextProps.websocket !== this.props.websocket ||
+            nextProps.ui !== this.props.ui ||
+            nextProps.variantsTable !== this.props.variantsTable ||
+            nextProps.p.currentLocale !== this.props.p.currentLocale
+        );
+    }
+
     render() {
         const {fields, variantsTable, ui, websocket, auth, p, dispatch} = this.props;
         const {
