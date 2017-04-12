@@ -25,7 +25,6 @@ import {samplesOnSave} from '../actions/samplesList';
 import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
 import {applyCurrentLanguageId} from '../actions/ui';
 import {closeSavedFilesDialog} from '../actions/savedFiles';
-import {getP} from 'redux-polyglot/dist/selectors';
 import * as i18n from '../utils/i18n';
 
 
