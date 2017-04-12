@@ -95,7 +95,7 @@ class VariantsTableReact extends Component {
             this.variantsTableRows = el;
         }
         const {scrollTarget} = this.state;
-        if (scrollTarget != null && el.scrollLeft != scrollTarget) {
+        if (scrollTarget !== null && el.scrollLeft !== scrollTarget) {
             el.scrollLeft = scrollTarget;
         }
     }
@@ -104,11 +104,11 @@ class VariantsTableReact extends Component {
         // sync scroll position in body and header.
         const {scrollTarget} = this.state;
         // do nothing if we already there
-        if (scrollTarget !== null && scrollLeft == scrollTarget) {
+        if (scrollTarget !== null && scrollLeft === scrollTarget) {
             return;
         }
         const otherDOMNode = isHeader ? this.variantsTableRows : this.variantsTableHead;
-        if (otherDOMNode && otherDOMNode.scrollLeft != scrollLeft) {
+        if (otherDOMNode && otherDOMNode.scrollLeft !== scrollLeft) {
             this.setState({scrollTarget: scrollLeft});
             otherDOMNode.scrollLeft = scrollLeft;
         }
