@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 
@@ -165,3 +165,12 @@ export default class ExistentFilterSelect extends Component {
     }
 
 }
+
+ExistentFilterSelect.propTypes = {
+    auth: PropTypes.object.isRequired,
+    filterBuilder: PropTypes.object.isRequired,
+    ui: PropTypes.object.isRequired,
+    texts: PropTypes.shape({p: PropTypes.func.isRequired}).isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    dispatch: PropTypes.func.isRequired
+};
