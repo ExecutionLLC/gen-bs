@@ -84,8 +84,7 @@ export default class ExistentFilterSelect extends Component {
 
     renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts) {
         return (
-            <div className='btn-group' data-toggle='tooltip'
-                 data-placement='bottom' data-container='body'>
+            <div className='btn-group'>
                 {isFilterDuplicable && this.renderDuplicateFilterButton(isDemoSession, texts)}
                 {isFilterEditable && this.renderResetFilterButton(texts)}
                 {isFilterEditable && this.renderDeleteFilterButton(texts)}
@@ -96,12 +95,13 @@ export default class ExistentFilterSelect extends Component {
     renderDuplicateFilterButton(isDemoSession, texts) {
         const title = isDemoSession ? texts.p('loginToWork') : texts.p('makeCopy');
         return (
-            <button type='button'
-                    className='btn btn-default in'
-                    id='dblBtn'
-                    onClick={() => this.onDuplicateClick()}
-                    disabled={isDemoSession}
-                    title={title}
+            <button
+                type='button'
+                className='btn btn-default in'
+                id='dblBtn'
+                onClick={() => this.onDuplicateClick()}
+                disabled={isDemoSession}
+                title={title}
             >
                 <span className='hidden-xs'>{texts.p('existentSelect.duplicate')}</span>
                 <span className='visible-xs'><i className='md-i'>content_copy</i></span>
@@ -111,9 +111,10 @@ export default class ExistentFilterSelect extends Component {
 
     renderResetFilterButton(texts) {
         return (
-            <button type='button'
-                    className='btn btn-default'
-                    onClick={() => this.onResetFilterClick()}
+            <button
+                type='button'
+                className='btn btn-default'
+                onClick={() => this.onResetFilterClick()}
             >
                 <span className='hidden-xs'>{texts.p('existentSelect.reset')}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
@@ -123,9 +124,10 @@ export default class ExistentFilterSelect extends Component {
 
     renderDeleteFilterButton(texts) {
         return (
-            <button type='button'
-                    className='btn btn-default'
-                    onClick={() => this.onDeleteFilterClick()}
+            <button
+                type='button'
+                className='btn btn-default'
+                onClick={() => this.onDeleteFilterClick()}
             >
                 <span className='hidden-xs'>{texts.p('existentSelect.deleteItem')}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
