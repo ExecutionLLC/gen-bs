@@ -107,9 +107,11 @@ class FiltersModal extends Component {
                                 { editingFilterIsNew &&
                                 <div className='modal-padding'>
                                     <NewFilterInputs
-                                        {...this.props}
+                                        filterBuilder={filterBuilder}
+                                        ui={ui}
                                         texts={texts}
                                         validationMessage={titleValidationMessage}
+                                        dispatch={dispatch}
                                     />
                                     <FilterBuilder
                                         filterBuilder={filterBuilder}
