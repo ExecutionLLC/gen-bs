@@ -51,7 +51,7 @@ class FiltersModal extends Component {
     }
 
     render() {
-        const {dispatch, auth: {isDemo}, filterBuilder, showModal, p} = this.props;
+        const {dispatch, auth: {isDemo}, filterBuilder, showModal, fields, ui, p} = this.props;
         const filters = filterBuilder.filtersList && filterBuilder.filtersList.hashedArray.array;
         const editingFilterObject = filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
@@ -112,9 +112,12 @@ class FiltersModal extends Component {
                                         validationMessage={titleValidationMessage}
                                     />
                                     <FilterBuilder
-                                        {...this.props}
+                                        filterBuilder={filterBuilder}
+                                        fields={fields}
+                                        ui={ui}
                                         texts={texts}
                                         p={p}
+                                        dispatch={dispatch}
                                     />
                                 </div>
                                 }
@@ -125,8 +128,12 @@ class FiltersModal extends Component {
                                         {...this.props}
                                     />
                                     <FilterBuilder
-                                        {...this.props}
+                                        filterBuilder={filterBuilder}
+                                        fields={fields}
+                                        ui={ui}
                                         texts={texts}
+                                        p={p}
+                                        dispatch={dispatch}
                                     />
                                 </div>
                                 }
