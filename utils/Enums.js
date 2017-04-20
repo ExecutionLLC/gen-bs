@@ -10,7 +10,8 @@ function createEnum(keyValueObject) {
 
 const OBJECT_STORAGE_TYPES = createEnum({
     S3: 's3',
-    OSS: 'oss'
+    OSS: 'oss',
+    FILE: 'file'
 });
 
 const SEARCH_SERVICE_EVENTS = createEnum({

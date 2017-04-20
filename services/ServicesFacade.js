@@ -25,8 +25,6 @@ const ObjectStorageService = require('./ObjectStorageService');
 const ModelsService = require('./ModelsService');
 const EventsService = require('./EventsService');
 
-const AmazonS3Service = require('./external/AmazonS3Service');
-const AliyunOSSService = require('./external/AliyunOSSService');
 
 const ApplicationServerService = require('./external/applicationServer/ApplicationServerService');
 const ApplicationServerReplyService = require('./external/applicationServer/ApplicationServerReplyService');
@@ -67,8 +65,6 @@ class ServiceFacade {
         this.applicationServerReply = new ApplicationServerReplyService(this);
         this.applicationServerSearch = new AppServerSearchService(this);
 
-        this.amazonS3 = new AmazonS3Service(this, models);
-        this.oss = new AliyunOSSService(this, models);
         this.objectStorage = new ObjectStorageService(this, models);
 
         this.scheduler = new SchedulerService(this, models);

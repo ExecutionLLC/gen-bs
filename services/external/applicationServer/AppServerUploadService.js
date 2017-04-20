@@ -158,10 +158,8 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (systemSession, callback) => this.services.operations.find(systemSession, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
-                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const params = {
-                    sample: operationId,
-                    bucket: newSamplesBucket
+                    path: this.services.objectStorage.getSamplePath(operationId)
                 };
                 this._rpcSend(session, operation, method, params, priority, callback);
             }
@@ -242,9 +240,8 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             },
             (callback) => {
                 callbackErrorHandler(() => {
-                    const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                     const vcfFileId = operation.getId();
-                    this.services.objectStorage.deleteObject(newSamplesBucket, vcfFileId,
+                    this.services.objectStorage.removeSampleFile(vcfFileId,
                         (error, result) => callback(error));
                 }, callback);
             },
