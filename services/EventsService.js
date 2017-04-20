@@ -7,7 +7,7 @@ class EventsService extends ServiceBase {
 
     addEvent(userId, eventType, callback) {
         const event = {
-            type: eventType,
+            type: eventType
         };
         this.models.events.add(userId, event, callback)
     }

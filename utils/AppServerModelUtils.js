@@ -54,7 +54,7 @@ class AppServerModelUtils {
                     return {
                         columnName,
                         sourceName,
-                        condition,
+                        condition
                     };
                 } else {
                     return null;

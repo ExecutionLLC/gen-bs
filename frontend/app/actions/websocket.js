@@ -138,15 +138,17 @@ function otherMessage(wsData) {
 
 function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
-        if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
-            dispatch(tableMessage(wsData));
-            const {variantsTable, variantsTable: {searchInResultsParams: {limit}}} = getState();
-            if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
-                const isReceivedAll = wsData.result.data && wsData.result.data.length < limit;
-                dispatch(receiveSearchedResults(isReceivedAll));
+        const {variantsTable, variantsTable: {searchInResultsParams: {limit}}} = getState();
+        if (wsData.operationId === variantsTable.operationId) {
+            if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
+                dispatch(tableMessage(wsData));
+                if (variantsTable.isFilteringOrSorting || variantsTable.isNextDataLoading) {
+                    const isReceivedAll = wsData.result.data && wsData.result.data.length < limit;
+                    dispatch(receiveSearchedResults(isReceivedAll));
+                }
+            } else {
+                dispatch(progressMessage(wsData));
             }
-        } else {
-            dispatch(progressMessage(wsData));
         }
     };
 }
@@ -172,7 +174,8 @@ function receiveClosedByUserMessage() {
 }
 
 function receiveErrorMessage(wsData) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const {variantsTable} = getState();
         if (wsData.result && wsData.result.metadata && wsData.result.metadata.samples) {
             dispatch(samplesListAddOrUpdateSamples(
                 _.map(wsData.result.metadata.samples, (sample) => {
@@ -187,6 +190,10 @@ function receiveErrorMessage(wsData) {
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
             dispatch(fileUploadErrorForOperationId(error, wsData.operationId));
+        } else if (wsData.operationType === WS_OPERATION_TYPES.SEARCH) {
+            if (wsData.operationId === variantsTable.operationId) {
+                dispatch(asError(error));
+            }
         } else {
             dispatch(asError(error));
         }

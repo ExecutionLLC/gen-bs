@@ -26,7 +26,7 @@ export default function auth(state = {
             });
         }
 
-        case ActionTypes.UPDATE_AUTOLOGOUT_TIMER: {
+        case ActionTypes.SET_AUTOLOGOUT_COUNTDOWN_TIMER: {
             const showAutoLogoutDialog = action.secondsToAutoLogout !== null;
             return Object.assign({}, state, {
                 showAutoLogoutDialog,

@@ -10,7 +10,7 @@ function stateMapperFunc(globalState) {
         sortingFields: [
             {fieldId: 'field1', sampleId: 'sample1'},
             {fieldId: 'field2', sampleId: 'sample2'},
-            {fieldId: 'field3', sampleId: 'sample3'},
+            {fieldId: 'field3', sampleId: 'sample3'}
         ]
     };
 }

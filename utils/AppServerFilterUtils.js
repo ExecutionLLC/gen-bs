@@ -33,7 +33,7 @@ class AppServerFilterUtils {
                 return {
                     columnName,
                     sourceName,
-                    condition,
+                    condition
                 }
             } else {
                 return null;

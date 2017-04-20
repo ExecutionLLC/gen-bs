@@ -62,7 +62,7 @@ describe('Users.update', () => {
         const r = Math.random();
         return Object.assign({}, user, {
             firstName: `${user.firstName} ${r}`,
-            lastName: `${user.lastName} ${r}`,
+            lastName: `${user.lastName} ${r}`
         });
     }
 

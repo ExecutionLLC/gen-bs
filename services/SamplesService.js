@@ -93,7 +93,7 @@ class SamplesService extends UserEntityServiceBase {
                 } else {
                     callback(null, item);
                 }
-            },
+            }
         ], callback);
     }
 
@@ -194,7 +194,7 @@ class SamplesService extends UserEntityServiceBase {
             creator: user.id,
             status: error ? SAMPLE_UPLOAD_STATUS.ERROR : SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
             progress: 0,
-            error: error ? ErrorUtils.createInternalError(error) : null,
+            error: error ? ErrorUtils.createInternalError(error) : null
         }, (error) => callback(error, id));
     }
 }
