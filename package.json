@@ -73,7 +73,7 @@
     "superagent": "2.2.0",
     "uglify-js": "https://github.com/mishoo/UglifyJS2#harmony",
     "webpack": "1.13.1",
-    "ws": "1.0.1"
+    "ws": "1.0.1",
     "npm": "^4.3.0"
   },
   "devDependencies": {
