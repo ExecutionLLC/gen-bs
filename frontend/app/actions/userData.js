@@ -26,7 +26,6 @@ import {
 } from './modelsList';
 import {analyze, applyCurrentLanguageId, storeAvailableLanguages} from './ui';
 import {uploadsListReceive} from './fileUpload';
-import * as i18n from '../utils/i18n';
 import {makeNewSearchParams} from '../utils/HistoryItemUtils';
 
 /*
