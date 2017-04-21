@@ -23,11 +23,11 @@ function reduceUpdateComment(action, state) {
     const {variants} = state;
     const {commentData} = action;
     const {searchKey} = commentData;
-    const comment = i18n.getEntityText(commentData, null).comment;
+    const commentLanguageTexts = i18n.getEntityLanguageTexts(commentData);
     const newVariants = _.map(variants, variant => {
         return variant.searchKey === searchKey ? {
             ...variant,
-            comments: immutableArray.assign(variant.comments, 0, i18n.changeEntityText({}, null, {comment}))
+            comments: immutableArray.assign(variant.comments, 0, i18n.setEntityLanguageTexts({}, commentLanguageTexts))
         } : variant;
     });
     return assign(state, {
@@ -39,11 +39,11 @@ function reduceAddComment(action, state) {
     const {variants} = state;
     const {commentData} = action;
     const {searchKey, id} = commentData;
-    const comment = i18n.getEntityText(commentData, null).comment;
+    const commentLanguageTexts = i18n.getEntityLanguageTexts(commentData);
     const newVariants = _.map(variants, variant => {
         return variant.searchKey === searchKey ? {
             ...variant,
-            comments: immutableArray.append(variant.comments, i18n.changeEntityText({id}, null, {comment}))
+            comments: immutableArray.append(variant.comments, i18n.setEntityLanguageTexts({id}, commentLanguageTexts))
         } : variant;
     });
     return assign(state, {
