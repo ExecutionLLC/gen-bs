@@ -63,9 +63,8 @@ class SamplesService extends UserEntityServiceBase {
     }
 
     _uploadSample(sampleLocalPath, fileId, callback) {
-        const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
         const fileStream = fs.createReadStream(sampleLocalPath);
-        this.services.objectStorage.uploadObject(newSamplesBucket, fileId, fileStream,
+        this.services.objectStorage.addSampleFile(fileId, fileStream,
             (error, result) => callback(error, fileId)
         );
     }
