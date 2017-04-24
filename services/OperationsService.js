@@ -3,16 +3,39 @@
 const async = require('async');
 const _ = require('lodash');
 
-const ServiceBase = require('../ServiceBase');
-const OperationBase = require('./OperationBase');
-const SearchOperation = require('./SearchOperation');
-const UploadOperation = require('./UploadOperation');
-const SystemOperation = require('./SystemOperation');
-const KeepAliveOperation = require('./KeepAliveOperation');
-const ReflectionUtils = require('../../utils/ReflectionUtils');
-const OperationNotFoundError = require('../../utils/errors/OperationNotFoundError');
+const ServiceBase = require('./ServiceBase');
+const {
+    SearchOperation,
+    KeepAliveOperation,
+    SystemOperation,
+    UploadOperation
+} = require('./operations/Operations');
+const ReflectionUtils = require('../utils/ReflectionUtils');
+const OperationNotFoundError = require('../utils/errors/OperationNotFoundError');
 
 const OPERATION_CLASSES = [SearchOperation, UploadOperation, SystemOperation, KeepAliveOperation];
+function getAllFuncs(obj) {
+    let props = [];
+
+    do {
+        const l = Object.getOwnPropertyNames(obj)
+            .concat(Object.getOwnPropertySymbols(obj).map(s => s.toString()))
+            .sort()
+            .filter((p, i, arr) =>
+                typeof obj[p] === 'function' &&  //only the methods
+                p !== 'constructor' &&           //not the constructor
+                (i == 0 || p !== arr[i - 1]) &&  //not overriding in this prototype
+                props.indexOf(p) === -1          //not overridden in a child
+            );
+        props = props.concat(l)
+    }
+    while (
+    (obj = Object.getPrototypeOf(obj)) &&   //walk-up the prototype chain
+    Object.getPrototypeOf(obj)              //not the the Object prototype methods (hasOwnProperty, etc...)
+        );
+
+    return props
+}
 
 class OperationsService extends ServiceBase {
     constructor(services, models) {
@@ -20,7 +43,10 @@ class OperationsService extends ServiceBase {
     }
 
     addSearchOperation(session, method, callback) {
+        console.log(session.id);
         const operation = new SearchOperation(session.id, method);
+        console.log(operation);
+        console.log(getAllFuncs(operation));
         this._addOperation(session, operation, callback);
     }
 
@@ -47,7 +73,7 @@ class OperationsService extends ServiceBase {
     addKeepAliveOperation(session, searchOperation, callback) {
         const operation = new KeepAliveOperation(session.id, searchOperation.id);
         // Keep-alive operation needs to go to the same AS instance as the search operation.
-        operation.setASQueryName(searchOperation.getASQueryName());
+        operation.ASQueryName = searchOperation.ASQueryName;
         this._addOperation(session, operation, callback);
     }
     
@@ -82,7 +108,13 @@ class OperationsService extends ServiceBase {
         if (!operations || !operations[operationId]) {
             this._onOperationNotFound(callback);
         } else {
-            callback(null, operations[operationId]);
+
+
+            const operation = operations[operationId];
+
+            console.log(operation);
+            console.log(getAllFuncs(operation));
+            callback(null, operation);
         }
     }
 

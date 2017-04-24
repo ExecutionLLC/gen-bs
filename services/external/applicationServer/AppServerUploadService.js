@@ -18,7 +18,7 @@ const SESSION_STATUS = {
     UPLOADING: 'uploading',
     READY: 'ready'
 };
-const UploadOperation = require('../../operations/UploadOperation');
+const {UploadOperation} = require('../../operations/Operations');
 
 
 /**
