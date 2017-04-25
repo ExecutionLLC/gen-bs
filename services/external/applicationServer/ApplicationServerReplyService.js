@@ -53,8 +53,6 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
      * @param callback
      */
     onRpcReplyReceived(sessionId, operationId, rpcMessage, callback) {
-        // debug code
-        const r = Math.floor(9000 * Math.random() + 1000);
         const {replyTo} = rpcMessage;
         lockSession(
             sessionId,
@@ -83,15 +81,14 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
                     // We are working with the session by ourselves, so need to explicitly save it here.
                     (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
                 ], (error) => {
-                    unlockSession(sessionId, r);
+                    unlockSession(sessionId);
                     if (error instanceof OperationNotFoundError && replyTo) {
                         this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
                     } else {
                         callback(error);
                     }
                 });
-            },
-            r // debug code
+            }
         );
     }
 

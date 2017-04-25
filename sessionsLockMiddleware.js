@@ -90,69 +90,45 @@ const getcookie = (() => {
     return getcookie;
 })();
 
-function lockSession(sessionId, callback, r) { // 'r' is debug
+function lockSession(sessionId, callback) {
     if (!sessionsCounter[sessionId]) {
-        // debug code
-        console.log(`~~~ ${r} [] enter first`);
         sessionsCounter[sessionId] = [];
         callback();
     } else {
-        // debug code
-        console.log(`~~~ ${r} ++ wait`);
         sessionsCounter[sessionId].push(() => {
-            // debug code
-            console.log(`~~~ ${r} >>> can proceed`);
             callback();
         });
     }
 
 }
 
-function unlockSession(sessionId, r) { // 'r' is debug
+function unlockSession(sessionId) {
     if (!sessionsCounter[sessionId]) {
-        // debug code
-        console.log(`~~~ ${r} let go next: no array`);
         return;
     }
     const nextF = sessionsCounter[sessionId].shift();
     if (nextF) {
-        // debug code
-        console.log(`~~~ ${r} let go next, queue len ${sessionsCounter[sessionId].length}`);
         nextF();
     } else {
-        // debug code
-        console.log(`~~~ ${r} no next, del queue`);
         delete sessionsCounter[sessionId];
     }
-
 }
 
 function sessionLockMiddleware(req, res, next) {
-
-    // debug code
-    const r = Math.floor(Math.random() * 900 + 100);
-
     const sessionId = getcookie(req, Config.sessions.sessionCookieName, [Config.sessions.sessionSecret]);
 
-    // debug code
-    console.log(`>>> ${r} ${sessionId} ${sessionsCounter[sessionId] ? sessionsCounter[sessionId].length : '-'}`);
-
     function letGoNext() {
-        unlockSession(sessionId, r);
+        unlockSession(sessionId);
     }
 
     res.on('finish', () => {
-        // debug code
-        console.log(`<<< ${r} finish`);
         letGoNext();
     });
     res.on('close', () => {
-        // debug code
-        console.log(`<<< ${r} close`);
         letGoNext();
     });
 
-    lockSession(sessionId, next, r); // 'r' is debug
+    lockSession(sessionId, next);
 }
 
 module.exports = {
