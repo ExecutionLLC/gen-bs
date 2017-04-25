@@ -70,6 +70,7 @@ export default function websocket(state = {
     error: null,
     closed: true,
     variants: null,
+    variantsHeader: null,
     variantsSamples: null,
     variantsView: null,
     variantsFilter: null,
