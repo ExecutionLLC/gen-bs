@@ -12,6 +12,7 @@ const WebSocketServer = require('ws').Server;
 
 const ErrorUtils = require('./utils/ErrorUtils');
 const ControllerBase = require('./controllers/base/ControllerBase');
+const {sessionLockMiddleware} = require('./sessionsLockMiddleware');
 
 class WebServerHost {
     constructor(controllers, services, models) {
@@ -42,6 +43,8 @@ class WebServerHost {
         this._warnAboutSettingsIfNeeded();
 
         this._addMiddleware(app);
+
+        app.use(sessionLockMiddleware);
 
         this._configureSession(app);
 
