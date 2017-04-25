@@ -186,18 +186,22 @@ export function updateCommentAsync(oldComment, alt, pos, ref, chrom, searchKey, 
     return (dispatch, getState) => {
         const oldCommentTexts = i18n.getEntityLanguageTexts(oldComment);
         const {id} = oldComment;
+        // make mew comment object with old comments contents
+        // and properties to call the update (id, alt, pos, etc)
+        const newCommentObjectWithOldTexts = i18n.setEntityLanguageTexts(
+            {
+                id,
+                alt,
+                pos,
+                reference: ref,
+                chrom,
+                searchKey
+            },
+            oldCommentTexts
+        );
+        // set the new comment text, leave all other content that can be in texts
         const commentObject = i18n.changeEntityText(
-            i18n.setEntityLanguageTexts(
-                {
-                    id,
-                    alt,
-                    pos,
-                    reference: ref,
-                    chrom,
-                    searchKey
-                },
-                oldCommentTexts
-            ),
+            newCommentObjectWithOldTexts,
             null,
             {
                 comment: newCommentText

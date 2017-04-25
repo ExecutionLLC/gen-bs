@@ -59,7 +59,7 @@
     "lodash": "4.14.1",
     "morgan": "1.6.1",
     "multer": "1.1.0",
-    "node-optimize": "https://github.com/karatheodory/node-optimize.git#es6-support",
+    "node-optimize": "1.2.2",
     "node-uuid": "1.4.7",
     "optimist": "0.6.1",
     "pako": "^1.0.4",
@@ -71,13 +71,14 @@
     "request": "2.67.0",
     "string-just": "0.0.2",
     "superagent": "2.2.0",
-    "uglify-js": "github:mishoo/UglifyJS2#6eaeb19",
+    "uglify-js": "https://github.com/mishoo/UglifyJS2#harmony",
     "webpack": "1.13.1",
     "ws": "1.0.1",
     "npm": "^4.3.0"
   },
   "devDependencies": {
     "fakeredis": "1.0.3",
-    "mocha": "2.4.5"
+    "mocha": "2.4.5",
+    "redux-freeze": "0.1.5"
   }
 }
