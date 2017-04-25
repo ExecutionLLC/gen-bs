@@ -7,7 +7,7 @@ const Config = require('./utils/Config');
 
 const sessionsCounter = {};
 
-function sessionLockMiddleware(req, res, next) {
+const getcookie = (() => {
 
     // for given from express-sessions functions
     function debug(s) {
@@ -87,6 +87,48 @@ function sessionLockMiddleware(req, res, next) {
         return val;
     }
 
+    return getcookie;
+})();
+
+function lockSession(sessionId, callback, r) { // 'r' is debug
+    if (!sessionsCounter[sessionId]) {
+        // debug code
+        console.log(`~~~ ${r} [] enter first`);
+        sessionsCounter[sessionId] = [];
+        callback();
+    } else {
+        // debug code
+        console.log(`~~~ ${r} ++ wait`);
+        sessionsCounter[sessionId].push(() => {
+            // debug code
+            console.log(`~~~ ${r} >>> can proceed`);
+            callback();
+        });
+    }
+
+}
+
+function unlockSession(sessionId, r) { // 'r' is debug
+    if (!sessionsCounter[sessionId]) {
+        // debug code
+        console.log(`~~~ ${r} let go next: no array`);
+        return;
+    }
+    const nextF = sessionsCounter[sessionId].shift();
+    if (nextF) {
+        // debug code
+        console.log(`~~~ ${r} let go next, queue len ${sessionsCounter[sessionId].length}`);
+        nextF();
+    } else {
+        // debug code
+        console.log(`~~~ ${r} no next, del queue`);
+        delete sessionsCounter[sessionId];
+    }
+
+}
+
+function sessionLockMiddleware(req, res, next) {
+
     // debug code
     const r = Math.floor(Math.random() * 900 + 100);
 
@@ -96,21 +138,7 @@ function sessionLockMiddleware(req, res, next) {
     console.log(`>>> ${r} ${sessionId} ${sessionsCounter[sessionId] ? sessionsCounter[sessionId].length : '-'}`);
 
     function letGoNext() {
-        if (!sessionsCounter[sessionId]) {
-            // debug code
-            console.log(`>>> ${r} let go next: no array`);
-            return;
-        }
-        const nextF = sessionsCounter[sessionId].shift();
-        if (nextF) {
-            // debug code
-            console.log(`>>> ${r} let go next, queue len ${sessionsCounter[sessionId].length}`);
-            nextF();
-        } else {
-            // debug code
-            console.log(`>>> ${r} no next, del queue`);
-            delete sessionsCounter[sessionId];
-        }
+        unlockSession(sessionId, r);
     }
 
     res.on('finish', () => {
@@ -124,20 +152,11 @@ function sessionLockMiddleware(req, res, next) {
         letGoNext();
     });
 
-    if (!sessionsCounter[sessionId]) {
-        // debug code
-        console.log(`>>> ${r} [] enter first`);
-        sessionsCounter[sessionId] = [];
-        next();
-    } else {
-        // debug code
-        console.log(`>>> ${r} ++ wait`);
-        sessionsCounter[sessionId].push(() => {
-            // debug code
-            console.log(`>>> ${r} >>> can proceed`);
-            next();
-        });
-    }
+    lockSession(sessionId, next, r); // 'r' is debug
 }
 
-module.exports = sessionLockMiddleware;
+module.exports = {
+    sessionLockMiddleware,
+    lockSession,
+    unlockSession
+};
