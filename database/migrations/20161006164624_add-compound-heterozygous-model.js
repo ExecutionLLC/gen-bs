@@ -1,7 +1,7 @@
 const Uuid = require('node-uuid');
 
-const Config = require('../../utils/Config');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const Config = require('./utils/Config');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 const modelTables = {
     METADATA: 'model',

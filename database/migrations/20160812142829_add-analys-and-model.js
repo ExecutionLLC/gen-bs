@@ -1,8 +1,8 @@
 'use strict';
 
 const path = require('path');
-const Config = require('../../utils/Config');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const Config = require('./utils/Config');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 const Uuid = require('node-uuid');
 const ModelsBuilder = require('../defaults/ModelsBuilder');
 

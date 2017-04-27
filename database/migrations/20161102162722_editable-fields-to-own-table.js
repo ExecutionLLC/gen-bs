@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 const sampleTableNames = {
     Genotypes: 'sample_genotype',

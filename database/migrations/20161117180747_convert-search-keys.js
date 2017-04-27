@@ -1,5 +1,5 @@
 const just = require('string-just');
-const Num = require('./../../utils/Num');
+const Num = require('./utils/Num');
 const commentTable = 'comment';
 const CHROM_MASK = parseInt(new Array(16).fill('1').join(''), 2);
 const POS_MASK = parseInt(new Array(28).fill('1').join(''), 2);

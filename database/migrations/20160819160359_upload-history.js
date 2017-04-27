@@ -1,4 +1,4 @@
-const {SAMPLE_UPLOAD_STATUS} = require('../../utils/Enums');
+const {SAMPLE_UPLOAD_STATUS} = require('./utils/Enums');
 
 exports.up = function (knex, Promise) {
     return knex.schema.createTable('sample_upload_history', (table) => {
