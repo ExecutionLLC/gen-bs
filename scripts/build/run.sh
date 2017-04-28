@@ -5,7 +5,6 @@
 # Stop on error
 set -e
 npm install
-npm run db:ensure
-npm run db:reset
+npm run db:prepare
 
 npm start
