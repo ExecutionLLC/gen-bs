@@ -2,7 +2,7 @@
 ROOT='../..'
 BUILD_DIR="${ROOT}/build"
 MERGE_OUT_FILE="${BUILD_DIR}/webserver.opt.js"
-MANGLE_OUT_FILE="${BUILD_DIR}/webserver.js" # The name is also used in the bootstrap.sh
+MANGLE_OUT_FILE="${BUILD_DIR}/index.js" # The name is also used in the bootstrap.sh
 PUBLIC_ASSETS="../../public/"
 
 # Fail on error
