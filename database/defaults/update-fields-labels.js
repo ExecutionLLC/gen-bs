@@ -31,99 +31,106 @@ const labelTemplates = _([
 // 1. find the field id by name and source name from the 'field_metadata' table.
 // 2. update corresponding label in the 'field_text' table.
 
-async.waterfall([
-    // Create and configure Knex library.
-    (callback) => {
-        const databaseSettings = Config.database;
-        const knex = new Knex({
-            client: databaseSettings.client,
-            connection: {
-                host: databaseSettings.host,
-                port: databaseSettings.port,
-                user: databaseSettings.user,
-                password: databaseSettings.password,
-                database: databaseSettings.databaseName
-            }
-        });
-        knex.transaction((trx) => {
-            console.log('Transaction started.');
-            callback(null, {
-                knex,
-                trx
-            });
-        });
-    },
-
-    // Create query with the list of fields
-    // corresponding to the (fieldName, sourceName) pairs we have.
-    (context, callback) => {
-        const {trx} = context;
-        let query = trx.select()
-            .from('field_metadata');
-        labelTemplates
-            .map(template => template.field)
-            .forEach(templateField => {
-                query = query.orWhere(function () {
-                    this.where('name', templateField.name)
-                        .andWhere('source_name', templateField.sourceName);
-
-                    if (templateField.dimension) {
-                        this.andWhere('dimension', templateField.dimension);
-                    }
-
-                    if (templateField.valueType) {
-                        this.andWhere('value_type', templateField.valueType);
-                    }
-                });
-            });
-        query.asCallback((error, fieldsMetadata) => callback(error, Object.assign({}, context, {fieldsMetadata})));
-    },
-
-    (context, callback) => {
-        const {fieldsMetadata, trx} = context;
-        async.forEach(fieldsMetadata, (fieldMetadata, callback) => {
-            const targetLabelTemplate = _.find(labelTemplates, (template) => {
-                    const {field} = template;
-                    return field.name === fieldMetadata.name
-                        && field.sourceName == fieldMetadata.source_name
-                        && (!field.valueType || field.valueType === fieldMetadata.valueType)
-                        && (!field.dimension || field.dimension === fieldMetadata.dimension);
+function doUpdate(callback) {
+    async.waterfall([
+        // Create and configure Knex library.
+        (callback) => {
+            const databaseSettings = Config.database;
+            const knex = new Knex({
+                client: databaseSettings.client,
+                connection: {
+                    host: databaseSettings.host,
+                    port: databaseSettings.port,
+                    user: databaseSettings.user,
+                    password: databaseSettings.password,
+                    database: databaseSettings.databaseName
                 }
-            );
-            assert.ok(targetLabelTemplate);
-            trx('field_text')
-                .where('field_id', fieldMetadata.id)
-                .update({label: targetLabelTemplate.label})
-                .asCallback((error) => {
-                    console.log(`${fieldMetadata.name} => ${targetLabelTemplate.label}: ${error ? 'FAIL' : 'SUCCESS'}`);
-                    callback(error);
-                });
-        }, (error) => callback(error, context));
-    },
-
-    (context, callback) => {
-        const {trx} = context;
-        console.log('Committing transaction');
-        trx.commit()
-            .asCallback(callback);
-    }
-], (error, context) => {
-    if (error) {
-        console.error(`Failed to update labels: ${error}`);
-        context.trx.rollback()
-            .then(() => {
-                console.log('Rollback successful');
-                process.exit(1);
-            })
-            .catch((error) => {
-                console.log(`Rollback failed: ${error}`);
-                process.exit(1);
             });
-    } else {
-        console.log('Labels are successfully updated.');
-        process.exit(0);
-    }
-});
+            knex.transaction((trx) => {
+                console.log('Transaction started.');
+                callback(null, {
+                    knex,
+                    trx
+                });
+            });
+        },
 
+        // Create query with the list of fields
+        // corresponding to the (fieldName, sourceName) pairs we have.
+        (context, callback) => {
+            const {trx} = context;
+            let query = trx.select()
+                .from('field_metadata');
+            labelTemplates
+                .map(template => template.field)
+                .forEach(templateField => {
+                    query = query.orWhere(function () {
+                        this.where('name', templateField.name)
+                            .andWhere('source_name', templateField.sourceName);
 
+                        if (templateField.dimension) {
+                            this.andWhere('dimension', templateField.dimension);
+                        }
 
+                        if (templateField.valueType) {
+                            this.andWhere('value_type', templateField.valueType);
+                        }
+                    });
+                });
+            query.asCallback((error, fieldsMetadata) => callback(error, Object.assign({}, context, {fieldsMetadata})));
+        },
+
+        (context, callback) => {
+            const {fieldsMetadata, trx} = context;
+            async.forEach(fieldsMetadata, (fieldMetadata, callback) => {
+                const targetLabelTemplate = _.find(labelTemplates, (template) => {
+                        const {field} = template;
+                        return field.name === fieldMetadata.name
+                            && field.sourceName == fieldMetadata.source_name
+                            && (!field.valueType || field.valueType === fieldMetadata.valueType)
+                            && (!field.dimension || field.dimension === fieldMetadata.dimension);
+                    }
+                );
+                assert.ok(targetLabelTemplate);
+                trx('field_text')
+                    .where('field_id', fieldMetadata.id)
+                    .update({label: targetLabelTemplate.label})
+                    .asCallback((error) => {
+                        console.log(`${fieldMetadata.name} => ${targetLabelTemplate.label}: ${error ? 'FAIL' : 'SUCCESS'}`);
+                        callback(error);
+                    });
+            }, (error) => callback(error, context));
+        },
+
+        (context, callback) => {
+            const {trx} = context;
+            console.log('Committing transaction');
+            trx.commit()
+                .asCallback(callback);
+        }
+    ], callback);
+}
+
+if (require.main === module) {
+    doUpdate((error, context) => {
+        if (error) {
+            console.error(`Failed to update labels: ${error}`);
+            context.trx.rollback()
+                .then(() => {
+                    console.log('Rollback successful');
+                    process.exit(1);
+                })
+                .catch((error) => {
+                    console.log(`Rollback failed: ${error}`);
+                    process.exit(1);
+                });
+        } else {
+            console.log('Labels are successfully updated.');
+            process.exit(0);
+        }
+    });
+}
+
+module.exports = {
+    doUpdate
+};
