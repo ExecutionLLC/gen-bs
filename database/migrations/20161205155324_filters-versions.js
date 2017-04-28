@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Uuid = require('node-uuid');
 const BluebirdPromise = require('bluebird');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 const tables = {
     FilterVersion: 'filter_version',
