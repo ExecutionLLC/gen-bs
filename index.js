@@ -54,8 +54,6 @@ if (require.main === module) {
 	start();
 }
 
-console.log('index.js as ' + (require.main === module ? 'main' : 'module'));
-
 module.exports = {
     Enums,
     ModelsFacade,
