@@ -4,7 +4,7 @@ const _ = require('lodash');
 const Uuid = require('node-uuid');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil.js');
+const ChangeCaseUtil = require('../scripts/utils/ChangeCaseUtil.js');
 
 class ModelsBuilder extends DefaultsBuilderBase {
     constructor() {
