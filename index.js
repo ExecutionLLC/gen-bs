@@ -11,6 +11,7 @@ const WebServerHost = require('./WebServerHost');
 
 const Enums = require('./utils/Enums');
 const PasswordUtils = require('./utils/PasswordUtils');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 function start() {
     const logger = new Logger(Config.logger);
@@ -60,5 +61,6 @@ module.exports = {
     ServicesFacade,
     Config,
     Logger,
-    PasswordUtils
+    PasswordUtils,
+    ChangeCaseUtil
 };

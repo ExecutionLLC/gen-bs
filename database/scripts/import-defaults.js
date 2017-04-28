@@ -6,8 +6,10 @@
 
 const InitialDataImportManager = require('./utils/InitialDataImportManager');
 
-const Config = require('../../utils/Config');
-const Logger = require('../../utils/Logger');
+const indexJs = require('./../../index');
+
+const Config = indexJs.Config;
+const Logger = indexJs.Logger;
 
 const logger = new Logger(Config.logger);
 
