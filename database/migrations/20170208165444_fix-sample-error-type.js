@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const BluebirdPromise = require('bluebird');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 const samplesTable = 'sample';
 const ERROR_CODE = -500;

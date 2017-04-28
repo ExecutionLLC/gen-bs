@@ -27,6 +27,7 @@ function makeDefault(value, defaultValue) {
 }
 
 const SETTINGS = {
+    oneSampleGenotypeName: null,
     port: makeDefault(ENV.GEN_WS_PORT, 5000),
     disableRequestLimits: makeDefault(ENV.GEN_WS_DISABLE_REQUEST_LIMITS, false),
     enableCORS: makeDefault(ENV.GEN_WS_CORS_ENABLE, true),

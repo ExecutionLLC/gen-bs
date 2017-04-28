@@ -6,15 +6,12 @@
 
 const InitialDataImportManager = require('./utils/InitialDataImportManager');
 
-const ModelsFacade = require('../../models/ModelsFacade');
-
 const Config = require('../../utils/Config');
 const Logger = require('../../utils/Logger');
 
 const logger = new Logger(Config.logger);
-const models = new ModelsFacade(Config, logger);
 
-const importManager = new InitialDataImportManager(models, Config, logger);
+const importManager = new InitialDataImportManager(Config, logger);
 importManager.execute((error) => {
     if (error) {
         console.error(`Error import initial data: ${error}\n${error.stack}`);
