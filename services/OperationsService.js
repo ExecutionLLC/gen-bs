@@ -3,14 +3,15 @@
 const async = require('async');
 const _ = require('lodash');
 
-const ServiceBase = require('../ServiceBase');
-const OperationBase = require('./OperationBase');
-const SearchOperation = require('./SearchOperation');
-const UploadOperation = require('./UploadOperation');
-const SystemOperation = require('./SystemOperation');
-const KeepAliveOperation = require('./KeepAliveOperation');
-const ReflectionUtils = require('../../utils/ReflectionUtils');
-const OperationNotFoundError = require('../../utils/errors/OperationNotFoundError');
+const ServiceBase = require('./ServiceBase');
+const {
+    SearchOperation,
+    KeepAliveOperation,
+    SystemOperation,
+    UploadOperation
+} = require('./operations/Operations');
+const ReflectionUtils = require('../utils/ReflectionUtils');
+const OperationNotFoundError = require('../utils/errors/OperationNotFoundError');
 
 const OPERATION_CLASSES = [SearchOperation, UploadOperation, SystemOperation, KeepAliveOperation];
 
