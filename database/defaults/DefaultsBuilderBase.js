@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 
-const FsUtils = require('../../utils/FileSystemUtils');
+const FsUtils = require('../scripts/utils/FileSystemUtils');
 
 class DefaultsBuilderBase {
     constructor() {

@@ -4,8 +4,8 @@ const _ = require('lodash');
 const async = require('async');
 const Uuid = require('node-uuid');
 
-const FsUtils = require('../../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const FsUtils = require('../scripts/utils/FileSystemUtils');
+const ChangeCaseUtil = require('../scripts/utils/ChangeCaseUtil');
 
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
