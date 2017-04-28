@@ -12,7 +12,7 @@ const WebServerHost = require('./WebServerHost');
 const Enums = require('./utils/Enums');
 const PasswordUtils = require('./utils/PasswordUtils');
 
-if (require.main === module) {
+function start() {
     const logger = new Logger(Config.logger);
 
     const models = new ModelsFacade(Config, logger);
@@ -23,31 +23,35 @@ if (require.main === module) {
 
     function setOnExitCallback() {
 
-	process.on('exit', () => {
-	    webServerHost.stop((error) => {
-		logger.error(error);
-	    })
-	});
+        process.on('exit', () => {
+            webServerHost.stop((error) => {
+                logger.error(error);
+            })
+        });
 
-	process.on('uncaughtException', (error) => {
-	    logger.error(error);
-	    process.exit(99);
-	});
+        process.on('uncaughtException', (error) => {
+            logger.error(error);
+            process.exit(99);
+        });
 
-	process.on('SIGINT', () => {
-	    logger.info('Caught signal: SIGINT');
-	    process.exit(2);
-	});
+        process.on('SIGINT', () => {
+            logger.info('Caught signal: SIGINT');
+            process.exit(2);
+        });
     }
 
     setOnExitCallback();
 
     webServerHost.start((error) => {
-	if (error) {
-	    logger.error(error);
-	    process.exit(1);
-	}
+        if (error) {
+            logger.error(error);
+            process.exit(1);
+        }
     });
+}
+
+if (require.main === module) {
+	start();
 }
 
 console.log('index.js as ' + (require.main === module ? 'main' : 'module'));
