@@ -1,4 +1,5 @@
-//const HOST = window.location.hostname;
+const HOST = window.location.hostname;
+const PORT = window.location.port;
 /* global
  API_HOST: false,
  API_PORT: false,
@@ -12,8 +13,6 @@
  */
 const HTTP_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'https' : 'http';
 const WS_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'wss' : 'ws';
-const HOST = API_HOST;
-const PORT = API_PORT;
 
 const config = {
     HOST,
