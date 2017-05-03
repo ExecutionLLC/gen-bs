@@ -30,6 +30,7 @@ function makeDefault(value, defaultValue) {
 // webpack is running directly, without npm run scripts.
 const API_HOST = makeDefault(ENV.GEN_FRONTEND_API_HOST, 'localhost');
 const API_PORT = makeDefault(ENV.GEN_FRONTEND_API_PORT, 5000);
+const API_USE_LOCATION = makeDefault(ENV.GEN_FRONTEND_API_USE_LOCATION, false);
 const USE_SECURE_CONNECTION = makeDefault(ENV.GEN_FRONTEND_USE_SECURE_CONNECTION, false);
 const LOGIN_CALLBACK_PORT = makeDefault(ENV.GEN_FRONTEND_LOGIN_CALLBACK_PORT, 8080);
 const ALLOW_GOOGLE_LOGIN = makeDefault(ENV.GEN_FRONTEND_ALLOW_GOOGLE_LOGIN, true);
@@ -143,6 +144,7 @@ module.exports = {
             },
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST),
+            API_USE_LOCATION: JSON.stringify(API_USE_LOCATION),
             USE_SECURE_CONNECTION: JSON.stringify(USE_SECURE_CONNECTION),
             LOGIN_CALLBACK_PORT: JSON.stringify(LOGIN_CALLBACK_PORT),
             ALLOW_GOOGLE_LOGIN: JSON.stringify(ALLOW_GOOGLE_LOGIN),
