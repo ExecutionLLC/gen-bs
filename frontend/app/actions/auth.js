@@ -25,7 +25,7 @@ import UserActions from './userActions';
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 export const SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG = 'SHOW_CLOSE_ALL_USER_SESSIONS_DIALOG';
-export const SHOW_ANOTHER_PAGE_OPENED_MODAL = 'SHOW_ANOTHER_PAGE_OPENED_MODAL';
+export const TOGGLE_ANOTHER_PAGE_OPENED_MODAL = 'TOGGLE_ANOTHER_PAGE_OPENED_MODAL';
 export const SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL = 'SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
@@ -246,7 +246,7 @@ export function loginWithGoogle() {
                         if (error.code !== TooManyWebSocketsError.CODE) {
                             dispatch(handleError(null, error.message));
                         } else {
-                            dispatch(showAnotherPageOpenedModal(true));
+                            dispatch(showAnotherPageOpenedModal());
                         }
                         return Promise.reject(error);
                     });
@@ -294,10 +294,31 @@ export function closeAllUserSessionsAsync() {
     };
 }
 
-export function showAnotherPageOpenedModal(shouldShow) {
+function toggleAnotherPageOpenedModal(shouldShow) {
     return {
-        type: SHOW_ANOTHER_PAGE_OPENED_MODAL,
+        type: TOGGLE_ANOTHER_PAGE_OPENED_MODAL,
         shouldShow
+    };
+}
+
+export function showAnotherPageOpenedModal() {
+    return (dispatch) => {
+        dispatch(toggleAnotherPageOpenedModal(true));
+    };
+}
+
+export function hideAnotherPageOpenedModal() {
+    return (dispatch, getState) => {
+        const {showAnotherPageOpenedModal: isShow, isWaitingForCloseAnotherPageOpenedModal: isWaiting} = getState().auth;
+        if (isShow) {
+            if (isWaiting) {
+                dispatch(toggleAnotherPageOpenedModal(false));
+            } else {
+                // hide/show to reset 'waiting' flag
+                dispatch(toggleAnotherPageOpenedModal(false));
+                dispatch(toggleAnotherPageOpenedModal(true));
+            }
+        }
     };
 }
 

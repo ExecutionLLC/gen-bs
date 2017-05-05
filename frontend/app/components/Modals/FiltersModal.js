@@ -51,7 +51,7 @@ class FiltersModal extends Component {
     }
 
     render() {
-        const {dispatch, auth: {isDemo}, filterBuilder, showModal, p} = this.props;
+        const {dispatch, auth, auth: {isDemo}, filterBuilder, showModal, fields, ui, p} = this.props;
         const filters = filterBuilder.filtersList && filterBuilder.filtersList.hashedArray.array;
         const editingFilterObject = filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
@@ -107,26 +107,39 @@ class FiltersModal extends Component {
                                 { editingFilterIsNew &&
                                 <div className='modal-padding'>
                                     <NewFilterInputs
-                                        {...this.props}
+                                        filterBuilder={filterBuilder}
+                                        ui={ui}
                                         texts={texts}
                                         validationMessage={titleValidationMessage}
+                                        dispatch={dispatch}
                                     />
                                     <FilterBuilder
-                                        {...this.props}
+                                        filterBuilder={filterBuilder}
+                                        fields={fields}
+                                        ui={ui}
                                         texts={texts}
                                         p={p}
+                                        dispatch={dispatch}
                                     />
                                 </div>
                                 }
                                 { !editingFilterIsNew &&
                                 <div className='modal-padding'>
                                     <ExistentFilterSelect
+                                        auth={auth}
+                                        filterBuilder={filterBuilder}
+                                        ui={ui}
                                         texts={texts}
-                                        {...this.props}
+                                        p={p}
+                                        dispatch={dispatch}
                                     />
                                     <FilterBuilder
-                                        {...this.props}
+                                        filterBuilder={filterBuilder}
+                                        fields={fields}
+                                        ui={ui}
                                         texts={texts}
+                                        p={p}
+                                        dispatch={dispatch}
                                     />
                                 </div>
                                 }
