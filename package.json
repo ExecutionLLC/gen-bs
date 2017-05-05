@@ -78,7 +78,6 @@
   },
   "devDependencies": {
     "fakeredis": "1.0.3",
-    "mocha": "2.4.5",
-    "redux-freeze": "0.1.5"
+    "mocha": "2.4.5"
   }
 }
