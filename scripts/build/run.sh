@@ -4,7 +4,6 @@
 
 # Stop on error
 set -e
-npm install
 npm run db:prepare
 
 npm start
