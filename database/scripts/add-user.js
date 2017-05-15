@@ -10,7 +10,7 @@ const Config = indexJs.Config;
 const Logger = indexJs.Logger;
 const PasswordUtils = indexJs.PasswordUtils;
 
-const logger = new Logger(Config.logger);
+const logger = new Logger({app_name: 'genomix_add_user'});
 const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 
@@ -101,8 +101,13 @@ services.users.add(
     },
     (error, user) => {
         if (error) {
-            console.error(error);
-            process.exit(1);
+            if (error instanceof models.users.constructor.DuplicateEmail) {
+                console.log(`User with email ${email} already registered`);
+                process.exit(0);
+            } else {
+                console.error(error);
+                process.exit(1);
+            }
         } else {
             console.log(`User with email ${user.email} was added with id: ${user.id}`);
             process.exit(0);
