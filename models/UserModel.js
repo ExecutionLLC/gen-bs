@@ -55,7 +55,7 @@ class UserModel extends RemovableModelBase {
     update(userId, languageId, user, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._checkFieldsUnique(user, trx, callback),
+                (callback) => this._checkFieldsUnique({id: userId, email: user.email}, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
