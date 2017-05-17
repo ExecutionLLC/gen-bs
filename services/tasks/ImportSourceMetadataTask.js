@@ -157,7 +157,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
     _processSourceMetadata(sourceName, appServerFieldsMetadata, callback) {
         const fieldsMetadata = _.map(
             appServerFieldsMetadata,
-            appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(
+            appServerFieldMetadata => this.services.fields.createFieldMetadata(
                 sourceName,
                 false,
                 appServerFieldMetadata
