@@ -70,7 +70,7 @@ class FieldsService extends ServiceBase {
         });
     }
 
-    static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
+    createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
         return {
             id: Uuid.v4(),
             name: appServerFieldMetadata.name, // Set label to name by default.
