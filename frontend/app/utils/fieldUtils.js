@@ -216,18 +216,15 @@ export default class FieldUtils {
         });
     }
 
-    static makeViewFilterAllowedFields(samples, totalFieldsHash, sourceFieldsList, languageId) {
+    static makeViewFilterAllowedFields(samples, totalFieldsHash, languageId) {
         const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
-        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList, languageId).filter((field) => !field.isInvisible);
+        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, languageId).filter((field) => !field.isInvisible);
     }
 
-    static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList, languageId) {
+    static makeAllowedFieldsForSamplesFields(samplesFields, languageId) {
         const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
         const sortedFields = FieldUtils.sortByLabels(allSamplesFields, languageId);
-        return [
-            ...sortedFields,
-            ...sourceFieldsList
-        ];
+        return sortedFields;
     }
 
     /**
