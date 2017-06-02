@@ -24,15 +24,6 @@ class FieldsMetadataController extends ControllerBase {
         });
     }
 
-    getSourcesFields(request, response) {
-        async.waterfall([
-            (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => this.services.fields.findSourcesFields(callback)
-        ], (error, fieldsMetadata) => {
-            this.sendErrorOrJson(response, error, fieldsMetadata);
-        });
-    }
-
     getAll(request, response) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
@@ -45,7 +36,6 @@ class FieldsMetadataController extends ControllerBase {
     createRouter() {
         const router = new Express();
 
-        router.get('/sources', this.getSourcesFields.bind(this));
         router.get('/:sampleId', this.getSampleMetadata.bind(this));
         router.get('/', this.getAll.bind(this));
 

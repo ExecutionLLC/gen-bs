@@ -129,14 +129,6 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
                 this.services.applicationServerUpload.processUploadResult(session, operation, rpcMessage, callback);
                 break;
 
-            case METHODS.getSourcesList:
-                this.services.applicationServerSources.processGetSourcesListResult(session, operation, rpcMessage, callback);
-                break;
-
-            case METHODS.getSourceMetadata:
-                this.services.applicationServerSources.processGetSourceMetadataResult(session, operation, rpcMessage, callback);
-                break;
-
             case METHODS.keepAlive:
                 this.services.applicationServerOperations.processKeepAliveResult(session, operation, rpcMessage, callback);
                 break;

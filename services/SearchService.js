@@ -295,26 +295,7 @@ class SearchService extends ServiceBase {
                 this.services.filters.find(user, filterId, callback);
             },
             fields: (callback) => {
-                async.waterfall([
-                    (callback) => {
-                        // Load sample metadata
-                        this.services.fields.findByUserAndSampleIds(user, sampleIds, callback);
-                    },
-                    (sampleMetadata, callback) => {
-                        // Load sources metadata
-                        this.services.fields.findSourcesFields((error, sourcesMetadata) => {
-                            callback(error, {
-                                sampleMetadata,
-                                sourcesMetadata
-                            });
-                        });
-                    },
-                    (metadata, callback) => {
-                        // Join metadata into one collection.
-                        const sourcesMetadata = metadata.sourcesMetadata;
-                        callback(null, sourcesMetadata.concat(metadata.sampleMetadata));
-                    }
-                ], callback);
+                this.services.fields.findByUserAndSampleIds(user, sampleIds, callback);
             },
             view: (callback) => {
                 this.services.views.find(user, viewId, callback);

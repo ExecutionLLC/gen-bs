@@ -16,7 +16,6 @@ const OperationService = require('./operations/OperationsService');
 const FieldsService = require('./FieldsService');
 const MetadataService = require('./MetadataService');
 const SearchService = require('./SearchService');
-const SchedulerService = require('./tasks/SchedulerService');
 const SavedFilesService = require('./SavedFilesService');
 const AnalysisService = require('./AnalysisService');
 const SampleUploadHistoryService = require('./SampleUploadHistoryService');
@@ -29,7 +28,6 @@ const EventsService = require('./EventsService');
 const ApplicationServerService = require('./external/applicationServer/ApplicationServerService');
 const ApplicationServerReplyService = require('./external/applicationServer/ApplicationServerReplyService');
 const AppServerUploadService = require('./external/applicationServer/AppServerUploadService');
-const AppServerSourcesService = require('./external/applicationServer/AppServerSourcesService');
 const AppServerOperationsService = require('./external/applicationServer/AppServerOperationsService');
 const AppServerSearchService = require('./external/applicationServer/AppServerSearchService');
 
@@ -60,14 +58,11 @@ class ServiceFacade {
 
         this.applicationServer = new ApplicationServerService(this);
         this.applicationServerUpload = new AppServerUploadService(this);
-        this.applicationServerSources = new AppServerSourcesService(this);
         this.applicationServerOperations = new AppServerOperationsService(this);
         this.applicationServerReply = new ApplicationServerReplyService(this);
         this.applicationServerSearch = new AppServerSearchService(this);
 
         this.objectStorage = new ObjectStorageService(this, models);
-
-        this.scheduler = new SchedulerService(this, models);
 
         _.map(this)
             .filter(service => service instanceof ServiceBase)
