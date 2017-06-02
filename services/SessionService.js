@@ -75,8 +75,7 @@ class SessionService extends ServiceBase {
                     cookie: {
                         expires: null,
                         originalMaxAge: null
-                    },
-                    operations : {}
+                    }
                 });
                 callback(null);
             }
