@@ -16,13 +16,18 @@ import rootReducer from '../reducers';
 const loggerMiddleware = createLogger();
 const timeoutMiddleware = reduxTimeout();
 
+const middlewares = [
+    thunkMiddleware,
+    reduxMulti,
+    timeoutMiddleware,
+    loggerMiddleware
+];
+if (process.env.NODE_ENV !== 'production') {
+    middlewares.push(require('redux-freeze'));
+}
+
 const createStoreWithMiddleware = compose(
-    applyMiddleware(
-        thunkMiddleware,
-        reduxMulti,
-        timeoutMiddleware,
-        loggerMiddleware
-    ),
+    applyMiddleware(...middlewares),
     batchedSubscribe(notify => notify())
 )(createStore);
 
