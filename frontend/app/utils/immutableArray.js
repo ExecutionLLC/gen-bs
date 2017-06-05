@@ -10,7 +10,7 @@ export default class immutableArray {
      */
     static replace(arr, index, item) {
         if (index < 0 || index >= arr.length) {
-            throw 'immutableArray.replace wrong index = ' + index + ', arr.length = ' + arr.length;
+            throw `immutableArray.replace wrong index = ${index}, arr.length = ${arr.length}`;
         }
         return [
             ...arr.slice(0, index),
@@ -64,6 +64,24 @@ export default class immutableArray {
         return [
             ...arr,
             ...arr2
+        ];
+    }
+
+    /**
+     * @template {T}
+     * @param {T[]} arr
+     * @param {number} index
+     * @param {T} item
+     * @returns {T[]}
+     */
+    static insertBefore(arr, index, item) {
+        if (index < 0 || index > arr.length) {
+            throw `immutableArray.insertBefore wrong index = ${index}, arr.length = ${arr.length}`;
+        }
+        return [
+            ...arr.slice(0, index),
+            item,
+            ...arr.slice(index, arr.length)
         ];
     }
 }
