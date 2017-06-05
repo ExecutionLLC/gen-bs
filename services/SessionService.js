@@ -23,9 +23,6 @@ const SESSION_KEY_PREFIX = 'genomics:';
 class SessionService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
-
-        this.config = this.services.config;
-        this.logger = this.services.logger;
     }
 
     init() {
