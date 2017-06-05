@@ -44,7 +44,7 @@ export default function auth(state = {
                 showCloseAllUserSessionsDialog: action.shouldShow
             });
 
-        case ActionTypes.SHOW_ANOTHER_PAGE_OPENED_MODAL:
+        case ActionTypes.TOGGLE_ANOTHER_PAGE_OPENED_MODAL:
             return {
                 ...state,
                 showAnotherPageOpenedModal: action.shouldShow,
