@@ -3,9 +3,9 @@ const _ = require('lodash');
 const path = require('path');
 const Promise = require('bluebird');
 
-const FsUtils = require('../../utils/FileSystemUtils');
-const Config = require('../../utils/Config');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const FsUtils = require('./utils/FileSystemUtils');
+const Config = require('./utils/Config');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 const fieldsTableNames = {
     Metadata: 'field_metadata',
     Text: 'field_text'

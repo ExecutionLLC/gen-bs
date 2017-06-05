@@ -1,12 +1,14 @@
 const _ = require('lodash');
 
-const {LOGIN_TYPES} = require('../../utils/Enums');
-const ModelsFacade = require('../../models/ModelsFacade');
-const ServicesFacade = require('../../services/ServicesFacade');
+const indexJs = require('../../index.js');
 
-const Config = require('../../utils/Config');
-const Logger = require('../../utils/Logger');
-const PasswordUtils = require('../../utils/PasswordUtils');
+const {LOGIN_TYPES} = indexJs.Enums;
+const ModelsFacade = indexJs.ModelsFacade;
+const ServicesFacade = indexJs.ServicesFacade;
+
+const Config = indexJs.Config;
+const Logger = indexJs.Logger;
+const PasswordUtils = indexJs.PasswordUtils;
 
 const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);

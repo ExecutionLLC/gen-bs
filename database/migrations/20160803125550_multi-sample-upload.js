@@ -1,8 +1,8 @@
 // See the issue for more information: https://github.com/ExecutionLLC/gen-bs/issues/447
 const assert = require('assert');
 const Uuid = require('node-uuid');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
-const Config = require('../../utils/Config');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
+const Config = require('./utils/Config');
 
 const ONE_SAMPLE_GENOTYPE_NAME = Config.oneSampleGenotypeName;
 

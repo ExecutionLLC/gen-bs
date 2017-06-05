@@ -9,9 +9,9 @@ const npm = require('npm');
 const path = require('path');
 
 const {processRulesFile, isBlank} = require('./parse-fields-labels');
+const indexJs = require('./../../index');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
-const Config = require('../../utils/Config');
+const Config = indexJs.Config;
 
 const languages = ['en', 'ru'];
 
