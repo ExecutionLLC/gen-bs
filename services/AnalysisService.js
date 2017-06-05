@@ -19,7 +19,7 @@ class AnalysisService extends UserEntityServiceBase {
             // Demo users have no history.
             callback(null, []);
         } else {
-            this.models.analysis.findAll(
+            this.theModel.findAll(
                 user.id, limit, offset, nameFilter, descriptionFilter, callback
             );
         }
