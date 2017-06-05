@@ -15,21 +15,21 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this._checkUserIsSet(user, callback),
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.models.sampleUploadHistory.countActive(user.id, callback)
+            (callback) => this.theModel.countActive(user.id, callback)
         ], callback);
     }
 
     findAll(user, limit, offset, callback) {
         async.waterfall([
             (callback) => this._checkUserIsSet(user, callback),
-            (callback) => this.models.sampleUploadHistory.findAll(user.id, limit, offset, callback)
+            (callback) => this.theModel.findAll(user.id, limit, offset, callback)
         ], callback);
     }
 
     findNotFinishedUploads(user, limit, offset, callback) {
         async.waterfall([
             (callback) => this._checkUserIsSet(user, callback),
-            (callback) => this.models.sampleUploadHistory.findNotFinishedUploads(user.id, limit, offset, callback)
+            (callback) => this.theModel.findNotFinishedUploads(user.id, limit, offset, callback)
         ], callback);
     }
 
@@ -40,17 +40,17 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
             async.waterfall([
                 (callback) => this._checkUserIsSet(user, callback),
                 (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-                (callback) => this.models.sampleUploadHistory.findActive(user.id, callback)
+                (callback) => this.theModel.findActive(user.id, callback)
             ], callback);
         }
     }
 
     findActiveForAllUsers(entryId, callback) {
-        this.models.sampleUploadHistory.findActiveForAllUsers(entryId, callback);
+        this.theModel.findActiveForAllUsers(entryId, callback);
     }
 
     findBySampleId(userId, sampleId, callback) {
-        this.models.sampleUploadHistory.findBySampleId(userId, sampleId, callback);
+        this.theModel.findBySampleId(userId, sampleId, callback);
     }
 
     remove(user, itemId, callback) {
