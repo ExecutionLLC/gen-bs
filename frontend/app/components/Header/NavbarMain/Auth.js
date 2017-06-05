@@ -93,6 +93,7 @@ class Auth extends Component {
                 <li className='dropdown-header'>
                     {p.t('navBar.auth.dropdownHeader')}
                 </li>
+                {config.ALLOW_GOOGLE_LOGIN &&
                 <li className='form-inline'>
                     <a href={config.LOGIN_URL} className='btn btn-danger btn-uppercase'>
                         <span title={p.t('navBar.auth.googleAccountTitle')}>
@@ -100,9 +101,12 @@ class Auth extends Component {
                         </span>
                     </a>
                 </li>
+                }
+                {config.ALLOW_GOOGLE_LOGIN &&
                 <li className='dropdown-header'>
                     {p.t('navBar.auth.loginPasswordCaption')}
                 </li>
+                }
                 <li>
                     <LoginForm
                         dispatch={dispatch}
