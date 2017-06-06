@@ -5,7 +5,7 @@ const async = require('async');
 const Uuid = require('node-uuid');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
-const {EVENT_TYPES} = require('./../utils/Enums');
+const {EVENT_TYPES, LOGIN_TYPES} = require('./../utils/Enums');
 
 const ServiceBase = require('./ServiceBase');
 const TooManyUserSessionsError = require('../utils/errors/TooManyUserSessionsError');
@@ -106,6 +106,7 @@ class SessionService extends ServiceBase {
     startForEmailPassword(session, email, password, callback) {
         async.waterfall([
             (callback) => this.services.users.findIdByEmailPassword(email, password, callback),
+            (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
             (userId, callback) => this._initUserSession(session, userId, callback)
         ], callback);
     }
@@ -119,7 +120,7 @@ class SessionService extends ServiceBase {
      * */
     startForEmail(session, email, callback) {
         async.waterfall([
-            (callback) => this.services.users.findIdByEmail(email, callback),
+            (callback) => this.services.users.findIdByEmail(email,LOGIN_TYPES.GOOGLE, callback),
             (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
             (userId, callback) => this._initUserSession(session, userId, callback)
         ], callback);
@@ -127,7 +128,7 @@ class SessionService extends ServiceBase {
 
     closeAllUserSessions(userEmail, callback) {
         async.waterfall([
-            (callback) => this.services.users.findIdByEmail(userEmail, callback),
+            (callback) => this.services.users.findIdByEmail(userEmail,null, callback),
             (userId, callback) => this.findUserSessions(userId, callback),
             (sessions, callback) => async.each(sessions,
                 (session, callback) => this.destroySession(session, callback),
