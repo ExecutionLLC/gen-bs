@@ -4,7 +4,7 @@ const async = require('async');
 const _ = require('lodash');
 
 const ServiceBase = require('./ServiceBase');
-const UploadOperation = require('./operations/UploadOperation');
+const {UploadOperation} = require('./operations/Operations');
 const {ENTITY_TYPES} = require('../utils/Enums');
 
 class UserDataService extends ServiceBase {

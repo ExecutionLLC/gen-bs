@@ -1,5 +1,5 @@
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
-const Config = require('../../utils/Config');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
+const Config = require('./utils/Config');
 const Promise = require('bluebird');
 
 const SampleTables = {

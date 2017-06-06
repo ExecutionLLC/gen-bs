@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 const tables = {
     Metadata: 'metadata',

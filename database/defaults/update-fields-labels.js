@@ -8,8 +8,10 @@ const _ = require('lodash');
 const async = require('async');
 const assert = require('assert');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
-const Config = require('../../utils/Config');
+const indexJs = require('./../../index');
+
+const ChangeCaseUtil = indexJs.ChangeCaseUtil;
+const Config = indexJs.Config;
 
 const labelTemplates = _([
     './fields/labels/vcf-fields.json',

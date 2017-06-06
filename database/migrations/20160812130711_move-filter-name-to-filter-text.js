@@ -1,6 +1,6 @@
 "use strict";
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 function addColumnToFilterText(knex, Promise) {
     return knex.raw('ALTER TABLE filter_text ADD COLUMN name character varying(50) NOT NULL DEFAULT \'\'');

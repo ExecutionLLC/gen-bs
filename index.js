@@ -9,45 +9,58 @@ const ControllersFacade = require('./controllers/ControllersFacade');
 
 const WebServerHost = require('./WebServerHost');
 
-const logger = new Logger(Config.logger);
+const Enums = require('./utils/Enums');
+const PasswordUtils = require('./utils/PasswordUtils');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
-const models = new ModelsFacade(Config, logger);
-const services = new ServicesFacade(Config, logger, models);
-const controllers = new ControllersFacade(logger, services);
+function start() {
+    const logger = new Logger(Config.logger);
 
-const webServerHost = new WebServerHost(controllers, services, models);
+    const models = new ModelsFacade(Config, logger);
+    const services = new ServicesFacade(Config, logger, models);
+    const controllers = new ControllersFacade(logger, services);
 
+    const webServerHost = new WebServerHost(controllers, services, models);
 
-function setOnExitCallback() {
+    function setOnExitCallback() {
 
-    process.on('exit', () => {
-        webServerHost.stop((error) => {
+        process.on('exit', () => {
+            webServerHost.stop((error) => {
+                logger.error(error);
+            })
+        });
+
+        process.on('uncaughtException', (error) => {
             logger.error(error);
-        })
-    });
+            process.exit(99);
+        });
 
-    process.on('uncaughtException', (error) => {
-        logger.error(error);
-        process.exit(99);
-    });
+        process.on('SIGINT', () => {
+            logger.info('Caught signal: SIGINT');
+            process.exit(2);
+        });
+    }
 
-    process.on('SIGINT', () => {
-        logger.info('Caught signal: SIGINT');
-        process.exit(2);
+    setOnExitCallback();
+
+    webServerHost.start((error) => {
+        if (error) {
+            logger.error(error);
+            process.exit(1);
+        }
     });
 }
 
-setOnExitCallback();
-
-webServerHost.start((error) => {
-    if (error) {
-        logger.error(error);
-        process.exit(1);
-    }
-});
+if (require.main === module) {
+	start();
+}
 
 module.exports = {
-    models,
-    services,
-    controllers
+    Enums,
+    ModelsFacade,
+    ServicesFacade,
+    Config,
+    Logger,
+    PasswordUtils,
+    ChangeCaseUtil
 };
