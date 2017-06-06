@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const BluebirdPromise = require('bluebird');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 exports.up = function (knex) {
     console.log('=> Add source field to sample ...');
