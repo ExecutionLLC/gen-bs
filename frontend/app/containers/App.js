@@ -25,8 +25,6 @@ import {samplesOnSave} from '../actions/samplesList';
 import {editAnalysesHistoryItem, resetCurrentAnalysesHistoryIdLoadDataAsync} from '../actions/analysesHistory';
 import {applyCurrentLanguageId} from '../actions/ui';
 import {closeSavedFilesDialog} from '../actions/savedFiles';
-import * as PropTypes from 'react/lib/ReactPropTypes';
-import {getP} from 'redux-polyglot/dist/selectors';
 import * as i18n from '../utils/i18n';
 
 
@@ -51,9 +49,17 @@ class App extends Component {
     }
 
     render() {
-        const {dispatch, samplesList: {hashedArray: {array: samplesArray}},
-            modalWindows, savedFiles, showErrorWindow, auth, analysesHistory,
-            samplesList, modelsList, auth: {isDemo}, ui: {languageId}} = this.props;
+        const {
+            dispatch,
+            samplesList: {hashedArray: {array: samplesArray}},
+            modalWindows, savedFiles, showErrorWindow, analysesHistory,
+            samplesList, modelsList,
+            auth: {
+                isDemo, showAutoLogoutDialog, showCloseAllUserSessionsDialog,
+                showAnotherPageOpenedModal, isWaitingForCloseAnotherPageOpenedModal
+            },
+            ui: {languageId}
+        } = this.props;
         const {newHistoryItem, currentHistoryId} = analysesHistory;
         const samplesOnSaveParamsReset = {
             action: resetCurrentAnalysesHistoryIdLoadDataAsync,
@@ -86,7 +92,7 @@ class App extends Component {
                     />
                      <div className='collapse-subnav hidden' id='subnav'>
                      </div>
-                     <VariantsTableReact {...this.props} />
+                     <VariantsTableReact />
                      <div id='fav-message' className='hidden'>
                         You can export these items to file
                      </div>
@@ -101,7 +107,7 @@ class App extends Component {
                     closeModal={ () => { dispatch(lastErrorResolved()); } }
                 />
                 <AutoLogoutModal
-                    showModal={auth.showAutoLogoutDialog}
+                    showModal={showAutoLogoutDialog}
                     closeModal={ () => {
                         dispatch(stopAutoLogoutCountdownTimer());
                         dispatch(startAutoLogoutTimer());
@@ -124,11 +130,11 @@ class App extends Component {
                     closeModal={ () => { dispatch(closeSavedFilesDialog()); } }
                 />
                 <CloseAllUserSessionsModal
-                    showModal={auth.showCloseAllUserSessionsDialog}
+                    showModal={showCloseAllUserSessionsDialog}
                 />
                 <AnotherPageOpenedErrorModal
-                    showModal={auth.showAnotherPageOpenedModal}
-                    isWaitingForClose={auth.isWaitingForCloseAnotherPageOpenedModal}
+                    showModal={showAnotherPageOpenedModal}
+                    isWaitingForClose={isWaitingForCloseAnotherPageOpenedModal}
                 />
             </div>
         );
@@ -136,37 +142,27 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth,
-            userData,
-            modalWindows,
-            fields,
-            savedFiles,
-            ui,
-            samplesList,
-            filtersList,
-            viewsList,
-            modelsList,
-            analysesHistory,
-            errorHandler: { showErrorWindow } } = state;
-
-    return {
+    const {
         auth,
-        userData,
         modalWindows,
-        fields,
         savedFiles,
         ui,
         samplesList,
-        filtersList,
-        viewsList,
         modelsList,
         analysesHistory,
-        showErrorWindow,
-        p: getP(state)
+        errorHandler: { showErrorWindow }
+    } = state;
+
+    return {
+        auth,
+        modalWindows,
+        savedFiles,
+        ui,
+        samplesList,
+        modelsList,
+        analysesHistory,
+        showErrorWindow
     };
 }
 
-App.propTypes = {
-    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
-};
 export default connect(mapStateToProps)(App);
