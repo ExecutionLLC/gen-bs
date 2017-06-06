@@ -230,7 +230,6 @@ VariantsTableRow.propTypes = {
     isSelected: PropTypes.bool.isRequired,
     fields: PropTypes.object.isRequired,
     ui: PropTypes.object.isRequired,
-    // callback(rowIndex, isSelected)
     onSelected: PropTypes.func.isRequired,
     tableElement: PropTypes.instanceOf(React.Component).isRequired,
     p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
