@@ -4,7 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
-const SearchOperation = require('../../operations/SearchOperation');
+const {SearchOperation} = require('../../operations/Operations');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const ReflectionUtils = require('../../../utils/ReflectionUtils');

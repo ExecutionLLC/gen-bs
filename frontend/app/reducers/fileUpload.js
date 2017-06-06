@@ -170,7 +170,7 @@ function reduceReceiveFileUpload(state, action) {
     };
 }
 
-function reduceReceiveFileOperation(state, action) {
+function reduceSaveFileOperation(state, action) {
     const {id: uploadId, upload: {created, error, id, progress, status}} = action;
     const {filesProcesses, currentUploadId} = state;
     const index = findFileProcessIndex(filesProcesses, id);
@@ -194,6 +194,46 @@ function reduceFileUploadChangeProgress(state, action) {
             progressValue: action.progressValue,
             progressStatus: action.progressStatus
         })
+    };
+}
+
+function reduceSaveUnknownUploadProgress(state, action) {
+    const {progressValue, progressStatus, operationId} = action;
+    const {unknownEvents} = state;
+    const newUnknownEvents = {
+        ...unknownEvents,
+        [operationId]: {
+            progressValue,
+            progressStatus
+        }
+    };
+    return {
+        ...state,
+        unknownEvents: newUnknownEvents
+    };
+}
+
+function reduceSaveUnknownUploadError(state, action) {
+    const {error, operationId} = action;
+    const {unknownEvents} = state;
+    const newUnknownEvents = {
+        ...unknownEvents,
+        [operationId]: {
+            error
+        }
+    };
+    return {
+        ...state,
+        unknownEvents: newUnknownEvents
+    };
+}
+
+function reduceEraseUnknownUploadEvent(state, action) {
+    const {operationId} = action;
+    const {unknownEvents} = state;
+    return {
+        ...state,
+        unknownEvents: _.omit(unknownEvents, operationId)
     };
 }
 
@@ -259,11 +299,20 @@ export default function fileUpload(state = initialState, action) {
         case ActionTypes.RECEIVE_FILE_UPLOAD:
             return reduceReceiveFileUpload(state, action);
 
-        case  ActionTypes.RECEIVE_FILE_OPERATION:
-            return reduceReceiveFileOperation(state, action);
+        case  ActionTypes.SAVE_FILE_OPERATION:
+            return reduceSaveFileOperation(state, action);
 
         case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS:
             return reduceFileUploadChangeProgress(state, action);
+
+        case ActionTypes.SAVE_UNKNOWN_UPLOAD_PROGRESS:
+            return reduceSaveUnknownUploadProgress(state, action);
+
+        case ActionTypes.SAVE_UNKNOWN_UPLOAD_ERROR:
+            return reduceSaveUnknownUploadError(state, action);
+
+        case ActionTypes.ERASE_UNKNOWN_UPLOAD_EVENT:
+            return reduceEraseUnknownUploadEvent(state, action);
 
         case ActionTypes.UPLOADS_LIST_RECEIVE:
             return reduceUploadsListReceive(state, action);

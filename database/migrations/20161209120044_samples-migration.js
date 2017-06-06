@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const Uuid = require('node-uuid');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 
 const tables = {
     VcfFile: 'vcf_file',

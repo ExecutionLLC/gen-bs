@@ -68,6 +68,14 @@ class apiMocks {
         });
     }
 
+    static createGetMock(expectedItemId, item) {
+        return jest.fn((itemId, callback) => {
+            expect(itemId).toBe(expectedItemId);
+            expect(callback).toBeTruthy();
+            callback(null, mockResponse(item));
+        });
+    }
+
     static createSendSearchRequestMock(expectedSessionId, expectedLanguageId, expectedSampleId, 
                                      expectedViewId, expectedFilterId, resultOperationId) {
         return jest.fn((sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) => {

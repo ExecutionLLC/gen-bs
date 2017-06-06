@@ -27,7 +27,6 @@ function makeDefault(value, defaultValue) {
 }
 
 const SETTINGS = {
-    oneSampleGenotypeName: null,
     port: makeDefault(ENV.GEN_WS_PORT, 5000),
     disableRequestLimits: makeDefault(ENV.GEN_WS_DISABLE_REQUEST_LIMITS, false),
     enableCORS: makeDefault(ENV.GEN_WS_CORS_ENABLE, true),
@@ -67,6 +66,10 @@ const SETTINGS = {
             regionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder'),
             savedFilesBucket: makeDefault(ENV.GEN_WS_OSS_SAVED_FILES_BUCKET_NAME, 'placeholder'),
             newSamplesBucket: makeDefault(ENV.GEN_WS_OSS_NEW_SAMPLES_BUCKET_NAME, 'placeholder')
+        },
+        file: {
+            savedFilesPath: makeDefault(ENV.GEN_WS_FILE_SAVED_FILES_PATH, 'placeholder'),
+            newSamplesPath: makeDefault(ENV.GEN_WS_FILE_NEW_SAMPLES_PATH, 'placeholder')
         }
     },
     savedFilesUpload: {

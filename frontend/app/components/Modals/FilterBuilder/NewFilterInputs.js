@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import {filterBuilderChangeAttr, filterBuilderRestartEdit} from '../../../actions/filterBuilder';
 import config from '../../../../config';
@@ -83,3 +83,11 @@ export default class NewFilterInputs extends Component {
     }
 
 }
+
+NewFilterInputs.propTypes = {
+    filterBuilder: PropTypes.object.isRequired,
+    ui: PropTypes.object.isRequired,
+    validationMessage: PropTypes.string.isRequired,
+    texts: PropTypes.shape({p: PropTypes.func.isRequired}).isRequired,
+    dispatch: PropTypes.func.isRequired
+};

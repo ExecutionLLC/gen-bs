@@ -19,7 +19,7 @@ class AnalysisService extends UserEntityServiceBase {
             // Demo users have no history.
             callback(null, []);
         } else {
-            this.models.analysis.findAll(
+            this.theModel.findAll(
                 user.id, limit, offset, nameFilter, descriptionFilter, callback
             );
         }
@@ -55,7 +55,7 @@ class AnalysisService extends UserEntityServiceBase {
         } else if (analysisText.name) {
             async.waterfall([
                 (callback) => {
-                    this.models.analysis.find(user.id, item.id, callback)
+                    this.theModel.find(user.id, item.id, callback)
                 },
                 (analysys, callback) => {
                     const newAnalysis = Object.assign({}, analysys, {

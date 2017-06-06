@@ -63,9 +63,8 @@ class SamplesService extends UserEntityServiceBase {
     }
 
     _uploadSample(sampleLocalPath, fileId, callback) {
-        const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
         const fileStream = fs.createReadStream(sampleLocalPath);
-        this.services.objectStorage.uploadObject(newSamplesBucket, fileId, fileStream,
+        this.services.objectStorage.addSampleFile(fileId, fileStream,
             (error, result) => callback(error, fileId)
         );
     }
@@ -101,7 +100,7 @@ class SamplesService extends UserEntityServiceBase {
     createMetadataForUploadedSample(user, vcfFileSampleId, appServerSampleFields, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
-            asField => FieldsService.createFieldMetadata(null, true, asField));
+            asField => this.services.fields.createFieldMetadata(null, true, asField));
         this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
     }
 

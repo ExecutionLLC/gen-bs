@@ -7,10 +7,11 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const ReflectionUtils = require('../../../utils/ReflectionUtils');
-const UploadOperation = require('../../operations/UploadOperation');
+const {UploadOperation} = require('../../operations/Operations');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const OperationNotFoundError = require('../../../utils/errors/OperationNotFoundError');
+const {lockSession, unlockSession} = require('../../../sessionsLockMiddleware');
 
 /**
  * @typedef {Object} AppServerResult
@@ -53,36 +54,42 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
      */
     onRpcReplyReceived(sessionId, operationId, rpcMessage, callback) {
         const {replyTo} = rpcMessage;
-        async.waterfall([
-            (callback) => this.services.sessions.findById(sessionId, callback),
-            (session, callback) => this.services.operations.find(session, operationId,
-                (error, operation) => callback(error, session, operation)
-            ),
-            (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
-                (error) => callback(error, session, operation)
-            ),
-            (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
-            (operationResult, callback) => {
-                // Store client message in the operation for active uploads.
-                const operation = operationResult.operation;
-                if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
-                    && !operationResult.shouldCompleteOperation) {
-                    operation.setLastAppServerMessage(operationResult.result);
-                }
-                callback(null, operationResult);
-            },
-            (operationResult, callback) => this._completeOperationIfNeeded(operationResult, callback),
-            (operationResult, callback) => this._emitEvent(operationResult.eventName,
-                operationResult, (error) => callback(error, operationResult)),
-            // We are working with the session by ourselves, so need to explicitly save it here.
-            (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
-        ], (error) => {
-            if (error instanceof OperationNotFoundError && replyTo) {
-                this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
-            } else {
-                callback(error);
+        lockSession(
+            sessionId,
+            () => {
+                async.waterfall([
+                    (callback) => this.services.sessions.findById(sessionId, callback),
+                    (session, callback) => this.services.operations.find(session, operationId,
+                        (error, operation) => callback(error, session, operation)
+                    ),
+                    (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
+                        (error) => callback(error, session, operation)
+                    ),
+                    (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
+                    (operationResult, callback) => {
+                        // Store client message in the operation for active uploads.
+                        const operation = operationResult.operation;
+                        if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
+                            && !operationResult.shouldCompleteOperation) {
+                            operation.setLastAppServerMessage(operationResult.result);
+                        }
+                        callback(null, operationResult);
+                    },
+                    (operationResult, callback) => this._completeOperationIfNeeded(operationResult, callback),
+                    (operationResult, callback) => this._emitEvent(operationResult.eventName,
+                        operationResult, (error) => callback(error, operationResult)),
+                    // We are working with the session by ourselves, so need to explicitly save it here.
+                    (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
+                ], (error) => {
+                    unlockSession(sessionId);
+                    if (error instanceof OperationNotFoundError && replyTo) {
+                        this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
+                    } else {
+                        callback(error);
+                    }
+                });
             }
-        });
+        );
     }
 
     _sendRpcNotFoundOperation(operationId, rpcMessage, callback) {

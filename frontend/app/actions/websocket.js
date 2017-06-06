@@ -169,7 +169,7 @@ function receiveUploadMessage(wsData) {
 
 function receiveClosedByUserMessage() {
     return (dispatch) => {
-        dispatch(showAnotherPageOpenedModal(true));
+        dispatch(showAnotherPageOpenedModal());
     };
 }
 

@@ -37,14 +37,13 @@ export function setCurrentAnalysesHistoryId(id) {
     };
 }
 
-function createNewHistoryItem(sample, filter, view, newHistoryItemInfo, languageId) {
+function createNewHistoryItem(sample, filter, view, newHistoryItemInfo) {
     return {
         type: CREATE_NEW_HISTORY_ITEM,
         sample,
         filter,
         view,
-        newHistoryItemInfo,
-        languageId
+        newHistoryItemInfo
     };
 }
 
@@ -333,8 +332,7 @@ export function createNewDefaultHistoryItem() {
         const {
             samplesList: {hashedArray: {array: samples}},
             viewsList: {hashedArray: {array: views}},
-            filtersList: {hashedArray: {array: filters}},
-            ui: {languageId}
+            filtersList: {hashedArray: {array: filters}}
         } = getState();
         const p = getP(getState());
         const sample = getDefaultOrStandardItem(samples);
@@ -344,12 +342,11 @@ export function createNewDefaultHistoryItem() {
             dispatch(handleError(null, p.t('errors.cannotFindDefaultItemsError')));
             return;
         }
-        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view, languageId);
+        const newAnalysisName = HistoryItemUtils.makeNewHistoryItemName(sample, filter, view);
         const newAnalysisDescription = p.t('analysis.descriptionOf', {name: newAnalysisName});
         dispatch(createNewHistoryItem(
             sample, filter, view,
-            {name: newAnalysisName, description: newAnalysisDescription},
-            languageId
+            {name: newAnalysisName, description: newAnalysisDescription}
         ));
     };
 }

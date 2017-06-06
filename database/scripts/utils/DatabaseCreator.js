@@ -18,7 +18,7 @@ class DatabaseCreator {
         this.databaseName = databaseName;
     }
 
-    create() {
+    create(dontRecreate) {
         const postgresConfig = this._createKnexConfigForDatabaseName('postgres');
 
         const postgresKnex = new Knex(postgresConfig);
@@ -27,27 +27,38 @@ class DatabaseCreator {
             this._isDatabaseExists(postgresKnex)
                 .then(isDatabaseExists => {
                     if (isDatabaseExists) {
-                        return this._dropDatabaseIfExists(postgresKnex)
-                            .catch((dropError) => {
-                                return Promise.reject('Failed to drop database. ' + dropError);
-                            })
-                            .then(() => {
-                                console.log('Database dropped: ' + this.databaseName + '.');
-                                return this._createDatabase(postgresKnex)
-                                    .catch((error) => {
-                                        return Promise.reject('Failed to create database. ' + error);
-                                    });
-                            });
+                        if (dontRecreate) {
+                            console.log('Database already exist, leave it: ' + this.databaseName);
+                            return Promise.resolve(true);
+                        } else {
+                            return this._dropDatabaseIfExists(postgresKnex)
+                                .catch((dropError) => {
+                                    return Promise.reject('Failed to drop database. ' + dropError);
+                                })
+                                .then(() => {
+                                    console.log('Database dropped: ' + this.databaseName + '.');
+                                    return this._createDatabase(postgresKnex)
+                                        .catch((error) => {
+                                            return Promise.reject('Failed to create database. ' + error);
+                                        });
+                                })
+                                .then(() => {
+                                    return Promise.resolve(false);
+                                });
+                        }
                     } else {
                         return this._createDatabase(postgresKnex)
                             .catch((error) => {
                                 return Promise.reject('Failed to create database. ' + error);
                             })
+                            .then(() => {
+                                return Promise.resolve(false);
+                            });
                     }
                 })
-                .then(() => {
+                .then((result) => {
                     console.log('Database created: ' + this.databaseName + '.');
-                    resolve();
+                    resolve(result);
                 })
                 .catch((error) => {
                     reject(error);

@@ -18,8 +18,6 @@ class ApplicationServerServiceBase extends ServiceBase {
         super(services);
 
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
-
-        this.logger = this.services.logger;
         const {
             rabbitMq: {
                 host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName
