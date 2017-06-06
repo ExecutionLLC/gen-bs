@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
-import {getP} from 'redux-polyglot/dist/selectors';
+import translate from 'redux-polyglot/translate';
 
 import VariantsTableHead from './VariantsTableHead';
 import VariantsTableRows from './VariantsTableRows';
@@ -18,6 +18,16 @@ class VariantsTableReact extends Component {
         };
         this.variantsTableHead = null;
         this.variantsTableRows = null;
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return (
+            nextProps.auth !== this.props.auth ||
+            nextProps.websocket !== this.props.websocket ||
+            nextProps.ui !== this.props.ui ||
+            nextProps.variantsTable !== this.props.variantsTable ||
+            nextProps.p.currentLocale !== this.props.p.currentLocale
+        );
     }
 
     render() {
@@ -123,9 +133,8 @@ function mapStateToProps(state) {
         websocket,
         ui,
         variantsTable,
-        fields,
-        p: getP(state)
+        fields
     };
 }
 
-export default connect(mapStateToProps)(VariantsTableReact);
+export default translate(connect(mapStateToProps)(VariantsTableReact));

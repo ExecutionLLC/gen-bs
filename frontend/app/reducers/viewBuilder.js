@@ -113,7 +113,7 @@ function reduceVBuilderChangeColumn(state, action) {
     };
 }
 
-function reduceVBuilderChangeSortColumn(state, action) { // TODO refactor
+function reduceVBuilderChangeSortColumn(state, action) {
     const viewItems = [...state.editingView.viewListItems];
     const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
     const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});

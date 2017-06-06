@@ -44,8 +44,6 @@ class WebServerHost {
 
         this._addMiddleware(app);
 
-        app.use(sessionLockMiddleware);
-
         this._configureSession(app);
 
         this._initRouters(app);
@@ -75,6 +73,8 @@ class WebServerHost {
         app.use(morgan('combined'));
 
         app.use('/', Express.static('public'));
+
+        app.use(sessionLockMiddleware);
     }
 
     /**

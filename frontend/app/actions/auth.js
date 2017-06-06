@@ -309,7 +309,12 @@ export function showAnotherPageOpenedModal() {
 
 export function hideAnotherPageOpenedModal() {
     return (dispatch, getState) => {
-        const {showAnotherPageOpenedModal: isShow, isWaitingForCloseAnotherPageOpenedModal: isWaiting} = getState().auth;
+        const {
+            auth: {
+                showAnotherPageOpenedModal: isShow,
+                isWaitingForCloseAnotherPageOpenedModal: isWaiting
+            }
+        } = getState();
         if (isShow) {
             if (isWaiting) {
                 dispatch(toggleAnotherPageOpenedModal(false));
