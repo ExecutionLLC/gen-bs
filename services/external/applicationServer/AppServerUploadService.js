@@ -247,7 +247,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             },
             (callback) => {
                 callbackErrorHandler(() => {
-                    this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                    this.models.samples.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
                         (error, existingSamples) => callback(error, existingSamples));
                 }, callback);
             },
@@ -267,7 +267,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], () => {
             async.waterfall([
                 (callback) => this.toggleNextOperation(operation.getId(), callback),
-                (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                (callback) => this.models.samples.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
                     (error, existingSamples) => callback(error, existingSamples)),
                 (existingSamples, callback) => this._createOperationResult(
                     session,
