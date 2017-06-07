@@ -10,8 +10,8 @@ const RESULT_TYPES = require('./AppServerResultTypes');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 class AppServerSourcesService extends ApplicationServerServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
     }
 
     requestSourcesList(callback) {

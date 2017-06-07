@@ -14,8 +14,8 @@ const proxyProviderFunc = _.once(function (...args) {
 });
 
 class ApplicationServerServiceBase extends ServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
 
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
         const {

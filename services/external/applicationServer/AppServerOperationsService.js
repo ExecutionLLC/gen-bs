@@ -12,8 +12,8 @@ const ErrorUtils = require('../../../utils/ErrorUtils');
 const AppServerEvents = require('./AppServerEvents');
 
 class AppServerOperationsService extends ApplicationServerServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
     }
 
     init() {
