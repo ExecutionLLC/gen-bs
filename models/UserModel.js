@@ -38,9 +38,9 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    findIdByEmailPassword(email, passwordHash, callback) {
+    findIdByEmailPassword(email, passwordHash, loginTypeOrNull, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findUserAsync(trx, null, email, passwordHash, null)
+            this._findUserAsync(trx, null, email, passwordHash, loginTypeOrNull)
                 .then((user) => user.id)
                 .asCallback(callback);
         }, callback);

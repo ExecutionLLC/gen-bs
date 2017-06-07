@@ -105,7 +105,7 @@ class SessionService extends ServiceBase {
 
     startForEmailPassword(session, email, password, callback) {
         async.waterfall([
-            (callback) => this.services.users.findIdByEmailPassword(email, password, callback),
+            (callback) => this.services.users.findIdByEmailPassword(email, password, LOGIN_TYPES.PASSWORD, callback),
             (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
             (userId, callback) => this._initUserSession(session, userId, callback)
         ], callback);
@@ -120,7 +120,7 @@ class SessionService extends ServiceBase {
      * */
     startForEmail(session, email, callback) {
         async.waterfall([
-            (callback) => this.services.users.findIdByEmail(email,LOGIN_TYPES.GOOGLE, callback),
+            (callback) => this.services.users.findIdByEmail(email, LOGIN_TYPES.GOOGLE, callback),
             (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
             (userId, callback) => this._initUserSession(session, userId, callback)
         ], callback);
