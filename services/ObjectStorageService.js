@@ -6,8 +6,8 @@ const AmazonS3DataProvider = require('./storage/AmazonS3DataProvider');
 const FileSystemDataProvider = require('./storage/FileSystemDataProvider');
 
 class ObjectStorageService extends ServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
         const storageType = this.config.objectStorage.type;
         this._dataProvider = ObjectStorageService._getActualDataProvider(storageType, services);
     }
