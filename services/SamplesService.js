@@ -36,7 +36,7 @@ class SamplesService extends UserEntityServiceBase {
     /**
      * Sends sample to application server for processing.
      * */
-    upload(session, user, localFileInfo, fileId, sampleList, callback) {
+    upload(user, localFileInfo, fileId, sampleList, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
@@ -57,7 +57,7 @@ class SamplesService extends UserEntityServiceBase {
                 user,
                 (error, priority) => callback(error, operationId, sampleIds, priority)
             ),
-            (operationId, sampleIds, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
+            (operationId, sampleIds, priority, callback) => this.services.applicationServer.requestUploadProcessing(user.id,
                 operationId, priority, (error) => callback(error, operationId, sampleIds))
         ], callback);
     }

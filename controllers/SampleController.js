@@ -52,7 +52,7 @@ class SampleController extends UserEntityControllerBase {
                     fileSize: sampleFile.size,
                     originalFileName: fileName
                 };
-                this.services.samples.upload(session, user, fileInfo, operationId, sampleNames, (error, operationId, sampleIds) => {
+                this.services.samples.upload(user, fileInfo, operationId, sampleNames, (error, operationId, sampleIds) => {
                     // Try removing local file anyway.
                     this._removeSampleFile(fileInfo.localFilePath);
                     callback(error, operationId, sampleIds);

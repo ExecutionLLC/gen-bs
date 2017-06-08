@@ -163,8 +163,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestUploadProcessing(session, operationId, priority, callback) {
-        const {userId} = session;
+    requestUploadProcessing(userId, operationId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
