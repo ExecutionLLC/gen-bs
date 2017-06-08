@@ -161,7 +161,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 const params = {
                     path: this.services.objectStorage.getSamplePath(operationId)
                 };
-                this._rpcSend(session, operation, method, params, priority, callback);
+                this._rpcSend(operation, method, params, priority, callback);
             }
         ], callback);
     }
