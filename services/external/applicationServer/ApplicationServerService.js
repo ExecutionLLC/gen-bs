@@ -100,8 +100,8 @@ class ApplicationServerService extends ApplicationServerServiceBase {
         this.services.applicationServerSearch.requestSearchInResults(session, operationId, params, callback);
     }
 
-    requestOperationState(session, operationId, callback) {
-        this.services.applicationServerOperations.requestOperationState(session, operationId, callback);
+    requestOperationState(operationId, callback) {
+        this.services.applicationServerOperations.requestOperationState(operationId, callback);
     }
 }
 

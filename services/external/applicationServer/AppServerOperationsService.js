@@ -49,7 +49,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestOperationState(session, operationId, callback) {
+    requestOperationState(operationId, callback) {
         async.waterfall([
             (callback) => this.services.operations.findInAllSessions(operationId, callback),
             (operation, callback) => this._rpcSend(operation, METHODS.checkSession, null, null, callback)
