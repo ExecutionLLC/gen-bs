@@ -17,7 +17,7 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response) {
-        const {body, file ,user, session} = request;
+        const {body, file, user, session} = request;
         let isCancelled = false;
         request.on('close', function () {
             isCancelled = true;
