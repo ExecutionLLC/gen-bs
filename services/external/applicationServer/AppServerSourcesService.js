@@ -17,22 +17,20 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
     requestSourcesList(callback) {
         const method = METHODS.getSourcesList;
         async.waterfall([
-            (callback) => this.services.sessions.findSystemSession(callback),
-            (session, callback) => this.services.operations.addSystemOperation(method,
-                (error, operation) => callback(error, session, operation)
+            (callback) => this.services.operations.addSystemOperation(method,
+                (error, operation) => callback(error, operation)
             ),
-            (session, operation, callback) => this._rpcSend(operation, method, null, null, callback) // TODO session did not used
+            (operation, callback) => this._rpcSend(operation, method, null, null, callback)
         ], callback);
     }
 
     requestSourceMetadata(sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
-            (callback) => this.services.sessions.findSystemSession(callback),
-            (session, callback) => this.services.operations.addSystemOperation(method,
-                (error, operation) => callback(error, session, operation)
+            (callback) => this.services.operations.addSystemOperation(method,
+                (error, operation) => callback(error, operation)
             ),
-            (session, operation, callback) => this._rpcSend(operation, method, // TODO session did not used
+            (operation, callback) => this._rpcSend(operation, method,
                 _.map(sourceNames, (sourceName) => `${sourceName}.h5`), null, callback)
         ], callback);
     }
