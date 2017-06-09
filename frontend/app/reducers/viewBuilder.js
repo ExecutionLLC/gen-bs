@@ -134,26 +134,42 @@ function reduceVBuilderChangeSortColumn(state, action) {
     if (isFirstSortItemSorting || isSecondSortItemSorting) {
         // selected one of already ordered items
         viewItems = [...editingView.viewListItems];
-        const selectedSortItem = editingView.viewListItems[selectedSortItemIndex];
+        const changingItems = [];
         if (!selectedDirection) {
             // reset column sorting
-            viewItems[selectedSortItemIndex] = Object.assign({}, selectedSortItem, {
-                sortDirection: null,
-                sortOrder: null
+            changingItems.push({
+                index: selectedSortItemIndex,
+                item: {
+                    sortDirection: null,
+                    sortOrder: null
+                }
             });
             if (isFirstSortItemSorting && secondSortItemIndex >= 0) {
                 // first sort order was reset, and there is second (not the same field as first),
                 // need to change second into the first
-                viewItems[secondSortItemIndex] = Object.assign({}, viewItems[secondSortItemIndex], {
-                    sortOrder: 1
+                changingItems.push({
+                    index: secondSortItemIndex,
+                    item: {
+                        sortOrder: 1
+                    }
                 });
             }
         } else {
             // set next column sorting
-            viewItems[selectedSortItemIndex] = Object.assign({}, selectedSortItem, {
-                sortDirection: selectedDirection
+            changingItems.push({
+                index: selectedSortItemIndex,
+                item: {
+                    sortDirection: selectedDirection
+                }
             });
         }
+        viewItems = _.reduce(
+            changingItems,
+            (newViewItems, change) => {
+                return immutableArray.assign(newViewItems, change.index, change.item);
+            },
+            editingView.viewListItems
+        );
     } else {
         // selected one of not sorted items, selectedSortItemIndex != firstSortItemIndex, != secondSortItemSorting
         // oldSortItemIndex will be firstSortItemIndex or secondSortItemSorting depends on desired sort order
