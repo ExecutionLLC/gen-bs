@@ -133,7 +133,6 @@ function reduceVBuilderChangeSortColumn(state, action) {
 
     if (isFirstSortItemSorting || isSecondSortItemSorting) {
         // selected one of already ordered items
-        viewItems = [...editingView.viewListItems];
         const changingItems = [];
         if (!selectedDirection) {
             // reset column sorting
