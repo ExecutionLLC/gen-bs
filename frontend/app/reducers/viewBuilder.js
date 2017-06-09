@@ -160,11 +160,9 @@ function reduceVBuilderChangeSortColumn(state, action) {
         const oldSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder});
         const changingItems = [];
         if (oldSortItemIndex >= 0) {
-            const oldSortItem = editingView.viewListItems[oldSortItemIndex];
             changingItems.push({
                 index: oldSortItemIndex,
                 item: {
-                    ...oldSortItem,
                     sortOrder: null,
                     sortDirection: null
                 }
@@ -174,7 +172,6 @@ function reduceVBuilderChangeSortColumn(state, action) {
         changingItems.push({
             index: selectedSortItemIndex,
             item: {
-                ...selectedSortItem,
                 sortDirection: selectedDirection,
                 sortOrder: firstSortItemIndex < 0 ? 1 : sortOrder
             }
