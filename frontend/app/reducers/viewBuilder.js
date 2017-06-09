@@ -117,16 +117,17 @@ function reduceVBuilderChangeSortColumn(state, action) {
     const {fieldId: sortFieldId, sortOrder, sortDirection} = action;
     const {editingView} = state;
 
+    const selectedSortItemIndex = _.findIndex(editingView.viewListItems, {fieldId: sortFieldId});
+
+    // item index of sort order 1
     const firstSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder: 1});
+    // item index of sort order 2
     const secondSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder: 2});
 
-    const firstSortItem = editingView.viewListItems[firstSortItemIndex];
-    const secondSortItem = editingView.viewListItems[secondSortItemIndex];
-
-    const isFirstSortItemSorting = firstSortItem && firstSortItem.fieldId === sortFieldId; // can simplier
-    const isSecondSortItemSorting = secondSortItem && secondSortItem.fieldId === sortFieldId; // can simplier
-
-    const selectedSortItemIndex = _.findIndex(editingView.viewListItems, {fieldId: sortFieldId});
+    // is sort order 1 item same as selected item?
+    const isFirstSortItemSorting = selectedSortItemIndex >= 0 && firstSortItemIndex === selectedSortItemIndex;
+    // is sort order 2 item same as selected item?
+    const isSecondSortItemSorting = selectedSortItemIndex >= 0 && secondSortItemIndex === selectedSortItemIndex;
 
     const selectedDirection = getNextDirection(sortDirection);
     const changingItems = [];
