@@ -149,15 +149,18 @@ function reduceVBuilderChangeSortColumn(state, action) {
         const oldSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder});
         if (oldSortItemIndex >= 0) {
             const oldSortItem = editingView.viewListItems[oldSortItemIndex];
-            viewItems[oldSortItemIndex] = Object.assign({}, oldSortItem, {
+            viewItems[oldSortItemIndex] = {
+                ...oldSortItem,
                 sortOrder: null,
                 sortDirection: null
-            });
+            };
         }
-        viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+        const selectedSortItem = editingView.viewListItems[selectedSortItemIndex];
+        viewItems[selectedSortItemIndex] = {
+            ...selectedSortItem,
             sortDirection: selectedDirection,
             sortOrder: firstSortItemIndex == -1 ? 1 : sortOrder
-        });
+        };
     }
     return Object.assign({}, state, {
         editingView: Object.assign({}, editingView, {
