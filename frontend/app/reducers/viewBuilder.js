@@ -166,7 +166,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
             item: {
                 ...selectedSortItem,
                 sortDirection: selectedDirection,
-                sortOrder: firstSortItemIndex == -1 ? 1 : sortOrder
+                sortOrder: firstSortItemIndex < 0 ? 1 : sortOrder
             }
         });
         viewItems = _.reduce(
