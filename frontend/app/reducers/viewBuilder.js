@@ -117,13 +117,21 @@ function reduceVBuilderChangeSortColumn(state, action) {
     const {fieldId: sortFieldId, sortOrder, sortDirection} = action;
     const {editingView} = state;
 
+    const firstSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder: 1});
+    const secondSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder: 2});
+
+    const firstSortItem = editingView.viewListItems[firstSortItemIndex];
+    const secondSortItem = editingView.viewListItems[secondSortItemIndex];
+
+    const isFirstSortItemSorting = firstSortItem && firstSortItem.fieldId === sortFieldId; // can simplier
+    const isSecondSortItemSorting = secondSortItem && secondSortItem.fieldId === sortFieldId; // can simplier
+
+    const selectedSortItemIndex = _.findIndex(editingView.viewListItems, {fieldId: sortFieldId});
+
     const viewItems = [...editingView.viewListItems];
-    const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
-    const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
-    const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: sortFieldId});
-    const selectedOrder = sortOrder;
     const selectedDirection = getNextDirection(sortDirection);
-    if (selectedSortItemIndex == secondSortItemIndex || selectedSortItemIndex == firstSortItemIndex) {
+
+    if (isFirstSortItemSorting || isSecondSortItemSorting) {
         viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
             sortDirection: selectedDirection
         });
@@ -138,7 +146,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
             }
         }
     } else {
-        const oldSortItemIndex = _.findIndex(viewItems, {sortOrder: selectedOrder});
+        const oldSortItemIndex = _.findIndex(viewItems, {sortOrder});
         if (oldSortItemIndex != -1) {
             viewItems[oldSortItemIndex] = Object.assign({}, viewItems[oldSortItemIndex], {
                 sortOrder: null,
@@ -147,7 +155,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
         }
         viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
             sortDirection: selectedDirection,
-            sortOrder: firstSortItemIndex == -1 ? 1 : selectedOrder
+            sortOrder: firstSortItemIndex == -1 ? 1 : sortOrder
         });
     }
     return Object.assign({}, state, {
