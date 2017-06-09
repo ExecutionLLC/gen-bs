@@ -141,7 +141,9 @@ function reduceVBuilderChangeSortColumn(state, action) {
                 sortDirection: null,
                 sortOrder: null
             });
-            if (selectedSortItemIndex == firstSortItemIndex && secondSortItemIndex != -1) {
+            if (isFirstSortItemSorting && secondSortItemIndex >= 0) {
+                // first sort order was reset, and there is second (not the same field as first),
+                // need to change second into the first
                 viewItems[secondSortItemIndex] = Object.assign({}, viewItems[secondSortItemIndex], {
                     sortOrder: 1
                 });
