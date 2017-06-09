@@ -128,12 +128,11 @@ function reduceVBuilderChangeSortColumn(state, action) {
 
     const selectedSortItemIndex = _.findIndex(editingView.viewListItems, {fieldId: sortFieldId});
 
-    let viewItems;
     const selectedDirection = getNextDirection(sortDirection);
+    const changingItems = [];
 
     if (isFirstSortItemSorting || isSecondSortItemSorting) {
         // selected one of already ordered items
-        const changingItems = [];
         if (!selectedDirection) {
             // reset column sorting
             changingItems.push({
@@ -162,18 +161,10 @@ function reduceVBuilderChangeSortColumn(state, action) {
                 }
             });
         }
-        viewItems = _.reduce(
-            changingItems,
-            (newViewItems, change) => {
-                return immutableArray.assign(newViewItems, change.index, change.item);
-            },
-            editingView.viewListItems
-        );
     } else {
         // selected one of not sorted items, selectedSortItemIndex != firstSortItemIndex, != secondSortItemSorting
         // oldSortItemIndex will be firstSortItemIndex or secondSortItemSorting depends on desired sort order
         const oldSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder});
-        const changingItems = [];
         if (oldSortItemIndex >= 0) {
             changingItems.push({
                 index: oldSortItemIndex,
@@ -191,17 +182,17 @@ function reduceVBuilderChangeSortColumn(state, action) {
                 sortOrder: firstSortItemIndex < 0 ? 1 : sortOrder
             }
         });
-        viewItems = _.reduce(
-            changingItems,
-            (newViewItems, change) => {
-                return immutableArray.assign(newViewItems, change.index, change.item);
-            },
-            editingView.viewListItems
-        );
     }
+    const newViewListItems = _.reduce(
+        changingItems,
+        (newViewItems, change) => {
+            return immutableArray.assign(newViewItems, change.index, change.item);
+        },
+        editingView.viewListItems
+    );
     return Object.assign({}, state, {
         editingView: Object.assign({}, editingView, {
-            viewListItems: viewItems
+            viewListItems: newViewListItems
         })
     });
 }
