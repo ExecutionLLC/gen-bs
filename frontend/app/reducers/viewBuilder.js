@@ -133,11 +133,9 @@ function reduceVBuilderChangeSortColumn(state, action) {
 
     if (isFirstSortItemSorting || isSecondSortItemSorting) {
         viewItems = [...editingView.viewListItems];
-        viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
-            sortDirection: selectedDirection
-        });
         if (selectedDirection == null) {
             viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                sortDirection: null,
                 sortOrder: null
             });
             if (selectedSortItemIndex == firstSortItemIndex && secondSortItemIndex != -1) {
@@ -145,6 +143,10 @@ function reduceVBuilderChangeSortColumn(state, action) {
                     sortOrder: 1
                 });
             }
+        } else {
+            viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                sortDirection: selectedDirection
+            });
         }
     } else {
         const oldSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder});
