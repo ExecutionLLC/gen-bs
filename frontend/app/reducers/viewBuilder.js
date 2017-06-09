@@ -114,12 +114,15 @@ function reduceVBuilderChangeColumn(state, action) {
 }
 
 function reduceVBuilderChangeSortColumn(state, action) {
-    const viewItems = [...state.editingView.viewListItems];
+    const {fieldId: sortFieldId, sortOrder, sortDirection} = action;
+    const {editingView} = state;
+
+    const viewItems = [...editingView.viewListItems];
     const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
     const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
-    const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: action.fieldId});
-    const selectedOrder = action.sortOrder;
-    const selectedDirection = getNextDirection(action.sortDirection);
+    const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: sortFieldId});
+    const selectedOrder = sortOrder;
+    const selectedDirection = getNextDirection(sortDirection);
     if (selectedSortItemIndex == secondSortItemIndex || selectedSortItemIndex == firstSortItemIndex) {
         viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
             sortDirection: selectedDirection
@@ -148,7 +151,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
         });
     }
     return Object.assign({}, state, {
-        editingView: Object.assign({}, state.editingView, {
+        editingView: Object.assign({}, editingView, {
             viewListItems: viewItems
         })
     });
