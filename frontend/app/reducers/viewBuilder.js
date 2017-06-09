@@ -174,7 +174,6 @@ function reduceVBuilderChangeSortColumn(state, action) {
                 }
             });
         }
-        const selectedSortItem = editingView.viewListItems[selectedSortItemIndex];
         changingItems.push({
             index: selectedSortItemIndex,
             item: {
