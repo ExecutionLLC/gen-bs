@@ -32,6 +32,16 @@ function createViewItem(fieldId) {
     };
 }
 
+function setNewViewListItems(state, newViewListItems) {
+    return {
+        ...state,
+        editingView: {
+            ...state.editingView,
+            viewListItems: newViewListItems
+        }
+    };
+}
+
 function reduceVBuilderStartEdit(state, action) {
     const {view, newViewInfo, allowedFields, languageId} = action;
     const editingView = newViewInfo ?
@@ -68,24 +78,18 @@ function reduceVBuilderEndEdit(state) {
 }
 
 function reduceVBuilderDeleteColumn(state, action) {
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.remove(state.editingView.viewListItems, action.viewItemIndex)
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.remove(state.editingView.viewListItems, action.viewItemIndex)
+    );
 }
 
 function reduceVBuilderAddColumn(state, action) {
     const newViewItem = createViewItem(action.columnFieldId);
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.insertBefore(state.editingView.viewListItems, action.viewItemIndex, newViewItem)
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.insertBefore(state.editingView.viewListItems, action.viewItemIndex, newViewItem)
+    );
 }
 
 function reduceVBuilderChangeAttr(state, action) {
@@ -104,13 +108,10 @@ function reduceVBuilderChangeAttr(state, action) {
 
 function reduceVBuilderChangeColumn(state, action) {
     const changedViewItem = createViewItem(action.fieldId);
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, changedViewItem)
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, changedViewItem)
+    );
 }
 
 function reduceVBuilderChangeSortColumn(state, action) {
@@ -191,23 +192,14 @@ function reduceVBuilderChangeSortColumn(state, action) {
         },
         viewListItems
     );
-    return {
-        ...state,
-        editingView: {
-            ...editingView,
-            viewListItems: newViewListItems
-        }
-    };
+    return setNewViewListItems(state, newViewListItems);
 }
 
 function reduceVBuilderSetItemKeywords(state, action) {
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, {keywords: action.keywordsIds})
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, {keywords: action.keywordsIds})
+    );
 }
 
 function reduceVBuilderOnSave(state, action) {
