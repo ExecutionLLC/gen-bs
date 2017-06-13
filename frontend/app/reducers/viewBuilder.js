@@ -191,11 +191,13 @@ function reduceVBuilderChangeSortColumn(state, action) {
         },
         viewListItems
     );
-    return Object.assign({}, state, {
-        editingView: Object.assign({}, editingView, {
+    return {
+        ...state,
+        editingView: {
+            ...editingView,
             viewListItems: newViewListItems
-        })
-    });
+        }
+    };
 }
 
 function reduceVBuilderSetItemKeywords(state, action) {
