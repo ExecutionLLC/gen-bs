@@ -116,13 +116,14 @@ function reduceVBuilderChangeColumn(state, action) {
 function reduceVBuilderChangeSortColumn(state, action) {
     const {fieldId: sortFieldId, sortOrder, sortDirection} = action;
     const {editingView} = state;
+    const {viewListItems} = editingView;
 
-    const selectedSortItemIndex = _.findIndex(editingView.viewListItems, {fieldId: sortFieldId});
+    const selectedSortItemIndex = _.findIndex(viewListItems, {fieldId: sortFieldId});
 
     // item index of sort order 1
-    const firstSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder: 1});
+    const firstSortItemIndex = _.findIndex(viewListItems, {sortOrder: 1});
     // item index of sort order 2
-    const secondSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder: 2});
+    const secondSortItemIndex = _.findIndex(viewListItems, {sortOrder: 2});
 
     // is sort order 1 item same as selected item?
     const isFirstSortItemSorting = selectedSortItemIndex >= 0 && firstSortItemIndex === selectedSortItemIndex;
@@ -165,7 +166,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
     } else {
         // selected one of not sorted items, selectedSortItemIndex != firstSortItemIndex, != secondSortItemSorting
         // oldSortItemIndex will be firstSortItemIndex or secondSortItemSorting depends on desired sort order
-        const oldSortItemIndex = _.findIndex(editingView.viewListItems, {sortOrder});
+        const oldSortItemIndex = _.findIndex(viewListItems, {sortOrder});
         if (oldSortItemIndex >= 0) {
             changingItems.push({
                 index: oldSortItemIndex,
@@ -188,7 +189,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
         (newViewItems, change) => {
             return immutableArray.assign(newViewItems, change.index, change.item);
         },
-        editingView.viewListItems
+        viewListItems
     );
     return Object.assign({}, state, {
         editingView: Object.assign({}, editingView, {
