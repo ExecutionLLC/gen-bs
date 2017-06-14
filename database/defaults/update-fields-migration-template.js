@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const BluebirdPromise = require('bluebird');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const ChangeCaseUtil = require('../scripts/utils/ChangeCaseUtil');
 const Uuid = require('node-uuid');
 
 console.log(__dirname);

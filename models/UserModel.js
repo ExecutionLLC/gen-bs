@@ -25,6 +25,12 @@ const mappedColumns = [
     'company'
 ];
 
+class DuplicateEmail extends Error {
+    constructor() {
+        super('Duplicate e-mail.');
+    }
+}
+
 class UserModel extends RemovableModelBase {
     constructor(models) {
         super(models, 'user', mappedColumns);
@@ -49,7 +55,7 @@ class UserModel extends RemovableModelBase {
     update(userId, languageId, user, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._checkFieldsUnique(user, trx, callback),
+                (callback) => this._checkFieldsUnique({id: userId, email: user.email}, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
@@ -119,41 +125,44 @@ class UserModel extends RemovableModelBase {
     }
 
     _add(user, languageId, shouldGenerateId, callback) {
-        this._addAsync(user, languageId, shouldGenerateId)
-            .asCallback(callback);
-    }
-
-    _addAsync(user, languageId, shouldGenerateId) {
         const idToInsert = shouldGenerateId ? this._generateId() : user.id;
-        return this.db.transactionallyAsync((trx) => {
-            return Promise.resolve()
-                .then(() => this._checkEmailUniqueAsync(user, trx))
-                .then(() => {
-                    const dataToInsert = {
-                        id: idToInsert,
-                        numberPaidSamples: user.numberPaidSamples,
-                        email: user.email,
-                        defaultLanguageId: languageId,
-                        isDeleted: false,
-                        gender: user.gender,
-                        phone: user.phone,
-                        loginType: user.loginType,
-                        password: user.password
-                    };
-                    return this._insertAsync(dataToInsert, trx)
-                        .then((userId) => {
-                            const dataToInsert = {
-                                userId: userId,
-                                languageId,
-                                firstName: user.firstName,
-                                lastName: user.lastName,
-                                speciality: user.speciality,
-                                company: user.company
-                            };
-                            return this._unsafeInsertAsync('user_text', dataToInsert, trx).then(() => userId);
-                        });
-                })
-        });
+        this.db.transactionally(
+            (trx, callback) => {
+               this._checkEmailUniqueAsync(user, trx)
+                    .then(() => {
+                        const dataToInsert = {
+                            id: idToInsert,
+                            numberPaidSamples: user.numberPaidSamples,
+                            email: user.email,
+                            defaultLanguageId: languageId,
+                            isDeleted: false,
+                            gender: user.gender,
+                            phone: user.phone,
+                            loginType: user.loginType,
+                            password: user.password
+                        };
+                        return this._insertAsync(dataToInsert, trx)
+                            .then((userId) => {
+                                const dataToInsert = {
+                                    userId: userId,
+                                    languageId,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    speciality: user.speciality,
+                                    company: user.company
+                                };
+                                return this._unsafeInsertAsync('user_text', dataToInsert, trx).then(() => userId);
+                            });
+                    })
+                    .then(userId => {
+                        callback(null, userId);
+                    })
+                    .catch(err => {
+                        callback(err);
+                    });
+            },
+            callback
+        );
     }
 
     _updateUserText(userId, dataToUpdate, trx, callback) {
@@ -261,9 +270,11 @@ class UserModel extends RemovableModelBase {
         return new Promise((resolve, reject) => {
             this._findUserAsync(trx, null, email, null)
                 .catch((error) => resolve())
-                .then(() => reject(new Error('Duplicate e-mail.')))
+                .then(() => reject(new DuplicateEmail()))
         });
     }
 }
+
+UserModel.DuplicateEmail = DuplicateEmail;
 
 module.exports = UserModel;

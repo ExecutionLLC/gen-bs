@@ -1,7 +1,7 @@
-//const HOST = window.location.hostname;
 /* global
  API_HOST: false,
  API_PORT: false,
+ API_USE_LOCATION: false,
  HEADER_SESSION: false,
  HEADER_LANGUAGE: false,
  SESSION_KEEP_ALIVE_TIMEOUT: false,
@@ -10,10 +10,10 @@
  USE_SECURE_CONNECTION: false,
  ALLOW_GOOGLE_LOGIN: true
  */
+const HOST = API_USE_LOCATION ? window.location.hostname : API_HOST;
+const PORT = API_USE_LOCATION ? window.location.port : API_PORT;
 const HTTP_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'https' : 'http';
 const WS_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'wss' : 'ws';
-const HOST = API_HOST;
-const PORT = API_PORT;
 
 const config = {
     HOST,

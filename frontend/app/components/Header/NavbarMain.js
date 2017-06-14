@@ -83,7 +83,7 @@ class NavbarMain extends Component {
                         dispatch={this.props.dispatch}
                         p={this.props.p}
                     />
-                    {languages && languages.length &&
+                    {languages && languages.length > 1 &&
                     <LanguageDropdown
                         dispatch={this.props.dispatch}
                         languages={languages}

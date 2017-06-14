@@ -12,6 +12,7 @@ const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const OperationNotFoundError = require('../../../utils/errors/OperationNotFoundError');
 const {lockSession, unlockSession} = require('../../../sessionsLockMiddleware');
+const TooManyAsError = require('../../../utils/errors/TooManyAsError');
 
 /**
  * @typedef {Object} AppServerResult
@@ -29,6 +30,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
         super(services, models);
 
         this.eventEmitter = new EventProxy(EVENTS);
+        this.backends = [];
     }
 
     registeredEvents() {
@@ -83,7 +85,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
                 ], (error) => {
                     unlockSession(sessionId);
                     if (error instanceof OperationNotFoundError && replyTo) {
-                        this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
+                        this._sendRpcError(operationId, rpcMessage, () => callback(error));
                     } else {
                         callback(error);
                     }
@@ -92,7 +94,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
         );
     }
 
-    _sendRpcNotFoundOperation(operationId, rpcMessage, callback) {
+    _sendRpcError(operationId, rpcMessage, callback) {
         const {id, replyTo} = rpcMessage;
         const method = METHODS.closeSession;
         this._rpcProxySend(id, operationId, method, null, replyTo, null, (error) => callback(error));
@@ -165,11 +167,30 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
         }
     }
 
+    _isBackendAvailable(backendId){
+        if (_.isNull(this.config.backendCount)){
+            return true;
+        }else if (this.backends.length < this.config.backendCount){
+            return true;
+        }
+        return this.backends.includes(backendId);
+    }
+
     _setASQueryNameIfAny(operation, rpcMessage, callback) {
         if (rpcMessage.replyTo) {
-            operation.setASQueryName(rpcMessage.replyTo);
+            if (this._isBackendAvailable(rpcMessage.replyTo)) {
+                operation.setASQueryName(rpcMessage.replyTo);
+                if (!this.backends.includes(rpcMessage.replyTo)){
+                    this.backends.push(rpcMessage.replyTo)
+                }
+                this.backends.push(rpcMessage.replyTo);
+                callback(null, operation);
+            } else {
+                callback(new TooManyAsError());
+            }
+        }else {
+            callback(null, operation);
         }
-        callback(null, operation);
     }
 }
 

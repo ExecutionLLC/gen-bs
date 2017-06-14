@@ -28,8 +28,9 @@ function makeDefault(value, defaultValue) {
 // Default values are set in the package.json.
 // These values are fallback values in case
 // webpack is running directly, without npm run scripts.
-const API_HOST = makeDefault(ENV.GEN_FRONTEND_API_HOST, 'localhost');
-const API_PORT = makeDefault(ENV.GEN_FRONTEND_API_PORT, 5000);
+const API_USE_LOCATION = makeDefault(ENV.GEN_FRONTEND_API_USE_LOCATION, false);
+const API_HOST = API_USE_LOCATION ? '' : makeDefault(ENV.GEN_FRONTEND_API_HOST, 'localhost');
+const API_PORT = API_USE_LOCATION ? '' : makeDefault(ENV.GEN_FRONTEND_API_PORT, 5000);
 const USE_SECURE_CONNECTION = makeDefault(ENV.GEN_FRONTEND_USE_SECURE_CONNECTION, false);
 const LOGIN_CALLBACK_PORT = makeDefault(ENV.GEN_FRONTEND_LOGIN_CALLBACK_PORT, 8080);
 const ALLOW_GOOGLE_LOGIN = makeDefault(ENV.GEN_FRONTEND_ALLOW_GOOGLE_LOGIN, true);
@@ -42,8 +43,8 @@ const HEADER_LANGUAGE = makeDefault(ENV.GEN_FRONTEND_HEADER_LANGUAGE, 'X-Languag
 
 const isProductionBuild = ENV.NODE_ENV === 'production';
 
-console.log(colors.bold('-> API host:         ', API_HOST));
-console.log(colors.bold('-> API port:         ', API_PORT));
+console.log(colors.bold('-> API host:         ', API_USE_LOCATION ? 'from window.location' : API_HOST));
+console.log(colors.bold('-> API port:         ', API_USE_LOCATION ? 'from window.location' : API_PORT));
 console.log(colors.bold('-> Secure?           ', USE_SECURE_CONNECTION));
 console.log(colors.bold('-> Production build? ', isProductionBuild));
 console.log('');
@@ -143,6 +144,7 @@ module.exports = {
             },
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST),
+            API_USE_LOCATION: JSON.stringify(API_USE_LOCATION),
             USE_SECURE_CONNECTION: JSON.stringify(USE_SECURE_CONNECTION),
             LOGIN_CALLBACK_PORT: JSON.stringify(LOGIN_CALLBACK_PORT),
             ALLOW_GOOGLE_LOGIN: JSON.stringify(ALLOW_GOOGLE_LOGIN),

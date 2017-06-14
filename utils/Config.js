@@ -142,7 +142,8 @@ const SETTINGS = {
         PORT: makeDefault(ENV.GEN_WS_REG_PORT, 3000),
         ADD_USER_KEY: makeDefault(ENV.GEN_WS_REG_ADD_USER_KEY, 'b5b7a458-693c-4a8d-845b-7b9a1295a15b')
     },
-    serverId: makeDefault(ENV.GEN_WS_SERVER_ID, '')
+    serverId: makeDefault(ENV.GEN_WS_SERVER_ID, ''),
+    backendCount: makeDefault(ENV.GEN_WS_BACKEND_COUNT, null)
 };
 
 // Add computational fields
