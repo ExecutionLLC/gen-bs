@@ -19,7 +19,6 @@ class ApplicationServerService extends ApplicationServerServiceBase {
         this.requestCloseSession = this.requestCloseSession.bind(this);
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
-        this.requestOperationState = this.requestOperationState.bind(this);
 
         this._rpcReply = this._rpcReply.bind(this);
     }
@@ -97,10 +96,6 @@ class ApplicationServerService extends ApplicationServerServiceBase {
 
     requestSearchInResults(session, operationId, params, callback) {
         this.services.applicationServerSearch.requestSearchInResults(session, operationId, params, callback);
-    }
-
-    requestOperationState(operationId, callback) {
-        this.services.applicationServerOperations.requestOperationState(operationId, callback);
     }
 }
 

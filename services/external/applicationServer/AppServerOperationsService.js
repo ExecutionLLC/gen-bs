@@ -49,13 +49,6 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestOperationState(operationId, callback) {
-        async.waterfall([
-            (callback) => this.services.operations.findInAllSessions(operationId, callback),
-            (operation, callback) => this._rpcSend(operation, METHODS.checkSession, null, null, callback)
-        ], callback);
-    }
-
     processKeepAliveResult(session, operation, rpcMessage, callback) {
         if (this._isAsErrorMessage(rpcMessage)) {
             this._createErrorOperationResult(
