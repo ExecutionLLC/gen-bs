@@ -36,17 +36,17 @@ class UserModel extends RemovableModelBase {
         super(models, 'user', mappedColumns);
     }
 
-    findIdByEmail(email, callback) {
+    findIdByEmail(email, loginTypeOrNull, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findUserAsync(trx, null, email, null)
+            this._findUserAsync(trx, null, email, null, loginTypeOrNull)
                 .then((user) => user.id)
                 .asCallback(callback);
         }, callback);
     }
 
-    findIdByEmailPassword(email, passwordHash, callback) {
+    findIdByEmailPassword(email, passwordHash, loginTypeOrNull, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findUserAsync(trx, null, email, passwordHash)
+            this._findUserAsync(trx, null, email, passwordHash, loginTypeOrNull)
                 .then((user) => user.id)
                 .asCallback(callback);
         }, callback);
@@ -205,7 +205,7 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    _findUserAsync(trx, userIdOrNull, emailOrNull, passwordOrNull) {
+    _findUserAsync(trx, userIdOrNull, emailOrNull, passwordOrNull, loginTypeOrNull) {
         let query = trx('user')
             .select()
             .leftJoin('user_text', 'user_text.user_id', 'user.id')
@@ -224,6 +224,9 @@ class UserModel extends RemovableModelBase {
 
         if (passwordOrNull) {
             query = query.andWhere('user.password', passwordOrNull);
+        }
+        if (loginTypeOrNull) {
+            query = query.andWhere('user.login_type', loginTypeOrNull);
         }
 
         return query
@@ -246,7 +249,7 @@ class UserModel extends RemovableModelBase {
     _checkFieldsUnique(user, trx, callback) {
         const {id, email} = user;
         Promise.all([
-            this._findUserAsync(trx, null, email, null)
+            this._findUserAsync(trx, null, email, null, null)
                 .then((foundUser) => {
                     if (foundUser.id !== id) {
                         return Promise.reject(new UserModelError('Duplicate e-mail.'))
@@ -268,7 +271,7 @@ class UserModel extends RemovableModelBase {
     _checkEmailUniqueAsync(user, trx) {
         const {email} = user;
         return new Promise((resolve, reject) => {
-            this._findUserAsync(trx, null, email, null)
+            this._findUserAsync(trx, null, email, null, null)
                 .catch((error) => resolve())
                 .then(() => reject(new DuplicateEmail()))
         });

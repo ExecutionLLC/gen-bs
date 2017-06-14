@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {openUserSession} from '../../../actions/auth';
+import {openUserSession, setupAuth} from '../../../actions/auth';
+import {loginType} from '../../../utils/authTypes';
 
 export default class LoginForm extends Component {
     constructor(props) {
@@ -59,7 +60,8 @@ export default class LoginForm extends Component {
         const {closeLoginForm, dispatch} = this.props;
 
         closeLoginForm();
-        dispatch(openUserSession(login, password));
+        dispatch(setupAuth(loginType.LOCAL, login, password));
+        dispatch(openUserSession());
     }
 }
 

@@ -18,7 +18,7 @@ import AnalysisModal from '../components/Modals/AnalysisModal';
 import CloseAllUserSessionsModal from '../components/Modals/CloseAllUserSessionsModal';
 import AnotherPageOpenedErrorModal from '../components/Modals/AnotherPageOpenedErrorModal';
 
-import { KeepAliveTask, loginWithGoogle, startAutoLogoutTimer, stopAutoLogoutCountdownTimer} from '../actions/auth';
+import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutCountdownTimer} from '../actions/auth';
 import { openModal, closeModal, modalName } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import {samplesOnSave} from '../actions/samplesList';
@@ -40,7 +40,7 @@ class App extends Component {
         const {dispatch} = this.props;
         const {SESSION: {KEEP_ALIVE_TIMEOUT}} = config;
         dispatch(applyCurrentLanguageId(i18n.DEFAULT_LANGUAGE_ID));
-        dispatch(loginWithGoogle());
+        dispatch(login());
 
         dispatch(startAutoLogoutTimer());
 
@@ -55,7 +55,7 @@ class App extends Component {
             modalWindows, savedFiles, showErrorWindow, analysesHistory,
             samplesList, modelsList,
             auth: {
-                isDemo, showAutoLogoutDialog, showCloseAllUserSessionsDialog,
+                authType, isDemo, showAutoLogoutDialog, showCloseAllUserSessionsDialog,
                 showAnotherPageOpenedModal, isWaitingForCloseAnotherPageOpenedModal
             },
             ui: {languageId}
@@ -131,6 +131,7 @@ class App extends Component {
                 />
                 <CloseAllUserSessionsModal
                     showModal={showCloseAllUserSessionsDialog}
+                    authType={authType}
                 />
                 <AnotherPageOpenedErrorModal
                     showModal={showAnotherPageOpenedModal}
