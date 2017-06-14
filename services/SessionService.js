@@ -104,6 +104,7 @@ class SessionService extends ServiceBase {
     }
 
     startForEmailPassword(session, email, password, callback) {
+        session.userEmail = email;
         async.waterfall([
             (callback) => this.services.users.findIdByEmailPassword(email, password, LOGIN_TYPES.PASSWORD, callback),
             (userId, callback) => this.ensureNoUserSessions(userId, (error) => callback(error, userId)),
