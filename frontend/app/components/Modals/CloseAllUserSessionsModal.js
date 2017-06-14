@@ -44,7 +44,7 @@ class CloseAllUserSessionsModal extends DialogBase {
             .then(() => {
                 dispatch(showCloseAllUserSessionsDialog(false));
                 dispatch(login());
-                if(authType === loginType.GOOGLE){
+                if (authType === loginType.GOOGLE) {
                     window.location = config.LOGIN_URL;
                 }
             });

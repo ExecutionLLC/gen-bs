@@ -176,7 +176,7 @@ export function openUserSession() {
         })
     ).then(({error, response}) => {
         const p = getP(getState());
-        if (response.status !== 200 && response.body && response.body.message) {
+        if (response.status !== HttpStatus.OK && response.body && response.body.message) {
             return dispatch(displayErrorFromOpenUserSession(p.t('errors.loginError'), response.body.message));
         } else {
             return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.loginError'), error, response));
