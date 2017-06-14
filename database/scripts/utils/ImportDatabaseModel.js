@@ -5,10 +5,8 @@ const _ = require('lodash');
 const async = require('async');
 const Uuid = require('node-uuid');
 
-const indexJs = require('../../../index.js');
-
-const ChangeCaseUtil = indexJs.ChangeCaseUtil;
-const KnexWrapper = indexJs.KnexWrapper;
+const ChangeCaseUtil = require('./ChangeCaseUtil');
+const KnexWrapper = require('./KnexWrapper');
 
 const TableNames = {
     Filter: 'filter',

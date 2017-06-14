@@ -8,9 +8,9 @@ const _ = require('lodash');
 const async = require('async');
 const assert = require('assert');
 
-const indexJs = require('./../../index');
+const ChangeCaseUtil = require('../scripts/utils/ChangeCaseUtil');
 
-const ChangeCaseUtil = indexJs.ChangeCaseUtil;
+const indexJs = require('./../../index');
 const Config = indexJs.Config;
 
 const labelTemplates = _([
