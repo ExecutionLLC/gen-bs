@@ -61,14 +61,13 @@ class ApplicationServerServiceBase extends ServiceBase {
     }
 
     /**
-     * @param {Object}session
      * @param {OperationBase}operation
      * @param {string}method
      * @param {Object}params
      * @param {(number|null)}priority
      * @param {function(Error, string=)}callback
      * */
-    _rpcSend(session, operation, method, params, priority, callback) {
+    _rpcSend(operation, method, params, priority, callback) {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
         const messageId = this.createAppServerSessionId(operation);
