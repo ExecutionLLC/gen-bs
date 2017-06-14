@@ -4,8 +4,8 @@ const path = require('path');
 const _ = require('lodash');
 const async = require('async');
 
-const FsUtils = require('../../../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
+const FsUtils = require('./FileSystemUtils');
+const ChangeCaseUtil = require('./ChangeCaseUtil');
 
 const ImportDatabaseModel = require('./ImportDatabaseModel');
 /**

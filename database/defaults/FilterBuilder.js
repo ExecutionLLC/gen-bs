@@ -5,8 +5,8 @@ const Uuid = require('node-uuid');
 const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
-const FsUtils = require('../../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil.js');
+const FsUtils = require('../scripts/utils/FileSystemUtils');
+const ChangeCaseUtil = require('../scripts/utils/ChangeCaseUtil.js');
 
 // TODO: Now view builder can be merged with field builder to reduce most of the copy-paste.
 class FilterBuilder extends DefaultsBuilderBase {
