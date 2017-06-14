@@ -94,7 +94,7 @@ class UserService extends ServiceBase {
     }
 
     findIdByEmail(email, loginTypeOrNull, callback) {
-        this.models.users.findIdByEmail(email,loginTypeOrNull, callback);
+        this.models.users.findIdByEmail(email, loginTypeOrNull, callback);
     }
 
     find(userId, callback) {

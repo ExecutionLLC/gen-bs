@@ -129,7 +129,7 @@ class SessionService extends ServiceBase {
 
     closeAllUserSessions(userEmail, callback) {
         async.waterfall([
-            (callback) => this.services.users.findIdByEmail(userEmail,null, callback),
+            (callback) => this.services.users.findIdByEmail(userEmail, null, callback),
             (userId, callback) => this.findUserSessions(userId, callback),
             (sessions, callback) => async.each(sessions,
                 (session, callback) => this.destroySession(session, callback),
