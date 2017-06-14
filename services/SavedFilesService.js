@@ -138,8 +138,7 @@ class SavedFilesService extends UserEntityServiceBase {
                                     text: analysis.text
                                 },
                                 samples: savedFileSamples
-                            }
-                            console.log(savedFile);
+                            };
                         })
                     )
                 }
