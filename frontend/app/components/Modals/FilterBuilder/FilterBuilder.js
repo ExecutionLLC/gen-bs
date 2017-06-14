@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import InputResizingArray from '../../shared/InputResizingArray';
@@ -516,3 +516,12 @@ export default class FilterBuilder extends React.Component {
         );
     }
 }
+
+FilterBuilder.propTypes = {
+    filterBuilder: PropTypes.object.isRequired,
+    fields: PropTypes.object.isRequired,
+    ui: PropTypes.object.isRequired,
+    texts: PropTypes.shape({p: PropTypes.func.isRequired}).isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    dispatch: PropTypes.func.isRequired
+};

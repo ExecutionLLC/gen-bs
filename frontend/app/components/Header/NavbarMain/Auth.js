@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import classNames from 'classnames';
 
@@ -172,5 +172,11 @@ class Auth extends Component {
         });
     }
 }
+
+Auth.propTypes = {
+    auth: PropTypes.object.isRequired,
+    userData: PropTypes.object.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired
+};
 
 export default onClickOutside(Auth);

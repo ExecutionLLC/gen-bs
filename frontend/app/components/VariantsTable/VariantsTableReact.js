@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
-import {getP} from 'redux-polyglot/dist/selectors';
+import translate from 'redux-polyglot/translate';
 
 import VariantsTableHead from './VariantsTableHead';
 import VariantsTableRows from './VariantsTableRows';
@@ -20,14 +20,27 @@ class VariantsTableReact extends Component {
         this.variantsTableRows = null;
     }
 
+    shouldComponentUpdate(nextProps) {
+        return (
+            nextProps.auth !== this.props.auth ||
+            nextProps.websocket !== this.props.websocket ||
+            nextProps.ui !== this.props.ui ||
+            nextProps.variantsTable !== this.props.variantsTable ||
+            nextProps.p.currentLocale !== this.props.p.currentLocale
+        );
+    }
+
     render() {
-        const {fields, p} = this.props;
-        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, variantsError, variantsAnalysis, variantsSamples} = this.props.ws;
+        const {fields, variantsTable, ui, websocket, auth, p, dispatch} = this.props;
+        const {
+            variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid,
+            variantsError, variantsAnalysis, variantsSamples
+        } = websocket;
         return (
 
             <div className='table-variants-wrapper'>
                 { isVariantsLoading &&
-                <div className='loader'></div>
+                <div className='loader' />
                 }
 
                 { !isVariantsLoading && !isVariantsValid &&
@@ -37,18 +50,38 @@ class VariantsTableReact extends Component {
                 }
                 { !isVariantsLoading && isVariantsValid &&
                 <div className='table-variants-container'>
-                    <table className='table table-striped table-variants table-select-mode' id='variants_table'
-                           ref='variantsTable'>
-                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
-                                           ref={(ref) => ref && this.onAppear(true, ref)}
-                                           p={p}
+                    <table
+                        className='table table-striped table-variants table-select-mode'
+                        id='variants_table'
+                        ref='variantsTable'
+                    >
+                        <VariantsTableHead
+                            fields={fields}
+                            variantsHeader={variantsHeader}
+                            variantsTable={variantsTable}
+                            variantsAnalysis={variantsAnalysis}
+                            variantsSamples={variantsSamples}
+                            ui={ui}
+                            websocket={websocket}
+                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, true); } }
+                            ref={(ref) => ref && this.onAppear(true, ref)}
+                            p={p}
+                            dispatch={dispatch}
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
-                                           ref={(ref) => ref && this.onAppear(false, ref)}
-                                           p={p}
+                        <VariantsTableRows
+                            ui={ui}
+                            auth={auth}
+                            fields={fields}
+                            variants={variants}
+                            variantsHeader={variantsHeader}
+                            variantsAnalysis={variantsAnalysis}
+                            websocket={websocket}
+                            variantsTable={variantsTable}
+                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, false); } }
+                            ref={(ref) => ref && this.onAppear(false, ref)}
+                            p={p}
+                            dispatch={dispatch}
                         />
                         }
                     </table>
@@ -72,7 +105,7 @@ class VariantsTableReact extends Component {
             this.variantsTableRows = el;
         }
         const {scrollTarget} = this.state;
-        if (scrollTarget != null && el.scrollLeft != scrollTarget) {
+        if (scrollTarget !== null && el.scrollLeft !== scrollTarget) {
             el.scrollLeft = scrollTarget;
         }
     }
@@ -81,11 +114,11 @@ class VariantsTableReact extends Component {
         // sync scroll position in body and header.
         const {scrollTarget} = this.state;
         // do nothing if we already there
-        if (scrollTarget !== null && scrollLeft == scrollTarget) {
+        if (scrollTarget !== null && scrollLeft === scrollTarget) {
             return;
         }
         const otherDOMNode = isHeader ? this.variantsTableRows : this.variantsTableHead;
-        if (otherDOMNode && otherDOMNode.scrollLeft != scrollLeft) {
+        if (otherDOMNode && otherDOMNode.scrollLeft !== scrollLeft) {
             this.setState({scrollTarget: scrollLeft});
             otherDOMNode.scrollLeft = scrollLeft;
         }
@@ -93,15 +126,15 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, websocket, ui, variantsTable} = state;
+    const {auth, websocket, ui, variantsTable, fields} = state;
 
     return {
         auth,
-        ws: websocket,
+        websocket,
         ui,
         variantsTable,
-        p: getP(state)
+        fields
     };
 }
 
-export default connect(mapStateToProps)(VariantsTableReact);
+export default translate(connect(mapStateToProps)(VariantsTableReact));
