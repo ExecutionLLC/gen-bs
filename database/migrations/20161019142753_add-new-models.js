@@ -2,9 +2,8 @@ const path = require('path');
 const _ = require('lodash');
 const Promise = require('bluebird');
 
-const FsUtils = require('../../utils/FileSystemUtils');
-const Config = require('../../utils/Config');
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const FsUtils = require('./utils/FileSystemUtils');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
 const addModel = require('./20161006164624_add-compound-heterozygous-model').addModel;
 
 const fieldsTableNames = {

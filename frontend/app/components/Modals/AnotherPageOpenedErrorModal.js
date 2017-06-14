@@ -7,7 +7,7 @@ import {getP} from 'redux-polyglot/dist/selectors';
 import DialogBase from './DialogBase';
 import {
     closeOtherSocketsAsync,
-    showAnotherPageOpenedModal,
+    hideAnotherPageOpenedModal,
     setWaitStateForModal
 } from '../../actions/auth';
 
@@ -69,7 +69,7 @@ class AnotherPageOpenedErrorModal extends DialogBase {
         const {dispatch} = this.props;
         dispatch(setWaitStateForModal());
         dispatch(closeOtherSocketsAsync())
-            .then(() => dispatch(showAnotherPageOpenedModal(false)));
+            .then(() => dispatch(hideAnotherPageOpenedModal()));
     }
 }
 

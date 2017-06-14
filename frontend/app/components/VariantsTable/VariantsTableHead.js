@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import FieldHeaderControls from './FieldHeaderControls';
 
@@ -11,7 +11,7 @@ import FieldUtils from '../../utils/fieldUtils';
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}, p} = this.props;
+        const {fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples, ui: {languageId}, p} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
@@ -33,13 +33,13 @@ export default class VariantsTableHead extends Component {
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
                 <td className='btntd'>
-                    <div></div>
+                    <div />
                 </td>
                 <td className='btntd row_checkbox' key='row_checkbox'>
-                    <div></div>
+                    <div />
                 </td>
                 <td className='btntd'>
-                    <div></div>
+                    <div />
                 </td>
                 <td key='comment' className='comment'>
                     <div>
@@ -65,7 +65,7 @@ export default class VariantsTableHead extends Component {
                 {_.map(variantsHeader, (fieldSampleExist) =>
                     this.renderFieldHeaderControls(
                         fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fieldSampleExist.unique,
-                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId, dispatch
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, languageId
                     )
                 )}
             </tr>
@@ -97,7 +97,7 @@ export default class VariantsTableHead extends Component {
                 onSearchRequested={(searchValue) => {
                     this.onSendSearchRequest(fieldId, sampleId, searchValue);
                 }}
-                currentVariants={this.props.ws.currentVariants}
+                currentVariants={this.props.websocket.currentVariants}
                 languageId={languageId}
                 disabled={isFetching}
             />
@@ -133,3 +133,16 @@ export default class VariantsTableHead extends Component {
     }
 
 }
+
+VariantsTableHead.propTypes = {
+    fields: PropTypes.object.isRequired,
+    variantsHeader: PropTypes.array,
+    variantsTable: PropTypes.object.isRequired,
+    variantsAnalysis: PropTypes.object,
+    variantsSamples: PropTypes.array,
+    ui: PropTypes.object.isRequired,
+    websocket: PropTypes.object.isRequired,
+    xScrollListener: PropTypes.func.isRequired,
+    p: PropTypes.shape({t: PropTypes.func.isRequired}).isRequired,
+    dispatch: PropTypes.func.isRequired
+};

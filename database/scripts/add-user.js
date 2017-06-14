@@ -1,14 +1,16 @@
 const _ = require('lodash');
 
-const {LOGIN_TYPES} = require('../../utils/Enums');
-const ModelsFacade = require('../../models/ModelsFacade');
-const ServicesFacade = require('../../services/ServicesFacade');
+const indexJs = require('../../index.js');
 
-const Config = require('../../utils/Config');
-const Logger = require('../../utils/Logger');
-const PasswordUtils = require('../../utils/PasswordUtils');
+const {LOGIN_TYPES} = indexJs.Enums;
+const ModelsFacade = indexJs.ModelsFacade;
+const ServicesFacade = indexJs.ServicesFacade;
 
-const logger = new Logger(Config.logger);
+const Config = indexJs.Config;
+const Logger = indexJs.Logger;
+const PasswordUtils = indexJs.PasswordUtils;
+
+const logger = new Logger({app_name: 'genomix_add_user'});
 const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 
@@ -99,8 +101,13 @@ services.users.add(
     },
     (error, user) => {
         if (error) {
-            console.error(error);
-            process.exit(1);
+            if (error instanceof models.users.constructor.DuplicateEmail) {
+                console.log(`User with email ${email} already registered`);
+                process.exit(0);
+            } else {
+                console.error(error);
+                process.exit(1);
+            }
         } else {
             console.log(`User with email ${user.email} was added with id: ${user.id}`);
             process.exit(0);

@@ -44,7 +44,16 @@ describe('Immutable array', () => {
         expect(immutableArray.concat([1, 2, 3], [])).toEqual([1, 2, 3]);
         expect(immutableArray.concat([], [4, 5])).toEqual([4, 5]);
         expect(immutableArray.concat([6, 7], [8, 9, 0])).toEqual([6, 7, 8, 9, 0]);
-    })
+    });
+    it('should insert before', () => {
+        expect(() => immutableArray.insertBefore(null, 123, 456)).toThrow();
+        expect(() => immutableArray.insertBefore([11, 22, 33], -1, 44)).toThrow();
+        expect(() => immutableArray.insertBefore([11, 22, 33], 4, 44)).toThrow();
+        expect(immutableArray.insertBefore([11, 22, 33], 0, 44)).toEqual([44, 11, 22, 33]);
+        expect(immutableArray.insertBefore([11, 22, 33], 1, 44)).toEqual([11, 44, 22, 33]);
+        expect(immutableArray.insertBefore([11, 22, 33], 2, 44)).toEqual([11, 22, 44, 33]);
+        expect(immutableArray.insertBefore([11, 22, 33], 3, 44)).toEqual([11, 22, 33, 44]);
+    });
 });
 
 describe('immutable utils', () => {

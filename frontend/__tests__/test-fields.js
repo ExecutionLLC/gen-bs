@@ -14,7 +14,6 @@ const initState = {
         samples: false,
         sources: false
     },
-    sourceFieldsList: [],
     totalFieldsHashedArray: {array: [], hash: {}}
 };
 
@@ -60,8 +59,6 @@ describe('fields', () => {
     it('should receive total fields', (done) => {
         // same as fieldsTotal in the hash
         const totalFieldsHash = _.keyBy(fieldsTotal, 'id');
-        // fields with 'sourceName' !== 'sample', labelled
-        const sourceFieldsList = _.filter(fieldsTotal, (field) => field.sourceName !== 'sample');
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveTotalFields(fieldsTotal)),
             stateMapperFunc,
@@ -70,8 +67,7 @@ describe('fields', () => {
                 totalFieldsHashedArray: {
                     hash: totalFieldsHash,
                     array: fieldsTotal
-                },
-                sourceFieldsList
+                }
             }
         }, done);
     });

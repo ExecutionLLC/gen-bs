@@ -2,8 +2,8 @@ const Promise = require('bluebird');
 const Uuid = require('node-uuid');
 const _ = require('lodash');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
-const CollectionUtils = require('../../registration/utils/CollectionUtils');
+const ChangeCaseUtil = require('./utils/ChangeCaseUtil');
+const CollectionUtils = require('./utils/CollectionUtils');
 
 const vepColumnsNames = ['VEP_Zygosity', 'VEP_Genotype'];
 const vepPrefix = 'VEP_';

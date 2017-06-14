@@ -18,7 +18,7 @@ const SESSION_STATUS = {
     UPLOADING: 'uploading',
     READY: 'ready'
 };
-const UploadOperation = require('../../operations/UploadOperation');
+const {UploadOperation} = require('../../operations/Operations');
 
 
 /**
@@ -139,10 +139,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 if (nextOperation) {
                     nextOperation.isActive = true;
                     async.waterfall([
-                        (callback) => this.services.sessions.findById(nextOperation.getSessionId(), callback),
-                        (session, callback) => this.requestSampleProcessing(
-                            session, nextOperation.getId(), null, (error) => callback(error)
-                        )
+                        (callback) => this.requestSampleProcessing(nextOperation.getId(), null, (error) => callback(error))
                     ], callback)
                 } else {
                     callback(null);
@@ -151,7 +148,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestSampleProcessing(session, operationId, priority, callback) {
+    requestSampleProcessing(operationId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
@@ -161,13 +158,12 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 const params = {
                     path: this.services.objectStorage.getSamplePath(operationId)
                 };
-                this._rpcSend(session, operation, method, params, priority, callback);
+                this._rpcSend(operation, method, params, priority, callback);
             }
         ], callback);
     }
 
-    requestUploadProcessing(session, operationId, priority, callback) {
-        const {userId} = session;
+    requestUploadProcessing(userId, operationId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
@@ -185,7 +181,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 });
                 if (activeUserOperation.length === 0) {
                     currentOperation.isActive = true;
-                    this.requestSampleProcessing(session, operationId, priority, callback);
+                    this.requestSampleProcessing(operationId, priority, callback);
                 } else {
                     callback(null, operationId);
                 }
@@ -341,7 +337,14 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const vcfFileId = operation.getId();
         const sampleMetadata = result.metadata;
         // Usual fields metadata. Values of these fields are the same for all genotypes.
-        const commonFieldsMetadata = sampleMetadata.columns;
+        const commonFieldsMetadata = _.flatMap(sampleMetadata, item => {
+            const {sourceName, metadata: {columns}} = item;
+            return _.map(columns, column => {
+                return Object.assign({}, column, {
+                    sourceName
+                });
+            })
+        });
 
         async.waterfall([
             (callback) => {

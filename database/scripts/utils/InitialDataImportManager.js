@@ -4,16 +4,15 @@ const path = require('path');
 const _ = require('lodash');
 const async = require('async');
 
-const FsUtils = require('../../../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
+const FsUtils = require('./FileSystemUtils');
+const ChangeCaseUtil = require('./ChangeCaseUtil');
 
 const ImportDatabaseModel = require('./ImportDatabaseModel');
 /**
  * Imports initial data on the service start.
  * */
 class InitialDataImportManager {
-    constructor(models, config, logger) {
-        this.models = models;
+    constructor(config, logger) {
         this.config = config;
         this.logger = logger;
         this.model = new ImportDatabaseModel(config, logger);

@@ -18,8 +18,6 @@ class ApplicationServerServiceBase extends ServiceBase {
         super(services);
 
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
-
-        this.logger = this.services.logger;
         const {
             rabbitMq: {
                 host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName
@@ -63,14 +61,13 @@ class ApplicationServerServiceBase extends ServiceBase {
     }
 
     /**
-     * @param {Object}session
      * @param {OperationBase}operation
      * @param {string}method
      * @param {Object}params
      * @param {(number|null)}priority
      * @param {function(Error, string=)}callback
      * */
-    _rpcSend(session, operation, method, params, priority, callback) {
+    _rpcSend(operation, method, params, priority, callback) {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
         const messageId = this.createAppServerSessionId(operation);

@@ -83,7 +83,7 @@ class NavbarMain extends Component {
                         dispatch={this.props.dispatch}
                         p={this.props.p}
                     />
-                    {languages && languages.length &&
+                    {languages && languages.length > 1 &&
                     <LanguageDropdown
                         dispatch={this.props.dispatch}
                         languages={languages}
@@ -91,7 +91,12 @@ class NavbarMain extends Component {
                         p={this.props.p}
                     />
                     }
-                    <Auth {...this.props} />
+                    <Auth
+                        dispatch={this.props.dispatch}
+                        auth={this.props.auth}
+                        userData={this.props.userData}
+                        p={this.props.p}
+                    />
                 </div>
             </nav>
         );
@@ -105,12 +110,11 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, ws, variantsTable, samplesList, fileUpload, ui} = state;
+    const {auth, userData, variantsTable, samplesList, fileUpload, ui} = state;
 
     return {
         auth,
         userData,
-        ws,
         variantsTable,
         samplesList,
         fileUpload,

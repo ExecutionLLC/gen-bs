@@ -67,7 +67,7 @@ export default class FileUploadSampleList extends React.Component {
                 if (isError) {
                     return _.map(uploadSamples, (sample) => {
                         const sampleName = i18n.getEntityText(sample, languageId).name;
-                        return this._renderSampleError(sample, sampleName, sample.id === currentSampleId);
+                        return this._renderSampleError(upload, sample, sampleName, sample.id === currentSampleId);
                     });
                 } else {
                     return this.renderProgressUploadSamples(uploadSamples, upload);
@@ -145,16 +145,23 @@ export default class FileUploadSampleList extends React.Component {
             if (item.sample.uploadState === SAMPLE_UPLOAD_STATE.COMPLETED) {
                 return this._renderSample(item.sample, item.label, item.sample.id === currentSampleId, isNew, languageId);
             } else {
-                return this._renderSampleError(item.sample, item.label, item.sample.id === currentSampleId);
+                return this._renderSampleError(null, item.sample, item.label, item.sample.id === currentSampleId);
             }
         });
     }
 
-    _renderSampleError(sample, label, isActive) {
+    _renderSampleError(upload, sample, label, isActive) {
         const {p} = this.props;
-        const message = sample.error ? sample.error.message : (sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
+        let message;
+        if (upload && upload.error) {
+            message = upload.error.message;
+        } else if (sample.error) {
+            message = sample.error.message;
+        } else {
+            message = sample.uploadState === SAMPLE_UPLOAD_STATE.NOT_FOUND
                 ? p.t('samples.error.sampleNotFound')
-                : p.t('samples.error.unknown'));
+                : p.t('samples.error.unknown');
+        }
         return this.renderListItem(
             sample.id,
             isActive,

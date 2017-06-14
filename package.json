@@ -6,6 +6,7 @@
   "scripts": {
     "test": "GEN_WS_DISABLE_REQUEST_LIMITS=true mocha",
     "db:create": "node ./database/scripts/create-database.js",
+    "db:prepare": "node ./database/scripts/ensure-database.js; npm run db:migrate",
     "db:migrate": "cd ./database; knex migrate:latest",
     "db:migrate:make": "cd ./database; knex migrate:make",
     "db:reset": "npm run db:create; npm run defaults:import; npm run labels:update; npm run db:migrate",

@@ -1,6 +1,10 @@
 import * as ActionTypes from '../actions/auth';
+import {loginType} from '../utils/authTypes';
 
 export default function auth(state = {
+    authType: loginType.GOOGLE,
+    login: null,
+    password: null,
     isFetching: false,
     isDemo: false,
     showAutoLogoutDialog: false,
@@ -44,7 +48,7 @@ export default function auth(state = {
                 showCloseAllUserSessionsDialog: action.shouldShow
             });
 
-        case ActionTypes.SHOW_ANOTHER_PAGE_OPENED_MODAL:
+        case ActionTypes.TOGGLE_ANOTHER_PAGE_OPENED_MODAL:
             return {
                 ...state,
                 showAnotherPageOpenedModal: action.shouldShow,
@@ -55,6 +59,14 @@ export default function auth(state = {
             return {
                 ...state,
                 isWaitingForCloseAnotherPageOpenedModal: true
+            };
+
+        case ActionTypes.SETUP_AUTH:
+            return {
+                ...state,
+                authType: action.authType,
+                login: action.login,
+                password: action.password
             };
 
         default:

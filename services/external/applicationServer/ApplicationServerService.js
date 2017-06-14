@@ -14,12 +14,9 @@ class ApplicationServerService extends ApplicationServerServiceBase {
     constructor(services) {
         super(services);
 
-        this.requestSourcesList = this.requestSourcesList.bind(this);
-        this.requestSourceMetadata = this.requestSourceMetadata.bind(this);
         this.requestCloseSession = this.requestCloseSession.bind(this);
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
-        this.requestOperationState = this.requestOperationState.bind(this);
 
         this._rpcReply = this._rpcReply.bind(this);
     }
@@ -30,14 +27,6 @@ class ApplicationServerService extends ApplicationServerServiceBase {
 
     isRPCConnected() {
         return this.rpcProxy.isConnected();
-    }
-
-    requestSourcesList(callback) {
-        this.services.applicationServerSources.requestSourcesList(callback);
-    }
-
-    requestSourceMetadata(sourceNames, callback) {
-        this.services.applicationServerSources.requestSourceMetadata(sourceNames, callback);
     }
 
     requestKeepOperationAlive(session, searchOperation, callback) {
@@ -74,14 +63,13 @@ class ApplicationServerService extends ApplicationServerServiceBase {
     /**
      * Sends request to process previously uploaded sample. Results will be sent by AS web socket.
      *
-     * @param session Session the request is related to.
+     * @param userId Session the request is related to.
      * @param operationId Id of the upload operation.
-     * @param sampleId Id of the sample to be converted.
      * @param priority Priority of the request (larger number corresponds to a higher priority).
      * @param callback (error, operationId)
      * */
-    requestUploadProcessing(session, operationId, priority, callback) {
-        this.services.applicationServerUpload.requestUploadProcessing(session, operationId,
+    requestUploadProcessing(userId, operationId, priority, callback) {
+        this.services.applicationServerUpload.requestUploadProcessing(userId, operationId,
             priority, callback);
     }
 
@@ -98,10 +86,6 @@ class ApplicationServerService extends ApplicationServerServiceBase {
 
     requestSearchInResults(session, operationId, params, callback) {
         this.services.applicationServerSearch.requestSearchInResults(session, operationId, params, callback);
-    }
-
-    requestOperationState(session, operationId, callback) {
-        this.services.applicationServerOperations.requestOperationState(session, operationId, callback);
     }
 }
 

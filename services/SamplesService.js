@@ -36,7 +36,7 @@ class SamplesService extends UserEntityServiceBase {
     /**
      * Sends sample to application server for processing.
      * */
-    upload(session, user, localFileInfo, fileId, sampleList, callback) {
+    upload(user, localFileInfo, fileId, sampleList, callback) {
         this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
@@ -57,7 +57,7 @@ class SamplesService extends UserEntityServiceBase {
                 user,
                 (error, priority) => callback(error, operationId, sampleIds, priority)
             ),
-            (operationId, sampleIds, priority, callback) => this.services.applicationServer.requestUploadProcessing(session,
+            (operationId, sampleIds, priority, callback) => this.services.applicationServer.requestUploadProcessing(user.id,
                 operationId, priority, (error) => callback(error, operationId, sampleIds))
         ], callback);
     }
@@ -100,8 +100,12 @@ class SamplesService extends UserEntityServiceBase {
     createMetadataForUploadedSample(user, vcfFileSampleId, appServerSampleFields, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
-            asField => FieldsService.createFieldMetadata(null, true, asField));
-        this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
+            asField => this.services.fields.createFieldMetadata(asField.sourceName, asField.sourceName == 'sample', asField));
+        // Add all non-mandatory source fields without trying to match them to existing fields.
+        const fieldsMetadataToAdd = _.filter(sampleFields, fieldMetadata => {
+            return !fieldMetadata.isMandatory || fieldMetadata.sourceName == 'sample'
+        });
+        this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, fieldsMetadataToAdd, callback);
     }
 
     initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, uploadState, callback) {

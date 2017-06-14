@@ -7,10 +7,12 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const ReflectionUtils = require('../../../utils/ReflectionUtils');
-const UploadOperation = require('../../operations/UploadOperation');
+const {UploadOperation} = require('../../operations/Operations');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const OperationNotFoundError = require('../../../utils/errors/OperationNotFoundError');
+const {lockSession, unlockSession} = require('../../../sessionsLockMiddleware');
+const TooManyAsError = require('../../../utils/errors/TooManyAsError');
 
 /**
  * @typedef {Object} AppServerResult
@@ -28,6 +30,7 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
         super(services, models);
 
         this.eventEmitter = new EventProxy(EVENTS);
+        this.backends = [];
     }
 
     registeredEvents() {
@@ -53,39 +56,45 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
      */
     onRpcReplyReceived(sessionId, operationId, rpcMessage, callback) {
         const {replyTo} = rpcMessage;
-        async.waterfall([
-            (callback) => this.services.sessions.findById(sessionId, callback),
-            (session, callback) => this.services.operations.find(session, operationId,
-                (error, operation) => callback(error, session, operation)
-            ),
-            (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
-                (error) => callback(error, session, operation)
-            ),
-            (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
-            (operationResult, callback) => {
-                // Store client message in the operation for active uploads.
-                const operation = operationResult.operation;
-                if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
-                    && !operationResult.shouldCompleteOperation) {
-                    operation.setLastAppServerMessage(operationResult.result);
-                }
-                callback(null, operationResult);
-            },
-            (operationResult, callback) => this._completeOperationIfNeeded(operationResult, callback),
-            (operationResult, callback) => this._emitEvent(operationResult.eventName,
-                operationResult, (error) => callback(error, operationResult)),
-            // We are working with the session by ourselves, so need to explicitly save it here.
-            (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
-        ], (error) => {
-            if (error instanceof OperationNotFoundError && replyTo) {
-                this._sendRpcNotFoundOperation(operationId, rpcMessage, () => callback(error));
-            } else {
-                callback(error);
+        lockSession(
+            sessionId,
+            () => {
+                async.waterfall([
+                    (callback) => this.services.sessions.findById(sessionId, callback),
+                    (session, callback) => this.services.operations.find(session, operationId,
+                        (error, operation) => callback(error, session, operation)
+                    ),
+                    (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
+                        (error) => callback(error, session, operation)
+                    ),
+                    (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
+                    (operationResult, callback) => {
+                        // Store client message in the operation for active uploads.
+                        const operation = operationResult.operation;
+                        if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
+                            && !operationResult.shouldCompleteOperation) {
+                            operation.setLastAppServerMessage(operationResult.result);
+                        }
+                        callback(null, operationResult);
+                    },
+                    (operationResult, callback) => this._completeOperationIfNeeded(operationResult, callback),
+                    (operationResult, callback) => this._emitEvent(operationResult.eventName,
+                        operationResult, (error) => callback(error, operationResult)),
+                    // We are working with the session by ourselves, so need to explicitly save it here.
+                    (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
+                ], (error) => {
+                    unlockSession(sessionId);
+                    if (error instanceof OperationNotFoundError && replyTo) {
+                        this._sendRpcError(operationId, rpcMessage, () => callback(error));
+                    } else {
+                        callback(error);
+                    }
+                });
             }
-        });
+        );
     }
 
-    _sendRpcNotFoundOperation(operationId, rpcMessage, callback) {
+    _sendRpcError(operationId, rpcMessage, callback) {
         const {id, replyTo} = rpcMessage;
         const method = METHODS.closeSession;
         this._rpcProxySend(id, operationId, method, null, replyTo, null, (error) => callback(error));
@@ -129,14 +138,6 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
                 this.services.applicationServerUpload.processUploadResult(session, operation, rpcMessage, callback);
                 break;
 
-            case METHODS.getSourcesList:
-                this.services.applicationServerSources.processGetSourcesListResult(session, operation, rpcMessage, callback);
-                break;
-
-            case METHODS.getSourceMetadata:
-                this.services.applicationServerSources.processGetSourceMetadataResult(session, operation, rpcMessage, callback);
-                break;
-
             case METHODS.keepAlive:
                 this.services.applicationServerOperations.processKeepAliveResult(session, operation, rpcMessage, callback);
                 break;
@@ -166,11 +167,30 @@ class ApplicationServerReplyService extends ApplicationServerServiceBase {
         }
     }
 
+    _isBackendAvailable(backendId){
+        if (_.isNull(this.config.backendCount)){
+            return true;
+        }else if (this.backends.length < this.config.backendCount){
+            return true;
+        }
+        return this.backends.includes(backendId);
+    }
+
     _setASQueryNameIfAny(operation, rpcMessage, callback) {
         if (rpcMessage.replyTo) {
-            operation.setASQueryName(rpcMessage.replyTo);
+            if (this._isBackendAvailable(rpcMessage.replyTo)) {
+                operation.setASQueryName(rpcMessage.replyTo);
+                if (!this.backends.includes(rpcMessage.replyTo)){
+                    this.backends.push(rpcMessage.replyTo)
+                }
+                this.backends.push(rpcMessage.replyTo);
+                callback(null, operation);
+            } else {
+                callback(new TooManyAsError());
+            }
+        }else {
+            callback(null, operation);
         }
-        callback(null, operation);
     }
 }
 

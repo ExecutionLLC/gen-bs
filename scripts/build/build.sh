@@ -2,8 +2,9 @@
 ROOT='../..'
 BUILD_DIR="${ROOT}/build"
 MERGE_OUT_FILE="${BUILD_DIR}/webserver.opt.js"
-MANGLE_OUT_FILE="${BUILD_DIR}/webserver.js" # The name is also used in the bootstrap.sh
+MANGLE_OUT_FILE="${BUILD_DIR}/index.js" # The name is also used in the bootstrap.sh
 PUBLIC_ASSETS="../../public/"
+DATABASE_ASSETS="../../database/"
 
 # Fail on error
 set -e
@@ -23,12 +24,12 @@ rm ${MERGE_OUT_FILE}
 echo "Copying public assets to the build folder."
 cp -r ${PUBLIC_ASSETS} ${BUILD_DIR}
 
+echo "Copying database files to the build folder."
+cp -r ${DATABASE_ASSETS} ${BUILD_DIR}
+
 echo "Copying package.json from the main project."
 cp ${ROOT}/package.json ${BUILD_DIR}
 
-echo "Making logs directory"
-mkdir -p ${BUILD_DIR}/logs
-
-echo "Copying bootstrap.sh"
-cp bootstrap.sh ${BUILD_DIR}/start.sh
-chmod u+x ${BUILD_DIR}/start.sh
+echo "Copying run.sh"
+cp run.sh ${BUILD_DIR}/run.sh
+chmod u+x ${BUILD_DIR}/run.sh
