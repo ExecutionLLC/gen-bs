@@ -1,27 +1,21 @@
-import _ from 'lodash';
-
 import * as ActionTypes from '../actions/fields';
 import {ImmutableHashedArray} from '../utils/immutable';
-import FieldUtils from '../utils/fieldUtils';
 
 const initialState = {
     isFetching: {
         samples: false,
         sources: false
     },
-    sourceFieldsList: [],
     totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([])
 };
 
 function reduceReceiveTotalFields(action, state) {
     const totalFields = action.fields;
-    const sourceFields = _.filter(totalFields, (field) => FieldUtils.isSourceField(field));
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
             sources: false
         }),
         totalFieldsHashedArray: ImmutableHashedArray.makeFromArray(totalFields),
-        sourceFieldsList: sourceFields,
         lastUpdated: action.receivedAt
     });
 }

@@ -100,8 +100,12 @@ class SamplesService extends UserEntityServiceBase {
     createMetadataForUploadedSample(user, vcfFileSampleId, appServerSampleFields, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
-            asField => this.services.fields.createFieldMetadata(null, true, asField));
-        this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, sampleFields, callback);
+            asField => this.services.fields.createFieldMetadata(asField.sourceName, asField.sourceName == 'sample', asField));
+        // Add all non-mandatory source fields without trying to match them to existing fields.
+        const fieldsMetadataToAdd = _.filter(sampleFields, fieldMetadata => {
+            return !fieldMetadata.isMandatory || fieldMetadata.sourceName == 'sample'
+        });
+        this.theModel.attachSampleFields(user.id, user.language, vcfFileSampleId, fieldsMetadataToAdd, callback);
     }
 
     initMetadataForUploadedSample(user, vcfFileId, vcfFileName, genotypes, uploadState, callback) {

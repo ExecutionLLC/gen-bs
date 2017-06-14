@@ -14,8 +14,6 @@ class ApplicationServerService extends ApplicationServerServiceBase {
     constructor(services) {
         super(services);
 
-        this.requestSourcesList = this.requestSourcesList.bind(this);
-        this.requestSourceMetadata = this.requestSourceMetadata.bind(this);
         this.requestCloseSession = this.requestCloseSession.bind(this);
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
@@ -30,14 +28,6 @@ class ApplicationServerService extends ApplicationServerServiceBase {
 
     isRPCConnected() {
         return this.rpcProxy.isConnected();
-    }
-
-    requestSourcesList(callback) {
-        this.services.applicationServerSources.requestSourcesList(callback);
-    }
-
-    requestSourceMetadata(sourceNames, callback) {
-        this.services.applicationServerSources.requestSourceMetadata(sourceNames, callback);
     }
 
     requestKeepOperationAlive(session, searchOperation, callback) {
