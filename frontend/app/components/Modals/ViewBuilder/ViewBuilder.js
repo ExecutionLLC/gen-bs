@@ -183,11 +183,24 @@ export default class ViewBuilder extends React.Component {
     }
 
     renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId, isDisable) {
+
+        function getNextDirection(direction) {
+            if (!direction) {
+                return 'asc';
+            }
+            const switcher = {
+                'asc': 'desc',
+                'desc': null
+            };
+
+            return switcher[direction];
+        }
+
         return (
             <button className={sortButtonClass}
                     type='button'
                     disabled={isDisable}
-                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
+                    onClick={ e => this.onSortClick(getNextDirection(currentDirection), e.ctrlKey || e.metaKey, fieldId )}>
                 <span className='text-info'>{sortOrder}</span>
             </button>
         );

@@ -13,18 +13,6 @@ const INITIAL_STATE = {
     allowedFields: null
 };
 
-function getNextDirection(direction) {
-    if (!direction) {
-        return 'asc';
-    }
-    const switcher = {
-        'asc': 'desc',
-        'desc': null
-    };
-
-    return switcher[direction];
-}
-
 function createViewItem(fieldId) {
     return {
         fieldId,
@@ -131,12 +119,11 @@ function reduceVBuilderChangeSortColumn(state, action) {
     // is sort order 2 item same as selected item?
     const isSecondSortItemSorting = selectedSortItemIndex >= 0 && secondSortItemIndex === selectedSortItemIndex;
 
-    const selectedDirection = getNextDirection(sortDirection);
     const changingItems = [];
 
     if (isFirstSortItemSorting || isSecondSortItemSorting) {
         // selected one of already ordered items
-        if (!selectedDirection) {
+        if (!sortDirection) {
             // reset column sorting
             changingItems.push({
                 index: selectedSortItemIndex,
@@ -160,7 +147,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
             changingItems.push({
                 index: selectedSortItemIndex,
                 item: {
-                    sortDirection: selectedDirection
+                    sortDirection: sortDirection
                 }
             });
         }
@@ -180,7 +167,7 @@ function reduceVBuilderChangeSortColumn(state, action) {
         changingItems.push({
             index: selectedSortItemIndex,
             item: {
-                sortDirection: selectedDirection,
+                sortDirection: sortDirection,
                 sortOrder: firstSortItemIndex < 0 ? 1 : sortOrder
             }
         });
