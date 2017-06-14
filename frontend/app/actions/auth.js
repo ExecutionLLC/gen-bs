@@ -18,6 +18,7 @@ import SessionsClient from '../api/SessionsClient';
 
 import {closeWs, TooManyWebSocketsError} from './websocket';
 import UserActions from './userActions';
+import {loginType} from '../utils/authTypes';
 
 /*
  * action types
@@ -31,6 +32,8 @@ export const SET_WAITING_FOR_CLOSE_ANOTHER_PAGE_OPENED_MODAL = 'SET_WAITING_FOR_
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 export const SET_AUTOLOGOUT_COUNTDOWN_TIMER = 'SET_AUTOLOGOUT_COUNTDOWN_TIMER';
+
+export const SETUP_AUTH = 'SETUP_AUTH_TYPE';
 
 const sessionsClient = apiFacade.sessionsClient;
 
@@ -161,17 +164,40 @@ function openDemoSessionAsync() {
     });
 }
 
-export function openUserSession(login, password) {
+export function openUserSession() {
     return (dispatch, getState) => Promise.resolve(
 
     ).then(() => new Promise(
-        (resolve) => sessionsClient.openUserSession(
-            login, password, (error, response) => resolve({error, response})
-        ))
+        (resolve) => {
+            const {auth: {login, password}} = getState();
+            sessionsClient.openUserSession(
+                login, password, (error, response) => resolve({error, response})
+            );
+        })
     ).then(({error, response}) => {
         const p = getP(getState());
-        return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.loginError'), error, response));
+        if (response.status !== 200 && response.body && response.body.message){
+            return dispatch(displayErrorFromOpenUserSession(p.t('errors.loginError'), response.body.message));
+        }else {
+            return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.loginError'), error, response));
+        }
     }).then(() => location.replace(location.origin));
+}
+
+function displayErrorFromOpenUserSession(errorMessage, serverMessage) {
+    return (dispatch) => Promise.resolve()
+        .then(() => {
+            console.log('authorization failed', serverMessage);
+            history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
+            if (serverMessage.toLowerCase() === TOO_MANY_USER_SESSIONS_ERROR.toLowerCase()) {
+                dispatch(showCloseAllUserSessionsDialog(true));
+                return Promise.reject(new Error(TOO_MANY_USER_SESSIONS_ERROR));
+            } else {
+                dispatch(loginError(serverMessage));
+                dispatch(handleError(null, errorMessage));
+            }
+            return Promise.resolve();
+        });
 }
 
 
@@ -228,6 +254,17 @@ function displayErrorFromParamsAsync() {
         });
 }
 
+export function login() {
+    return (dispatch, getState) => Promise.resolve()
+        .then(() => {
+            const {auth: {authType}} = getState();
+            if (authType === loginType.GOOGLE) {
+                return dispatch(loginWithGoogle());
+            } else {
+                return dispatch(openUserSession());
+            }
+        });
+}
 
 export function loginWithGoogle() {
     return dispatch => Promise.resolve(
@@ -258,10 +295,19 @@ export function loginWithGoogle() {
     });
 }
 
+export function setupAuth(type, login, password) {
+    return {
+        type: SETUP_AUTH,
+        authType: type,
+        login,
+        password
+    };
+}
 
 export function logout() {
     return (dispatch) => {
         dispatch(closeWs());
+        dispatch(setupAuth(loginType.GOOGLE, null, null));
         sessionsClient.closeSession((error, response) => {
             if (error || response.status !== HttpStatus.OK) {
                 // We close session on the frontend and don't care about returned
@@ -340,7 +386,7 @@ export function closeOtherSocketsAsync() {
         ).then(({error, response}) => {
             const p = getP(getState());
             return dispatch(handleApiBodylessResponseErrorAsync(p.t('errors.closeOtherSocketsError'), error, response));
-        }).then(() => dispatch(loginWithGoogle()));
+        }).then(() => dispatch(login()));
     };
 }
 
