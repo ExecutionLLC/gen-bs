@@ -81,8 +81,15 @@ class SavedFilesModal extends DialogBase {
     renderSavedFileRow(savedFile) {
         const {filter, view, model, samples, timestamp} = savedFile;
         const {samplesList: {hashedArray: {hash: samplesHashedArray}}, ui: {languageId}, p} = this.props;
-        const savedFileSamples = _.map(samples, sample => samplesHashedArray[sample.id]);
-        const savedFileSamplesNames = _.map(savedFileSamples, sample => sample ? i18n.getEntityText(sample, languageId).name : '???');
+        const savedFileSamples = _.map(samples, sample => ({
+            sample: samplesHashedArray[sample.id],
+            savedSample: sample
+        }));
+        const savedFileSamplesNames = _.map(savedFileSamples, info => {
+            return info.sample ?
+                i18n.getEntityText(info.sample, languageId).name :
+                `${info.savedSample.fileName}:${info.savedSample.genotypeName}`;
+        });
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>

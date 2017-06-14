@@ -33,41 +33,12 @@ class FieldsService extends ServiceBase {
         this.models.fields.find(fieldId, callback);
     }
 
-    findSourcesFields(callback) {
-        this.models.fields.findSourcesFields(callback);
-    }
-
     findAll(callback) {
         this.models.fields.findAll(callback);
     }
 
-    getExistingSourceNames(callback) {
-        this.models.fields.getExistingSourceNames(callback);
-    }
-
     findMany(fieldIds, callback) {
         this.models.fields.findMany(fieldIds, callback);
-    }
-
-    addMissingSourceReferences(sourcesList, callback) {
-        _.each(sourcesList, (source) => {
-            if (!this._findSource(source.sourceName)) {
-                this.availableSources.push(source);
-            }
-        });
-        callback(null, this.availableSources);
-    }
-
-    addSourceFields(languageId, sourceFieldsMetadata, callback) {
-        // Add all non-mandatory source fields without trying to match them to existing fields.
-        const fieldsMetadataToAdd = _.filter(sourceFieldsMetadata, fieldMetadata => !fieldMetadata.isMandatory);
-        this.models.fields.addMany(languageId, fieldsMetadataToAdd, callback);
-    }
-
-    _findSource(sourceName) {
-        return _.find(this.availableSources, (availableSource) => {
-            return availableSource.sourceName === sourceName;
-        });
     }
 
     createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {

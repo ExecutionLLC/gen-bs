@@ -4,7 +4,8 @@ import {getP} from 'redux-polyglot/dist/selectors';
 
 import DialogBase from './DialogBase';
 import config from '../../../config';
-import {closeAllUserSessionsAsync, showCloseAllUserSessionsDialog} from '../../actions/auth';
+import {closeAllUserSessionsAsync, login, showCloseAllUserSessionsDialog} from '../../actions/auth';
+import {loginType} from '../../utils/authTypes';
 
 class CloseAllUserSessionsModal extends DialogBase {
     renderTitleContents() {
@@ -38,11 +39,14 @@ class CloseAllUserSessionsModal extends DialogBase {
     }
 
     _closeAllSessions() {
-        const {dispatch} = this.props;
+        const {dispatch, authType} = this.props;
         dispatch(closeAllUserSessionsAsync())
             .then(() => {
                 dispatch(showCloseAllUserSessionsDialog(false));
-                window.location = config.LOGIN_URL;
+                dispatch(login());
+                if (authType === loginType.GOOGLE) {
+                    window.location = config.LOGIN_URL;
+                }
             });
     }
 }

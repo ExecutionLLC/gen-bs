@@ -144,7 +144,7 @@ export function exportToFile(exportType) {
         })
         .concat(['Comment']);
 
-        const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
+        const dataToExport = _([...selectedRowIndices].sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
             .map(rowIndex => [
                 ...variants[rowIndex].fields,
                 ...[_.isEmpty(variants[rowIndex].comments) ? '' : i18n.getEntityText(variants[rowIndex].comments[0], languageId).comment]

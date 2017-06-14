@@ -57,6 +57,10 @@ const args = require('optimist')
         'company': {
             demand: true,
             describe: 'User company'
+        },
+        'update': {
+            demand: false,
+            describe: 'Update user'
         }
     })
     .argv;
@@ -72,7 +76,8 @@ const {
     phone,
     loginType,
     company,
-    password
+    password,
+    update
 } = args;
 
 if (!_.includes(LOGIN_TYPES.allValues, loginType)) {
@@ -85,32 +90,71 @@ if (loginType === LOGIN_TYPES.PASSWORD) {
         process.exit(1);
     }
 }
-services.users.add(
-    defaultLanguage,
-    {
-        firstName,
-        lastName,
+
+if (update) {
+    services.users.findIdByEmail(
         email,
-        speciality,
-        numberPaidSamples,
-        gender,
-        phone,
-        loginType,
-        password: loginType === LOGIN_TYPES.PASSWORD ? PasswordUtils.hash(`${password}`) : null,
-        company
-    },
-    (error, user) => {
-        if (error) {
-            if (error instanceof models.users.constructor.DuplicateEmail) {
-                console.log(`User with email ${email} already registered`);
-                process.exit(0);
-            } else {
-                console.error(error);
-                process.exit(1);
+        (error, userId) => {
+            if (error) {
+                console.log(`User with login ${email} did not found for update`);
+                process.exit(2);
             }
-        } else {
-            console.log(`User with email ${user.email} was added with id: ${user.id}`);
-            process.exit(0);
+            console.log('updating', userId);
+            services.users.update(
+                userId,
+                defaultLanguage,
+                {
+                    firstName,
+                    lastName,
+                    email,
+                    speciality,
+                    numberPaidSamples,
+                    gender,
+                    phone,
+                    loginType,
+                    password: loginType === LOGIN_TYPES.PASSWORD ? PasswordUtils.hash(`${password}`) : null,
+                    company
+                },
+                (error) => {
+                    if (error) {
+                        console.error(error);
+                        process.exit(1);
+                    } else {
+                        console.log(`User with login ${email} was changed`);
+                        process.exit(0);
+                    }
+                }
+            );
         }
-    }
-);
+    );
+} else {
+    services.users.add(
+        defaultLanguage,
+        {
+            firstName,
+            lastName,
+            email,
+            speciality,
+            numberPaidSamples,
+            gender,
+            phone,
+            loginType,
+            password: loginType === LOGIN_TYPES.PASSWORD ? PasswordUtils.hash(`${password}`) : null,
+            company
+        },
+        (error, user) => {
+            if (error) {
+                if (error instanceof models.users.constructor.DuplicateEmail) {
+                    console.log(`User with login ${email} already registered, use '--update 1'`);
+                    process.exit(2);
+                } else {
+                    console.error(error);
+                    process.exit(1);
+                }
+            } else {
+                console.log(`User with login ${user.email} was added with id: ${user.id}`);
+                process.exit(0);
+            }
+        }
+    );
+}

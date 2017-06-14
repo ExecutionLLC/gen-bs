@@ -19,13 +19,13 @@ class FieldsModel extends ModelBase {
 
     findAll(callback) {
         this.db.transactionally((trx, callback) => {
-            this._findFields(trx, null, null, null, null, null, null, callback);
+            this._findFields(trx, null, null, null, null, null, null, null, callback);
         }, callback);
     }
 
     findMany(fieldIds, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findFields(trx, fieldIds, null, null, null, null, null, callback);
+            this._findFields(trx, fieldIds, null, null, null, null, null, null, callback);
         }, callback);
     }
 
@@ -33,7 +33,7 @@ class FieldsModel extends ModelBase {
         const fieldIds = [fieldId];
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findFields(trx, fieldIds, null, null, null, null, null, callback),
+                (callback) => this._findFields(trx, fieldIds, null, null, null, null, null, null, callback),
                 (fields, callback) => callback(null, _.first(fields))
             ], callback);
         }, callback);
@@ -80,7 +80,7 @@ class FieldsModel extends ModelBase {
 
     addMissingFields(languageId, fields, trx, callback) {
         // Ensure the coming fields are unique in terms of the same rule as below.
-        const uniqueFields = _.uniqBy(fields, (field) => `${field.name}#${field.valueType}#${field.dimension}`);
+        const uniqueFields = _.uniqBy(fields, (field) => `${field.name}#${field.valueType}#${field.dimension}#${field.sourceName}`);
         async.waterfall([
             (callback) => {
                 // First, for each field try to find existing one.
@@ -148,16 +148,10 @@ class FieldsModel extends ModelBase {
         ], callback);
     }
 
-    findSourcesFields(callback) {
-        this.db.transactionally((trx, callback) => {
-            this._findFields(trx, null, null, true, null, null, null, callback);
-        }, callback);
-    }
-
     _findIdOfTheSameAsOrNullInTransaction(fieldMetadata, trx, callback) {
-        const {name, valueType, dimension} = fieldMetadata;
+        const {name, valueType, dimension, sourceName} = fieldMetadata;
         async.waterfall([
-            (callback) => this._findFields(trx, null, null, null, name, valueType, dimension, callback),
+            (callback) => this._findFields(trx, null, null, null, name, valueType, dimension, sourceName, callback),
             (fields, callback) => callback(null, fields.length ? _.first(fields).id : null)
         ], callback)
     }
@@ -169,6 +163,7 @@ class FieldsModel extends ModelBase {
                 nameOrNull,
                 valueTypeOrNull,
                 dimensionOrNull,
+                sourceNameOrNull,
                 callback) {
         async.waterfall([
             (callback) => this._findFieldsValues(
@@ -179,6 +174,7 @@ class FieldsModel extends ModelBase {
                 nameOrNull,
                 valueTypeOrNull,
                 dimensionOrNull,
+                sourceNameOrNull,
                 callback
             ),
             (fieldValues, callback) => this._attachKeywords(fieldValues, callback)
@@ -209,6 +205,7 @@ class FieldsModel extends ModelBase {
                       nameOrNull,
                       valueTypeOrNull,
                       dimensionOrNull,
+                      sourceNameOrNull,
                       callback) {
         let query = trx.select([
             `${TableNames.Field}.id`,
@@ -245,6 +242,10 @@ class FieldsModel extends ModelBase {
         }
         if (dimensionOrNull) {
             query = query.andWhere(`${TableNames.Field}.dimension`, dimensionOrNull);
+        }
+
+        if (sourceNameOrNull) {
+            query = query.andWhere(`${TableNames.Field}.source_name`, sourceNameOrNull);
         }
 
         async.waterfall([
@@ -289,27 +290,6 @@ class FieldsModel extends ModelBase {
             }
         ], callback);
     };
-
-    /**
-     * Returns existing field metadata if the field is already in the existingFields array.
-     * Returns null, if there is no such field in existingFields array.
-     * */
-    static getExistingFieldOrNull(fieldMetadata, existingFields, isSourceField) {
-        const existingField = _.find(existingFields,
-            field => field.name === fieldMetadata.name
-            && field.valueType === fieldMetadata.valueType
-            && field.dimension === fieldMetadata.dimension
-        );
-        const shouldAddField =
-            (isSourceField && (!fieldMetadata.isMandatory || !existingField)) // Should add copies of all non-mandatory source fields
-            || (!isSourceField && !existingField); // Should only add sample fields if there is no existing field.
-
-        if (shouldAddField) {
-            return null;
-        } else {
-            return existingField;
-        }
-    }
 }
 
 module.exports = FieldsModel;

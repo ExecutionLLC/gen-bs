@@ -337,7 +337,14 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         const vcfFileId = operation.getId();
         const sampleMetadata = result.metadata;
         // Usual fields metadata. Values of these fields are the same for all genotypes.
-        const commonFieldsMetadata = sampleMetadata.columns;
+        const commonFieldsMetadata = _.flatMap(sampleMetadata, item => {
+            const {sourceName, metadata: {columns}} = item;
+            return _.map(columns, column => {
+                return Object.assign({}, column, {
+                    sourceName
+                });
+            })
+        });
 
         async.waterfall([
             (callback) => {

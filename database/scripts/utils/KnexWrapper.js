@@ -95,7 +95,7 @@ class KnexWrapper {
             .then(({trx, knex}) =>
                 queryAsync(knex)
                     .then((data) => ({trx, error: null, data}))
-                    .catch((error) => ({trx, error: error ? error : 'queryAsync error', data: null}))
+                    .catch((error) => ({trx, error: error ? error : 'queryAsync error: ' + error, data: null}))
             )
             .then(({trx, error, data}) => Promise.fromCallback((callback) =>
                 trx.complete(error, originalStack, data, callback)

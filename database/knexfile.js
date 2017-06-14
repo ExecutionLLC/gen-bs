@@ -7,7 +7,7 @@ const {
         password,
         databaseName: database
     }
-} = require('./../utils/Config');
+} = require('./migrations/utils/Config');
 
 console.log(`Using database '${database}' on ${host}:${port}`);
 

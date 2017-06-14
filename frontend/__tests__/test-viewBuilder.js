@@ -29,7 +29,7 @@ function stateMapperFunc(globalState) {
     const languageId = globalState.ui.languageId;
     const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, fields.totalFieldsHashedArray.hash).filter(f => !!f));
 
-    const allowedFields = FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, fields.sourceFieldsList, languageId).filter((field) => !field.isInvisible);
+    const allowedFields = FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, languageId).filter((field) => !field.isInvisible);
     return {
         initialAppState: globalState,
         vbuilder: globalState.viewBuilder,

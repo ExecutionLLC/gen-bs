@@ -49,10 +49,10 @@ class UserService extends ServiceBase {
         this.models.users.update(userId, languageId, user, callback);
     }
 
-    findIdByEmailPassword(email, password, callback) {
+    findIdByEmailPassword(email, password, loginTypeOrNull, callback) {
         const fixedEmail = this._prepareEmail(email);
         const passwordHash = PasswordUtils.hash(password || '');
-        this.models.users.findIdByEmailPassword(fixedEmail, passwordHash, callback);
+        this.models.users.findIdByEmailPassword(fixedEmail, passwordHash, loginTypeOrNull, callback);
     }
 
     /**
@@ -93,8 +93,8 @@ class UserService extends ServiceBase {
         callback(null, SYSTEM_USER);
     }
 
-    findIdByEmail(email, callback) {
-        this.models.users.findIdByEmail(email, callback);
+    findIdByEmail(email, loginTypeOrNull, callback) {
+        this.models.users.findIdByEmail(email, loginTypeOrNull, callback);
     }
 
     find(userId, callback) {
