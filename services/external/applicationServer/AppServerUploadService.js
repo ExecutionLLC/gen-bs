@@ -103,8 +103,8 @@ function callbackErrorHandler(fn, callback) {
 }
 
 class AppServerUploadService extends ApplicationServerServiceBase {
-    constructor(services, models) {
-        super(services, models);
+    constructor(services) {
+        super(services);
         this._uploadProgressAsyncQueue = makeAsyncQueue();
     }
 

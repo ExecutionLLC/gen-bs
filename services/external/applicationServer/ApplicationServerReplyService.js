@@ -26,8 +26,8 @@ const TooManyAsError = require('../../../utils/errors/TooManyAsError');
  * */
 
 class ApplicationServerReplyService extends ApplicationServerServiceBase {
-    constructor(services, models) {
-        super(services, models);
+    constructor(services) {
+        super(services);
 
         this.eventEmitter = new EventProxy(EVENTS);
         this.backends = [];
