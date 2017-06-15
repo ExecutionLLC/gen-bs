@@ -103,8 +103,8 @@ function callbackErrorHandler(fn, callback) {
 }
 
 class AppServerUploadService extends ApplicationServerServiceBase {
-    constructor(services, models) {
-        super(services, models);
+    constructor(services) {
+        super(services);
         this._uploadProgressAsyncQueue = makeAsyncQueue();
     }
 
@@ -247,7 +247,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             },
             (callback) => {
                 callbackErrorHandler(() => {
-                    this.models.samples.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                    this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
                         (error, existingSamples) => callback(error, existingSamples));
                 }, callback);
             },
@@ -267,7 +267,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], () => {
             async.waterfall([
                 (callback) => this.toggleNextOperation(operation.getId(), callback),
-                (callback) => this.models.samples.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
+                (callback) => this.services.samples.theModel.findSamplesByVcfFileIds(user.id, [operation.getId()], true,
                     (error, existingSamples) => callback(error, existingSamples)),
                 (existingSamples, callback) => this._createOperationResult(
                     session,

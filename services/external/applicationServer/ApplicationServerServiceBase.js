@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 const RESULT_TYPES = require('./AppServerResultTypes');
-const ServiceBase = require('../../ServiceBase');
+const ModellessServiceBase = require('../../ModellessServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
@@ -13,9 +13,9 @@ const proxyProviderFunc = _.once(function (...args) {
     return new RPCProxy(...args);
 });
 
-class ApplicationServerServiceBase extends ServiceBase {
-    constructor(services, models) {
-        super(services, models);
+class ApplicationServerServiceBase extends ModellessServiceBase {
+    constructor(services) {
+        super(services);
 
         _.bindAll(this, ['_rpcSend', '_rpcReply', '_rpcReturned']);
         const {

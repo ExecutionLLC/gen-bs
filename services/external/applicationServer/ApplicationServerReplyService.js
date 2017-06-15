@@ -25,8 +25,8 @@ const {lockSession, unlockSession} = require('../../../sessionsLockMiddleware');
  * */
 
 class ApplicationServerReplyService extends ApplicationServerServiceBase {
-    constructor(services, models) {
-        super(services, models);
+    constructor(services) {
+        super(services);
 
         this.eventEmitter = new EventProxy(EVENTS);
     }

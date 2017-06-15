@@ -11,8 +11,8 @@ const METHODS = require('./AppServerMethods');
  * by the separate ApplicationServerReplyService.
  * */
 class ApplicationServerService extends ApplicationServerServiceBase {
-    constructor(services, models) {
-        super(services, models);
+    constructor(services) {
+        super(services);
 
         this.requestSourcesList = this.requestSourcesList.bind(this);
         this.requestSourceMetadata = this.requestSourceMetadata.bind(this);

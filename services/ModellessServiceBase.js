@@ -1,11 +1,11 @@
 'use strict';
 
-const ModellessServiceBase = require('./ModellessServiceBase');
+class ModellessServiceBase {
+    constructor(services) {
+        this.services = services;
 
-class ServiceBase extends ModellessServiceBase {
-    constructor(services, models) {
-        super(services);
-        this.models = models;
+        this.config = services.config;
+        this.logger = services.logger;
     }
 
     _checkUserIsSet(user, callback) {
@@ -38,4 +38,4 @@ class ServiceBase extends ModellessServiceBase {
     init() {}
 }
 
-module.exports = ServiceBase;
+module.exports = ModellessServiceBase;

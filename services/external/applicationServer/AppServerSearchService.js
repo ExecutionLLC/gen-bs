@@ -25,8 +25,8 @@ const SESSION_STATUS = {
 };
 
 class AppServerSearchService extends ApplicationServerServiceBase {
-    constructor(services, models) {
-        super(services, models);
+    constructor(services) {
+        super(services);
 
         this.eventEmitter = new EventEmitter(EVENTS);
     }

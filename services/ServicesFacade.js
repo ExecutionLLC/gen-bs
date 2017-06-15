@@ -58,12 +58,12 @@ class ServiceFacade {
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
 
-        this.applicationServer = new ApplicationServerService(this, models);
-        this.applicationServerUpload = new AppServerUploadService(this, models);
-        this.applicationServerSources = new AppServerSourcesService(this, models);
-        this.applicationServerOperations = new AppServerOperationsService(this, models);
-        this.applicationServerReply = new ApplicationServerReplyService(this, models);
-        this.applicationServerSearch = new AppServerSearchService(this, models);
+        this.applicationServer = new ApplicationServerService(this);
+        this.applicationServerUpload = new AppServerUploadService(this);
+        this.applicationServerSources = new AppServerSourcesService(this);
+        this.applicationServerOperations = new AppServerOperationsService(this);
+        this.applicationServerReply = new ApplicationServerReplyService(this);
+        this.applicationServerSearch = new AppServerSearchService(this);
 
         this.objectStorage = new ObjectStorageService(this, models);
 
