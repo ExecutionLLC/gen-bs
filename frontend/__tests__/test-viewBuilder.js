@@ -371,7 +371,7 @@ describe('View builder', () => {
 
                     StoreTestUtils.runTest({
                         globalInitialState: newState.initialAppState,
-                        applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, null, false)),
+                        applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, 'asc', false)),
                         stateMapperFunc
                     }, (newState) => {
                         const expectingViewListItems = [
@@ -386,7 +386,7 @@ describe('View builder', () => {
                         expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
                         StoreTestUtils.runTest({
                             globalInitialState: newState.initialAppState,
-                            applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, null, false)),
+                            applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, 'asc', false)),
                             stateMapperFunc
                         }, (newState) => {
                             const expectingViewListItems = [
@@ -407,7 +407,7 @@ describe('View builder', () => {
                             expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
                             StoreTestUtils.runTest({
                                 globalInitialState: newState.initialAppState,
-                                applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, 'asc', false)),
+                                applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, 'desc', false)),
                                 stateMapperFunc
                             }, (newState) => {
                                 const expectingViewListItems = [
@@ -428,7 +428,7 @@ describe('View builder', () => {
                                 expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
                                 StoreTestUtils.runTest({
                                     globalInitialState: newState.initialAppState,
-                                    applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, null, true)),
+                                    applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, 'asc', true)),
                                     stateMapperFunc
                                 }, (newState) => {
                                     const expectingViewListItems = [
@@ -449,7 +449,7 @@ describe('View builder', () => {
                                     expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
                                     StoreTestUtils.runTest({
                                         globalInitialState: newState.initialAppState,
-                                        applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, 'desc', false)),
+                                        applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd2.id, null, false)),
                                         stateMapperFunc
                                     }, (newState) => {
                                         const expectingViewListItems = [
@@ -470,7 +470,7 @@ describe('View builder', () => {
                                         expect(newState.vbuilder.editingView.viewListItems).toEqual(expectingViewListItems);
                                         StoreTestUtils.runTest({
                                             globalInitialState: newState.initialAppState,
-                                            applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, 'desc', false)),
+                                            applyActions: (dispatch) => dispatch(viewBuilderChangeSortColumn(fieldToAdd1.id, null, false)),
                                             stateMapperFunc
                                         }, (newState) => {
                                             const expectingViewListItems = [

@@ -13,22 +13,20 @@ const INITIAL_STATE = {
     allowedFields: null
 };
 
-function getNextDirection(direction) {
-    if (!direction) {
-        return 'asc';
-    }
-    const switcher = {
-        'asc': 'desc',
-        'desc': null
-    };
-
-    return switcher[direction];
-}
-
 function createViewItem(fieldId) {
     return {
         fieldId,
         keywords: []
+    };
+}
+
+function setNewViewListItems(state, newViewListItems) {
+    return {
+        ...state,
+        editingView: {
+            ...state.editingView,
+            viewListItems: newViewListItems
+        }
     };
 }
 
@@ -68,24 +66,18 @@ function reduceVBuilderEndEdit(state) {
 }
 
 function reduceVBuilderDeleteColumn(state, action) {
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.remove(state.editingView.viewListItems, action.viewItemIndex)
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.remove(state.editingView.viewListItems, action.viewItemIndex)
+    );
 }
 
 function reduceVBuilderAddColumn(state, action) {
     const newViewItem = createViewItem(action.columnFieldId);
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.insertBefore(state.editingView.viewListItems, action.viewItemIndex, newViewItem)
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.insertBefore(state.editingView.viewListItems, action.viewItemIndex, newViewItem)
+    );
 }
 
 function reduceVBuilderChangeAttr(state, action) {
@@ -104,64 +96,97 @@ function reduceVBuilderChangeAttr(state, action) {
 
 function reduceVBuilderChangeColumn(state, action) {
     const changedViewItem = createViewItem(action.fieldId);
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, changedViewItem)
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, changedViewItem)
+    );
 }
 
 function reduceVBuilderChangeSortColumn(state, action) {
-    const viewItems = [...state.editingView.viewListItems];
-    const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
-    const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
-    const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: action.fieldId});
-    const selectedOrder = action.sortOrder;
-    const selectedDirection = getNextDirection(action.sortDirection);
-    if (selectedSortItemIndex == secondSortItemIndex || selectedSortItemIndex == firstSortItemIndex) {
-        viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
-            sortDirection: selectedDirection
-        });
-        if (selectedDirection == null) {
-            viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
-                sortOrder: null
+    const {fieldId: sortFieldId, sortOrder, sortDirection} = action;
+    const {editingView} = state;
+    const {viewListItems} = editingView;
+
+    const selectedSortItemIndex = _.findIndex(viewListItems, {fieldId: sortFieldId});
+
+    // item index of sort order 1
+    const firstSortItemIndex = _.findIndex(viewListItems, {sortOrder: 1});
+    // item index of sort order 2
+    const secondSortItemIndex = _.findIndex(viewListItems, {sortOrder: 2});
+
+    // is sort order 1 item same as selected item?
+    const isFirstSortItemSorting = selectedSortItemIndex >= 0 && firstSortItemIndex === selectedSortItemIndex;
+    // is sort order 2 item same as selected item?
+    const isSecondSortItemSorting = selectedSortItemIndex >= 0 && secondSortItemIndex === selectedSortItemIndex;
+
+    const changingItems = [];
+
+    if (isFirstSortItemSorting || isSecondSortItemSorting) {
+        // selected one of already ordered items
+        if (!sortDirection) {
+            // reset column sorting
+            changingItems.push({
+                index: selectedSortItemIndex,
+                item: {
+                    sortDirection: null,
+                    sortOrder: null
+                }
             });
-            if (selectedSortItemIndex == firstSortItemIndex && secondSortItemIndex != -1) {
-                viewItems[secondSortItemIndex] = Object.assign({}, viewItems[secondSortItemIndex], {
-                    sortOrder: 1
+            if (isFirstSortItemSorting && secondSortItemIndex >= 0) {
+                // first sort order was reset, and there is second (not the same field as first),
+                // need to change second into the first
+                changingItems.push({
+                    index: secondSortItemIndex,
+                    item: {
+                        sortOrder: 1
+                    }
                 });
             }
-        }
-    } else {
-        const oldSortItemIndex = _.findIndex(viewItems, {sortOrder: selectedOrder});
-        if (oldSortItemIndex != -1) {
-            viewItems[oldSortItemIndex] = Object.assign({}, viewItems[oldSortItemIndex], {
-                sortOrder: null,
-                sortDirection: null
+        } else {
+            // set next column sorting
+            changingItems.push({
+                index: selectedSortItemIndex,
+                item: {
+                    sortDirection: sortDirection
+                }
             });
         }
-        viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
-            sortDirection: selectedDirection,
-            sortOrder: firstSortItemIndex == -1 ? 1 : selectedOrder
+    } else {
+        // selected one of not sorted items, selectedSortItemIndex != firstSortItemIndex, != secondSortItemSorting
+        // oldSortItemIndex will be firstSortItemIndex or secondSortItemSorting depends on desired sort order
+        const oldSortItemIndex = _.findIndex(viewListItems, {sortOrder});
+        if (oldSortItemIndex >= 0) {
+            changingItems.push({
+                index: oldSortItemIndex,
+                item: {
+                    sortOrder: null,
+                    sortDirection: null
+                }
+            });
+        }
+        changingItems.push({
+            index: selectedSortItemIndex,
+            item: {
+                sortDirection: sortDirection,
+                sortOrder: firstSortItemIndex < 0 ? 1 : sortOrder
+            }
         });
     }
-    return Object.assign({}, state, {
-        editingView: Object.assign({}, state.editingView, {
-            viewListItems: viewItems
-        })
-    });
+    const newViewListItems = _.reduce(
+        changingItems,
+        (newViewItems, change) => {
+            return immutableArray.assign(newViewItems, change.index, change.item);
+        },
+        viewListItems
+    );
+    return setNewViewListItems(state, newViewListItems);
 }
 
 function reduceVBuilderSetItemKeywords(state, action) {
-    return {
-        ...state,
-        editingView: {
-            ...state.editingView,
-            viewListItems: immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, {keywords: action.keywordsIds})
-        }
-    };
+    return setNewViewListItems(
+        state,
+        immutableArray.assign(state.editingView.viewListItems, action.viewItemIndex, {keywords: action.keywordsIds})
+    );
 }
 
 function reduceVBuilderOnSave(state, action) {
