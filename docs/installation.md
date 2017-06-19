@@ -9,6 +9,20 @@ Web server uses the following external services:
 
 Use environment variables to configure access to these services. The names of the variables along with their defaults can be found in the `utils/Config.js` file.
 
+## Storages
+
+Web server need to store some data, like saved files and sample. Available two type of storage: `file` and `s3`. To setup storage setup `GEN_WS_OBJECT_STORAGE_TYPE`.
+Storage settings:
+- Amazon storage:
+    - `GEN_WS_S3_ACCESS_KEY_ID` - amazon access key setting
+    - `GEN_WS_S3_ACCESS_KEY_SECRET` - amazon access key secret setting
+    - `GEN_WS_S3_REGION_NAME` - amazon region name
+    - `GEN_WS_S3_SAVED_FILES_BUCKET_NAME` - bucket for saved files 
+    - `GEN_WS_S3_NEW_SAMPLES_BUCKET_NAME` - bucket for uploaded samples
+- FileSystem setting 
+    - `GEN_WS_FILE_SAVED_FILES_PATH` - full path for saved files location folder 
+    - `GEN_WS_FILE_NEW_SAMPLES_PATH` - full path for uploaded samples location folder
+
 ## Dependencies
 
 Currently, Node v6.1.0 is used. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
