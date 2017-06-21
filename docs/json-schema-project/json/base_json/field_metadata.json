@@ -11,9 +11,18 @@
 			"description": "Text Label",
 			"type": "string"
 		},
-		"label": {
-			"description": "Display text for the field",
+		"hyperlinkTemplate": {
+			"description": "Template for hyperlink fileds",
 			"type": "string"
+		},
+		"isHyperlink": {
+			"description": "Mark for  hyperlink fields",
+			"type": "boolean"
+		},
+
+		"isInvisible": {
+			"description": "Mark invisible fields",
+			"type": "boolean"
 		},
 		"source_name": {
 			"type": "string",
@@ -33,13 +42,6 @@
 		"is_mandatory": {
 			"type": "boolean"
 		},
-		"is_editable": {
-			"type": "boolean"
-		},
-		"description": {
-			"description": "Text description for tooltip",
-			"type": "string"
-		},
 		"dimension": {
 			"type": "integer",
 			"description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
@@ -51,24 +53,26 @@
 				"$ref": "../base_json/keyword.json#"
 			}
 		},
-		"available_values": {
+		"text": {
 			"type": "array",
-			"description": "Values for enum-like fields",
+			"minItems": 1,
+			"uniqueItems": true,
 			"items": {
 				"type": "object",
-				"properties": {
-					"id": {
+				"properties":{
+					"languageId": {
+						"type":"string"
+					},
+					"label": {
+						"description": "Display text for the field",
 						"type": "string"
 					},
-					"value": {
+					"description": {
+						"description": "Text description for tooltip",
 						"type": "string"
 					}
 				}
 			}
-		},
-		"value": {
-			"type": "string",
-			"description": "Used when requesting update of an editable sample field."
 		}
 	},
 	"required": [
