@@ -45,7 +45,7 @@ We use KnexJS console tool to do database migrations. Execute this command to in
 
     npm install -g knex
 
-Currently, we have two jQuery plugins installed as submodules. To initialize them, from the sources root execute:
+Currently, we have two jQuery plugins installed as submodules(Not used). To initialize them, from the sources root execute:
 
     git submodule init
     git submodule update
@@ -61,6 +61,10 @@ Now the database should be created for the project. Use the following command to
 Now, it should be filled with default values, such as samples and views. To do that, run:
 
     npm run defaults:import
+    
+Then we need to update labels for default data:
+
+    npm run labels:update
 
 We also need to apply all database migrations:
 
