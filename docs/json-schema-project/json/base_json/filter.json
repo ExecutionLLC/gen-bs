@@ -7,28 +7,52 @@
 			"type": "string",
 			"description": "UUID, the unique identifier for the filter"
 		},
-		"name": {
+		"created": {
+			"type": "timestamp"
+		},
+		"creator": {
 			"type": "string"
+		},
+		"filter_id": {
+			"type": "string",
+			"description": "UUID, the unique identifier for the filter info(created, creator, and is deleted)"
+		},
+		"isDeleted": {
+			"type": "boolean"
 		},
 		"type": {
 			"type": "string",
-			"description": "Standard - available for demo-user, advanced - only for registered.",
+			"description": "standard/default - available for demo-user, user - created by user, default - default filters for analyses",
 			"enum": [
 				"standard",
-				"advanced",
+				"default",
 				"user"
 			]
 		},
-		"description": {
-			"type": "string"
+		"text": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"properties":{
+					"languageId": {
+						"type":"string"
+					},
+					"name": {
+						"description": "Display text for the field",
+						"type": "string"
+					},
+					"description": {
+						"description": "Text description for tooltip",
+						"type": "string"
+					}
+				}
+			}
 		},
 		"rules": {
 			"type": "string",
 			"description": "A JSON object with rules needed by the UI for this filter."
-		},
-		"is_copy_disabled": {
-			"type": "boolean",
-			"description": "If true, user should not be allowed to copy the filter on UI."
 		}
 	},
 	"required": [
@@ -36,6 +60,6 @@
 		"name",
 		"type",
 		"rules",
-		"is_copy_disabled"
+		"isDeleted"
 	]
 }
