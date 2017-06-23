@@ -55,6 +55,27 @@
         "tumor",
         "family"
       ]
+    },
+    "text": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties":{
+          "languageId": {
+            "type":"string"
+          },
+          "name": {
+            "description": "Display name of the analysis",
+            "type": "string"
+          },
+          "description": {
+            "description": "Text description of the analysis",
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [
