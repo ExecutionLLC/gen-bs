@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the analysis"
+    },
+    "createdDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "filterId": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the filter"
+    },
+    "modelId": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the model"
+    },
+    "viewId": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the view"
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties":{
+          "id": {
+            "type":"string",
+            "description": "UUID, the unique identifier for the sample"
+          },
+          "type": {
+            "description": "Type of sample",
+            "type": "string",
+            "enum": [
+              "single",
+              "tumor",
+              "normal",
+              "proband",
+              "mother",
+              "father"
+            ]
+          }
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "single",
+        "tumor",
+        "family"
+      ]
+    }
+  },
+  "required": [
+    "sample",
+    "view",
+    "filters",
+    "keywords"
+  ]
+}
