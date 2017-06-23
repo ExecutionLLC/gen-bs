@@ -3,7 +3,7 @@
 	"title": "User",
 	"type": "object",
 	"properties": {
-		"name": {
+		"first_name": {
 			"type": "string"
 		},
 		"last_name": {
@@ -16,12 +16,37 @@
 		"speciality": {
 			"type": "string"
 		},
-		"language": {
+		"languageId": {
 			"type": "string",
 			"maxLength": 2
 		},
 		"number_paid_samples": {
 			"type": "integer"
+		},
+		"company": {
+			"type": "string"
+		},
+		"gender": {
+			"type": "string"
+		},
+		"id": {
+			"type": "string"
+		},
+		"default_language_id": {
+			"type": "string"
+		},
+		"is_deleted": {
+			"type": "string"
+		},
+		"login_type": {
+			"type": "string"
+		},
+		"password": {
+			"type": "string",
+			"_comment": "why?????"
+		},
+		"phone": {
+			"type": "string"
 		}
 	}
 }
