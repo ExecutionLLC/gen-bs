@@ -18,21 +18,19 @@
 			"type": "string",
 			"maxLength": 50
 		},
-		"synonyms": {
+		"text": {
 			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
 			"items": {
 				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"keyword_id": {
-						"type": "string",
-						"description": "UUID of the keyword for this synonym"
+				"properties":{
+					"languageId": {
+						"type":"string"
 					},
 					"value": {
-						"type": "string",
-						"maxLength": 50
+						"description": "Display text for the keyword",
+						"type": "string"
 					}
 				}
 			}

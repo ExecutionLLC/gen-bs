@@ -40,7 +40,7 @@
 						"type":"string"
 					},
 					"name": {
-						"description": "Display text for the field",
+						"description": "Display name of the filter",
 						"type": "string"
 					},
 					"description": {
