@@ -6,26 +6,43 @@
 			"type": "string",
 			"description": "UUID, the unique identifier for the sample"
 		},
-		"hash": {
+		"created": {
+			"type": "timestamp"
+		},
+		"creator": {
+			"type": "string",
+			"description": "UUID, the unique identifier for the user"
+		},
+		"error": {
 			"type": "string"
+		},
+		"file_name": {
+			"type": "string"
+		},
+		"genotype_name": {
+			"type": "string"
+		},
+		"vcf_file_id": {
+			"type": "string",
+			"description": "UUID, the unique identifier for the vcf file"
+		},
+		"upload_state": {
+			"type": "string",
+			"enum": [
+				"unconfirmed",
+				"not_found",
+				"completed",
+				"error"
+			]
 		},
 		"type": {
 			"type": "string",
-			"description": "Standard - available for demo-user, advanced - only for registered.",
+			"description": "standard/default - available for demo-user, user - created by user, default - default for analyses",
 			"enum": [
 				"standard",
-				"advanced",
+				"default",
 				"user"
 			]
-		},
-		"metadata": {
-			"$ref": "./sample_metadata.json#"
-		},
-		"vcf_fields": {
-			"type": "array",
-			"items": {
-				"$ref": "./vcf_field.json#"
-			}
 		},
 		"is_analyzed": {
 			"type": "boolean"
@@ -34,13 +51,69 @@
 			"type": "string",
 			"format": "date-time"
 		},
-		"is_deleted": {
-			"type": "boolean"
-		},
-		"commentaries": {
+		"sample_metadata": {
 			"type": "array",
 			"items": {
-				"$ref": "./commentary.json#"
+				"type": "object",
+				"properties":{
+					"metadata_id": {
+						"type":"string"
+					},
+					"sample_id": {
+						"type":"string"
+					},
+					"text": {
+						"type": "array",
+						"minItems": 1,
+						"uniqueItems": true,
+						"items": {
+							"type": "object",
+							"properties":{
+								"languageId": {
+									"type":"string"
+								},
+								"value": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"sample_fields": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties":{
+					"field_id": {
+						"type":"string"
+					},
+					"sample_id": {
+						"type":"string"
+					}
+				}
+			}
+		},
+		"text": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"properties":{
+					"languageId": {
+						"type":"string"
+					},
+					"name": {
+						"description": "Display name of the sample",
+						"type": "string"
+					},
+					"description": {
+						"description": "Text description for tooltip",
+						"type": "string"
+					}
+				}
 			}
 		}
 	},
