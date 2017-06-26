@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "created": {
+      "type": "timestamp"
+    },
+    "creator": {
+      "type": "string"
+    },
+    "error": {
+      "type": "string"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "hash": {
+      "type": "string"
+    },
+    "is_deleted": {
+      "type": "boolean"
+    },
+    "progress": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "error",
+        "ready"
+      ]
+    }
+  }
+}

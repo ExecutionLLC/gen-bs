@@ -34,43 +34,29 @@
 		"saved_files": {
 			"type": "array",
 			"items": {
-				"$ref": "../WS_AS/save_file.json#"
+				"$ref": "../base_json/saved_file.json#"
 			}
 		},
-		"queries_history": {
+		"analyses": {
 			"type": "array",
 			"uniqueItems": true,
 			"items": {
-				"$ref": "../base_json/query_history.json#"
+				"$ref": "../base_json/analysis.json#"
 			}
 		},
-		"active_operations": {
+		"active_uploads": {
 			"type": "array",
-			"description": "Array of active operations for the session specified in the request header.",
+			"uniqueItems": true,
 			"items": {
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string",
-						"description": "Operation identifier"
-					},
-					"type": {
-						"type": "string",
-						"description": "Operation type.",
-						"enum": [
-							"search",
-							"upload"
-						]
-					}
-				}
+				"$ref": "../base_json/uploads.json#"
 			}
 		},
 		"number_paid_samples": {
 			"type": "integer"
-		}
-	},
-	"required": [
-		"id",
-		"number_paid_samples"
-	]
+		},
+		"required": [
+			"id",
+			"number_paid_samples"
+		]
+	}
 }
