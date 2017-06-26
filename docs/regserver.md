@@ -72,13 +72,13 @@
 
 Для тестирования регистрации заведены ещё две страницы:
 
-Ссылка: [http://alapy.com/wp-admin/post.php?post=1662&action=edit](http://alapy.com/wp-admin/post.php?post=1662&action=edit).
+Ссылка: [http://alapy.com/join-pioneers-alpha/](http://alapy.com/join-pioneers-alpha/).
 
-Редактирование: [http://alapy.com/join-pioneers-alpha/](http://alapy.com/join-pioneers-alpha/).
+Редактирование: [http://alapy.com/wp-admin/post.php?post=1662&action=edit](http://alapy.com/wp-admin/post.php?post=1662&action=edit).
 
-Ссылка: [http://alapy.com/wp-admin/post.php?post=1692&action=edit](http://alapy.com/wp-admin/post.php?post=1692&action=edit).
+Ссылка: [http://alapy.com/join-pioneers-test/](http://alapy.com/join-pioneers-test/).
 
-Редактирование: [http://alapy.com/join-pioneers-test/](http://alapy.com/join-pioneers-test/).
+Редактирование: [http://alapy.com/wp-admin/post.php?post=1692&action=edit](http://alapy.com/wp-admin/post.php?post=1692&action=edit).
 
 Нужно обратить внимание на различия в скриптах этих страниц, точнее на ссылки на сервера, чтобы тестовые страницы работали только с тестовыми регистрационными серверами, а боевой &mdash; с боевым.
 
