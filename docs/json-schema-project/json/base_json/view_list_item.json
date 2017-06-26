@@ -6,13 +6,13 @@
       "type": "string",
       "description": "UUID, the unique identifier for the view list item"
     },
-    "field_name": {
+    "field_id": {
       "type": "string",
-      "description": "name of the field in sample."
+      "description": "UUID, the unique identifier for the view list item"
     },
-    "source_name": {
+    "view_version_id": {
       "type": "string",
-      "description": "Null for sample fields, otherwise contains name of the source field is contained in."
+      "description": "UUID, the unique identifier for the view"
     },
     "order": {
       "description": "The order of column in list",
@@ -31,7 +31,8 @@
       ]
     },
     "filter_control_enable": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "not used"
     },
     "keywords": {
       "type": "array",

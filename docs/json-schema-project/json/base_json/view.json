@@ -7,29 +7,33 @@
       "type": "string",
       "description": "UUID, the unique identifier for the view"
     },
-    "name": {
-      "type": "string"
+    "view_id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the parent view"
     },
-    "description": {
-      "description": "Localized view description for UI",
-      "type": "string"
+    "created": {
+      "type": "timestamp"
+    },
+    "creator": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the user"
     },
     "type": {
       "type": "string",
-      "description": "Standard - available for demo-user, advanced - only for registered.",
+      "description": "standard/default - available for demo-user, user - created by user, default - default view for analyses",
       "enum": [
         "standard",
-        "advanced",
+        "default",
         "user"
       ]
     },
     "is_copy_disabled": {
       "type": "boolean",
-      "description": "If true, user should not be allowed to copy the view on UI."
+      "description": "If true, user should not be allowed to copy the view on UI.(not used)"
     },
-    "modified_timestamp": {
-      "type": "integer",
-      "description": "Timestamp of the last view modification."
+    "is_deleted": {
+      "type": "boolean",
+      "description": "(not used)"
     },
     "view_list_items": {
       "type": "array",
