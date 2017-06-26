@@ -4,6 +4,8 @@ Genomix Application is intended to do great things for genetics all over the wor
 
 Be proud feeling yourself a part of it!
 
+Read about [registration server](docs/regserver.md).
+
 See [general information about the project entities](docs/general-info.md).
 
 Also, read about [the development rules in the project](docs/development.md).
