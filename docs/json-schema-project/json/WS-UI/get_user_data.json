@@ -51,8 +51,17 @@
 				"$ref": "../base_json/uploads.json#"
 			}
 		},
-		"number_paid_samples": {
-			"type": "integer"
+		"languages": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"type": "object",
+				"properties": {
+					"description": "string",
+					"type": "string",
+					"id": "string"
+				}
+			}
 		},
 		"required": [
 			"id",
