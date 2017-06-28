@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "search",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "analysis": {
+      "$ref": "../base_json/analysis.json#"
+    },
+    "required": [
+      "id",
+      "analysis"
+    ]
+  }
+}
