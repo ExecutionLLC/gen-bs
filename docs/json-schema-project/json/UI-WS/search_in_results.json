@@ -1,71 +1,71 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"type": "object",
-	"properties": {
-		"top_search": {
-			"type": "object",
-			"properties": {
-				"filter": {
-					"type": "string",
-					"description": "Global search string value"
-				},
-				"excluded_fields": {
-					"type": "array",
-					"description": "List of excluded columns",
-					"items": {
-						"type": "string",
-						"description": "Field id"
-					}
-				}
-			}
-		},
-		"search": {
-			"description": "value in every filter control",
-			"type": "array",
-			"items": {
-				"type": "object",
-				"properties": {
-					"field_id": {
-						"description": "column uuid",
-						"type": "string"
-					},
-					"value": {
-						"description": "value in filter control",
-						"type": "string"
-					}
-				}
-			}
-		},
-		"sort": {
-			"type": "array",
-			"description": "Array of field ids with sort directions (asc/desc).",
-            "items": {
-              "type": "object",
-              "properties": {
-                "field_id": {
-                  "description": "column uuid",
-                  "type": "string"
-                },
-                "order": {
-                  "description": "Column order in sorting",
-                  "type": "integer"
-                },
-                "direction": {
-                  "description": "Sort direction",
-                  "type": "string",
-                  "enum": [
-                    "asc",
-                    "desc"
-                  ]
-                }
-              }
-            }
-		},
-		"limit": {
-			"type": "integer"
-		},
-		"offset": {
-			"type": "integer"
-		}
-	}
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "top_search": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "type": "string",
+          "description": "Global search string value"
+        }
+      }
+    },
+    "search": {
+      "description": "value in every filter control",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_id": {
+            "description": "column uuid",
+            "type": "string"
+          },
+          "value": {
+            "description": "value in filter control",
+            "type": "string"
+          },
+          "sample_id": {
+            "description": "sample unique identifier",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sort": {
+      "type": "array",
+      "description": "Array of field ids with sort directions (asc/desc).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_id": {
+            "description": "column uuid",
+            "type": "string"
+          },
+          "order": {
+            "description": "Column order in sorting",
+            "type": "integer"
+          },
+          "direction": {
+            "description": "Sort direction",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ]
+          },
+          "sample_id": {
+            "description": "sample unique identifier",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "limit": {
+      "type": "integer"
+    },
+    "offset": {
+      "type": "integer"
+    }
+  }
 }
