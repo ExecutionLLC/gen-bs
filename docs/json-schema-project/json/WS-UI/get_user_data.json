@@ -78,6 +78,13 @@
 				}
 			}
 		},
+		"total_fields": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$ref": "../base_json/field_metadata.json#"
+			}
+		},
 		"required": [
 			"id",
 			"number_paid_samples"
