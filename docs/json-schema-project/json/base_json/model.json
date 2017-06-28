@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One filter",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the model"
+    },
+    "created": {
+      "type": "timestamp"
+    },
+    "creator": {
+      "type": "string"
+    },
+    "model_id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the model info(created, creator, and is deleted)"
+    },
+    "isDeleted": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string",
+      "description": "standard/default - available for demo-user, user - created by user, default - default models for analyses",
+      "enum": [
+        "standard",
+        "default",
+        "user"
+      ]
+    },
+    "text": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties":{
+          "languageId": {
+            "type":"string"
+          },
+          "name": {
+            "description": "Display name of the model",
+            "type": "string"
+          },
+          "description": {
+            "description": "Text description for tooltip",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "string",
+      "description": "A JSON object with rules needed by the UI for this model."
+    },
+    "analysis_type": {
+      "type": "string",
+      "enum": [
+        "tumor",
+        "family"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "type",
+    "rules",
+    "isDeleted"
+  ]
+}
