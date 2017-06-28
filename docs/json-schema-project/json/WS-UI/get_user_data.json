@@ -51,6 +51,13 @@
 				"$ref": "../base_json/uploads.json#"
 			}
 		},
+		"metadata": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$ref": "../base_json/metadata_field.json#"
+			}
+		},
 		"languages": {
 			"type": "array",
 			"uniqueItems": true,
