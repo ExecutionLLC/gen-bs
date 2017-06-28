@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "search",
+  "type": "object",
+  "properties": {
+    "operation_id": {
+      "type": "string"
+    },
+    "required": [
+      "operation_id"
+    ]
+  }
+}
