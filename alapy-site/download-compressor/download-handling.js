@@ -1,6 +1,7 @@
 function onloadCallback() {
   grecaptcha.render('reCaptchaLock_2478', {'sitekey' : '6Ldi_xoUAAAAAJFf3X5EUxicvT-91FtsCP6vSojE', 'callback': function() { window.verifyCallback_2478(); }});
   grecaptcha.render('reCaptchaLock_2508', {'sitekey' : '6Ldi_xoUAAAAAJFf3X5EUxicvT-91FtsCP6vSojE', 'callback': function() { window.verifyCallback_2508(); }});
+  grecaptcha.render('reCaptchaLock_2626', {'sitekey' : '6Ldi_xoUAAAAAJFf3X5EUxicvT-91FtsCP6vSojE', 'callback': function() { window.verifyCallback_2626(); }});
 }
 
 var elDownloadWindowsContainer = document.getElementById('download-windows-container');
