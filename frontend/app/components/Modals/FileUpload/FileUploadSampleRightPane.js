@@ -281,7 +281,7 @@ export default class FileUploadSampleRightPane extends React.Component {
                             ref='fileInput'
                             id='file-select'
                             type='file'
-                            accept='.vcf,.gz'
+                            accept='.vcf,.gz,.txt'
                             name='files[]'
                             defaultValue=''
                             multiple='multiple'

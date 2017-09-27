@@ -133,8 +133,9 @@ function addNoGZippedForUpload(files) {
  * @param {function(string)} onError
  */
 function ensureGzippedFile(file, p, onGzipStart, onGzipped, onError) {
-    if (!(file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') &&
-        !(file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz')) {
+    const fileExt = file.name.split('.').pop();
+    if (!(file.type === 'text/vcard' || file.type === 'text/directory' || fileExt === 'vcf' || fileExt === 'txt') &&
+        !(file.type === 'application/gzip' || file.type === 'application/x-gzip' || fileExt === 'gz')) {
         onError(p.t('samples.errors.unsupportedFileFormat'));
     } else {
         isGzipFormat(file).then(isGz => {
