@@ -39,9 +39,28 @@ class SampleController extends UserEntityControllerBase {
                     callback(null, sampleFile, fileName);
                 }
             },
-            (sampleFile, fileName, callback) => VCFParseUtils.parseSampleNames(sampleFile,
-                (error, sampleNames) => callback(null, sampleFile, fileName, error, error ? [] : sampleNames)),
+            (sampleFile, fileName, callback) => {
+                const fileType = fileName.split('.').slice(-2)[0];
+                switch (fileType) {
+                    case 'txt':
+                        // because 23andme file
+                        callback(null, sampleFile, fileName, null, ['GENOTYPE']);
+                        break;
+                    case 'vcf':
+                        VCFParseUtils.parseSampleNames(
+                            sampleFile,
+                            (error, sampleNames) => {
+                                this.logger.warn("sampleNames =", sampleNames);
+                                callback(null, sampleFile, fileName, error, error ? [] : sampleNames);
+                            }
+                        );
+                        break;
+                    default:
+                        callback(new Error('Unknown sample type.'));
+                }
+            },
             (sampleFile, fileName, parseError, sampleNames, callback) => {
+                this.logger.warn('[*] sampleNames =', sampleNames);
                 this.services.samples.createHistoryEntry(user, fileName, parseError, (error, fileId) => {
                     callback(error || parseError, sampleFile, fileName, sampleNames, fileId);
                 });
