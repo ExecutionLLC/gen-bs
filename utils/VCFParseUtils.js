@@ -7,7 +7,7 @@ const fs = require('fs');
 
 class VCFParseUtils {
 
-    static  parseSampleNames(sampleFile, callback) {
+    static parseSampleNames(sampleFile, callback) {
         fs.readFile(sampleFile.path, (error, content) => {
             if (error) {
                 callback(error);
