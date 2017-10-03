@@ -72,6 +72,11 @@ const WS_SAMPLE_UPLOAD_STATE = createEnum({
     ERROR: 'error' // an error has occurred while parsing the file with this sample.
 });
 
+const SAMPLE_TYPE = createEnum({
+    VCF: 'vcf',
+    TXT: 'txt'
+});
+
 module.exports = {
     OBJECT_STORAGE_TYPES,
     SEARCH_SERVICE_EVENTS,
@@ -82,5 +87,6 @@ module.exports = {
 	SAMPLE_UPLOAD_STATUS,
     LOGIN_TYPES,
     EVENT_TYPES,
-    WS_SAMPLE_UPLOAD_STATE
+    WS_SAMPLE_UPLOAD_STATE,
+    SAMPLE_TYPE
 };
